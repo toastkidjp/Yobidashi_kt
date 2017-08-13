@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="jp.toastkid.yobidashi">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:name=".ExtendedApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        >
+        <activity
+            android:name=".main.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Splash"
+            android:configChanges="orientation|screenSize|locale"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity-alias
+            android:name=".browser.BrowserActivity"
+            android:targetActivity=".main.MainActivity"
+            android:label="@string/title_search"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".search.SearchActivity"
+            android:targetActivity=".main.MainActivity"
+            android:label="@string/title_search"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.WEB_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_settings"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            />
+        <activity
+            android:name=".settings.color.ColorSettingActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            />
+        <activity
+            android:name=".settings.background.BackgroundSettingActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            />
+        <activity
+            android:name=".about.AboutThisAppActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            />
+        <activity
+            android:name=".launcher.LauncherActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
+            android:name=".planning_poker.CardViewActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            />
+        <activity
+            android:name=".barcode.BarcodeReaderActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            />
+        <activity
+            android:name=".browser.screenshots.ScreenshotsActivity"
+            android:label="@string/title_screenshots"
+            android:theme="@style/AppTheme.Translucent"
+            />
+        <activity
+            android:name=".browser.archive.ArchivesActivity"
+            android:label="@string/title_archives"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
+            android:name=".planning_poker.PlanningPokerActivity"
+            android:label="@string/title_planning_poker"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+
+        <service android:name=".search.favorite.AddingFavoriteSearchService">
+            <intent-filter>
+                <action android:name="ADD_ITEM" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".color_filter.ColorFilterService"/>
+
+        <receiver android:name=".appwidget.search.Provider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_provider" />
+        </receiver>
+        <receiver android:name=".calendar.alarm.DailyCalendarReceiver" android:process=":remote" />
+        <receiver android:name=".calendar.alarm.TimeChangedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="jp.toastkid.yobidashi.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/cache_image_path" />
+        </provider>
+    </application>
+</manifest>

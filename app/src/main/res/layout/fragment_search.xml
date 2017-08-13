@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/filter_white"
+        >
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:scrollbarStyle="outsideInset"
+            android:fillViewport="true"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/search_horizontal_margin"
+                android:layout_marginRight="@dimen/search_horizontal_margin"
+                >
+
+                <include android:id="@+id/history_module"
+                    layout="@layout/module_search_history" />
+
+                <include android:id="@+id/suggestion_module"
+                    layout="@layout/module_search_suggestion" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="3dp"
+            android:minHeight="?android:actionBarSize"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    >
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="7"
+                        >
+                        <ImageView
+                            android:id="@+id/search_icon"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="left|center_vertical"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/ic_search_white"
+                            />
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/search_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="35dp"
+                            android:maxLines="1"
+                            android:hint="@string/title_search"
+                            android:textColorHint="@color/white"
+                            android:textColor="@color/white"
+                            app:theme="@style/EditTextStyle"
+                            android:inputType="text"
+                            android:imeOptions="actionSearch"
+                            android:background="@drawable/ripple_transparent"
+                            >
+                            <requestFocus/>
+                        </android.support.v7.widget.AppCompatEditText>
+                        <View
+                            android:id="@+id/search_input_border"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="4dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_gravity="bottom"
+                            android:background="@color/white"
+                            />
+                        <ImageView
+                            android:id="@+id/search_clear"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="8dp"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/ic_close"
+                            />
+                    </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/search_action_background"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        >
+                        <TextView
+                            android:id="@+id/search_action"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/title_search_action"
+                            android:textColor="@color/white"
+                            android:background="@drawable/ripple_appwidget"
+                            />
+                    </FrameLayout>
+                </LinearLayout>
+                <Spinner
+                    android:id="@+id/search_categories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:background="@color/spinner_background"
+                    />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </FrameLayout>
+</layout>

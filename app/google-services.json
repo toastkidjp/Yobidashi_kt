@@ -1,0 +1,135 @@
+{
+  "project_info": {
+    "project_number": "174711349205",
+    "firebase_url": "https://wastage-87f38.firebaseio.com",
+    "project_id": "wastage-87f38",
+    "storage_bucket": "wastage-87f38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174711349205:android:cf942e464552434f",
+        "android_client_info": {
+          "package_name": "jp.toastkid.search_widget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174711349205-9mpusku6rohjue26o7rm6se4d870nmar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCBX8tOjL-OIkNGtWStO14JtLkKlq9qhE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174711349205:android:18afc2cfa3aeefe7",
+        "android_client_info": {
+          "package_name": "jp.toastkid.wifi_switcher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174711349205-9mpusku6rohjue26o7rm6se4d870nmar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCBX8tOjL-OIkNGtWStO14JtLkKlq9qhE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174711349205:android:543d4141bdcf090a",
+        "android_client_info": {
+          "package_name": "jp.toastkid.calendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174711349205-9mpusku6rohjue26o7rm6se4d870nmar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCBX8tOjL-OIkNGtWStO14JtLkKlq9qhE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174711349205:android:be552c3aeb8ceba4",
+        "android_client_info": {
+          "package_name": "jp.toastkid.yobidashi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174711349205-9mpusku6rohjue26o7rm6se4d870nmar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCBX8tOjL-OIkNGtWStO14JtLkKlq9qhE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

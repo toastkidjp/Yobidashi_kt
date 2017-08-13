@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="calendar_menu">
+        <item name="open_article">何の日か見る</item>
+        <item name="add_schedule">スケジュールを登録</item>
+        <item name="search">Web 検索</item>
+    </array>
+</resources>

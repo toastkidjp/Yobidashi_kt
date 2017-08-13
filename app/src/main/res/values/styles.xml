@@ -1,0 +1,76 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="SettingCardStyle">
+        <item name="cardElevation">5dp</item>
+        <item name="android:layout_margin">@dimen/setting_card_margin</item>
+        <item name="android:background">@color/filter_white_bb</item>
+    </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/cyan_bg</item>
+        <item name="android:textColorHighlight">@color/cyan_bg</item>
+    </style>
+
+    <style name="SettingSubhead">
+        <item name="android:textSize">10sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="OneLineTextMenu">
+        <item name="android:background">@drawable/ripple_transparent</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="colorControlNormal">@color/filter_white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Splash">
+        <item name="android:windowContentOverlay">@drawable/splash</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Border">
+        <item name="android:textColorSecondary">@color/darkgray_scale</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.Translucent">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="errorText">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FakeTabStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:button">@android:color/transparent</item>
+        <item name="android:background">@drawable/fake_tab</item>
+    </style>
+
+</resources>

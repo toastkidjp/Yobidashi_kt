@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable name="activity" type="jp.toastkid.yobidashi.settings.SettingsActivity" />
+    </data>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:minHeight="?android:actionBarSize"
+            />
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            >
+            <RadioGroup
+                android:id="@+id/category_group"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                >
+                <RadioButton
+                    android:id="@+id/category_all"
+                    android:text="@string/all"
+                    style="@style/FakeTabStyle"
+                    android:onClick="@{activity.switchAll}"
+                    />
+                <RadioButton
+                    android:id="@+id/category_displaying"
+                    android:text="@string/subhead_displaying"
+                    style="@style/FakeTabStyle"
+                    android:onClick="@{activity.switchDisplaying}"
+                    />
+                <RadioButton
+                    android:id="@+id/category_browser"
+                    android:text="@string/title_browser"
+                    style="@style/FakeTabStyle"
+                    android:onClick="@{activity.switchBrowser}"
+                    />
+                <RadioButton
+                    android:id="@+id/category_notification"
+                    android:text="@string/subhead_notification"
+                    style="@style/FakeTabStyle"
+                    android:onClick="@{activity.switchNotification}"
+                    />
+                <RadioButton
+                    android:id="@+id/category_other"
+                    android:text="@string/subhead_others"
+                    style="@style/FakeTabStyle"
+                    android:onClick="@{activity.switchOthers}"
+                    />
+            </RadioGroup>
+        </HorizontalScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/cardview_shadow_start_color"
+            />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <ImageView
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                />
+            <ScrollView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <FrameLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </ScrollView>
+        </FrameLayout>
+    </LinearLayout>
+
+
+</layout>

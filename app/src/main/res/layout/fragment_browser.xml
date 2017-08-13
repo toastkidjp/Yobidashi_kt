@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="fragment" type="jp.toastkid.yobidashi.browser.BrowserFragment" />
+    </data>
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <FrameLayout
+            android:id="@+id/web_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/menus_view"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="@dimen/fab_margin_horizontal"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:background="@color/fab_color"
+            android:foreground="@drawable/ripple_transparent"
+            android:src="@drawable/ic_menu"
+            android:onClick="@{fragment.showMenu}"
+            />
+        <FrameLayout
+            android:id="@+id/tab_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            />
+
+        <include android:id="@+id/sip" layout="@layout/module_searcher" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-6dp"
+            android:layout_gravity="top"
+            />
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

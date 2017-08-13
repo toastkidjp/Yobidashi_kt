@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="action"
+            type="jp.toastkid.yobidashi.search.favorite.Addition" />
+    </data>
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/settings_item_left_margin"
+        android:layout_marginRight="@dimen/settings_item_left_margin"
+        android:background="@color/soft_background"
+        app:cardElevation="3dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/category"
+                android:textSize="16sp"
+                />
+            <Spinner
+                android:id="@+id/favorite_search_addition_categories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:spinnerMode="dropdown"
+                android:background="@color/spinner_background"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/word"
+                android:textSize="16sp"
+                />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/favorite_search_addition_query"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/errorText"
+                >
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/favorite_search_addition_query_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    />
+            </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <Button
+                    android:id="@+id/close"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:onClick="@{action.cancel}"
+                    android:text="@string/close" />
+
+                <Button
+                    android:id="@+id/add"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/title_add"
+                    android:onClick="@{action.ok}"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

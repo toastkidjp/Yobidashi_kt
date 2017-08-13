@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".settings.SettingsActivity"
+    >
+    <item
+        android:id="@+id/color_settings_toolbar_menu_add_recommend"
+        android:title="@string/title_add_recommended_colors"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/color_settings_toolbar_menu_add_random"
+        android:title="@string/title_add_random"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+</menu>

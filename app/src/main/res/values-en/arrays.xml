@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="calendar_menu">
+        <item name="open_article">What happened today?</item>
+        <item name="add_schedule">Add schedule</item>
+        <item name="search">Web search</item>
+    </array>
+</resources>

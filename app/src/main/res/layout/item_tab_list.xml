@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="152dp"
+        android:layout_height="212dp"
+        >
+        <android.support.v7.widget.CardView
+            android:layout_width="152dp"
+            android:layout_height="200dp"
+            android:layout_margin="4dp"
+            android:layout_gravity="bottom"
+            android:foreground="@drawable/ripple_transparent"
+            >
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="top|center_horizontal"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/ic_launcher_round"
+                />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="8dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                />
+        </android.support.v7.widget.CardView>
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|right"
+            android:src="@drawable/ic_remove_circle"
+            />
+    </FrameLayout>
+</layout>
