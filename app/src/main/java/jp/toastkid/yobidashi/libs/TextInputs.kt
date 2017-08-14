@@ -22,7 +22,7 @@ class TextInputs private constructor() {
         fun setEmptyAlert(inputLayout: TextInputLayout): EditText {
             val input = inputLayout.editText
             if (input == null) {
-                return input
+                return input!!
             }
 
             input.addTextChangedListener(object : TextWatcher {
@@ -35,7 +35,7 @@ class TextInputs private constructor() {
                 }
 
                 override fun afterTextChanged(s: Editable) {
-                    if (s.toString().length == 0) {
+                    if (s.toString().isEmpty()) {
                         inputLayout.error = inputLayout.context
                                 .getString(R.string.favorite_search_addition_dialog_empty_message)
                         return

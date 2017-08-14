@@ -59,7 +59,7 @@ object SavedColors {
     ) {
         deleter.executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { v ->
+                .subscribe { t, t2 ->
                     Toaster.snackShort(
                             view,
                             R.string.settings_color_delete,

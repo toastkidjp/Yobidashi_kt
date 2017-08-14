@@ -4,9 +4,11 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ItemTabListBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
@@ -48,14 +50,14 @@ internal class Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val tab = tabAdapter.get(position)
+        val tab = tabAdapter.getTabByIndex(position)
         holder.itemView.setOnClickListener { v ->
             tabAdapter.setIndex(position)
             closeAction.run()
         }
         holder.setTitle(tab.latest.title())
         holder.setImagePath(tab.thumbnailPath)
-        holder.setCloseAction { v -> closeAt(position) }
+        holder.setCloseAction(View.OnClickListener { v -> closeAt(position) })
         holder.setColor(colorPair)
     }
 

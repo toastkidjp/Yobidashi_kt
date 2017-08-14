@@ -42,26 +42,26 @@ internal class ViewHolder
     fun applyContent(f: File) {
         ImageLoader.setImageToImageView(this.binding.image, f.path)
         this.binding.text.text = f.name
-        this.binding.remove.setOnClickListener { v -> removeSetImage(f) }
-        this.binding.root.setOnClickListener { v ->
+        this.binding.remove.setOnClickListener ({ v -> removeSetImage(f) })
+        this.binding.root.setOnClickListener ({ v ->
             preferenceApplier.backgroundImagePath = f.path
             Toaster.snackShort(
                     binding.image,
                     R.string.message_change_background_image,
                     preferenceApplier.colorPair()
             )
-        }
-        this.binding.root.setOnLongClickListener { v ->
+        })
+        this.binding.root.setOnLongClickListener ({ v ->
             val uri = Uri.parse(f.toURI().toString())
             try {
                 ImageDialog.show(
-                        v.context, uri, ImageLoader.readBitmapDrawable(v.context, uri))
+                        v.context, uri, ImageLoader.readBitmapDrawable(v.context, uri)!!)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
 
             true
-        }
+        })
     }
 
     /**

@@ -15,18 +15,23 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.Spinner
 
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.history.HistoryModule
+import jp.toastkid.yobidashi.search.history.SearchHistory
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 
@@ -57,7 +62,7 @@ class SearchFragment : BaseFragment() {
         disposables = CompositeDisposable()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
 
         preferenceApplier = PreferenceApplier(context)
@@ -70,8 +75,8 @@ class SearchFragment : BaseFragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater!!, LAYOUT_ID, container, false)
-        binding!!.searchClear.setOnClickListener { v -> binding!!.searchInput.setText("") }
-        SearchCategorySpinnerInitializer.initialize(binding!!.searchCategories)
+        binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
+        SearchCategorySpinnerInitializer.initialize(binding?.searchCategories as Spinner)
 
         initHistoryModule()
 
@@ -80,18 +85,18 @@ class SearchFragment : BaseFragment() {
         applyColor()
 
         suggestionModule = SuggestionModule(
-                binding!!.suggestionModule,
-                binding!!.searchInput,
-                { suggestion -> search(binding!!.searchCategories.selectedItem.toString(), suggestion) },
+                binding?.suggestionModule as ModuleSearchSuggestionBinding,
+                binding?.searchInput as EditText,
+                Consumer<String> { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
                 Runnable { this.hideKeyboard() }
         )
 
         setHasOptionsMenu(true)
 
-        binding!!.scroll.setOnTouchListener { v, event ->
+        binding!!.scroll.setOnTouchListener({ v, event ->
             hideKeyboard()
             false
-        }
+        })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding!!.searchBar.transitionName = "share"
@@ -108,9 +113,9 @@ class SearchFragment : BaseFragment() {
                 Completable.create { e ->
                     historyModule = HistoryModule(
                             binding!!.historyModule,
-                            { history -> search(history.category, history.query) },
+                            Consumer<SearchHistory> { history -> search(history.category as String, history.query as String) },
                             Runnable { this.hideKeyboard() },
-                            { text ->
+                            Consumer<String> { text ->
                                 binding!!.searchInput.setText(text + " ")
                                 binding!!.searchInput.setSelection(
                                         binding!!.searchInput.text.toString().length)
@@ -154,14 +159,12 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun initSearchInput() {
-        binding!!.searchInput.setOnEditorActionListener { v, actionId, event ->
-            if (actionId != EditorInfo.IME_ACTION_SEARCH) {
-                return@binding.searchInput.setOnEditorActionListener false
+        binding!!.searchInput.setOnEditorActionListener({ v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                search(binding!!.searchCategories.selectedItem.toString(), v.text.toString())
             }
-            search(binding!!.searchCategories.selectedItem.toString(), v.text.toString())
             true
-        }
-
+        })
         binding!!.searchInput.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -194,21 +197,22 @@ class SearchFragment : BaseFragment() {
      * Apply color to views.
      */
     private fun applyColor() {
-        val colorPair = preferenceApplier!!.colorPair()
-        @ColorInt val bgColor = colorPair.bgColor()
+        val colorPair = preferenceApplier?.colorPair()
+        @ColorInt val bgColor = colorPair?.bgColor() as Int
         @ColorInt val fontColor = colorPair.fontColor()
-        Colors.setEditTextColor(binding!!.searchInput, bgColor)
+        Colors.setEditTextColor(binding?.searchInput as EditText, bgColor)
 
-        binding!!.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
-        binding!!.searchAction.setTextColor(fontColor)
-        binding!!.searchAction.setOnClickListener { view ->
+        binding?.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
+        binding?.searchAction?.setTextColor(fontColor)
+        binding?.searchAction?.setOnClickListener({ view ->
             search(
-                    binding!!.searchCategories.selectedItem.toString(),
-                    binding!!.searchInput.text.toString())
-        }
-        binding!!.searchIcon.setColorFilter(bgColor)
-        binding!!.searchClear.setColorFilter(bgColor)
-        binding!!.searchInputBorder.setBackgroundColor(bgColor)
+                    binding?.searchCategories?.selectedItem.toString(),
+                    binding?.searchInput?.text.toString()
+            )
+        })
+        binding?.searchIcon?.setColorFilter(bgColor)
+        binding?.searchClear?.setColorFilter(bgColor)
+        binding?.searchInputBorder?.setBackgroundColor(bgColor)
     }
 
     /**

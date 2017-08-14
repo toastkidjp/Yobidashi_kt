@@ -10,7 +10,7 @@ import java.util.regex.Pattern
 /**
  * @author toastkidjp
  */
-internal abstract class StorageWrapper
+abstract class StorageWrapper
 /**
  * Initialize with context.
  * @param context

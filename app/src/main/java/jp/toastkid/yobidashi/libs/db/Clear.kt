@@ -25,7 +25,7 @@ class Clear(private val view: View, private val deleter: Deleter<*, *>) {
         this.context = view.context
     }
 
-    @JvmOverloads operator fun invoke(callback: Runnable = { }) {
+    operator fun invoke(callback: Runnable) {
         AlertDialog.Builder(context)
                 .setTitle(R.string.title_delete_all)
                 .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))

@@ -30,15 +30,15 @@ class CardFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<CardItemBinding>(inflater!!, LAYOUT_ID, container, false)
-        binding!!.root.setOnClickListener { v ->
+        binding?.root?.setOnClickListener({ v ->
             Toaster.snackLong(
                     v,
                     R.string.message_confirm_back,
                     R.string.back,
-                    { view -> activity.finish() },
+                    View.OnClickListener{ view -> activity.finish() },
                     PreferenceApplier(v.context).colorPair()
             )
-        }
+        })
         return binding!!.root
     }
 

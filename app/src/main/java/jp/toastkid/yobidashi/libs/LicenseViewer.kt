@@ -22,7 +22,7 @@ class LicenseViewer
  * @param context
  */
 (
-        /** For using get assets and show dialog.   */
+        /** For using makeNew assets and show dialog.   */
         private val mContext: Context) {
 
     /**

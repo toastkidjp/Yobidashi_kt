@@ -41,25 +41,10 @@ object CustomTabsFactory {
         return CustomTabsIntent.Builder()
                 .setToolbarColor(backgroundColor)
                 .setShowTitle(true)
-                .setCloseButtonIcon(decodeResource(context, iconId))
                 .setSecondaryToolbarColor(fontColor)
                 .setStartAnimations(context, 0, 0)
                 .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .addDefaultShareMenuItem()
     }
 
-    /**
-
-     * @param context
-     * *
-     * @param id
-     * *
-     * @return
-     */
-    private fun decodeResource(
-            context: Context,
-            @DrawableRes id: Int
-    ): Bitmap {
-        return BitmapFactory.decodeResource(context.resources, id)
-    }
 }

@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CalendarView
 
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -33,7 +34,7 @@ class CalendarFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         logSender = LogSender(context)
     }
@@ -54,7 +55,8 @@ class CalendarFragment : BaseFragment() {
      */
     private fun initCalendarView() {
         binding!!.calendar.date = System.currentTimeMillis()
-        binding!!.calendar.setOnDateChangeListener { view, year, month, dayOfMonth ->
+        binding!!.calendar.setOnDateChangeListener(
+                CalendarView.OnDateChangeListener { view, year, month, dayOfMonth ->
             val context = context
             val dateTitle = DateTitleFactory.makeDateTitle(context, month, dayOfMonth)
             AlertDialog.Builder(context)
@@ -62,30 +64,27 @@ class CalendarFragment : BaseFragment() {
                     .setItems(R.array.calendar_menu) { d, index ->
                         val bundle = Bundle()
                         bundle.putString("daily", dateTitle)
-                        if (index == 0) {
-                            logSender!!.send("cal_wkp", bundle)
-                            CalendarArticleLinker(context, month, dayOfMonth).invoke()
-                            return@new AlertDialog.Builder(context)
-                                    .setTitle(dateTitle)
-                                    .setItems
-                        }
-                        if (index == 1) {
-                            logSender!!.send("cal_schdl", bundle)
-                            startActivity(IntentFactory.makeCalendar(view.date))
-                            return@new AlertDialog.Builder(context)
-                                    .setTitle(dateTitle)
-                                    .setItems
-                        }
-                        if (index == 2) {
-                            logSender!!.send("cal_srch", bundle)
-                            startActivity(MainActivity.makeSearchIntent(context, dateTitle))
+                        when (index) {
+                            0 -> {
+                                logSender!!.send("cal_wkp", bundle)
+                                CalendarArticleLinker(context, month, dayOfMonth).invoke()
+                            }
+                            1 -> {
+                                logSender!!.send("cal_schdl", bundle)
+                                startActivity(IntentFactory.makeCalendar(view.date))
+
+                            }
+                            2 -> {
+                                logSender!!.send("cal_srch", bundle)
+                                startActivity(MainActivity.makeSearchIntent(context, dateTitle))
+                            }
                         }
                     }
                     .setCancelable(true)
                     .setOnCancelListener { v -> logSender!!.send("cal_x") }
                     .setPositiveButton(R.string.close) { d, i -> d.dismiss() }
                     .show()
-        }
+        })
     }
 
     @StringRes

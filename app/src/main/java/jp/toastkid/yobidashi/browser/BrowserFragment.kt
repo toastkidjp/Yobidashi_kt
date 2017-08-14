@@ -90,7 +90,7 @@ class BrowserFragment : BaseFragment() {
         disposables = CompositeDisposable()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         fragmentReplaceAction = activity as FragmentReplaceAction
     }
@@ -389,12 +389,12 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun refreshFab() {
-        binding!!.fab.setBackgroundColor(preferenceApplier().colorPair().bgColor())
+        binding!!.fab.setBackgroundColor(preferenceApplier()!!.colorPair().bgColor())
 
         val resources = resources
         val fabMarginBottom = resources.getDimensionPixelSize(R.dimen.fab_margin)
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
-        MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier().menuPos())
+        MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier()!!.menuPos())
     }
 
     override fun pressBack(): Boolean {

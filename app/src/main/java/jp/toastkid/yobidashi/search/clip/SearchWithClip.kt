@@ -45,17 +45,15 @@ class SearchWithClip
     operator fun invoke() {
         cm.addPrimaryClipChangedListener {
             if (!cm.hasPrimaryClip()) {
-                return@cm.addPrimaryClipChangedListener
+                return@addPrimaryClipChangedListener
             }
 
             val firstItem = cm.primaryClip.getItemAt(0)
-            if (firstItem == null) {
-                return@cm.addPrimaryClipChangedListener
-            }
+            firstItem ?: return@addPrimaryClipChangedListener
 
-            val text = firstItem!!.text
-            if (text == null || text.length == 0) {
-                return@cm.addPrimaryClipChangedListener
+            val text = firstItem.text
+            if (text == null || text.isEmpty()) {
+                return@addPrimaryClipChangedListener
             }
 
             val context = parent.context
@@ -63,7 +61,7 @@ class SearchWithClip
                     parent,
                     context.getString(R.string.message_clip_search, text),
                     R.string.title_search_action,
-                    { v -> searchOrBrowse(context, text) },
+                    View.OnClickListener{ v -> searchOrBrowse(context, text) },
                     colorPair
             )
         }

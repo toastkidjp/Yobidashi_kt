@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.functions.Consumer
 
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -48,7 +49,7 @@ class SpeedDialFragment : BaseFragment() {
     /** Adapter.  */
     private var adapter: Adapter? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         action = context as FragmentReplaceAction?
     }
@@ -137,7 +138,7 @@ class SpeedDialFragment : BaseFragment() {
         super.onResume()
 
         binding!!.root.setBackgroundColor(
-                if (preferenceApplier().hasBackgroundImagePath())
+                if (preferenceApplier()!!.hasBackgroundImagePath())
                     Color.TRANSPARENT
                 else
                     ContextCompat.getColor(activity, R.color.darkgray_scale)

@@ -9,9 +9,9 @@ import jp.toastkid.yobidashi.main.MainActivity
  */
 internal class InternalSearchIntentLauncher(private val context: Context) : SearchIntentLauncher {
 
-    private var category: String
+    private var category: String = ""
 
-    private var query: String
+    private var query: String = ""
 
 
     fun setCategory(category: String): InternalSearchIntentLauncher {

@@ -54,16 +54,16 @@ class PageSearcherModule
 
             }
         })
-        editText = binding.inputLayout.editText
-        binding.close.setOnClickListener { v -> hide() }
-        binding.sipUpward.setOnClickListener { v ->
+        editText = binding.inputLayout.editText!!
+        binding.close.setOnClickListener { hide() }
+        binding.sipUpward.setOnClickListener({
             tabs.findUp()
             Inputs.hideKeyboard(editText)
-        }
-        binding.sipDownward.setOnClickListener { v ->
+        })
+        binding.sipDownward.setOnClickListener( {
             tabs.findDown()
             Inputs.hideKeyboard(editText)
-        }
+        })
     }
 
     /**

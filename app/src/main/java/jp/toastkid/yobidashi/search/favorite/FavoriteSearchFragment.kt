@@ -11,6 +11,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.functions.BiConsumer
+import io.reactivex.functions.Consumer
 
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -58,8 +60,9 @@ class FavoriteSearchFragment : BaseFragment() {
         adapter = Adapter(
                 activity,
                 DbInitter.get(activity).relationOfFavoriteSearch(),
-                SearchCallback { category, query -> this.startSearch(category, query) }
-        ) { messageId -> Toaster.snackShort(binding!!.content, messageId!!, colorPair()) }
+                BiConsumer<SearchCategory, String> { category: SearchCategory, query: String -> this.startSearch(category, query) },
+                Consumer<Int> { messageId -> Toaster.snackShort(binding!!.content, messageId!!, colorPair()) }
+        )
         binding!!.favoriteSearchView.adapter = adapter
         binding!!.favoriteSearchView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         ItemTouchHelper(
@@ -103,7 +106,7 @@ class FavoriteSearchFragment : BaseFragment() {
         inflater!!.inflate(R.menu.favorite_toolbar_menu, menu)
 
         menu!!.findItem(R.id.favorite_toolbar_menu_clear).setOnMenuItemClickListener { v ->
-            Clear(binding!!.favoriteSearchView, adapter!!.relation.deleter()).invoke()
+            Clear(binding!!.favoriteSearchView, adapter!!.relation.deleter()).invoke(Runnable {  })
             true
         }
 
@@ -119,8 +122,9 @@ class FavoriteSearchFragment : BaseFragment() {
 
     private fun invokeAddition() {
         Addition(
-                binding!!.additionArea
-        ) { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }.invoke()
+                binding!!.additionArea,
+                Consumer<String> { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
+        ).invoke()
     }
 
     @StringRes

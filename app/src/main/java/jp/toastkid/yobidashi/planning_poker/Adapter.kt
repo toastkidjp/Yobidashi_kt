@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.CardItemBinding
 
 /**
  * RecyclerView's adapter.

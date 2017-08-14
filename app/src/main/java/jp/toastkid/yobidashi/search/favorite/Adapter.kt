@@ -3,13 +3,17 @@ package jp.toastkid.yobidashi.search.favorite
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
+import io.reactivex.functions.BiConsumer
+import io.reactivex.functions.Consumer
 
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.FavoriteSearchItemBinding
 import jp.toastkid.yobidashi.libs.functions.SingleValueCallback
 import jp.toastkid.yobidashi.search.SearchCategory
 
@@ -19,13 +23,9 @@ import jp.toastkid.yobidashi.search.SearchCategory
 internal class Adapter(
         context: Context,
         relation: Relation<FavoriteSearch, *>,
-        private val searchAction: SearchCallback,
-        private val toasterCallback: SingleValueCallback<Int>
+        private val searchAction: BiConsumer<SearchCategory, String>,
+        private val toasterCallback: Consumer<Int>
 ) : OrmaRecyclerViewAdapter<FavoriteSearch, FavoriteSearchHolder>(context, relation) {
-
-    internal interface SearchCallback {
-        fun accept(category: SearchCategory, query: String)
-    }
 
     private val inflater: LayoutInflater
 
@@ -58,17 +58,17 @@ internal class Adapter(
     }
 
     private fun bindViews(holder: FavoriteSearchHolder, favoriteSearch: FavoriteSearch) {
-        val category = SearchCategory.findByCategory(favoriteSearch.category)
+        val category = SearchCategory.findByCategory(favoriteSearch.category as String)
         holder.setImageId(category.iconId)
 
         val query = favoriteSearch.query
         holder.setText(query!!)
 
-        holder.setClickAction { v -> searchAction.accept(category, query) }
+        holder.setClickAction(View.OnClickListener { searchAction.accept(category, query) })
 
-        holder.setRemoveAction { v ->
+        holder.setRemoveAction(View.OnClickListener {
             removeItemAsMaybe(favoriteSearch).subscribeOn(Schedulers.io()).subscribe()
             toasterCallback.accept(R.string.settings_color_delete)
-        }
+        })
     }
 }

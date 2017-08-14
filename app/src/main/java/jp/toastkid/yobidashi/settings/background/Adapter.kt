@@ -39,7 +39,7 @@ internal class Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.applyContent(storeroom.get(position))
+        holder.applyContent(storeroom.get(position)!!)
     }
 
     override fun getItemCount(): Int {

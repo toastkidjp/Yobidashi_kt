@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi.browser.archive
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import io.reactivex.functions.Consumer
 
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
@@ -23,13 +25,15 @@ class ArchivesActivity : BaseActivity() {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityArchivesBinding>(this, LAYOUT_ID)
         binding!!.archivesView.layoutManager = LinearLayoutManager(this)
-        val adapter = Adapter(this) { filePath ->
-
-            val intent = Intent()
-            intent.putExtra("FILE_NAME", filePath)
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
+        val adapter = Adapter(
+                this,
+                Consumer<String> { filePath ->
+                    val intent = Intent()
+                    intent.putExtra("FILE_NAME", filePath)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+        )
         if (adapter.itemCount == 0) {
             finish()
             Toaster.tShort(this, R.string.message_empty_archives)

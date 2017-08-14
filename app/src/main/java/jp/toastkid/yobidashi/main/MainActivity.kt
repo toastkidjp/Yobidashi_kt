@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.main
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -116,7 +117,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
      */
     private fun setInitialFragment() {
         speedDial = SpeedDialFragment()
-        replaceFragment(speedDial)
+        replaceFragment(speedDial!!)
     }
 
     /**
@@ -164,12 +165,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     }
 
     private fun loadUri(uri: Uri) {
-        if (preferenceApplier.useInternalBrowser()) {
+        if (preferenceApplier!!.useInternalBrowser()) {
             browserFragment = BrowserFragment()
             val args = Bundle()
             args.putParcelable("url", uri)
             browserFragment!!.arguments = args
-            replaceFragment(browserFragment)
+            replaceFragment(browserFragment!!)
             return
         }
         CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back).build().launchUrl(this, uri)
@@ -186,12 +187,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         }
 
         val transaction = supportFragmentManager.beginTransaction()
-        val sharedElement = speedDial!!.transitionView()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && sharedElement != null) {
-            transaction.replace(R.id.content, fragment).addSharedElement(sharedElement, "share")
-        } else {
-            transaction.replace(R.id.content, fragment)
-        }
+        transaction.replace(R.id.content, fragment)
         transaction.commit()
         binding!!.drawerLayout.closeDrawers()
         binding!!.appBarMain.toolbar.setTitle(fragment.titleId())
@@ -211,18 +207,22 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         if (interstitialAd == null) {
             interstitialAd = InterstitialAd(applicationContext)
         }
-        interstitialAd!!.adUnitId = getString(R.string.unit_id_interstitial)
-        interstitialAd!!.adListener = object : AdListener() {
+        if (interstitialAd == null) {
+            return
+        }
+        interstitialAd?.adUnitId = getString(R.string.unit_id_interstitial)
+        interstitialAd?.adListener = object : AdListener() {
+            val toolbar: Toolbar = binding?.appBarMain?.toolbar as Toolbar
             override fun onAdClosed() {
                 super.onAdClosed()
                 Toaster.snackShort(
-                        binding!!.appBarMain.toolbar,
+                        toolbar,
                         R.string.thank_you_for_using,
                         colorPair()
                 )
             }
         }
-        AdInitializers.find(this).invoke(interstitialAd!!)
+        AdInitializers.find(this).invoke(interstitialAd as InterstitialAd)
     }
 
     /**
@@ -252,29 +252,26 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
      * Initialize navigation.
      */
     private fun initNavigation() {
-        binding!!.navView.setNavigationItemSelectedListener { item ->
+        binding!!.navView.setNavigationItemSelectedListener({ item: MenuItem ->
             attemptToShowingAd()
             when (item.itemId) {
                 R.id.nav_search -> {
                     sendLog("nav_search")
                     switchToSearch()
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_calendar -> {
                     sendLog("nav_cal")
                     if (calendarFragment == null) {
                         calendarFragment = CalendarFragment()
                     }
-                    replaceFragment(calendarFragment)
-                    return@binding.navView.setNavigationItemSelectedListener true
+                    replaceFragment(calendarFragment!!)
                 }
                 R.id.nav_favorite_search -> {
                     sendLog("nav_fav_search")
                     if (favoriteSearchFragment == null) {
                         favoriteSearchFragment = FavoriteSearchFragment()
                     }
-                    replaceFragment(favoriteSearchFragment)
-                    return@binding.navView.setNavigationItemSelectedListener true
+                    replaceFragment(favoriteSearchFragment!!)
                 }
                 R.id.nav_tweet -> {
                     sendLog("nav_twt")
@@ -283,17 +280,14 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                             colorPair(),
                             R.drawable.ic_back
                     ).launchUrl(this@MainActivity, Uri.parse("https://twitter.com/share"))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_launcher -> {
                     sendLog("nav_lnchr")
                     startActivity(LauncherActivity.makeIntent(this))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_share -> {
                     sendLog("nav_shr")
                     startActivity(IntentFactory.makeShare(makeShareMessage()))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_share_twitter -> {
                     sendLog("nav_shr_twt")
@@ -305,78 +299,72 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                             this@MainActivity,
                             Uri.parse("https://twitter.com/share?text=" + Uri.encode(makeShareMessage()))
                     )
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_about_this_app -> {
                     sendLog("nav_about")
                     startActivity(AboutThisAppActivity.makeIntent(this))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_screenshots -> {
                     sendLog("nav_screenshots")
                     startActivity(ScreenshotsActivity.makeIntent(this))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_google_play -> {
                     sendLog("nav_gplay")
                     startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_privacy_policy -> {
                     sendLog("nav_prvcy_plcy")
                     CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back)
                             .build()
                             .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_settings -> {
                     sendLog("nav_set_top")
                     startActivity(SettingsActivity.makeIntent(this))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_planning_poker -> {
                     sendLog("nav_poker")
                     startActivity(PlanningPokerActivity.makeIntent(this))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_browser -> {
                     sendLog("nav_browser")
-                    loadUri(Uri.parse(preferenceApplier.homeUrl))
-                    return@binding.navView.setNavigationItemSelectedListener true
+                    loadUri(Uri.parse(preferenceApplier?.homeUrl))
                 }
                 R.id.nav_barcode -> {
                     sendLog("nav_barcode")
                     startActivity(BarcodeReaderActivity.makeIntent(this))
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_instant_barcode -> {
                     sendLog("nav_instant_barcode")
                     InstantBarcodeGenerator(this).invoke()
-                    return@binding.navView.setNavigationItemSelectedListener true
                 }
                 R.id.nav_home -> {
-                    replaceFragment(speedDial)
-                    return@binding.navView.setNavigationItemSelectedListener true
+                    replaceFragment(speedDial!!)
                 }
             }
             true
+        })
+        val headerView = binding?.navView?.getHeaderView(0)
+        if (headerView != null) {
+            navBackground = headerView.findViewById(R.id.nav_header_background)
         }
-        navBackground = binding!!.navView.getHeaderView(0).findViewById(R.id.nav_header_background)
     }
 
     private fun switchToSearch() {
         if (searchFragment == null) {
             searchFragment = SearchFragment()
         }
-        replaceFragment(searchFragment)
+        replaceFragment(searchFragment!!)
     }
 
     override fun onBackPressed() {
-        val fragment = supportFragmentManager.fragments[0] as BaseFragment
+        @SuppressLint("RestrictedApi")
+        val fragment = supportFragmentManager.fragments[0]
         if (fragment == null) {
             super.onBackPressed()
             return
         }
+        fragment as BaseFragment
         if (fragment.pressBack()) {
             return
         }
@@ -416,6 +404,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
     private fun attemptToShowingAd() {
         val preferenceApplier = preferenceApplier
+        if (preferenceApplier == null) {
+            return
+        }
         if (interstitialAd!!.isLoaded && preferenceApplier.allowShowingAd()) {
             Toaster.snackShort(
                     binding!!.appBarMain.toolbar,
@@ -433,7 +424,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     private fun applyBackgrounds() {
         val backgroundImagePath = backgroundImagePath
         val fontColor = colorPair().fontColor()
-        if (backgroundImagePath.length == 0) {
+        if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
             (navBackground!!.findViewById(R.id.nav_header_main) as TextView)
                     .setTextColor(fontColor)
@@ -476,7 +467,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     override fun action(c: Command) {
         when (c) {
             Command.OPEN_BROWSER -> {
-                loadUri(Uri.parse(preferenceApplier.homeUrl))
+                loadUri(Uri.parse(preferenceApplier?.homeUrl))
                 return
             }
             Command.OPEN_SEARCH -> {
@@ -484,7 +475,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 return
             }
             Command.OPEN_HOME -> {
-                replaceFragment(speedDial)
+                replaceFragment(speedDial!!)
                 return
             }
         }

@@ -15,6 +15,6 @@ object DbInitter {
         if (orma == null) {
             orma = OrmaDatabase.builder(context).name("yobidashi.db").build()
         }
-        return orma
+        return orma as OrmaDatabase
     }
 }

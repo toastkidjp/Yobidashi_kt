@@ -20,12 +20,12 @@ internal class ViewHolder(private val binding: ItemSearchSuggestionBinding) : Re
     }
 
     fun setOnClickAdd(text: String, onClickAdd: Consumer<String>) {
-        binding.searchSuggestAdd.setOnClickListener { v ->
+        binding.searchSuggestAdd.setOnClickListener ({ _ ->
             try {
                 onClickAdd.accept(text)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
+        })
     }
 }

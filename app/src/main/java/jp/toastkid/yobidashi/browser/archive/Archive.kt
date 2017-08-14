@@ -27,7 +27,7 @@ object Archive {
      * *
      * @return
      */
-    operator fun get(context: Context): Storeroom {
+    fun makeNew(context: Context): Storeroom {
         return Storeroom(context, ARCHIVE_DIR)
     }
 
@@ -38,7 +38,7 @@ object Archive {
     fun save(webView: WebView) {
         ArchiveSaver.invoke(
                 webView,
-                get(webView.context).assignNewFile(webView.title + Archive.fileExtension)
+                makeNew(webView.context).assignNewFile(webView.title + Archive.fileExtension)
         )
     }
 

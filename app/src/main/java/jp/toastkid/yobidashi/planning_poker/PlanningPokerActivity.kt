@@ -29,8 +29,11 @@ class PlanningPokerActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView<ActivityPlanningPokerBinding>(this, LAYOUT_ID)
 
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.cardsView.layoutManager = layoutManager
-        binding!!.cardsView.adapter = Adapter()
+        if (binding?.cardsView == null) {
+            return
+        }
+        binding?.cardsView?.layoutManager = layoutManager
+        binding?.cardsView?.adapter = Adapter()
         layoutManager.scrollToPosition(Adapter.medium())
 
         ItemTouchHelper(

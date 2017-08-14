@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.view.View
 import android.webkit.URLUtil
 
 import com.google.zxing.ResultPoint
@@ -82,7 +83,7 @@ class BarcodeReaderActivity : BaseActivity() {
     private fun showResult(text: String) {
         if (URLUtil.isHttpUrl(text) || URLUtil.isHttpsUrl(text)) {
             snackbar = Toaster.withAction(binding!!.root, text, R.string.display,
-                    { v ->
+                    View.OnClickListener{ v ->
                         startActivity(MainActivity.makeBrowserIntent(
                                 this@BarcodeReaderActivity, Uri.parse(text)))
                     },

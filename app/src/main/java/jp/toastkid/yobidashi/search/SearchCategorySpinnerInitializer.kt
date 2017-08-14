@@ -32,12 +32,12 @@ object SearchCategorySpinnerInitializer {
                 return SearchCategory.values()[position].id.toLong()
             }
 
-            override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val searchCategory = SearchCategory.values()[position]
 
                 val context = spinner.context
                 val inflater = LayoutInflater.from(context)
-                val view = inflater.inflate(R.layout.search_category, null)
+                val view = inflater.inflate(R.layout.search_category, parent, false)
                 val imageView = view.findViewById(R.id.search_category_image) as ImageView
                 imageView.setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
                 val textView = view.findViewById(R.id.search_category_text) as TextView

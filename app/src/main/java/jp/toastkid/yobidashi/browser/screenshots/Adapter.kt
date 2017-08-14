@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ItemImageCardBinding
 import jp.toastkid.yobidashi.libs.storage.Storeroom
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -45,7 +46,7 @@ internal class Adapter
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.setImage(screenshots.get(position))
+        holder.setImage(screenshots.get(position)!!)
         holder.itemView.setOnLongClickListener { v ->
             if (screenshots.remove(position)) {
                 notifyItemRemoved(position)

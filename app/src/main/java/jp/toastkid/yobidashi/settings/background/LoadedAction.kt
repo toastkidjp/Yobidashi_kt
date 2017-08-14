@@ -109,7 +109,7 @@ internal class LoadedAction
     private fun informDone(context: Context, image: Bitmap) {
         Toaster.snackLong(
                 parent, R.string.message_done_set_image, R.string.display,
-                { v -> ImageDialog.show(context, uri, BitmapDrawable(context.resources, image)) },
+                View.OnClickListener{ v -> ImageDialog.show(context, uri, BitmapDrawable(context.resources, image)) },
                 colorPair
         )
     }

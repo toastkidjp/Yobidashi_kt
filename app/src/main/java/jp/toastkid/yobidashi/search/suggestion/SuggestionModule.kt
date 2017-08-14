@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search.suggestion
 
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 
 import java.util.HashMap
@@ -50,14 +51,15 @@ class SuggestionModule
     init {
         mSuggestionAdapter = Adapter(
                 LayoutInflater.from(context()),
-                searchInput
-        ) { suggestion -> searchCallback.accept(suggestion) }
+                searchInput,
+                Consumer<String>{ suggestion -> searchCallback.accept(suggestion) }
+        )
         binding.searchSuggestions.layoutManager = LinearLayoutManager(context())
         binding.searchSuggestions.adapter = mSuggestionAdapter
-        binding.searchSuggestions.setOnTouchListener { v, event ->
+        binding.searchSuggestions.setOnTouchListener (View.OnTouchListener{ v, event ->
             onClick.run()
             false
-        }
+        })
     }
 
     /**
@@ -78,7 +80,7 @@ class SuggestionModule
         }
 
         if (mCache.containsKey(key)) {
-            disposable = replace(mCache[key])
+            disposable = replace(mCache[key]!!)
             return
         }
 
@@ -86,17 +88,17 @@ class SuggestionModule
             return
         }
 
-        mFetcher.fetchAsync(key) { suggestions ->
+        mFetcher.fetchAsync(key, Consumer<List<String>>{ suggestions ->
             if (suggestions == null || suggestions.isEmpty()) {
                 Completable.create { e ->
                     hide()
                     e.onComplete()
                 }.subscribeOn(AndroidSchedulers.mainThread()).subscribe()
-                return@mFetcher.fetchAsync
+                return@Consumer
             }
             mCache.put(key, suggestions)
             disposable = replace(suggestions)
-        }
+        })
     }
 
     /**

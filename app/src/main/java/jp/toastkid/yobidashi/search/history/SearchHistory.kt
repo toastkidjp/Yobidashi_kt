@@ -13,13 +13,13 @@ import com.github.gfx.android.orma.annotation.Table
 class SearchHistory {
 
     @PrimaryKey
-    var key: String? = null
+    var key: String? = ""
 
     @Column
-    var category: String? = null
+    var category: String? = ""
 
     @Column
-    var query: String? = null
+    var query: String? = ""
 
     @Column(indexed = true)
     var timestamp: Long = 0

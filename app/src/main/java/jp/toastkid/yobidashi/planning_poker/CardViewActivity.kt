@@ -25,7 +25,7 @@ class CardViewActivity : AppCompatActivity() {
         setContentView(LAYOUT_ID)
 
         cardFragment = CardFragment()
-        addFragment(cardFragment)
+        addFragment(cardFragment!!)
     }
 
     override fun onResume() {

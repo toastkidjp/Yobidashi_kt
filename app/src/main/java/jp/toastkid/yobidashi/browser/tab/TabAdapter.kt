@@ -49,7 +49,7 @@ class TabAdapter(
 
     private val colorPair: ColorPair
 
-    private val webView: WebView?
+    private val webView: WebView
 
     /** Loading flag.  */
     private var isLoadFinished: Boolean = false
@@ -78,7 +78,7 @@ class TabAdapter(
     ): WebView {
         val webViewClient = object : WebViewClient() {
 
-            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
+            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 progress.visibility = View.VISIBLE
                 isLoadFinished = false
@@ -138,22 +138,20 @@ class TabAdapter(
         webView.setOnLongClickListener { v ->
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
-                WebView.HitTestResult.IMAGE_TYPE -> return@webView.setOnLongClickListener
-                false
-                        WebView . HitTestResult . SRC_ANCHOR_TYPE -> {
+                WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                     val url = hitResult.extra
                     if (url != null) {
                         Clipboard.clip(v.context, url)
                     }
                     Clipboard.clip(v.context, url)
-                    return@webView.setOnLongClickListener false
+                    false
                 }
                 else -> {
                     val extra = hitResult.extra
                     if (extra != null) {
                         Clipboard.clip(v.context, extra)
                     }
-                    return@webView.setOnLongClickListener false
+                    false
                 }
             }
         }
@@ -293,11 +291,12 @@ class TabAdapter(
         return Single.create<String> { e -> preferenceApplier.userAgent() }
                 .map { uaName ->
                     val text = UserAgent.valueOf(uaName).text()
-                    if (text.length != 0) {
-                        return@Single.< String > create e -> preferenceApplier.userAgent())
-                        .map text
+
+                    if (text.isNotEmpty()) {
+                        text
+                    } else {
+                        WebView(webView.context).settings.userAgentString
                     }
-                    WebView(webView.context).settings.userAgentString
                 }
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(Consumer<String> { settings.userAgentString = it })
@@ -333,7 +332,7 @@ class TabAdapter(
      * *
      * @return
      */
-    operator fun get(index: Int): Tab {
+    internal fun getTabByIndex(index: Int): Tab {
         return tabList.get(index)
     }
 

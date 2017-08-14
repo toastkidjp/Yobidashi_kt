@@ -32,7 +32,7 @@ enum class UserAgent private constructor(private val title: String, private val 
     companion object {
 
         fun titles(): Array<String> {
-            val titles = arrayOfNulls<String>(values().size)
+            val titles = arrayOf<String>()
             for (i in 0..values().size - 1) {
                 titles[i] = values()[i].title
             }

@@ -16,7 +16,7 @@ import okio.Okio
 
  * @author toastkidjp
  */
-class TabList private constructor() : Iterable<Tab> {
+class TabList private constructor() {
 
     private val tabs: MutableList<Tab>
 
@@ -38,12 +38,8 @@ class TabList private constructor() : Iterable<Tab> {
         return tabs.size
     }
 
-    operator fun get(position: Int): Tab {
+    internal fun get(position: Int): Tab {
         return tabs[position]
-    }
-
-    override fun iterator(): Iterator<Tab> {
-        return tabs.iterator()
     }
 
     /**
@@ -101,7 +97,7 @@ class TabList private constructor() : Iterable<Tab> {
 
             try {
                 initJsonAdapterIfNeed()
-                return jsonAdapter!!.fromJson(Okio.buffer(Okio.source(tabsFile!!)))
+                return jsonAdapter!!.fromJson(Okio.buffer(Okio.source(tabsFile!!)))!!
             } catch (e: IOException) {
                 e.printStackTrace()
             }

@@ -19,9 +19,9 @@ internal class ChromeTabsSearchIntentLauncher(private val context: Context) : Se
 
     @ColorInt private var fontColor: Int = 0
 
-    private var category: String
+    private var category: String = ""
 
-    private var query: String
+    private var query: String = ""
 
     fun setBackgroundColor(@ColorInt backgroundColor: Int): ChromeTabsSearchIntentLauncher {
         this.backgroundColor = backgroundColor

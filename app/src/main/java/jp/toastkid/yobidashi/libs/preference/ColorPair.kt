@@ -5,7 +5,7 @@ import android.support.annotation.ColorInt
 /**
  * @author toastkidjp
  */
-class ColorPair(@param:ColorInt @ColorInt private val bgColor: Int, @param:ColorInt @ColorInt private val fontColor: Int) {
+class ColorPair(@param:ColorInt private val bgColor: Int, @param:ColorInt private val fontColor: Int) {
 
     fun bgColor(): Int {
         return bgColor

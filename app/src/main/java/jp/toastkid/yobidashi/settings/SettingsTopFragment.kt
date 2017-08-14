@@ -13,6 +13,8 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
+import io.reactivex.functions.Consumer
 
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -59,14 +61,13 @@ class SettingsTopFragment : BaseFragment() {
     }
 
     private fun initMenuPos() {
-        binding!!.menuPosRadio.setOnCheckedChangeListener { group, checkedId ->
+        binding!!.menuPosRadio.setOnCheckedChangeListener (RadioGroup.OnCheckedChangeListener{ group, checkedId ->
             when (group.checkedRadioButtonId) {
-                R.id.menu_pos_left -> preferenceApplier().setMenuPos(MenuPos.LEFT)
-                R.id.menu_pos_right,
-                else -> preferenceApplier().setMenuPos(MenuPos.RIGHT)
+                R.id.menu_pos_left  -> preferenceApplier()!!.setMenuPos(MenuPos.LEFT)
+                R.id.menu_pos_right -> preferenceApplier()!!.setMenuPos(MenuPos.RIGHT)
             }
-        }
-        binding!!.menuPosRadio.check(preferenceApplier().menuPos().id())
+        })
+        binding!!.menuPosRadio.check(preferenceApplier()!!.menuPos().id())
     }
 
     override fun onResume() {
@@ -76,7 +77,7 @@ class SettingsTopFragment : BaseFragment() {
     }
 
     private fun setCurrentValues() {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         binding!!.useInternalBrowserCheck.isChecked = preferenceApplier.useInternalBrowser()
         binding!!.retainTabsCheck.isChecked = preferenceApplier.doesRetainTabs()
         binding!!.useNotificationWidgetCheck.isChecked = preferenceApplier.useNotificationWidget()
@@ -116,12 +117,12 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun clearBackgroundSettings(view: View) {
         sendLog("nav_bg_reset")
-        preferenceApplier().removeBackgroundImagePath()
+        preferenceApplier()!!.removeBackgroundImagePath()
         setBackgroundImage(null)
         Toaster.snackShort(
                 binding!!.root,
                 R.string.message_reset_bg_image,
-                preferenceApplier().colorPair()
+                preferenceApplier()!!.colorPair()
         )
     }
 
@@ -140,8 +141,9 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun userAgent(v: View) {
         UserAgent.showSelectionDialog(
-                binding!!.root
-        ) { userAgent -> binding!!.userAgentValue.text = userAgent.title() }
+                binding!!.root,
+                Consumer{ userAgent -> binding!!.userAgentValue.text = userAgent.title() }
+        )
     }
 
     /**
@@ -150,7 +152,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchNotificationWidget(v: View) {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         val newState = !preferenceApplier.useNotificationWidget()
         preferenceApplier.setUseNotificationWidget(newState)
         binding!!.useNotificationWidgetCheck.isChecked = newState
@@ -171,7 +173,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchInternalBrowser(v: View) {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         val newState = !preferenceApplier.useInternalBrowser()
         preferenceApplier.setUseInternalBrowser(newState)
         binding!!.useInternalBrowserCheck.isChecked = newState
@@ -188,7 +190,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchRetainTabs(v: View) {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         val newState = !preferenceApplier.doesRetainTabs()
         preferenceApplier.setRetainTabs(newState)
         binding!!.retainTabsCheck.isChecked = newState
@@ -217,7 +219,7 @@ class SettingsTopFragment : BaseFragment() {
             Toaster.snackShort(binding!!.root, R.string.message_invalid_url, colorPair())
             return
         }
-        preferenceApplier().homeUrl = input
+        preferenceApplier()!!.homeUrl = input
 
         Toaster.snackShort(
                 binding!!.root,
@@ -231,7 +233,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchJsEnabled(v: View) {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         val newState = !preferenceApplier.useJavaScript()
         preferenceApplier.setUseJavaScript(newState)
         binding!!.browserJsCheck.isChecked = newState
@@ -248,7 +250,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchLoadingImage(v: View) {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         val newState = !preferenceApplier.doesLoadImage()
         preferenceApplier.setLoadImage(newState)
         binding!!.useImageCheck.isChecked = newState
@@ -260,7 +262,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchSaveFormData(v: View) {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         val newState = !preferenceApplier.doesSaveForm()
         preferenceApplier.setSaveForm(newState)
         binding!!.saveFormCheck.isChecked = newState
@@ -272,7 +274,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchDailyAlarm(v: View) {
-        val preferenceApplier = preferenceApplier()
+        val preferenceApplier = preferenceApplier()!!
         val newState = !preferenceApplier.doesUseDailyAlarm()
         binding!!.useDailyAlarmCheck.isChecked = newState
 
@@ -288,7 +290,7 @@ class SettingsTopFragment : BaseFragment() {
             Toaster.snackShort(
                     binding!!.root,
                     R.string.message_set_daily_alarm,
-                    preferenceApplier.colorPair()
+                    preferenceApplier!!.colorPair()
             )
             sendLog("nav_daily_set")
         } else {
@@ -297,7 +299,7 @@ class SettingsTopFragment : BaseFragment() {
             Toaster.snackShort(
                     binding!!.root,
                     R.string.message_clear_daily_alarm,
-                    preferenceApplier.colorPair()
+                    preferenceApplier!!.colorPair()
             )
             sendLog("nav_daily_cancel")
         }
@@ -439,7 +441,7 @@ class SettingsTopFragment : BaseFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, i ->
-                    preferenceApplier.clear()
+                    preferenceApplier!!.clear()
                     initColorFilterIfNeed()
                     colorFilter!!.stop()
                     setCurrentValues()

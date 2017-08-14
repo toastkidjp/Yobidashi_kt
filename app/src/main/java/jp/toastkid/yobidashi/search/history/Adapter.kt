@@ -16,6 +16,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
 import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
@@ -43,7 +44,7 @@ internal class Adapter
         /** On click callback.  */
         private val onClick: Consumer<SearchHistory>,
         /** On changed visibility callback.  */
-        private val onVisibilityChanged: HistoryModule.VisibilityCallback,
+        private val onVisibilityChanged: Consumer<Boolean>,
         private val onClickAdd: Consumer<String>
 ) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation) {
 
@@ -75,7 +76,7 @@ internal class Adapter
         }
         holder.setOnClickAdd(searchHistory.query!!, onClickAdd)
 
-        holder.setImageRes(SearchCategory.findByCategory(searchHistory.category).iconId)
+        holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
             val context = context
             AlertDialog.Builder(context)
@@ -102,7 +103,7 @@ internal class Adapter
         clear()
 
         val selector = relation.selector()
-        if (s.length != 0) {
+        if (s.isNotEmpty()) {
             selector.where(relation.schema.query, "LIKE", s.toString() + "%")
         }
         return selector
@@ -112,10 +113,10 @@ internal class Adapter
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate {
-                    onVisibilityChanged.changeState(!isEmpty)
+                    onVisibilityChanged.accept(!isEmpty)
                     notifyDataSetChanged()
                 }
-                .subscribe { this.add(it) }
+                .subscribe { it -> this.add(it) }
     }
 
     /**
@@ -131,7 +132,7 @@ internal class Adapter
                     selected.remove(item)
                     notifyItemRemoved(position)
                     if (isEmpty) {
-                        onVisibilityChanged.changeState(false)
+                        onVisibilityChanged.accept(false)
                     }
                 }
     }

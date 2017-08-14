@@ -13,6 +13,7 @@ import android.view.ViewGroup
 
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
+import com.larswerkman.holocolorpicker.ColorPicker
 
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
@@ -59,19 +60,19 @@ class ColorSettingActivity : BaseActivity() {
     }
 
     private fun initPalette() {
-        binding!!.backgroundPalette.addSVBar(binding!!.backgroundSvbar)
-        binding!!.backgroundPalette.addOpacityBar(binding!!.backgroundOpacitybar)
-        binding!!.backgroundPalette.setOnColorChangedListener { c ->
-            binding!!.settingsColorToolbar.setBackgroundColor(c)
-            binding!!.settingsColorOk.setBackgroundColor(c)
-        }
+        binding?.backgroundPalette?.addSVBar(binding!!.backgroundSvbar)
+        binding?.backgroundPalette?.addOpacityBar(binding!!.backgroundOpacitybar)
+        binding?.backgroundPalette?.setOnColorChangedListener ({ c ->
+            binding?.settingsColorToolbar?.setBackgroundColor(c)
+            binding?.settingsColorOk?.setBackgroundColor(c)
+        })
 
-        binding!!.fontPalette.addSVBar(binding!!.fontSvbar)
-        binding!!.fontPalette.addOpacityBar(binding!!.fontOpacitybar)
-        binding!!.fontPalette.setOnColorChangedListener { c ->
-            binding!!.settingsColorToolbar.setTitleTextColor(c)
-            binding!!.settingsColorOk.setTextColor(c)
-        }
+        binding?.fontPalette?.addSVBar(binding!!.fontSvbar)
+        binding?.fontPalette?.addOpacityBar(binding!!.fontOpacitybar)
+        binding?.fontPalette?.setOnColorChangedListener({ c ->
+            binding?.settingsColorToolbar?.setTitleTextColor(c)
+            binding?.settingsColorOk?.setTextColor(c)
+        })
 
         refresh()
     }
@@ -81,13 +82,13 @@ class ColorSettingActivity : BaseActivity() {
         adapter = SavedColorAdapter(this, DbInitter.get(this).relationOfSavedColor())
         binding!!.savedColors.adapter = adapter
         binding!!.savedColors.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.clearSavedColor.setOnClickListener { v ->
+        binding!!.clearSavedColor.setOnClickListener({ v ->
             SavedColors.showClearColorsDialog(
                     this,
                     binding!!.settingsColorToolbar,
                     adapter!!.relation as SavedColor_Relation
             )
-        }
+        })
     }
 
     /**
@@ -133,9 +134,9 @@ class ColorSettingActivity : BaseActivity() {
     }
 
     private fun commitNewColor(bgColor: Int, fontColor: Int) {
-        preferenceApplier.color = bgColor
+        preferenceApplier!!.color = bgColor
 
-        preferenceApplier.fontColor = fontColor
+        preferenceApplier!!.fontColor = fontColor
 
         refresh()
 
@@ -147,9 +148,9 @@ class ColorSettingActivity : BaseActivity() {
     }
 
     fun reset(view: View) {
-        preferenceApplier.color = initialBgColor
+        preferenceApplier!!.color = initialBgColor
 
-        preferenceApplier.fontColor = initialFontColor
+        preferenceApplier!!.fontColor = initialFontColor
 
         refresh()
         Updater.update(this)

@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi.search
 
 import android.content.Context
 import android.net.Uri
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
 
 import java.util.Locale
 
@@ -13,7 +15,12 @@ import jp.toastkid.yobidashi.main.LocaleWrapper
 
  * @author toastkidjp
  */
-enum class SearchCategory private constructor(val id: Int, val iconId: Int, private val mHost: String, private val mGenerator: Generator = { l, h, q -> h + Uri.encode(q) }) {
+enum class SearchCategory(
+            @StringRes val id: Int,
+            @DrawableRes val iconId: Int,
+            private val mHost: String,
+            val generator: (l: String, h: String, q: String) -> String = {l, h, q ->  h + q }
+    ) {
 
     GOOGLE(R.string.google,
             R.drawable.googleg_standard_color_18,
@@ -25,8 +32,7 @@ enum class SearchCategory private constructor(val id: Int, val iconId: Int, priv
     ),
     WEB(R.string.search_category_web,
             R.drawable.ic_world,
-            "https://duckduckgo.com/%s?ia=web",
-            { l, h, q -> String.format(h, q) }
+            "https://duckduckgo.com/%s?ia=web"
     ),
     IMAGE(R.string.search_category_image,
             R.drawable.ic_image_search,
@@ -70,7 +76,7 @@ enum class SearchCategory private constructor(val id: Int, val iconId: Int, priv
             "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords=",
             { l, h, q ->
                 if (Locale.JAPANESE.language == l) {
-                    return h + Uri.encode(q)
+                    h + Uri.encode(q)
                 }
                 "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Uri.encode(q)
             }
@@ -82,9 +88,9 @@ enum class SearchCategory private constructor(val id: Int, val iconId: Int, priv
     TECHNOLOGY(R.string.search_category_technology,
             R.drawable.ic_technology,
             "http://jp.techcrunch.com/search/",
-            { l, h, q ->
+            {l, h, q ->
                 if (Locale.JAPANESE.language == l) {
-                    return h + Uri.encode(q)
+                    h + Uri.encode(q)
                 }
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
@@ -98,20 +104,15 @@ enum class SearchCategory private constructor(val id: Int, val iconId: Int, priv
             "https://mvnrepository.com/search?q="
     );
 
-    /**
-     * URL Generator.
-     */
-    private interface Generator {
-        fun generate(lang: String, host: String, query: String): String
-    }
-
     fun make(context: Context, query: String): String {
-        return mGenerator.generate(
+        return generate(
                 LocaleWrapper.getLocale(context.resources.configuration),
                 mHost,
                 query
         )
     }
+
+    fun generate(l: String, h: String, q: String): String = generator(l, h, q)
 
     companion object {
 
@@ -121,7 +122,9 @@ enum class SearchCategory private constructor(val id: Int, val iconId: Int, priv
                     return f
                 }
             }
-            return WEB
+            return SearchCategory.values()
+                    .find { it.name == category.toUpperCase() }
+                    .let { if (it == null) {WEB} else it }
         }
     }
 }

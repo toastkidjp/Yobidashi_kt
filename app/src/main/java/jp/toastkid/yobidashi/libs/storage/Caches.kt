@@ -9,7 +9,7 @@ import java.io.File
 
  * @author toastkidjp
  */
-class Caches
+internal class Caches
 /**
  * Initialize with context.
 

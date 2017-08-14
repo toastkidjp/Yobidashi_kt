@@ -89,8 +89,8 @@ internal class Adapter(private val context: Context, private val parent: View) :
         Observable.fromIterable(master)
                 .filter { appInfo -> appInfo.packageName.contains(str) }
                 .subscribeOn(Schedulers.trampoline())
-                .doOnComplete(Action { this.notifyDataSetChanged() })
-                .subscribe(Consumer<ApplicationInfo> { installedApps.add(it) })
+                .doOnComplete { this.notifyDataSetChanged() }
+                .subscribe { installedApps.add(it) }
     }
 
     override fun getItemCount(): Int {

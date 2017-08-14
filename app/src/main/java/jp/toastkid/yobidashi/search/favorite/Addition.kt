@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Spinner
+import io.reactivex.functions.Consumer
 
 import java.text.MessageFormat
 
@@ -35,7 +36,9 @@ class Addition
  */
 internal constructor(
         /** For using extract background color.  */
-        private val parent: ViewGroup, private val toasterCallback: SingleValueCallback<String>) {
+        private val parent: ViewGroup,
+        private val toasterCallback: Consumer<String>
+) {
 
     /** Context.  */
     private val context: Context

@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 
 import io.reactivex.disposables.Disposable
@@ -63,7 +64,7 @@ internal class Adapter
         holder.setColorPair(colorPair)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
-        holder.setOnClick { v -> menuPublishProcessor.onNext(menu) }
+        holder.setOnClick(View.OnClickListener { v -> menuPublishProcessor.onNext(menu) })
     }
 
     override fun getItemCount(): Int {

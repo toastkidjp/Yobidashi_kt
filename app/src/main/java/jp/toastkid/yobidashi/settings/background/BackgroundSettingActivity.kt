@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.settings.background
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -47,7 +48,7 @@ class BackgroundSettingActivity : BaseActivity() {
 
     private fun initImagesView() {
         binding!!.imagesView.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false)
-        adapter = Adapter(preferenceApplier, storeroom)
+        adapter = Adapter(preferenceApplier!!, storeroom!!)
         binding!!.imagesView.adapter = adapter
     }
 
@@ -75,7 +76,7 @@ class BackgroundSettingActivity : BaseActivity() {
     }
 
     private fun clearImages() {
-        ClearImages(this) {
+        ClearImages(this, Runnable {
             sendLog("clear_bg_img")
             storeroom!!.clean()
             Toaster.snackShort(
@@ -84,7 +85,7 @@ class BackgroundSettingActivity : BaseActivity() {
                     colorPair()
             )
             adapter!!.notifyDataSetChanged()
-        }.invoke()
+        }).invoke()
     }
 
     override fun onActivityResult(

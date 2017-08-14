@@ -17,6 +17,6 @@ internal object DbInitter {
                     .name("saved_color.db")
                     .build()
         }
-        return orma
+        return orma as OrmaDatabase
     }
 }

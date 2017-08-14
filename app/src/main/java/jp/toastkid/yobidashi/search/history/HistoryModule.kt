@@ -44,10 +44,6 @@ class HistoryModule
     /** Last subscription.  */
     private var disposable: Disposable? = null
 
-    internal interface VisibilityCallback {
-        fun changeState(visible: Boolean)
-    }
-
     init {
 
         binding.module = this
@@ -56,7 +52,7 @@ class HistoryModule
 
         binding.searchHistories.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
         adapter = Adapter(context(), relation, searchCallback,
-                { visible ->
+                Consumer<Boolean> { visible ->
                     if (visible) {
                         show()
                     } else {
@@ -90,10 +86,11 @@ class HistoryModule
      * @param view
      */
     fun clearHistory(view: View) {
-        Clear(binding.root, relation.deleter()).invoke {
-            adapter.clear()
-            hide()
-        }
+        Clear(binding.root, relation.deleter())
+                .invoke(Runnable {
+                    adapter.clear()
+                    hide()
+                })
     }
 
     /**
