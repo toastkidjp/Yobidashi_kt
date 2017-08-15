@@ -1,10 +1,8 @@
 package jp.toastkid.yobidashi.browser
 
-import android.content.Context
 import android.support.v7.app.AlertDialog
 import android.view.View
 import io.reactivex.functions.Consumer
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -32,11 +30,11 @@ enum class UserAgent private constructor(private val title: String, private val 
     companion object {
 
         fun titles(): Array<String> {
-            val titles = arrayOf<String>()
+            val titles = ArrayList<String>(values().size)
             for (i in 0..values().size - 1) {
-                titles[i] = values()[i].title
+                titles.add(values()[i].title)
             }
-            return titles
+            return titles.toArray(arrayOf<String>())
         }
 
         fun findCurrentIndex(name: String): Int {

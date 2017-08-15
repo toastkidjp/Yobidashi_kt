@@ -59,6 +59,7 @@ import jp.toastkid.yobidashi.speed_dial.FragmentReplaceAction
 import android.content.Context.CLIPBOARD_SERVICE
 import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Internal browser fragment.
@@ -71,7 +72,7 @@ class BrowserFragment : BaseFragment() {
     private var binding: FragmentBrowserBinding? = null
 
     /** Archive folder.  */
-    private var tabs: TabAdapter? = null
+    private lateinit var tabs: TabAdapter
 
     private var fragmentReplaceAction: FragmentReplaceAction? = null
 
@@ -389,12 +390,15 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun refreshFab() {
-        binding!!.fab.setBackgroundColor(preferenceApplier()!!.colorPair().bgColor())
+        val preferenceApplier = preferenceApplier() as PreferenceApplier
+        binding!!.fab.setBackgroundColor(preferenceApplier.colorPair().bgColor())
 
         val resources = resources
         val fabMarginBottom = resources.getDimensionPixelSize(R.dimen.fab_margin)
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
-        MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier()!!.menuPos())
+        MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
+
+        tabs.resetUserAgent(UserAgent.valueOf(preferenceApplier.userAgent()))
     }
 
     override fun pressBack(): Boolean {
