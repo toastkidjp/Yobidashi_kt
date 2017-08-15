@@ -196,7 +196,6 @@ class SearchFragment : BaseFragment() {
                     binding.searchInput?.text.toString()
             )
         })
-        binding.searchIcon?.setColorFilter(bgColor)
         binding.searchClear?.setColorFilter(bgColor)
         binding.searchInputBorder?.setBackgroundColor(bgColor)
     }
