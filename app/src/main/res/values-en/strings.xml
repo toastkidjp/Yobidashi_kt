@@ -151,7 +151,6 @@
     <string name="title_menu_back">Back</string>
     <string name="title_menu_forward">Forward</string>
     <string name="title_menu_page_information">Page information</string>
-    <string name="title_menu_capture">Capture</string>
 
     <string name="message_js_enabled">It has changed to enable JavaScript.</string>
     <string name="message_js_disabled">It has changed to disable JavaScript.</string>
