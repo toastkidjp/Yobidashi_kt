@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.screenshots.ScreenshotsActivity
 import jp.toastkid.yobidashi.calendar.CalendarArticleLinker
 import jp.toastkid.yobidashi.calendar.CalendarFragment
+import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -69,7 +70,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     private var navBackground: View? = null
 
     /** Data binding object.  */
-    private var binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
 
     /** Interstitial AD.  */
     private var interstitialAd: InterstitialAd? = null
@@ -98,16 +99,20 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, LAYOUT_ID)
 
-        initToolbar(binding!!.appBarMain.toolbar)
-        setSupportActionBar(binding!!.appBarMain.toolbar)
+        initToolbar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.appBarMain.toolbar)
 
-        initDrawer(binding!!.appBarMain.toolbar)
+        initDrawer(binding.appBarMain.toolbar)
 
         initNavigation()
 
         setInitialFragment()
 
         initInterstitialAd()
+
+        if (preferenceApplier?.useColorFilter() as Boolean) {
+            ColorFilter(this, binding.root as View).start()
+        }
 
         processShortcut()
     }
