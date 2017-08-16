@@ -7,10 +7,8 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.annotation.StringRes
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
@@ -47,7 +45,6 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -143,7 +140,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY))
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
                 else
-                    SearchCategory.WEB.name
+                    SearchCategory.DUCKDUCKGO.name
                 SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
                         .invoke()
                 return

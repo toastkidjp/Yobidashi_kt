@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="search_category_web">Web</string>
+    <string name="search_category_web">DuckDuckGo</string>
     <string name="search_category_image">画像</string>
     <string name="search_category_map">地図</string>
     <string name="search_category_apps">アプリ</string>
@@ -218,4 +218,6 @@
     <string name="message_check_retain_tabs">アプリ終了後もタブを保持します。</string>
     <string name="message_check_doesnot_retain_tabs">アプリ終了時にタブをすべて削除します。</string>
     <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
+    <string name="search_category_grep_code">GrepCode</string>
+    <string name="search_category_yandex">Yandex</string>
 </resources>

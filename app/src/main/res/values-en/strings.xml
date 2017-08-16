@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="search_category_web">Web</string>
+    <string name="search_category_web">DuckDuckGo</string>
     <string name="search_category_image">Image</string>
     <string name="search_category_map">Map</string>
     <string name="search_category_apps">Apps</string>
@@ -220,4 +220,6 @@
     <string name="message_check_retain_tabs">It will retain tabs when you exit this app.</string>
     <string name="message_check_doesnot_retain_tabs">It will remove all tabs when you exit this app.</string>
     <string name="title_retain_tabs">Retain tabs on exit this app</string>
+    <string name="search_category_grep_code">GrepCode</string>
+    <string name="search_category_yandex">Yandex</string>
 </resources>
