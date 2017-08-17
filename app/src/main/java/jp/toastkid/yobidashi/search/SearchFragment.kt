@@ -18,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
@@ -36,7 +37,7 @@ import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 class SearchFragment : BaseFragment() {
 
     /** View binder.  */
-    private lateinit var binding: FragmentSearchBinding
+    private var binding: FragmentSearchBinding? = null
 
     /** Disposables.  */
     private lateinit var disposables: CompositeDisposable
@@ -58,9 +59,9 @@ class SearchFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater!!, LAYOUT_ID, container, false)
-        binding.searchClear?.setOnClickListener ({ v -> binding.searchInput?.setText("") })
-        SearchCategorySpinnerInitializer.initialize(binding.searchCategories as Spinner)
+        binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater, LAYOUT_ID, container, false)
+        binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
+        SearchCategorySpinnerInitializer.initialize(binding?.searchCategories as Spinner)
 
         initHistoryModule()
 
@@ -69,40 +70,40 @@ class SearchFragment : BaseFragment() {
         applyColor()
 
         suggestionModule = SuggestionModule(
-                binding.suggestionModule as ModuleSearchSuggestionBinding,
-                binding.searchInput as EditText,
-                Consumer<String> { suggestion -> search(binding.searchCategories?.selectedItem.toString(), suggestion) },
+                binding?.suggestionModule as ModuleSearchSuggestionBinding,
+                binding?.searchInput as EditText,
+                Consumer<String> { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
                 Runnable { this.hideKeyboard() }
         )
 
         setHasOptionsMenu(true)
 
-        binding.scroll.setOnTouchListener({ v, event ->
+        binding?.scroll?.setOnTouchListener({ v, event ->
             hideKeyboard()
             false
         })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.searchBar.transitionName = "share"
+            binding?.searchBar?.transitionName = "share"
         }
 
-        return binding.root
+        return binding?.root
     }
 
     /**
      * Initialize history module asynchronously.
      */
     private fun initHistoryModule() {
-        disposables!!.add(
+        disposables.add(
                 Completable.create { e ->
                     historyModule = HistoryModule(
-                            binding.historyModule,
+                            binding?.historyModule as ModuleSearchHistoryBinding,
                             Consumer<SearchHistory> { history -> search(history.category as String, history.query as String) },
                             Runnable { this.hideKeyboard() },
                             Consumer<String> { text ->
-                                binding.searchInput.setText(text + " ")
-                                binding.searchInput.setSelection(
-                                        binding.searchInput.text.toString().length)
+                                binding?.searchInput?.setText(text + " ")
+                                binding?.searchInput?.setSelection(
+                                        binding?.searchInput?.text.toString().length)
                             }
                     )
                     e.onComplete()
@@ -110,7 +111,7 @@ class SearchFragment : BaseFragment() {
                         .subscribeOn(Schedulers.newThread())
                         .subscribe {
                             if (preferenceApplier().isEnableSearchHistory) {
-                                historyModule!!.query("")
+                                historyModule.query("")
                             }
                         }
         )
@@ -144,13 +145,13 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun initSearchInput() {
-        binding.searchInput.setOnEditorActionListener({ v, actionId, event ->
+        binding?.searchInput?.setOnEditorActionListener({ v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                search(binding.searchCategories.selectedItem.toString(), v.text.toString())
+                search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
             }
             true
         })
-        binding.searchInput.addTextChangedListener(object : TextWatcher {
+        binding?.searchInput?.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 // NOP.
@@ -162,15 +163,15 @@ class SearchFragment : BaseFragment() {
 
                 val preferenceApplier: PreferenceApplier = preferenceApplier()
                 if (preferenceApplier.isEnableSearchHistory) {
-                    historyModule!!.query(s)
+                    historyModule.query(s)
                 }
 
                 if (preferenceApplier.isDisableSuggestion) {
-                    suggestionModule!!.clear()
+                    suggestionModule.clear()
                     return
                 }
 
-                suggestionModule!!.request(key)
+                suggestionModule.request(key)
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -184,20 +185,20 @@ class SearchFragment : BaseFragment() {
      */
     private fun applyColor() {
         val colorPair : ColorPair = colorPair()
-        @ColorInt val bgColor = colorPair.bgColor() as Int
+        @ColorInt val bgColor = colorPair.bgColor()
         @ColorInt val fontColor = colorPair.fontColor()
-        Colors.setEditTextColor(binding.searchInput as EditText, bgColor)
+        Colors.setEditTextColor(binding?.searchInput as EditText, bgColor)
 
-        binding.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
-        binding.searchAction?.setTextColor(fontColor)
-        binding.searchAction?.setOnClickListener({ view ->
+        binding?.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
+        binding?.searchAction?.setTextColor(fontColor)
+        binding?.searchAction?.setOnClickListener({ view ->
             search(
-                    binding.searchCategories?.selectedItem.toString(),
-                    binding.searchInput?.text.toString()
+                    binding?.searchCategories?.selectedItem.toString(),
+                    binding?.searchInput?.text.toString()
             )
         })
-        binding.searchClear?.setColorFilter(bgColor)
-        binding.searchInputBorder?.setBackgroundColor(bgColor)
+        binding?.searchClear?.setColorFilter(bgColor)
+        binding?.searchInputBorder?.setBackgroundColor(bgColor)
     }
 
     /**
@@ -218,7 +219,7 @@ class SearchFragment : BaseFragment() {
      * Hide software keyboard.
      */
     fun hideKeyboard() {
-        Inputs.hideKeyboard(binding.searchInput)
+        Inputs.hideKeyboard(binding?.searchInput as EditText)
     }
 
     override fun onPause() {

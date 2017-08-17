@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.settings
 
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -131,20 +130,11 @@ class SettingsTopFragment : BaseFragment() {
     fun clearBackgroundSettings(view: View) {
         sendLog("nav_bg_reset")
         preferenceApplier().removeBackgroundImagePath()
-        setBackgroundImage(null)
         Toaster.snackShort(
                 binding.root,
                 R.string.message_reset_bg_image,
                 preferenceApplier().colorPair()
         )
-    }
-
-    /**
-     * Set background image.
-     * @param background nullable
-     */
-    private fun setBackgroundImage(background: BitmapDrawable?) {
-        //((ImageView) navBackground.findViewById(R.id.background)).setImageDrawable(background);
     }
 
     /**
