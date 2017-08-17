@@ -222,4 +222,7 @@
     <string name="title_retain_tabs">Retain tabs on exit this app</string>
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
+    <string name="title_default_search_engine">Default Search Engine</string>
+    <string name="subhead_search">Search</string>
+    <string name="subhead_browser">Browser</string>
 </resources>

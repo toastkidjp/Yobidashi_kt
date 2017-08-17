@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search
 
-import android.content.Context
 import android.support.v7.content.res.AppCompatResources
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,8 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
-
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -46,6 +45,8 @@ object SearchCategorySpinnerInitializer {
             }
         }
         spinner.adapter = adapter
+        spinner.setSelection(SearchCategory.findIndex(
+                PreferenceApplier(spinner.context).getDefaultSearchEngine()))
     }
 
 }

@@ -70,6 +70,51 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/search_module"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SettingCardStyle"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/SettingSubhead"
+                    android:text="@string/title_search_action"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    />
+                <FrameLayout
+                    android:id="@+id/default_search_engine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{fragment.openSearchCategory}"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/OneLineTextMenu"
+                        android:drawableLeft="@drawable/ic_search_black"
+                        android:text="@string/title_default_search_engine"
+                        />
+                    <Spinner
+                        android:id="@+id/search_categories"
+                        android:layout_width="@dimen/search_category_spinner_width"
+                        android:layout_height="@dimen/search_category_spinner_width"
+                        android:layout_gravity="right|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:background="@color/spinner_background"
+                        />
+                </FrameLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:id="@+id/browser_module"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

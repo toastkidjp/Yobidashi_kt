@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.FragmentTransaction
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySettingsBinding
@@ -22,32 +20,32 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 class SettingsActivity : BaseActivity() {
 
     /** DataBinding object.  */
-    private var binding: ActivitySettingsBinding? = null
+    private lateinit var binding: ActivitySettingsBinding
 
     /** Settings fragment.  */
-    private var fragment: SettingsTopFragment? = null
+    private lateinit var fragment: SettingsTopFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivitySettingsBinding>(this, LAYOUT_ID)
-        binding!!.activity = this
-        setSupportActionBar(binding!!.toolbar)
-        initToolbar(binding!!.toolbar)
+        binding.activity = this
+        setSupportActionBar(binding.toolbar)
+        initToolbar(binding.toolbar)
 
         val transaction = supportFragmentManager.beginTransaction()
         fragment = SettingsTopFragment()
         transaction.replace(R.id.container, fragment)
         transaction.commit()
 
-        binding!!.categoryGroup.check(R.id.category_all)
+        binding.categoryGroup.check(R.id.category_all)
     }
 
     override fun onResume() {
         super.onResume()
-        applyColorToToolbar(binding!!.toolbar)
+        applyColorToToolbar(binding.toolbar)
 
-        ImageLoader.setImageToImageView(binding!!.background, backgroundImagePath)
+        ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -76,7 +74,7 @@ class SettingsActivity : BaseActivity() {
      * @param v
      */
     fun switchAll(v: View) {
-        fragment!!.showAll()
+        fragment.showAll()
     }
 
     /**
@@ -85,7 +83,11 @@ class SettingsActivity : BaseActivity() {
      * @param v
      */
     fun switchDisplaying(v: View) {
-        fragment!!.showDisplay()
+        fragment.showDisplay()
+    }
+
+    fun switchSearch(v: View) {
+        fragment.showSearch()
     }
 
     /**
@@ -94,7 +96,7 @@ class SettingsActivity : BaseActivity() {
      * @param v
      */
     fun switchBrowser(v: View) {
-        fragment!!.showBrowser()
+        fragment.showBrowser()
     }
 
     /**
@@ -103,7 +105,7 @@ class SettingsActivity : BaseActivity() {
      * @param v
      */
     fun switchNotification(v: View) {
-        fragment!!.showNotifications()
+        fragment.showNotifications()
     }
 
     /**
@@ -112,7 +114,7 @@ class SettingsActivity : BaseActivity() {
      * @param v
      */
     fun switchOthers(v: View) {
-        fragment!!.showOthers()
+        fragment.showOthers()
     }
 
     companion object {

@@ -220,4 +220,7 @@
     <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
+    <string name="title_default_search_engine">デフォルトの検索エンジン</string>
+    <string name="subhead_search">検索の設定</string>
+    <string name="subhead_browser">ブラウザの設定</string>
 </resources>

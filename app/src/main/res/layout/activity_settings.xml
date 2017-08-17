@@ -39,8 +39,14 @@
                     android:onClick="@{activity.switchDisplaying}"
                     />
                 <RadioButton
+                    android:id="@+id/category_search"
+                    android:text="@string/subhead_search"
+                    style="@style/FakeTabStyle"
+                    android:onClick="@{activity.switchSearch}"
+                    />
+                <RadioButton
                     android:id="@+id/category_browser"
-                    android:text="@string/title_browser"
+                    android:text="@string/subhead_browser"
                     style="@style/FakeTabStyle"
                     android:onClick="@{activity.switchBrowser}"
                     />

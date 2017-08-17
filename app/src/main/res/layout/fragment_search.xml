@@ -72,7 +72,7 @@
 
             <Spinner
                 android:id="@+id/search_categories"
-                android:layout_width="44dp"
+                android:layout_width="@dimen/search_category_spinner_width"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
                 android:spinnerMode="dropdown"

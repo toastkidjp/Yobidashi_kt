@@ -10,7 +10,7 @@ import java.util.*
 
 /**
  * Web search category.
-
+ *
  * @author toastkidjp
  */
 enum class SearchCategory(
@@ -131,9 +131,20 @@ enum class SearchCategory(
             }
             return SearchCategory.values()
                     .find { it.name == category.toUpperCase() }
-                    .let { if (it == null) {
-                        DUCKDUCKGO
-                    } else it }
+                    .let { if (it == null) { GOOGLE } else { it } }
+        }
+
+        fun findIndex(category: String): Int {
+            return values().find { it.name == category.toUpperCase() }
+                    .let { if (it == null) { 0 } else { it.ordinal } }
+        }
+
+        fun getDefault(): SearchCategory {
+            return GOOGLE
+        }
+
+        fun getDefaultCategoryName(): String {
+            return getDefault().name
         }
     }
 }

@@ -3,10 +3,8 @@ package jp.toastkid.yobidashi.search.voice
 import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
-
-import jp.toastkid.yobidashi.libs.Logger
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
  * Voice search use case.
@@ -44,7 +42,6 @@ object VoiceSearch {
         if (result.size == 0) {
             return
         }
-        Logger.i(result.toString())
-        SearchAction(context, SearchCategory.GOOGLE.name, result[0]).invoke()
+        SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), result[0]).invoke()
     }
 }

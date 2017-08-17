@@ -17,14 +17,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
-
-import java.io.File
-import java.io.IOException
-import java.text.MessageFormat
-
 import io.reactivex.disposables.Disposable
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
@@ -47,7 +41,6 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
@@ -55,6 +48,9 @@ import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.speed_dial.Command
 import jp.toastkid.yobidashi.speed_dial.FragmentReplaceAction
 import jp.toastkid.yobidashi.speed_dial.SpeedDialFragment
+import java.io.File
+import java.io.IOException
+import java.text.MessageFormat
 
 /**
  * Main of this calendar app.
@@ -137,10 +133,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {
-                val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY))
+                val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
-                else
-                    SearchCategory.DUCKDUCKGO.name
+                } else {
+                    preferenceApplier.getDefaultSearchEngine()
+                }
                 SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
                         .invoke()
                 return

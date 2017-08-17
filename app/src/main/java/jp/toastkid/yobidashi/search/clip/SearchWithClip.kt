@@ -1,17 +1,15 @@
 package jp.toastkid.yobidashi.search.clip
 
-import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.view.View
-
 import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
  * Search action with clipboard text.
@@ -78,6 +76,6 @@ class SearchWithClip
 
             return
         }
-        SearchAction(context, SearchCategory.GOOGLE.name, query).invoke()
+        SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), query).invoke()
     }
 }

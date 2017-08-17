@@ -28,7 +28,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * FIXME: remove it
      * @return [PreferenceApplier]
      */
-    protected var preferenceApplier: PreferenceApplier? = null
+    protected lateinit var preferenceApplier: PreferenceApplier
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
