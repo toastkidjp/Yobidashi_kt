@@ -33,13 +33,13 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 
 /**
  * Speed dial.
-
+ *
  * @author toastkidjp
  */
 class HomeFragment : BaseFragment() {
 
     /** Data binding object.  */
-    private var binding: FragmentHomeBinding? = null
+    private lateinit var binding: FragmentHomeBinding
 
     /** Callback.  */
     private var action: FragmentReplaceAction? = null
@@ -59,12 +59,11 @@ class HomeFragment : BaseFragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<FragmentHomeBinding>(inflater!!, LAYOUT_ID, container, false)
-        binding!!.fragment = this
-        binding!!.mainTitle.setTextColor(colorPair().fontColor())
+        binding.fragment = this
 
         initMenus()
 
-        return binding!!.root
+        return binding.root
     }
 
     /**
@@ -72,9 +71,9 @@ class HomeFragment : BaseFragment() {
      */
     private fun initMenus() {
         adapter = Adapter(activity, Consumer<Menu> { this.processMenu(it) })
-        binding!!.menusView.adapter = adapter
+        binding.menusView.adapter = adapter
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.menusView.layoutManager = layoutManager
+        binding.menusView.layoutManager = layoutManager
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
@@ -121,7 +120,7 @@ class HomeFragment : BaseFragment() {
                 return
             }
             Menu.COLOR_FILTER -> {
-                ColorFilter(activity, binding!!.root)
+                ColorFilter(activity, binding.root)
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
                 return
             }
@@ -135,8 +134,8 @@ class HomeFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
 
-        binding!!.root.setBackgroundColor(
-                if (preferenceApplier()!!.hasBackgroundImagePath())
+        binding.root.setBackgroundColor(
+                if (preferenceApplier().hasBackgroundImagePath())
                     Color.TRANSPARENT
                 else
                     ContextCompat.getColor(activity, R.color.darkgray_scale)
@@ -144,12 +143,13 @@ class HomeFragment : BaseFragment() {
         val colorPair = colorPair()
         @ColorInt val bgColor = colorPair.bgColor()
         @ColorInt val fontColor = colorPair.fontColor()
-        binding!!.searchInput.setTextColor(bgColor)
-        binding!!.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
-        binding!!.searchAction.setTextColor(fontColor)
-        binding!!.searchIcon.setColorFilter(bgColor)
-        binding!!.voiceSearch.setColorFilter(bgColor)
-        binding!!.searchInputBorder.setBackgroundColor(bgColor)
+        binding.mainTitle.setTextColor(colorPair().fontColor())
+        binding.searchInput.setTextColor(bgColor)
+        binding.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
+        binding.searchAction.setTextColor(fontColor)
+        binding.searchIcon.setColorFilter(bgColor)
+        binding.voiceSearch.setColorFilter(bgColor)
+        binding.searchInputBorder.setBackgroundColor(bgColor)
     }
 
     /**
@@ -159,18 +159,10 @@ class HomeFragment : BaseFragment() {
     fun search(v: View) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding!!.searchBar.transitionName = "share"
+            binding.searchBar.transitionName = "share"
         }
 
         action!!.action(Command.OPEN_SEARCH)
-    }
-
-    /**
-     * Return transition view.
-     * @return
-     */
-    fun transitionView(): View? {
-        return if (binding != null) binding!!.searchBar else null
     }
 
     /**
@@ -194,13 +186,13 @@ class HomeFragment : BaseFragment() {
             REQUEST_OVERLAY_PERMISSION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
                     Toaster.snackShort(
-                            binding!!.root,
+                            binding.root,
                             R.string.message_cannot_draw_overlay,
                             colorPair()
                     )
                     return
                 }
-                ColorFilter(activity, binding!!.root)
+                ColorFilter(activity, binding.root)
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
                 return
             }
