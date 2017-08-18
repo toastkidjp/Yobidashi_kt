@@ -13,45 +13,42 @@ import jp.toastkid.yobidashi.search.SearchAction
 
 /**
  * Search action with clipboard text.
-
+ * Initialize with ClipboardManager, parent view, and color pair.
+ *
+ * @param cm For monitoring clipboard.
+ *
+ * @param parent Use for showing snackbar.
+ *
+ * @param colorPair Use for showing snackbar.
+ *
+ * @param browseCallback Use for browse clipped URL.
+ *
  * @author toastkidjp
  */
-class SearchWithClip
-/**
- * Initialize with ClipboardManager, parent view, and color pair.
-
- * @param cm
- * *
- * @param parent
- * *
- * @param colorPair
- */
-(
-        /** For monitoring clipboard.  */
+class SearchWithClip(
         private val cm: ClipboardManager,
-        /** Use for showing snackbar.  */
         private val parent: View,
-        /** Use for showing snackbar.  */
         private val colorPair: ColorPair,
-        /** Use for browse clipped URL.  */
         private val browseCallback: Consumer<String>
 ) {
+
+    private lateinit var listener: ClipboardManager.OnPrimaryClipChangedListener
 
     /**
      * Invoke action.
      */
     operator fun invoke() {
-        cm.addPrimaryClipChangedListener {
+        listener = ClipboardManager.OnPrimaryClipChangedListener{
             if (!cm.hasPrimaryClip()) {
-                return@addPrimaryClipChangedListener
+                return@OnPrimaryClipChangedListener
             }
 
             val firstItem = cm.primaryClip.getItemAt(0)
-            firstItem ?: return@addPrimaryClipChangedListener
+            firstItem ?: return@OnPrimaryClipChangedListener
 
             val text = firstItem.text
             if (text == null || text.isEmpty()) {
-                return@addPrimaryClipChangedListener
+                return@OnPrimaryClipChangedListener
             }
 
             val context = parent.context
@@ -59,10 +56,11 @@ class SearchWithClip
                     parent,
                     context.getString(R.string.message_clip_search, text),
                     R.string.title_search_action,
-                    View.OnClickListener{ v -> searchOrBrowse(context, text) },
+                    View.OnClickListener { v -> searchOrBrowse(context, text) },
                     colorPair
             )
         }
+        cm.addPrimaryClipChangedListener(listener)
     }
 
     private fun searchOrBrowse(context: Context, text: CharSequence) {
@@ -73,9 +71,12 @@ class SearchWithClip
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             return
         }
         SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), query).invoke()
+    }
+
+    fun dispose() {
+        cm.removePrimaryClipChangedListener(listener)
     }
 }

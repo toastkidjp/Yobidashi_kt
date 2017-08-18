@@ -3,15 +3,13 @@ package jp.toastkid.yobidashi.browser
 import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.content.res.Resources
 import android.databinding.DataBindingUtil
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.design.widget.TextInputLayout
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -20,15 +18,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
-
-import java.io.File
-import java.io.IOException
-
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.BuildConfig
@@ -42,24 +36,22 @@ import jp.toastkid.yobidashi.browser.tab.TabAdapter
 import jp.toastkid.yobidashi.browser.tab.TabListModule
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
+import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.libs.ImageCache
-import jp.toastkid.yobidashi.libs.Logger
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.speed_dial.Command
 import jp.toastkid.yobidashi.speed_dial.FragmentReplaceAction
-
-import android.content.Context.CLIPBOARD_SERVICE
-import io.reactivex.functions.Consumer
-import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import java.io.File
+import java.io.IOException
 
 /**
  * Internal browser fragment.
@@ -85,6 +77,8 @@ class BrowserFragment : BaseFragment() {
 
     /** Disposer.  */
     private val disposables: CompositeDisposable
+
+    private lateinit var searchWithClip: SearchWithClip
 
     init {
         titleProcessor = PublishProcessor.create<TitlePair>()
@@ -117,12 +111,13 @@ class BrowserFragment : BaseFragment() {
         pageSearcherModule = PageSearcherModule(binding!!.sip, tabs!!)
 
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        SearchWithClip(
+        searchWithClip = SearchWithClip(
                 cm,
                 binding!!.root,
                 colorPair(),
                 Consumer<String> { url -> tabs!!.loadWithNewTab(Uri.parse(url)) }
-        ).invoke()
+        )
+        searchWithClip.invoke()
 
         val url = arguments.getParcelable<Uri>("url")
         if (url != null) {
@@ -468,6 +463,7 @@ class BrowserFragment : BaseFragment() {
         (binding!!.menusView.adapter as Adapter).dispose()
         tabs!!.dispose()
         disposables.dispose()
+        searchWithClip.dispose();
     }
 
     companion object {
