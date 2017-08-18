@@ -4,8 +4,7 @@ import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
-import jp.toastkid.yobidashi.databinding.ItemSpeedDialMenuBinding
+import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
@@ -13,7 +12,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 
  * @author toastkidjp
  */
-internal class ViewHolder(private val binding: ItemSpeedDialMenuBinding) : RecyclerView.ViewHolder(binding.root) {
+internal class ViewHolder(private val binding: ItemHomeMenuBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun setText(@StringRes titleId: Int) {
         binding.text.setText(titleId)

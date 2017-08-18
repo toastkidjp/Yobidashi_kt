@@ -3,23 +3,12 @@
     <data>
         <variable name="fragment" type="jp.toastkid.yobidashi.home.HomeFragment" />
     </data>
-    <FrameLayout
+    <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <TextView
-            android:id="@+id/main_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textSize="60sp"
-            android:textStyle="bold"
-            />
+
         <LinearLayout
             android:id="@+id/search"
             android:orientation="horizontal"
@@ -27,7 +16,7 @@
             android:layout_height="@dimen/toolbar_height"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             >
             <FrameLayout
                 android:id="@+id/search_bar"
@@ -99,13 +88,26 @@
                     />
             </FrameLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_above="@id/search"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textSize="60sp"
+            android:textStyle="bold"
+            />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menus_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="112dp"
+            android:layout_below="@id/search"
+            android:layout_marginTop="12dp"
             android:layout_gravity="center"
             android:gravity="center"
             />
-    </FrameLayout>
+    </RelativeLayout>
 </layout>
