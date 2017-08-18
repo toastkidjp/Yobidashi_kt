@@ -16,13 +16,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.reactivex.functions.Consumer
-
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
 import jp.toastkid.yobidashi.color_filter.ColorFilter
-import jp.toastkid.yobidashi.databinding.FragmentSpeedDialBinding
+import jp.toastkid.yobidashi.databinding.FragmentHomeBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
@@ -40,7 +39,7 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 class HomeFragment : BaseFragment() {
 
     /** Data binding object.  */
-    private var binding: FragmentSpeedDialBinding? = null
+    private var binding: FragmentHomeBinding? = null
 
     /** Callback.  */
     private var action: FragmentReplaceAction? = null
@@ -59,7 +58,7 @@ class HomeFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<FragmentSpeedDialBinding>(inflater!!, LAYOUT_ID, container, false)
+        binding = DataBindingUtil.inflate<FragmentHomeBinding>(inflater!!, LAYOUT_ID, container, false)
         binding!!.fragment = this
         binding!!.mainTitle.setTextColor(colorPair().fontColor())
 
@@ -214,13 +213,13 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun titleId(): Int {
-        return R.string.title_speed_dial
+        return R.string.title_home
     }
 
     companion object {
 
         /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.fragment_speed_dial
+        private val LAYOUT_ID = R.layout.fragment_home
 
         private val REQUEST_CODE_VOICE_SEARCH = 2
 
