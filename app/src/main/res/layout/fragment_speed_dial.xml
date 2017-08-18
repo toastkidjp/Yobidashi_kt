@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <variable name="fragment" type="jp.toastkid.yobidashi.speed_dial.SpeedDialFragment" />
+        <variable name="fragment" type="jp.toastkid.yobidashi.home.HomeFragment" />
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

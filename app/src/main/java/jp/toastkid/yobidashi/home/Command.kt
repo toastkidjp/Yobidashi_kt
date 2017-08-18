@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.speed_dial
+package jp.toastkid.yobidashi.home
 
 /**
  * Speed dial commands.

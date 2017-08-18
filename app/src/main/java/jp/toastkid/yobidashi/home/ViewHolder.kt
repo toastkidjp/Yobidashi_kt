@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.speed_dial
+package jp.toastkid.yobidashi.home
 
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes

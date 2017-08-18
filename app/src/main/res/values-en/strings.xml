@@ -182,7 +182,6 @@
     <string name="generate">Generate</string>
     <string name="message_requires_permission_camera">
         If you want to use this function, you should permit using camera to this app.</string>
-    <string name="title_speed_dial">Speed Dial</string>
     <string name="title_home">Home</string>
     <string name="title_open_url">Open URL</string>
     <string name="message_invalid_url">Input URL is invalid.</string>

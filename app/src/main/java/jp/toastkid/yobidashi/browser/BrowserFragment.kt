@@ -48,8 +48,8 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.speed_dial.Command
-import jp.toastkid.yobidashi.speed_dial.FragmentReplaceAction
+import jp.toastkid.yobidashi.home.Command
+import jp.toastkid.yobidashi.home.FragmentReplaceAction
 import java.io.File
 import java.io.IOException
 

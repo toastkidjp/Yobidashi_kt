@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.speed_dial
+package jp.toastkid.yobidashi.home
 
 import android.app.Activity
 import android.content.Context
@@ -26,7 +26,6 @@ import jp.toastkid.yobidashi.databinding.FragmentSpeedDialBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
-import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -38,7 +37,7 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 
  * @author toastkidjp
  */
-class SpeedDialFragment : BaseFragment() {
+class HomeFragment : BaseFragment() {
 
     /** Data binding object.  */
     private var binding: FragmentSpeedDialBinding? = null

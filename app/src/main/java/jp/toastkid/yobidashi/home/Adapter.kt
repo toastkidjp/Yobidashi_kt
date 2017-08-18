@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.speed_dial
+package jp.toastkid.yobidashi.home
 
 import android.content.Context
 import android.databinding.DataBindingUtil

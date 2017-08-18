@@ -34,6 +34,9 @@ import jp.toastkid.yobidashi.calendar.CalendarArticleLinker
 import jp.toastkid.yobidashi.calendar.CalendarFragment
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
+import jp.toastkid.yobidashi.home.Command
+import jp.toastkid.yobidashi.home.FragmentReplaceAction
+import jp.toastkid.yobidashi.home.HomeFragment
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
@@ -45,9 +48,6 @@ import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.speed_dial.Command
-import jp.toastkid.yobidashi.speed_dial.FragmentReplaceAction
-import jp.toastkid.yobidashi.speed_dial.SpeedDialFragment
 import java.io.File
 import java.io.IOException
 import java.text.MessageFormat
@@ -80,8 +80,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     /** Browser fragment.  */
     private lateinit var browserFragment: BrowserFragment
 
-    /** Speed dial fragment.  */
-    private lateinit var speedDial: SpeedDialFragment
+    /** Home fragment.  */
+    private lateinit var homeFragment: HomeFragment
 
     /** For stop subscribing title pair.  */
     private var prevDisposable: Disposable? = null
@@ -114,8 +114,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
      * Set initial fragment.
      */
     private fun setInitialFragment() {
-        speedDial = SpeedDialFragment()
-        replaceFragment(speedDial)
+        homeFragment = HomeFragment()
+        replaceFragment(homeFragment)
     }
 
     /**
@@ -336,7 +336,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                     InstantBarcodeGenerator(this).invoke()
                 }
                 R.id.nav_home -> {
-                    replaceFragment(speedDial)
+                    replaceFragment(homeFragment)
                 }
             }
             true
@@ -469,7 +469,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 return
             }
             Command.OPEN_HOME -> {
-                replaceFragment(speedDial)
+                replaceFragment(homeFragment)
                 return
             }
         }
