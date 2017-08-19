@@ -2,19 +2,11 @@ package jp.toastkid.yobidashi.browser.tab
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.text.TextUtils
 import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-
-import java.io.File
-import java.io.IOException
-
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -31,6 +23,8 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.Caches
 import jp.toastkid.yobidashi.search.SiteSearch
+import java.io.File
+import java.io.IOException
 
 /**
  * Adapter of [Tab].
@@ -159,7 +153,7 @@ class TabAdapter(
     }
 
     private fun saveNewThumbnail() {
-        webView!!.invalidate()
+        webView.invalidate()
         webView.buildDrawingCache()
         val file = tabsScreenshots.assignNewFile(System.currentTimeMillis().toString() + ".png")
         Bitmaps.compress(webView.drawingCache, file)
@@ -181,7 +175,7 @@ class TabAdapter(
         val newTab = Tab()
         newTab.addHistory(
                 History.make(
-                        webView!!.context.getString(R.string.new_tab),
+                        webView.context.getString(R.string.new_tab),
                         preferenceApplier.homeUrl
                 )
         )
@@ -226,46 +220,49 @@ class TabAdapter(
     }
 
     fun reload() {
-        webView!!.reload()
+        webView.reload()
     }
 
     fun loadUrl(url: String) {
-        webView!!.loadUrl(url)
+        if (TextUtils.equals(webView.url, url)) {
+            return
+        }
+        webView.loadUrl(url)
     }
 
     fun pageUp() {
-        webView!!.pageUp(true)
+        webView.pageUp(true)
     }
 
     fun pageDown() {
-        webView!!.pageDown(true)
+        webView.pageDown(true)
     }
 
     fun currentSnap() {
-        webView!!.invalidate()
+        webView.invalidate()
         webView.buildDrawingCache()
         Screenshot.save(webView.context, webView.drawingCache)
     }
 
     fun resetUserAgent(userAgent: UserAgent) {
-        webView!!.settings.userAgentString = userAgent.text()
+        webView.settings.userAgentString = userAgent.text()
         webView.reload()
     }
 
     fun clearCache() {
-        webView!!.clearCache(true)
+        webView.clearCache(true)
     }
 
     fun clearFormData() {
-        webView!!.clearFormData()
+        webView.clearFormData()
     }
 
     fun currentUrl(): String {
-        return webView!!.url
+        return webView.url
     }
 
     fun currentTitle(): String {
-        return webView!!.title
+        return webView.title
     }
 
     fun showPageInformation() {
@@ -284,7 +281,7 @@ class TabAdapter(
      * @return subscription
      */
     fun reloadWebViewSettings(): Disposable {
-        val settings = webView!!.settings
+        val settings = webView.settings
         settings.javaScriptEnabled = preferenceApplier.useJavaScript()
         settings.saveFormData = preferenceApplier.doesSaveForm()
         settings.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
@@ -364,21 +361,21 @@ class TabAdapter(
      * @param text
      */
     fun find(text: String) {
-        webView!!.findAllAsync(text)
+        webView.findAllAsync(text)
     }
 
     /**
      * Find to upward.
      */
     fun findUp() {
-        webView!!.findNext(false)
+        webView.findNext(false)
     }
 
     /**
      * Find to downward.
      */
     fun findDown() {
-        webView!!.findNext(true)
+        webView.findNext(true)
     }
 
     /**

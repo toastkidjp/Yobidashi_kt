@@ -37,6 +37,8 @@ import jp.toastkid.yobidashi.browser.tab.TabListModule
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
+import jp.toastkid.yobidashi.home.Command
+import jp.toastkid.yobidashi.home.FragmentReplaceAction
 import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -48,8 +50,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.home.Command
-import jp.toastkid.yobidashi.home.FragmentReplaceAction
 import java.io.File
 import java.io.IOException
 
@@ -95,7 +95,8 @@ class BrowserFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate<FragmentBrowserBinding>(inflater!!, R.layout.fragment_browser, container, false)
+        binding = DataBindingUtil.inflate<FragmentBrowserBinding>(
+                inflater!!, R.layout.fragment_browser, container, false)
         binding!!.fragment = this
 
         tabs = TabAdapter(
@@ -108,20 +109,20 @@ class BrowserFragment : BaseFragment() {
 
         initMenus()
 
-        pageSearcherModule = PageSearcherModule(binding!!.sip, tabs!!)
+        pageSearcherModule = PageSearcherModule(binding!!.sip, tabs)
 
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
                 binding!!.root,
                 colorPair(),
-                Consumer<String> { url -> tabs!!.loadWithNewTab(Uri.parse(url)) }
+                Consumer<String> { url -> tabs.loadWithNewTab(Uri.parse(url)) }
         )
         searchWithClip.invoke()
 
         val url = arguments.getParcelable<Uri>("url")
         if (url != null) {
-            tabs!!.loadWithNewTab(url)
+            tabs.loadWithNewTab(url)
         }
 
         return binding!!.root
@@ -163,7 +164,7 @@ class BrowserFragment : BaseFragment() {
         val context = activity
         when (menu) {
             Menu.RELOAD -> {
-                tabs!!.reload()
+                tabs.reload()
                 return
             }
             Menu.BACK -> {
@@ -171,18 +172,18 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.FORWARD -> {
-                val forward = tabs!!.forward()
-                if (forward.length != 0) {
-                    tabs!!.loadUrl(forward)
+                val forward = tabs.forward()
+                if (forward.isNotEmpty()) {
+                    tabs.loadUrl(forward)
                 }
                 return
             }
             Menu.TOP -> {
-                tabs!!.pageUp()
+                tabs.pageUp()
                 return
             }
             Menu.BOTTOM -> {
-                tabs!!.pageDown()
+                tabs.pageDown()
                 return
             }
             Menu.CLOSE -> {
@@ -199,14 +200,14 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.SCREENSHOT -> {
-                tabs!!.currentSnap()
+                tabs.currentSnap()
                 Toaster.snackShort(binding!!.root, R.string.message_done_save, colorPair())
                 return
             }
             Menu.SHARE -> {
                 startActivity(
-                        IntentFactory.makeShare(tabs!!.currentTitle()
-                                + System.getProperty("line.separator") + tabs!!.currentUrl())
+                        IntentFactory.makeShare(tabs.currentTitle()
+                                + System.getProperty("line.separator") + tabs.currentUrl())
                 )
                 return
             }
@@ -215,7 +216,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.USER_AGENT -> {
-                UserAgent.showSelectionDialog(binding!!.root, Consumer<UserAgent> { tabs!!.resetUserAgent(it) })
+                UserAgent.showSelectionDialog(binding!!.root, Consumer<UserAgent> { tabs.resetUserAgent(it) })
                 return
             }
             Menu.WIFI_SETTING -> {
@@ -228,7 +229,7 @@ class BrowserFragment : BaseFragment() {
                         .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
                         .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                         .setPositiveButton(R.string.ok) { d, i ->
-                            tabs!!.clearCache()
+                            tabs.clearCache()
                             Toaster.snackShort(binding!!.root, R.string.done_clear, colorPair())
                             d.dismiss()
                         }
@@ -242,7 +243,7 @@ class BrowserFragment : BaseFragment() {
                         .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
                         .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                         .setPositiveButton(R.string.ok) { d, i ->
-                            tabs!!.clearFormData()
+                            tabs.clearFormData()
                             Toaster.snackShort(binding!!.root, R.string.done_clear, colorPair())
                             d.dismiss()
                         }
@@ -251,14 +252,14 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.PAGE_INFORMATION -> {
-                tabs!!.showPageInformation()
+                tabs.showPageInformation()
                 return
             }
             Menu.TAB_LIST -> {
                 if (tabListModule == null) {
                     tabListModule = TabListModule(DataBindingUtil.inflate<ModuleTabListBinding>(
                             LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
-                            tabs!!
+                            tabs
                     )
                     binding!!.tabListContainer.addView(tabListModule!!.moduleView)
                     hideMenu()
@@ -275,7 +276,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.OPEN -> {
                 val inputLayout = TextInputs.make(context)
-                inputLayout.editText!!.setText(tabs!!.currentUrl())
+                inputLayout.editText!!.setText(tabs.currentUrl())
                 AlertDialog.Builder(context)
                         .setTitle(R.string.title_open_url)
                         .setView(inputLayout)
@@ -283,20 +284,20 @@ class BrowserFragment : BaseFragment() {
                         .setPositiveButton("開く") { d, i ->
                             val url = inputLayout.editText!!.text.toString()
                             if (Urls.isValidUrl(url)) {
-                                tabs!!.loadWithNewTab(Uri.parse(url))
+                                tabs.loadWithNewTab(Uri.parse(url))
                             }
                         }
                         .show()
                 return
             }
             Menu.OTHER_BROWSER -> {
-                startActivity(IntentFactory.openBrowser(Uri.parse(tabs!!.currentUrl())))
+                startActivity(IntentFactory.openBrowser(Uri.parse(tabs.currentUrl())))
                 return
             }
             Menu.CHROME_TAB -> {
                 CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
                         .build()
-                        .launchUrl(context, Uri.parse(tabs!!.currentUrl()))
+                        .launchUrl(context, Uri.parse(tabs.currentUrl()))
                 return
             }
             Menu.BARCODE_READER -> {
@@ -307,7 +308,7 @@ class BrowserFragment : BaseFragment() {
                 val imageView = ImageView(context)
                 try {
                     val bitmap = BarcodeEncoder()
-                            .encodeBitmap(tabs!!.currentUrl(), BarcodeFormat.QR_CODE, 400, 400)
+                            .encodeBitmap(tabs.currentUrl(), BarcodeFormat.QR_CODE, 400, 400)
                     imageView.setImageBitmap(bitmap)
                     AlertDialog.Builder(context)
                             .setTitle(R.string.title_share_by_code)
@@ -332,7 +333,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.ARCHIVE -> {
-                tabs!!.saveArchive()
+                tabs.saveArchive()
                 return
             }
             Menu.VIEW_ARCHIVE -> {
@@ -348,7 +349,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.SITE_SEARCH -> {
-                tabs!!.siteSearch()
+                tabs.siteSearch()
                 return
             }
             Menu.VOICE_SEARCH -> {
@@ -368,9 +369,9 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun back(): Boolean {
-        val back = tabs!!.back()
-        if (back.length != 0) {
-            tabs!!.loadUrl(back)
+        val back = tabs.back()
+        if (back.isNotEmpty()) {
+            tabs.loadUrl(back)
             return true
         }
         return false
@@ -381,7 +382,7 @@ class BrowserFragment : BaseFragment() {
 
         refreshFab()
 
-        disposables.add(tabs!!.reloadWebViewSettings())
+        disposables.add(tabs.reloadWebViewSettings())
     }
 
     private fun refreshFab() {
@@ -424,7 +425,7 @@ class BrowserFragment : BaseFragment() {
         when (requestCode) {
             REQUEST_CODE_VIEW_ARCHIVE -> {
                 try {
-                    tabs!!.loadArchive(File(data.getStringExtra("FILE_NAME")))
+                    tabs.loadArchive(File(data.getStringExtra("FILE_NAME")))
                 } catch (e: IOException) {
                     e.printStackTrace()
                 } catch (error: OutOfMemoryError) {
@@ -461,7 +462,7 @@ class BrowserFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         (binding!!.menusView.adapter as Adapter).dispose()
-        tabs!!.dispose()
+        tabs.dispose()
         disposables.dispose()
         searchWithClip.dispose();
     }
