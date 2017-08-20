@@ -34,7 +34,7 @@ internal class Adapter
     private val inflater: LayoutInflater
 
     /** Menu.  */
-    private val menus: Array<Menu>
+    private val menus: List<Menu>
 
     /** Color pair.  */
     private val colorPair: ColorPair
@@ -47,7 +47,7 @@ internal class Adapter
 
     init {
         inflater = LayoutInflater.from(context)
-        menus = Menu.values()
+        menus = Menu.list
         val preferenceApplier = PreferenceApplier(context)
         colorPair = preferenceApplier.colorPair()
         menuPublishProcessor = PublishProcessor.create<Menu>()
