@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.browser.tab
 
-import java.util.ArrayList
+import java.util.*
 
 /**
  * @author toastkidjp
@@ -10,6 +10,8 @@ internal class Tab {
     private val histories: MutableList<History>
 
     private var index: Int = 0
+
+    val id: String = UUID.randomUUID().toString()
 
     var thumbnailPath: String
 

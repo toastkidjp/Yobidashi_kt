@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser.tab
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
 import jp.toastkid.yobidashi.databinding.ItemTabListBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -19,6 +18,9 @@ internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerVie
     }
 
     fun setImagePath(thumbnailPath: String) {
+        if (thumbnailPath.isEmpty()) {
+            return
+        }
         ImageLoader.setImageToImageView(binding.image, thumbnailPath)
     }
 
@@ -34,5 +36,9 @@ internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerVie
 
     fun close() {
         binding.close.callOnClick()
+    }
+
+    fun setBackgroundColor(color: Int) {
+        binding.root.setBackgroundColor(color)
     }
 }

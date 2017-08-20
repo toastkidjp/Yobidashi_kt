@@ -17,7 +17,9 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -100,11 +102,11 @@ class BrowserFragment : BaseFragment() {
         binding!!.fragment = this
 
         tabs = TabAdapter(
-                binding!!.progress,
-                binding!!.webViewContainer,
+                binding?.progress as ProgressBar,
+                binding?.webViewContainer as FrameLayout,
                 Consumer<TitlePair> { titleProcessor.onNext(it) },
-                Runnable { this.hideOption() },
-                Runnable { fragmentReplaceAction!!.action(Command.OPEN_HOME) }
+                { this.hideOption() },
+                { fragmentReplaceAction?.action(Command.OPEN_HOME) }
         )
 
         initMenus()
@@ -257,26 +259,28 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.TAB_LIST -> {
                 if (tabListModule == null) {
-                    tabListModule = TabListModule(DataBindingUtil.inflate<ModuleTabListBinding>(
-                            LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
-                            tabs
+                    tabListModule = TabListModule(
+                            DataBindingUtil.inflate<ModuleTabListBinding>(
+                                LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
+                            tabs,
+                            binding?.root as View,
+                            this::hideTabList
                     )
-                    binding!!.tabListContainer.addView(tabListModule!!.moduleView)
-                    hideMenu()
-                    return
+                    binding?.tabListContainer?.addView(tabListModule?.moduleView)
                 }
 
-                if (tabListModule!!.isVisible) {
-                    tabListModule!!.hide()
+                if (tabListModule?.isVisible as Boolean) {
+                    hideTabList()
                 } else {
                     hideMenu()
-                    tabListModule!!.show()
+                    binding?.fab?.hide()
+                    tabListModule?.show()
                 }
                 return
             }
             Menu.OPEN -> {
                 val inputLayout = TextInputs.make(context)
-                inputLayout.editText!!.setText(tabs.currentUrl())
+                inputLayout.editText?.setText(tabs.currentUrl())
                 AlertDialog.Builder(context)
                         .setTitle(R.string.title_open_url)
                         .setView(inputLayout)
@@ -402,16 +406,21 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun hideOption(): Boolean {
-        if (tabListModule != null && tabListModule!!.isVisible) {
-            tabListModule!!.hide()
+        if (tabListModule?.isVisible as Boolean) {
+            hideTabList()
             return true
         }
 
-        if (binding!!.menusView.visibility == View.VISIBLE) {
+        if (binding?.menusView?.visibility == View.VISIBLE) {
             hideMenu()
             return true
         }
         return false
+    }
+
+    private fun hideTabList() {
+        tabListModule?.hide()
+        binding?.fab?.show()
     }
 
     override fun titleId(): Int {

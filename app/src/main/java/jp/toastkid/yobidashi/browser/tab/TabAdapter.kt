@@ -28,15 +28,15 @@ import java.io.IOException
 
 /**
  * Adapter of [Tab].
-
+ *
  * @author toastkidjp
  */
 class TabAdapter(
         progress: ProgressBar,
         webViewContainer: FrameLayout,
         titleCallback: Consumer<TitlePair>,
-        touchCallback: Runnable,
-        private val tabEmptyCallback: Runnable
+        touchCallback: () -> Unit,
+        private val tabEmptyCallback: () -> Unit
 ) {
 
     private val tabList: TabList
@@ -55,9 +55,9 @@ class TabAdapter(
     private val preferenceApplier: PreferenceApplier
 
     init {
-        this.tabList = TabList.loadOrInit(progress.context)
+        tabList = TabList.loadOrInit(progress.context)
 
-        this.webView = makeWebView(progress, titleCallback, touchCallback)
+        webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
 
         tabsScreenshots = Caches(webView.context, TAB_SCREENSHOTS_DIR)
@@ -68,7 +68,7 @@ class TabAdapter(
     private fun makeWebView(
             progress: ProgressBar,
             titleCallback: Consumer<TitlePair>,
-            touchCallback: Runnable
+            touchCallback: () -> Unit
     ): WebView {
         val webViewClient = object : WebViewClient() {
 
@@ -125,8 +125,8 @@ class TabAdapter(
         val webView = WebView(progress.context)
         webView.setWebViewClient(webViewClient)
         webView.setWebChromeClient(webChromeClient)
-        webView.setOnTouchListener { v, event ->
-            touchCallback.run()
+        webView.setOnTouchListener { _, _ ->
+            touchCallback()
             false
         }
         webView.setOnLongClickListener { v ->
@@ -161,7 +161,7 @@ class TabAdapter(
     }
 
     private fun deleteThumbnail(thumbnailPath: String) {
-        if (thumbnailPath.length == 0) {
+        if (thumbnailPath.isEmpty()) {
             return
         }
 
@@ -221,6 +221,10 @@ class TabAdapter(
 
     fun reload() {
         webView.reload()
+    }
+
+    fun reloadUrlIfNeed() {
+        loadUrl(tabList.currentTab().latest.url())
     }
 
     fun loadUrl(url: String) {
@@ -304,10 +308,10 @@ class TabAdapter(
      */
     fun saveArchive() {
         if (Archive.cannotUseArchive()) {
-            Toaster.snackShort(webView!!, R.string.message_disable_archive, colorPair)
+            Toaster.snackShort(webView, R.string.message_disable_archive, colorPair)
             return
         }
-        Archive.save(webView!!)
+        Archive.save(webView)
     }
 
     /**
@@ -324,9 +328,9 @@ class TabAdapter(
 
     /**
      * Return specified index tab.
-
+     *
      * @param index
-     * *
+     *
      * @return
      */
     internal fun getTabByIndex(index: Int): Tab {
@@ -346,7 +350,7 @@ class TabAdapter(
 
         tabList.closeTab(index)
         if (tabList.isEmpty) {
-            tabEmptyCallback.run()
+            tabEmptyCallback()
         }
     }
 
@@ -376,6 +380,10 @@ class TabAdapter(
      */
     fun findDown() {
         webView.findNext(true)
+    }
+
+    fun index(): Int {
+        return tabList.getIndex()
     }
 
     /**

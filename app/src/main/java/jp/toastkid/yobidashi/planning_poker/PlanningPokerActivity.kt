@@ -39,7 +39,7 @@ class PlanningPokerActivity : BaseActivity() {
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
                     override fun onMove(
-                            recyclerView: RecyclerView,
+                            rv: RecyclerView,
                             viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder
                     ): Boolean {

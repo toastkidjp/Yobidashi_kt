@@ -11,7 +11,7 @@ import java.util.*
 
 /**
  * First collection of [Tab].
-
+ *
  * @author toastkidjp
  */
 class TabList private constructor() {
@@ -32,6 +32,10 @@ class TabList private constructor() {
         index = newIndex
     }
 
+    fun getIndex(): Int {
+        return index
+    }
+
     fun size(): Int {
         return tabs.size
     }
@@ -46,13 +50,13 @@ class TabList private constructor() {
     internal fun save() {
         try {
             initJsonAdapterIfNeed()
+            initTabJsonAdapterIfNeed()
             val json = jsonAdapter?.toJson(this)
             Okio.buffer(Okio.sink(tabsFile)).write(json?.toByteArray(charset("UTF-8"))).flush()
             itemsDir?.list()?.map { File(itemsDir, it) }?.forEach { it.delete() }
-            (0..tabs.size - 1).forEach {
-                Logger.i("save " + File(itemsDir, "$it.json").absoluteFile)
-                Okio.buffer(Okio.sink(File(itemsDir, "$it.json")))
-                    .write(tabJsonAdapter?.toJson(tabs.get(it))?.toByteArray(charset("UTF-8")))
+            tabs.forEach {
+                Okio.buffer(Okio.sink(File(itemsDir, "${it.id}.json")))
+                    .write(tabJsonAdapter?.toJson(it)?.toByteArray(charset("UTF-8")))
                     .flush()
             }
         } catch (e: IOException) {
@@ -68,16 +72,17 @@ class TabList private constructor() {
         tabs.add(newTab)
     }
 
-    private fun remove(index: Int) {
-        tabs.removeAt(index)
-    }
-
     internal fun closeTab(index: Int) {
         if (index <= this.index) {
             this.index--
         }
-        remove(index)
-        save()
+        val tab: Tab = tabs.get(index)
+        remove(tab)
+    }
+
+    private fun remove(tab: Tab) {
+        File(itemsDir, tab.id + ".json").delete()
+        tabs.removeAt(index)
     }
 
     internal fun clear() {
@@ -113,8 +118,6 @@ class TabList private constructor() {
 
                 val fromJson: TabList?
                         = jsonAdapter?.fromJson(Okio.buffer(Okio.source(tabsFile as File)))
-
-                Logger.i("size = ${itemsDir?.list()?.size}")
 
                 itemsDir?.list()
                         ?.map{ tabJsonAdapter?.fromJson(Okio.buffer(Okio.source(File(itemsDir, it))))}
