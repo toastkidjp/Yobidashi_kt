@@ -7,10 +7,8 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.annotation.StringRes
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
@@ -19,14 +17,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
-
-import java.io.File
-import java.io.IOException
-import java.text.MessageFormat
-
 import io.reactivex.disposables.Disposable
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
@@ -40,23 +32,25 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.screenshots.ScreenshotsActivity
 import jp.toastkid.yobidashi.calendar.CalendarArticleLinker
 import jp.toastkid.yobidashi.calendar.CalendarFragment
+import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
+import jp.toastkid.yobidashi.home.Command
+import jp.toastkid.yobidashi.home.FragmentReplaceAction
+import jp.toastkid.yobidashi.home.HomeFragment
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.speed_dial.Command
-import jp.toastkid.yobidashi.speed_dial.FragmentReplaceAction
-import jp.toastkid.yobidashi.speed_dial.SpeedDialFragment
+import java.io.File
+import java.io.IOException
+import java.text.MessageFormat
 
 /**
  * Main of this calendar app.
@@ -69,7 +63,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     private var navBackground: View? = null
 
     /** Data binding object.  */
-    private var binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
 
     /** Interstitial AD.  */
     private var interstitialAd: InterstitialAd? = null
@@ -77,17 +71,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     /** Calendar.  */
     private var calendarFragment: CalendarFragment? = null
 
-    /** Search.  */
-    private var searchFragment: SearchFragment? = null
-
     /** Favorite search.  */
     private var favoriteSearchFragment: FavoriteSearchFragment? = null
 
-    /** Browser fragment.  */
-    private var browserFragment: BrowserFragment? = null
+    /** Search.  */
+    private var searchFragment: SearchFragment? = null
 
-    /** Speed dial fragment.  */
-    private var speedDial: SpeedDialFragment? = null
+    /** Browser fragment.  */
+    private lateinit var browserFragment: BrowserFragment
+
+    /** Home fragment.  */
+    private lateinit var homeFragment: HomeFragment
 
     /** For stop subscribing title pair.  */
     private var prevDisposable: Disposable? = null
@@ -98,16 +92,20 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, LAYOUT_ID)
 
-        initToolbar(binding!!.appBarMain.toolbar)
-        setSupportActionBar(binding!!.appBarMain.toolbar)
+        initToolbar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.appBarMain.toolbar)
 
-        initDrawer(binding!!.appBarMain.toolbar)
+        initDrawer(binding.appBarMain.toolbar)
 
         initNavigation()
 
         setInitialFragment()
 
         initInterstitialAd()
+
+        if (preferenceApplier.useColorFilter()) {
+            ColorFilter(this, binding.root as View).start()
+        }
 
         processShortcut()
     }
@@ -116,8 +114,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
      * Set initial fragment.
      */
     private fun setInitialFragment() {
-        speedDial = SpeedDialFragment()
-        replaceFragment(speedDial!!)
+        homeFragment = HomeFragment()
+        replaceFragment(homeFragment)
     }
 
     /**
@@ -135,10 +133,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {
-                val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY))
+                val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
-                else
-                    SearchCategory.WEB.name
+                } else {
+                    preferenceApplier.getDefaultSearchEngine()
+                }
                 SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
                         .invoke()
                 return
@@ -165,12 +164,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     }
 
     private fun loadUri(uri: Uri) {
-        if (preferenceApplier!!.useInternalBrowser()) {
+        if (preferenceApplier.useInternalBrowser()) {
             browserFragment = BrowserFragment()
             val args = Bundle()
             args.putParcelable("url", uri)
-            browserFragment!!.arguments = args
-            replaceFragment(browserFragment!!)
+            browserFragment.arguments = args
+            replaceFragment(browserFragment)
             return
         }
         CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back).build().launchUrl(this, uri)
@@ -183,21 +182,21 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     private fun replaceFragment(fragment: BaseFragment) {
 
         if (prevDisposable != null) {
-            prevDisposable!!.dispose()
+            prevDisposable?.dispose()
         }
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.content, fragment)
         transaction.commit()
-        binding!!.drawerLayout.closeDrawers()
-        binding!!.appBarMain.toolbar.setTitle(fragment.titleId())
-        binding!!.appBarMain.toolbar.subtitle = ""
+        binding.drawerLayout.closeDrawers()
+        binding.appBarMain.toolbar.setTitle(fragment.titleId())
+        binding.appBarMain.toolbar.subtitle = ""
 
         if (fragment is BrowserFragment) {
             prevDisposable = fragment.titlePairProcessor()
                     .subscribe { titlePair ->
-                        binding!!.appBarMain.toolbar.title = titlePair.title()
-                        binding!!.appBarMain.toolbar.subtitle = titlePair.subtitle()
+                        binding.appBarMain.toolbar.title = titlePair.title()
+                        binding.appBarMain.toolbar.subtitle = titlePair.subtitle()
                     }
         }
 
@@ -212,7 +211,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         }
         interstitialAd?.adUnitId = getString(R.string.unit_id_interstitial)
         interstitialAd?.adListener = object : AdListener() {
-            val toolbar: Toolbar = binding?.appBarMain?.toolbar as Toolbar
+            val toolbar: Toolbar = binding.appBarMain?.toolbar as Toolbar
             override fun onAdClosed() {
                 super.onAdClosed()
                 Toaster.snackShort(
@@ -232,19 +231,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     private fun initDrawer(toolbar: Toolbar) {
         val toggle = object : ActionBarDrawerToggle(
                 this,
-                binding!!.drawerLayout,
+                binding.drawerLayout,
                 toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close
         ) {
             override fun onDrawerStateChanged(newState: Int) {
                 super.onDrawerStateChanged(newState)
-                if (searchFragment != null) {
-                    searchFragment!!.hideKeyboard()
-                }
+                searchFragment?.hideKeyboard()
             }
         }
-        binding!!.drawerLayout.addDrawerListener(toggle)
+        binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
 
@@ -252,7 +249,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
      * Initialize navigation.
      */
     private fun initNavigation() {
-        binding!!.navView.setNavigationItemSelectedListener({ item: MenuItem ->
+        binding.navView.setNavigationItemSelectedListener({ item: MenuItem ->
             attemptToShowingAd()
             when (item.itemId) {
                 R.id.nav_search -> {
@@ -264,14 +261,14 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                     if (calendarFragment == null) {
                         calendarFragment = CalendarFragment()
                     }
-                    replaceFragment(calendarFragment!!)
+                    replaceFragment(calendarFragment as CalendarFragment)
                 }
                 R.id.nav_favorite_search -> {
                     sendLog("nav_fav_search")
                     if (favoriteSearchFragment == null) {
                         favoriteSearchFragment = FavoriteSearchFragment()
                     }
-                    replaceFragment(favoriteSearchFragment!!)
+                    replaceFragment(favoriteSearchFragment as FavoriteSearchFragment)
                 }
                 R.id.nav_tweet -> {
                     sendLog("nav_twt")
@@ -328,7 +325,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 }
                 R.id.nav_browser -> {
                     sendLog("nav_browser")
-                    loadUri(Uri.parse(preferenceApplier?.homeUrl))
+                    loadUri(Uri.parse(preferenceApplier.homeUrl))
                 }
                 R.id.nav_barcode -> {
                     sendLog("nav_barcode")
@@ -339,12 +336,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                     InstantBarcodeGenerator(this).invoke()
                 }
                 R.id.nav_home -> {
-                    replaceFragment(speedDial!!)
+                    replaceFragment(homeFragment)
                 }
             }
             true
         })
-        val headerView = binding?.navView?.getHeaderView(0)
+        val headerView = binding.navView?.getHeaderView(0)
         if (headerView != null) {
             navBackground = headerView.findViewById(R.id.nav_header_background)
         }
@@ -354,7 +351,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         if (searchFragment == null) {
             searchFragment = SearchFragment()
         }
-        replaceFragment(searchFragment!!)
+        replaceFragment(searchFragment as SearchFragment)
     }
 
     override fun onBackPressed() {
@@ -368,8 +365,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         if (fragment.pressBack()) {
             return
         }
-        if (binding!!.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding!!.drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
             return
         }
         super.onBackPressed()
@@ -397,19 +394,16 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     }
 
     private fun refresh() {
-        applyColorToToolbar(binding!!.appBarMain.toolbar)
+        applyColorToToolbar(binding.appBarMain.toolbar)
 
         applyBackgrounds()
     }
 
     private fun attemptToShowingAd() {
         val preferenceApplier = preferenceApplier
-        if (preferenceApplier == null) {
-            return
-        }
         if (interstitialAd!!.isLoaded && preferenceApplier.allowShowingAd()) {
             Toaster.snackShort(
-                    binding!!.appBarMain.toolbar,
+                    binding.appBarMain.toolbar,
                     R.string.message_please_view_ad,
                     colorPair()
             )
@@ -426,7 +420,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         val fontColor = colorPair().fontColor()
         if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
-            (navBackground!!.findViewById(R.id.nav_header_main) as TextView)
+            (navBackground?.findViewById(R.id.nav_header_main) as TextView)
                     .setTextColor(fontColor)
             return
         }
@@ -449,7 +443,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             setBackgroundImage(null)
         }
 
-        (navBackground!!.findViewById(R.id.nav_header_main) as TextView).setTextColor(fontColor)
+        (navBackground?.findViewById(R.id.nav_header_main) as TextView).setTextColor(fontColor)
     }
 
     /**
@@ -458,16 +452,16 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
         (navBackground!!.findViewById(R.id.background) as ImageView).setImageDrawable(background)
-        binding!!.appBarMain.background.setImageDrawable(background)
+        binding.appBarMain.background.setImageDrawable(background)
         if (background == null) {
-            navBackground!!.setBackgroundColor(colorPair().bgColor())
+            navBackground?.setBackgroundColor(colorPair().bgColor())
         }
     }
 
     override fun action(c: Command) {
         when (c) {
             Command.OPEN_BROWSER -> {
-                loadUri(Uri.parse(preferenceApplier?.homeUrl))
+                loadUri(Uri.parse(preferenceApplier.homeUrl))
                 return
             }
             Command.OPEN_SEARCH -> {
@@ -475,7 +469,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 return
             }
             Command.OPEN_HOME -> {
-                replaceFragment(speedDial!!)
+                replaceFragment(homeFragment)
                 return
             }
         }
@@ -580,7 +574,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         ): Intent {
             val intent = Intent(context, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            if (query.length != 0) {
+            if (query.isNotEmpty()) {
                 intent.putExtra(SearchManager.QUERY, query)
             }
             return intent

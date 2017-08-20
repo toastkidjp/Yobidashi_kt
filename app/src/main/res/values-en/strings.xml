@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="search_category_web">Web</string>
+    <string name="search_category_web">DuckDuckGo</string>
     <string name="search_category_image">Image</string>
     <string name="search_category_map">Map</string>
     <string name="search_category_apps">Apps</string>
@@ -151,7 +151,6 @@
     <string name="title_menu_back">Back</string>
     <string name="title_menu_forward">Forward</string>
     <string name="title_menu_page_information">Page information</string>
-    <string name="title_menu_capture">Capture</string>
 
     <string name="message_js_enabled">It has changed to enable JavaScript.</string>
     <string name="message_js_disabled">It has changed to disable JavaScript.</string>
@@ -183,7 +182,6 @@
     <string name="generate">Generate</string>
     <string name="message_requires_permission_camera">
         If you want to use this function, you should permit using camera to this app.</string>
-    <string name="title_speed_dial">Speed Dial</string>
     <string name="title_home">Home</string>
     <string name="title_open_url">Open URL</string>
     <string name="message_invalid_url">Input URL is invalid.</string>
@@ -221,4 +219,9 @@
     <string name="message_check_retain_tabs">It will retain tabs when you exit this app.</string>
     <string name="message_check_doesnot_retain_tabs">It will remove all tabs when you exit this app.</string>
     <string name="title_retain_tabs">Retain tabs on exit this app</string>
+    <string name="search_category_grep_code">GrepCode</string>
+    <string name="search_category_yandex">Yandex</string>
+    <string name="title_default_search_engine">Default Search Engine</string>
+    <string name="subhead_search">Search</string>
+    <string name="subhead_browser">Browser</string>
 </resources>

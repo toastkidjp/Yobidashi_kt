@@ -16,10 +16,10 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 abstract class BaseFragment : Fragment() {
 
     /** Firebase analytics logger.  */
-    private var logSender: LogSender? = null
+    private lateinit var logSender: LogSender
 
     /** Preferences wrapper.  */
-    private var preferenceApplier: PreferenceApplier? = null
+    private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -28,7 +28,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     protected fun sendLog(key: String) {
-        logSender!!.send(key)
+        logSender.send(key)
     }
 
     /**
@@ -51,7 +51,7 @@ abstract class BaseFragment : Fragment() {
      * Get Preferences wrapper.
      * @return [PreferenceApplier]
      */
-    fun preferenceApplier(): PreferenceApplier? {
+    fun preferenceApplier(): PreferenceApplier {
         return preferenceApplier
     }
 
@@ -60,7 +60,7 @@ abstract class BaseFragment : Fragment() {
      * @return [ColorPair]
      */
     fun colorPair(): ColorPair {
-        return preferenceApplier!!.colorPair()
+        return preferenceApplier.colorPair()
     }
 
 }

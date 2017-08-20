@@ -4,15 +4,13 @@ import android.content.Context
 import android.net.Uri
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-
-import java.util.Locale
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.LocaleWrapper
+import java.util.*
 
 /**
  * Web search category.
-
+ *
  * @author toastkidjp
  */
 enum class SearchCategory(
@@ -30,9 +28,14 @@ enum class SearchCategory(
             R.drawable.ic_bing_logo,
             "https://www.bing.com/search?q="
     ),
-    WEB(R.string.search_category_web,
-            R.drawable.ic_world,
-            "https://duckduckgo.com/%s?ia=web"
+    DUCKDUCKGO(R.string.search_category_web,
+            R.drawable.ic_duckduckgo,
+            "https://duckduckgo.com/%s?ia=web",
+            {l, h, q -> String.format(h, q)}
+    ),
+    YANDEX(R.string.search_category_yandex,
+            R.drawable.ic_yandex,
+            "https://www.yandex.com/search/?text="
     ),
     IMAGE(R.string.search_category_image,
             R.drawable.ic_image_search,
@@ -60,11 +63,11 @@ enum class SearchCategory(
             "https://www.google.co.jp/maps/place/"
     ),
     APPS(R.string.search_category_apps,
-            R.drawable.ic_android_app,
+            R.drawable.ic_android_app_green,
             "https://play.google.com/store/search?q="
     ),
     YELP(R.string.yelp,
-            R.drawable.ic_restaurant,
+            R.drawable.ic_yelp,
             "https://www.yelp.com/search?find_desc="
     ),
     GUTENBERG(R.string.gutenberg,
@@ -82,7 +85,7 @@ enum class SearchCategory(
             }
     ),
     TECHNICAL_QA(R.string.search_category_technical_qa,
-            R.drawable.ic_technical_qa,
+            R.drawable.ic_stackoverflow,
             "https://stackoverflow.com/search?q="
     ),
     TECHNOLOGY(R.string.search_category_technology,
@@ -102,6 +105,10 @@ enum class SearchCategory(
     MVNREPOSITORY(R.string.search_category_mvnrepository,
             R.drawable.ic_mvn,
             "https://mvnrepository.com/search?q="
+    ),
+    GREP_CODE(R.string.search_category_grep_code,
+            R.drawable.ic_grepcode,
+            "http://grepcode.com/search/?query="
     );
 
     fun make(context: Context, query: String): String {
@@ -124,7 +131,20 @@ enum class SearchCategory(
             }
             return SearchCategory.values()
                     .find { it.name == category.toUpperCase() }
-                    .let { if (it == null) {WEB} else it }
+                    .let { if (it == null) { GOOGLE } else { it } }
+        }
+
+        fun findIndex(category: String): Int {
+            return values().find { it.name == category.toUpperCase() }
+                    .let { if (it == null) { 0 } else { it.ordinal } }
+        }
+
+        fun getDefault(): SearchCategory {
+            return GOOGLE
+        }
+
+        fun getDefaultCategoryName(): String {
+            return getDefault().name
         }
     }
 }

@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search
 
-import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
@@ -8,16 +7,10 @@ import android.support.annotation.ColorInt
 import android.support.v4.graphics.ColorUtils
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Spinner
-
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -25,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
@@ -45,27 +39,18 @@ class SearchFragment : BaseFragment() {
     /** View binder.  */
     private var binding: FragmentSearchBinding? = null
 
-    /** Preferences wrapper.  */
-    private var preferenceApplier: PreferenceApplier? = null
-
     /** Disposables.  */
-    private var disposables: CompositeDisposable? = null
+    private lateinit var disposables: CompositeDisposable
 
     /** History module.  */
-    private var historyModule: HistoryModule? = null
+    private lateinit var historyModule: HistoryModule
 
     /** Suggestion module.  */
-    private var suggestionModule: SuggestionModule? = null
+    private lateinit var suggestionModule: SuggestionModule
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         disposables = CompositeDisposable()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        preferenceApplier = PreferenceApplier(context)
     }
 
     override fun onCreateView(
@@ -74,7 +59,7 @@ class SearchFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater!!, LAYOUT_ID, container, false)
+        binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater, LAYOUT_ID, container, false)
         binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
         SearchCategorySpinnerInitializer.initialize(binding?.searchCategories as Spinner)
 
@@ -93,40 +78,40 @@ class SearchFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
-        binding!!.scroll.setOnTouchListener({ v, event ->
+        binding?.scroll?.setOnTouchListener({ v, event ->
             hideKeyboard()
             false
         })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding!!.searchBar.transitionName = "share"
+            binding?.searchBar?.transitionName = "share"
         }
 
-        return binding!!.root
+        return binding?.root
     }
 
     /**
      * Initialize history module asynchronously.
      */
     private fun initHistoryModule() {
-        disposables!!.add(
+        disposables.add(
                 Completable.create { e ->
                     historyModule = HistoryModule(
-                            binding!!.historyModule,
+                            binding?.historyModule as ModuleSearchHistoryBinding,
                             Consumer<SearchHistory> { history -> search(history.category as String, history.query as String) },
                             Runnable { this.hideKeyboard() },
                             Consumer<String> { text ->
-                                binding!!.searchInput.setText(text + " ")
-                                binding!!.searchInput.setSelection(
-                                        binding!!.searchInput.text.toString().length)
+                                binding?.searchInput?.setText(text + " ")
+                                binding?.searchInput?.setSelection(
+                                        binding?.searchInput?.text.toString().length)
                             }
                     )
                     e.onComplete()
                 }
                         .subscribeOn(Schedulers.newThread())
                         .subscribe {
-                            if (preferenceApplier!!.isEnableSearchHistory) {
-                                historyModule!!.query("")
+                            if (preferenceApplier().isEnableSearchHistory) {
+                                historyModule.query("")
                             }
                         }
         )
@@ -136,19 +121,20 @@ class SearchFragment : BaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater!!.inflate(R.menu.search_menu, menu)
 
+        val preferenceApplier: PreferenceApplier = preferenceApplier()
         val item = menu!!.findItem(R.id.suggestion_check)
-        item.isChecked = preferenceApplier!!.isEnableSuggestion
+        item.isChecked = preferenceApplier.isEnableSuggestion
         item.setOnMenuItemClickListener { i ->
-            preferenceApplier!!.switchEnableSuggestion()
-            i.isChecked = preferenceApplier!!.isEnableSuggestion
+            preferenceApplier.switchEnableSuggestion()
+            i.isChecked = preferenceApplier.isEnableSuggestion
             true
         }
 
         val history = menu.findItem(R.id.history_check)
-        history.isChecked = preferenceApplier!!.isEnableSearchHistory
+        history.isChecked = preferenceApplier.isEnableSearchHistory
         history.setOnMenuItemClickListener { i ->
-            preferenceApplier!!.switchEnableSearchHistory()
-            i.isChecked = preferenceApplier!!.isEnableSearchHistory
+            preferenceApplier.switchEnableSearchHistory()
+            i.isChecked = preferenceApplier.isEnableSearchHistory
             true
         }
     }
@@ -159,13 +145,13 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun initSearchInput() {
-        binding!!.searchInput.setOnEditorActionListener({ v, actionId, event ->
+        binding?.searchInput?.setOnEditorActionListener({ v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                search(binding!!.searchCategories.selectedItem.toString(), v.text.toString())
+                search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
             }
             true
         })
-        binding!!.searchInput.addTextChangedListener(object : TextWatcher {
+        binding?.searchInput?.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 // NOP.
@@ -175,16 +161,17 @@ class SearchFragment : BaseFragment() {
 
                 val key = s.toString()
 
-                if (preferenceApplier!!.isEnableSearchHistory) {
-                    historyModule!!.query(s)
+                val preferenceApplier: PreferenceApplier = preferenceApplier()
+                if (preferenceApplier.isEnableSearchHistory) {
+                    historyModule.query(s)
                 }
 
-                if (preferenceApplier!!.isDisableSuggestion) {
-                    suggestionModule!!.clear()
+                if (preferenceApplier.isDisableSuggestion) {
+                    suggestionModule.clear()
                     return
                 }
 
-                suggestionModule!!.request(key)
+                suggestionModule.request(key)
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -197,8 +184,8 @@ class SearchFragment : BaseFragment() {
      * Apply color to views.
      */
     private fun applyColor() {
-        val colorPair = preferenceApplier?.colorPair()
-        @ColorInt val bgColor = colorPair?.bgColor() as Int
+        val colorPair : ColorPair = colorPair()
+        @ColorInt val bgColor = colorPair.bgColor()
         @ColorInt val fontColor = colorPair.fontColor()
         Colors.setEditTextColor(binding?.searchInput as EditText, bgColor)
 
@@ -210,7 +197,6 @@ class SearchFragment : BaseFragment() {
                     binding?.searchInput?.text.toString()
             )
         })
-        binding?.searchIcon?.setColorFilter(bgColor)
         binding?.searchClear?.setColorFilter(bgColor)
         binding?.searchInputBorder?.setBackgroundColor(bgColor)
     }
@@ -223,8 +209,8 @@ class SearchFragment : BaseFragment() {
      * @param query    search query
      */
     private fun search(category: String, query: String) {
-        if (preferenceApplier!!.isEnableSearchHistory) {
-            disposables!!.add(SearchHistoryInsertion.make(activity, category, query).insert())
+        if (preferenceApplier().isEnableSearchHistory) {
+            disposables.add(SearchHistoryInsertion.make(activity, category, query).insert())
         }
         SearchAction(activity, category, query).invoke()
     }
@@ -233,10 +219,7 @@ class SearchFragment : BaseFragment() {
      * Hide software keyboard.
      */
     fun hideKeyboard() {
-        if (binding == null) {
-            return
-        }
-        Inputs.hideKeyboard(binding!!.searchInput)
+        Inputs.hideKeyboard(binding?.searchInput as EditText)
     }
 
     override fun onPause() {
@@ -246,9 +229,9 @@ class SearchFragment : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        disposables!!.dispose()
-        historyModule!!.dispose()
-        suggestionModule!!.dispose()
+        disposables.dispose()
+        historyModule.dispose()
+        suggestionModule.dispose()
     }
 
     override fun titleId(): Int {

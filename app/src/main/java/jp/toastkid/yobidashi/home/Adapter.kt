@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.speed_dial
+package jp.toastkid.yobidashi.home
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -6,12 +6,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemSpeedDialMenuBinding
+import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
@@ -55,7 +54,7 @@ internal class Adapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = DataBindingUtil.inflate<ItemSpeedDialMenuBinding>(inflater, LAYOUT_ID, parent, false)
+        val binding = DataBindingUtil.inflate<ItemHomeMenuBinding>(inflater, LAYOUT_ID, parent, false)
         return ViewHolder(binding)
     }
 
@@ -81,7 +80,7 @@ internal class Adapter
     companion object {
 
         /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.item_speed_dial_menu
+        private val LAYOUT_ID = R.layout.item_home_menu
 
         /** Maximum length of menus.  */
         private val MAXIMUM = Menu.values().size * 20

@@ -5,14 +5,12 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
-
-import java.io.File
-import java.util.Calendar
-import java.util.Locale
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.search.SearchCategory
+import java.io.File
+import java.util.*
 
 /**
  * Preferences wrapper.
@@ -24,7 +22,7 @@ class PreferenceApplier(private val context: Context) {
     private enum class Key {
         BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, BG_IMAGE, LAST_AD_DATE,
         USE_DAILY_ALARM, USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
-        LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR
+        LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR, DEFAULT_SEARCH_ENGINE
     }
 
     private val preferences: SharedPreferences
@@ -201,6 +199,17 @@ class PreferenceApplier(private val context: Context) {
 
     @ColorInt fun filterColor(): Int {
         return preferences.getInt(Key.FILTER_COLOR.name, Color.TRANSPARENT)
+    }
+
+    fun setDefaultSearchEngine(category: String) {
+        preferences.edit().putString(Key.DEFAULT_SEARCH_ENGINE.name, category).apply()
+    }
+
+    fun getDefaultSearchEngine(): String {
+        return preferences.getString(
+                Key.DEFAULT_SEARCH_ENGINE.name,
+                SearchCategory.getDefaultCategoryName()
+        )
     }
 
     fun clear() {

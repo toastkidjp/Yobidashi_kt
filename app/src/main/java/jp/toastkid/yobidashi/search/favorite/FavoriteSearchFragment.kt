@@ -68,7 +68,7 @@ class FavoriteSearchFragment : BaseFragment() {
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
                     override fun onMove(
-                            recyclerView: RecyclerView,
+                            rv: RecyclerView,
                             viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder
                     ): Boolean {

@@ -18,4 +18,5 @@
     <dimen name="search_item_height">40dp</dimen>
     <dimen name="search_horizontal_margin">8dp</dimen>
     <dimen name="search_vertical_margin">8dp</dimen>
+    <dimen name="search_category_spinner_width">44dp</dimen>
 </resources>

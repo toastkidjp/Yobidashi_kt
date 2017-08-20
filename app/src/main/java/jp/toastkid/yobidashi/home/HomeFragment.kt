@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.speed_dial
+package jp.toastkid.yobidashi.home
 
 import android.app.Activity
 import android.content.Context
@@ -16,17 +16,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.reactivex.functions.Consumer
-
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
 import jp.toastkid.yobidashi.color_filter.ColorFilter
-import jp.toastkid.yobidashi.databinding.FragmentSpeedDialBinding
+import jp.toastkid.yobidashi.databinding.FragmentHomeBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
-import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -35,13 +33,13 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 
 /**
  * Speed dial.
-
+ *
  * @author toastkidjp
  */
-class SpeedDialFragment : BaseFragment() {
+class HomeFragment : BaseFragment() {
 
     /** Data binding object.  */
-    private var binding: FragmentSpeedDialBinding? = null
+    private lateinit var binding: FragmentHomeBinding
 
     /** Callback.  */
     private var action: FragmentReplaceAction? = null
@@ -60,13 +58,12 @@ class SpeedDialFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<FragmentSpeedDialBinding>(inflater!!, LAYOUT_ID, container, false)
-        binding!!.fragment = this
-        binding!!.mainTitle.setTextColor(colorPair().fontColor())
+        binding = DataBindingUtil.inflate<FragmentHomeBinding>(inflater!!, LAYOUT_ID, container, false)
+        binding.fragment = this
 
         initMenus()
 
-        return binding!!.root
+        return binding.root
     }
 
     /**
@@ -74,9 +71,9 @@ class SpeedDialFragment : BaseFragment() {
      */
     private fun initMenus() {
         adapter = Adapter(activity, Consumer<Menu> { this.processMenu(it) })
-        binding!!.menusView.adapter = adapter
+        binding.menusView.adapter = adapter
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.menusView.layoutManager = layoutManager
+        binding.menusView.layoutManager = layoutManager
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
@@ -123,7 +120,7 @@ class SpeedDialFragment : BaseFragment() {
                 return
             }
             Menu.COLOR_FILTER -> {
-                ColorFilter(activity, binding!!.root)
+                ColorFilter(activity, binding.root)
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
                 return
             }
@@ -137,8 +134,8 @@ class SpeedDialFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
 
-        binding!!.root.setBackgroundColor(
-                if (preferenceApplier()!!.hasBackgroundImagePath())
+        binding.root.setBackgroundColor(
+                if (preferenceApplier().hasBackgroundImagePath())
                     Color.TRANSPARENT
                 else
                     ContextCompat.getColor(activity, R.color.darkgray_scale)
@@ -146,12 +143,13 @@ class SpeedDialFragment : BaseFragment() {
         val colorPair = colorPair()
         @ColorInt val bgColor = colorPair.bgColor()
         @ColorInt val fontColor = colorPair.fontColor()
-        binding!!.searchInput.setTextColor(bgColor)
-        binding!!.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
-        binding!!.searchAction.setTextColor(fontColor)
-        binding!!.searchIcon.setColorFilter(bgColor)
-        binding!!.voiceSearch.setColorFilter(bgColor)
-        binding!!.searchInputBorder.setBackgroundColor(bgColor)
+        binding.mainTitle.setTextColor(colorPair().fontColor())
+        binding.searchInput.setTextColor(bgColor)
+        binding.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
+        binding.searchAction.setTextColor(fontColor)
+        binding.searchIcon.setColorFilter(bgColor)
+        binding.voiceSearch.setColorFilter(bgColor)
+        binding.searchInputBorder.setBackgroundColor(bgColor)
     }
 
     /**
@@ -161,18 +159,10 @@ class SpeedDialFragment : BaseFragment() {
     fun search(v: View) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding!!.searchBar.transitionName = "share"
+            binding.searchBar.transitionName = "share"
         }
 
         action!!.action(Command.OPEN_SEARCH)
-    }
-
-    /**
-     * Return transition view.
-     * @return
-     */
-    fun transitionView(): View? {
-        return if (binding != null) binding!!.searchBar else null
     }
 
     /**
@@ -196,13 +186,13 @@ class SpeedDialFragment : BaseFragment() {
             REQUEST_OVERLAY_PERMISSION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
                     Toaster.snackShort(
-                            binding!!.root,
+                            binding.root,
                             R.string.message_cannot_draw_overlay,
                             colorPair()
                     )
                     return
                 }
-                ColorFilter(activity, binding!!.root)
+                ColorFilter(activity, binding.root)
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
                 return
             }
@@ -215,13 +205,13 @@ class SpeedDialFragment : BaseFragment() {
     }
 
     override fun titleId(): Int {
-        return R.string.title_speed_dial
+        return R.string.title_home
     }
 
     companion object {
 
         /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.fragment_speed_dial
+        private val LAYOUT_ID = R.layout.fragment_home
 
         private val REQUEST_CODE_VOICE_SEARCH = 2
 

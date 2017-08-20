@@ -1,12 +1,10 @@
 package jp.toastkid.yobidashi.browser.tab
 
-import android.content.res.Resources
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
@@ -17,35 +15,31 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Tab list module.
-
+ *
  * @author toastkidjp
  */
-class TabListModule
-/**
- * Initialize with parent.
-
- * @param binding
- */
-(
-        binding: ModuleTabListBinding,
-        tabAdapter: TabAdapter
+class TabListModule(
+        val binding: ModuleTabListBinding,
+        val tabAdapter: TabAdapter,
+        private val parent: View,
+        private val closeAction: () -> Unit
 ) : BaseModule(binding.root) {
 
     /** Tab list adapter.  */
     private var adapter: Adapter? = null
 
     /** For showing snackbar.  */
-    private val parent: View
-
-    /** For showing snackbar.  */
     private val colorPair: ColorPair
 
     /** For showing snackbar.  */
-    private var firstLaunch: Boolean = false
+    private var firstLaunch: Boolean = true
 
+    /**
+     * Initialize with parent.
+     *
+     * @param binding
+     */
     init {
-        parent = binding.root
-
         val preferenceApplier = PreferenceApplier(parent.context)
         colorPair = preferenceApplier.colorPair()
 
@@ -69,7 +63,7 @@ class TabListModule
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
                     override fun onMove(
-                            recyclerView: RecyclerView,
+                            rv: RecyclerView,
                             viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder
                     ): Boolean {
@@ -83,16 +77,16 @@ class TabListModule
                         (viewHolder as ViewHolder).close()
                     }
                 }).attachToRecyclerView(recyclerView)
-        adapter = Adapter(context(), tabAdapter, Runnable { this.hide() })
+        adapter = Adapter(context(), tabAdapter, closeAction)
         recyclerView.adapter = adapter
     }
 
     /**
      * Initialize adding tab fab.
      * @param addTab fab
-     * *
+     *
      * @param tabAdapter
-     * *
+     *
      * @param menuPos
      */
     private fun initAddTabButton(
@@ -105,7 +99,7 @@ class TabListModule
             tabAdapter.openNewTab()
             tabAdapter.setIndex(tabAdapter.size() - 1)
             adapter!!.notifyItemInserted(adapter!!.itemCount - 1)
-            hide()
+            closeAction()
             addTab.isClickable = true
         }
 
@@ -115,11 +109,13 @@ class TabListModule
     }
 
     override fun show() {
+        binding.recyclerView.layoutManager.scrollToPosition(tabAdapter.index())
+        adapter?.setCurrentIndex(tabAdapter.index())
+        adapter?.notifyDataSetChanged()
         super.show()
-        adapter!!.notifyDataSetChanged()
         if (firstLaunch) {
             Toaster.snackShort(parent, R.string.message_tutorial_remove_tab, colorPair)
-            firstLaunch = true
+            firstLaunch = false
         }
     }
 }
