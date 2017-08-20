@@ -118,7 +118,7 @@ class BrowserFragment : BaseFragment() {
                 cm,
                 binding!!.root,
                 colorPair(),
-                Consumer<String> { url -> tabs.loadWithNewTab(Uri.parse(url)) }
+                { url -> tabs.loadWithNewTab(Uri.parse(url)) }
         )
         searchWithClip.invoke()
 

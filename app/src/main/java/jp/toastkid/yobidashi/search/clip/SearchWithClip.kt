@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.search.clip
 import android.content.ClipboardManager
 import android.content.Context
 import android.view.View
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -29,7 +28,7 @@ class SearchWithClip(
         private val cm: ClipboardManager,
         private val parent: View,
         private val colorPair: ColorPair,
-        private val browseCallback: Consumer<String>
+        private val browseCallback: (String) -> Unit
 ) {
 
     private lateinit var listener: ClipboardManager.OnPrimaryClipChangedListener
@@ -66,11 +65,7 @@ class SearchWithClip(
     private fun searchOrBrowse(context: Context, text: CharSequence) {
         val query = text.toString()
         if (Urls.isValidUrl(query)) {
-            try {
-                browseCallback.accept(query)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            browseCallback(query)
             return
         }
         SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), query).invoke()

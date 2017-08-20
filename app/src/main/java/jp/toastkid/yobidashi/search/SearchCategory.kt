@@ -22,7 +22,7 @@ enum class SearchCategory(
 
     GOOGLE(R.string.google,
             R.drawable.googleg_standard_color_18,
-            "https://www.google.com/#q="
+            "https://www.google.com/search?q="
     ),
     BING(R.string.bing,
             R.drawable.ic_bing_logo,
