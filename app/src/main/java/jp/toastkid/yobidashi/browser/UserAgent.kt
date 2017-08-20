@@ -54,7 +54,7 @@ enum class UserAgent private constructor(private val title: String, private val 
          */
         fun showSelectionDialog(
                 snackbarParent: View,
-                callback: Consumer<UserAgent>
+                callback: (UserAgent) -> Unit
         ) {
             val context = snackbarParent.context
             val preferenceApplier = PreferenceApplier(context)
@@ -66,7 +66,7 @@ enum class UserAgent private constructor(private val title: String, private val 
                     ) { d, i ->
                         val userAgent = UserAgent.values()[i]
                         preferenceApplier.setUserAgent(userAgent.name)
-                        callback.accept(userAgent)
+                        callback(userAgent)
                         Toaster.snackShort(
                                 snackbarParent,
                                 context.getString(R.string.format_result_user_agent, userAgent.title()),

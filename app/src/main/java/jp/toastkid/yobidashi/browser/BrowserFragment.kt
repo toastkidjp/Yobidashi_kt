@@ -218,7 +218,10 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.USER_AGENT -> {
-                UserAgent.showSelectionDialog(binding!!.root, Consumer<UserAgent> { tabs.resetUserAgent(it) })
+                UserAgent.showSelectionDialog(
+                        binding!!.root,
+                        { tabs.resetUserAgent(it.text()) }
+                )
                 return
             }
             Menu.WIFI_SETTING -> {
@@ -397,8 +400,6 @@ class BrowserFragment : BaseFragment() {
         val fabMarginBottom = resources.getDimensionPixelSize(R.dimen.fab_margin)
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
         MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
-
-        tabs.resetUserAgent(UserAgent.valueOf(preferenceApplier.userAgent()))
     }
 
     override fun pressBack(): Boolean {

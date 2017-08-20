@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -151,7 +150,7 @@ class SettingsTopFragment : BaseFragment() {
     fun userAgent(v: View) {
         UserAgent.showSelectionDialog(
                 binding.root,
-                Consumer{ userAgent -> binding.userAgentValue.text = userAgent.title() }
+                { userAgent -> binding.userAgentValue.text = userAgent.title() }
         )
     }
 

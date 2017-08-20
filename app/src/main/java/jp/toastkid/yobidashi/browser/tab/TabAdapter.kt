@@ -262,8 +262,8 @@ class TabAdapter(
         Screenshot.save(webView.context, webView.drawingCache)
     }
 
-    fun resetUserAgent(userAgent: UserAgent) {
-        webView.settings.userAgentString = userAgent.text()
+    fun resetUserAgent(userAgentText: String) {
+        webView.settings.userAgentString = userAgentText
         webView.reload()
     }
 
@@ -303,7 +303,7 @@ class TabAdapter(
         settings.javaScriptEnabled = preferenceApplier.useJavaScript()
         settings.saveFormData = preferenceApplier.doesSaveForm()
         settings.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
-        return Single.create<String> { e -> preferenceApplier.userAgent() }
+        return Single.create<String> { e -> e.onSuccess(preferenceApplier.userAgent()) }
                 .map { uaName ->
                     val text = UserAgent.valueOf(uaName).text()
 
@@ -313,8 +313,9 @@ class TabAdapter(
                         WebView(webView.context).settings.userAgentString
                     }
                 }
+                .filter { settings.userAgentString != it }
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(Consumer<String> { settings.userAgentString = it })
+                .subscribe { resetUserAgent(it) }
     }
 
     /**
