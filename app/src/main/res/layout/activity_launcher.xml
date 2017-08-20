@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height"
-            android:minHeight="?android:actionBarSize"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:background="@color/transparent"
             >
-            <FrameLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:minHeight="?android:actionBarSize"
                 >
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/filter"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:maxLines="1"
-                    android:hint="@string/title_package_name_filter"
-                    android:background="@drawable/ripple_transparent"
-                    android:inputType="text"
-                    />
-                <LinearLayout
-                    android:id="@+id/input_border"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_gravity="bottom"
-                    android:background="@color/white"
-                    />
-            </FrameLayout>
+                    >
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/filter"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:maxLines="1"
+                        android:hint="@string/title_package_name_filter"
+                        android:background="@drawable/ripple_transparent"
+                        android:inputType="text"
+                        />
+                    <LinearLayout
+                        android:id="@+id/input_border"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/white"
+                        />
+                </FrameLayout>
 
-        </android.support.v7.widget.Toolbar>
-
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,8 +64,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 />
         </FrameLayout>
-
-    </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>
