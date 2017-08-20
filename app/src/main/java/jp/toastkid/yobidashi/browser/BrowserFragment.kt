@@ -406,7 +406,7 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun hideOption(): Boolean {
-        if (tabListModule?.isVisible as Boolean) {
+        if (tabListModule != null && tabListModule?.isVisible as Boolean) {
             hideTabList()
             return true
         }
