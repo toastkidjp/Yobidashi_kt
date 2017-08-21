@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:foreground="@drawable/ripple_transparent"
+        android:background="@color/filter_white_bb"
+        >
+        <ImageView
+            android:id="@+id/favorite_search_image"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left|center_vertical"
+            android:adjustViewBounds="true"
+            />
+        <TextView
+            android:id="@+id/favorite_search_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="40dp"
+            android:gravity="center_vertical"
+            android:textSize="22sp"
+            />
+        <ImageView
+            android:id="@+id/favorite_search_delete"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_remove_circle"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ripple_transparent"
+            />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="40dp"
+            android:background="@color/search_divider"
+            />
+    </FrameLayout>
+</layout>

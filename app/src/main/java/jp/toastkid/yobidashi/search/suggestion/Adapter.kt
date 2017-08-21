@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-
-import java.util.ArrayList
-
 import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
+import java.util.*
 
 /**
  * Suggest list adapter.
@@ -73,6 +71,7 @@ internal class Adapter
         holder.setText(item)
         holder.itemView.setOnClickListener { v -> onItemClicked(item) }
         holder.setOnClickAdd(View.OnClickListener{ v -> onAddClicked(item) })
+        holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
     /**

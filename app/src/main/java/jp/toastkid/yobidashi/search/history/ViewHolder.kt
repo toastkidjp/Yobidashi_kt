@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search.history
 
 import android.support.annotation.DrawableRes
 import android.support.v7.widget.RecyclerView
+import android.view.View
 
 import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
@@ -27,5 +28,9 @@ internal class ViewHolder(private val binding: ItemSearchSuggestionBinding) : Re
                 e.printStackTrace()
             }
         })
+    }
+
+    fun switchDividerVisibility(visible: Boolean) {
+        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
     }
 }

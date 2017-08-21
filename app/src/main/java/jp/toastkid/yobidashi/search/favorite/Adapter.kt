@@ -5,16 +5,13 @@ import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.functions.BiConsumer
 import io.reactivex.functions.Consumer
-
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FavoriteSearchItemBinding
-import jp.toastkid.yobidashi.libs.functions.SingleValueCallback
+import jp.toastkid.yobidashi.databinding.ItemFavoriteSearchBinding
 import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
@@ -39,12 +36,13 @@ internal class Adapter(
     ): FavoriteSearchHolder {
         return FavoriteSearchHolder(
                 DataBindingUtil
-                        .inflate<FavoriteSearchItemBinding>(inflater, R.layout.favorite_search_item, parent, false)
+                        .inflate<ItemFavoriteSearchBinding>(inflater, R.layout.item_favorite_search, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: FavoriteSearchHolder, position: Int) {
         bindViews(holder, relation.get(position))
+        holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
     override fun getItemCount(): Int {

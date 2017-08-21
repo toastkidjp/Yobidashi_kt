@@ -5,6 +5,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:minHeight="@dimen/search_item_height"
         >
         <TextView
@@ -36,6 +38,14 @@
             android:textSize="20dp"
             android:textColor="@color/white"
             android:background="@color/search_add_background"
+            />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="40dp"
+            android:background="@color/search_divider"
             />
     </FrameLayout>
 </layout>

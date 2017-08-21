@@ -6,11 +6,7 @@ import android.support.v7.app.AlertDialog
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
-
-import java.util.ArrayList
-
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
@@ -18,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
 import jp.toastkid.yobidashi.search.SearchCategory
+import java.util.*
 
 /**
  * Adapter of search history list.
@@ -90,6 +87,7 @@ internal class Adapter
                     .show()
             true
         }
+        holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
     /**
