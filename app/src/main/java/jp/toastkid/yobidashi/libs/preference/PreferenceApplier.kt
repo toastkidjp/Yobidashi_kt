@@ -97,7 +97,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun useDailyAlarm() {
-        preferences.edit().putBoolean(Key.USE_DAILY_ALARM.name, true).apply()
+        preferences.edit().putBoolean(Key.USE_DAILY_ALARM.name, false).apply()
     }
 
     fun notUseDailyAlarm() {
@@ -137,7 +137,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun useJavaScript(): Boolean {
-        return preferences.getBoolean(Key.USE_JS.name, false)
+        return preferences.getBoolean(Key.USE_JS.name, true)
     }
 
     fun setMenuPos(newState: MenuPos) {
