@@ -223,4 +223,7 @@
     <string name="title_default_search_engine">デフォルトの検索エンジン</string>
     <string name="subhead_search">検索の設定</string>
     <string name="subhead_browser">ブラウザの設定</string>
+    <string name="title_enable_search_with_clip">「クリップボードで検索」を使う</string>
+    <string name="message_enable_swc">「クリップボードで検索」を有効にしました。</string>
+    <string name="message_disable_swc">「クリップボードで検索」を無効にしました。</string>
 </resources>

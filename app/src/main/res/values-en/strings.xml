@@ -225,4 +225,7 @@
     <string name="title_default_search_engine">Default Search Engine</string>
     <string name="subhead_search">Search</string>
     <string name="subhead_browser">Browser</string>
+    <string name="title_enable_search_with_clip">Use "Search with Clip"</string>
+    <string name="message_enable_swc">It has enabled "Search with Clip".</string>
+    <string name="message_disable_swc">It has disabled "Search with Clip".</string>
 </resources>

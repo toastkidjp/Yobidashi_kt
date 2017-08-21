@@ -22,7 +22,8 @@ class PreferenceApplier(private val context: Context) {
     private enum class Key {
         BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, BG_IMAGE, LAST_AD_DATE,
         USE_DAILY_ALARM, USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
-        LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR, DEFAULT_SEARCH_ENGINE
+        LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
+        DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP
     }
 
     private val preferences: SharedPreferences
@@ -67,7 +68,7 @@ class PreferenceApplier(private val context: Context) {
         set(path) = preferences.edit().putString(Key.BG_IMAGE.name, path).apply()
 
     fun hasBackgroundImagePath(): Boolean {
-        return backgroundImagePath.length != 0
+        return backgroundImagePath.isNotEmpty()
     }
 
     fun removeBackgroundImagePath() {
@@ -211,6 +212,12 @@ class PreferenceApplier(private val context: Context) {
                 SearchCategory.getDefaultCategoryName()
         )
     }
+
+    var enableSearchWithClip: Boolean
+        get () = preferences.getBoolean(Key.ENABLE_SEARCH_WITH_CLIP.name, true)
+        set (newState) {
+            preferences.edit().putBoolean(Key.ENABLE_SEARCH_WITH_CLIP.name, newState).apply()
+        }
 
     fun clear() {
         preferences.edit().clear().apply()

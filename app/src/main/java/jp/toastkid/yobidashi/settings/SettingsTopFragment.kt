@@ -100,6 +100,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.saveFormCheck.isChecked = preferenceApplier.doesSaveForm()
         binding.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
+        binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
     }
 
     /**
@@ -141,6 +142,22 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun openSearchCategory(v: View) {
         binding.searchCategories.performClick()
+    }
+
+    /**
+     * Switch notification widget displaying.
+     *
+     * @param v
+     */
+    fun switchSearchWithClip(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.enableSearchWithClip
+        preferenceApplier.enableSearchWithClip = newState
+        binding.enableSearchWithClipCheck.isChecked = newState
+
+        @StringRes val messageId
+                = if (newState) { R.string.message_enable_swc } else { R.string.message_disable_swc }
+        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 
     /**

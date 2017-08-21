@@ -38,7 +38,7 @@ class SearchWithClip(
      */
     operator fun invoke() {
         listener = ClipboardManager.OnPrimaryClipChangedListener{
-            if (!cm.hasPrimaryClip()) {
+            if (!PreferenceApplier(parent.context).enableSearchWithClip || !cm.hasPrimaryClip()) {
                 return@OnPrimaryClipChangedListener
             }
 
