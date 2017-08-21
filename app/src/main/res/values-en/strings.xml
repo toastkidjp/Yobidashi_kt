@@ -17,6 +17,7 @@
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
+    <string name="search_category_search_code">searchcode</string>
 
     <string name="close">Close</string>
     <string name="display">Display</string>
