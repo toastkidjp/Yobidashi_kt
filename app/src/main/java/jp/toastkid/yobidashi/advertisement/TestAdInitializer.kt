@@ -1,13 +1,7 @@
 package jp.toastkid.yobidashi.advertisement
 
 import android.content.Context
-
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.NativeExpressAdView
-
+import com.google.android.gms.ads.*
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 
@@ -56,6 +50,7 @@ internal class TestAdInitializer
         return AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("59A864957D348217B858A8CE956AA352")
+                .addTestDevice("41D3185792903C624B6E9045EBF43BB3")
                 .build()
     }
 
