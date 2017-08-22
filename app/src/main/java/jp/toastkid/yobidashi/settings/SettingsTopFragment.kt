@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -101,6 +100,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.saveFormCheck.isChecked = preferenceApplier.doesSaveForm()
         binding.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
+        binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
     }
 
     /**
@@ -145,13 +145,29 @@ class SettingsTopFragment : BaseFragment() {
     }
 
     /**
+     * Switch notification widget displaying.
+     *
+     * @param v
+     */
+    fun switchSearchWithClip(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.enableSearchWithClip
+        preferenceApplier.enableSearchWithClip = newState
+        binding.enableSearchWithClipCheck.isChecked = newState
+
+        @StringRes val messageId
+                = if (newState) { R.string.message_enable_swc } else { R.string.message_disable_swc }
+        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+    }
+
+    /**
      * UserAgent setting.
      * @param v
      */
     fun userAgent(v: View) {
         UserAgent.showSelectionDialog(
                 binding.root,
-                Consumer{ userAgent -> binding.userAgentValue.text = userAgent.title() }
+                { userAgent -> binding.userAgentValue.text = userAgent.title() }
         )
     }
 

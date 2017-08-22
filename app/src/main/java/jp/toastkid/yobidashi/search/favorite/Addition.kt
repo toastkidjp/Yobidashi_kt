@@ -19,8 +19,6 @@ import jp.toastkid.yobidashi.databinding.FavoriteSearchAdditionDialogContentBind
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
-import jp.toastkid.yobidashi.libs.functions.SingleValueCallback
-import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
 
@@ -119,7 +117,7 @@ internal constructor(
 
         val category = categorySelector.selectedItem.toString()
 
-        Insertion(context, category, query).insert()
+        FavoriteSearchInsertion(context, category, query).insert()
 
         val message = MessageFormat.format(
                 context.getString(R.string.favorite_search_addition_successful_format),

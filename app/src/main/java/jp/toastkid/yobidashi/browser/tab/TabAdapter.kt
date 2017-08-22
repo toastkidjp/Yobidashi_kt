@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.tab
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
 import android.webkit.*
@@ -27,7 +28,7 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Adapter of [Tab].
+ * ModuleAdapter of [Tab].
  *
  * @author toastkidjp
  */
@@ -134,10 +135,24 @@ class TabAdapter(
             when (hitResult.type) {
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                     val url = hitResult.extra
-                    if (url != null) {
-                        Clipboard.clip(v.context, url)
+                    if (url.isEmpty()) {
+                        false
                     }
-                    Clipboard.clip(v.context, url)
+                    AlertDialog.Builder(progress.context)
+                            .setTitle(url)
+                            .setItems(R.array.url_menu, { dialog, which ->
+                                when (which) {
+                                    0 -> {
+                                        openNewTab(url)
+                                        setIndex(tabList.size() - 1)
+                                    }
+                                    1 -> { openNewTab(url) }
+                                    2 -> { loadUrl(url) }
+                                }
+                            })
+                            .setCancelable(true)
+                            .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
+                            .show()
                     false
                 }
                 else -> {
@@ -172,13 +187,12 @@ class TabAdapter(
     }
 
     internal fun openNewTab() {
+        openNewTab(preferenceApplier.homeUrl)
+    }
+
+    internal fun openNewTab(url: String) {
         val newTab = Tab()
-        newTab.addHistory(
-                History.make(
-                        webView.context.getString(R.string.new_tab),
-                        preferenceApplier.homeUrl
-                )
-        )
+        newTab.addHistory(History.make(url, url))
         tabList.add(newTab)
         tabList.save()
     }
@@ -248,8 +262,8 @@ class TabAdapter(
         Screenshot.save(webView.context, webView.drawingCache)
     }
 
-    fun resetUserAgent(userAgent: UserAgent) {
-        webView.settings.userAgentString = userAgent.text()
+    fun resetUserAgent(userAgentText: String) {
+        webView.settings.userAgentString = userAgentText
         webView.reload()
     }
 
@@ -289,7 +303,7 @@ class TabAdapter(
         settings.javaScriptEnabled = preferenceApplier.useJavaScript()
         settings.saveFormData = preferenceApplier.doesSaveForm()
         settings.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
-        return Single.create<String> { e -> preferenceApplier.userAgent() }
+        return Single.create<String> { e -> e.onSuccess(preferenceApplier.userAgent()) }
                 .map { uaName ->
                     val text = UserAgent.valueOf(uaName).text()
 
@@ -299,8 +313,9 @@ class TabAdapter(
                         WebView(webView.context).settings.userAgentString
                     }
                 }
+                .filter { settings.userAgentString != it }
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(Consumer<String> { settings.userAgentString = it })
+                .subscribe { resetUserAgent(it) }
     }
 
     /**

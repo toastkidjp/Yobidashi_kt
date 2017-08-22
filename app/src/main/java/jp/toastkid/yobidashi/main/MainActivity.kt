@@ -47,6 +47,7 @@ import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
+import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import java.io.File
 import java.io.IOException
@@ -85,6 +86,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
     /** For stop subscribing title pair.  */
     private var prevDisposable: Disposable? = null
+
+    private var adCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -256,6 +259,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                     sendLog("nav_search")
                     switchToSearch()
                 }
+                R.id.nav_search_history -> {
+                    sendLog("nav_srch_hstry")
+                    startActivity(SearchHistoryActivity.makeIntent(this))
+                }
                 R.id.nav_calendar -> {
                     sendLog("nav_cal")
                     if (calendarFragment == null) {
@@ -400,8 +407,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     }
 
     private fun attemptToShowingAd() {
-        val preferenceApplier = preferenceApplier
-        if (interstitialAd!!.isLoaded && preferenceApplier.allowShowingAd()) {
+        if (interstitialAd!!.isLoaded && 4 <= adCount && preferenceApplier.allowShowingAd()) {
             Toaster.snackShort(
                     binding.appBarMain.toolbar,
                     R.string.message_please_view_ad,
@@ -410,6 +416,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             interstitialAd!!.show()
             preferenceApplier.updateLastAd()
         }
+        adCount++
     }
 
     /**

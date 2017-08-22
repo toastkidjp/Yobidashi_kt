@@ -5,4 +5,9 @@
         <item name="add_schedule">スケジュールを登録</item>
         <item name="search">Web 検索</item>
     </array>
+    <array name="url_menu">
+        <item name="open_article">新規タブで開く</item>
+        <item name="add_schedule">バックグラウンドで開く</item>
+        <item name="search">開く</item>
+    </array>
 </resources>

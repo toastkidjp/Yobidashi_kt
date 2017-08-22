@@ -25,7 +25,7 @@ import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.history.HistoryModule
-import jp.toastkid.yobidashi.search.history.SearchHistory
+import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 
@@ -98,10 +98,10 @@ class SearchFragment : BaseFragment() {
                 Completable.create { e ->
                     historyModule = HistoryModule(
                             binding?.historyModule as ModuleSearchHistoryBinding,
-                            Consumer<SearchHistory> { history -> search(history.category as String, history.query as String) },
-                            Runnable { this.hideKeyboard() },
-                            Consumer<String> { text ->
-                                binding?.searchInput?.setText(text + " ")
+                            { history -> search(history.category as String, history.query as String) },
+                            this::hideKeyboard,
+                            { searchHistory ->
+                                binding?.searchInput?.setText("${searchHistory.query} ")
                                 binding?.searchInput?.setSelection(
                                         binding?.searchInput?.text.toString().length)
                             }
@@ -135,6 +135,15 @@ class SearchFragment : BaseFragment() {
         history.setOnMenuItemClickListener { i ->
             preferenceApplier.switchEnableSearchHistory()
             i.isChecked = preferenceApplier.isEnableSearchHistory
+            true
+        }
+
+        menu.findItem(R.id.open_favorite_search).setOnMenuItemClickListener {
+            true
+        }
+
+        menu.findItem(R.id.open_search_history).setOnMenuItemClickListener {
+            activity.startActivity(SearchHistoryActivity.makeIntent(activity))
             true
         }
     }
@@ -219,7 +228,9 @@ class SearchFragment : BaseFragment() {
      * Hide software keyboard.
      */
     fun hideKeyboard() {
-        Inputs.hideKeyboard(binding?.searchInput as EditText)
+        if (binding?.searchInput != null) {
+            Inputs.hideKeyboard(binding?.searchInput as EditText)
+        }
     }
 
     override fun onPause() {

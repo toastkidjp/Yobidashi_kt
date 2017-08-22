@@ -17,6 +17,7 @@
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
+    <string name="search_category_search_code">searchcode</string>
 
     <string name="close">Close</string>
     <string name="display">Display</string>
@@ -224,4 +225,14 @@
     <string name="title_default_search_engine">Default Search Engine</string>
     <string name="subhead_search">Search</string>
     <string name="subhead_browser">Browser</string>
+    <string name="title_enable_search_with_clip">Use "Search with Clip"</string>
+    <string name="message_enable_swc">It has enabled "Search with Clip".</string>
+    <string name="message_disable_swc">It has disabled "Search with Clip".</string>
+
+    <string name="message_add_favorite_search" formatted="false" >
+        Would you like to add to "Favorite Search"? \n
+        Site: %s\n
+        Keyword: %s
+    </string>
+    <string name="message_none_search_histories">It does not exists any search histories.</string>
 </resources>

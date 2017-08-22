@@ -4,11 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.webkit.WebView
-
+import jp.toastkid.yobidashi.libs.storage.Storeroom
 import java.io.File
 import java.io.IOException
-
-import jp.toastkid.yobidashi.libs.storage.Storeroom
 
 /**
  * Archive dir.
@@ -49,7 +47,7 @@ object Archive {
         return !canUseArchive()
     }
 
-    private fun canUseArchive(): Boolean {
+    fun canUseArchive(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
     }
 

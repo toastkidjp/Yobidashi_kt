@@ -12,7 +12,7 @@ import jp.toastkid.yobidashi.libs.db.DbInitter
 /**
  * @author toastkidjp
  */
-internal class Insertion(
+class FavoriteSearchInsertion(
         private val context: Context,
         private val category: String,
         private val query: String

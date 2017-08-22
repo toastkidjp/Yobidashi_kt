@@ -2,15 +2,20 @@ package jp.toastkid.yobidashi.browser
 
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.archive.Archive
 
 /**
  * In App Browser's circular menu.
-
+ *
  * @author toastkidjp
  */
-internal enum class Menu private constructor(@param:StringRes val titleId: Int, @param:DrawableRes val iconId: Int) {
+internal enum class Menu(
+        @param:StringRes val titleId: Int,
+        @param:DrawableRes val iconId: Int
+) {
+
+    TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
 
     RELOAD(R.string.title_menu_reload, R.drawable.ic_reload),
 
@@ -35,8 +40,6 @@ internal enum class Menu private constructor(@param:StringRes val titleId: Int, 
     CLEAR_CACHE(R.string.title_clear_cache, R.drawable.ic_clear_cache),
 
     CLEAR_FORM_DATA(R.string.clear_form_data, R.drawable.ic_clear_form),
-
-    TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
 
     OPEN(R.string.title_open_url, R.drawable.ic_web),
 
@@ -66,5 +69,11 @@ internal enum class Menu private constructor(@param:StringRes val titleId: Int, 
 
     COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
 
-    EXIT(R.string.exit, R.drawable.ic_exit)
+    EXIT(R.string.exit, R.drawable.ic_exit);
+
+    companion object {
+        val list: List<Menu> =
+                if (Archive.canUseArchive()) { values().toList() }
+                else { values().filter{  (it != VIEW_ARCHIVE || it != ARCHIVE) } }
+    }
 }

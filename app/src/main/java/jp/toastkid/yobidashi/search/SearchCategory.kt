@@ -22,7 +22,7 @@ enum class SearchCategory(
 
     GOOGLE(R.string.google,
             R.drawable.googleg_standard_color_18,
-            "https://www.google.com/#q="
+            "https://www.google.com/search?q="
     ),
     BING(R.string.bing,
             R.drawable.ic_bing_logo,
@@ -109,6 +109,10 @@ enum class SearchCategory(
     GREP_CODE(R.string.search_category_grep_code,
             R.drawable.ic_grepcode,
             "http://grepcode.com/search/?query="
+    ),
+    SEARCH_CODE(R.string.search_category_search_code,
+            R.drawable.ic_searchcode,
+            "https://searchcode.com/?q="
     );
 
     fun make(context: Context, query: String): String {

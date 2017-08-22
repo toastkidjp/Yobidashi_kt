@@ -34,4 +34,8 @@ internal class ViewHolder
     fun setOnClickAdd(listener: View.OnClickListener) {
         binding.searchSuggestAdd.setOnClickListener(listener)
     }
+
+    fun switchDividerVisibility(visible: Boolean) {
+        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
+    }
 }

@@ -17,6 +17,7 @@
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
+    <string name="search_category_search_code">searchcode</string>
 
     <string name="close">閉じる</string>
     <string name="display">表示</string>
@@ -222,4 +223,11 @@
     <string name="title_default_search_engine">デフォルトの検索エンジン</string>
     <string name="subhead_search">検索の設定</string>
     <string name="subhead_browser">ブラウザの設定</string>
+    <string name="title_enable_search_with_clip">「クリップボードで検索」を使う</string>
+    <string name="message_enable_swc">「クリップボードで検索」を有効にしました。</string>
+    <string name="message_disable_swc">「クリップボードで検索」を無効にしました。</string>
+
+    <string name="message_add_favorite_search" formatted="false" >
+        種別: %s\nキーワード: %s\nをお気に入り検索に追加しますか？</string>
+    <string name="message_none_search_histories">検索履歴がありません。</string>
 </resources>

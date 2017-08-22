@@ -44,7 +44,7 @@ class HomeFragment : BaseFragment() {
     /** Callback.  */
     private var action: FragmentReplaceAction? = null
 
-    /** Adapter.  */
+    /** ModuleAdapter.  */
     private var adapter: Adapter? = null
 
     override fun onAttach(context: Context) {
