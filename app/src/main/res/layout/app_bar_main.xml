@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="jp.toastkid.yobidashi.main.MainActivity"
+        tools:context="jp.toastkid.jitte.main.MainActivity"
         >
 
         <ImageView
