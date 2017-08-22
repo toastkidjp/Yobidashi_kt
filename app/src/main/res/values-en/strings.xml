@@ -228,4 +228,11 @@
     <string name="title_enable_search_with_clip">Use "Search with Clip"</string>
     <string name="message_enable_swc">It has enabled "Search with Clip".</string>
     <string name="message_disable_swc">It has disabled "Search with Clip".</string>
+
+    <string name="message_add_favorite_search" formatted="false" >
+        Would you like to add to "Favorite Search"? \n
+        Site: %s\n
+        Keyword: %s
+    </string>
+    <string name="message_none_search_histories">It does not exists any search histories.</string>
 </resources>

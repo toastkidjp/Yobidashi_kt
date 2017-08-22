@@ -15,7 +15,7 @@ class AddingFavoriteSearchService : Service() {
         if (intent == null) {
             return Service.START_STICKY_COMPATIBILITY
         }
-        Insertion(
+        FavoriteSearchInsertion(
                 applicationContext,
                 intent.getStringExtra(EXTRA_KEY_CATEGORY),
                 intent.getStringExtra(EXTRA_KEY_QUERY)

@@ -9,56 +9,40 @@ import android.view.ViewGroup
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
+import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchCategory
 import java.util.*
 
 /**
- * Adapter of search history list.
-
+ * ModuleAdapter of search history list.
+ *
+ * @param context
+ * @param relation Relation
+ * @param onClick On click callback
+ * @param onVisibilityChanged On changed visibility callback
+ * @param onClickAdd
+ *
  * @author toastkidjp
  */
-internal class Adapter
-/**
-
- * @param context
- * *
- * @param relation
- * *
- * @param onClick
- * *
- * @param onVisibilityChanged
- * *
- * @param onClickAdd
- */
-(
+internal class ModuleAdapter(
         context: Context,
-        /** Relation.  */
         private val relation: SearchHistory_Relation,
-        /** On click callback.  */
-        private val onClick: Consumer<SearchHistory>,
-        /** On changed visibility callback.  */
-        private val onVisibilityChanged: Consumer<Boolean>,
-        private val onClickAdd: Consumer<String>
+        private val onClick: (SearchHistory) -> Unit,
+        private val onVisibilityChanged: (Boolean) -> Unit,
+        private val onClickAdd: (SearchHistory) -> Unit
 ) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation) {
 
     /** Layout inflater.  */
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     /** Selected items.  */
-    private val selected: MutableList<SearchHistory>
-
-    init {
-        this.inflater = LayoutInflater.from(context)
-        this.selected = ArrayList<SearchHistory>(5)
-    }
+    private val selected: MutableList<SearchHistory> = ArrayList<SearchHistory>(5)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil
-                .inflate<ItemSearchSuggestionBinding>(inflater, R.layout.item_search_suggestion, parent, false))
+        return ViewHolder(DataBindingUtil.inflate<ItemSearchHistoryBinding>(
+                inflater, R.layout.item_search_history, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -66,12 +50,14 @@ internal class Adapter
         holder.setText(searchHistory.query!!)
         holder.itemView.setOnClickListener { v ->
             try {
-                onClick.accept(searchHistory)
+                onClick(searchHistory)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
-        holder.setOnClickAdd(searchHistory.query!!, onClickAdd)
+        holder.setOnClickAdd(searchHistory, onClickAdd)
+
+        holder.setAddIcon(R.drawable.ic_add_circle_search)
 
         holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
@@ -87,6 +73,7 @@ internal class Adapter
                     .show()
             true
         }
+        holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
@@ -111,7 +98,7 @@ internal class Adapter
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate {
-                    onVisibilityChanged.accept(!isEmpty)
+                    onVisibilityChanged(!isEmpty)
                     notifyDataSetChanged()
                 }
                 .subscribe { it -> this.add(it) }
@@ -130,7 +117,7 @@ internal class Adapter
                     selected.remove(item)
                     notifyItemRemoved(position)
                     if (isEmpty) {
-                        onVisibilityChanged.accept(false)
+                        onVisibilityChanged(false)
                     }
                 }
     }

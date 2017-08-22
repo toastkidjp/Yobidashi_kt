@@ -28,7 +28,7 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Adapter of [Tab].
+ * ModuleAdapter of [Tab].
  *
  * @author toastkidjp
  */

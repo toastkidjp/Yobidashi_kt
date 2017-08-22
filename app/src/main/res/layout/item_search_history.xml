@@ -4,32 +4,44 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
+        android:minHeight="@dimen/search_item_height"
+        android:layout_margin="4dp"
         android:foreground="@drawable/ripple_transparent"
         android:background="@color/filter_white_bb"
         >
         <ImageView
-            android:id="@+id/favorite_search_image"
+            android:id="@+id/search_history_image"
             android:layout_width="24dp"
             android:layout_height="match_parent"
             android:layout_gravity="left|center_vertical"
             android:adjustViewBounds="true"
             />
         <TextView
-            android:id="@+id/favorite_search_text"
+            android:id="@+id/search_history_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="40dp"
+            android:layout_marginRight="76dp"
+            android:maxLines="3"
             android:gravity="center_vertical"
-            android:textSize="22sp"
+            android:textSize="18sp"
             />
         <ImageView
-            android:id="@+id/favorite_search_delete"
-            android:layout_width="40dp"
+            android:id="@+id/search_history_bookmark"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="40dp"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_favorite_gray"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ripple_transparent"
+            />
+        <ImageView
+            android:id="@+id/search_history_add"
+            android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
-            android:src="@drawable/ic_remove_search"
+            android:src="@drawable/ic_add_circle_search"
             android:adjustViewBounds="true"
             android:background="@drawable/ripple_transparent"
             />

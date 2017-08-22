@@ -226,4 +226,8 @@
     <string name="title_enable_search_with_clip">「クリップボードで検索」を使う</string>
     <string name="message_enable_swc">「クリップボードで検索」を有効にしました。</string>
     <string name="message_disable_swc">「クリップボードで検索」を無効にしました。</string>
+
+    <string name="message_add_favorite_search" formatted="false" >
+        種別: %s\nキーワード: %s\nをお気に入り検索に追加しますか？</string>
+    <string name="message_none_search_histories">検索履歴がありません。</string>
 </resources>

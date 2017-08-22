@@ -3,9 +3,7 @@ package jp.toastkid.yobidashi.search.history
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
@@ -30,13 +28,13 @@ class HistoryModule
 (
         /** Data binding object  */
         private val binding: ModuleSearchHistoryBinding,
-        searchCallback: Consumer<SearchHistory>,
-        onTouch: Runnable,
-        onClickAdd: Consumer<String>
+        searchCallback: (SearchHistory) -> Unit,
+        onTouch: () -> Unit,
+        onClickAdd: (SearchHistory) -> Unit
 ) : BaseModule(binding.root) {
 
-    /** RecyclerView's adapter.  */
-    private val adapter: Adapter
+    /** RecyclerView's moduleAdapter.  */
+    private val moduleAdapter: ModuleAdapter
 
     /** Database relation.  */
     private val relation: SearchHistory_Relation
@@ -51,20 +49,17 @@ class HistoryModule
         relation = DbInitter.get(context()).relationOfSearchHistory()
 
         binding.searchHistories.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
-        adapter = Adapter(context(), relation, searchCallback,
-                Consumer<Boolean> { visible ->
-                    if (visible) {
-                        show()
-                    } else {
-                        hide()
-                    }
-                },
-                Consumer<String> { onClickAdd.accept(it) }
+        moduleAdapter = ModuleAdapter(
+                context(),
+                relation,
+                searchCallback,
+                { visible -> if (visible) { show() } else { hide() } },
+                { history -> onClickAdd(history) }
         )
-        binding.searchHistories.adapter = adapter
+        binding.searchHistories.adapter = moduleAdapter
         binding.searchHistories.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                onTouch.run()
+                onTouch()
                 return false
             }
         }
@@ -78,7 +73,7 @@ class HistoryModule
         if (disposable != null) {
             disposable!!.dispose()
         }
-        disposable = adapter.query(s)
+        disposable = moduleAdapter.query(s)
     }
 
     /**
@@ -88,7 +83,7 @@ class HistoryModule
     fun clearHistory(view: View) {
         Clear(binding.root, relation.deleter())
                 .invoke(Runnable {
-                    adapter.clear()
+                    moduleAdapter.clear()
                     hide()
                 })
     }

@@ -36,7 +36,7 @@ class SuggestionModule
         onClick: Runnable
 ) : BaseModule(binding.root) {
 
-    /** Suggest Adapter.  */
+    /** Suggest ModuleAdapter.  */
     private val mSuggestionAdapter: Adapter
 
     /** Fetcher.  */

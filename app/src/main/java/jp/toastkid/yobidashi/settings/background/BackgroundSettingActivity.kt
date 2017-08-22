@@ -9,13 +9,12 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
-
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBackgroundSettingBinding
-import jp.toastkid.yobidashi.libs.storage.Storeroom
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.storage.Storeroom
 
 /**
  * Background settings.
@@ -27,7 +26,7 @@ class BackgroundSettingActivity : BaseActivity() {
     /** Data Binding object.  */
     private var binding: ActivityBackgroundSettingBinding? = null
 
-    /** Adapter.  */
+    /** ModuleAdapter.  */
     private var adapter: Adapter? = null
 
     /** Wrapper of FilesDir.  */

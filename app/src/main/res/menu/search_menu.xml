@@ -13,4 +13,16 @@
         android:title="@string/title_use_search_history"
         android:checkable="true"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/open_favorite_search"
+        android:orderInCategory="100"
+        android:title="@string/title_favorite_search"
+        android:checkable="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/open_search_history"
+        android:orderInCategory="100"
+        android:title="@string/title_search_history"
+        android:checkable="false"
+        app:showAsAction="never" />
 </menu>
