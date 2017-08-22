@@ -2,7 +2,7 @@
 <layout>
     <data>
         <variable name="activity"
-            type="jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity" />
+            type="jp.toastkid.jitte.settings.background.BackgroundSettingActivity" />
     </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

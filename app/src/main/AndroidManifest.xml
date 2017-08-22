@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="jp.toastkid.yobidashi">
+    package="jp.toastkid.jitte">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name=".ExtendedApplication"
+        android:name="jp.toastkid.jitte.ExtendedApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         >
         <activity
-            android:name=".main.MainActivity"
+            android:name="jp.toastkid.jitte.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Splash"
             android:configChanges="orientation|screenSize|locale"
@@ -31,7 +31,7 @@
 
         <activity-alias
             android:name=".browser.BrowserActivity"
-            android:targetActivity=".main.MainActivity"
+            android:targetActivity="jp.toastkid.jitte.main.MainActivity"
             android:label="@string/title_search"
             >
             <intent-filter>
@@ -45,7 +45,7 @@
 
         <activity-alias
             android:name=".search.SearchActivity"
-            android:targetActivity=".main.MainActivity"
+            android:targetActivity="jp.toastkid.jitte.main.MainActivity"
             android:label="@string/title_search"
             >
             <intent-filter>
@@ -55,80 +55,80 @@
         </activity-alias>
 
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="jp.toastkid.jitte.settings.SettingsActivity"
             android:label="@string/title_settings"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".settings.color.ColorSettingActivity"
+            android:name="jp.toastkid.jitte.settings.color.ColorSettingActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".settings.background.BackgroundSettingActivity"
+            android:name="jp.toastkid.jitte.settings.background.BackgroundSettingActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".about.AboutThisAppActivity"
+            android:name="jp.toastkid.jitte.about.AboutThisAppActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".launcher.LauncherActivity"
+            android:name="jp.toastkid.jitte.launcher.LauncherActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
         <activity
-            android:name=".ScrollingActivity"
+            android:name="jp.toastkid.jitte.ScrollingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name=".planning_poker.CardViewActivity"
+            android:name="jp.toastkid.jitte.planning_poker.CardViewActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".barcode.BarcodeReaderActivity"
+            android:name="jp.toastkid.jitte.barcode.BarcodeReaderActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".browser.screenshots.ScreenshotsActivity"
+            android:name="jp.toastkid.jitte.browser.screenshots.ScreenshotsActivity"
             android:label="@string/title_screenshots"
             android:theme="@style/AppTheme.Translucent"
             />
         <activity
-            android:name=".browser.archive.ArchivesActivity"
+            android:name="jp.toastkid.jitte.browser.archive.ArchivesActivity"
             android:label="@string/title_archives"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name=".planning_poker.PlanningPokerActivity"
+            android:name="jp.toastkid.jitte.planning_poker.PlanningPokerActivity"
             android:label="@string/title_planning_poker"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name=".search.history.SearchHistoryActivity"
+            android:name="jp.toastkid.jitte.search.history.SearchHistoryActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
 
-        <service android:name=".search.favorite.AddingFavoriteSearchService">
+        <service android:name="jp.toastkid.jitte.search.favorite.AddingFavoriteSearchService">
             <intent-filter>
                 <action android:name="ADD_ITEM" />
             </intent-filter>
         </service>
 
-        <service android:name=".color_filter.ColorFilterService"/>
+        <service android:name="jp.toastkid.jitte.color_filter.ColorFilterService"/>
 
-        <receiver android:name=".appwidget.search.Provider" >
+        <receiver android:name="jp.toastkid.jitte.appwidget.search.Provider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -136,8 +136,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_provider" />
         </receiver>
-        <receiver android:name=".calendar.alarm.DailyCalendarReceiver" android:process=":remote" />
-        <receiver android:name=".calendar.alarm.TimeChangedReceiver">
+        <receiver android:name="jp.toastkid.jitte.calendar.alarm.DailyCalendarReceiver" android:process=":remote" />
+        <receiver android:name="jp.toastkid.jitte.calendar.alarm.TimeChangedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DATE_CHANGED" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
@@ -147,7 +147,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="jp.toastkid.yobidashi.fileprovider"
+            android:authorities="jp.toastkid.jitte.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

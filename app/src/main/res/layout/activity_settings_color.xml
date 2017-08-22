@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="activity" type="jp.toastkid.yobidashi.settings.color.ColorSettingActivity" />
+        <variable name="activity" type="jp.toastkid.jitte.settings.color.ColorSettingActivity" />
     </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">呼出 - Yobidashi</string>
+    <string name="app_name">十手 - Jitte</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -63,7 +63,7 @@
         <![CDATA[<font color=\"red\">注意：この操作は取り消せません。</font>]]></string>
 
     <string name="message_share">
-        Android アプリ「{0}」\nhttps://play.google.com/store/apps/details?id=jp.toastkid.yobidashi
+        Android 用の検索アプリ「{0}」\nhttps://play.google.com/store/apps/details?id=jp.toastkid.jitte
     </string>
 
     <string name="message_failed_read_image">画像の読み込みに失敗しました。</string>
@@ -75,9 +75,9 @@
     <string name="format_date_title">{0}月{1}日</string>
     <string name="format_date_link">https://ja.wikipedia.org/wiki/{0}月{1}日</string>
 
-    <string name="production_app_admob_id">ca-app-pub-5751262573448755~1704109822</string>
-    <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
-    <string name="unit_id_native_large_ad">ca-app-pub-5751262573448755/1285307423</string>
+    <string name="production_app_admob_id">ca-app-pub-5751262573448755~2639924999</string>
+    <string name="unit_id_interstitial">ca-app-pub-5751262573448755/6160367602</string>
+    <string name="unit_id_native_large_ad">ca-app-pub-5751262573448755/5696854246</string>
 
     <string name="copyright">(c) @toastkidjp</string>
 
@@ -99,7 +99,13 @@
     <string name="title_about_this_app">このアプリについて</string>
     <string name="message_introduce_ad">全面広告を表示</string>
     <string name="message_about_this_app">
-        毎日の生活に役立つ機能を持つアプリです。
+        さまざまなサイトで情報を検索できる Web 検索アプリです。\n
+        1. Web 検索\n
+        2. バーコードリーダー\n
+        3. アプリランチャー\n
+        4. 簡易タブブラウザ\n
+        5. カレンダー\n
+        6. Planning Poker\n
     </string>
     <string name="message_done_load_ad">広告のロードが完了しました。</string>
     <string name="message_failed_ad_loading">広告のロードに失敗しました。</string>
