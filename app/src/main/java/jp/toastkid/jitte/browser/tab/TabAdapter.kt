@@ -27,6 +27,7 @@ import jp.toastkid.jitte.search.SiteSearch
 import java.io.File
 import java.io.IOException
 
+
 /**
  * ModuleAdapter of [Tab].
  *
@@ -133,10 +134,14 @@ class TabAdapter(
         webView.setOnLongClickListener { v ->
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
+                WebView.HitTestResult.IMAGE_TYPE, WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
+                    ImageDownloadAction(webView, hitResult).invoke()
+                    false
+                }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                     val url = hitResult.extra
                     if (url.isEmpty()) {
-                        false
+                        return@setOnLongClickListener false
                     }
                     AlertDialog.Builder(progress.context)
                             .setTitle(url)
@@ -164,6 +169,7 @@ class TabAdapter(
                 }
             }
         }
+
         return webView
     }
 
@@ -405,7 +411,7 @@ class TabAdapter(
      * Dispose this object's fields.
      */
     fun dispose() {
-        webView?.destroy()
+        webView.destroy()
         if (preferenceApplier.doesRetainTabs()) {
             tabList.save()
         } else {
@@ -420,3 +426,4 @@ class TabAdapter(
     }
 
 }
+

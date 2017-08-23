@@ -241,4 +241,7 @@
         Keyword: %s
     </string>
     <string name="message_none_search_histories">It does not exists any search histories.</string>
+    <string name="message_cannot_downloading_image">This file cannot download...</string>
+    <string name="title_download_image">Download this image file</string>
+    <string name="message_confirm_downloading_image">Would you like to download this image file?</string>
 </resources>
