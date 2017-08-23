@@ -1,5 +1,7 @@
 package jp.toastkid.jitte.browser.tab
 
+import android.app.DownloadManager
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.support.v7.app.AlertDialog
@@ -169,7 +171,18 @@ class TabAdapter(
                 }
             }
         }
+        webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+            val request = DownloadManager.Request(Uri.parse(url))
+            request.allowScanningByMediaScanner()
+            request.setNotificationVisibility(
+                    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            request.setVisibleInDownloadsUi(true)
+            request.setMimeType(mimetype)
+            request.setDescription(contentDisposition)
 
+            val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            dm.enqueue(request)
+        }
         return webView
     }
 
