@@ -79,7 +79,7 @@ internal class ActivityAdapter(
      * Remove item with position.
      * @param position
      */
-    private fun removeAt(position: Int) {
+    fun removeAt(position: Int) {
         val item = getItem(position)
         removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
