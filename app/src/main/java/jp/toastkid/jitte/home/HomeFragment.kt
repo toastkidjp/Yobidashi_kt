@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import jp.toastkid.jitte.BaseFragment
 import jp.toastkid.jitte.R
@@ -46,6 +47,9 @@ class HomeFragment : BaseFragment() {
 
     /** ModuleAdapter.  */
     private var adapter: Adapter? = null
+
+    /** Disposables.  */
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -180,7 +184,7 @@ class HomeFragment : BaseFragment() {
 
         when (requestCode) {
             REQUEST_CODE_VOICE_SEARCH -> {
-                VoiceSearch.processResult(activity, data)
+                disposables.add(VoiceSearch.processResult(activity, data))
                 return
             }
             REQUEST_OVERLAY_PERMISSION -> {
@@ -202,6 +206,7 @@ class HomeFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         adapter!!.dispose()
+        disposables.dispose()
     }
 
     override fun titleId(): Int {

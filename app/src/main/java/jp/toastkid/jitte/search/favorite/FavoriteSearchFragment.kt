@@ -6,14 +6,10 @@ import android.support.annotation.StringRes
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiConsumer
 import io.reactivex.functions.Consumer
-
 import jp.toastkid.jitte.BaseFragment
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.FragmentFavoriteSearchBinding
@@ -39,6 +35,8 @@ class FavoriteSearchFragment : BaseFragment() {
 
     /** Preferences wrapper.  */
     private val preferenceApplier: PreferenceApplier? = null
+
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
             inflater: LayoutInflater?,
@@ -97,7 +95,7 @@ class FavoriteSearchFragment : BaseFragment() {
      * @param query    Search query
      */
     private fun startSearch(category: SearchCategory, query: String) {
-        SearchAction(activity, category.name, query).invoke()
+        disposables.add(SearchAction(activity, category.name, query).invoke())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -130,6 +128,11 @@ class FavoriteSearchFragment : BaseFragment() {
     @StringRes
     override fun titleId(): Int {
         return R.string.title_favorite_search
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        disposables.dispose()
     }
 
     companion object {

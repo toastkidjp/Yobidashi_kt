@@ -22,8 +22,6 @@ internal enum class Menu private constructor(@param:StringRes val titleId: Int, 
 
     PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),
 
-    SHARE(R.string.section_title_share, R.drawable.ic_share),
-
     SETTING(R.string.title_settings, R.drawable.ic_settings),
 
     COLOR_SETTING(R.string.title_settings_color, R.drawable.ic_palette),

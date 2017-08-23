@@ -26,7 +26,6 @@ import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.search.history.HistoryModule
 import jp.toastkid.jitte.search.history.SearchHistoryActivity
-import jp.toastkid.jitte.search.history.SearchHistoryInsertion
 import jp.toastkid.jitte.search.suggestion.SuggestionModule
 
 /**
@@ -40,7 +39,7 @@ class SearchFragment : BaseFragment() {
     private var binding: FragmentSearchBinding? = null
 
     /** Disposables.  */
-    private lateinit var disposables: CompositeDisposable
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     /** History module.  */
     private lateinit var historyModule: HistoryModule
@@ -50,7 +49,6 @@ class SearchFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        disposables = CompositeDisposable()
     }
 
     override fun onCreateView(
@@ -218,10 +216,7 @@ class SearchFragment : BaseFragment() {
      * @param query    search query
      */
     private fun search(category: String, query: String) {
-        if (preferenceApplier().isEnableSearchHistory) {
-            disposables.add(SearchHistoryInsertion.make(activity, category, query).insert())
-        }
-        SearchAction(activity, category, query).invoke()
+        disposables.add(SearchAction(activity, category, query).invoke())
     }
 
     /**

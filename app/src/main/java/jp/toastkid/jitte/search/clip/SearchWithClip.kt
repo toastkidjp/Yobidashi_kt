@@ -3,6 +3,8 @@ package jp.toastkid.jitte.search.clip
 import android.content.ClipboardManager
 import android.content.Context
 import android.view.View
+import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.Urls
@@ -33,6 +35,8 @@ class SearchWithClip(
 
     private lateinit var listener: ClipboardManager.OnPrimaryClipChangedListener
 
+    private var disposable: Disposable = Disposables.empty()
+
     /**
      * Invoke action.
      */
@@ -55,23 +59,25 @@ class SearchWithClip(
                     parent,
                     context.getString(R.string.message_clip_search, text),
                     R.string.title_search_action,
-                    View.OnClickListener { v -> searchOrBrowse(context, text) },
+                    View.OnClickListener { v ->
+                        disposable = searchOrBrowse(context, text) },
                     colorPair
             )
         }
         cm.addPrimaryClipChangedListener(listener)
     }
 
-    private fun searchOrBrowse(context: Context, text: CharSequence) {
+    private fun searchOrBrowse(context: Context, text: CharSequence): Disposable {
         val query = text.toString()
         if (Urls.isValidUrl(query)) {
             browseCallback(query)
-            return
+            return Disposables.empty()
         }
-        SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), query).invoke()
+        return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), query).invoke()
     }
 
     fun dispose() {
         cm.removePrimaryClipChangedListener(listener)
+        disposable.dispose()
     }
 }
