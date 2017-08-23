@@ -40,7 +40,7 @@ class SearchHistoryActivity : BaseActivity() {
         adapter = ActivityAdapter(
                 this,
                 relation,
-                { history -> SearchAction(this, history.category as String, history.query as String)},
+                { history -> SearchAction(this, history.category as String, history.query as String).invoke()},
                 { history -> Toaster.snackShort(binding.root, history.query as String, colorPair()) }
         )
         binding.historiesView.adapter = adapter
