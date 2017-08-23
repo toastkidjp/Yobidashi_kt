@@ -63,6 +63,7 @@ internal class ActivityAdapter(
                     .setTitle(R.string.delete)
                     .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
                     .setCancelable(true)
+                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                     .setPositiveButton(R.string.ok) { d, i ->
                         removeAt(position)
                         d.dismiss()
@@ -78,7 +79,7 @@ internal class ActivityAdapter(
      * Remove item with position.
      * @param position
      */
-    private fun removeAt(position: Int) {
+    fun removeAt(position: Int) {
         val item = getItem(position)
         removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())

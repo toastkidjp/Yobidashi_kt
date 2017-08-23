@@ -1,5 +1,7 @@
 package jp.toastkid.jitte.browser.tab
 
+import android.app.DownloadManager
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.support.v7.app.AlertDialog
@@ -26,6 +28,7 @@ import jp.toastkid.jitte.libs.storage.Caches
 import jp.toastkid.jitte.search.SiteSearch
 import java.io.File
 import java.io.IOException
+
 
 /**
  * ModuleAdapter of [Tab].
@@ -133,10 +136,14 @@ class TabAdapter(
         webView.setOnLongClickListener { v ->
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
+                WebView.HitTestResult.IMAGE_TYPE, WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
+                    ImageDownloadAction(webView, hitResult).invoke()
+                    false
+                }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                     val url = hitResult.extra
                     if (url.isEmpty()) {
-                        false
+                        return@setOnLongClickListener false
                     }
                     AlertDialog.Builder(progress.context)
                             .setTitle(url)
@@ -163,6 +170,18 @@ class TabAdapter(
                     false
                 }
             }
+        }
+        webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+            val request = DownloadManager.Request(Uri.parse(url))
+            request.allowScanningByMediaScanner()
+            request.setNotificationVisibility(
+                    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            request.setVisibleInDownloadsUi(true)
+            request.setMimeType(mimetype)
+            request.setDescription(contentDisposition)
+
+            val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            dm.enqueue(request)
         }
         return webView
     }
@@ -405,7 +424,7 @@ class TabAdapter(
      * Dispose this object's fields.
      */
     fun dispose() {
-        webView?.destroy()
+        webView.destroy()
         if (preferenceApplier.doesRetainTabs()) {
             tabList.save()
         } else {
@@ -420,3 +439,4 @@ class TabAdapter(
     }
 
 }
+

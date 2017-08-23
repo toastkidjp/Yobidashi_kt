@@ -78,13 +78,12 @@ class BrowserFragment : BaseFragment() {
     private val titleProcessor: PublishProcessor<TitlePair>
 
     /** Disposer.  */
-    private val disposables: CompositeDisposable
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     private lateinit var searchWithClip: SearchWithClip
 
     init {
         titleProcessor = PublishProcessor.create<TitlePair>()
-        disposables = CompositeDisposable()
     }
 
     override fun onAttach(context: Context) {
@@ -446,7 +445,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             REQUEST_CODE_VOICE_SEARCH -> {
-                VoiceSearch.processResult(activity, data)
+                disposables.add(VoiceSearch.processResult(activity, data))
                 return
             }
             REQUEST_OVERLAY_PERMISSION -> {

@@ -27,7 +27,7 @@
     <color name="aw_ripple">#30000000</color>
     <color name="fab_color">#22000044</color>
 
-    <color name="crimson_bg">#AAb71c1c</color>
+    <color name="crimson_bg">#AAD50000</color>
     <color name="crimson_font">#EEFDD835</color>
     <color name="wa_bg">#BB388E3C</color>
     <color name="wa_font">#CCFFFFFF</color>
@@ -35,4 +35,12 @@
     <color name="purple_bg">#CC9C27B0</color>
     <color name="lime_bg">#CCCDDC39</color>
     <color name="pinky">#DDFF80AB</color>
+    <color name="deep_yellow">#DDFFC200</color>
+    <color name="light_blue_200_dd">#DD81D4FA</color>
+    <color name="teal_500_dd">#DD009688</color>
+    <color name="gray_500_dd">#DD9E9E9E</color>
+    <color name="deep_orange_500_dd">#DDFF5722</color>
+    <color name="indigo_200_dd">#DD9FA8DA</color>
+    <color name="red_200_dd">#DDffcdd2</color>
+    <color name="yellow_200_dd">#DDFFF59D</color>
 </resources>

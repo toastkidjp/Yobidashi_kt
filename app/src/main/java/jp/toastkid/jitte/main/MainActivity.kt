@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import jp.toastkid.jitte.BaseActivity
 import jp.toastkid.jitte.BaseFragment
@@ -84,7 +85,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     /** Home fragment.  */
     private lateinit var homeFragment: HomeFragment
 
-    /** For stop subscribing title pair.  */
+    /** Disposables.  */
+    private val disposables: CompositeDisposable = CompositeDisposable()
+
+    /** For stopping subscribing title pair.  */
     private var prevDisposable: Disposable? = null
 
     private var adCount = 0
@@ -141,8 +145,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 } else {
                     preferenceApplier.getDefaultSearchEngine()
                 }
-                SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
-                        .invoke()
+
+                disposables.add(
+                        SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
+                                .invoke()
+                )
                 return
             }
         }
@@ -493,6 +500,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     @StringRes
     override fun titleId(): Int {
         return R.string.app_name
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
     }
 
     companion object {

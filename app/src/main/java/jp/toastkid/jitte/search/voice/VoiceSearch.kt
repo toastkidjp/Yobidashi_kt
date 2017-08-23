@@ -3,6 +3,8 @@ package jp.toastkid.jitte.search.voice
 import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
+import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.search.SearchAction
 
@@ -37,11 +39,12 @@ object VoiceSearch {
      * *
      * @param data
      */
-    fun processResult(context: Context, data: Intent) {
+    fun processResult(context: Context, data: Intent): Disposable {
         val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
         if (result.size == 0) {
-            return
+            return Disposables.empty()
         }
-        SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), result[0]).invoke()
+        return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), result[0])
+                .invoke()
     }
 }

@@ -2,9 +2,11 @@ package jp.toastkid.jitte.search
 
 import android.content.Context
 import android.os.Bundle
-
+import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import jp.toastkid.jitte.analytics.LogSender
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import jp.toastkid.jitte.search.history.SearchHistoryInsertion
 
 /**
  * @author toastkidjp
@@ -24,7 +26,14 @@ class SearchAction(
         this.preferenceApplier = PreferenceApplier(activityContext)
     }
 
-    operator fun invoke() {
+    operator fun invoke(): Disposable {
+
+        val disposable = if (preferenceApplier.isEnableSearchHistory) {
+            SearchHistoryInsertion.make(activityContext, category, query).insert()
+        } else {
+            Disposables.empty()
+        }
+
         val bundle = Bundle()
         bundle.putString("category", category)
         bundle.putString("query", query)
@@ -44,5 +53,7 @@ class SearchAction(
                     .setQuery(query)
                     .invoke()
         }
+        return disposable
     }
+
 }
