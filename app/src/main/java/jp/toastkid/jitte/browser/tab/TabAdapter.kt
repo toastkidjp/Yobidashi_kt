@@ -17,6 +17,7 @@ import io.reactivex.functions.Consumer
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.browser.UserAgent
+import jp.toastkid.jitte.browser.WebViewFactory
 import jp.toastkid.jitte.browser.archive.Archive
 import jp.toastkid.jitte.browser.screenshots.Screenshot
 import jp.toastkid.jitte.libs.Bitmaps
@@ -126,7 +127,7 @@ class TabAdapter(
                 }
             }
         }
-        val webView = WebView(progress.context)
+        val webView = WebViewFactory.make(progress.context)
         webView.setWebViewClient(webViewClient)
         webView.setWebChromeClient(webChromeClient)
         webView.setOnTouchListener { _, _ ->
