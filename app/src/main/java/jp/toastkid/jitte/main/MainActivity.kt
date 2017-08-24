@@ -117,6 +117,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         processShortcut()
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        processShortcut()
+    }
+
     /**
      * Set initial fragment.
      */
@@ -152,6 +157,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 )
                 return
             }
+            VALUE_EXTRA_LAUNCH_SEARCH -> {
+                switchToSearch()
+                return
+            }
         }
 
         if (calledIntent.hasExtra(KEY_EXTRA_MONTH)) {
@@ -163,14 +172,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             return
         }
 
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        if (Intent.ACTION_VIEW == intent.action) {
-            val uri = intent.data
-            loadUri(uri)
-        }
     }
 
     private fun loadUri(uri: Uri) {
@@ -518,9 +519,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         /** For using daily alarm.  */
         private val KEY_EXTRA_DOM = "dom"
 
-        /** For using launcher intent.  */
-        private val KEY_EXTRA_LAUNCH = "launch"
-
         /** For using search intent.  */
         private val VALUE_EXTRA_LAUNCH_SEARCH = "search"
 
@@ -575,7 +573,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         ): Intent {
             val intent = Intent(context, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.putExtra(KEY_EXTRA_LAUNCH, VALUE_EXTRA_LAUNCH_SEARCH)
+            intent.setAction(VALUE_EXTRA_LAUNCH_SEARCH)
             return intent
         }
 
