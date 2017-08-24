@@ -163,6 +163,7 @@ class BrowserFragment : BaseFragment() {
      */
     private fun onMenuClick(menu: Menu) {
         val context = activity
+        val snackbarParent = binding?.root as View
         when (menu) {
             Menu.RELOAD -> {
                 tabs.reload()
@@ -202,7 +203,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.SCREENSHOT -> {
                 tabs.currentSnap()
-                Toaster.snackShort(binding!!.root, R.string.message_done_save, colorPair())
+                Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
                 return
             }
             Menu.SHARE -> {
@@ -218,7 +219,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.USER_AGENT -> {
                 UserAgent.showSelectionDialog(
-                        binding!!.root,
+                        snackbarParent,
                         { tabs.resetUserAgent(it.text()) }
                 )
                 return
@@ -234,7 +235,7 @@ class BrowserFragment : BaseFragment() {
                         .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                         .setPositiveButton(R.string.ok) { d, i ->
                             tabs.clearCache()
-                            Toaster.snackShort(binding!!.root, R.string.done_clear, colorPair())
+                            Toaster.snackShort(snackbarParent, R.string.done_clear, colorPair())
                             d.dismiss()
                         }
                         .setCancelable(true)
@@ -248,7 +249,7 @@ class BrowserFragment : BaseFragment() {
                         .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                         .setPositiveButton(R.string.ok) { d, i ->
                             tabs.clearFormData()
-                            Toaster.snackShort(binding!!.root, R.string.done_clear, colorPair())
+                            Toaster.snackShort(snackbarParent, R.string.done_clear, colorPair())
                             d.dismiss()
                         }
                         .setCancelable(true)
@@ -265,7 +266,7 @@ class BrowserFragment : BaseFragment() {
                             DataBindingUtil.inflate<ModuleTabListBinding>(
                                 LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
                             tabs,
-                            binding?.root as View,
+                            snackbarParent,
                             this::hideTabList
                     )
                     binding?.tabListContainer?.addView(tabListModule?.moduleView)
@@ -332,7 +333,7 @@ class BrowserFragment : BaseFragment() {
                             .show()
                 } catch (e: WriterException) {
                     e.printStackTrace()
-                    Toaster.snackShort(binding!!.root, e.message.orEmpty(), colorPair())
+                    Toaster.snackShort(snackbarParent, e.message.orEmpty(), colorPair())
                     return
                 }
 
@@ -344,7 +345,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.VIEW_ARCHIVE -> {
                 if (Archive.cannotUseArchive()) {
-                    Toaster.snackShort(binding!!.root, R.string.message_disable_archive, colorPair())
+                    Toaster.snackShort(snackbarParent, R.string.message_disable_archive, colorPair())
                     return
                 }
                 startActivityForResult(ArchivesActivity.makeIntent(context), REQUEST_CODE_VIEW_ARCHIVE)
@@ -363,7 +364,29 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.COLOR_FILTER -> {
-                ColorFilter(activity, binding!!.root).switchState(this, REQUEST_OVERLAY_PERMISSION)
+                ColorFilter(activity, snackbarParent).switchState(this, REQUEST_OVERLAY_PERMISSION)
+                return
+            }
+            Menu.REPLACE_HOME -> {
+                val currentUrl = tabs.currentUrl()
+                if (Urls.isInvalidUrl(currentUrl)) {
+                    Toaster.snackShort(
+                            snackbarParent,
+                            R.string.message_cannot_replace_home_url,
+                            colorPair()
+                    )
+                    return
+                }
+                preferenceApplier().homeUrl = currentUrl
+                Toaster.snackShort(
+                        snackbarParent,
+                        getString(R.string.message_replace_home_url, currentUrl) ,
+                        colorPair()
+                )
+                return
+            }
+            Menu.LOAD_HOME -> {
+                tabs.loadHome()
                 return
             }
             Menu.EXIT -> {

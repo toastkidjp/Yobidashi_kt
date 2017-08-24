@@ -69,6 +69,10 @@ internal enum class Menu(
 
     COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
 
+    REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
+
+    LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
+
     EXIT(R.string.exit, R.drawable.ic_exit);
 
     companion object {

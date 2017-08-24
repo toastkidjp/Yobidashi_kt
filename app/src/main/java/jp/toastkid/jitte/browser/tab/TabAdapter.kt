@@ -439,5 +439,9 @@ class TabAdapter(
         private val TAB_SCREENSHOTS_DIR = "tabs/screenshots"
     }
 
+    fun loadHome() {
+        loadUrl(preferenceApplier.homeUrl)
+    }
+
 }
 
