@@ -239,4 +239,6 @@
     <string name="message_cannot_downloading_image">このファイルはダウンロードできません。</string>
     <string name="title_download_image">画像をダウンロード</string>
     <string name="message_confirm_downloading_image">この画像をダウンロードしますか？</string>
+    <string name="title_startup_start">スタート</string>
+    <string name="title_setting_startup">起動時の表示</string>
 </resources>

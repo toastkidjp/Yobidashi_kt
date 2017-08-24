@@ -172,6 +172,22 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             return
         }
 
+        when (preferenceApplier.startUp) {
+            StartUp.START -> {
+                replaceFragment(homeFragment)
+            }
+            StartUp.APPS_LAUNCHER -> {
+                startActivity(LauncherActivity.makeIntent(this))
+                finish()
+            }
+            StartUp.BROWSER -> {
+                loadUri(Uri.parse(preferenceApplier.homeUrl))
+            }
+            StartUp.SEARCH -> {
+                switchToSearch()
+            }
+        }
+
     }
 
     private fun loadUri(uri: Uri) {

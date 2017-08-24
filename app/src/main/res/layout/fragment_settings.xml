@@ -493,6 +493,31 @@
                     />
 
                 <FrameLayout
+                    android:id="@+id/start_up"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{fragment.openStartup}"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/OneLineTextMenu"
+                        android:drawableLeft="@drawable/ic_launch_black"
+                        android:text="@string/title_setting_startup"
+                        />
+                    <Spinner
+                        android:id="@+id/start_up_items"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:background="@color/spinner_background"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
                     android:id="@+id/use_color_filter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

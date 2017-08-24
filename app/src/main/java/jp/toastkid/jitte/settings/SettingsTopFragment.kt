@@ -27,6 +27,8 @@ import jp.toastkid.jitte.libs.TextInputs
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.Urls
 import jp.toastkid.jitte.libs.intent.SettingsIntentFactory
+import jp.toastkid.jitte.main.StartUp
+import jp.toastkid.jitte.main.StartUpSpinnerInitializer
 import jp.toastkid.jitte.notification.widget.NotificationWidget
 import jp.toastkid.jitte.search.SearchCategory
 import jp.toastkid.jitte.search.SearchCategorySpinnerInitializer
@@ -62,6 +64,17 @@ class SettingsTopFragment : BaseFragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier().setDefaultSearchEngine(
                         SearchCategory.values()[binding.searchCategories.selectedItemPosition].name)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // NOP
+            }
+        }
+        StartUpSpinnerInitializer.initialize(binding.startUpItems)
+        binding.startUpItems.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                preferenceApplier().startUp =
+                        StartUp.values()[binding.startUpItems.selectedItemPosition]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -142,6 +155,13 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun openSearchCategory(v: View) {
         binding.searchCategories.performClick()
+    }
+
+    /**
+     * Open startup spinner.
+     */
+    fun openStartup(v: View) {
+        binding.startUpItems.performClick()
     }
 
     /**

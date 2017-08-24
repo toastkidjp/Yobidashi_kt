@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.browser.MenuPos
 import jp.toastkid.jitte.libs.Urls
+import jp.toastkid.jitte.main.StartUp
 import jp.toastkid.jitte.search.SearchCategory
 import java.io.File
 import java.util.*
@@ -23,7 +24,7 @@ class PreferenceApplier(private val context: Context) {
         BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, BG_IMAGE, LAST_AD_DATE,
         USE_DAILY_ALARM, USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
-        DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP
+        DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP
     }
 
     private val preferences: SharedPreferences
@@ -218,6 +219,10 @@ class PreferenceApplier(private val context: Context) {
         set (newState) {
             preferences.edit().putBoolean(Key.ENABLE_SEARCH_WITH_CLIP.name, newState).apply()
         }
+
+    var startUp: StartUp
+        get () = StartUp.find(preferences.getString(Key.START_UP.name, ""))
+        set (newValue) = preferences.edit().putString(Key.START_UP.name, newValue.name).apply()
 
     fun clear() {
         preferences.edit().clear().apply()
