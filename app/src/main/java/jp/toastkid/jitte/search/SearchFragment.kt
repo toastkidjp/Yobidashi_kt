@@ -18,12 +18,14 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.BaseFragment
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.FragmentSearchBinding
+import jp.toastkid.jitte.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.jitte.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.jitte.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.jitte.libs.Colors
 import jp.toastkid.jitte.libs.Inputs
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import jp.toastkid.jitte.search.favorite.FavoriteSearchModule
 import jp.toastkid.jitte.search.history.HistoryModule
 import jp.toastkid.jitte.search.history.SearchHistoryActivity
 import jp.toastkid.jitte.search.suggestion.SuggestionModule
@@ -40,6 +42,9 @@ class SearchFragment : BaseFragment() {
 
     /** Disposables.  */
     private val disposables: CompositeDisposable = CompositeDisposable()
+
+
+    private lateinit var favoriteModule: FavoriteSearchModule
 
     /** History module.  */
     private lateinit var historyModule: HistoryModule
@@ -60,6 +65,8 @@ class SearchFragment : BaseFragment() {
         binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater, LAYOUT_ID, container, false)
         binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
         SearchCategorySpinnerInitializer.initialize(binding?.searchCategories as Spinner)
+
+        initFavoriteModule()
 
         initHistoryModule()
 
@@ -86,6 +93,28 @@ class SearchFragment : BaseFragment() {
         }
 
         return binding?.root
+    }
+
+    private fun initFavoriteModule() {
+        disposables.add(
+                Completable.create { e ->
+                    favoriteModule = FavoriteSearchModule(
+                            binding?.favoriteModule as ModuleSearchFavoriteBinding,
+                            { fav -> search(fav.category as String, fav.query as String) },
+                            this::hideKeyboard,
+                            { fav ->
+                                binding?.searchInput?.setText("${fav.query} ")
+                                binding?.searchInput?.setSelection(
+                                        binding?.searchInput?.text.toString().length)
+                            }
+                    )
+                    e.onComplete()
+                }
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe {
+                            favoriteModule.query("")
+                        }
+        )
     }
 
     /**
@@ -172,6 +201,7 @@ class SearchFragment : BaseFragment() {
                 if (preferenceApplier.isEnableSearchHistory) {
                     historyModule.query(s)
                 }
+                favoriteModule.query(s)
 
                 if (preferenceApplier.isDisableSuggestion) {
                     suggestionModule.clear()
@@ -236,6 +266,7 @@ class SearchFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         disposables.dispose()
+        favoriteModule.dispose()
         historyModule.dispose()
         suggestionModule.dispose()
     }

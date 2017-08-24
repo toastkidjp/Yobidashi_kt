@@ -17,7 +17,7 @@ import jp.toastkid.jitte.search.SearchCategory
 /**
  * @author toastkidjp
  */
-internal class Adapter(
+internal class ActivityAdapter(
         context: Context,
         relation: Relation<FavoriteSearch, *>,
         private val searchAction: BiConsumer<SearchCategory, String>,

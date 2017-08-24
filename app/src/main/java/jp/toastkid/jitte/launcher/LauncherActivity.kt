@@ -16,6 +16,7 @@ import jp.toastkid.jitte.databinding.ActivityLauncherBinding
 import jp.toastkid.jitte.libs.Colors
 import jp.toastkid.jitte.libs.ImageLoader
 import jp.toastkid.jitte.libs.Inputs
+import jp.toastkid.jitte.settings.SettingsActivity
 
 /**
  * App Launcher.
@@ -83,6 +84,11 @@ class LauncherActivity : BaseActivity() {
         val itemId = item.itemId
 
         val itemCount = binding!!.appItemsView.adapter.itemCount
+
+        if (itemId == R.id.setting) {
+            startActivity(SettingsActivity.makeIntent(this))
+            return true
+        }
 
         if (itemId == R.id.to_top) {
             if (itemCount > 30) {

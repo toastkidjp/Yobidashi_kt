@@ -28,7 +28,7 @@ import jp.toastkid.jitte.search.SearchCategory
 class FavoriteSearchFragment : BaseFragment() {
 
     /** RecyclerView's adapter  */
-    private var adapter: Adapter? = null
+    private var adapter: ActivityAdapter? = null
 
     /** Data Binding object.  */
     private var binding: FragmentFavoriteSearchBinding? = null
@@ -55,7 +55,7 @@ class FavoriteSearchFragment : BaseFragment() {
     }
 
     private fun initFavSearchsView() {
-        adapter = Adapter(
+        adapter = ActivityAdapter(
                 activity,
                 DbInitter.get(activity).relationOfFavoriteSearch(),
                 BiConsumer<SearchCategory, String> { category: SearchCategory, query: String -> this.startSearch(category, query) },
