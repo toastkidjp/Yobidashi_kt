@@ -8,14 +8,13 @@ import android.support.v7.app.AlertDialog
 import android.text.Html
 import android.view.View
 import android.widget.TextView
-
-import java.util.Random
-
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.libs.Toaster
+import jp.toastkid.jitte.libs.db.DbInitter
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import java.util.*
 
 /**
  * @author toastkidjp

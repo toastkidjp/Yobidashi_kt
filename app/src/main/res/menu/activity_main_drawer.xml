@@ -45,6 +45,11 @@
                 android:title="@string/title_browser"
                 />
             <item
+                android:id="@+id/nav_view_history"
+                android:icon="@drawable/ic_history_black"
+                android:title="@string/title_view_history"
+                />
+            <item
                 android:id="@+id/nav_screenshots"
                 android:icon="@drawable/ic_camera_black"
                 android:title="@string/title_screenshots"

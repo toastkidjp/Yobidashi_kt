@@ -21,6 +21,7 @@ import jp.toastkid.jitte.appwidget.search.Updater
 import jp.toastkid.jitte.databinding.ActivitySettingsColorBinding
 import jp.toastkid.jitte.libs.Colors
 import jp.toastkid.jitte.libs.Toaster
+import jp.toastkid.jitte.libs.db.DbInitter
 
 /**
  * Color setting activity.

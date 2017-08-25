@@ -19,14 +19,16 @@ import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.browser.UserAgent
 import jp.toastkid.jitte.browser.WebViewFactory
 import jp.toastkid.jitte.browser.archive.Archive
+import jp.toastkid.jitte.browser.history.ViewHistoryInsertion
 import jp.toastkid.jitte.browser.screenshots.Screenshot
 import jp.toastkid.jitte.libs.Bitmaps
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.clip.Clipboard
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
-import jp.toastkid.jitte.libs.storage.Caches
+import jp.toastkid.jitte.libs.storage.Storeroom
 import jp.toastkid.jitte.search.SiteSearch
+import okio.Okio
 import java.io.File
 import java.io.IOException
 
@@ -55,7 +57,9 @@ class TabAdapter(
 
     private var backOrForwardProgress: Boolean = false
 
-    private val tabsScreenshots: Caches
+    private val favicons: Storeroom
+
+    private val tabsScreenshots: Storeroom
 
     private val preferenceApplier: PreferenceApplier
 
@@ -65,7 +69,9 @@ class TabAdapter(
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
 
-        tabsScreenshots = Caches(webView.context, TAB_SCREENSHOTS_DIR)
+        favicons = Storeroom(webView.context, "favicons")
+
+        tabsScreenshots = Storeroom(webView.context, "tabs/screenshots")
         preferenceApplier = PreferenceApplier(webView.context)
         colorPair = preferenceApplier.colorPair()
     }
@@ -80,6 +86,14 @@ class TabAdapter(
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 progress.visibility = View.VISIBLE
+                val file = favicons.assignNewFile(Uri.parse(url).host)
+                if (favicon != null) {
+                    favicon.compress(
+                            Bitmap.CompressFormat.PNG,
+                            100,
+                            Okio.buffer(Okio.sink(file)).outputStream()
+                    )
+                }
                 isLoadFinished = false
             }
 
@@ -99,6 +113,10 @@ class TabAdapter(
 
                 if (!backOrForwardProgress) {
                     addHistory(view.title, view.url)
+
+                    ViewHistoryInsertion
+                            .make(view.context, view.title, view.url, favicons.assignNewFile(Uri.parse(url).host).absolutePath)
+                            .insert()
                 }
                 backOrForwardProgress = false
             }
@@ -432,11 +450,6 @@ class TabAdapter(
             tabList.clear()
             tabsScreenshots.clean()
         }
-    }
-
-    companion object {
-
-        private val TAB_SCREENSHOTS_DIR = "tabs/screenshots"
     }
 
     fun loadHome() {

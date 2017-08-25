@@ -1,6 +1,7 @@
 package jp.toastkid.jitte.main
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -30,6 +31,7 @@ import jp.toastkid.jitte.advertisement.AdInitializers
 import jp.toastkid.jitte.barcode.BarcodeReaderActivity
 import jp.toastkid.jitte.barcode.InstantBarcodeGenerator
 import jp.toastkid.jitte.browser.BrowserFragment
+import jp.toastkid.jitte.browser.history.ViewHistoryActivity
 import jp.toastkid.jitte.browser.screenshots.ScreenshotsActivity
 import jp.toastkid.jitte.calendar.CalendarArticleLinker
 import jp.toastkid.jitte.calendar.CalendarFragment
@@ -214,7 +216,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.content, fragment)
-        transaction.commit()
+        transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
         binding.appBarMain.toolbar.setTitle(fragment.titleId())
         binding.appBarMain.toolbar.subtitle = ""
@@ -357,6 +359,13 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 R.id.nav_browser -> {
                     sendLog("nav_browser")
                     loadUri(Uri.parse(preferenceApplier.homeUrl))
+                }
+                R.id.nav_view_history -> {
+                    sendLog("nav_view_history")
+                    startActivityForResult(
+                            ViewHistoryActivity.makeIntent(this),
+                            ViewHistoryActivity.REQUEST_CODE
+                    )
                 }
                 R.id.nav_barcode -> {
                     sendLog("nav_barcode")
@@ -519,6 +528,16 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         return R.string.app_name
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        when (requestCode) {
+            ViewHistoryActivity.REQUEST_CODE -> if (data?.data != null) {loadUri(data.data)}
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         disposables.dispose()
@@ -612,6 +631,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             }
             return intent
         }
+
     }
 
 }
