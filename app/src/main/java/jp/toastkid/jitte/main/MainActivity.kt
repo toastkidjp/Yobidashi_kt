@@ -396,19 +396,23 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
     override fun onBackPressed() {
         @SuppressLint("RestrictedApi")
+
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            return
+        }
+
         val fragment = supportFragmentManager.fragments[0]
         if (fragment == null) {
             super.onBackPressed()
             return
         }
         fragment as BaseFragment
+
         if (fragment.pressBack()) {
             return
         }
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-            return
-        }
+
         super.onBackPressed()
     }
 
