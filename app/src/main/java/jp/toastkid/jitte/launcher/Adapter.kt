@@ -9,15 +9,14 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import java.util.ArrayList
-
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.AppLauncherItemBinding
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import java.util.*
 
 /**
  * @author toastkidjp
@@ -85,8 +84,10 @@ internal class Adapter(private val context: Context, private val parent: View) :
             return
         }
         Observable.fromIterable(master)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
                 .filter { appInfo -> appInfo.packageName.contains(str) }
-                .subscribeOn(Schedulers.trampoline())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete { this.notifyDataSetChanged() }
                 .subscribe { installedApps.add(it) }
     }
