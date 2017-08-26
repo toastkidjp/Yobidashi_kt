@@ -42,6 +42,7 @@ import jp.toastkid.jitte.home.FragmentReplaceAction
 import jp.toastkid.jitte.home.HomeFragment
 import jp.toastkid.jitte.launcher.LauncherActivity
 import jp.toastkid.jitte.libs.ImageLoader
+import jp.toastkid.jitte.libs.Logger
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.intent.CustomTabsFactory
 import jp.toastkid.jitte.libs.intent.IntentFactory
@@ -116,12 +117,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             ColorFilter(this, binding.root as View).start()
         }
 
-        processShortcut()
+        processShortcut(intent)
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        processShortcut()
+    override fun onNewIntent(passedIntent: Intent) {
+        super.onNewIntent(passedIntent)
+        processShortcut(passedIntent)
     }
 
     /**
@@ -135,9 +136,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     /**
      * Process intent shortcut.
      */
-    private fun processShortcut() {
-        val calledIntent = intent
-        if (calledIntent == null || calledIntent.action == null) {
+    private fun processShortcut(calledIntent: Intent) {
+        if (calledIntent.action == null) {
             return
         }
 
@@ -559,7 +559,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         private val KEY_EXTRA_DOM = "dom"
 
         /** For using search intent.  */
-        private val VALUE_EXTRA_LAUNCH_SEARCH = "search"
+        private val VALUE_EXTRA_LAUNCH_SEARCH = "jp.toastkid.jitte.search"
 
         /**
          * Make launcher intent.
