@@ -247,4 +247,5 @@
     <string name="message_replace_home_url">ホームページを変更しました。: %s</string>
     <string name="title_clear_view_history">履歴をすべて削除</string>
     <string name="title_view_history">ブラウザの履歴</string>
+    <string name="title_save_view_history">ブラウザの履歴を保存</string>
 </resources>

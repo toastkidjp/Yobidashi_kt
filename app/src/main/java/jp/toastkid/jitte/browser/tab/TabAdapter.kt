@@ -114,9 +114,16 @@ class TabAdapter(
                 if (!backOrForwardProgress) {
                     addHistory(view.title, view.url)
 
-                    ViewHistoryInsertion
-                            .make(view.context, view.title, view.url, favicons.assignNewFile(Uri.parse(url).host).absolutePath)
-                            .insert()
+                    if (preferenceApplier.saveViewHistory) {
+                        ViewHistoryInsertion
+                                .make(
+                                        view.context,
+                                        view.title,
+                                        view.url,
+                                        favicons.assignNewFile(Uri.parse(url).host).absolutePath
+                                )
+                                .insert()
+                    }
                 }
                 backOrForwardProgress = false
             }
