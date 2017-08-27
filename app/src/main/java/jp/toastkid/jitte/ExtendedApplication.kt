@@ -1,6 +1,7 @@
 package jp.toastkid.jitte
 
 import android.app.Application
+import android.support.multidex.MultiDexApplication
 
 import com.squareup.leakcanary.LeakCanary
 
@@ -13,7 +14,7 @@ import jp.toastkid.jitte.settings.color.SavedColors
 
  * @author toastkidjp
  */
-class ExtendedApplication : Application() {
+class ExtendedApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
