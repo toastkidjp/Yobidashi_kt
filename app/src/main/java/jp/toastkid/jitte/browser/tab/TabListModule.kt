@@ -1,9 +1,11 @@
 package jp.toastkid.jitte.browser.tab
 
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.Html
 import android.view.View
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.browser.MenuPos
@@ -43,9 +45,32 @@ class TabListModule(
         val preferenceApplier = PreferenceApplier(parent.context)
         colorPair = preferenceApplier.colorPair()
 
-        initRecyclerView(binding.recyclerView, tabAdapter)
+        initRecyclerView(binding.recyclerView)
 
-        initAddTabButton(binding.addTab, tabAdapter, preferenceApplier.menuPos())
+        initAddTabButton(binding.addTab)
+
+        initClearTabs(binding.clearTabs)
+
+        val menuPos = preferenceApplier.menuPos()
+        val resources = context().resources
+        val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
+        MenuPos.place(binding.fabs, 0, fabMarginHorizontal, menuPos)
+    }
+
+    private fun initClearTabs(clearTabs: FloatingActionButton) {
+        clearTabs.setOnClickListener { v ->
+            AlertDialog.Builder(context())
+                    .setTitle(context().getString(R.string.title_clear_all_tabs))
+                    .setMessage(Html.fromHtml(context().getString(R.string.confirm_clear_all_settings)))
+                    .setCancelable(true)
+                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                    .setPositiveButton(R.string.ok) { d, i ->
+                        tabAdapter.clear(adapter)
+                        closeAction()
+                        d.dismiss()
+                    }
+                    .show()
+        }
     }
 
     /**
@@ -55,10 +80,7 @@ class TabListModule(
      * *
      * @param tabAdapter
      */
-    private fun initRecyclerView(
-            recyclerView: RecyclerView,
-            tabAdapter: TabAdapter
-    ) {
+    private fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.HORIZONTAL, false)
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
@@ -89,11 +111,7 @@ class TabListModule(
      *
      * @param menuPos
      */
-    private fun initAddTabButton(
-            addTab: FloatingActionButton,
-            tabAdapter: TabAdapter,
-            menuPos: MenuPos
-    ) {
+    private fun initAddTabButton(addTab: FloatingActionButton) {
         addTab.setOnClickListener { v ->
             addTab.isClickable = false
             tabAdapter.openNewTab()
@@ -102,10 +120,6 @@ class TabListModule(
             closeAction()
             addTab.isClickable = true
         }
-
-        val resources = context().resources
-        val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
-        MenuPos.place(addTab, 0, fabMarginHorizontal, menuPos)
     }
 
     override fun show() {

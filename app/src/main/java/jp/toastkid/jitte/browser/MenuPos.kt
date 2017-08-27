@@ -2,10 +2,9 @@ package jp.toastkid.jitte.browser
 
 import android.support.annotation.IdRes
 import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.FloatingActionButton
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
-
 import jp.toastkid.jitte.R
 
 /**
@@ -22,7 +21,7 @@ enum class MenuPos private constructor(@param:IdRes internal val id: Int) {
     companion object {
 
         fun place(
-                fab: FloatingActionButton,
+                fab: View,
                 fabMarginBottom: Int,
                 fabMarginHorizontal: Int,
                 menuPos: MenuPos

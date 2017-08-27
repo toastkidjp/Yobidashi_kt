@@ -475,5 +475,13 @@ class TabAdapter(
         loadUrl(preferenceApplier.homeUrl)
     }
 
+    internal fun clear(adapter: Adapter?) {
+        (0..tabList.size() - 1).forEach {
+            closeTab(it)
+            adapter?.notifyItemRemoved(it)
+        }
+        tabList.save()
+    }
+
 }
 
