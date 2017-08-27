@@ -101,8 +101,12 @@ class TabAdapter(
                 super.onPageFinished(view, url)
                 isLoadFinished = true
                 progress.visibility = View.GONE
+
+                val title  = view.title ?: ""
+                val urlstr = url ?: ""
+
                 try {
-                    titleCallback.accept(TitlePair.make(view.title, view.url))
+                    titleCallback.accept(TitlePair.make(title, urlstr))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -112,15 +116,18 @@ class TabAdapter(
                 saveNewThumbnail()
 
                 if (!backOrForwardProgress) {
-                    addHistory(view.title, view.url)
+                    addHistory(title, urlstr)
 
-                    if (preferenceApplier.saveViewHistory) {
+                    if (preferenceApplier.saveViewHistory
+                            && title.isNotEmpty()
+                            && urlstr.isNotEmpty()
+                            ) {
                         ViewHistoryInsertion
                                 .make(
                                         view.context,
-                                        view.title,
-                                        view.url,
-                                        favicons.assignNewFile(Uri.parse(url).host).absolutePath
+                                        title,
+                                        urlstr,
+                                        favicons.assignNewFile(Uri.parse(urlstr).host).absolutePath
                                 )
                                 .insert()
                     }
