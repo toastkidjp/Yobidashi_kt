@@ -1,6 +1,6 @@
 package jp.toastkid.jitte
 
-import android.support.multidex.MultiDexApplication
+import android.app.Application
 import com.squareup.leakcanary.LeakCanary
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.notification.widget.NotificationWidget
@@ -11,7 +11,7 @@ import jp.toastkid.jitte.settings.color.SavedColors
 
  * @author toastkidjp
  */
-class ExtendedApplication : MultiDexApplication() {
+class ExtendedApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

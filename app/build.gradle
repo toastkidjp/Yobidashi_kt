@@ -22,14 +22,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        debug {
-            multiDexEnabled true
-
-            dexOptions {
-                preDexLibraries false
-                javaMaxHeapSize "2g"
-            }
-        }
         release {
             minifyEnabled true
             shrinkResources true
@@ -64,8 +56,6 @@ dependencies {
     compile 'com.squareup.moshi:moshi:1.5.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.github.gfx.android.orma:orma:4.2.5'
-
-    compile 'com.android.support:multidex:1.0.1'
 
     kapt 'com.android.databinding:compiler:2.3.1'
     kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
