@@ -29,7 +29,6 @@ abstract class BaseActivity : AppCompatActivity() {
      * @return [PreferenceApplier]
      */
     protected lateinit var preferenceApplier: PreferenceApplier
-        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

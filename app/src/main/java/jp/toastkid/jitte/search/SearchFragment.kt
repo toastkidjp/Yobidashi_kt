@@ -198,7 +198,7 @@ class SearchFragment : BaseFragment() {
                 val key = s.toString()
 
                 val preferenceApplier: PreferenceApplier = preferenceApplier()
-                if (preferenceApplier.isEnableSearchHistory) {
+                if (preferenceApplier.isEnableSearchHistory && historyModule != null) {
                     historyModule.query(s)
                 }
                 favoriteModule.query(s)

@@ -73,6 +73,8 @@ internal enum class Menu(
 
     LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
 
+    VIEW_HISTORY(R.string.title_view_history, R.drawable.ic_history),
+
     EXIT(R.string.exit, R.drawable.ic_exit);
 
     companion object {

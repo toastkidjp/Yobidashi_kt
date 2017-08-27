@@ -343,6 +343,35 @@
 
                 <include layout="@layout/primary_dark_divider"/>
 
+                <FrameLayout
+                    android:id="@+id/save_view_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment.switchViewHistory}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_open_in_browser_black"
+                        android:text="@string/title_save_view_history"
+                        />
+                    <CheckBox
+                        android:id="@+id/save_view_history_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

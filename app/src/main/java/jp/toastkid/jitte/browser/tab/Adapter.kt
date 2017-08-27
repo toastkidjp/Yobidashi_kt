@@ -50,12 +50,12 @@ internal class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tab = tabAdapter.getTabByIndex(position)
         holder.itemView.setOnClickListener { _ ->
-            tabAdapter.setIndex(position)
+            tabAdapter.setIndexByTab(tab)
             closeAction()
         }
         holder.setTitle(tab.latest.title())
         holder.setImagePath(tab.thumbnailPath)
-        holder.setCloseAction(View.OnClickListener { _ -> closeAt(position) })
+        holder.setCloseAction(View.OnClickListener { _ -> closeAt(tabAdapter.indexOf(tab)) })
         holder.setColor(colorPair)
         holder.setBackgroundColor(
                 if (index == position) {

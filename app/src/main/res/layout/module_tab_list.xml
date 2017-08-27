@@ -13,13 +13,28 @@
             android:layout_height="match_parent"
             />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_tab"
-            android:layout_width="48dp"
+        <FrameLayout
+            android:id="@+id/fabs"
+            android:layout_width="100dp"
             android:layout_height="48dp"
             android:layout_gravity="right|bottom"
-            android:src="@drawable/ic_add_tab"
-            android:background="@drawable/ripple_transparent"
-            />
+            >
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/add_tab"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="left"
+                android:src="@drawable/ic_add_tab"
+                android:background="@drawable/ripple_transparent"
+                />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/clear_tabs"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_close"
+                android:background="@drawable/ripple_transparent"
+                />
+        </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

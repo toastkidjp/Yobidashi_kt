@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
@@ -19,13 +20,14 @@ import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.browser.UserAgent
 import jp.toastkid.jitte.browser.WebViewFactory
 import jp.toastkid.jitte.browser.archive.Archive
+import jp.toastkid.jitte.browser.history.ViewHistoryInsertion
 import jp.toastkid.jitte.browser.screenshots.Screenshot
 import jp.toastkid.jitte.libs.Bitmaps
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.clip.Clipboard
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
-import jp.toastkid.jitte.libs.storage.Caches
+import jp.toastkid.jitte.libs.storage.Storeroom
 import jp.toastkid.jitte.search.SiteSearch
 import java.io.File
 import java.io.IOException
@@ -55,7 +57,9 @@ class TabAdapter(
 
     private var backOrForwardProgress: Boolean = false
 
-    private val tabsScreenshots: Caches
+    private val favicons: Storeroom
+
+    private val tabsScreenshots: Storeroom
 
     private val preferenceApplier: PreferenceApplier
 
@@ -65,7 +69,9 @@ class TabAdapter(
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
 
-        tabsScreenshots = Caches(webView.context, TAB_SCREENSHOTS_DIR)
+        favicons = Storeroom(webView.context, "favicons")
+
+        tabsScreenshots = Storeroom(webView.context, "tabs/screenshots")
         preferenceApplier = PreferenceApplier(webView.context)
         colorPair = preferenceApplier.colorPair()
     }
@@ -87,8 +93,12 @@ class TabAdapter(
                 super.onPageFinished(view, url)
                 isLoadFinished = true
                 progress.visibility = View.GONE
+
+                val title  = view.title ?: ""
+                val urlstr = url ?: ""
+
                 try {
-                    titleCallback.accept(TitlePair.make(view.title, view.url))
+                    titleCallback.accept(TitlePair.make(title, urlstr))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -98,7 +108,21 @@ class TabAdapter(
                 saveNewThumbnail()
 
                 if (!backOrForwardProgress) {
-                    addHistory(view.title, view.url)
+                    addHistory(title, urlstr)
+
+                    if (preferenceApplier.saveViewHistory
+                            && title.isNotEmpty()
+                            && urlstr.isNotEmpty()
+                            ) {
+                        ViewHistoryInsertion
+                                .make(
+                                        view.context,
+                                        title,
+                                        urlstr,
+                                        favicons.assignNewFile(Uri.parse(urlstr).host + ".png").absolutePath
+                                )
+                                .insert()
+                    }
                 }
                 backOrForwardProgress = false
             }
@@ -117,7 +141,7 @@ class TabAdapter(
                     try {
                         titleCallback.accept(TitlePair.make(
                                 view.context.getString(R.string.prefix_loading) + newProgress + "%",
-                                view.url
+                                view.url ?: ""
                         )
                         )
                     } catch (e: Exception) {
@@ -126,7 +150,16 @@ class TabAdapter(
 
                 }
             }
+
+            override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
+                super.onReceivedIcon(view, favicon)
+                if (view?.url != null && favicon != null) {
+                    val file = favicons.assignNewFile(Uri.parse(view.url).host + ".png")
+                    Bitmaps.compress(favicon, file)
+                }
+            }
         }
+
         val webView = WebViewFactory.make(progress.context)
         webView.setWebViewClient(webViewClient)
         webView.setWebChromeClient(webChromeClient)
@@ -183,6 +216,10 @@ class TabAdapter(
 
             val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(request)
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            WebIconDatabase.getInstance()
+                    .open(webView.context.getDir("favicons", Context.MODE_PRIVATE).path);
         }
         return webView
     }
@@ -243,6 +280,10 @@ class TabAdapter(
         if (latest !== History.EMPTY) {
             loadUrl(latest.url())
         }
+    }
+
+    internal fun setIndexByTab(tab: Tab) {
+        setIndex(tabList.indexOf(tab))
     }
 
     private fun checkIndex(newIndex: Int): Boolean {
@@ -434,13 +475,20 @@ class TabAdapter(
         }
     }
 
-    companion object {
-
-        private val TAB_SCREENSHOTS_DIR = "tabs/screenshots"
-    }
-
     fun loadHome() {
         loadUrl(preferenceApplier.homeUrl)
+    }
+
+    internal fun clear(adapter: Adapter?) {
+        (0..tabList.size() - 1).forEach {
+            closeTab(it)
+            adapter?.notifyItemRemoved(it)
+        }
+        tabList.save()
+    }
+
+    internal fun indexOf(tab: Tab): Int {
+        return tabList.indexOf(tab)
     }
 
 }

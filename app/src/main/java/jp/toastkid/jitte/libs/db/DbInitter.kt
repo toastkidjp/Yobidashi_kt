@@ -1,8 +1,7 @@
 package jp.toastkid.jitte.libs.db
 
 import android.content.Context
-
-import jp.toastkid.jitte.search.favorite.OrmaDatabase
+import jp.toastkid.jitte.browser.history.OrmaDatabase
 
 /**
  * @author toastkidjp
@@ -13,7 +12,7 @@ object DbInitter {
 
     operator fun get(context: Context): OrmaDatabase {
         if (orma == null) {
-            orma = OrmaDatabase.builder(context).name("yobidashi.db").build()
+            orma = OrmaDatabase.builder(context).name("jitte.db").build()
         }
         return orma as OrmaDatabase
     }

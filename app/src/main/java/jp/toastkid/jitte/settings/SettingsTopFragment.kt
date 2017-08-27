@@ -114,6 +114,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
+        binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
     }
 
     /**
@@ -310,6 +311,18 @@ class SettingsTopFragment : BaseFragment() {
         val newState = !preferenceApplier.doesSaveForm()
         preferenceApplier.setSaveForm(newState)
         binding.saveFormCheck.isChecked = newState
+    }
+
+    /**
+     * Switch saving view history.
+
+     * @param v
+     */
+    fun switchViewHistory(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.saveViewHistory
+        preferenceApplier.saveViewHistory = newState
+        binding.saveViewHistoryCheck.isChecked = newState
     }
 
     /**

@@ -33,6 +33,7 @@ import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.barcode.BarcodeReaderActivity
 import jp.toastkid.jitte.browser.archive.Archive
 import jp.toastkid.jitte.browser.archive.ArchivesActivity
+import jp.toastkid.jitte.browser.history.ViewHistoryActivity
 import jp.toastkid.jitte.browser.page_search.PageSearcherModule
 import jp.toastkid.jitte.browser.tab.TabAdapter
 import jp.toastkid.jitte.browser.tab.TabListModule
@@ -389,6 +390,13 @@ class BrowserFragment : BaseFragment() {
                 tabs.loadHome()
                 return
             }
+            Menu.VIEW_HISTORY -> {
+                startActivityForResult(
+                        ViewHistoryActivity.makeIntent(context),
+                        ViewHistoryActivity.REQUEST_CODE
+                )
+                return
+            }
             Menu.EXIT -> {
                 activity.finish()
                 return
@@ -470,6 +478,9 @@ class BrowserFragment : BaseFragment() {
             REQUEST_CODE_VOICE_SEARCH -> {
                 disposables.add(VoiceSearch.processResult(activity, data))
                 return
+            }
+            ViewHistoryActivity.REQUEST_CODE -> {
+                if (data.data != null) {tabs.loadUrl(data.data.toString())}
             }
             REQUEST_OVERLAY_PERMISSION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {

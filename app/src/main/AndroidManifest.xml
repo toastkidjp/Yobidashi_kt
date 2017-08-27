@@ -36,6 +36,7 @@
             >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <action android:name="jp.toastkid.jitte.search" />
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="http"/>
@@ -115,7 +116,13 @@
             />
         <activity
             android:name="jp.toastkid.jitte.search.history.SearchHistoryActivity"
-            android:theme="@style/AppTheme.Translucent"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            />
+        <activity
+            android:name="jp.toastkid.jitte.browser.history.ViewHistoryActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />

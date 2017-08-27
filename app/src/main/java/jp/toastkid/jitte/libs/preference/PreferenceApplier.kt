@@ -24,7 +24,7 @@ class PreferenceApplier(private val context: Context) {
         BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, BG_IMAGE, LAST_AD_DATE,
         USE_DAILY_ALARM, USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
-        DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP
+        DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY
     }
 
     private val preferences: SharedPreferences
@@ -223,6 +223,10 @@ class PreferenceApplier(private val context: Context) {
     var startUp: StartUp
         get () = StartUp.find(preferences.getString(Key.START_UP.name, ""))
         set (newValue) = preferences.edit().putString(Key.START_UP.name, newValue.name).apply()
+
+    var saveViewHistory: Boolean
+        get () = preferences.getBoolean(Key.SAVE_VIEW_HISTORY.name, true)
+        set (newState) = preferences.edit().putBoolean(Key.SAVE_VIEW_HISTORY.name, newState).apply()
 
     fun clear() {
         preferences.edit().clear().apply()
