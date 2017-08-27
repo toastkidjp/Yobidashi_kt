@@ -42,7 +42,10 @@ import jp.toastkid.jitte.databinding.FragmentBrowserBinding
 import jp.toastkid.jitte.databinding.ModuleTabListBinding
 import jp.toastkid.jitte.home.Command
 import jp.toastkid.jitte.home.FragmentReplaceAction
-import jp.toastkid.jitte.libs.*
+import jp.toastkid.jitte.libs.ImageCache
+import jp.toastkid.jitte.libs.TextInputs
+import jp.toastkid.jitte.libs.Toaster
+import jp.toastkid.jitte.libs.Urls
 import jp.toastkid.jitte.libs.intent.CustomTabsFactory
 import jp.toastkid.jitte.libs.intent.IntentFactory
 import jp.toastkid.jitte.libs.intent.SettingsIntentFactory
