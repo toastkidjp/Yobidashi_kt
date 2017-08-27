@@ -6,7 +6,6 @@ import com.squareup.moshi.Moshi
 import okio.Okio
 import java.io.File
 import java.io.IOException
-import java.util.*
 
 /**
  * First collection of [Tab].
@@ -20,7 +19,7 @@ class TabList private constructor() {
     private var index: Int = 0
 
     init {
-        this.tabs = ArrayList<Tab>()
+        this.tabs = mutableListOf<Tab>()
     }
 
     internal fun currentTab(): Tab {
@@ -81,7 +80,7 @@ class TabList private constructor() {
 
     private fun remove(tab: Tab) {
         File(itemsDir, tab.id + ".json").delete()
-        tabs.removeAt(index)
+        tabs.remove(tab)
     }
 
     internal fun clear() {
@@ -121,7 +120,7 @@ class TabList private constructor() {
                 itemsDir?.list()
                         ?.map{ tabJsonAdapter?.fromJson(Okio.buffer(Okio.source(File(itemsDir, it))))}
                         ?.forEach { fromJson?.add(it as Tab) }
-
+                
                 return fromJson as TabList
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -156,5 +155,9 @@ class TabList private constructor() {
             }
             jsonAdapter = Moshi.Builder().build().adapter(TabList::class.java)
         }
+    }
+
+    internal fun indexOf(tab: Tab): Int {
+        return tabs.indexOf(tab)
     }
 }

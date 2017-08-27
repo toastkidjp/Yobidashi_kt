@@ -282,6 +282,10 @@ class TabAdapter(
         }
     }
 
+    internal fun setIndexByTab(tab: Tab) {
+        setIndex(tabList.indexOf(tab))
+    }
+
     private fun checkIndex(newIndex: Int): Boolean {
         return newIndex < 0 || tabList.size() <= newIndex
     }
@@ -481,6 +485,10 @@ class TabAdapter(
             adapter?.notifyItemRemoved(it)
         }
         tabList.save()
+    }
+
+    internal fun indexOf(tab: Tab): Int {
+        return tabList.indexOf(tab)
     }
 
 }
