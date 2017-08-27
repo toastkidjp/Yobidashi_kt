@@ -47,7 +47,7 @@ class BackgroundSettingActivity : BaseActivity() {
 
     private fun initImagesView() {
         binding!!.imagesView.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false)
-        adapter = Adapter(preferenceApplier!!, storeroom!!)
+        adapter = Adapter(preferenceApplier, storeroom!!)
         binding!!.imagesView.adapter = adapter
     }
 
@@ -94,7 +94,7 @@ class BackgroundSettingActivity : BaseActivity() {
     ) {
 
         if (requestCode == IMAGE_READ_REQUEST && resultCode == Activity.RESULT_OK) {
-            LoadedAction(data, binding!!.fabParent, colorPair(), Runnable { adapter!!.notifyDataSetChanged() })
+            LoadedAction(data, binding!!.fabParent, colorPair(), { adapter?.notifyDataSetChanged() })
                     .invoke()
             sendLog("set_img")
         }

@@ -116,13 +116,13 @@
             />
         <activity
             android:name="jp.toastkid.jitte.search.history.SearchHistoryActivity"
-            android:theme="@style/AppTheme.Translucent"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
             android:name="jp.toastkid.jitte.browser.history.ViewHistoryActivity"
-            android:theme="@style/AppTheme.Translucent"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />

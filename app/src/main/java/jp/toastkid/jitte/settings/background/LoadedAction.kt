@@ -6,17 +6,15 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.view.View
-
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.libs.ImageLoader
-import jp.toastkid.jitte.libs.storage.Storeroom
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import jp.toastkid.jitte.libs.storage.Storeroom
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * Action of loaded new background image.
@@ -41,7 +39,7 @@ internal class LoadedAction
         /** Color pair.  */
         private val colorPair: ColorPair,
         /** On loaded action.  */
-        private val onLoadedAction: Runnable
+        private val onLoadedAction: () -> Unit
 ) {
 
     /** Image file URI.  */
@@ -68,7 +66,7 @@ internal class LoadedAction
 
             storeImageToFile(context, image)
 
-            onLoadedAction.run()
+            onLoadedAction()
 
             informDone(context, image)
         } catch (e: IOException) {

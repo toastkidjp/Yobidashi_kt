@@ -2,7 +2,7 @@ package jp.toastkid.jitte.browser.history
 
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.reactivex.Single
@@ -12,6 +12,8 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.ItemViewHistoryBinding
+import jp.toastkid.jitte.libs.ImageLoader
+import java.io.File
 
 /**
  * @author toastkidjp
@@ -29,11 +31,13 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
             setDefaultIcon()
             return Disposables.empty()
         }
-        return Single.create<Bitmap>{ e -> e.onSuccess(BitmapFactory.decodeFile(faviconPath))}
+        return Single.create<File>{ e -> e.onSuccess(File(faviconPath))}
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .map { ImageLoader.loadBitmap(binding.root.context, Uri.fromFile(it)) as Bitmap }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { it -> binding.icon.setImageBitmap(it) },
+                        { binding.icon.setImageBitmap(it) },
                         { e -> setDefaultIcon() }
                 )
     }
@@ -43,9 +47,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
     }
 
     fun setOnClickAdd(history: ViewHistory, onClickAdd: (ViewHistory) -> Unit) {
-        binding.delete.setOnClickListener ({ _ ->
-            onClickAdd(history)
-        })
+        binding.delete.setOnClickListener ({ _ -> onClickAdd(history) })
     }
 
     fun switchDividerVisibility(visible: Boolean) {

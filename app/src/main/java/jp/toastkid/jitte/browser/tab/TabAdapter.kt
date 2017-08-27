@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
@@ -28,7 +29,6 @@ import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.libs.storage.Storeroom
 import jp.toastkid.jitte.search.SiteSearch
-import okio.Okio
 import java.io.File
 import java.io.IOException
 
@@ -86,14 +86,6 @@ class TabAdapter(
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 progress.visibility = View.VISIBLE
-                val file = favicons.assignNewFile(Uri.parse(url).host)
-                if (favicon != null) {
-                    favicon.compress(
-                            Bitmap.CompressFormat.PNG,
-                            100,
-                            Okio.buffer(Okio.sink(file)).outputStream()
-                    )
-                }
                 isLoadFinished = false
             }
 
@@ -127,7 +119,7 @@ class TabAdapter(
                                         view.context,
                                         title,
                                         urlstr,
-                                        favicons.assignNewFile(Uri.parse(urlstr).host).absolutePath
+                                        favicons.assignNewFile(Uri.parse(urlstr).host + ".png").absolutePath
                                 )
                                 .insert()
                     }
@@ -149,7 +141,7 @@ class TabAdapter(
                     try {
                         titleCallback.accept(TitlePair.make(
                                 view.context.getString(R.string.prefix_loading) + newProgress + "%",
-                                view.url
+                                view.url ?: ""
                         )
                         )
                     } catch (e: Exception) {
@@ -158,7 +150,16 @@ class TabAdapter(
 
                 }
             }
+
+            override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
+                super.onReceivedIcon(view, favicon)
+                if (view?.url != null && favicon != null) {
+                    val file = favicons.assignNewFile(Uri.parse(view.url).host + ".png")
+                    Bitmaps.compress(favicon, file)
+                }
+            }
         }
+
         val webView = WebViewFactory.make(progress.context)
         webView.setWebViewClient(webViewClient)
         webView.setWebChromeClient(webChromeClient)
@@ -215,6 +216,10 @@ class TabAdapter(
 
             val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(request)
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            WebIconDatabase.getInstance()
+                    .open(webView.context.getDir("favicons", Context.MODE_PRIVATE).path);
         }
         return webView
     }

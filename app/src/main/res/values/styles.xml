@@ -40,6 +40,7 @@
     <style name="AppTheme.Splash">
         <item name="android:windowContentOverlay">@drawable/splash</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
     </style>
 
     <style name="Border">

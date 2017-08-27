@@ -1,10 +1,7 @@
 package jp.toastkid.jitte
 
-import android.app.Application
 import android.support.multidex.MultiDexApplication
-
 import com.squareup.leakcanary.LeakCanary
-
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.notification.widget.NotificationWidget
 import jp.toastkid.jitte.settings.color.SavedColors
