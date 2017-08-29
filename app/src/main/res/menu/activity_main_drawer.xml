@@ -45,6 +45,11 @@
                 android:title="@string/title_browser"
                 />
             <item
+                android:id="@+id/nav_bookmark"
+                android:icon="@drawable/ic_bookmark_black"
+                android:title="@string/title_bookmark"
+                />
+            <item
                 android:id="@+id/nav_view_history"
                 android:icon="@drawable/ic_history_black"
                 android:title="@string/title_view_history"

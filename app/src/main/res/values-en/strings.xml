@@ -254,4 +254,8 @@
     <string name="title_view_history">Browser History</string>
     <string name="title_save_view_history">Save Browser History</string>
     <string name="title_clear_all_tabs">Clear all tabs</string>
+    <string name="name_default_bookmark_folder">Preset</string>
+    <string name="title_bookmark">Bookmark</string>
+    <string name="title_clear_bookmark">Clear All Bookmarks</string>
+    <string name="message_none_bookmarks">There is no bookmarks.</string>
 </resources>

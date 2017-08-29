@@ -31,6 +31,7 @@ import jp.toastkid.jitte.advertisement.AdInitializers
 import jp.toastkid.jitte.barcode.BarcodeReaderActivity
 import jp.toastkid.jitte.barcode.InstantBarcodeGenerator
 import jp.toastkid.jitte.browser.BrowserFragment
+import jp.toastkid.jitte.browser.bookmark.BookmarkActivity
 import jp.toastkid.jitte.browser.history.ViewHistoryActivity
 import jp.toastkid.jitte.browser.screenshots.ScreenshotsActivity
 import jp.toastkid.jitte.calendar.CalendarArticleLinker
@@ -42,7 +43,6 @@ import jp.toastkid.jitte.home.FragmentReplaceAction
 import jp.toastkid.jitte.home.HomeFragment
 import jp.toastkid.jitte.launcher.LauncherActivity
 import jp.toastkid.jitte.libs.ImageLoader
-import jp.toastkid.jitte.libs.Logger
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.intent.CustomTabsFactory
 import jp.toastkid.jitte.libs.intent.IntentFactory
@@ -360,6 +360,13 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                     sendLog("nav_browser")
                     loadUri(Uri.parse(preferenceApplier.homeUrl))
                 }
+                R.id.nav_bookmark -> {
+                    sendLog("nav_bkmk")
+                    startActivityForResult(
+                            BookmarkActivity.makeIntent(this),
+                            BookmarkActivity.REQUEST_CODE
+                    )
+                }
                 R.id.nav_view_history -> {
                     sendLog("nav_view_history")
                     startActivityForResult(
@@ -538,7 +545,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             return
         }
         when (requestCode) {
-            ViewHistoryActivity.REQUEST_CODE -> if (data?.data != null) {loadUri(data.data)}
+            ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE
+                -> if (data?.data != null) {loadUri(data.data)}
         }
     }
 
