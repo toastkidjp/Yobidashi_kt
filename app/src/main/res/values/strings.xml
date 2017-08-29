@@ -253,4 +253,9 @@
     <string name="title_bookmark">ブックマーク</string>
     <string name="title_clear_bookmark">ブックマークをすべて削除</string>
     <string name="message_none_bookmarks">ブックマークがありません。</string>
+    <string name="title_add_bookmark">ブックマークを追加</string>
+    <string name="message_done_added_bookmark">ブックマークを追加しました。</string>
+    <string name="open">開く</string>
+    <string name="title_add_default_bookmark">デフォルトのブックマークを追加</string>
+    <string name="message_add_default_bookmark">デフォルトのブックマークを追加します。</string>
 </resources>

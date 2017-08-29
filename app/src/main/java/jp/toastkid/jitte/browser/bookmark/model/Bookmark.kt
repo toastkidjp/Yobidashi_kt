@@ -10,7 +10,7 @@ import com.github.gfx.android.orma.annotation.Table
  * @author toastkidjp
  */
 @Table
-class Bookmark: BookmarkItem {
+class Bookmark {
 
     @PrimaryKey(autoincrement = true)
     var _id: Long = 0
@@ -35,10 +35,6 @@ class Bookmark: BookmarkItem {
 
     @Column
     var last_viewed: Long = 0
-
-    override fun getName(): String {
-        return title
-    }
 
     fun getBookmarks(orma: OrmaDatabase): Bookmark_Relation {
         return orma.relationOfBookmark()._idEq(1)

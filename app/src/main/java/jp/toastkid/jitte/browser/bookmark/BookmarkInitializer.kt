@@ -30,7 +30,6 @@ object BookmarkInitializer {
     fun invoke(context: Context) {
         val favicons = Storeroom(context, "favicons")
 
-        BookmarkInsertion(context, title = "root", folder = true).insert()
         DEFAULT_BOOKMARKS.entries.forEach {
             BookmarkInsertion(
                     context,

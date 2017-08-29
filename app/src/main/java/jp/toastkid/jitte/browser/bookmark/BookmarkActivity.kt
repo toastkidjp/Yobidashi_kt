@@ -44,9 +44,7 @@ class BookmarkActivity: BaseActivity() {
         )
         binding.historiesView.adapter = adapter
         binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                return false
-            }
+            override fun onFling(velocityX: Int, velocityY: Int) = false
         }
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
@@ -73,7 +71,9 @@ class BookmarkActivity: BaseActivity() {
                 }).attachToRecyclerView(binding.historiesView)
 
         initToolbar(binding.toolbar)
-        binding.toolbar.inflateMenu(R.menu.view_history)
+        binding.toolbar.inflateMenu(R.menu.bookmark)
+
+        adapter.showRoot()
     }
 
     private fun finishWithResult(uri: Uri) {
@@ -86,37 +86,47 @@ class BookmarkActivity: BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (adapter.itemCount == 0) {
-            Toaster.tShort(this, getString(R.string.message_none_bookmarks))
-            finish()
-            return
-        }
-
         applyColorToToolbar(binding.toolbar)
 
         ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.clear) {
-            AlertDialog.Builder(this)
-                    .setTitle(R.string.title_clear_bookmark)
-                    .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
-                        d.dismiss()
-                        finish()
-                    }
-                    .setCancelable(true)
-                    .show()
-            return true
+        when (item.itemId) {
+            R.id.clear -> {
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.title_clear_bookmark)
+                        .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                        .setPositiveButton(R.string.ok) { d, i ->
+                            adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
+                            d.dismiss()
+                            finish()
+                        }
+                        .setCancelable(true)
+                        .show()
+                return true
+            }
+            R.id.add_default -> {
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.title_add_default_bookmark)
+                        .setMessage(R.string.message_add_default_bookmark)
+                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                        .setPositiveButton(R.string.ok) { d, i ->
+                            BookmarkInitializer.invoke(this)
+                            d.dismiss()
+                            Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
+                        }
+                        .setCancelable(true)
+                        .show()
+                adapter.showRoot()
+                return true
+            }
         }
         return super.clickMenu(item)
     }
 
-    override fun titleId(): Int = R.string.title_view_history
+    override fun titleId(): Int = R.string.title_bookmark
 
     override fun onDestroy() {
         super.onDestroy()

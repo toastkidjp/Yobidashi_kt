@@ -31,7 +31,6 @@ class ExtendedApplication : Application() {
             BookmarkInitializer.invoke(this)
         }
 
-        BookmarkInitializer.invoke(this)
         if (preferenceApplier.useNotificationWidget()) {
             NotificationWidget.show(this)
         }

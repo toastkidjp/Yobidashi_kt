@@ -258,4 +258,9 @@
     <string name="title_bookmark">Bookmark</string>
     <string name="title_clear_bookmark">Clear All Bookmarks</string>
     <string name="message_none_bookmarks">There is no bookmarks.</string>
+    <string name="title_add_bookmark">Add bookmark</string>
+    <string name="message_done_added_bookmark">It has done adding bookmark.</string>
+    <string name="open">Open</string>
+    <string name="title_add_default_bookmark">Add default bookmarks</string>
+    <string name="message_add_default_bookmark">Would you lile to add default bookmarks?</string>
 </resources>

@@ -33,6 +33,7 @@ import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.barcode.BarcodeReaderActivity
 import jp.toastkid.jitte.browser.archive.Archive
 import jp.toastkid.jitte.browser.archive.ArchivesActivity
+import jp.toastkid.jitte.browser.bookmark.BookmarkActivity
 import jp.toastkid.jitte.browser.history.ViewHistoryActivity
 import jp.toastkid.jitte.browser.page_search.PageSearcherModule
 import jp.toastkid.jitte.browser.tab.TabAdapter
@@ -396,6 +397,14 @@ class BrowserFragment : BaseFragment() {
                         ViewHistoryActivity.REQUEST_CODE
                 )
                 return
+            }
+            Menu.ADD_BOOKMARK -> {
+                tabs.addBookmark{
+                    startActivityForResult(
+                            BookmarkActivity.makeIntent(activity),
+                            BookmarkActivity.REQUEST_CODE
+                    )
+                };
             }
             Menu.EXIT -> {
                 activity.finish()

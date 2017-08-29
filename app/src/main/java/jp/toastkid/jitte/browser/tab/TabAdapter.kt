@@ -20,6 +20,7 @@ import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.browser.UserAgent
 import jp.toastkid.jitte.browser.WebViewFactory
 import jp.toastkid.jitte.browser.archive.Archive
+import jp.toastkid.jitte.browser.bookmark.BookmarkInsertion
 import jp.toastkid.jitte.browser.history.ViewHistoryInsertion
 import jp.toastkid.jitte.browser.screenshots.Screenshot
 import jp.toastkid.jitte.libs.Bitmaps
@@ -119,7 +120,7 @@ class TabAdapter(
                                         view.context,
                                         title,
                                         urlstr,
-                                        favicons.assignNewFile(Uri.parse(urlstr).host + ".png").absolutePath
+                                        makeFaviconPath(urlstr)
                                 )
                                 .insert()
                     }
@@ -222,6 +223,10 @@ class TabAdapter(
                     .open(webView.context.getDir("favicons", Context.MODE_PRIVATE).path);
         }
         return webView
+    }
+
+    private fun makeFaviconPath(urlstr: String): String {
+        return favicons.assignNewFile(Uri.parse(urlstr).host + ".png").absolutePath
     }
 
     private fun saveNewThumbnail() {
@@ -489,6 +494,19 @@ class TabAdapter(
 
     internal fun indexOf(tab: Tab): Int {
         return tabList.indexOf(tab)
+    }
+
+    fun addBookmark(callback: () -> Unit) {
+        val context = webView.context
+        BookmarkInsertion(
+                context, webView.title, webView.url, makeFaviconPath(webView.url), "root").insert()
+        Toaster.snackLong(
+                webView,
+                context.getString(R.string.message_done_added_bookmark),
+                R.string.open,
+                View.OnClickListener { _ -> callback()},
+                colorPair
+        )
     }
 
 }
