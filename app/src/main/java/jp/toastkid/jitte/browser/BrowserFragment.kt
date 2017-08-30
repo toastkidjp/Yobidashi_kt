@@ -40,6 +40,7 @@ import jp.toastkid.jitte.browser.tab.TabAdapter
 import jp.toastkid.jitte.browser.tab.TabListModule
 import jp.toastkid.jitte.color_filter.ColorFilter
 import jp.toastkid.jitte.databinding.FragmentBrowserBinding
+import jp.toastkid.jitte.databinding.ModuleSearcherBinding
 import jp.toastkid.jitte.databinding.ModuleTabListBinding
 import jp.toastkid.jitte.home.Command
 import jp.toastkid.jitte.home.FragmentReplaceAction
@@ -112,7 +113,7 @@ class BrowserFragment : BaseFragment() {
 
         initMenus()
 
-        pageSearcherModule = PageSearcherModule(binding!!.sip, tabs)
+        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
