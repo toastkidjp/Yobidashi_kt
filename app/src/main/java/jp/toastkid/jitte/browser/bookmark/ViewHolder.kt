@@ -12,14 +12,14 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.browser.bookmark.model.Bookmark
-import jp.toastkid.jitte.databinding.ItemViewHistoryBinding
+import jp.toastkid.jitte.databinding.ItemBookmarkBinding
 import jp.toastkid.jitte.libs.ImageLoader
 import java.io.File
 
 /**
  * @author toastkidjp
  */
-internal class ViewHolder(private val binding: ItemViewHistoryBinding)
+internal class ViewHolder(private val binding: ItemBookmarkBinding)
     : RecyclerView.ViewHolder(binding.root) {
 
     fun setText(text: String, url: String) {

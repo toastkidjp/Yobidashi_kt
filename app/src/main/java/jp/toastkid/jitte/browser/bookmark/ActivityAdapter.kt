@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.browser.bookmark.model.Bookmark
 import jp.toastkid.jitte.browser.bookmark.model.Bookmark_Relation
-import jp.toastkid.jitte.databinding.ItemViewHistoryBinding
+import jp.toastkid.jitte.databinding.ItemBookmarkBinding
 import timber.log.Timber
 
 /**
@@ -35,8 +35,8 @@ internal class ActivityAdapter(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate<ItemViewHistoryBinding>(
-                inflater, R.layout.item_view_history, parent, false))
+        return ViewHolder(DataBindingUtil.inflate<ItemBookmarkBinding>(
+                inflater, R.layout.item_bookmark, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

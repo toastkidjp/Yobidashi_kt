@@ -35,7 +35,7 @@ class ViewHistoryActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView<ActivityViewHistoryBinding>(this, LAYOUT_ID)
         val relation = DbInitter.get(this).relationOfViewHistory()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         adapter = ActivityAdapter(
                 this,
                 relation,

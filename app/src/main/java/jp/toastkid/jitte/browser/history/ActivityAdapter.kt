@@ -12,6 +12,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.ItemViewHistoryBinding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author toastkidjp
@@ -28,6 +31,12 @@ internal class ActivityAdapter(
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    private val dateFormat: ThreadLocal<DateFormat> = object: ThreadLocal<DateFormat>() {
+        override fun initialValue(): DateFormat {
+            return SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate<ItemViewHistoryBinding>(
                 inflater, R.layout.item_view_history, parent, false))
@@ -35,12 +44,18 @@ internal class ActivityAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val viewHistory: ViewHistory = getItem(position)
-        holder.setText(viewHistory.title, viewHistory.url)
+
+        holder.setText(
+                viewHistory.title,
+                viewHistory.url,
+                dateFormat.get().format(viewHistory.last_viewed)
+        )
         holder.itemView.setOnClickListener { v -> onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->
             removeAt(position)
             onDelete.invoke(history)
         }
+        holder.setOnClickBookmark(viewHistory)
 
         disposables.add(holder.setImage(viewHistory.favicon))
 
