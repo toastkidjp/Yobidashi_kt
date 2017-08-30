@@ -29,6 +29,7 @@ import jp.toastkid.jitte.libs.clip.Clipboard
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.libs.storage.Storeroom
+import jp.toastkid.jitte.search.SearchAction
 import jp.toastkid.jitte.search.SiteSearch
 import java.io.File
 import java.io.IOException
@@ -181,15 +182,16 @@ class TabAdapter(
                         return@setOnLongClickListener false
                     }
                     AlertDialog.Builder(progress.context)
-                            .setTitle(url)
+                            .setTitle("URL: " + url)
                             .setItems(R.array.url_menu, { dialog, which ->
                                 when (which) {
                                     0 -> {
                                         openNewTab(url)
                                         setIndex(tabList.size() - 1)
                                     }
-                                    1 -> { openNewTab(url) }
-                                    2 -> { loadUrl(url) }
+                                    1 -> openNewTab(url)
+                                    2 -> loadUrl(url)
+                                    3 -> Clipboard.clip(v.context, url)
                                 }
                             })
                             .setCancelable(true)
@@ -199,9 +201,26 @@ class TabAdapter(
                 }
                 else -> {
                     val extra = hitResult.extra
-                    if (extra != null) {
-                        Clipboard.clip(v.context, extra)
+                    if (extra == null || extra.isEmpty()) {
+                        return@setOnLongClickListener false
                     }
+                    AlertDialog.Builder(v.context)
+                            .setTitle("Text: " + extra)
+                            .setItems(R.array.url_menu, { dialog, which ->
+                                when (which) {
+                                    0 -> Clipboard.clip(v.context, extra)
+                                    1 -> {
+                                        SearchAction(
+                                                v.context,
+                                                preferenceApplier.getDefaultSearchEngine(),
+                                                extra
+                                        ).invoke()
+                                    }
+                                }
+                            })
+                            .setCancelable(true)
+                            .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
+                            .show()
                     false
                 }
             }
