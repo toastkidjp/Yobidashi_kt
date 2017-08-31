@@ -259,4 +259,5 @@
     <string name="title_add_default_bookmark">デフォルトのブックマークを追加</string>
     <string name="message_add_default_bookmark">デフォルトのブックマークを追加します。</string>
     <string name="message_add_bookmark">ブックマークを追加しますか？</string>
+    <string name="hint_find_in_page">ページ内検索のキーワードを入力</string>
 </resources>
