@@ -11,6 +11,7 @@ import java.util.*
 object BookmarkInitializer {
 
     private val DEFAULT_BOOKMARKS: Map<String, String> = mapOf(
+            "Google Translate" to "https://translate.google.co.jp/",
             "Twitter" to "https://twitter.com",
             "Google" to "https://www.google.com",
             "YouTube" to "https://www.youtube.com/",
