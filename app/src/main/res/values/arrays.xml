@@ -8,6 +8,11 @@
     <array name="url_menu">
         <item name="open_article">新規タブで開く</item>
         <item name="add_schedule">バックグラウンドで開く</item>
-        <item name="search">開く</item>
+        <item name="open">開く</item>
+        <item name="copy">コピー</item>
+    </array>
+    <array name="text_menu">
+        <item name="copy">コピー</item>
+        <item name="search">Web 検索</item>
     </array>
 </resources>

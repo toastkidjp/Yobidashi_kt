@@ -2,31 +2,25 @@ package jp.toastkid.jitte.settings.background
 
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
-
-import java.io.File
-import java.io.IOException
-
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.SavedImageBinding
 import jp.toastkid.jitte.libs.ImageLoader
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import timber.log.Timber
+import java.io.File
+import java.io.IOException
 
 /**
  * Extended of [RecyclerView.ViewHolder].
-
+ *
+ * @param binding
+ * @param preferenceApplier
+ * @param onRemoved
+ *
  * @author toastkidjp
  */
-internal class ViewHolder
-/**
-
- * @param binding
- * *
- * @param preferenceApplier
- * *
- * @param onRemoved
- */
-(
+internal class ViewHolder(
         /** Binding object.  */
         private val binding: SavedImageBinding,
         /** Preferences wrapper.  */
@@ -57,7 +51,7 @@ internal class ViewHolder
                 ImageDialog.show(
                         v.context, uri, ImageLoader.readBitmapDrawable(v.context, uri)!!)
             } catch (e: IOException) {
-                e.printStackTrace()
+                Timber.e(e)
             }
 
             true

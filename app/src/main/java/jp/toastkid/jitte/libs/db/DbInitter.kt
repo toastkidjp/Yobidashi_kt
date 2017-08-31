@@ -1,7 +1,7 @@
 package jp.toastkid.jitte.libs.db
 
 import android.content.Context
-import jp.toastkid.jitte.browser.history.OrmaDatabase
+import jp.toastkid.jitte.browser.bookmark.model.OrmaDatabase
 
 /**
  * @author toastkidjp

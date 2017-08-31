@@ -249,4 +249,15 @@
     <string name="title_view_history">ブラウザの履歴</string>
     <string name="title_save_view_history">ブラウザの履歴を保存</string>
     <string name="title_clear_all_tabs">タブをすべて削除</string>
+    <string name="name_default_bookmark_folder">デフォルト</string>
+    <string name="title_bookmark">ブックマーク</string>
+    <string name="title_clear_bookmark">ブックマークをすべて削除</string>
+    <string name="message_none_bookmarks">ブックマークがありません。</string>
+    <string name="title_add_bookmark">ブックマークを追加</string>
+    <string name="message_done_added_bookmark">ブックマークを追加しました。</string>
+    <string name="open">開く</string>
+    <string name="title_add_default_bookmark">デフォルトのブックマークを追加</string>
+    <string name="message_add_default_bookmark">デフォルトのブックマークを追加します。</string>
+    <string name="message_add_bookmark">ブックマークを追加しますか？</string>
+    <string name="hint_find_in_page">ページ内検索のキーワードを入力</string>
 </resources>

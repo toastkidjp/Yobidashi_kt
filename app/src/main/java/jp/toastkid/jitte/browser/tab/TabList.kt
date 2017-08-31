@@ -4,6 +4,7 @@ import android.content.Context
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import okio.Okio
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -58,7 +59,7 @@ class TabList private constructor() {
                     .flush()
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
 
     }
@@ -123,7 +124,7 @@ class TabList private constructor() {
                 
                 return fromJson as TabList
             } catch (e: IOException) {
-                e.printStackTrace()
+                Timber.e(e)
             }
 
             return TabList()

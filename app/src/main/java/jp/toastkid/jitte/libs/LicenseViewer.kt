@@ -2,25 +2,22 @@ package jp.toastkid.jitte.libs
 
 import android.content.Context
 import android.support.v7.app.AlertDialog
-
-import java.io.IOException
-import java.io.InputStream
-import java.util.LinkedHashMap
-
 import jp.toastkid.jitte.R
 import okio.Okio
+import timber.log.Timber
+import java.io.IOException
+import java.io.InputStream
+import java.util.*
 
 /**
  * License files viewer.
-
- * @author toastkidjp
- */
-class LicenseViewer
-/**
+ *
  * Initialize with context.
  * @param context
+ *
+ * @author toastkidjp
  */
-(
+class LicenseViewer(
         /** For using makeNew assets and show dialog.   */
         private val mContext: Context) {
 
@@ -52,7 +49,7 @@ class LicenseViewer
                     .setPositiveButton(R.string.close) { d, i -> d.dismiss() }
                     .show()
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
 
     }

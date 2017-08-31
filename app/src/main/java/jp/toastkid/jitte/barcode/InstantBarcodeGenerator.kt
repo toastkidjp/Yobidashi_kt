@@ -11,6 +11,7 @@ import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 
 import jp.toastkid.jitte.R
+import timber.log.Timber
 
 /**
  * Instant barcode generator.
@@ -56,7 +57,7 @@ class InstantBarcodeGenerator
                             BarcodeEncoder()
                                     .encodeBitmap(string, BarcodeFormat.QR_CODE, 400, 400)))
         } catch (e: WriterException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
 
         AlertDialog.Builder(context)

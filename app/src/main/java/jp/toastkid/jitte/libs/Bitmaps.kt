@@ -1,6 +1,7 @@
 package jp.toastkid.jitte.libs
 
 import android.graphics.Bitmap
+import timber.log.Timber
 
 import java.io.File
 import java.io.FileOutputStream
@@ -27,7 +28,7 @@ object Bitmaps {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
             fos.close()
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
             if (fos == null) {
                 return
             }
@@ -35,7 +36,7 @@ object Bitmaps {
             try {
                 fos.close()
             } catch (e1: IOException) {
-                e1.printStackTrace()
+                Timber.e(e1)
             }
 
         }

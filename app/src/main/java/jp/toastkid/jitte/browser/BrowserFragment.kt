@@ -33,12 +33,14 @@ import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.barcode.BarcodeReaderActivity
 import jp.toastkid.jitte.browser.archive.Archive
 import jp.toastkid.jitte.browser.archive.ArchivesActivity
+import jp.toastkid.jitte.browser.bookmark.BookmarkActivity
 import jp.toastkid.jitte.browser.history.ViewHistoryActivity
 import jp.toastkid.jitte.browser.page_search.PageSearcherModule
 import jp.toastkid.jitte.browser.tab.TabAdapter
 import jp.toastkid.jitte.browser.tab.TabListModule
 import jp.toastkid.jitte.color_filter.ColorFilter
 import jp.toastkid.jitte.databinding.FragmentBrowserBinding
+import jp.toastkid.jitte.databinding.ModuleSearcherBinding
 import jp.toastkid.jitte.databinding.ModuleTabListBinding
 import jp.toastkid.jitte.home.Command
 import jp.toastkid.jitte.home.FragmentReplaceAction
@@ -53,6 +55,7 @@ import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.search.clip.SearchWithClip
 import jp.toastkid.jitte.search.voice.VoiceSearch
 import jp.toastkid.jitte.settings.SettingsActivity
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -111,7 +114,7 @@ class BrowserFragment : BaseFragment() {
 
         initMenus()
 
-        pageSearcherModule = PageSearcherModule(binding!!.sip, tabs)
+        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
@@ -333,7 +336,7 @@ class BrowserFragment : BaseFragment() {
                             }
                             .show()
                 } catch (e: WriterException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                     Toaster.snackShort(snackbarParent, e.message.orEmpty(), colorPair())
                     return
                 }
@@ -396,6 +399,14 @@ class BrowserFragment : BaseFragment() {
                         ViewHistoryActivity.REQUEST_CODE
                 )
                 return
+            }
+            Menu.ADD_BOOKMARK -> {
+                tabs.addBookmark{
+                    startActivityForResult(
+                            BookmarkActivity.makeIntent(activity),
+                            BookmarkActivity.REQUEST_CODE
+                    )
+                };
             }
             Menu.EXIT -> {
                 activity.finish()
@@ -467,9 +478,9 @@ class BrowserFragment : BaseFragment() {
                 try {
                     tabs.loadArchive(File(data.getStringExtra("FILE_NAME")))
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 } catch (error: OutOfMemoryError) {
-                    error.printStackTrace()
+                    Timber.e(error)
                     System.gc()
                 }
 

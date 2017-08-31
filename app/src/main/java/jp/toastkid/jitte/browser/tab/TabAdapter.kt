@@ -20,6 +20,7 @@ import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.browser.UserAgent
 import jp.toastkid.jitte.browser.WebViewFactory
 import jp.toastkid.jitte.browser.archive.Archive
+import jp.toastkid.jitte.browser.bookmark.BookmarkInsertion
 import jp.toastkid.jitte.browser.history.ViewHistoryInsertion
 import jp.toastkid.jitte.browser.screenshots.Screenshot
 import jp.toastkid.jitte.libs.Bitmaps
@@ -28,7 +29,9 @@ import jp.toastkid.jitte.libs.clip.Clipboard
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.libs.storage.Storeroom
+import jp.toastkid.jitte.search.SearchAction
 import jp.toastkid.jitte.search.SiteSearch
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -100,7 +103,7 @@ class TabAdapter(
                 try {
                     titleCallback.accept(TitlePair.make(title, urlstr))
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 }
 
                 deleteThumbnail(tabList.currentTab().thumbnailPath)
@@ -119,7 +122,7 @@ class TabAdapter(
                                         view.context,
                                         title,
                                         urlstr,
-                                        favicons.assignNewFile(Uri.parse(urlstr).host + ".png").absolutePath
+                                        makeFaviconPath(urlstr)
                                 )
                                 .insert()
                     }
@@ -145,7 +148,7 @@ class TabAdapter(
                         )
                         )
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Timber.e(e)
                     }
 
                 }
@@ -180,15 +183,16 @@ class TabAdapter(
                         return@setOnLongClickListener false
                     }
                     AlertDialog.Builder(progress.context)
-                            .setTitle(url)
+                            .setTitle("URL: " + url)
                             .setItems(R.array.url_menu, { dialog, which ->
                                 when (which) {
                                     0 -> {
                                         openNewTab(url)
                                         setIndex(tabList.size() - 1)
                                     }
-                                    1 -> { openNewTab(url) }
-                                    2 -> { loadUrl(url) }
+                                    1 -> openNewTab(url)
+                                    2 -> loadUrl(url)
+                                    3 -> Clipboard.clip(v.context, url)
                                 }
                             })
                             .setCancelable(true)
@@ -198,9 +202,26 @@ class TabAdapter(
                 }
                 else -> {
                     val extra = hitResult.extra
-                    if (extra != null) {
-                        Clipboard.clip(v.context, extra)
+                    if (extra == null || extra.isEmpty()) {
+                        return@setOnLongClickListener false
                     }
+                    AlertDialog.Builder(v.context)
+                            .setTitle("Text: " + extra)
+                            .setItems(R.array.url_menu, { dialog, which ->
+                                when (which) {
+                                    0 -> Clipboard.clip(v.context, extra)
+                                    1 -> {
+                                        SearchAction(
+                                                v.context,
+                                                preferenceApplier.getDefaultSearchEngine(),
+                                                extra
+                                        ).invoke()
+                                    }
+                                }
+                            })
+                            .setCancelable(true)
+                            .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
+                            .show()
                     false
                 }
             }
@@ -222,6 +243,10 @@ class TabAdapter(
                     .open(webView.context.getDir("favicons", Context.MODE_PRIVATE).path);
         }
         return webView
+    }
+
+    private fun makeFaviconPath(urlstr: String): String {
+        return favicons.assignNewFile(Uri.parse(urlstr).host + ".png").absolutePath
     }
 
     private fun saveNewThumbnail() {
@@ -489,6 +514,19 @@ class TabAdapter(
 
     internal fun indexOf(tab: Tab): Int {
         return tabList.indexOf(tab)
+    }
+
+    fun addBookmark(callback: () -> Unit) {
+        val context = webView.context
+        BookmarkInsertion(
+                context, webView.title, webView.url, makeFaviconPath(webView.url), "root").insert()
+        Toaster.snackLong(
+                webView,
+                context.getString(R.string.message_done_added_bookmark),
+                R.string.open,
+                View.OnClickListener { _ -> callback()},
+                colorPair
+        )
     }
 
 }

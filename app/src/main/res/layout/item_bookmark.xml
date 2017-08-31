@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="44dp"
             >
             <TextView
                 android:id="@+id/title"
@@ -42,31 +42,10 @@
                 android:textSize="12sp"
                 android:text="https://www.yahoo.com"
                 />
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/url"
-                android:maxLines="1"
-                android:gravity="center_vertical"
-                android:textColor="@color/darkgray_scale"
-                android:textSize="12sp"
-                android:text="https://www.yahoo.com"
-                />
         </RelativeLayout>
         <ImageView
-            android:id="@+id/bookmark"
-            android:layout_width="28dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="36dp"
-            android:layout_gravity="right|center_vertical"
-            android:src="@drawable/ic_bookmark_yellow"
-            android:adjustViewBounds="true"
-            android:background="@drawable/ripple_transparent"
-            />
-        <ImageView
             android:id="@+id/delete"
-            android:layout_width="28dp"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
             android:src="@drawable/ic_remove_search"

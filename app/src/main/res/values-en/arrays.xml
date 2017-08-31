@@ -8,6 +8,11 @@
     <array name="url_menu">
         <item name="open_article">Open with new tab</item>
         <item name="add_schedule">Open with background tab</item>
-        <item name="search">Open with this tab</item>
+        <item name="open">Open with this tab</item>
+        <item name="copy">Copy</item>
+    </array>
+    <array name="text_menu">
+        <item name="copy">Copy</item>
+        <item name="search">Web search</item>
     </array>
 </resources>

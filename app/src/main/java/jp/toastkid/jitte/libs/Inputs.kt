@@ -20,8 +20,6 @@ object Inputs {
     fun showKeyboard(activity: Activity, editText: EditText) {
         val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (!inputMethodManager.isActive) {
-
-            Logger.i("Active.")
             return
         }
         inputMethodManager.showSoftInput(editText, 0)

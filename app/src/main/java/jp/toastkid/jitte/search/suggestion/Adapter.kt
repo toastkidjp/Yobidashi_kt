@@ -9,23 +9,19 @@ import android.widget.EditText
 import io.reactivex.functions.Consumer
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.ItemSearchSuggestionBinding
+import timber.log.Timber
 import java.util.*
 
 /**
  * Suggest list adapter.
-
+ *
+ * @param inflater
+ * @param input
+ * @param suggestConsumer
+ *
  * @author toastkidjp
  */
-internal class Adapter
-/**
-
- * @param inflater
- * *
- * @param input
- * *
- * @param suggestConsumer
- */
-(
+internal class Adapter (
         /** Layout inflater.  */
         private val mInflater: LayoutInflater,
         /** EditText.  */
@@ -93,7 +89,7 @@ internal class Adapter
         try {
             mSuggestConsumer.accept(suggest)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Timber.e(e)
         }
 
     }

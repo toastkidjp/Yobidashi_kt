@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.ItemSearchHistoryBinding
 import jp.toastkid.jitte.search.SearchCategory
+import timber.log.Timber
 
 /**
  * ModuleAdapter of search history list.
@@ -46,7 +47,7 @@ internal class ActivityAdapter(
             try {
                 onClick(searchHistory)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Timber.e(e)
             }
         }
         holder.setOnClickAdd(searchHistory) {history ->

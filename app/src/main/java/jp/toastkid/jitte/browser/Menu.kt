@@ -75,6 +75,8 @@ internal enum class Menu(
 
     VIEW_HISTORY(R.string.title_view_history, R.drawable.ic_history),
 
+    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_bookmark),
+
     EXIT(R.string.exit, R.drawable.ic_exit);
 
     companion object {

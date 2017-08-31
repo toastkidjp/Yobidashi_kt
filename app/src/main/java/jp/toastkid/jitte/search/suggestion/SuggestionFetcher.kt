@@ -1,18 +1,13 @@
 package jp.toastkid.jitte.search.suggestion
 
 import android.net.Uri
-
-import java.io.IOException
-import java.util.Locale
-import java.util.concurrent.TimeUnit
-
 import io.reactivex.functions.Consumer
 import jp.toastkid.jitte.libs.Strings
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
+import timber.log.Timber
+import java.io.IOException
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Suggest Web API response fetcher.
@@ -22,17 +17,10 @@ import okhttp3.Response
 class SuggestionFetcher {
 
     /** HTTP client.  */
-    private val mClient: OkHttpClient
-
-    /**
-     * Initialize HTTP client.
-     */
-    init {
-        mClient = OkHttpClient.Builder()
-                .connectTimeout(3L, TimeUnit.SECONDS)
-                .readTimeout(3L, TimeUnit.SECONDS)
-                .build()
-    }
+    private val mClient: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(3L, TimeUnit.SECONDS)
+            .readTimeout(3L, TimeUnit.SECONDS)
+            .build()
 
     /**
      * Fetch Web API result asynchronously.
@@ -46,9 +34,7 @@ class SuggestionFetcher {
                 .url(makeSuggestUrl(query))
                 .build()
         mClient.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
+            override fun onFailure(call: Call, e: IOException) = Timber.e(e)
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
@@ -58,7 +44,7 @@ class SuggestionFetcher {
                 try {
                     consumer.accept(SuggestionParser().parse(response.body()!!.string()))
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 }
 
             }
