@@ -1,10 +1,8 @@
-package jp.toastkid.jitte
+package jp.toastkid.jitte.browser
 
 /**
  * Toolbar title pair.
-
- * TODO write test
-
+ *
  * @author toastkidjp
  */
 class TitlePair private constructor(private val title: String, private val subtitle: String) {
