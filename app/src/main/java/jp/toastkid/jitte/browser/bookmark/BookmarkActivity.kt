@@ -101,7 +101,6 @@ class BookmarkActivity: BaseActivity() {
                         .setPositiveButton(R.string.ok) { d, i ->
                             adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
                             d.dismiss()
-                            finish()
                         }
                         .setCancelable(true)
                         .show()
