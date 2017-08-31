@@ -6,29 +6,26 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import java.io.IOException
-import java.text.NumberFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
 import io.reactivex.functions.Consumer
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.ItemArchiveBinding
 import jp.toastkid.jitte.libs.storage.Storeroom
+import timber.log.Timber
+import java.io.IOException
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
-/**
- * @author toastkidjp
- */
-internal class Adapter
 /**
  * Initialize with Context.
  * @param context
+ * @author toastkidjp
  */
-(context: Context,
- /** Return read content.  */
- private val callback: Consumer<String>) : RecyclerView.Adapter<ViewHolder>() {
+internal class Adapter(
+        context: Context,
+        /** Return read content.  */
+        private val callback: Consumer<String>
+) : RecyclerView.Adapter<ViewHolder>() {
 
     /** Archive folder wrapper.  */
     private val archiveDir: Storeroom
@@ -58,9 +55,9 @@ internal class Adapter
             try {
                 callback.accept(file.absolutePath)
             } catch (e: IOException) {
-                e.printStackTrace()
+                Timber.e(e)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Timber.e(e)
             }
         }
         holder.setDelete(View.OnClickListener{ view ->

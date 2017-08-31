@@ -55,6 +55,7 @@ import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.search.clip.SearchWithClip
 import jp.toastkid.jitte.search.voice.VoiceSearch
 import jp.toastkid.jitte.settings.SettingsActivity
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -335,7 +336,7 @@ class BrowserFragment : BaseFragment() {
                             }
                             .show()
                 } catch (e: WriterException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                     Toaster.snackShort(snackbarParent, e.message.orEmpty(), colorPair())
                     return
                 }
@@ -477,9 +478,9 @@ class BrowserFragment : BaseFragment() {
                 try {
                     tabs.loadArchive(File(data.getStringExtra("FILE_NAME")))
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 } catch (error: OutOfMemoryError) {
-                    error.printStackTrace()
+                    Timber.e(error)
                     System.gc()
                 }
 

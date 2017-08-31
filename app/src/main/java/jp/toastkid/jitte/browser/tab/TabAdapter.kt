@@ -31,6 +31,7 @@ import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.libs.storage.Storeroom
 import jp.toastkid.jitte.search.SearchAction
 import jp.toastkid.jitte.search.SiteSearch
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -102,7 +103,7 @@ class TabAdapter(
                 try {
                     titleCallback.accept(TitlePair.make(title, urlstr))
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Timber.e(e)
                 }
 
                 deleteThumbnail(tabList.currentTab().thumbnailPath)
@@ -147,7 +148,7 @@ class TabAdapter(
                         )
                         )
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Timber.e(e)
                     }
 
                 }

@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.text.TextUtils
 import android.widget.ImageView
+import timber.log.Timber
 
 import java.io.File
 import java.io.IOException
@@ -80,7 +81,7 @@ object ImageLoader {
                     Uri.parse(File(imagePath).toURI().toString())
             ))
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
 
     }

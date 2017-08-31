@@ -12,27 +12,22 @@ import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.libs.storage.Storeroom
+import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
 /**
  * Action of loaded new background image.
-
+ *
+ * @param data
+ * @param parent
+ * @param colorPair
+ * @param onLoadedAction
+ *
  * @author toastkidjp
  */
-internal class LoadedAction
-/**
-
- * @param data
- * *
- * @param parent
- * *
- * @param colorPair
- * *
- * @param onLoadedAction
- */
-(
+internal class LoadedAction (
         data: Intent,
         /** Snackbar's parent.  */
         private val parent: View,
@@ -43,11 +38,7 @@ internal class LoadedAction
 ) {
 
     /** Image file URI.  */
-    private val uri: Uri
-
-    init {
-        this.uri = data.data
-    }
+    private val uri: Uri = data.data
 
     /**
      * Invoke action.
@@ -70,7 +61,7 @@ internal class LoadedAction
 
             informDone(context, image)
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
 
     }

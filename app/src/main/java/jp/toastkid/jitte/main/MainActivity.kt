@@ -53,6 +53,7 @@ import jp.toastkid.jitte.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.jitte.search.favorite.FavoriteSearchFragment
 import jp.toastkid.jitte.search.history.SearchHistoryActivity
 import jp.toastkid.jitte.settings.SettingsActivity
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.text.MessageFormat
@@ -484,7 +485,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                     )
             )
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
             Toaster.snackShort(
                     navBackground!!,
                     getString(R.string.message_failed_read_image),

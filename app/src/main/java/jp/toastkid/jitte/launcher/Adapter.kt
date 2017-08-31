@@ -16,6 +16,7 @@ import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.AppLauncherItemBinding
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -59,7 +60,7 @@ internal class Adapter(private val context: Context, private val parent: View) :
             holder.setVersionInformation(packageInfo.versionName + "(" + packageInfo.versionCode + ")")
             holder.setInstalled(packageInfo.firstInstallTime)
         } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
 
         val intent = packageManager.getLaunchIntentForPackage(info.packageName)

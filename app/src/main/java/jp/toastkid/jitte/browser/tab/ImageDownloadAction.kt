@@ -18,10 +18,13 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
 import okhttp3.Response
+import timber.log.Timber
 import java.io.IOException
 
 /**
  * Method object of downloading image file.
+ *
+ * @author toastkidjp
  */
 class ImageDownloadAction(
         val view: View,
@@ -62,7 +65,7 @@ class ImageDownloadAction(
         val client = HttpClientFactory.make()
         client.newCall(Request.Builder().url(url).build()).enqueue(object : Callback {
             override fun onFailure(call: Call?, e: IOException?) {
-                e?.printStackTrace()
+                Timber.e(e)
             }
 
             override fun onResponse(call: Call?, response: Response?) {
