@@ -25,6 +25,7 @@ import jp.toastkid.jitte.libs.Colors
 import jp.toastkid.jitte.libs.Inputs
 import jp.toastkid.jitte.libs.preference.ColorPair
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import jp.toastkid.jitte.search.favorite.FavoriteSearchActivity
 import jp.toastkid.jitte.search.favorite.FavoriteSearchModule
 import jp.toastkid.jitte.search.history.HistoryModule
 import jp.toastkid.jitte.search.history.SearchHistoryActivity
@@ -166,6 +167,7 @@ class SearchFragment : BaseFragment() {
         }
 
         menu.findItem(R.id.open_favorite_search).setOnMenuItemClickListener {
+            activity.startActivity(FavoriteSearchActivity.makeIntent(activity))
             true
         }
 

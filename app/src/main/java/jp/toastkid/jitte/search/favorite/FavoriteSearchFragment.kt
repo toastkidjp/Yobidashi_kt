@@ -22,7 +22,7 @@ import jp.toastkid.jitte.search.SearchCategory
 
 /**
  * Favorite search fragment.
-
+ *
  * @author toastkidjp
  */
 class FavoriteSearchFragment : BaseFragment() {

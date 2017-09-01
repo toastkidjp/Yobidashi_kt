@@ -50,7 +50,7 @@ import jp.toastkid.jitte.planning_poker.PlanningPokerActivity
 import jp.toastkid.jitte.search.SearchAction
 import jp.toastkid.jitte.search.SearchFragment
 import jp.toastkid.jitte.search.favorite.AddingFavoriteSearchService
-import jp.toastkid.jitte.search.favorite.FavoriteSearchFragment
+import jp.toastkid.jitte.search.favorite.FavoriteSearchActivity
 import jp.toastkid.jitte.search.history.SearchHistoryActivity
 import jp.toastkid.jitte.settings.SettingsActivity
 import timber.log.Timber
@@ -76,9 +76,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
     /** Calendar.  */
     private var calendarFragment: CalendarFragment? = null
-
-    /** Favorite search.  */
-    private var favoriteSearchFragment: FavoriteSearchFragment? = null
 
     /** Search.  */
     private var searchFragment: SearchFragment? = null
@@ -299,10 +296,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 }
                 R.id.nav_favorite_search -> {
                     sendLog("nav_fav_search")
-                    if (favoriteSearchFragment == null) {
-                        favoriteSearchFragment = FavoriteSearchFragment()
-                    }
-                    replaceFragment(favoriteSearchFragment as FavoriteSearchFragment)
+                    startActivity(FavoriteSearchActivity.makeIntent(this))
                 }
                 R.id.nav_tweet -> {
                     sendLog("nav_twt")

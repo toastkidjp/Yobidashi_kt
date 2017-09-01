@@ -115,6 +115,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
+            android:name="jp.toastkid.jitte.search.favorite.FavoriteSearchActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            />
+        <activity
             android:name="jp.toastkid.jitte.search.history.SearchHistoryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
