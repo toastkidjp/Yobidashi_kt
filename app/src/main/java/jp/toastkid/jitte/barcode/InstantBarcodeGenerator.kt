@@ -15,15 +15,13 @@ import timber.log.Timber
 
 /**
  * Instant barcode generator.
-
+ * Initialize with context.
+ * 
+ * @param context
+ * 
  * @author toastkidjp
  */
-class InstantBarcodeGenerator
-/**
- * Initialize with context.
- * @param context
- */
-(
+class InstantBarcodeGenerator(
         /** Context  */
         private val context: Context) {
 
@@ -32,6 +30,7 @@ class InstantBarcodeGenerator
      */
     operator fun invoke() {
         val editText = EditText(context)
+        editText.hint = context.getString(R.string.hint_generate_barcode)
         AlertDialog.Builder(context)
                 .setTitle(R.string.title_instant_barcode)
                 .setView(editText)
