@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
-import io.reactivex.functions.BiConsumer
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.R
 import jp.toastkid.jitte.databinding.ItemFavoriteSearchBinding
@@ -20,15 +18,11 @@ import jp.toastkid.jitte.search.SearchCategory
 internal class ActivityAdapter(
         context: Context,
         relation: Relation<FavoriteSearch, *>,
-        private val searchAction: BiConsumer<SearchCategory, String>,
-        private val toasterCallback: Consumer<Int>
+        private val searchAction: (SearchCategory, String) -> Unit,
+        private val toasterCallback: (Int) -> Unit
 ) : OrmaRecyclerViewAdapter<FavoriteSearch, FavoriteSearchHolder>(context, relation) {
 
-    private val inflater: LayoutInflater
-
-    init {
-        this.inflater = LayoutInflater.from(context)
-    }
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -62,11 +56,11 @@ internal class ActivityAdapter(
         val query = favoriteSearch.query
         holder.setText(query!!)
 
-        holder.setClickAction(View.OnClickListener { searchAction.accept(category, query) })
+        holder.setClickAction(View.OnClickListener { searchAction(category, query) })
 
         holder.setRemoveAction(View.OnClickListener {
             removeItemAsMaybe(favoriteSearch).subscribeOn(Schedulers.io()).subscribe()
-            toasterCallback.accept(R.string.settings_color_delete)
+            toasterCallback(R.string.settings_color_delete)
         })
     }
 }

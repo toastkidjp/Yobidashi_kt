@@ -14,9 +14,8 @@ import android.widget.ProgressBar
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import jp.toastkid.jitte.R
-import jp.toastkid.jitte.TitlePair
+import jp.toastkid.jitte.browser.TitlePair
 import jp.toastkid.jitte.browser.UserAgent
 import jp.toastkid.jitte.browser.WebViewFactory
 import jp.toastkid.jitte.browser.archive.Archive
@@ -44,7 +43,7 @@ import java.io.IOException
 class TabAdapter(
         progress: ProgressBar,
         webViewContainer: FrameLayout,
-        titleCallback: Consumer<TitlePair>,
+        titleCallback: (TitlePair) -> Unit,
         touchCallback: () -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
@@ -81,7 +80,7 @@ class TabAdapter(
 
     private fun makeWebView(
             progress: ProgressBar,
-            titleCallback: Consumer<TitlePair>,
+            titleCallback: (TitlePair) -> Unit,
             touchCallback: () -> Unit
     ): WebView {
         val webViewClient = object : WebViewClient() {
@@ -101,7 +100,7 @@ class TabAdapter(
                 val urlstr = url ?: ""
 
                 try {
-                    titleCallback.accept(TitlePair.make(title, urlstr))
+                    titleCallback(TitlePair.make(title, urlstr))
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -142,7 +141,7 @@ class TabAdapter(
                 if (!isLoadFinished) {
                     progress.progress = newProgress
                     try {
-                        titleCallback.accept(TitlePair.make(
+                        titleCallback(TitlePair.make(
                                 view.context.getString(R.string.prefix_loading) + newProgress + "%",
                                 view.url ?: ""
                         )

@@ -29,7 +29,6 @@ import io.reactivex.processors.PublishProcessor
 import jp.toastkid.jitte.BaseFragment
 import jp.toastkid.jitte.BuildConfig
 import jp.toastkid.jitte.R
-import jp.toastkid.jitte.TitlePair
 import jp.toastkid.jitte.barcode.BarcodeReaderActivity
 import jp.toastkid.jitte.browser.archive.Archive
 import jp.toastkid.jitte.browser.archive.ArchivesActivity
@@ -107,7 +106,7 @@ class BrowserFragment : BaseFragment() {
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
                 binding?.webViewContainer as FrameLayout,
-                Consumer<TitlePair> { titleProcessor.onNext(it) },
+                { titleProcessor.onNext(it) },
                 { this.hideOption() },
                 { fragmentReplaceAction?.action(Command.OPEN_HOME) }
         )

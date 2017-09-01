@@ -113,12 +113,12 @@ class BookmarkActivity: BaseActivity() {
                         .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                         .setPositiveButton(R.string.ok) { d, i ->
                             BookmarkInitializer.invoke(this)
-                            d.dismiss()
+                            adapter.showRoot()
                             Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
+                            d.dismiss()
                         }
                         .setCancelable(true)
                         .show()
-                adapter.showRoot()
                 return true
             }
         }

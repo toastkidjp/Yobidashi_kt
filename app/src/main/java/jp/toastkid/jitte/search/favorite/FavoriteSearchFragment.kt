@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiConsumer
 import io.reactivex.functions.Consumer
 import jp.toastkid.jitte.BaseFragment
 import jp.toastkid.jitte.R
@@ -16,13 +15,12 @@ import jp.toastkid.jitte.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.db.Clear
 import jp.toastkid.jitte.libs.db.DbInitter
-import jp.toastkid.jitte.libs.preference.PreferenceApplier
 import jp.toastkid.jitte.search.SearchAction
 import jp.toastkid.jitte.search.SearchCategory
 
 /**
  * Favorite search fragment.
-
+ *
  * @author toastkidjp
  */
 class FavoriteSearchFragment : BaseFragment() {
@@ -33,9 +31,6 @@ class FavoriteSearchFragment : BaseFragment() {
     /** Data Binding object.  */
     private var binding: FragmentFavoriteSearchBinding? = null
 
-    /** Preferences wrapper.  */
-    private val preferenceApplier: PreferenceApplier? = null
-
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
@@ -44,7 +39,8 @@ class FavoriteSearchFragment : BaseFragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<FragmentFavoriteSearchBinding>(inflater!!, LAYOUT_ID, container, false)
+        binding = DataBindingUtil.inflate<FragmentFavoriteSearchBinding>(
+                inflater!!, LAYOUT_ID, container, false)
         binding!!.activity = this
 
         initFavSearchsView()
@@ -58,8 +54,8 @@ class FavoriteSearchFragment : BaseFragment() {
         adapter = ActivityAdapter(
                 activity,
                 DbInitter.get(activity).relationOfFavoriteSearch(),
-                BiConsumer<SearchCategory, String> { category: SearchCategory, query: String -> this.startSearch(category, query) },
-                Consumer<Int> { messageId -> Toaster.snackShort(binding!!.content, messageId!!, colorPair()) }
+                { category, query -> this.startSearch(category, query) },
+                { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
         )
         binding!!.favoriteSearchView.adapter = adapter
         binding!!.favoriteSearchView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
