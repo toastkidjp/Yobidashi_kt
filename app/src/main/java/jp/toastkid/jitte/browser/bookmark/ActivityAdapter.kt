@@ -123,6 +123,7 @@ internal class ActivityAdapter(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { i ->
                     onComplete()
+                    items.clear()
                     notifyItemRangeRemoved(0, i)
                 }
     }
