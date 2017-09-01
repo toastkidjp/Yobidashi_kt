@@ -90,10 +90,12 @@ class BackgroundSettingActivity : BaseActivity() {
     override fun onActivityResult(
             requestCode: Int,
             resultCode: Int,
-            data: Intent
+            data: Intent?
     ) {
 
-        if (requestCode == IMAGE_READ_REQUEST && resultCode == Activity.RESULT_OK) {
+        if (requestCode == IMAGE_READ_REQUEST
+                && resultCode == Activity.RESULT_OK
+                && data != null) {
             LoadedAction(data, binding!!.fabParent, colorPair(), { adapter?.notifyDataSetChanged() })
                     .invoke()
             sendLog("set_img")
