@@ -14,7 +14,6 @@ import jp.toastkid.jitte.R
 import jp.toastkid.jitte.browser.bookmark.model.Bookmark
 import jp.toastkid.jitte.browser.bookmark.model.Bookmark_Relation
 import jp.toastkid.jitte.databinding.ItemBookmarkBinding
-import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -90,12 +89,9 @@ internal class ActivityAdapter(
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { items.clear() }
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate { notifyDataSetChanged()
-                Timber.i("doOnTerminate")}
+                .doOnTerminate { notifyDataSetChanged() }
                 .observeOn(Schedulers.computation())
-                .subscribe{ items.add(it)
-                Timber.i("${it.title} ${it.url} ${items.size}")
-                }
+                .subscribe{ items.add(it) }
     }
 
     /**
@@ -103,21 +99,21 @@ internal class ActivityAdapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        remove(items.get(position))
+        remove(items.get(position), position)
     }
 
     /**
      * Remove item.
      * @param position
      */
-    fun remove(item: Bookmark) {
-        val pos = items.indexOf(item)
+    fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
         relation.deleteAsMaybe(item)
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .doOnComplete { items.remove(item) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i -> notifyItemRemoved(pos) }
+                .subscribe { i ->
+                    items.remove(item)
+                    notifyItemRemoved(position)
+                }
     }
 
     fun clearAll(onComplete: () -> Unit) {
