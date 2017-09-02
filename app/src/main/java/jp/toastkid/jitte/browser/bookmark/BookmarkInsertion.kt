@@ -8,6 +8,7 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.jitte.browser.bookmark.model.Bookmark
 import jp.toastkid.jitte.libs.db.DbInitter
+import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -30,12 +31,12 @@ class BookmarkInsertion (
 
     private fun insert(bookmark: Bookmark): Disposable {
         return Completable.create { e ->
-            DbInitter.get(context)
+            DbInitter.init(context)
                     .relationOfBookmark()
                     .inserter(OnConflict.REPLACE)
                     .execute(bookmark)
             e.onComplete()
-        }.subscribeOn(Schedulers.io()).subscribe()
+        }.subscribeOn(Schedulers.io()).subscribe({}, {Timber.e(it)})
     }
 
     private fun makeItem(

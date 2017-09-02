@@ -27,7 +27,7 @@ class ViewHistoryInsertion private constructor(
 
     private fun insert(searchHistory: ViewHistory): Disposable {
         return Completable.create { e ->
-            DbInitter.get(context)
+            DbInitter.init(context)
                     .relationOfViewHistory()
                     .inserter(OnConflict.REPLACE)
                     .execute(searchHistory)

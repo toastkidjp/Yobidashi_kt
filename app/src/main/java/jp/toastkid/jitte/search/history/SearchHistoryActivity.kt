@@ -34,7 +34,7 @@ class SearchHistoryActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivitySearchHistoryBinding>(this, LAYOUT_ID)
-        val relation = DbInitter.get(this).relationOfSearchHistory()
+        val relation = DbInitter.init(this).relationOfSearchHistory()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = ActivityAdapter(

@@ -10,7 +10,7 @@ object DbInitter {
 
     private var orma: OrmaDatabase? = null
 
-    operator fun get(context: Context): OrmaDatabase {
+    fun init(context: Context): OrmaDatabase {
         if (orma == null) {
             orma = OrmaDatabase.builder(context).name("jitte.db").build()
         }

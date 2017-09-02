@@ -53,7 +53,7 @@ class FavoriteSearchFragment : BaseFragment() {
     private fun initFavSearchsView() {
         adapter = ActivityAdapter(
                 activity,
-                DbInitter.get(activity).relationOfFavoriteSearch(),
+                DbInitter.init(activity).relationOfFavoriteSearch(),
                 { category, query -> this.startSearch(category, query) },
                 { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
         )

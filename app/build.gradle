@@ -8,7 +8,7 @@ android {
     buildToolsVersion "25.0.3"
     byte verMajor  = 0;
     byte verMiddle = 0;
-    byte verMinor  = 1;
+    byte verMinor  = 2;
 
     defaultConfig {
         applicationId "jp.toastkid.jitte"

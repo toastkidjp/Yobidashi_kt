@@ -27,7 +27,7 @@ class SearchHistoryInsertion private constructor(
 
     private fun insert(searchHistory: SearchHistory): Disposable {
         return Completable.create { e ->
-            DbInitter.get(context)
+            DbInitter.init(context)
                     .relationOfSearchHistory()
                     .inserter(OnConflict.REPLACE)
                     .execute(searchHistory)

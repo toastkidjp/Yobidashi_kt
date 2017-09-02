@@ -8,9 +8,6 @@ import jp.toastkid.jitte.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.jitte.libs.db.Clear
 import jp.toastkid.jitte.libs.db.DbInitter
 import jp.toastkid.jitte.libs.facade.BaseModule
-import jp.toastkid.jitte.search.favorite.ModuleAdapter
-import jp.toastkid.jitte.search.favorite.FavoriteSearch
-import jp.toastkid.jitte.search.favorite.FavoriteSearch_Relation
 
 /**
  * Search hisotry module.
@@ -49,7 +46,7 @@ class FavoriteSearchModule
 
         binding.module = this
 
-        relation = DbInitter.get(context()).relationOfFavoriteSearch()
+        relation = DbInitter.init(context()).relationOfFavoriteSearch()
 
         binding.searchFavorites.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
         moduleAdapter = ModuleAdapter(
