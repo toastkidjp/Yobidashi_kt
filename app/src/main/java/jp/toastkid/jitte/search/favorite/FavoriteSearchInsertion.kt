@@ -24,7 +24,7 @@ class FavoriteSearchInsertion(
 
     private fun insertFavoriteSearch(favoriteSearch: FavoriteSearch) {
         Completable.create { e ->
-            DbInitter.get(context).insertIntoFavoriteSearch(favoriteSearch)
+            DbInitter.init(context).insertIntoFavoriteSearch(favoriteSearch)
             e.onComplete()
         }
                 .subscribeOn(Schedulers.io())

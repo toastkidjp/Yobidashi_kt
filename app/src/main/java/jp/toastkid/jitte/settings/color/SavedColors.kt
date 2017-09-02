@@ -14,6 +14,7 @@ import jp.toastkid.jitte.R
 import jp.toastkid.jitte.libs.Toaster
 import jp.toastkid.jitte.libs.db.DbInitter
 import jp.toastkid.jitte.libs.preference.PreferenceApplier
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -75,11 +76,11 @@ object SavedColors {
     fun insertDefaultColors(context: Context) {
 
         Completable.create { e ->
-            DbInitter.get(context).relationOfSavedColor()
+            DbInitter.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAllAsObservable(DefaultColors.make(context))
                     .subscribe()
-        }.subscribeOn(Schedulers.io()).subscribe()
+        }.subscribeOn(Schedulers.io()).subscribe({}, {Timber.e(it)})
     }
 
     fun insertRandomColor(context: Context) {
@@ -98,7 +99,7 @@ object SavedColors {
                 random.nextInt(255)
         )
         Completable.create { e ->
-            DbInitter.get(context).relationOfSavedColor()
+            DbInitter.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAsSingle(makeSavedColor(bg, font))
                     .subscribe()

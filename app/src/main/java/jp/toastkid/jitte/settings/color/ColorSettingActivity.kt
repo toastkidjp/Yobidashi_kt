@@ -78,7 +78,7 @@ class ColorSettingActivity : BaseActivity() {
 
     private fun initSavedColors() {
 
-        adapter = SavedColorAdapter(this, DbInitter.get(this).relationOfSavedColor())
+        adapter = SavedColorAdapter(this, DbInitter.init(this).relationOfSavedColor())
         binding!!.savedColors.adapter = adapter
         binding!!.savedColors.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding!!.clearSavedColor.setOnClickListener({ v ->

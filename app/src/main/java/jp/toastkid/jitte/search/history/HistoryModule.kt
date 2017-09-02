@@ -46,7 +46,7 @@ class HistoryModule
 
         binding.module = this
 
-        relation = DbInitter.get(context()).relationOfSearchHistory()
+        relation = DbInitter.init(context()).relationOfSearchHistory()
 
         binding.searchHistories.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
         moduleAdapter = ModuleAdapter(

@@ -33,7 +33,7 @@ class BookmarkActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityBookmarkBinding>(this, LAYOUT_ID)
-        val relation = DbInitter.get(this).relationOfBookmark()
+        val relation = DbInitter.init(this).relationOfBookmark()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = ActivityAdapter(
