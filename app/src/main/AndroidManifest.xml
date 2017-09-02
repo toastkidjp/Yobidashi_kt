@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="jp.toastkid.jitte">
+    package="jp.toastkid.yobidashi">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name="jp.toastkid.jitte.ExtendedApplication"
+        android:name=".ExtendedApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         >
         <activity
-            android:name="jp.toastkid.jitte.main.MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Splash"
             android:configChanges="orientation|screenSize|locale"
@@ -31,12 +31,12 @@
 
         <activity-alias
             android:name=".browser.BrowserActivity"
-            android:targetActivity="jp.toastkid.jitte.main.MainActivity"
+            android:targetActivity=".main.MainActivity"
             android:label="@string/title_search"
             >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <action android:name="jp.toastkid.jitte.search" />
+                <action android:name="jp.toastkid.yobidashi.search" />
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="http"/>
@@ -46,7 +46,7 @@
 
         <activity-alias
             android:name=".search.SearchActivity"
-            android:targetActivity="jp.toastkid.jitte.main.MainActivity"
+            android:targetActivity=".main.MainActivity"
             android:label="@string/title_search"
             >
             <intent-filter>
@@ -56,98 +56,98 @@
         </activity-alias>
 
         <activity
-            android:name="jp.toastkid.jitte.settings.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="@string/title_settings"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name="jp.toastkid.jitte.settings.color.ColorSettingActivity"
+            android:name=".settings.color.ColorSettingActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name="jp.toastkid.jitte.settings.background.BackgroundSettingActivity"
+            android:name=".settings.background.BackgroundSettingActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name="jp.toastkid.jitte.about.AboutThisAppActivity"
+            android:name=".about.AboutThisAppActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name="jp.toastkid.jitte.launcher.LauncherActivity"
+            android:name=".launcher.LauncherActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
         <activity
-            android:name="jp.toastkid.jitte.ScrollingActivity"
+            android:name=".ScrollingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name="jp.toastkid.jitte.planning_poker.CardViewActivity"
+            android:name=".planning_poker.CardViewActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
-            android:name="jp.toastkid.jitte.barcode.BarcodeReaderActivity"
+            android:name=".barcode.BarcodeReaderActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
-            android:name="jp.toastkid.jitte.browser.screenshots.ScreenshotsActivity"
+            android:name=".browser.screenshots.ScreenshotsActivity"
             android:label="@string/title_screenshots"
             android:theme="@style/AppTheme.Translucent"
             />
         <activity
-            android:name="jp.toastkid.jitte.browser.archive.ArchivesActivity"
+            android:name=".browser.archive.ArchivesActivity"
             android:label="@string/title_archives"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name="jp.toastkid.jitte.planning_poker.PlanningPokerActivity"
+            android:name=".planning_poker.PlanningPokerActivity"
             android:label="@string/title_planning_poker"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name="jp.toastkid.jitte.search.favorite.FavoriteSearchActivity"
+            android:name=".search.favorite.FavoriteSearchActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
-            android:name="jp.toastkid.jitte.search.history.SearchHistoryActivity"
+            android:name=".search.history.SearchHistoryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
-            android:name="jp.toastkid.jitte.browser.history.ViewHistoryActivity"
+            android:name=".browser.history.ViewHistoryActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
         <activity
-            android:name="jp.toastkid.jitte.browser.bookmark.BookmarkActivity"
+            android:name=".browser.bookmark.BookmarkActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
 
-        <service android:name="jp.toastkid.jitte.search.favorite.AddingFavoriteSearchService">
+        <service android:name=".search.favorite.AddingFavoriteSearchService">
             <intent-filter>
                 <action android:name="ADD_ITEM" />
             </intent-filter>
         </service>
 
-        <service android:name="jp.toastkid.jitte.color_filter.ColorFilterService"/>
+        <service android:name=".color_filter.ColorFilterService"/>
 
-        <receiver android:name="jp.toastkid.jitte.appwidget.search.Provider" >
+        <receiver android:name=".appwidget.search.Provider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -155,8 +155,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_provider" />
         </receiver>
-        <receiver android:name="jp.toastkid.jitte.calendar.alarm.DailyCalendarReceiver" android:process=":remote" />
-        <receiver android:name="jp.toastkid.jitte.calendar.alarm.TimeChangedReceiver">
+        <receiver android:name=".calendar.alarm.DailyCalendarReceiver" android:process=":remote" />
+        <receiver android:name=".calendar.alarm.TimeChangedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DATE_CHANGED" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
@@ -166,7 +166,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="jp.toastkid.jitte.fileprovider"
+            android:authorities="jp.toastkid.yobidashi.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

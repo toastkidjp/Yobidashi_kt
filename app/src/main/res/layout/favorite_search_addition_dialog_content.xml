@@ -3,7 +3,7 @@
     <data>
         <variable
             name="action"
-            type="jp.toastkid.jitte.search.favorite.Addition" />
+            type="jp.toastkid.yobidashi.search.favorite.Addition" />
     </data>
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"

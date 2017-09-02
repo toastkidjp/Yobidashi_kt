@@ -2,7 +2,7 @@
 <layout>
     <data>
         <variable name="fragment"
-            type="jp.toastkid.jitte.settings.SettingsTopFragment" />
+            type="jp.toastkid.yobidashi.settings.SettingsTopFragment" />
     </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
