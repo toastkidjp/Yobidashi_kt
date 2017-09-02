@@ -82,10 +82,10 @@ class HistoryModule
      */
     fun clearHistory(view: View) {
         Clear(binding.root, relation.deleter())
-                .invoke(Runnable {
+                .invoke{
                     moduleAdapter.clear()
                     hide()
-                })
+                }
     }
 
     /**

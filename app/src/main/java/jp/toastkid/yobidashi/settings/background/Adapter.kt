@@ -4,29 +4,23 @@ import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.SavedImageBinding
-import jp.toastkid.yobidashi.libs.storage.Storeroom
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.storage.Storeroom
 
 /**
  * RecyclerView's adapter.
-
+ *
+ * @param preferenceApplier Preferences wrapper.
+ * @param storeroom FilesDir wrapper.
+ *
  * @author toastkidjp
  */
-internal class Adapter
-/**
-
- * @param preferenceApplier
- * *
- * @param storeroom
- */
-(
-        /** Preferences wrapper.  */
+internal class Adapter(
         private val preferenceApplier: PreferenceApplier,
-        /** FilesDir wrapper.  */
-        private val storeroom: Storeroom) : RecyclerView.Adapter<ViewHolder>() {
+        private val storeroom: Storeroom
+) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding = DataBindingUtil.inflate<SavedImageBinding>(
@@ -35,7 +29,7 @@ internal class Adapter
                 parent,
                 false
         )
-        return ViewHolder(itemBinding, preferenceApplier, Runnable { this.notifyDataSetChanged() })
+        return ViewHolder(itemBinding, preferenceApplier, this::notifyDataSetChanged)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

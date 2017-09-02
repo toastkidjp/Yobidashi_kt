@@ -19,13 +19,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 class Clear(private val view: View, private val deleter: Deleter<*, *>) {
 
-    private val context: Context
+    private val context: Context = view.context
 
-    init {
-        this.context = view.context
-    }
-
-    operator fun invoke(callback: Runnable) {
+    operator fun invoke(callback: () -> Unit = {}) {
         AlertDialog.Builder(context)
                 .setTitle(R.string.title_delete_all)
                 .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
@@ -40,7 +36,7 @@ class Clear(private val view: View, private val deleter: Deleter<*, *>) {
                                         R.string.settings_color_delete,
                                         PreferenceApplier(context).colorPair()
                                 )
-                                callback.run()
+                                callback()
                                 d.dismiss()
                             }
                 }

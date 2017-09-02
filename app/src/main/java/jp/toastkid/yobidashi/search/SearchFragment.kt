@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.Spinner
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -78,8 +77,8 @@ class SearchFragment : BaseFragment() {
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
                 binding?.searchInput as EditText,
-                Consumer<String> { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
-                Runnable { this.hideKeyboard() }
+                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
+                this::hideKeyboard
         )
 
         setHasOptionsMenu(true)

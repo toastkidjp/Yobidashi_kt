@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Spinner
-import io.reactivex.functions.Consumer
 
 import java.text.MessageFormat
 
@@ -24,22 +23,17 @@ import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
 
 /**
  * Show input dialog and call inserting action.
-
+ *
+ * @param parent For using extract background color.
  * @author toastkidjp
  */
-class Addition
-/**
-
- * @param view
- */
-internal constructor(
-        /** For using extract background color.  */
+class Addition internal constructor(
         private val parent: ViewGroup,
-        private val toasterCallback: Consumer<String>
+        private val toasterCallback: (String) -> Unit
 ) {
 
     /** Context.  */
-    private val context: Context
+    private val context: Context = parent.context
 
     private val binding: FavoriteSearchAdditionDialogContentBinding
 
@@ -48,7 +42,6 @@ internal constructor(
     private val input: EditText
 
     init {
-        this.context = parent.context
 
         binding = DataBindingUtil.inflate<FavoriteSearchAdditionDialogContentBinding>(
                 LayoutInflater.from(context),
@@ -111,7 +104,7 @@ internal constructor(
         val query = input.text.toString()
 
         if (TextUtils.isEmpty(query)) {
-            toasterCallback.accept(context.getString(R.string.favorite_search_addition_dialog_empty_message))
+            toasterCallback(context.getString(R.string.favorite_search_addition_dialog_empty_message))
             return
         }
 
@@ -123,7 +116,7 @@ internal constructor(
                 context.getString(R.string.favorite_search_addition_successful_format),
                 query
         )
-        toasterCallback.accept(message)
+        toasterCallback(message)
     }
 
     companion object {

@@ -6,36 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
 import timber.log.Timber
-import java.util.*
 
 /**
  * Suggest list adapter.
  *
- * @param inflater
- * @param input
- * @param suggestConsumer
+ * @param mInflater Layout inflater
+ * @param mSearchInput EditText
+ * @param mSuggestionsCallback Using selected suggest action
  *
  * @author toastkidjp
  */
 internal class Adapter (
-        /** Layout inflater.  */
         private val mInflater: LayoutInflater,
-        /** EditText.  */
         private val mSearchInput: EditText,
-        /** Using selected suggest action.  */
-        private val mSuggestConsumer: Consumer<String>
+        private val mSuggestionsCallback: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /** Suggestion items.  */
-    private val mSuggestions: MutableList<String>
-
-    init {
-        mSuggestions = ArrayList<String>(10)
-    }
+    private val mSuggestions: MutableList<String> = mutableListOf()
 
     /**
      * Clear suggestions.
@@ -59,7 +50,8 @@ internal class Adapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                DataBindingUtil.inflate<ItemSearchSuggestionBinding>(mInflater, R.layout.item_search_suggestion, parent, false))
+                DataBindingUtil.inflate<ItemSearchSuggestionBinding>(
+                        mInflater, R.layout.item_search_suggestion, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -87,7 +79,7 @@ internal class Adapter (
         mSearchInput.setText(suggest)
         mSearchInput.setSelection(suggest.length)
         try {
-            mSuggestConsumer.accept(suggest)
+            mSuggestionsCallback(suggest)
         } catch (e: Exception) {
             Timber.e(e)
         }

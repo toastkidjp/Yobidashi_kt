@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import jp.toastkid.yobidashi.libs.storage.Storeroom
@@ -19,30 +18,27 @@ import java.util.*
 /**
  * Initialize with Context.
  * @param context
+ * @param callback Return read content
+ *
  * @author toastkidjp
  */
 internal class Adapter(
         context: Context,
-        /** Return read content.  */
-        private val callback: Consumer<String>
+        private val callback: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /** Archive folder wrapper.  */
-    private val archiveDir: Storeroom
+    private val archiveDir: Storeroom = Archive.makeNew(context)
 
     /** Layout inflater.  */
-    private val layoutInflater: LayoutInflater
+    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
     /** Data binding object.  */
     private var binding: ItemArchiveBinding? = null
 
-    init {
-        this.archiveDir = Archive.makeNew(context)
-        this.layoutInflater = LayoutInflater.from(context)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding = DataBindingUtil.inflate<ItemArchiveBinding>(layoutInflater, R.layout.item_archive, parent, false)
+        binding = DataBindingUtil.inflate<ItemArchiveBinding>(
+                layoutInflater, R.layout.item_archive, parent, false)
         return ViewHolder(binding as ItemArchiveBinding)
     }
 
@@ -53,10 +49,8 @@ internal class Adapter(
                 + " / " + convertKb(file.length()) + "[KB]")
         holder.itemView.setOnClickListener { v ->
             try {
-                callback.accept(file.absolutePath)
+                callback(file.absolutePath)
             } catch (e: IOException) {
-                Timber.e(e)
-            } catch (e: Exception) {
                 Timber.e(e)
             }
         }

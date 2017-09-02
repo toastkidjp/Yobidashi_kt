@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.settings.background
 
 import android.net.Uri
+import android.support.annotation.StringRes
 import android.support.v7.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.SavedImageBinding
@@ -14,19 +15,16 @@ import java.io.IOException
 /**
  * Extended of [RecyclerView.ViewHolder].
  *
- * @param binding
- * @param preferenceApplier
- * @param onRemoved
+ * @param binding Binding object.
+ * @param preferenceApplier Preferences wrapper.
+ * @param onRemoved Action on removed.
  *
  * @author toastkidjp
  */
 internal class ViewHolder(
-        /** Binding object.  */
         private val binding: SavedImageBinding,
-        /** Preferences wrapper.  */
         private val preferenceApplier: PreferenceApplier,
-        /** Action on removed.  */
-        private val onRemoved: Runnable
+        private val onRemoved: () -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     /**
@@ -60,32 +58,28 @@ internal class ViewHolder(
 
     /**
      * Remove set image.
-
+     *
      * @param file
      */
     private fun removeSetImage(file: File?) {
         if (file == null || !file.exists()) {
-            Toaster.snackShort(
-                    binding.text,
-                    R.string.message_cannot_found_image,
-                    preferenceApplier.colorPair()
-            )
+            snack(R.string.message_cannot_found_image)
             return
         }
         val successRemove = file.delete()
         if (!successRemove) {
-            Toaster.snackShort(
-                    binding.text,
-                    R.string.message_failed_image_removal,
-                    preferenceApplier.colorPair()
-            )
+            snack(R.string.message_failed_image_removal)
             return
         }
+        snack(R.string.message_success_image_removal)
+        onRemoved()
+    }
+
+    private fun snack(@StringRes messageId: Int) {
         Toaster.snackShort(
                 binding.text,
-                R.string.message_success_image_removal,
+                messageId,
                 preferenceApplier.colorPair()
         )
-        onRemoved.run()
     }
 }

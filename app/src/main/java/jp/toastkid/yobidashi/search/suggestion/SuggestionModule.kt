@@ -2,38 +2,30 @@ package jp.toastkid.yobidashi.search.suggestion
 
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.EditText
-
-import java.util.HashMap
-
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import java.util.*
 
 /**
  * Facade of search suggestion module.
-
+ * Initialize with binding object.
+ *
+ * @param binding
+ * @param searchInput
+ *
  * @author toastkidjp
  */
-class SuggestionModule
-/**
- * Initialize with binding object.
-
- * @param binding
- * *
- * @param searchInput
- */
-(
+class SuggestionModule(
         binding: ModuleSearchSuggestionBinding,
         searchInput: EditText,
-        searchCallback: Consumer<String>,
-        onClick: Runnable
+        searchCallback: (String) -> Unit,
+        onClick: () -> Unit
 ) : BaseModule(binding.root) {
 
     /** Suggest ModuleAdapter.  */
@@ -52,14 +44,14 @@ class SuggestionModule
         mSuggestionAdapter = Adapter(
                 LayoutInflater.from(context()),
                 searchInput,
-                Consumer<String>{ suggestion -> searchCallback.accept(suggestion) }
+                searchCallback
         )
         binding.searchSuggestions.layoutManager = LinearLayoutManager(context())
         binding.searchSuggestions.adapter = mSuggestionAdapter
-        binding.searchSuggestions.setOnTouchListener (View.OnTouchListener{ v, event ->
-            onClick.run()
+        binding.searchSuggestions.setOnTouchListener { _, _ ->
+            onClick()
             false
-        })
+        }
     }
 
     /**
@@ -88,16 +80,16 @@ class SuggestionModule
             return
         }
 
-        mFetcher.fetchAsync(key, Consumer<List<String>>{ suggestions ->
+        mFetcher.fetchAsync(key, { suggestions ->
             if (suggestions == null || suggestions.isEmpty()) {
                 Completable.create { e ->
                     hide()
                     e.onComplete()
                 }.subscribeOn(AndroidSchedulers.mainThread()).subscribe()
-                return@Consumer
+            } else {
+                mCache.put(key, suggestions)
+                disposable = replace(suggestions)
             }
-            mCache.put(key, suggestions)
-            disposable = replace(suggestions)
         })
     }
 

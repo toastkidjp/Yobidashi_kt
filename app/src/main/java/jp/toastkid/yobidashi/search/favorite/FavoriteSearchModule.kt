@@ -80,12 +80,12 @@ class FavoriteSearchModule
      * Clear search history.
      * @param view
      */
-    fun clearHistory(view: View) {
+    fun clearHistory(ignored: View) {
         Clear(binding.root, relation.deleter())
-                .invoke(Runnable {
+                .invoke {
                     moduleAdapter.clear()
                     hide()
-                })
+                }
     }
 
     /**

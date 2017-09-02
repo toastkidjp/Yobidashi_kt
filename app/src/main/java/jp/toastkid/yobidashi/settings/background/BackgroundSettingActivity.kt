@@ -75,7 +75,7 @@ class BackgroundSettingActivity : BaseActivity() {
     }
 
     private fun clearImages() {
-        ClearImages(this, Runnable {
+        ClearImages(this, {
             sendLog("clear_bg_img")
             storeroom!!.clean()
             Toaster.snackShort(
