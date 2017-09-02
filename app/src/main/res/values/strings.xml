@@ -63,7 +63,7 @@
         <![CDATA[<font color=\"red\">注意：この操作は取り消せません。</font>]]></string>
 
     <string name="message_share">
-        Android 用の検索アプリ「{0}」\nhttps://play.google.com/store/apps/details?id=jp.toastkid.jitte
+        Android 用 Web 検索アプリ「{0}」\nhttps://play.google.com/store/apps/details?id=jp.toastkid.jitte
     </string>
 
     <string name="message_failed_read_image">画像の読み込みに失敗しました。</string>

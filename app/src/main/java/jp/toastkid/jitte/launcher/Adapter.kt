@@ -1,5 +1,6 @@
 package jp.toastkid.jitte.launcher
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -20,9 +21,12 @@ import timber.log.Timber
 import java.util.*
 
 /**
+ * RecyclerView's adapter.
+ *
  * @author toastkidjp
  */
-internal class Adapter(private val context: Context, private val parent: View) : RecyclerView.Adapter<ViewHolder>() {
+internal class Adapter(private val context: Context, private val parent: View)
+    : RecyclerView.Adapter<ViewHolder>() {
 
     private val master: List<ApplicationInfo>
 
@@ -65,16 +69,25 @@ internal class Adapter(private val context: Context, private val parent: View) :
 
         val intent = packageManager.getLaunchIntentForPackage(info.packageName)
         if (intent == null) {
-            holder.itemView.setOnClickListener { v ->
-                Toaster.snackShort(
-                        parent,
-                        R.string.message_failed_launching,
-                        preferenceApplier.colorPair()
-                )
-            }
+            holder.itemView.setOnClickListener { v -> snackCannotLaunch() }
         } else {
-            holder.itemView.setOnClickListener { v -> context.startActivity(intent) }
+            holder.itemView.setOnClickListener { v ->
+                try {
+                    context.startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    Timber.e(e)
+                    snackCannotLaunch()
+                }
+            }
         }
+    }
+
+    private fun snackCannotLaunch() {
+        Toaster.snackShort(
+                parent,
+                R.string.message_failed_launching,
+                preferenceApplier.colorPair()
+        )
     }
 
     fun filter(str: String) {
