@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="fragment" type="jp.toastkid.jitte.home.HomeFragment" />
+        <variable name="fragment" type="jp.toastkid.yobidashi.home.HomeFragment" />
     </data>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

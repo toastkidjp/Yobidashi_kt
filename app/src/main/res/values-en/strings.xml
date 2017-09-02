@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">十手 - Jitte</string>
+    <string name="app_name">呼出 - Yobidashi</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -69,7 +69,7 @@
         <![CDATA[<font color=\"red\">Caution: This operation cannot undo.</font>]]></string>
 
     <string name="message_share">
-        Search App for Android "{0}"\nhttps://play.google.com/store/apps/details?id=jp.toastkid.jitte
+        Search App for Android "{0}"\nhttps://play.google.com/store/apps/details?id=jp.toastkid.yobidashi
     </string>
 
     <string name="message_failed_read_image">It failed loading image.</string>
@@ -81,9 +81,9 @@
     <string name="format_date_title">{0} {1}</string>
     <string name="format_date_link">https://en.wikipedia.org/wiki/{0}_{1}</string>
 
-    <string name="production_app_admob_id">ca-app-pub-5751262573448755~2639924999</string>
-    <string name="unit_id_interstitial">ca-app-pub-5751262573448755/6160367602</string>
-    <string name="unit_id_native_large_ad">ca-app-pub-5751262573448755/5696854246</string>
+    <string name="production_app_admob_id">ca-app-pub-5751262573448755~1704109822</string>
+    <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
+    <string name="unit_id_native_large_ad">ca-app-pub-5751262573448755/1285307423</string>
 
     <string name="copyright">(c) @toastkidjp</string>
     <string name="clear_all">Clear All</string>
