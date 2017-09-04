@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -60,7 +61,7 @@ import java.io.IOException
 
 /**
  * Internal browser fragment.
-
+ *
  * @author toastkidjp
  */
 class BrowserFragment : BaseFragment() {
@@ -129,6 +130,8 @@ class BrowserFragment : BaseFragment() {
             tabs.loadWithNewTab(url)
         }
 
+        setHasOptionsMenu(true)
+
         return binding!!.root
     }
 
@@ -142,22 +145,47 @@ class BrowserFragment : BaseFragment() {
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
+    fun switchMenu() {
+        hideTabList()
+        if (binding?.menusView?.visibility == View.GONE) {
+            showMenu(binding?.root ?: View(context))
+        } else {
+            hideMenu()
+        }
+    }
+
     /**
      * Show quick control menu.
-
-     * @param view
+     *
+     * @param ignored
      */
-    fun showMenu(view: View) {
-        binding!!.fab.hide()
-        binding!!.menusView.visibility = View.VISIBLE
+    fun showMenu(ignored: View) {
+        binding?.fab?.hide()
+        binding?.menusView?.visibility = View.VISIBLE
     }
 
     /**
      * Hide quick control menu.
      */
     private fun hideMenu() {
-        binding!!.fab.show()
-        binding!!.menusView.visibility = View.GONE
+        binding?.fab?.show()
+        binding?.menusView?.visibility = View.GONE
+    }
+
+    override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater?.inflate(R.menu.browser, menu)
+
+        menu?.findItem(R.id.open_menu)?.setOnMenuItemClickListener { v ->
+            switchMenu()
+            true
+        }
+
+        menu?.findItem(R.id.open_tabs)?.setOnMenuItemClickListener { v ->
+            switchTabList()
+            true
+        }
     }
 
     /**
@@ -264,24 +292,8 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.TAB_LIST -> {
-                if (tabListModule == null) {
-                    tabListModule = TabListModule(
-                            DataBindingUtil.inflate<ModuleTabListBinding>(
-                                LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
-                            tabs,
-                            snackbarParent,
-                            this::hideTabList
-                    )
-                    binding?.tabListContainer?.addView(tabListModule?.moduleView)
-                }
-
-                if (tabListModule?.isVisible as Boolean) {
-                    hideTabList()
-                } else {
-                    hideMenu()
-                    binding?.fab?.hide()
-                    tabListModule?.show()
-                }
+                initTabListIfNeed(snackbarParent)
+                switchTabList()
                 return
             }
             Menu.OPEN -> {
@@ -415,6 +427,28 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    private fun initTabListIfNeed(snackbarParent: View) {
+        if (tabListModule == null) {
+            tabListModule = TabListModule(
+                    DataBindingUtil.inflate<ModuleTabListBinding>(
+                            LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
+                    tabs,
+                    snackbarParent,
+                    this::hideTabList
+            )
+            binding?.tabListContainer?.addView(tabListModule?.moduleView)
+        }
+    }
+
+    private fun switchTabList() {
+        initTabListIfNeed(binding?.root as View)
+        if (tabListModule?.isVisible ?: false) {
+            hideTabList()
+        } else {
+            showTabList()
+        }
+    }
+
     private fun back(): Boolean {
         val back = tabs.back()
         if (back.isNotEmpty()) {
@@ -462,6 +496,12 @@ class BrowserFragment : BaseFragment() {
     private fun hideTabList() {
         tabListModule?.hide()
         binding?.fab?.show()
+    }
+
+    private fun showTabList() {
+        hideMenu()
+        binding?.fab?.hide()
+        tabListModule?.show()
     }
 
     override fun titleId(): Int {
