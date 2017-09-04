@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/filter_white"
+        >
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            />
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="56dp"
+            android:scrollbarStyle="outsideInset"
+            android:fillViewport="true"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/search_horizontal_margin"
+                android:layout_marginRight="@dimen/search_horizontal_margin"
+                >
+
+                <include android:id="@+id/favorite_module"
+                    layout="@layout/module_search_favorite" />
+
+                <include android:id="@+id/history_module"
+                    layout="@layout/module_search_history" />
+
+                <include android:id="@+id/suggestion_module"
+                    layout="@layout/module_search_suggestion" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:background="@color/transparent"
+            >
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:minHeight="?android:actionBarSize"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                >
+                <FrameLayout
+                    android:id="@+id/search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    android:foreground="@drawable/ripple_transparent"
+                    >
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/search_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="52dp"
+                        android:maxLines="1"
+                        android:hint="@string/title_search"
+                        android:textColorHint="@color/white"
+                        android:textColor="@color/white"
+                        app:theme="@style/EditTextStyle"
+                        android:inputType="text"
+                        android:imeOptions="actionSearch"
+                        android:background="@color/transparent"
+                        >
+                        <requestFocus/>
+                    </android.support.v7.widget.AppCompatEditText>
+
+                    <View
+                        android:id="@+id/search_input_border"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/white"
+                        />
+
+                    <Spinner
+                        android:id="@+id/search_categories"
+                        android:layout_width="@dimen/search_category_spinner_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:spinnerMode="dropdown"
+                        android:background="@color/spinner_background"
+                        />
+
+                    <ImageView
+                        android:id="@+id/search_clear"
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="44dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_close"
+                        />
+                    <FrameLayout
+                        android:id="@+id/search_action_background"
+                        android:layout_width="32dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        >
+                        <ImageView
+                            android:id="@+id/search_action"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:src="@drawable/ic_search_white"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/ripple_appwidget"
+                            />
+                    </FrameLayout>
+
+                </FrameLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+    </FrameLayout>
+</layout>

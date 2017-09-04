@@ -8,7 +8,7 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.calendar.alarm.DailyCalendarReceiver
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.search.SearchFragment
+import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 
@@ -22,11 +22,11 @@ object PendingIntentFactory {
     /**
      * Make launch search intent.
      * @param context
-     * *
-     * @return [SearchFragment]'s pending intent
+     *
+     * @return [SearchActivity]'s pending intent
      */
     fun makeSearchLauncher(context: Context): PendingIntent {
-        val intent = MainActivity.makeSearchLauncherIntent(context)
+        val intent = SearchActivity.makeIntent(context)
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 

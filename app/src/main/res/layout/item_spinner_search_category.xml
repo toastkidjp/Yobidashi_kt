@@ -20,5 +20,6 @@
         android:layout_marginLeft="45dp"
         android:gravity="center_vertical"
         android:textSize="20sp"
+        android:textColor="@color/black"
         />
 </FrameLayout>
