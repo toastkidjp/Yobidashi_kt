@@ -18,7 +18,7 @@ object Bitmaps {
      * Save bitmap to file.
 
      * @param bitmap
-     * *
+     *
      * @param file
      */
     fun compress(bitmap: Bitmap, file: File) {

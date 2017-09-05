@@ -86,7 +86,7 @@ class FavoriteSearchFragment : BaseFragment() {
     /**
      * Start search action.
      * @param category Search category
-     * *
+     *
      * @param query    Search query
      */
     private fun startSearch(category: SearchCategory, query: String) {

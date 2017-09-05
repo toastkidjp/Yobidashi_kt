@@ -18,9 +18,9 @@ internal object ImageDialog {
     /**
      * Show dialog with image.
      * @param context
-     * *
+     *
      * @param uri
-     * *
+     *
      * @param background
      */
     fun show(context: Context, uri: Uri, background: BitmapDrawable) {

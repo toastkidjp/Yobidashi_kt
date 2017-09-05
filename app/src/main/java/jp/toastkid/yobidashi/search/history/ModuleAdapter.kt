@@ -81,7 +81,7 @@ internal class ModuleAdapter(
     /**
      * Execute query.
      * @param s
-     * *
+     *
      * @return
      */
     fun query(s: CharSequence): Disposable {

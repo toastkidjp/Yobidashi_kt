@@ -22,7 +22,7 @@ object Archive {
      * Make new object.
 
      * @param context
-     * *
+     *
      * @return
      */
     fun makeNew(context: Context): Storeroom {
@@ -55,9 +55,9 @@ object Archive {
      * Load archive.
 
      * @param webView
-     * *
+     *
      * @param file
-     * *
+     *
      * @throws IOException
      */
     @Throws(IOException::class)

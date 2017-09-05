@@ -11,7 +11,7 @@ internal class SuggestionParser {
     /**
      * Parse response xml.
      * @param response
-     * *
+     *
      * @return suggest words
      */
     fun parse(response: String): List<String> {

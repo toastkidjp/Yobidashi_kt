@@ -128,7 +128,7 @@ class LauncherActivity : BaseActivity() {
         /**
          * Make launcher intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context): Intent {

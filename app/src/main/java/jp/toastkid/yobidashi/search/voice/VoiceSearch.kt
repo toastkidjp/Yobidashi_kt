@@ -19,7 +19,7 @@ object VoiceSearch {
      * Make intent.
 
      * @param context
-     * *
+     *
      * @return
      */
     fun makeIntent(context: Context): Intent {
@@ -36,7 +36,7 @@ object VoiceSearch {
      * Process activity result.
 
      * @param context
-     * *
+     *
      * @param data
      */
     fun processResult(context: Context, data: Intent): Disposable {

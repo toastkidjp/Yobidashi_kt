@@ -21,9 +21,9 @@ object Screenshot {
     /**
      * Save bitmap file to cache file.
      * @param context
-     * *
+     *
      * @param bitmap
-     * *
+     *
      * @return
      */
     fun save(context: Context, bitmap: Bitmap): File {

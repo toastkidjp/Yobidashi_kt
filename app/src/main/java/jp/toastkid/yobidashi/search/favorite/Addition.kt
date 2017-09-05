@@ -74,7 +74,7 @@ class Addition internal constructor(
     /**
      * Initialize spinner.
      * @param content
-     * *
+     *
      * @return
      */
     private fun initSpinner(content: View): Spinner {
@@ -86,7 +86,7 @@ class Addition internal constructor(
     /**
      * Initialize input field.
      * @param content
-     * *
+     *
      * @return
      */
     private fun initInput(content: View): EditText {

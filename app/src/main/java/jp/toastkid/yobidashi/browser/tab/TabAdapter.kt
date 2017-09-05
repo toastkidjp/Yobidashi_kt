@@ -418,7 +418,7 @@ class TabAdapter(
      * Load archive file.
 
      * @param archiveFile
-     * *
+     *
      * @throws IOException
      */
     @Throws(IOException::class)

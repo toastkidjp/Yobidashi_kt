@@ -239,7 +239,7 @@ class SearchActivity : BaseActivity() {
      * Open search result.
 
      * @param category search category
-     * *
+     *
      * @param query    search query
      */
     private fun search(category: String, query: String) {

@@ -20,11 +20,11 @@ internal object DateArticleUrlFactory {
     /**
      * Make Wikipedia article's url.
      * @param context context
-     * *
+     *
      * @param month 0-11
-     * *
+     *
      * @param dayOfMonth 1-31
-     * *
+     *
      * @return Wikipedia article's url
      */
     fun make(context: Context, month: Int, dayOfMonth: Int): String {

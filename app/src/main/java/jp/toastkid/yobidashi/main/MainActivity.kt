@@ -548,7 +548,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         /**
          * Make launcher intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context): Intent {
@@ -560,7 +560,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         /**
          * Make browser intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeBrowserIntent(context: Context, uri: Uri): Intent {
@@ -574,7 +574,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         /**
          * Make launcher intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent {

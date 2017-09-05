@@ -12,7 +12,7 @@ internal object Month {
     /**
      * Return month string form.
      * @param month 1-11
-     * *
+     *
      * @return string form
      */
     operator fun get(month: Int): String {

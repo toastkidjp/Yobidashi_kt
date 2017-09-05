@@ -18,11 +18,11 @@ class FavoriteSearchModule
 /**
  * Initialize with Data Binding object and so on...
  * @param binding
- * *
+ *
  * @param searchCallback
- * *
+ *
  * @param onTouch
- * *
+ *
  * @param onClickAdd
  */
 (

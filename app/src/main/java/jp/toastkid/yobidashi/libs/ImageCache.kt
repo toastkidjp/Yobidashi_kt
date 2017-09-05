@@ -15,9 +15,9 @@ object ImageCache {
     /**
      * Save bitmap file to cache file.
      * @param context
-     * *
+     *
      * @param bitmap
-     * *
+     *
      * @return
      */
     fun saveBitmap(context: Context, bitmap: Bitmap): File {

@@ -20,11 +20,11 @@ object DateTitleFactory {
     /**
      * Make daily title.
      * @param context context
-     * *
+     *
      * @param month 0-11
-     * *
+     *
      * @param dayOfMonth 1-31
-     * *
+     *
      * @return daily title
      */
     fun makeDateTitle(context: Context, month: Int, dayOfMonth: Int): String {

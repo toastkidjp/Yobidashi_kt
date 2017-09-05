@@ -21,7 +21,7 @@ object NativeAdFactory {
     /**
      * Make native ad view.
      * @param appContext Application context
-     * *
+     *
      * @return [NativeExpressAdView]
      */
     fun make(appContext: Context): NativeExpressAdView {

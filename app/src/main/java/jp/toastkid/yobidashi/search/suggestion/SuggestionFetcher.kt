@@ -25,7 +25,7 @@ class SuggestionFetcher {
      * Fetch Web API result asynchronously.
 
      * @param query
-     * *
+     *
      * @param listCallback
      */
     fun fetchAsync(query: String, listCallback: (List<String>) -> Unit) {
@@ -48,7 +48,7 @@ class SuggestionFetcher {
     /**
      * Make suggest Web API requesting URL.
      * @param query Query
-     * *
+     *
      * @return suggest Web API requesting URL
      */
     private fun makeSuggestUrl(query: String): String {
@@ -58,7 +58,7 @@ class SuggestionFetcher {
     /**
      * Find appropriate language.
      * @param query
-     * *
+     *
      * @return
      */
     private fun findHl(query: String): String {

@@ -24,7 +24,7 @@ class ColorFilter
  * Initialize with two parent object.
 
  * @param activity
- * *
+ *
  * @param parent
  */
 (

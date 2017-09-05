@@ -13,7 +13,7 @@ object NetworkChecker {
     /**
      * Return true if we can't use network.
      * @param context
-     * *
+     *
      * @return
      */
     fun isNotAvailable(context: Context): Boolean {
@@ -23,7 +23,7 @@ object NetworkChecker {
     /**
      * Check usable network.
      * @param context
-     * *
+     *
      * @return
      */
     fun isAvailable(context: Context): Boolean {

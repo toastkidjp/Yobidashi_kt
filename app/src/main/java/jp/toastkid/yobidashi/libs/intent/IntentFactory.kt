@@ -18,7 +18,7 @@ object IntentFactory {
     /**
      * Make sharing message intent.
      * @param message
-     * *
+     *
      * @return Intent
      */
     fun makeShare(message: String): Intent {
@@ -55,7 +55,7 @@ object IntentFactory {
     /**
      * Make launching calendar intent.
      * @param eventStartMs
-     * *
+     *
      * @return Intent
      */
     fun makeCalendar(eventStartMs: Long): Intent {
@@ -69,7 +69,7 @@ object IntentFactory {
     /**
      * Make launching Google Play intent.
      * @param packageName
-     * *
+     *
      * @return Google play intent.
      */
     fun googlePlay(packageName: String): Intent {
@@ -81,7 +81,7 @@ object IntentFactory {
     /**
      * Share image uri.
      * @param uri
-     * *
+     *
      * @return
      */
     fun shareImage(uri: Uri): Intent {
@@ -96,7 +96,7 @@ object IntentFactory {
     /**
      * Make opening browser intent.
      * @param uri
-     * *
+     *
      * @return
      */
     fun openBrowser(uri: Uri): Intent {

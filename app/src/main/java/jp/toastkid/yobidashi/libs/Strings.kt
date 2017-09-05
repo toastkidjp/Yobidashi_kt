@@ -20,7 +20,7 @@ private constructor() {
         /**
          * Return containing multi byte.
          * @param str
-         * *
+         *
          * @return
          */
         fun containsMultiByte(str: String): Boolean {

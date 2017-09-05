@@ -28,7 +28,7 @@ internal object RemoteViewsFactory {
      * Make RemoteViews.
 
      * @param context
-     * *
+     *
      * @return RemoteViews
      */
     fun make(context: Context): RemoteViews {
@@ -47,7 +47,7 @@ internal object RemoteViewsFactory {
     /**
      * Set background color to remote views.
      * @param remoteViews
-     * *
+     *
      * @param backgroundColor
      */
     private fun setBackgroundColor(
@@ -61,7 +61,7 @@ internal object RemoteViewsFactory {
     /**
      * Set font color to remote views.
      * @param remoteViews
-     * *
+     *
      * @param fontColor
      */
     private fun setFontColor(
@@ -79,7 +79,7 @@ internal object RemoteViewsFactory {
     /**
      * Set pending intents.
      * @param context
-     * *
+     *
      * @param remoteViews
      */
     private fun setTapActions(context: Context, remoteViews: RemoteViews) {

@@ -121,7 +121,7 @@ class BackgroundSettingActivity : BaseActivity() {
         /**
          * Make launcher intent.
          * @param context Context
-         * *
+         *
          * @return [Intent]
          */
         fun makeIntent(context: Context): Intent {

@@ -125,7 +125,7 @@ class SettingsActivity : BaseActivity() {
         /**
          * Make this activity's intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context): Intent {

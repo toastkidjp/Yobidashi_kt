@@ -31,7 +31,7 @@ abstract class StorageWrapper
     /**
      * Get file object.
      * @param index
-     * *
+     *
      * @return
      */
     operator fun get(index: Int): File? {
@@ -67,7 +67,7 @@ abstract class StorageWrapper
     /**
      * Assign new file.
      * @param uri
-     * *
+     *
      * @return
      */
     fun assignNewFile(uri: Uri): File {
@@ -77,7 +77,7 @@ abstract class StorageWrapper
     /**
      * Assign new file.
      * @param name
-     * *
+     *
      * @return
      */
     fun assignNewFile(name: String): File {

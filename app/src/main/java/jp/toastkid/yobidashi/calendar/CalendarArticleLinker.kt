@@ -14,9 +14,9 @@ class CalendarArticleLinker
 /**
 
  * @param context
- * *
+ *
  * @param month
- * *
+ *
  * @param dayOfMonth
  */
 (
