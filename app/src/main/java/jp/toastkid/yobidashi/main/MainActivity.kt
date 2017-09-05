@@ -586,10 +586,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
         /**
          * Make launcher intent with search query.
+         *
          * @param context
-         * *
          * @param query
-         * *
+         *
          * @return launcher intent
          */
         fun makeSearchIntent(
@@ -597,7 +597,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 query: String
         ): Intent {
             val intent = Intent(context, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             if (query.isNotEmpty()) {
                 intent.putExtra(SearchManager.QUERY, query)
             }
