@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 
 /**
  * Factory of [PendingIntent].
-
+ *
  * @author toastkidjp
  */
 object PendingIntentFactory {
