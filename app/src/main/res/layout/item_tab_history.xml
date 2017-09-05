@@ -46,17 +46,6 @@
                     android:textSize="12sp"
                     android:text="https://www.yahoo.com"
                     />
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/url"
-                    android:maxLines="1"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/darkgray_scale"
-                    android:textSize="12sp"
-                    android:text="https://www.yahoo.com"
-                    />
             </RelativeLayout>
             <ImageView
                 android:id="@+id/bookmark"
@@ -76,6 +65,7 @@
                 android:src="@drawable/ic_remove_search"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
+                android:visibility="gone"
                 />
             <View
                 android:id="@+id/divider"
