@@ -102,7 +102,7 @@ class AboutThisAppActivity : BaseActivity() {
         /**
          * Make launcher intent.
          * @param context
-         * *
+         *
          * @return [Intent]
          */
         fun makeIntent(context: Context): Intent {

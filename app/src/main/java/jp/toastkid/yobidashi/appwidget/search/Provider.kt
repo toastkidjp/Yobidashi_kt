@@ -25,7 +25,7 @@ class Provider : AppWidgetProvider() {
         /**
          * Update widget.
          * @param context
-         * *
+         *
          * @param remoteViews
          */
         fun updateWidget(context: Context, remoteViews: RemoteViews) {

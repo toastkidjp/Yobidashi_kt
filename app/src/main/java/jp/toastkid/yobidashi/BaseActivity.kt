@@ -23,8 +23,8 @@ abstract class BaseActivity : AppCompatActivity() {
     /** Firebase analytics log sender.  */
     private var sender: LogSender? = null
 
-    /** Preference Applier.  */
     /**
+     * Preference Applier.
      * FIXME: remove it
      * @return [PreferenceApplier]
      */
@@ -84,8 +84,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Send log.
+     *
      * @param key
-     * *
      * @param bundle
      */
     @JvmOverloads protected fun sendLog(key: String, bundle: Bundle = Bundle.EMPTY) {
@@ -109,7 +109,3 @@ abstract class BaseActivity : AppCompatActivity() {
 
     @StringRes protected abstract fun titleId(): Int
 }
-/**
- * Send empty parameter log.
- * @param key
- */

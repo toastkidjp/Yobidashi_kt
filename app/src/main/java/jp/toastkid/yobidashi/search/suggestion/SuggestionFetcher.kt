@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.search.suggestion
 
 import android.net.Uri
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.libs.Strings
 import okhttp3.*
 import timber.log.Timber
@@ -26,10 +25,10 @@ class SuggestionFetcher {
      * Fetch Web API result asynchronously.
 
      * @param query
-     * *
-     * @param consumer
+     *
+     * @param listCallback
      */
-    fun fetchAsync(query: String, consumer: Consumer<List<String>>) {
+    fun fetchAsync(query: String, listCallback: (List<String>) -> Unit) {
         val request = Request.Builder()
                 .url(makeSuggestUrl(query))
                 .build()
@@ -41,12 +40,7 @@ class SuggestionFetcher {
                 if (response.body() == null) {
                     return
                 }
-                try {
-                    consumer.accept(SuggestionParser().parse(response.body()!!.string()))
-                } catch (e: Exception) {
-                    Timber.e(e)
-                }
-
+                listCallback(SuggestionParser().parse(response.body()?.string() ?: ""))
             }
         })
     }
@@ -54,7 +48,7 @@ class SuggestionFetcher {
     /**
      * Make suggest Web API requesting URL.
      * @param query Query
-     * *
+     *
      * @return suggest Web API requesting URL
      */
     private fun makeSuggestUrl(query: String): String {
@@ -64,7 +58,7 @@ class SuggestionFetcher {
     /**
      * Find appropriate language.
      * @param query
-     * *
+     *
      * @return
      */
     private fun findHl(query: String): String {

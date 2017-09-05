@@ -69,9 +69,9 @@ internal class LoadedAction (
     /**
      * Store image file.
      * @param context
-     * *
+     *
      * @param image
-     * *
+     *
      * @throws FileNotFoundException
      */
     @Throws(FileNotFoundException::class)
@@ -91,7 +91,7 @@ internal class LoadedAction (
     /**
      * Inform done with action.
      * @param context
-     * *
+     *
      * @param image
      */
     private fun informDone(context: Context, image: Bitmap) {

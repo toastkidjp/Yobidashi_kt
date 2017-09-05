@@ -22,13 +22,13 @@ object CustomTabsFactory {
     /**
 
      * @param context
-     * *
+     *
      * @param backgroundColor
-     * *
+     *
      * @param fontColor
-     * *
+     *
      * @param iconId
-     * *
+     *
      * @return
      */
     fun make(

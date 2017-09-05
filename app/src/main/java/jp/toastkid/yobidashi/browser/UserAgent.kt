@@ -48,7 +48,7 @@ enum class UserAgent private constructor(private val title: String, private val 
         /**
          * Show selection dialog.
          * @param snackbarParent
-         * *
+         *
          * @param callback
          */
         fun showSelectionDialog(

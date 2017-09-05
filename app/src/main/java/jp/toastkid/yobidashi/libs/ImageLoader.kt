@@ -27,11 +27,11 @@ object ImageLoader {
     </pre> *
 
      * @param context Context
-     * *
+     *
      * @param uri Image path uri
-     * *
+     *
      * @return [BitmapDrawable]
-     * *
+     *
      * @throws IOException
      */
     @Throws(IOException::class)
@@ -46,11 +46,11 @@ object ImageLoader {
     /**
 
      * @param context
-     * *
+     *
      * @param uri
-     * *
+     *
      * @return
-     * *
+     *
      * @throws IOException
      */
     @Throws(IOException::class)
@@ -66,7 +66,7 @@ object ImageLoader {
      * Set image to passed ImageView.
 
      * @param iv ImageView
-     * *
+     *
      * @param imagePath Image file path
      */
     fun setImageToImageView(iv: ImageView, imagePath: String) {

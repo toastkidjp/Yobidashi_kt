@@ -36,7 +36,7 @@ class DailyCalendarReceiver : BroadcastReceiver() {
         /**
          * Make notification.
          * @param context
-         * *
+         *
          * @return
          */
         private fun makeNotification(context: Context): Notification {

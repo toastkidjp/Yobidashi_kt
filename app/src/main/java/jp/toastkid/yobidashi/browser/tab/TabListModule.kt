@@ -77,7 +77,7 @@ class TabListModule(
      * Initialize recyclerView.
 
      * @param recyclerView
-     * *
+     *
      * @param tabAdapter
      */
     private fun initRecyclerView(recyclerView: RecyclerView) {

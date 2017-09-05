@@ -76,7 +76,7 @@ class PlanningPokerActivity : BaseActivity() {
         /**
          * Make this activity launcher intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context): Intent {

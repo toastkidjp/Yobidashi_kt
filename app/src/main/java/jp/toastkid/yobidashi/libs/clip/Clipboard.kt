@@ -24,7 +24,7 @@ object Clipboard {
      * Insert passed text to primary clip.
 
      * @param context
-     * *
+     *
      * @param text
      */
     fun clip(context: Context, text: String) {

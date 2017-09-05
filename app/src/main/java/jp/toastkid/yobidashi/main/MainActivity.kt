@@ -48,7 +48,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchFragment
+import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
@@ -76,9 +76,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
     /** Calendar.  */
     private var calendarFragment: CalendarFragment? = null
-
-    /** Search.  */
-    private var searchFragment: SearchFragment? = null
 
     /** Browser fragment.  */
     private lateinit var browserFragment: BrowserFragment
@@ -157,10 +154,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 )
                 return
             }
-            VALUE_EXTRA_LAUNCH_SEARCH -> {
-                switchToSearch()
-                return
-            }
         }
 
         if (calledIntent.hasExtra(KEY_EXTRA_MONTH)) {
@@ -184,7 +177,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 loadUri(Uri.parse(preferenceApplier.homeUrl))
             }
             StartUp.SEARCH -> {
-                switchToSearch()
+                startActivity(SearchActivity.makeIntent(this))
             }
         }
 
@@ -256,18 +249,13 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
      * @param toolbar
      */
     private fun initDrawer(toolbar: Toolbar) {
-        val toggle = object : ActionBarDrawerToggle(
+        val toggle = ActionBarDrawerToggle(
                 this,
                 binding.drawerLayout,
                 toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close
-        ) {
-            override fun onDrawerStateChanged(newState: Int) {
-                super.onDrawerStateChanged(newState)
-                searchFragment?.hideKeyboard()
-            }
-        }
+        )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
@@ -281,7 +269,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             when (item.itemId) {
                 R.id.nav_search -> {
                     sendLog("nav_search")
-                    switchToSearch()
+                    startActivity(SearchActivity.makeIntent(this))
                 }
                 R.id.nav_search_history -> {
                     sendLog("nav_srch_hstry")
@@ -387,13 +375,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         if (headerView != null) {
             navBackground = headerView.findViewById(R.id.nav_header_background)
         }
-    }
-
-    private fun switchToSearch() {
-        if (searchFragment == null) {
-            searchFragment = SearchFragment()
-        }
-        replaceFragment(searchFragment as SearchFragment)
     }
 
     override fun onBackPressed() {
@@ -511,7 +492,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 return
             }
             Command.OPEN_SEARCH -> {
-                switchToSearch()
+                startActivity(SearchActivity.makeIntent(this))
                 return
             }
             Command.OPEN_HOME -> {
@@ -536,12 +517,15 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK || data == null) {
             return
         }
         when (requestCode) {
             ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE
                 -> if (data?.data != null) {loadUri(data.data)}
+            SearchActivity.REQUERST_CODE -> {
+                data.getStringExtra("query")
+            }
         }
     }
 
@@ -561,13 +545,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         /** For using daily alarm.  */
         private val KEY_EXTRA_DOM = "dom"
 
-        /** For using search intent.  */
-        private val VALUE_EXTRA_LAUNCH_SEARCH = "jp.toastkid.yobidashi.search"
-
         /**
          * Make launcher intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context): Intent {
@@ -579,7 +560,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         /**
          * Make browser intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeBrowserIntent(context: Context, uri: Uri): Intent {
@@ -593,7 +574,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         /**
          * Make launcher intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent {
@@ -603,28 +584,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             return intent
         }
 
-
         /**
          * Make launcher intent with search query.
+         *
          * @param context
-         * *
-         * @return launcher intent
-         */
-        fun makeSearchLauncherIntent(
-                context: Context
-        ): Intent {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.setAction(VALUE_EXTRA_LAUNCH_SEARCH)
-            return intent
-        }
-
-        /**
-         * Make launcher intent with search query.
-         * @param context
-         * *
          * @param query
-         * *
+         *
          * @return launcher intent
          */
         fun makeSearchIntent(
@@ -632,7 +597,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 query: String
         ): Intent {
             val intent = Intent(context, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             if (query.isNotEmpty()) {
                 intent.putExtra(SearchManager.QUERY, query)
             }

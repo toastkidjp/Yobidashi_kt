@@ -5,15 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v7.widget.LinearLayoutManager
-import io.reactivex.functions.Consumer
-
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityArchivesBinding
 import jp.toastkid.yobidashi.libs.Toaster
 
 /**
+ * Activity of archives.
+ *
  * @author toastkidjp
  */
 class ArchivesActivity : BaseActivity() {
@@ -27,7 +28,7 @@ class ArchivesActivity : BaseActivity() {
         binding!!.archivesView.layoutManager = LinearLayoutManager(this)
         val adapter = Adapter(
                 this,
-                Consumer<String> { filePath ->
+                { filePath ->
                     val intent = Intent()
                     intent.putExtra("FILE_NAME", filePath)
                     setResult(Activity.RESULT_OK, intent)
@@ -41,9 +42,7 @@ class ArchivesActivity : BaseActivity() {
         binding!!.archivesView.adapter = adapter
     }
 
-    override fun titleId(): Int {
-        return R.string.title_archives
-    }
+    @StringRes override fun titleId(): Int = R.string.title_archives
 
     companion object {
 
@@ -52,7 +51,7 @@ class ArchivesActivity : BaseActivity() {
         /**
          * Make launcher intent.
          * @param context
-         * *
+         *
          * @return
          */
         fun makeIntent(context: Context): Intent {

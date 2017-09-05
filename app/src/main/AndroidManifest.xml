@@ -44,16 +44,17 @@
             </intent-filter>
         </activity-alias>
 
-        <activity-alias
+        <activity
             android:name=".search.SearchActivity"
-            android:targetActivity=".main.MainActivity"
             android:label="@string/title_search"
+            android:theme="@style/AppTheme.Translucent"
+            android:configChanges="orientation|screenSize"
             >
             <intent-filter>
                 <action android:name="android.intent.action.WEB_SEARCH" />
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-        </activity-alias>
+        </activity>
 
         <activity
             android:name=".settings.SettingsActivity"
@@ -135,6 +136,12 @@
         <activity
             android:name=".browser.bookmark.BookmarkActivity"
             android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            />
+        <activity
+            android:name=".browser.tab.TabHistoryActivity"
+            android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />

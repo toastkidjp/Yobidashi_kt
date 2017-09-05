@@ -15,6 +15,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.UserAgent
 import jp.toastkid.yobidashi.browser.WebViewFactory
@@ -59,9 +60,9 @@ class TabAdapter(
 
     private var backOrForwardProgress: Boolean = false
 
-    private val favicons: Storeroom
-
     private val tabsScreenshots: Storeroom
+
+    private val faviconApplier: FaviconApplier = FaviconApplier(progress.context)
 
     private val preferenceApplier: PreferenceApplier
 
@@ -70,8 +71,6 @@ class TabAdapter(
 
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
-
-        favicons = Storeroom(webView.context, "favicons")
 
         tabsScreenshots = Storeroom(webView.context, "tabs/screenshots")
         preferenceApplier = PreferenceApplier(webView.context)
@@ -121,7 +120,7 @@ class TabAdapter(
                                         view.context,
                                         title,
                                         urlstr,
-                                        makeFaviconPath(urlstr)
+                                        faviconApplier.makePath(urlstr)
                                 )
                                 .insert()
                     }
@@ -156,8 +155,7 @@ class TabAdapter(
             override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
                 super.onReceivedIcon(view, favicon)
                 if (view?.url != null && favicon != null) {
-                    val file = favicons.assignNewFile(Uri.parse(view.url).host + ".png")
-                    Bitmaps.compress(favicon, file)
+                    Bitmaps.compress(favicon, faviconApplier.assignFile(view.url))
                 }
             }
         }
@@ -239,13 +237,9 @@ class TabAdapter(
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
-                    .open(webView.context.getDir("favicons", Context.MODE_PRIVATE).path);
+                    .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path);
         }
         return webView
-    }
-
-    private fun makeFaviconPath(urlstr: String): String {
-        return favicons.assignNewFile(Uri.parse(urlstr).host + ".png").absolutePath
     }
 
     private fun saveNewThumbnail() {
@@ -418,7 +412,7 @@ class TabAdapter(
      * Load archive file.
 
      * @param archiveFile
-     * *
+     *
      * @throws IOException
      */
     @Throws(IOException::class)
@@ -518,7 +512,7 @@ class TabAdapter(
     fun addBookmark(callback: () -> Unit) {
         val context = webView.context
         BookmarkInsertion(
-                context, webView.title, webView.url, makeFaviconPath(webView.url), "root").insert()
+                context, webView.title, webView.url, faviconApplier.makePath(webView.url), "root").insert()
         Toaster.snackLong(
                 webView,
                 context.getString(R.string.message_done_added_bookmark),
@@ -526,6 +520,10 @@ class TabAdapter(
                 View.OnClickListener { _ -> callback()},
                 colorPair
         )
+    }
+
+    internal fun currentTab(): Tab {
+        return tabList.get(index())
     }
 
 }

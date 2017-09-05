@@ -8,13 +8,13 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.calendar.alarm.DailyCalendarReceiver
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.search.SearchFragment
+import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 
 /**
  * Factory of [PendingIntent].
-
+ *
  * @author toastkidjp
  */
 object PendingIntentFactory {
@@ -22,18 +22,18 @@ object PendingIntentFactory {
     /**
      * Make launch search intent.
      * @param context
-     * *
-     * @return [SearchFragment]'s pending intent
+     *
+     * @return [SearchActivity]'s pending intent
      */
     fun makeSearchLauncher(context: Context): PendingIntent {
-        val intent = MainActivity.makeSearchLauncherIntent(context)
+        val intent = SearchActivity.makeIntent(context)
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     /**
      * Make launch color settings intent.
      * @param context
-     * *
+     *
      * @return [ColorSettingActivity]'s pending intent
      */
     fun makeColorSettingsIntent(context: Context): PendingIntent {
@@ -44,7 +44,7 @@ object PendingIntentFactory {
     /**
      * Make launch main activity.
      * @param context
-     * *
+     *
      * @return
      */
     fun main(context: Context): PendingIntent {
@@ -59,7 +59,7 @@ object PendingIntentFactory {
     /**
      * Daily notification intent.
      * @param context
-     * *
+     *
      * @return
      */
     fun daily(context: Context): PendingIntent {
@@ -74,11 +74,11 @@ object PendingIntentFactory {
     /**
      * Make calling calendar intent.
      * @param context
-     * *
+     *
      * @param month
-     * *
+     *
      * @param dayOfMonth
-     * *
+     *
      * @return
      */
     fun calendar(
@@ -95,7 +95,7 @@ object PendingIntentFactory {
      * Return Launcher Intent of Launcher Activity.
 
      * @param context
-     * *
+     *
      * @return
      */
     fun launcher(context: Context): PendingIntent {
@@ -110,11 +110,11 @@ object PendingIntentFactory {
     /**
      * Make adding favorite search intent.
      * @param context
-     * *
+     *
      * @param category
-     * *
+     *
      * @param query
-     * *
+     *
      * @return [AddingFavoriteSearchService]'s pending intent
      */
     fun favoriteSearchAdding(
@@ -131,7 +131,7 @@ object PendingIntentFactory {
     /**
      * Make barcode reader intent.
      * @param context
-     * *
+     *
      * @return
      */
     fun barcode(context: Context): PendingIntent {

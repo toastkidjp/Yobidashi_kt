@@ -19,7 +19,7 @@ class Urls private constructor() {
         /**
          * Return passed url is invalid.
          * @param url
-         * *
+         *
          * @return
          */
         fun isInvalidUrl(url: String): Boolean {
@@ -29,7 +29,7 @@ class Urls private constructor() {
         /**
          * Return passed url is valid.
          * @param url
-         * *
+         *
          * @return
          */
         fun isValidUrl(url: String): Boolean {

@@ -19,7 +19,7 @@ object Toaster {
     /**
      * Short toasting.
      * @param context
-     * *
+     *
      * @param messageId
      */
     fun tShort(
@@ -32,7 +32,7 @@ object Toaster {
     /**
      * Short toasting.
      * @param context
-     * *
+     *
      * @param message
      */
     fun tShort(
@@ -46,9 +46,9 @@ object Toaster {
      * Show simple snackbar on short time.
 
      * @param view
-     * *
+     *
      * @param messageId
-     * *
+     *
      * @param pair
      */
     fun snackShort(
@@ -63,9 +63,9 @@ object Toaster {
      * Show simple snackbar on short time.
 
      * @param view
-     * *
+     *
      * @param message
-     * *
+     *
      * @param pair
      */
     fun snackShort(
@@ -79,9 +79,9 @@ object Toaster {
     /**
      * Show simple snackbar on indefinite duration.
      * @param view
-     * *
+     *
      * @param message
-     * *
+     *
      * @param pair
      */
     fun snackIndefinite(
@@ -96,11 +96,11 @@ object Toaster {
      * Show simple snackbar on specified duration.
 
      * @param view
-     * *
+     *
      * @param message
-     * *
+     *
      * @param pair
-     * *
+     *
      * @param duration
      */
     fun snack(
@@ -121,13 +121,13 @@ object Toaster {
     /**
      * Show snackbar on long time.
      * @param view
-     * *
+     *
      * @param message
-     * *
+     *
      * @param actionTextId
-     * *
+     *
      * @param action
-     * *
+     *
      * @param pair
      */
     fun snackLong(
@@ -150,13 +150,13 @@ object Toaster {
     /**
      * Show snackbar on long time.
      * @param view
-     * *
+     *
      * @param messageId
-     * *
+     *
      * @param actionTextId
-     * *
+     *
      * @param action
-     * *
+     *
      * @param pair
      */
     fun snackLong(
@@ -179,13 +179,13 @@ object Toaster {
     /**
      * Show snackbar on long time.
      * @param view
-     * *
+     *
      * @param messageId
-     * *
+     *
      * @param actionTextId
-     * *
+     *
      * @param action
-     * *
+     *
      * @param pair
      */
     fun withAction(
@@ -201,13 +201,13 @@ object Toaster {
     /**
      * Show snackbar on long time.
      * @param view
-     * *
+     *
      * @param messageId
-     * *
+     *
      * @param actionTextId
-     * *
+     *
      * @param action
-     * *
+     *
      * @param pair
      */
     private fun withAction(

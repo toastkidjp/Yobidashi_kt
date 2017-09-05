@@ -43,9 +43,9 @@ object SiteSearch {
      * Make URL.
 
      * @param url
-     * *
+     *
      * @param rawQuery
-     * *
+     *
      * @return
      */
     private fun makeUrl(url: String, rawQuery: String): String {

@@ -93,7 +93,7 @@ class ColorSettingActivity : BaseActivity() {
     /**
      * Bind value and action to holder's view.
      * @param holder Holder
-     * *
+     *
      * @param color  [SavedColor] object
      */
     private fun bindView(holder: SavedColorHolder, color: SavedColor) {
@@ -209,7 +209,7 @@ class ColorSettingActivity : BaseActivity() {
         /**
          * Make launcher intent.
          * @param context Context
-         * *
+         *
          * @return [Intent]
          */
         fun makeIntent(context: Context): Intent {

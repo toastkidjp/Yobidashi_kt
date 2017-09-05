@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
@@ -87,7 +86,7 @@ class FavoriteSearchFragment : BaseFragment() {
     /**
      * Start search action.
      * @param category Search category
-     * *
+     *
      * @param query    Search query
      */
     private fun startSearch(category: SearchCategory, query: String) {
@@ -100,7 +99,7 @@ class FavoriteSearchFragment : BaseFragment() {
         inflater!!.inflate(R.menu.favorite_toolbar_menu, menu)
 
         menu!!.findItem(R.id.favorite_toolbar_menu_clear).setOnMenuItemClickListener { v ->
-            Clear(binding!!.favoriteSearchView, adapter!!.relation.deleter()).invoke(Runnable {  })
+            Clear(binding!!.favoriteSearchView, adapter!!.relation.deleter()).invoke()
             true
         }
 
@@ -117,7 +116,7 @@ class FavoriteSearchFragment : BaseFragment() {
     private fun invokeAddition() {
         Addition(
                 binding!!.additionArea,
-                Consumer<String> { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
+                { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
         ).invoke()
     }
 

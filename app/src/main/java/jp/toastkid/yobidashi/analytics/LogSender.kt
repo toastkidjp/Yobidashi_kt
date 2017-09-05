@@ -29,7 +29,7 @@ class LogSender
     /**
      * Send log.
      * @param key
-     * *
+     *
      * @param bundle
      */
     @JvmOverloads fun send(key: String, bundle: Bundle = Bundle.EMPTY) {

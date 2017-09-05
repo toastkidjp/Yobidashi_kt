@@ -14,7 +14,7 @@ object Inputs {
     /**
      * Show software keyboard.
      * @param activity
-     * *
+     *
      * @param editText
      */
     fun showKeyboard(activity: Activity, editText: EditText) {

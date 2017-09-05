@@ -7,7 +7,7 @@ import java.util.*
  */
 internal class Tab {
 
-    private val histories: MutableList<History>
+    internal val histories: MutableList<History>
 
     private var index: Int = 0
 
@@ -49,4 +49,8 @@ internal class Tab {
             }
             return histories[index]
         }
+
+    internal fun currentIndex() : Int {
+        return index
+    }
 }

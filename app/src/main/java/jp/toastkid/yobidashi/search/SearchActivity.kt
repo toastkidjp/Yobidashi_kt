@@ -1,30 +1,33 @@
 package jp.toastkid.yobidashi.search
 
+import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.v4.graphics.ColorUtils
+import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
+import jp.toastkid.yobidashi.databinding.ActivitySearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Colors
+import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
@@ -36,10 +39,10 @@ import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 
  * @author toastkidjp
  */
-class SearchFragment : BaseFragment() {
+class SearchActivity : BaseActivity() {
 
     /** View binder.  */
-    private var binding: FragmentSearchBinding? = null
+    private var binding: ActivitySearchBinding? = null
 
     /** Disposables.  */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -55,15 +58,8 @@ class SearchFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater?,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<FragmentSearchBinding>(inflater, LAYOUT_ID, container, false)
+        setContentView(LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
         SearchCategorySpinnerInitializer.initialize(binding?.searchCategories as Spinner)
 
@@ -78,11 +74,9 @@ class SearchFragment : BaseFragment() {
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
                 binding?.searchInput as EditText,
-                Consumer<String> { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
-                Runnable { this.hideKeyboard() }
+                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
+                this::hideKeyboard
         )
-
-        setHasOptionsMenu(true)
 
         binding?.scroll?.setOnTouchListener({ v, event ->
             hideKeyboard()
@@ -93,7 +87,39 @@ class SearchFragment : BaseFragment() {
             binding?.searchBar?.transitionName = "share"
         }
 
-        return binding?.root
+        initToolbar(binding?.toolbar as Toolbar)
+        binding?.toolbar?.setNavigationIcon(null)
+        binding?.toolbar?.setPadding(0,0,0,0);
+        binding?.toolbar?.setContentInsetsAbsolute(0,0);
+        binding?.toolbar?.inflateMenu(R.menu.search_menu)
+        val menu = binding?.toolbar?.menu
+        menu?.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
+        menu?.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+    }
+
+    override fun clickMenu(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        return when (itemId) {
+            R.id.suggestion_check -> {
+                preferenceApplier.switchEnableSuggestion()
+                item.isChecked = preferenceApplier.isEnableSuggestion
+                true
+            }
+            R.id.history_check -> {
+                preferenceApplier.switchEnableSearchHistory()
+                item.isChecked = preferenceApplier.isEnableSearchHistory
+                true
+            }
+            R.id.open_favorite_search -> {
+                startActivity(FavoriteSearchActivity.makeIntent(this))
+                true
+            }
+            R.id.open_search_history -> {
+                startActivity(SearchHistoryActivity.makeIntent(this))
+                true
+            }
+            else -> super.clickMenu(item);
+        }
     }
 
     private fun initFavoriteModule() {
@@ -112,9 +138,7 @@ class SearchFragment : BaseFragment() {
                     e.onComplete()
                 }
                         .subscribeOn(Schedulers.newThread())
-                        .subscribe {
-                            favoriteModule.query("")
-                        }
+                        .subscribe { favoriteModule.query("") }
         )
     }
 
@@ -138,48 +162,20 @@ class SearchFragment : BaseFragment() {
                 }
                         .subscribeOn(Schedulers.newThread())
                         .subscribe {
-                            if (preferenceApplier().isEnableSearchHistory) {
+                            if (preferenceApplier.isEnableSearchHistory) {
                                 historyModule.query("")
                             }
                         }
         )
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.search_menu, menu)
-
-        val preferenceApplier: PreferenceApplier = preferenceApplier()
-        val item = menu!!.findItem(R.id.suggestion_check)
-        item.isChecked = preferenceApplier.isEnableSuggestion
-        item.setOnMenuItemClickListener { i ->
-            preferenceApplier.switchEnableSuggestion()
-            i.isChecked = preferenceApplier.isEnableSuggestion
-            true
-        }
-
-        val history = menu.findItem(R.id.history_check)
-        history.isChecked = preferenceApplier.isEnableSearchHistory
-        history.setOnMenuItemClickListener { i ->
-            preferenceApplier.switchEnableSearchHistory()
-            i.isChecked = preferenceApplier.isEnableSearchHistory
-            true
-        }
-
-        menu.findItem(R.id.open_favorite_search).setOnMenuItemClickListener {
-            activity.startActivity(FavoriteSearchActivity.makeIntent(activity))
-            true
-        }
-
-        menu.findItem(R.id.open_search_history).setOnMenuItemClickListener {
-            activity.startActivity(SearchHistoryActivity.makeIntent(activity))
-            true
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        Inputs.toggle(activity)
+        Inputs.toggle(this)
+
+        applyColorToToolbar(binding?.toolbar as Toolbar)
+
+        ImageLoader.setImageToImageView(binding?.background as ImageView, backgroundImagePath)
     }
 
     private fun initSearchInput() {
@@ -199,7 +195,6 @@ class SearchFragment : BaseFragment() {
 
                 val key = s.toString()
 
-                val preferenceApplier: PreferenceApplier = preferenceApplier()
                 if (preferenceApplier.isEnableSearchHistory && historyModule != null) {
                     historyModule.query(s)
                 }
@@ -226,29 +221,29 @@ class SearchFragment : BaseFragment() {
         val colorPair : ColorPair = colorPair()
         @ColorInt val bgColor = colorPair.bgColor()
         @ColorInt val fontColor = colorPair.fontColor()
-        Colors.setEditTextColor(binding?.searchInput as EditText, bgColor)
+        Colors.setEditTextColor(binding?.searchInput as EditText, fontColor)
 
         binding?.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
-        binding?.searchAction?.setTextColor(fontColor)
+        binding?.searchAction?.setColorFilter(fontColor)
         binding?.searchAction?.setOnClickListener({ view ->
             search(
                     binding?.searchCategories?.selectedItem.toString(),
                     binding?.searchInput?.text.toString()
             )
         })
-        binding?.searchClear?.setColorFilter(bgColor)
-        binding?.searchInputBorder?.setBackgroundColor(bgColor)
+        binding?.searchClear?.setColorFilter(fontColor)
+        binding?.searchInputBorder?.setBackgroundColor(fontColor)
     }
 
     /**
      * Open search result.
 
      * @param category search category
-     * *
+     *
      * @param query    search query
      */
     private fun search(category: String, query: String) {
-        disposables.add(SearchAction(activity, category, query).invoke())
+        disposables.add(SearchAction(this, category, query).invoke())
     }
 
     /**
@@ -265,8 +260,8 @@ class SearchFragment : BaseFragment() {
         hideKeyboard()
     }
 
-    override fun onDetach() {
-        super.onDetach()
+    override fun onDestroy() {
+        super.onDestroy()
         disposables.dispose()
         favoriteModule.dispose()
         historyModule.dispose()
@@ -280,6 +275,14 @@ class SearchFragment : BaseFragment() {
     companion object {
 
         /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.fragment_search
+        private val LAYOUT_ID = R.layout.activity_search
+
+        fun makeIntent(context: Context): Intent {
+            val intent = Intent(context, SearchActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            return intent;
+        }
+
+        val REQUERST_CODE: Int = 21
     }
 }

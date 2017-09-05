@@ -75,7 +75,7 @@ class BackgroundSettingActivity : BaseActivity() {
     }
 
     private fun clearImages() {
-        ClearImages(this, Runnable {
+        ClearImages(this, {
             sendLog("clear_bg_img")
             storeroom!!.clean()
             Toaster.snackShort(
@@ -121,7 +121,7 @@ class BackgroundSettingActivity : BaseActivity() {
         /**
          * Make launcher intent.
          * @param context Context
-         * *
+         *
          * @return [Intent]
          */
         fun makeIntent(context: Context): Intent {

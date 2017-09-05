@@ -18,11 +18,11 @@ class HistoryModule
 /**
  * Initialize with Data Binding object and so on...
  * @param binding
- * *
+ *
  * @param searchCallback
- * *
+ *
  * @param onTouch
- * *
+ *
  * @param onClickAdd
  */
 (
@@ -82,10 +82,10 @@ class HistoryModule
      */
     fun clearHistory(view: View) {
         Clear(binding.root, relation.deleter())
-                .invoke(Runnable {
+                .invoke{
                     moduleAdapter.clear()
                     hide()
-                })
+                }
     }
 
     /**

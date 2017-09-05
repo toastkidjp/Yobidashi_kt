@@ -14,7 +14,7 @@ internal class Caches
  * Initialize with context.
 
  * @param context
- * *
+ *
  * @param dirName
  */
 (context: Context, dirName: String) : StorageWrapper(context, dirName) {

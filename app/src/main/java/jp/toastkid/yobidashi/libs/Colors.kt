@@ -17,7 +17,7 @@ object Colors {
     /**
      * Set specified color to passed EditText.
      * @param editText
-     * *
+     *
      * @param fontColor
      */
     fun setEditTextColor(editText: EditText, @ColorInt fontColor: Int) {

@@ -16,24 +16,22 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Menu's adapter.
-
+ *
+ * Initialize with context and menu click event consumer.
+ *
+ * @param context
+ * @param consumer
+ *
  * @author toastkidjp
  */
-internal class Adapter
-/**
- * Initialize with context and menu click event consumer.
-
- * @param context
- * *
- * @param consumer
- */
-(context: Context, consumer: Consumer<Menu>) : RecyclerView.Adapter<ViewHolder>() {
+internal class Adapter(context: Context, consumer: Consumer<Menu>)
+    : RecyclerView.Adapter<ViewHolder>() {
 
     /** Layout inflater.  */
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     /** Menu.  */
-    private val menus: Array<Menu>
+    private val menus: Array<Menu> = Menu.values()
 
     /** Color pair.  */
     private val colorPair: ColorPair
@@ -45,8 +43,6 @@ internal class Adapter
     private val disposable: Disposable?
 
     init {
-        inflater = LayoutInflater.from(context)
-        menus = Menu.values()
         val preferenceApplier = PreferenceApplier(context)
         colorPair = preferenceApplier.colorPair()
         menuPublishProcessor = PublishProcessor.create<Menu>()

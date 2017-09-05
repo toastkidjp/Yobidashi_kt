@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi.R
 /**
  * @author toastkidjp
  */
-internal class ClearImages(private val context: Context, private val action: Runnable) {
+internal class ClearImages(private val context: Context, private val action: () -> Unit) {
 
     operator fun invoke() {
         AlertDialog.Builder(context)
@@ -17,7 +17,7 @@ internal class ClearImages(private val context: Context, private val action: Run
                 .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok) { d, i ->
-                    action.run()
+                    action()
                     d.dismiss()
                 }
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
