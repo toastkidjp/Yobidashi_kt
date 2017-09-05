@@ -266,4 +266,5 @@
     <string name="message_add_bookmark">Would you like to add bookmark?</string>
     <string name="hint_find_in_page">Input keyword of find-in-page.</string>
     <string name="hint_generate_barcode">Please could you input any text...</string>
+    <string name="title_tab_histories">Tab histories</string>
 </resources>

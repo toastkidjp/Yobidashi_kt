@@ -33,6 +33,8 @@ internal enum class Menu(
 
     SETTING(R.string.title_settings, R.drawable.ic_settings),
 
+    TAB_HISTORY(R.string.title_tab_histories, R.drawable.ic_history),
+
     USER_AGENT(R.string.title_user_agent, R.drawable.ic_user_agent),
 
     WIFI_SETTING(R.string.title_settings_wifi, R.drawable.ic_wifi),

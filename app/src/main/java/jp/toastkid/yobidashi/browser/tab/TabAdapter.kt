@@ -528,5 +528,9 @@ class TabAdapter(
         )
     }
 
+    internal fun currentTab(): Tab {
+        return tabList.get(index())
+    }
+
 }
 

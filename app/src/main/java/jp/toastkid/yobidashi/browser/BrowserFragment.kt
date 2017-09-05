@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
@@ -37,6 +38,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.tab.TabAdapter
+import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
 import jp.toastkid.yobidashi.browser.tab.TabListModule
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
@@ -247,6 +249,16 @@ class BrowserFragment : BaseFragment() {
             Menu.SETTING -> {
                 startActivity(SettingsActivity.makeIntent(context))
                 return
+            }
+            Menu.TAB_HISTORY -> {
+                val scaleUpAnimation = ActivityOptions.makeScaleUpAnimation(
+                        binding?.menusView, 0, 0,
+                        binding?.menusView?.width ?: 0, binding?.menusView?.height ?: 0)
+                startActivityForResult(
+                        TabHistoryActivity.makeIntent(context, tabs.currentTab()),
+                        TabHistoryActivity.REQUEST_CODE,
+                        scaleUpAnimation.toBundle()
+                        )
             }
             Menu.USER_AGENT -> {
                 UserAgent.showSelectionDialog(
@@ -530,6 +542,9 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             ViewHistoryActivity.REQUEST_CODE -> {
+                if (data.data != null) {tabs.loadUrl(data.data.toString())}
+            }
+            TabHistoryActivity.REQUEST_CODE -> {
                 if (data.data != null) {tabs.loadUrl(data.data.toString())}
             }
             REQUEST_OVERLAY_PERMISSION -> {
