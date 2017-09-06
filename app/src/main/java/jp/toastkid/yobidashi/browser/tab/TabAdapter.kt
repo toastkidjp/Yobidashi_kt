@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.tab
 import android.app.DownloadManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AlertDialog
@@ -11,9 +12,12 @@ import android.view.View
 import android.webkit.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.TitlePair
@@ -26,14 +30,19 @@ import jp.toastkid.yobidashi.browser.screenshots.Screenshot
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.Storeroom
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SiteSearch
+import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
+import okhttp3.Request
+import okhttp3.Response
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.net.HttpURLConnection
 
 
 /**
@@ -65,6 +74,8 @@ class TabAdapter(
     private val faviconApplier: FaviconApplier = FaviconApplier(progress.context)
 
     private val preferenceApplier: PreferenceApplier
+
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
         tabList = TabList.loadOrInit(progress.context)
@@ -171,7 +182,39 @@ class TabAdapter(
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
                 WebView.HitTestResult.IMAGE_TYPE, WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
-                    ImageDownloadAction(webView, hitResult).invoke()
+                    val url = hitResult.extra
+                    if (url.isEmpty()) {
+                        return@setOnLongClickListener false
+                    }
+                    AlertDialog.Builder(progress.context)
+                            .setTitle("Image: " + url)
+                            .setItems(R.array.image_menu, { dialog, which ->
+                                when (which) {
+                                    0 -> {
+                                        disposables.add(
+                                                storeImage(url, webView).subscribe{file ->
+                                                    preferenceApplier.backgroundImagePath = file.absolutePath
+                                                    Toaster.snackShort(
+                                                            webView,
+                                                            R.string.message_change_background_image,
+                                                            preferenceApplier.colorPair()
+                                                    )
+                                                }
+                                        )
+                                    }
+                                    1 -> disposables.add(storeImage(url, webView).subscribe({
+                                        Toaster.snackShort(
+                                                webView,
+                                                R.string.message_done_save,
+                                                preferenceApplier.colorPair()
+                                        )
+                                    }))
+                                    2 -> ImageDownloadAction(webView, hitResult).invoke()
+                                }
+                            })
+                            .setCancelable(true)
+                            .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
+                            .show()
                     false
                 }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
@@ -240,6 +283,23 @@ class TabAdapter(
                     .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path);
         }
         return webView
+    }
+
+    private fun storeImage(url: String, webView: WebView): Maybe<File> {
+        return Single.create<Response> { e ->
+            val client = HttpClientFactory.make()
+            e.onSuccess(client.newCall(Request.Builder().url(url).build()).execute())
+        }.subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .filter { it.code() == HttpURLConnection.HTTP_OK }
+                .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
+                .map {
+                    val storeroom = Storeroom(webView.context, BackgroundSettingActivity.BACKGROUND_DIR)
+                    val file = storeroom.assignNewFile(Uri.parse(url))
+                    Timber.i(file.absolutePath)
+                    Bitmaps.compress(it, file)
+                    file
+                }
     }
 
     private fun saveNewThumbnail() {
@@ -491,6 +551,7 @@ class TabAdapter(
             tabList.clear()
             tabsScreenshots.clean()
         }
+        disposables.dispose()
     }
 
     fun loadHome() {
