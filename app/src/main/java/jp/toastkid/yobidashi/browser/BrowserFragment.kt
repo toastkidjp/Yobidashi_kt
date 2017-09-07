@@ -545,8 +545,8 @@ class BrowserFragment : BaseFragment() {
                 if (intent.data != null) {tabs.loadUrl(intent.data.toString())}
             }
             TabHistoryActivity.REQUEST_CODE -> {
-                if (intent.hasExtra("index")) {
-                    tabs.moveTo(intent.getIntExtra("index", 0))
+                if (intent.hasExtra(TabHistoryActivity.EXTRA_KEY_INDEX)) {
+                    tabs.moveTo(intent.getIntExtra(TabHistoryActivity.EXTRA_KEY_INDEX, 0))
                 }
             }
             REQUEST_OVERLAY_PERMISSION -> {

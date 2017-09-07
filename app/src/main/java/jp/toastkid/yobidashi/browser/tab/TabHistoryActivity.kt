@@ -29,7 +29,7 @@ class TabHistoryActivity : BaseActivity() {
 
         val adapter = TabHistoryAdapter(this, JSON_ADAPTER.fromJson(tabJson) ?: Tab()) { index ->
             val intent = Intent()
-            intent.putExtra("index", index)
+            intent.putExtra(EXTRA_KEY_INDEX, index)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -55,6 +55,8 @@ class TabHistoryActivity : BaseActivity() {
         private val JSON_ADAPTER = Moshi.Builder().build().adapter(Tab::class.java)
 
         private val EXTRA_KEY_TAB = "tab"
+
+        val EXTRA_KEY_INDEX = "index"
 
         val REQUEST_CODE: Int = 24
 
