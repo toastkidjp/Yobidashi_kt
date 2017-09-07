@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -387,7 +388,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
         val fragment = supportFragmentManager.fragments[0]
         if (fragment == null) {
-            super.onBackPressed()
+            confirmExit()
             return
         }
         fragment as BaseFragment
@@ -396,7 +397,19 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             return
         }
 
-        super.onBackPressed()
+        confirmExit()
+    }
+
+    private fun confirmExit() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.confirmation)
+                .setMessage(R.string.message_confirm_exit)
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok, { d, i ->
+                    super.onBackPressed()
+                    d.dismiss()
+                })
+                .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
