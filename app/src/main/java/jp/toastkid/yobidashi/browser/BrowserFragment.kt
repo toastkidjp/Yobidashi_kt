@@ -209,7 +209,7 @@ class BrowserFragment : BaseFragment() {
             Menu.FORWARD -> {
                 val forward = tabs.forward()
                 if (forward.isNotEmpty()) {
-                    tabs.loadUrl(forward)
+                    tabs.loadUrl(forward, false)
                 }
                 return
             }
@@ -464,7 +464,7 @@ class BrowserFragment : BaseFragment() {
     private fun back(): Boolean {
         val back = tabs.back()
         if (back.isNotEmpty()) {
-            tabs.loadUrl(back)
+            tabs.loadUrl(back, false)
             return true
         }
         return false
@@ -565,9 +565,7 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
-    fun titlePairProcessor(): PublishProcessor<TitlePair> {
-        return titleProcessor
-    }
+    fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
 
     override fun onDestroy() {
         super.onDestroy()
