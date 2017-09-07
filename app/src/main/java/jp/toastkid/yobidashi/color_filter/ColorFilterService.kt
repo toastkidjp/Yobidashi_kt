@@ -8,12 +8,11 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-
 import jp.toastkid.yobidashi.R
 
 /**
  * Overlay Color filter.
-
+ *
  * @author toastkidjp
  */
 class ColorFilterService : Service() {
@@ -24,11 +23,10 @@ class ColorFilterService : Service() {
     /** Window manager.  */
     private var windowManager: WindowManager? = null
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent?): IBinder? = null
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        super.onCreate()
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val layoutParams = WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -39,7 +37,6 @@ class ColorFilterService : Service() {
         )
         filterView = LayoutInflater.from(this).inflate(R.layout.color_filter, null)
         windowManager!!.addView(filterView, layoutParams)
-        return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
