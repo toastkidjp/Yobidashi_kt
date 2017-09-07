@@ -65,7 +65,7 @@ class TabListModule(
                     .setCancelable(true)
                     .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                     .setPositiveButton(R.string.ok) { d, i ->
-                        tabAdapter.clear(adapter)
+                        tabAdapter.clear()
                         closeAction()
                         d.dismiss()
                     }

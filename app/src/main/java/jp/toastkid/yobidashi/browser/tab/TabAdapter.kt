@@ -548,12 +548,8 @@ class TabAdapter(
         loadUrl(preferenceApplier.homeUrl)
     }
 
-    internal fun clear(adapter: Adapter?) {
-        (0..tabList.size() - 1).forEach {
-            closeTab(it)
-            adapter?.notifyItemRemoved(it)
-        }
-        tabList.save()
+    internal fun clear() {
+        tabList.clear()
     }
 
     internal fun indexOf(tab: Tab): Int = tabList.indexOf(tab)

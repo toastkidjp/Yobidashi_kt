@@ -111,7 +111,7 @@ class BrowserFragment : BaseFragment() {
                 binding?.webViewContainer as FrameLayout,
                 { titleProcessor.onNext(it) },
                 { this.hideOption() },
-                { fragmentReplaceAction?.action(Command.OPEN_HOME) }
+                { fragmentManager.popBackStack() }
         )
 
         initMenus()
@@ -506,6 +506,10 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun hideTabList() {
+        if (tabs.size() == 0) {
+            fragmentManager.popBackStack()
+            return
+        }
         tabListModule?.hide()
         binding?.fab?.show()
     }
