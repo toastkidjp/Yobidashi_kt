@@ -325,11 +325,12 @@ class TabAdapter(
         openNewTab(preferenceApplier.homeUrl)
     }
 
-    internal fun openNewTab(url: String) {
+    private fun openNewTab(url: String) {
         val newTab = Tab()
-        newTab.addHistory(History.make(url, url))
         tabList.add(newTab)
         tabList.save()
+        setIndexByTab(newTab)
+        loadUrl(url)
     }
 
     private fun addHistory(title: String, url: String) {
@@ -364,13 +365,9 @@ class TabAdapter(
         setIndex(tabList.indexOf(tab))
     }
 
-    private fun checkIndex(newIndex: Int): Boolean {
-        return newIndex < 0 || tabList.size() <= newIndex
-    }
+    private fun checkIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
 
-    fun size(): Int {
-        return tabList.size()
-    }
+    fun size(): Int = tabList.size()
 
     fun reload() {
         webView.reload()
@@ -380,10 +377,11 @@ class TabAdapter(
         loadUrl(tabList.currentTab().latest.url())
     }
 
-    fun loadUrl(url: String) {
+    fun loadUrl(url: String, saveHistory: Boolean = true) {
         if (TextUtils.equals(webView.url, url)) {
             return
         }
+        backOrForwardProgress = !saveHistory
         webView.loadUrl(url)
     }
 
@@ -414,13 +412,9 @@ class TabAdapter(
         webView.clearFormData()
     }
 
-    fun currentUrl(): String {
-        return webView.url
-    }
+    fun currentUrl(): String = webView.url
 
-    fun currentTitle(): String {
-        return webView.title
-    }
+    fun currentTitle(): String = webView.title
 
     fun showPageInformation() {
         PageInformationDialog(webView).show()
@@ -487,9 +481,7 @@ class TabAdapter(
      *
      * @return
      */
-    internal fun getTabByIndex(index: Int): Tab {
-        return tabList.get(index)
-    }
+    internal fun getTabByIndex(index: Int): Tab = tabList.get(index)
 
     /**
      * Close specified index' tab.
@@ -536,9 +528,7 @@ class TabAdapter(
         webView.findNext(true)
     }
 
-    fun index(): Int {
-        return tabList.getIndex()
-    }
+    fun index(): Int = tabList.getIndex()
 
     /**
      * Dispose this object's fields.
@@ -566,9 +556,7 @@ class TabAdapter(
         tabList.save()
     }
 
-    internal fun indexOf(tab: Tab): Int {
-        return tabList.indexOf(tab)
-    }
+    internal fun indexOf(tab: Tab): Int = tabList.indexOf(tab)
 
     fun addBookmark(callback: () -> Unit) {
         val context = webView.context
@@ -583,8 +571,14 @@ class TabAdapter(
         )
     }
 
-    internal fun currentTab(): Tab {
-        return tabList.get(index())
+    internal fun currentTab(): Tab = tabList.get(index())
+
+    fun moveTo(i: Int) {
+        val url = currentTab().moveAndGet(i)
+        if (url.isEmpty()) {
+            return
+        }
+        loadUrl(url, false)
     }
 
 }

@@ -520,14 +520,14 @@ class BrowserFragment : BaseFragment() {
         return R.string.title_browser
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK || data == null) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        if (resultCode != Activity.RESULT_OK || intent == null) {
             return
         }
         when (requestCode) {
             REQUEST_CODE_VIEW_ARCHIVE -> {
                 try {
-                    tabs.loadArchive(File(data.getStringExtra("FILE_NAME")))
+                    tabs.loadArchive(File(intent.getStringExtra("FILE_NAME")))
                 } catch (e: IOException) {
                     Timber.e(e)
                 } catch (error: OutOfMemoryError) {
@@ -538,14 +538,16 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             REQUEST_CODE_VOICE_SEARCH -> {
-                disposables.add(VoiceSearch.processResult(activity, data))
+                disposables.add(VoiceSearch.processResult(activity, intent))
                 return
             }
             ViewHistoryActivity.REQUEST_CODE -> {
-                if (data.data != null) {tabs.loadUrl(data.data.toString())}
+                if (intent.data != null) {tabs.loadUrl(intent.data.toString())}
             }
             TabHistoryActivity.REQUEST_CODE -> {
-                if (data.data != null) {tabs.loadUrl(data.data.toString())}
+                if (intent.hasExtra("index")) {
+                    tabs.moveTo(intent.getIntExtra("index", 0))
+                }
             }
             REQUEST_OVERLAY_PERMISSION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {

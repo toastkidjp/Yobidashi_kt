@@ -26,7 +26,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 internal class TabHistoryAdapter(
         private val context: Context,
         private val tab: Tab,
-        private val clickCallback: (String) -> Unit
+        private val clickCallback: (Int) -> Unit
 ) : RecyclerView.Adapter<TabHistoryViewHolder>() {
 
     /** For getting Data binding object.  */
@@ -45,7 +45,7 @@ internal class TabHistoryAdapter(
 
     override fun onBindViewHolder(holder: TabHistoryViewHolder, position: Int) {
         val history = tab.histories.get(position)
-        holder.itemView.setOnClickListener { _ -> clickCallback(history.url()) }
+        holder.itemView.setOnClickListener { _ -> clickCallback(position) }
         holder.setTitle(history.title())
         holder.setUrl(history.url())
         holder.setBookmarkAction(
@@ -59,8 +59,6 @@ internal class TabHistoryAdapter(
         );
     }
 
-    override fun getItemCount(): Int {
-        return tab.histories.size
-    }
+    override fun getItemCount(): Int = tab.histories.size
 
 }

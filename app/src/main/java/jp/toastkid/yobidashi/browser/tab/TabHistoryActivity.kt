@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.squareup.moshi.Moshi
@@ -28,9 +27,9 @@ class TabHistoryActivity : BaseActivity() {
 
         val tabJson = intent.getStringExtra(EXTRA_KEY_TAB)
 
-        val adapter = TabHistoryAdapter(this, JSON_ADAPTER.fromJson(tabJson) ?: Tab()) { url ->
+        val adapter = TabHistoryAdapter(this, JSON_ADAPTER.fromJson(tabJson) ?: Tab()) { index ->
             val intent = Intent()
-            intent.setData(Uri.parse(url))
+            intent.putExtra("index", index)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -46,9 +45,7 @@ class TabHistoryActivity : BaseActivity() {
         binding?.root?.setOnClickListener { _ -> finish() }
     }
 
-    public override fun titleId(): Int {
-        return R.string.title_tab_histories
-    }
+    public override fun titleId(): Int = R.string.title_tab_histories
 
     companion object {
 
