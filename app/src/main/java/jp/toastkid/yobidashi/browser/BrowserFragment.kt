@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -44,8 +43,6 @@ import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
-import jp.toastkid.yobidashi.home.Command
-import jp.toastkid.yobidashi.home.FragmentReplaceAction
 import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -54,6 +51,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -74,8 +72,6 @@ class BrowserFragment : BaseFragment() {
     /** Archive folder.  */
     private lateinit var tabs: TabAdapter
 
-    private var fragmentReplaceAction: FragmentReplaceAction? = null
-
     private var tabListModule: TabListModule? = null
 
     private var pageSearcherModule: PageSearcherModule? = null
@@ -90,11 +86,6 @@ class BrowserFragment : BaseFragment() {
 
     init {
         titleProcessor = PublishProcessor.create<TitlePair>()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        fragmentReplaceAction = activity as FragmentReplaceAction
     }
 
     override fun onCreateView(
@@ -379,7 +370,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.SEARCH -> {
-                fragmentReplaceAction!!.action(Command.OPEN_SEARCH)
+                startActivity(SearchActivity.makeIntent(context))
                 return
             }
             Menu.SITE_SEARCH -> {
