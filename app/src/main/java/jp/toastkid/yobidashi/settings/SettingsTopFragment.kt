@@ -127,7 +127,7 @@ class SettingsTopFragment : BaseFragment() {
     }
 
     /**
-     * Call backgroud setting.
+     * Call background setting.
 
      * @param view
      */
