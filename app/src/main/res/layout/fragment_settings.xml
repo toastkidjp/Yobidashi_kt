@@ -632,6 +632,18 @@
                 <include layout="@layout/primary_dark_divider"/>
 
                 <TextView
+                    android:id="@+id/settings_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_settings_display"
+                    android:drawableLeft="@drawable/ic_phone_android_black"
+                    android:onClick="@{fragment.display}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
                     android:id="@+id/settings_all_apps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

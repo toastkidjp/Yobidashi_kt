@@ -59,4 +59,14 @@ object SettingsIntentFactory {
         intent.action = Settings.ACTION_DATE_SETTINGS
         return intent
     }
+
+    /**
+     * Make launch display settings intent.
+     * @return [Intent]
+     */
+    fun display(): Intent {
+        val intent = Intent()
+        intent.action = Settings.ACTION_DISPLAY_SETTINGS
+        return intent
+    }
 }

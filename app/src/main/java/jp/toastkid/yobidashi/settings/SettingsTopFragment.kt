@@ -394,12 +394,22 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Call Date-and-Time settings.
-
+     *
      * @param v
      */
     fun dateAndTime(v: View) {
         sendLog("nav_dat")
         startActivity(SettingsIntentFactory.dateAndTime())
+    }
+
+    /**
+     * Call display settings.
+     *
+     * @param v
+     */
+    fun display(v: View) {
+        sendLog("nav_dsply")
+        startActivity(SettingsIntentFactory.display())
     }
 
     /**
