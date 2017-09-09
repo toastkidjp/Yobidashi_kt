@@ -115,7 +115,6 @@ class TabListModule(
         addTab.setOnClickListener { v ->
             addTab.isClickable = false
             tabAdapter.openNewTab()
-            tabAdapter.setIndex(tabAdapter.size() - 1)
             adapter!!.notifyItemInserted(adapter!!.itemCount - 1)
             closeAction()
             addTab.isClickable = true

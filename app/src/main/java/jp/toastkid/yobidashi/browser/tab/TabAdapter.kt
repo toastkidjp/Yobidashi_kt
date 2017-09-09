@@ -226,11 +226,8 @@ class TabAdapter(
                             .setTitle("URL: " + url)
                             .setItems(R.array.url_menu, { dialog, which ->
                                 when (which) {
-                                    0 -> {
-                                        openNewTab(url)
-                                        setIndex(tabList.size() - 1)
-                                    }
-                                    1 -> openNewTab(url)
+                                    0 -> openNewTab(url)
+                                    1 -> openBackgroundTab(url)
                                     2 -> loadUrl(url)
                                     3 -> Clipboard.clip(v.context, url)
                                 }
@@ -328,9 +325,14 @@ class TabAdapter(
     private fun openNewTab(url: String) {
         val newTab = Tab()
         tabList.add(newTab)
-        tabList.save()
-        setIndexByTab(newTab)
+        setIndexByTab(newTab, false)
         loadUrl(url)
+        tabList.save()
+    }
+
+    private fun openBackgroundTab(url: String) {
+        tabList.add(Tab.makeBackground(webView.context.getString(R.string.new_tab), url))
+        tabList.save()
     }
 
     private fun addHistory(title: String, url: String) {
@@ -347,22 +349,21 @@ class TabAdapter(
         return tabList.currentTab().forward()
     }
 
-    fun setIndex(newIndex: Int) {
+    fun setIndex(newIndex: Int, load: Boolean = true) {
 
         if (checkIndex(newIndex)) {
             return
         }
         tabList.setIndex(newIndex)
-        backOrForwardProgress = true
 
         val latest = tabList.currentTab().latest
-        if (latest !== History.EMPTY) {
+        if (latest !== History.EMPTY && load) {
             loadUrl(latest.url())
         }
     }
 
-    internal fun setIndexByTab(tab: Tab) {
-        setIndex(tabList.indexOf(tab))
+    internal fun setIndexByTab(tab: Tab, load: Boolean = true) {
+        setIndex(tabList.indexOf(tab), load)
     }
 
     private fun checkIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
