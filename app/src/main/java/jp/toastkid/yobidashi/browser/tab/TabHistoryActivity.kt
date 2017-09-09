@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.squareup.moshi.Moshi
@@ -43,27 +45,46 @@ class TabHistoryActivity : BaseActivity() {
         binding?.recyclerView?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding?.recyclerView?.adapter = adapter
         binding?.root?.setOnClickListener { _ -> finish() }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.navigationBarColor = Color.TRANSPARENT
+        }
     }
 
     public override fun titleId(): Int = R.string.title_tab_histories
 
     companion object {
 
-        /** Layout ID.  */
+        /**
+         *  Layout ID.
+         */
         private val LAYOUT_ID = R.layout.activity_tab_history
 
+        /**
+         * Use for deserialize tab object from JSON.
+         */
         private val JSON_ADAPTER = Moshi.Builder().build().adapter(Tab::class.java)
 
+        /**
+         * Key of extra tab.
+         */
         private val EXTRA_KEY_TAB = "tab"
 
+        /**
+         * Key of extra tab history index.
+         */
         val EXTRA_KEY_INDEX = "index"
 
+        /**
+         * Request code.
+         */
         val REQUEST_CODE: Int = 24
 
         /**
          * Make launcher intent.
          *
          * @param context
+         * @param tab
          *
          * @return
          */
