@@ -35,7 +35,7 @@ class TabHistoryActivity : BaseActivity() {
         }
         if (adapter.itemCount == 0) {
             finish()
-            Toaster.tShort(this, R.string.message_empty_screenshots)
+            Toaster.tShort(this, R.string.message_empty_histories)
             return
         }
 

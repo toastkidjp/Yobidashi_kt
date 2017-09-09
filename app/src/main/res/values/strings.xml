@@ -264,4 +264,5 @@
     <string name="title_tab_histories">タブの履歴一覧</string>
     <string name="confirmation">確認</string>
     <string name="message_confirm_exit">アプリを終了しますか？</string>
+    <string name="message_empty_histories">履歴はありません。</string>
 </resources>

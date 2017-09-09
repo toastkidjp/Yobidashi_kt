@@ -175,10 +175,11 @@ class PreferenceApplier(private val context: Context) {
 
     var homeUrl: String
         get() = preferences.getString(Key.HOME_URL.name,
-                if (Locale.getDefault().language == Locale.ENGLISH.language)
+                if (Locale.getDefault().language == Locale.ENGLISH.language) {
                     "https://www.yahoo.com"
-                else
-                    "https://www.yahoo.co.jp"
+                } else {
+                    "https://m.yahoo.co.jp"
+                }
         )
         set(path) {
             if (Urls.isInvalidUrl(path)) {

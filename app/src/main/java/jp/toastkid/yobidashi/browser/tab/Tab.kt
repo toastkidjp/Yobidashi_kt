@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.tab
 
+import android.text.TextUtils
 import java.util.*
 
 /**
@@ -18,6 +19,8 @@ internal class Tab {
     var thumbnailPath: String = ""
 
     var lastTitle: String? = null
+
+    @Transient var background = false
 
     @Synchronized fun back(): String {
         val nextIndex = if (index == 0) index else index - 1
@@ -42,7 +45,18 @@ internal class Tab {
     }
 
     fun addHistory(history: History) {
+        if (TextUtils.equals(history.url(), "about:blank")
+                || histories.contains(history)) {
+            return
+        }
+
         histories.add(history)
+
+        if (background) {
+            histories.removeAt(0)
+            background = false
+            return
+        }
         index++
     }
 
@@ -55,5 +69,15 @@ internal class Tab {
         }
 
     internal fun currentIndex() : Int = index
+
+    companion object {
+
+        fun makeBackground(title: String, url: String): Tab {
+            val backgroundTab = Tab()
+            backgroundTab.addHistory(History.make(title, url))
+            backgroundTab.background = true
+            return backgroundTab
+        }
+    }
 
 }
