@@ -54,6 +54,7 @@ class TabAdapter(
         progress: ProgressBar,
         webViewContainer: FrameLayout,
         titleCallback: (TitlePair) -> Unit,
+        val loadedCallback: () -> Unit,
         touchCallback: () -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
@@ -137,12 +138,14 @@ class TabAdapter(
                     }
                 }
                 backOrForwardProgress = false
+                loadedCallback()
             }
 
             override fun onReceivedError(
                     view: WebView, request: WebResourceRequest, error: WebResourceError) {
                 super.onReceivedError(view, request, error)
                 backOrForwardProgress = false
+                loadedCallback()
             }
         }
         val webChromeClient = object : WebChromeClient() {

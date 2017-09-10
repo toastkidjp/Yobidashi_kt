@@ -101,10 +101,12 @@ class BrowserFragment : BaseFragment() {
                 binding?.progress as ProgressBar,
                 binding?.webViewContainer as FrameLayout,
                 { titleProcessor.onNext(it) },
+                { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
                 { fragmentManager.popBackStack() }
         )
 
+        binding?.refresher?.setOnRefreshListener({ tabs.reload() });
         initMenus()
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
