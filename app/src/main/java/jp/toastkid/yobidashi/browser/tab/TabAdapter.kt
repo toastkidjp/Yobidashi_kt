@@ -293,7 +293,6 @@ class TabAdapter(
                 .map {
                     val storeroom = Storeroom(webView.context, BackgroundSettingActivity.BACKGROUND_DIR)
                     val file = storeroom.assignNewFile(Uri.parse(url))
-                    Timber.i(file.absolutePath)
                     Bitmaps.compress(it, file)
                     file
                 }
@@ -325,7 +324,7 @@ class TabAdapter(
     private fun openNewTab(url: String) {
         val newTab = Tab()
         tabList.add(newTab)
-        setIndexByTab(newTab, false)
+        setIndexByTab(newTab)
         loadUrl(url)
         tabList.save()
     }
@@ -349,7 +348,11 @@ class TabAdapter(
         return tabList.currentTab().forward()
     }
 
-    fun setIndex(newIndex: Int, load: Boolean = true) {
+    internal fun setIndexByTab(tab: Tab) {
+        setIndex(tabList.indexOf(tab))
+    }
+
+    private fun setIndex(newIndex: Int) {
 
         if (checkIndex(newIndex)) {
             return
@@ -357,13 +360,9 @@ class TabAdapter(
         tabList.setIndex(newIndex)
 
         val latest = tabList.currentTab().latest
-        if (latest !== History.EMPTY && load) {
+        if (latest !== History.EMPTY) {
             loadUrl(latest.url())
         }
-    }
-
-    internal fun setIndexByTab(tab: Tab, load: Boolean = true) {
-        setIndex(tabList.indexOf(tab), load)
     }
 
     private fun checkIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
@@ -379,7 +378,7 @@ class TabAdapter(
     }
 
     fun loadUrl(url: String, saveHistory: Boolean = true) {
-        if (TextUtils.equals(webView.url, url)) {
+        if (TextUtils.equals(webView.url, url) || url.isEmpty()) {
             return
         }
         backOrForwardProgress = !saveHistory
