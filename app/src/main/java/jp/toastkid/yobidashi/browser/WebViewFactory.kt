@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
 import android.content.Context
+import android.view.MotionEvent
 import android.webkit.WebView
 
 /**
@@ -10,8 +11,14 @@ import android.webkit.WebView
  */
 internal object WebViewFactory {
 
-    fun make(context: Context): WebView {
-        val webView = WebView(context)
+    fun make(context: Context): CustomWebView {
+        val webView = CustomWebView(context)
+        webView.setOnTouchListener{ _, motionEvent ->
+            when (motionEvent.getAction()) {
+                MotionEvent.ACTION_UP -> webView.enablePullToRefresh = false
+            }
+            false
+        }
         val settings = webView.settings
         settings.builtInZoomControls = true
         settings.displayZoomControls = false

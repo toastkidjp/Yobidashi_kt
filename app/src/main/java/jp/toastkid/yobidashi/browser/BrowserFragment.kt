@@ -106,7 +106,8 @@ class BrowserFragment : BaseFragment() {
                 { fragmentManager.popBackStack() }
         )
 
-        binding?.refresher?.setOnRefreshListener({ tabs.reload() });
+        binding?.refresher?.setOnRefreshListener({ tabs.reload() })
+        binding?.refresher?.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
         initMenus()
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)

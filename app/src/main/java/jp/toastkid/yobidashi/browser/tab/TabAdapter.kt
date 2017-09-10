@@ -19,10 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.TitlePair
-import jp.toastkid.yobidashi.browser.UserAgent
-import jp.toastkid.yobidashi.browser.WebViewFactory
+import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
@@ -63,7 +60,7 @@ class TabAdapter(
 
     private val colorPair: ColorPair
 
-    private val webView: WebView
+    private val webView: CustomWebView
 
     /** Loading flag.  */
     private var isLoadFinished: Boolean = false
@@ -93,7 +90,7 @@ class TabAdapter(
             progress: ProgressBar,
             titleCallback: (TitlePair) -> Unit,
             touchCallback: () -> Unit
-    ): WebView {
+    ): CustomWebView {
         val webViewClient = object : WebViewClient() {
 
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
@@ -579,6 +576,8 @@ class TabAdapter(
         }
         loadUrl(url, false)
     }
+
+    fun enablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
 
 }
 
