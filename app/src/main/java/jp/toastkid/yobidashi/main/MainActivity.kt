@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -104,8 +105,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
         initNavigation()
 
-        setInitialFragment()
-
         initInterstitialAd()
 
         if (preferenceApplier.useColorFilter()) {
@@ -118,14 +117,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
     override fun onNewIntent(passedIntent: Intent) {
         super.onNewIntent(passedIntent)
         processShortcut(passedIntent)
-    }
-
-    /**
-     * Set initial fragment.
-     */
-    private fun setInitialFragment() {
-        homeFragment = HomeFragment()
-        replaceFragment(homeFragment)
     }
 
     /**
@@ -167,6 +158,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
         when (preferenceApplier.startUp) {
             StartUp.START -> {
+                homeFragment = HomeFragment()
                 replaceFragment(homeFragment)
             }
             StartUp.APPS_LAUNCHER -> {
@@ -197,7 +189,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
     /**
      * Replace with passed fragment.
-     * @param fragment
+     * @param fragment {@link BaseFragment} instance
      */
     private fun replaceFragment(fragment: BaseFragment) {
 
@@ -207,6 +199,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.content, fragment)
+        transaction.addToBackStack(null)
+        transaction.setTransition(android.R.anim.slide_in_left)
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
         binding.appBarMain.toolbar.setTitle(fragment.titleId())
@@ -385,9 +379,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             return
         }
 
-        val fragment = supportFragmentManager.fragments[0]
+        val fragment = supportFragmentManager.findFragmentById(R.id.content)
         if (fragment == null) {
-            super.onBackPressed()
+            confirmExit()
             return
         }
         fragment as BaseFragment
@@ -396,7 +390,24 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             return
         }
 
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            finish()
+            return
+        }
+
         super.onBackPressed()
+    }
+
+    private fun confirmExit() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.confirmation)
+                .setMessage(R.string.message_confirm_exit)
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok, { d, i ->
+                    d.dismiss()
+                    finish()
+                })
+                .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

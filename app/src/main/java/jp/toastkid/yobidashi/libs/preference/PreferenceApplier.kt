@@ -34,11 +34,11 @@ class PreferenceApplier(private val context: Context) {
     }
 
     var color: Int
-        get() = preferences.getInt(Key.BG_COLOR.name, ContextCompat.getColor(context, R.color.colorPrimary))
+        get() = preferences.getInt(Key.BG_COLOR.name, ContextCompat.getColor(context, R.color.colorPrimaryDark))
         set(color) = preferences.edit().putInt(Key.BG_COLOR.name, color).apply()
 
     var fontColor: Int
-        get() = preferences.getInt(Key.FONT_COLOR.name, Color.WHITE)
+        get() = preferences.getInt(Key.FONT_COLOR.name, ContextCompat.getColor(context, R.color.textPrimary))
         set(color) = preferences.edit().putInt(Key.FONT_COLOR.name, color).apply()
 
     fun colorPair(): ColorPair {
@@ -175,10 +175,11 @@ class PreferenceApplier(private val context: Context) {
 
     var homeUrl: String
         get() = preferences.getString(Key.HOME_URL.name,
-                if (Locale.getDefault().language == Locale.ENGLISH.language)
+                if (Locale.getDefault().language == Locale.ENGLISH.language) {
                     "https://www.yahoo.com"
-                else
-                    "https://www.yahoo.co.jp"
+                } else {
+                    "https://m.yahoo.co.jp"
+                }
         )
         set(path) {
             if (Urls.isInvalidUrl(path)) {

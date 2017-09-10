@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -44,8 +43,6 @@ import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
-import jp.toastkid.yobidashi.home.Command
-import jp.toastkid.yobidashi.home.FragmentReplaceAction
 import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -54,6 +51,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -74,8 +72,6 @@ class BrowserFragment : BaseFragment() {
     /** Archive folder.  */
     private lateinit var tabs: TabAdapter
 
-    private var fragmentReplaceAction: FragmentReplaceAction? = null
-
     private var tabListModule: TabListModule? = null
 
     private var pageSearcherModule: PageSearcherModule? = null
@@ -92,11 +88,6 @@ class BrowserFragment : BaseFragment() {
         titleProcessor = PublishProcessor.create<TitlePair>()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        fragmentReplaceAction = activity as FragmentReplaceAction
-    }
-
     override fun onCreateView(
             inflater: LayoutInflater?,
             container: ViewGroup?,
@@ -110,10 +101,13 @@ class BrowserFragment : BaseFragment() {
                 binding?.progress as ProgressBar,
                 binding?.webViewContainer as FrameLayout,
                 { titleProcessor.onNext(it) },
+                { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
-                { fragmentReplaceAction?.action(Command.OPEN_HOME) }
+                { fragmentManager.popBackStack() }
         )
 
+        binding?.refresher?.setOnRefreshListener({ tabs.reload() })
+        binding?.refresher?.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
         initMenus()
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
@@ -209,7 +203,7 @@ class BrowserFragment : BaseFragment() {
             Menu.FORWARD -> {
                 val forward = tabs.forward()
                 if (forward.isNotEmpty()) {
-                    tabs.loadUrl(forward)
+                    tabs.loadUrl(forward, false)
                 }
                 return
             }
@@ -379,7 +373,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.SEARCH -> {
-                fragmentReplaceAction!!.action(Command.OPEN_SEARCH)
+                startActivity(SearchActivity.makeIntent(context))
                 return
             }
             Menu.SITE_SEARCH -> {
@@ -464,7 +458,7 @@ class BrowserFragment : BaseFragment() {
     private fun back(): Boolean {
         val back = tabs.back()
         if (back.isNotEmpty()) {
-            tabs.loadUrl(back)
+            tabs.loadUrl(back, false)
             return true
         }
         return false
@@ -506,6 +500,10 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun hideTabList() {
+        if (tabs.size() == 0) {
+            fragmentManager.popBackStack()
+            return
+        }
         tabListModule?.hide()
         binding?.fab?.show()
     }
@@ -520,14 +518,14 @@ class BrowserFragment : BaseFragment() {
         return R.string.title_browser
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK || data == null) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        if (resultCode != Activity.RESULT_OK || intent == null) {
             return
         }
         when (requestCode) {
             REQUEST_CODE_VIEW_ARCHIVE -> {
                 try {
-                    tabs.loadArchive(File(data.getStringExtra("FILE_NAME")))
+                    tabs.loadArchive(File(intent.getStringExtra("FILE_NAME")))
                 } catch (e: IOException) {
                     Timber.e(e)
                 } catch (error: OutOfMemoryError) {
@@ -538,14 +536,16 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             REQUEST_CODE_VOICE_SEARCH -> {
-                disposables.add(VoiceSearch.processResult(activity, data))
+                disposables.add(VoiceSearch.processResult(activity, intent))
                 return
             }
             ViewHistoryActivity.REQUEST_CODE -> {
-                if (data.data != null) {tabs.loadUrl(data.data.toString())}
+                if (intent.data != null) {tabs.loadUrl(intent.data.toString())}
             }
             TabHistoryActivity.REQUEST_CODE -> {
-                if (data.data != null) {tabs.loadUrl(data.data.toString())}
+                if (intent.hasExtra(TabHistoryActivity.EXTRA_KEY_INDEX)) {
+                    tabs.moveTo(intent.getIntExtra(TabHistoryActivity.EXTRA_KEY_INDEX, 0))
+                }
             }
             REQUEST_OVERLAY_PERMISSION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
@@ -563,9 +563,7 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
-    fun titlePairProcessor(): PublishProcessor<TitlePair> {
-        return titleProcessor
-    }
+    fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
 
     override fun onDestroy() {
         super.onDestroy()

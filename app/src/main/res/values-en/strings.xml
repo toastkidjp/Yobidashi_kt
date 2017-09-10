@@ -267,4 +267,8 @@
     <string name="hint_find_in_page">Input keyword of find-in-page.</string>
     <string name="hint_generate_barcode">Please could you input any text...</string>
     <string name="title_tab_histories">Tab histories</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="message_confirm_exit">Would you like to exit this app?</string>
+    <string name="title_settings_display">Display setting</string>
+    <string name="message_empty_histories">There are no histories.</string>
 </resources>

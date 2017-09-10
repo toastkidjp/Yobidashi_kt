@@ -262,4 +262,8 @@
     <string name="hint_find_in_page">ページ内検索のキーワードを入力</string>
     <string name="hint_generate_barcode">バーコードにしたい文字を入力してください。</string>
     <string name="title_tab_histories">タブの履歴一覧</string>
+    <string name="confirmation">確認</string>
+    <string name="message_confirm_exit">アプリを終了しますか？</string>
+    <string name="title_settings_display">ディスプレイの設定</string>
+    <string name="message_empty_histories">履歴はありません。</string>
 </resources>

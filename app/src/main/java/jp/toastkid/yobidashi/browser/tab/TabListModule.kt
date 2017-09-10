@@ -65,7 +65,7 @@ class TabListModule(
                     .setCancelable(true)
                     .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                     .setPositiveButton(R.string.ok) { d, i ->
-                        tabAdapter.clear(adapter)
+                        tabAdapter.clear()
                         closeAction()
                         d.dismiss()
                     }
@@ -115,7 +115,6 @@ class TabListModule(
         addTab.setOnClickListener { v ->
             addTab.isClickable = false
             tabAdapter.openNewTab()
-            tabAdapter.setIndex(tabAdapter.size() - 1)
             adapter!!.notifyItemInserted(adapter!!.itemCount - 1)
             closeAction()
             addTab.isClickable = true

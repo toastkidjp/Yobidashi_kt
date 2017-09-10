@@ -17,7 +17,7 @@ internal enum class Menu(
 
     TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
 
-    RELOAD(R.string.title_menu_reload, R.drawable.ic_reload),
+    TAB_HISTORY(R.string.title_tab_histories, R.drawable.ic_history),
 
     TOP(R.string.title_menu_to_top, R.drawable.ic_top),
 
@@ -27,13 +27,11 @@ internal enum class Menu(
 
     FORWARD(R.string.title_menu_forward, R.drawable.ic_forward),
 
+    RELOAD(R.string.title_menu_reload, R.drawable.ic_reload),
+
     PAGE_INFORMATION(R.string.title_menu_page_information, R.drawable.ic_info),
 
-    CLOSE(R.string.close_menu, R.drawable.ic_close_white),
-
     SETTING(R.string.title_settings, R.drawable.ic_settings),
-
-    TAB_HISTORY(R.string.title_tab_histories, R.drawable.ic_history),
 
     USER_AGENT(R.string.title_user_agent, R.drawable.ic_user_agent),
 
@@ -79,7 +77,9 @@ internal enum class Menu(
 
     ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_bookmark),
 
-    EXIT(R.string.exit, R.drawable.ic_exit);
+    EXIT(R.string.exit, R.drawable.ic_exit),
+
+    CLOSE(R.string.close_menu, R.drawable.ic_close_white);
 
     companion object {
         val list: List<Menu> =

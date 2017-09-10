@@ -5,6 +5,11 @@
         <item name="add_schedule">スケジュールを登録</item>
         <item name="search">Web 検索</item>
     </array>
+    <array name="image_menu">
+        <item name="set_bg">背景画像に設定</item>
+        <item name="save_bg">背景画像として保存</item>
+        <item name="download">画像をダウンロード</item>
+    </array>
     <array name="url_menu">
         <item name="open_article">新規タブで開く</item>
         <item name="add_schedule">バックグラウンドで開く</item>

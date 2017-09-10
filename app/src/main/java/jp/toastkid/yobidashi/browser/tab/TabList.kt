@@ -24,7 +24,7 @@ class TabList private constructor() {
     }
 
     internal fun currentTab(): Tab {
-        return tabs[index]
+        return tabs.get(index)
     }
 
     internal fun setIndex(newIndex: Int) {
@@ -85,10 +85,17 @@ class TabList private constructor() {
     }
 
     internal fun clear() {
+        for (tab in tabs) {
+            val lastScreenshot = File(tab.thumbnailPath)
+            if (lastScreenshot.exists()) {
+                lastScreenshot.delete()
+            }
+        }
         tabs.clear()
-        index = -1
+        index = 0
         tabsFile?.delete()
         itemsDir?.delete()
+        save()
     }
 
     companion object {

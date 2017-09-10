@@ -2,28 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_black"
+        android:title="@string/title_home"
+        />
+
+    <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/title_settings"
         />
 
-    <item android:title="@string/title_tools">
+    <item android:title="@string/title_search">
         <menu>
-            <item
-                android:id="@+id/nav_home"
-                android:icon="@drawable/ic_home_black"
-                android:title="@string/title_home"
-                />
-            <item
-                android:id="@+id/nav_barcode"
-                android:icon="@drawable/ic_barcode_black"
-                android:title="@string/title_code_reader"
-                />
-            <item
-                android:id="@+id/nav_instant_barcode"
-                android:icon="@drawable/ic_barcode_black"
-                android:title="@string/title_instant_barcode"
-                />
             <item
                 android:id="@+id/nav_search"
                 android:icon="@drawable/ic_search"
@@ -39,6 +30,11 @@
                 android:icon="@drawable/ic_favorite"
                 android:title="@string/title_favorite_search"
                 />
+        </menu>
+    </item>
+
+    <item android:title="@string/title_browser">
+        <menu>
             <item
                 android:id="@+id/nav_browser"
                 android:icon="@drawable/ic_web_black"
@@ -58,6 +54,21 @@
                 android:id="@+id/nav_screenshots"
                 android:icon="@drawable/ic_camera_black"
                 android:title="@string/title_screenshots"
+                />
+        </menu>
+    </item>
+
+    <item android:title="@string/title_tools">
+        <menu>
+            <item
+                android:id="@+id/nav_barcode"
+                android:icon="@drawable/ic_barcode_black"
+                android:title="@string/title_code_reader"
+                />
+            <item
+                android:id="@+id/nav_instant_barcode"
+                android:icon="@drawable/ic_barcode_black"
+                android:title="@string/title_instant_barcode"
                 />
             <item
                 android:id="@+id/nav_launcher"
