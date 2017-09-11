@@ -15,6 +15,8 @@ internal enum class Menu(
         @param:DrawableRes val iconId: Int
 ) {
 
+    FULL_SCREEN(R.string.title_full_screen, R.drawable.ic_photo),
+
     TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
 
     TAB_HISTORY(R.string.title_tab_histories, R.drawable.ic_history),

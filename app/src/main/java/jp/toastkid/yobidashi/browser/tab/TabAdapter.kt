@@ -9,6 +9,7 @@ import android.os.Build
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -49,7 +50,7 @@ import java.net.HttpURLConnection
  */
 class TabAdapter(
         progress: ProgressBar,
-        webViewContainer: FrameLayout,
+        val webViewContainer: FrameLayout,
         titleCallback: (TitlePair) -> Unit,
         val loadedCallback: () -> Unit,
         touchCallback: () -> Unit,

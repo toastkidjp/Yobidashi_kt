@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
@@ -64,7 +65,7 @@ import java.text.MessageFormat
 
  * @author toastkidjp
  */
-class MainActivity : BaseActivity(), FragmentReplaceAction {
+class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /** Navigation's background.  */
     private var navBackground: View? = null
@@ -521,6 +522,36 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             }
         }
     }
+
+    override fun hideToolbar() {
+        if (!isVisibleToolbar()) {
+            return
+        }
+
+        val animate = binding.appBarMain.toolbar.animate()
+        animate.cancel();
+        animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200).start();
+        val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
+        marginLayoutParams.topMargin = 0
+        binding.appBarMain.content.requestLayout()
+        binding.appBarMain.toolbar.visibility = View.GONE
+    }
+
+    override fun showToolbar() {
+        if (isVisibleToolbar()) {
+            return
+        }
+
+        val animate = binding.appBarMain.toolbar.animate()
+        animate.cancel();
+        animate.translationY(0f).setDuration(200).start();
+        val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
+        marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
+        binding.appBarMain.content.requestLayout()
+        binding.appBarMain.toolbar.visibility = View.VISIBLE
+    }
+
+    override fun isVisibleToolbar(): Boolean = binding.appBarMain.toolbar.visibility == View.VISIBLE
 
     /**
      * Make share message.

@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -51,6 +52,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -86,6 +88,13 @@ class BrowserFragment : BaseFragment() {
 
     init {
         titleProcessor = PublishProcessor.create<TitlePair>()
+    }
+
+    private var toolbarAction: ToolbarAction? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        toolbarAction = context as ToolbarAction?
     }
 
     override fun onCreateView(
@@ -192,6 +201,13 @@ class BrowserFragment : BaseFragment() {
         val context = activity
         val snackbarParent = binding?.root as View
         when (menu) {
+            Menu.FULL_SCREEN -> {
+                if (toolbarAction?.isVisibleToolbar() ?: false) {
+                    toolbarAction?.hideToolbar()
+                } else {
+                    toolbarAction?.showToolbar()
+                }
+            }
             Menu.RELOAD -> {
                 tabs.reload()
                 return
@@ -570,7 +586,8 @@ class BrowserFragment : BaseFragment() {
         (binding!!.menusView.adapter as Adapter).dispose()
         tabs.dispose()
         disposables.dispose()
-        searchWithClip.dispose();
+        searchWithClip.dispose()
+        toolbarAction?.showToolbar()
     }
 
     companion object {
