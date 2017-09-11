@@ -198,9 +198,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         }
 
         val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.replace(R.id.content, fragment)
         transaction.addToBackStack(null)
-        transaction.setTransition(android.R.anim.slide_in_left)
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
         binding.appBarMain.toolbar.setTitle(fragment.titleId())
