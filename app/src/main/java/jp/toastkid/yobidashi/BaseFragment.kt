@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Base fragment.
-
+ *
  * @author toastkidjp
  */
 abstract class BaseFragment : Fragment() {
@@ -27,40 +27,39 @@ abstract class BaseFragment : Fragment() {
         preferenceApplier = PreferenceApplier(context)
     }
 
-    protected fun sendLog(key: String) {
+    /**
+     * Send log which has only key.
+     */
+    internal fun sendLog(key: String) {
         logSender.send(key)
     }
 
     /**
      * Return this fragment's title ID.
-
+     *
      * @return [StringRes]
      */
     @StringRes abstract fun titleId(): Int
 
     /**
      * Event of press back key.
-
+     *
      * @return is consumed event?
      */
-    open fun pressBack(): Boolean {
-        return false
-    }
+    open fun pressBack(): Boolean = false
 
     /**
      * Get Preferences wrapper.
+     *
      * @return [PreferenceApplier]
      */
-    fun preferenceApplier(): PreferenceApplier {
-        return preferenceApplier
-    }
+    fun preferenceApplier(): PreferenceApplier = preferenceApplier
 
     /**
      * Get color pair.
+     *
      * @return [ColorPair]
      */
-    fun colorPair(): ColorPair {
-        return preferenceApplier.colorPair()
-    }
+    fun colorPair(): ColorPair = preferenceApplier.colorPair()
 
 }
