@@ -79,7 +79,7 @@
             />
         <activity
             android:name=".launcher.LauncherActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden"
             />
