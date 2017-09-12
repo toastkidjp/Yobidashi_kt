@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.net.http.SslError
 import android.os.Build
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
@@ -19,7 +20,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.*
+import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.TitlePair
+import jp.toastkid.yobidashi.browser.UserAgent
+import jp.toastkid.yobidashi.browser.WebViewFactory
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
@@ -49,10 +53,11 @@ import java.net.HttpURLConnection
  */
 class TabAdapter(
         progress: ProgressBar,
-        webViewContainer: FrameLayout,
+        val webViewContainer: FrameLayout,
         titleCallback: (TitlePair) -> Unit,
         val loadedCallback: () -> Unit,
         touchCallback: () -> Unit,
+        private val fabSwitcher: (Boolean) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
 
@@ -143,6 +148,19 @@ class TabAdapter(
                 super.onReceivedError(view, request, error)
                 backOrForwardProgress = false
                 loadedCallback()
+            }
+
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+                super.onReceivedSslError(view, handler, error)
+
+                handler?.cancel()
+
+                val context = webView.context
+                AlertDialog.Builder(context)
+                        .setTitle(R.string.title_ssl_connection_error)
+                        .setMessage(SslErrorMessageGenerator.generate(context, error))
+                        .setPositiveButton(R.string.ok, {d, i -> d.dismiss()})
+                        .show()
             }
         }
         val webChromeClient = object : WebChromeClient() {
@@ -274,6 +292,10 @@ class TabAdapter(
 
             val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(request)
+        }
+        webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
+            val scrolled = vertical - oldVertical
+            fabSwitcher(0 > scrolled)
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()

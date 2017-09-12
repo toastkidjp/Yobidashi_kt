@@ -271,4 +271,14 @@
     <string name="message_confirm_exit">Would you like to exit this app?</string>
     <string name="title_settings_display">Display setting</string>
     <string name="message_empty_histories">There are no histories.</string>
+    <string name="title_full_screen">Full screen mode</string>
+
+    <string name="title_ssl_connection_error">TLS Error!</string>
+    <string name="message_ssl_error_first_line">This site\'s certificate can\'t be trusted.
+        It had canceled connection. \n\nBecause: \n</string>
+    <string name="message_ssl_error_expired">This site\'s certificate is expired. \n\nExpired date time=</string>
+    <string name="message_ssl_error_id_mismatch">Mismatched site name.\n\nCN=</string>
+    <string name="message_ssl_error_not_yet_valid">This site\'s certificate is not yet valid.\n\nStart time=</string>
+    <string name="message_ssl_error_untrusted">CA is untrusted.\n\nCA=</string>
+    <string name="message_ssl_error_unknown">Occurred unknown error!</string>
 </resources>

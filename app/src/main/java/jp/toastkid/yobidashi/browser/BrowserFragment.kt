@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -13,7 +14,6 @@ import android.provider.Settings
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -30,7 +30,6 @@ import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
@@ -51,6 +50,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -88,6 +88,13 @@ class BrowserFragment : BaseFragment() {
         titleProcessor = PublishProcessor.create<TitlePair>()
     }
 
+    private var toolbarAction: ToolbarAction? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        toolbarAction = context as ToolbarAction?
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater?,
             container: ViewGroup?,
@@ -103,6 +110,7 @@ class BrowserFragment : BaseFragment() {
                 { titleProcessor.onNext(it) },
                 { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
+                { if (it) binding?.fab?.show() else binding?.fab?.hide() },
                 { fragmentManager.popBackStack() }
         )
 
@@ -192,6 +200,13 @@ class BrowserFragment : BaseFragment() {
         val context = activity
         val snackbarParent = binding?.root as View
         when (menu) {
+            Menu.FULL_SCREEN -> {
+                if (toolbarAction?.isVisibleToolbar() ?: false) {
+                    toolbarAction?.hideToolbar()
+                } else {
+                    toolbarAction?.showToolbar()
+                }
+            }
             Menu.RELOAD -> {
                 tabs.reload()
                 return
@@ -213,10 +228,6 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.BOTTOM -> {
                 tabs.pageDown()
-                return
-            }
-            Menu.CLOSE -> {
-                hideMenu()
                 return
             }
             Menu.FIND_IN_PAGE -> {
@@ -265,34 +276,6 @@ class BrowserFragment : BaseFragment() {
                 startActivity(SettingsIntentFactory.wifi())
                 return
             }
-            Menu.CLEAR_CACHE -> {
-                AlertDialog.Builder(context)
-                        .setTitle(R.string.title_clear_cache)
-                        .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            tabs.clearCache()
-                            Toaster.snackShort(snackbarParent, R.string.done_clear, colorPair())
-                            d.dismiss()
-                        }
-                        .setCancelable(true)
-                        .show()
-                return
-            }
-            Menu.CLEAR_FORM_DATA -> {
-                AlertDialog.Builder(context)
-                        .setTitle(R.string.title_clear_form_data)
-                        .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            tabs.clearFormData()
-                            Toaster.snackShort(snackbarParent, R.string.done_clear, colorPair())
-                            d.dismiss()
-                        }
-                        .setCancelable(true)
-                        .show()
-                return
-            }
             Menu.PAGE_INFORMATION -> {
                 tabs.showPageInformation()
                 return
@@ -319,17 +302,9 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.OTHER_BROWSER -> {
-                startActivity(IntentFactory.openBrowser(Uri.parse(tabs.currentUrl())))
-                return
-            }
-            Menu.CHROME_TAB -> {
                 CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
                         .build()
                         .launchUrl(context, Uri.parse(tabs.currentUrl()))
-                return
-            }
-            Menu.BARCODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(context))
                 return
             }
             Menu.SHARE_BARCODE -> {
@@ -570,7 +545,8 @@ class BrowserFragment : BaseFragment() {
         (binding!!.menusView.adapter as Adapter).dispose()
         tabs.dispose()
         disposables.dispose()
-        searchWithClip.dispose();
+        searchWithClip.dispose()
+        toolbarAction?.showToolbar()
     }
 
     companion object {

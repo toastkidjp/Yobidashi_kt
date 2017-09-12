@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
@@ -64,7 +65,7 @@ import java.text.MessageFormat
 
  * @author toastkidjp
  */
-class MainActivity : BaseActivity(), FragmentReplaceAction {
+class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /** Navigation's background.  */
     private var navBackground: View? = null
@@ -198,9 +199,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
         }
 
         val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.replace(R.id.content, fragment)
         transaction.addToBackStack(null)
-        transaction.setTransition(android.R.anim.slide_in_left)
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
         binding.appBarMain.toolbar.setTitle(fragment.titleId())
@@ -264,10 +265,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 R.id.nav_search -> {
                     sendLog("nav_search")
                     startActivity(SearchActivity.makeIntent(this))
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_search_history -> {
                     sendLog("nav_srch_hstry")
                     startActivity(SearchHistoryActivity.makeIntent(this))
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_calendar -> {
                     sendLog("nav_cal")
@@ -279,6 +282,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 R.id.nav_favorite_search -> {
                     sendLog("nav_fav_search")
                     startActivity(FavoriteSearchActivity.makeIntent(this))
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_tweet -> {
                     sendLog("nav_twt")
@@ -291,6 +295,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 R.id.nav_launcher -> {
                     sendLog("nav_lnchr")
                     startActivity(LauncherActivity.makeIntent(this))
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_share -> {
                     sendLog("nav_shr")
@@ -310,14 +315,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                 R.id.nav_about_this_app -> {
                     sendLog("nav_about")
                     startActivity(AboutThisAppActivity.makeIntent(this))
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_screenshots -> {
                     sendLog("nav_screenshots")
                     startActivity(ScreenshotsActivity.makeIntent(this))
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_google_play -> {
                     sendLog("nav_gplay")
                     startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_privacy_policy -> {
                     sendLog("nav_prvcy_plcy")
@@ -343,6 +351,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                             BookmarkActivity.makeIntent(this),
                             BookmarkActivity.REQUEST_CODE
                     )
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_view_history -> {
                     sendLog("nav_view_history")
@@ -350,6 +359,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
                             ViewHistoryActivity.makeIntent(this),
                             ViewHistoryActivity.REQUEST_CODE
                     )
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_barcode -> {
                     sendLog("nav_barcode")
@@ -512,6 +522,36 @@ class MainActivity : BaseActivity(), FragmentReplaceAction {
             }
         }
     }
+
+    override fun hideToolbar() {
+        if (!isVisibleToolbar()) {
+            return
+        }
+
+        val animate = binding.appBarMain.toolbar.animate()
+        animate.cancel();
+        animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200).start();
+        val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
+        marginLayoutParams.topMargin = 0
+        binding.appBarMain.content.requestLayout()
+        binding.appBarMain.toolbar.visibility = View.GONE
+    }
+
+    override fun showToolbar() {
+        if (isVisibleToolbar()) {
+            return
+        }
+
+        val animate = binding.appBarMain.toolbar.animate()
+        animate.cancel();
+        animate.translationY(0f).setDuration(200).start();
+        val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
+        marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
+        binding.appBarMain.content.requestLayout()
+        binding.appBarMain.toolbar.visibility = View.VISIBLE
+    }
+
+    override fun isVisibleToolbar(): Boolean = binding.appBarMain.toolbar.visibility == View.VISIBLE
 
     /**
      * Make share message.

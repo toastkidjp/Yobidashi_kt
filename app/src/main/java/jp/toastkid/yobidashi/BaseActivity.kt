@@ -63,7 +63,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param toolbar Toolbar
      */
     protected fun applyColorToToolbar(toolbar: Toolbar) {
-        val pair = preferenceApplier!!.colorPair()
+        val pair = preferenceApplier.colorPair()
         toolbar.setBackgroundColor(pair.bgColor())
         toolbar.setTitleTextColor(pair.fontColor())
         toolbar.setSubtitleTextColor(pair.fontColor())
@@ -72,7 +72,9 @@ abstract class BaseActivity : AppCompatActivity() {
         applyTint(toolbar.overflowIcon, pair.fontColor())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ColorUtils.setAlphaComponent(pair.bgColor(), 255)
+            val color = ColorUtils.setAlphaComponent(pair.bgColor(), 255)
+            window.statusBarColor     = color
+            window.navigationBarColor = color
         }
     }
 
