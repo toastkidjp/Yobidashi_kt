@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser
 import android.content.Context
 import android.view.MotionEvent
 import android.webkit.WebView
+import jp.toastkid.yobidashi.browser.tab.CustomWebView
 
 /**
  * [WebView] factory.

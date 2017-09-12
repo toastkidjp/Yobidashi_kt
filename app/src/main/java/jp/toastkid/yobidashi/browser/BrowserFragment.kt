@@ -110,6 +110,7 @@ class BrowserFragment : BaseFragment() {
                 { titleProcessor.onNext(it) },
                 { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
+                { if (it) binding?.fab?.show() else binding?.fab?.hide() },
                 { fragmentManager.popBackStack() }
         )
 
