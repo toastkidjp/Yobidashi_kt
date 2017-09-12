@@ -15,8 +15,6 @@ internal enum class Menu(
         @param:DrawableRes val iconId: Int
 ) {
 
-    FULL_SCREEN(R.string.title_full_screen, R.drawable.ic_photo),
-
     TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
 
     TAB_HISTORY(R.string.title_tab_histories, R.drawable.ic_history),
@@ -29,27 +27,19 @@ internal enum class Menu(
 
     FORWARD(R.string.title_menu_forward, R.drawable.ic_forward),
 
+    FULL_SCREEN(R.string.title_full_screen, R.drawable.ic_fullscreen),
+
     RELOAD(R.string.title_menu_reload, R.drawable.ic_reload),
 
     PAGE_INFORMATION(R.string.title_menu_page_information, R.drawable.ic_info),
-
-    SETTING(R.string.title_settings, R.drawable.ic_settings),
 
     USER_AGENT(R.string.title_user_agent, R.drawable.ic_user_agent),
 
     WIFI_SETTING(R.string.title_settings_wifi, R.drawable.ic_wifi),
 
-    CLEAR_CACHE(R.string.title_clear_cache, R.drawable.ic_clear_cache),
-
-    CLEAR_FORM_DATA(R.string.clear_form_data, R.drawable.ic_clear_form),
-
     OPEN(R.string.title_open_url, R.drawable.ic_web),
 
     OTHER_BROWSER(R.string.title_open_other_browser, R.drawable.ic_open_with),
-
-    CHROME_TAB(R.string.title_open_chrome, R.drawable.ic_chrome),
-
-    BARCODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
 
     FIND_IN_PAGE(R.string.title_find_in_page, R.drawable.ic_find_in_page),
 
@@ -58,12 +48,6 @@ internal enum class Menu(
     ARCHIVE(R.string.title_archive, R.drawable.ic_archive),
 
     VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
-
-    SEARCH(R.string.title_search_action, R.drawable.ic_search_white),
-
-    VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
-
-    SITE_SEARCH(R.string.title_site_search_by_google, R.drawable.googleg_disabled_color_18),
 
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
@@ -79,9 +63,16 @@ internal enum class Menu(
 
     ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_bookmark),
 
-    EXIT(R.string.exit, R.drawable.ic_exit),
+    VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 
-    CLOSE(R.string.close_menu, R.drawable.ic_close_white);
+    SITE_SEARCH(R.string.title_site_search_by_google, R.drawable.googleg_disabled_color_18),
+
+    SEARCH(R.string.title_search_action, R.drawable.ic_search_white),
+
+    SETTING(R.string.title_settings, R.drawable.ic_settings),
+
+    EXIT(R.string.exit, R.drawable.ic_exit)
+    ;
 
     companion object {
         val list: List<Menu> =
