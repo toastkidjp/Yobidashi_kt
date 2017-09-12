@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.net.http.SslError
 import android.os.Build
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
@@ -147,6 +148,19 @@ class TabAdapter(
                 super.onReceivedError(view, request, error)
                 backOrForwardProgress = false
                 loadedCallback()
+            }
+
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+                super.onReceivedSslError(view, handler, error)
+
+                handler?.cancel()
+
+                val context = webView.context
+                AlertDialog.Builder(context)
+                        .setTitle(R.string.title_ssl_connection_error)
+                        .setMessage(SslErrorMessageGenerator.generate(context, error))
+                        .setPositiveButton(R.string.ok, {d, i -> d.dismiss()})
+                        .show()
             }
         }
         val webChromeClient = object : WebChromeClient() {

@@ -267,4 +267,12 @@
     <string name="title_settings_display">ディスプレイの設定</string>
     <string name="message_empty_histories">履歴はありません。</string>
     <string name="title_full_screen">全画面モード</string>
+
+    <string name="title_ssl_connection_error">TLS エラー!</string>
+    <string name="message_ssl_error_first_line">サイトのセキュリティ証明書が信頼できません。接続を終了しました。\n\nエラーの原因\n</string>
+    <string name="message_ssl_error_expired">証明書の有効期限が切れています。\n\n終了時刻=</string>
+    <string name="message_ssl_error_id_mismatch">ホスト名が一致しません。  CN=</string>
+    <string name="message_ssl_error_not_yet_valid">証明書はまだ有効ではありません  開始時刻=</string>
+    <string name="message_ssl_error_untrusted">証明書を発行した認証局が信頼できません  認証局</string>
+    <string name="message_ssl_error_unknown">原因不明のエラーが発生しました</string>
 </resources>
