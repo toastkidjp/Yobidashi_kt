@@ -16,11 +16,15 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Base activity.
+ *
  * @author toastkidjp
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    /** Firebase analytics log sender.  */
+    /**
+     * Firebase analytics log sender.
+     */
     private var sender: LogSender? = null
 
     /**
@@ -78,6 +82,11 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Apply tint to passed drawable.
+     * @param icon Drawable
+     * @param fontColor color int
+     */
     private fun applyTint(icon: Drawable?, @ColorInt fontColor: Int) {
         if (icon != null) {
             DrawableCompat.setTint(icon, fontColor)
@@ -90,24 +99,31 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param key
      * @param bundle
      */
-    @JvmOverloads protected fun sendLog(key: String, bundle: Bundle = Bundle.EMPTY) {
+    @JvmOverloads
+    protected fun sendLog(key: String, bundle: Bundle = Bundle.EMPTY) {
         sender!!.send(key, bundle)
     }
 
-    protected fun colorPair(): ColorPair {
-        return preferenceApplier!!.colorPair()
-    }
+    /**
+     * Return color pair.
+     */
+    protected fun colorPair(): ColorPair = preferenceApplier.colorPair()
 
+    /**
+     * Background image file path.
+     */
     protected val backgroundImagePath: String
-        get() = preferenceApplier!!.backgroundImagePath
+        get() = preferenceApplier.backgroundImagePath
 
+    /**
+     * Remove background image file path from preferences.
+     */
     protected fun removeBackgroundImagePath() {
-        preferenceApplier!!.removeBackgroundImagePath()
+        preferenceApplier.removeBackgroundImagePath()
     }
 
-    protected fun clearPreferences() {
-        preferenceApplier!!.clear()
-    }
-
+    /**
+     * Return title's string resource ID.
+     */
     @StringRes protected abstract fun titleId(): Int
 }
