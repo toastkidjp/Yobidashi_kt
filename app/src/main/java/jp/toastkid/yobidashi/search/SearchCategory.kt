@@ -37,6 +37,10 @@ enum class SearchCategory(
             R.drawable.ic_yandex,
             "https://www.yandex.com/search/?text="
     ),
+    YAHOO(R.string.search_category_yahoo,
+            R.drawable.ic_yahoo,
+            "https://search.yahoo.com/search?p="
+    ),
     IMAGE(R.string.search_category_image,
             R.drawable.ic_image_search,
             "https://www.google.co.jp/search?site=imghp&tbm=isch&q="
@@ -140,7 +144,13 @@ enum class SearchCategory(
 
         fun findIndex(category: String): Int {
             return values().find { it.name == category.toUpperCase() }
-                    .let { if (it == null) { 0 } else { it.ordinal } }
+                    .let {
+                        if (it == null) {
+                            0
+                        } else {
+                            it.ordinal
+                        }
+                    }
         }
 
         fun getDefault(): SearchCategory {

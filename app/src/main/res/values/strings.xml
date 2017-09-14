@@ -18,6 +18,10 @@
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
     <string name="search_category_search_code">searchcode</string>
+    <string name="search_category_startpage">startpage</string>
+    <string name="search_category_grep_code">GrepCode</string>
+    <string name="search_category_yandex">Yandex</string>
+    <string name="search_category_yahoo">Yahoo!</string>
 
     <string name="close">閉じる</string>
     <string name="display">表示</string>
@@ -224,8 +228,6 @@
     <string name="message_check_retain_tabs">アプリ終了後もタブを保持します。</string>
     <string name="message_check_doesnot_retain_tabs">アプリ終了時にタブをすべて削除します。</string>
     <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
-    <string name="search_category_grep_code">GrepCode</string>
-    <string name="search_category_yandex">Yandex</string>
     <string name="title_default_search_engine">デフォルトの検索エンジン</string>
     <string name="subhead_search">検索の設定</string>
     <string name="subhead_browser">ブラウザの設定</string>
@@ -266,7 +268,7 @@
     <string name="message_confirm_exit">アプリを終了しますか？</string>
     <string name="title_settings_display">ディスプレイの設定</string>
     <string name="message_empty_histories">履歴はありません。</string>
-    <string name="title_full_screen">全画面モード</string>
+    <string name="title_full_screen">フルスクリーンモード</string>
 
     <string name="title_ssl_connection_error">TLS エラー!</string>
     <string name="message_ssl_error_first_line">サイトのセキュリティ証明書が信頼できません。接続を終了しました。\n\nエラーの原因\n</string>
@@ -275,4 +277,6 @@
     <string name="message_ssl_error_not_yet_valid">証明書はまだ有効ではありません  開始時刻=</string>
     <string name="message_ssl_error_untrusted">証明書を発行した認証局が信頼できません  認証局</string>
     <string name="message_ssl_error_unknown">原因不明のエラーが発生しました</string>
+    <string name="message_full_screen">アプリ内ブラウザをフルスクリーンで表示します。</string>
+    <string name="message_cancel_full_screen">フルスクリーンモードを解除しました。</string>
 </resources>

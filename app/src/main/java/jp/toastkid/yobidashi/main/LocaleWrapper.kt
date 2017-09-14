@@ -2,8 +2,7 @@ package jp.toastkid.yobidashi.main
 
 import android.content.res.Configuration
 import android.os.Build
-
-import java.util.Locale
+import java.util.*
 
 /**
  * @author toastkidjp
@@ -11,6 +10,10 @@ import java.util.Locale
 object LocaleWrapper {
 
     private val JAPANESE = Locale.JAPAN.language
+
+    fun checkJa(): Boolean {
+        return Locale.getDefault().language.equals(Locale.JAPANESE.language)
+    }
 
     fun isJa(configuration: Configuration): Boolean {
         return getLocale(configuration) == JAPANESE

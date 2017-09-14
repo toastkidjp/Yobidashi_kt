@@ -115,6 +115,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
         binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
+        binding.browserFullscreenCheck.isChecked = preferenceApplier.fullScreen
     }
 
     /**
@@ -226,6 +227,17 @@ class SettingsTopFragment : BaseFragment() {
         @StringRes val messageId
                 = if (newState) { R.string.message_use_internal_browser }
                   else { R.string.message_use_chrome }
+        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+    }
+
+    fun switchFullScreen(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.fullScreen
+        preferenceApplier.fullScreen = newState
+        binding.browserFullscreenCheck.isChecked = newState
+        @StringRes val messageId =
+                if (newState) { R.string.message_full_screen }
+                else          { R.string.message_cancel_full_screen }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 

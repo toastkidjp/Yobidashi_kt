@@ -524,10 +524,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     override fun hideToolbar() {
-        if (!isVisibleToolbar()) {
-            return
-        }
-
         val animate = binding.appBarMain.toolbar.animate()
         animate.cancel();
         animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200).start();
@@ -538,10 +534,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     override fun showToolbar() {
-        if (isVisibleToolbar()) {
-            return
-        }
-
         val animate = binding.appBarMain.toolbar.animate()
         animate.cancel();
         animate.translationY(0f).setDuration(200).start();
@@ -550,8 +542,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         binding.appBarMain.content.requestLayout()
         binding.appBarMain.toolbar.visibility = View.VISIBLE
     }
-
-    override fun isVisibleToolbar(): Boolean = binding.appBarMain.toolbar.visibility == View.VISIBLE
 
     /**
      * Make share message.

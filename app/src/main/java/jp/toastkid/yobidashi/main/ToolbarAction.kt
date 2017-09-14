@@ -8,6 +8,4 @@ interface ToolbarAction {
     fun showToolbar()
 
     fun hideToolbar()
-
-    fun isVisibleToolbar(): Boolean
 }

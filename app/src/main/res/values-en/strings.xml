@@ -18,6 +18,10 @@
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
     <string name="search_category_search_code">searchcode</string>
+    <string name="search_category_startpage">startpage</string>
+    <string name="search_category_grep_code">GrepCode</string>
+    <string name="search_category_yandex">Yandex</string>
+    <string name="search_category_yahoo">Yahoo!</string>
 
     <string name="close">Close</string>
     <string name="display">Display</string>
@@ -226,8 +230,6 @@
     <string name="message_check_retain_tabs">It will retain tabs when you exit this app.</string>
     <string name="message_check_doesnot_retain_tabs">It will remove all tabs when you exit this app.</string>
     <string name="title_retain_tabs">Retain tabs on exit this app</string>
-    <string name="search_category_grep_code">GrepCode</string>
-    <string name="search_category_yandex">Yandex</string>
     <string name="title_default_search_engine">Default Search Engine</string>
     <string name="subhead_search">Search</string>
     <string name="subhead_browser">Browser</string>
@@ -281,4 +283,6 @@
     <string name="message_ssl_error_not_yet_valid">This site\'s certificate is not yet valid.\n\nStart time=</string>
     <string name="message_ssl_error_untrusted">CA is untrusted.\n\nCA=</string>
     <string name="message_ssl_error_unknown">Occurred unknown error!</string>
+    <string name="message_full_screen">This app use full screen mode.</string>
+    <string name="message_cancel_full_screen">It has canceled full screen mode.</string>
 </resources>
