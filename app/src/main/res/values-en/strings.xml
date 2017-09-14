@@ -284,4 +284,6 @@
     <string name="message_ssl_error_not_yet_valid">This site\'s certificate is not yet valid.\n\nStart time=</string>
     <string name="message_ssl_error_untrusted">CA is untrusted.\n\nCA=</string>
     <string name="message_ssl_error_unknown">Occurred unknown error!</string>
+    <string name="message_full_screen">This app use full screen mode.</string>
+    <string name="message_cancel_full_screen">It has canceled full screen mode.</string>
 </resources>

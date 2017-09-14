@@ -201,11 +201,13 @@ class BrowserFragment : BaseFragment() {
         val snackbarParent = binding?.root as View
         when (menu) {
             Menu.FULL_SCREEN -> {
-                if (toolbarAction?.isVisibleToolbar() ?: false) {
-                    toolbarAction?.hideToolbar()
-                } else {
+                val preferenceApplier = preferenceApplier()
+                if (preferenceApplier.fullScreen) {
                     toolbarAction?.showToolbar()
+                } else {
+                    toolbarAction?.hideToolbar()
                 }
+                preferenceApplier.fullScreen = !preferenceApplier.fullScreen
             }
             Menu.RELOAD -> {
                 tabs.reload()
@@ -443,6 +445,13 @@ class BrowserFragment : BaseFragment() {
         super.onResume()
 
         refreshFab()
+
+        val preferenceApplier = preferenceApplier()
+        if (preferenceApplier.fullScreen) {
+            toolbarAction?.hideToolbar()
+        } else {
+            toolbarAction?.showToolbar()
+        }
 
         disposables.add(tabs.reloadWebViewSettings())
     }

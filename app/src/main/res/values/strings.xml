@@ -269,7 +269,7 @@
     <string name="message_confirm_exit">アプリを終了しますか？</string>
     <string name="title_settings_display">ディスプレイの設定</string>
     <string name="message_empty_histories">履歴はありません。</string>
-    <string name="title_full_screen">全画面モード</string>
+    <string name="title_full_screen">フルスクリーンモード</string>
 
     <string name="title_ssl_connection_error">TLS エラー!</string>
     <string name="message_ssl_error_first_line">サイトのセキュリティ証明書が信頼できません。接続を終了しました。\n\nエラーの原因\n</string>
@@ -278,4 +278,6 @@
     <string name="message_ssl_error_not_yet_valid">証明書はまだ有効ではありません  開始時刻=</string>
     <string name="message_ssl_error_untrusted">証明書を発行した認証局が信頼できません  認証局</string>
     <string name="message_ssl_error_unknown">原因不明のエラーが発生しました</string>
+    <string name="message_full_screen">アプリ内ブラウザをフルスクリーンで表示します。</string>
+    <string name="message_cancel_full_screen">フルスクリーンモードを解除しました。</string>
 </resources>
