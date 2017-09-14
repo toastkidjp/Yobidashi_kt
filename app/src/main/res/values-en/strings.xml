@@ -22,7 +22,6 @@
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
     <string name="search_category_yahoo">Yahoo!</string>
-    <string name="search_category_yahoo_japan">Yahoo! JAPAN</string>
 
     <string name="close">Close</string>
     <string name="display">Display</string>
