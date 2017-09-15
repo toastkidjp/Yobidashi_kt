@@ -3,6 +3,9 @@ package jp.toastkid.yobidashi.browser.tab
 import android.content.Context
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import io.reactivex.Completable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import okio.Okio
 import timber.log.Timber
 import java.io.File
@@ -16,6 +19,8 @@ import java.io.IOException
 class TabList private constructor() {
 
     @Transient private val tabs: MutableList<Tab>
+
+    @Transient private val disposables = CompositeDisposable()
 
     private var index: Int = 0
 
@@ -47,21 +52,34 @@ class TabList private constructor() {
      * Save current state to file.
      */
     internal fun save() {
-        try {
+        val initJsonAdapterIfNeed = Completable.create { e ->
             initJsonAdapterIfNeed()
+            e.onComplete()
+        }
+        val initTabJsonAdapterIfNeed = Completable.create { e ->
             initTabJsonAdapterIfNeed()
-            val json = jsonAdapter?.toJson(this)
-            Okio.buffer(Okio.sink(tabsFile)).write(json?.toByteArray(charset("UTF-8"))).flush()
-            itemsDir?.list()?.map { File(itemsDir, it) }?.forEach { it.delete() }
-            tabs.forEach {
-                Okio.buffer(Okio.sink(File(itemsDir, "${it.id}.json")))
-                    .write(tabJsonAdapter?.toJson(it)?.toByteArray(charset("UTF-8")))
-                    .flush()
-            }
-        } catch (e: IOException) {
-            Timber.e(e)
+            e.onComplete()
         }
 
+        disposables.add(Completable.ambArray(initJsonAdapterIfNeed, initTabJsonAdapterIfNeed)
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {
+                            val json = jsonAdapter?.toJson(this)
+                            val charset = charset("UTF-8")
+                            Okio.buffer(Okio.sink(tabsFile))
+                                    .write(json?.toByteArray(charset)).flush()
+                            itemsDir?.list()
+                                    ?.map { File(itemsDir, it) }
+                                    ?.forEach { it.delete() }
+                            tabs.forEach {
+                                Okio.buffer(Okio.sink(File(itemsDir, "${it.id}.json")))
+                                        .write(tabJsonAdapter?.toJson(it)?.toByteArray(charset))
+                                        .flush()
+                            }
+                        },
+                        { Timber.e(it) }
+                ))
     }
 
     internal val isEmpty: Boolean
@@ -167,5 +185,9 @@ class TabList private constructor() {
 
     internal fun indexOf(tab: Tab): Int {
         return tabs.indexOf(tab)
+    }
+
+    fun dispose() {
+        disposables.dispose()
     }
 }

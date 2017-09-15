@@ -407,6 +407,7 @@ class TabAdapter(
         }
         backOrForwardProgress = !saveHistory
         webView.loadUrl(url)
+        tabList.save()
     }
 
     fun pageUp() {
@@ -566,6 +567,7 @@ class TabAdapter(
             tabsScreenshots.clean()
         }
         disposables.dispose()
+        tabList.dispose()
     }
 
     fun loadHome() {
