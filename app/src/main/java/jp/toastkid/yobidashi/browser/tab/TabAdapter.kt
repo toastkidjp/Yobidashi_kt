@@ -323,9 +323,11 @@ class TabAdapter(
     private fun saveNewThumbnail() {
         webView.invalidate()
         webView.buildDrawingCache()
-        val file = tabsScreenshots.assignNewFile(System.currentTimeMillis().toString() + ".png")
+
+        val currentTab = tabList.currentTab()
+        val file = tabsScreenshots.assignNewFile("${currentTab.id}.png")
         Bitmaps.compress(webView.drawingCache, file)
-        tabList.currentTab().thumbnailPath = file.absolutePath
+        currentTab.thumbnailPath = file.absolutePath
     }
 
     private fun deleteThumbnail(thumbnailPath: String) {
