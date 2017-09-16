@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi.databinding.ActivityViewHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 
 /**
  * @author toastkidjp
@@ -48,6 +49,7 @@ class ViewHistoryActivity: BaseActivity() {
                 return false
             }
         }
+        binding.historiesView.layoutManager.scrollToPosition(adapter.itemCount - 1)
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
                     override fun onMove(
@@ -99,19 +101,31 @@ class ViewHistoryActivity: BaseActivity() {
 
     override fun clickMenu(item: MenuItem): Boolean {
         val itemId = item.itemId
-        if (itemId == R.id.clear) {
-            AlertDialog.Builder(this)
-                    .setTitle(R.string.title_clear_cache)
-                    .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
-                        d.dismiss()
-                        finish()
-                    }
-                    .setCancelable(true)
-                    .show()
-            return true
+        when (itemId) {
+            R.id.clear -> {
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.title_clear_cache)
+                        .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                        .setPositiveButton(R.string.ok) { d, i ->
+                            adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
+                            d.dismiss()
+                            finish()
+                        }
+                        .setCancelable(true)
+                        .show()
+                return true
+            }
+            R.id.to_top -> {
+                // For reverse layout.
+                RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
+                return true
+            }
+            R.id.to_bottom -> {
+                // For reverse layout.
+                RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
+                return true
+            }
         }
         return super.clickMenu(item)
     }

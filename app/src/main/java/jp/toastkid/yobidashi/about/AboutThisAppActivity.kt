@@ -4,18 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.view.View
-
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.NativeExpressAdView
-
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.advertisement.AdInitializers
 import jp.toastkid.yobidashi.advertisement.NativeAdFactory
 import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.LicenseViewer
 import jp.toastkid.yobidashi.libs.Toaster
 
@@ -37,21 +35,28 @@ class AboutThisAppActivity : BaseActivity() {
         overridePendingTransition(0, 0)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityAboutBinding>(this, LAYOUT_ID)
-        binding!!.activity = this
+        binding?.activity = this
 
-        initToolbar(binding!!.toolbar)
+        if (binding?.toolbar != null) {
+            initToolbar(binding?.toolbar as Toolbar)
+        }
 
-        binding!!.settingsAppVersion.text = BuildConfig.VERSION_NAME
+        binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
 
         val appContext = applicationContext
 
         val adInitializer = AdInitializers.find(appContext)
         nativeAd = NativeAdFactory.make(appContext)
-        nativeAd!!.adListener = object : AdListener() {
+        if (nativeAd == null) {
+            return
+        }
+
+        val snackbarParent = binding?.root as View
+        nativeAd?.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 super.onAdLoaded()
                 Toaster.snackShort(
-                        nativeAd!!,
+                        snackbarParent,
                         R.string.message_done_load_ad,
                         colorPair()
                 )
@@ -60,39 +65,36 @@ class AboutThisAppActivity : BaseActivity() {
             override fun onAdFailedToLoad(i: Int) {
                 super.onAdFailedToLoad(i)
                 Toaster.snackShort(
-                        nativeAd!!,
+                        snackbarParent,
                         R.string.message_failed_ad_loading,
                         colorPair()
                 )
             }
         }
-        binding!!.ad.addView(nativeAd)
-        adInitializer.invoke(nativeAd!!)
+        binding?.ad?.addView(nativeAd)
+        adInitializer.invoke(nativeAd as NativeExpressAdView)
     }
 
     override fun onResume() {
         super.onResume()
 
-        applyColorToToolbar(binding!!.toolbar)
-        ImageLoader.setImageToImageView(binding!!.backgroundImage, backgroundImagePath)
+        if (binding?.toolbar != null) applyColorToToolbar(binding?.toolbar as Toolbar)
     }
 
     /**
      * Show licenses dialog.
      * @param view
      */
-    fun licenses(view: View) {
+    fun licenses(ignored: View) {
         LicenseViewer(this).invoke()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        nativeAd!!.destroy()
+        nativeAd?.destroy()
     }
 
-    override fun titleId(): Int {
-        return R.string.title_about_this_app
-    }
+    override fun titleId(): Int = R.string.title_about_this_app
 
     companion object {
 

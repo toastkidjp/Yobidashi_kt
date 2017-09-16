@@ -104,12 +104,27 @@
     <string name="message_introduce_ad">全面広告を表示</string>
     <string name="message_about_this_app">
         さまざまなサイトで情報を検索できる Web 検索アプリです。\n
+        \n
+        【検索のしやすさ】\n
+        1. お気に入り検索……好きなサイトとキーワードの組み合わせを保存できます。
+        いつも検索するキーワードを保存しておけばすぐに検索ができます。\n
+        2. 多数の検索サイトに対応……Google, Bing, DuckDuckGo...その日の気分に合わせて使い分けOK！\n
+        3. 検索ウィジェット搭載……ホーム画面や通知領域にウィジェットを置けば、検索をすぐに起動できます。\n
+        \n
+        【豊富な機能】\n
         1. Web 検索\n
         2. バーコードリーダー\n
         3. アプリランチャー\n
         4. 簡易タブブラウザ\n
         5. カレンダー\n
         6. Planning Poker\n
+        7. ブルーライトカットフィルタ\n
+        \n
+        【カスタマイズ】\n
+        1. Toolbar を好きな色に変えられます。\n
+        2. 背景を好きな画像に変更できます。\n
+        3. 好きな検索サイトをデフォルトにできます。\n
+        4. デフォルトのホーム画面だけでなく、検索やアプリランチャー画面を起動直後の画面に設定できます。\n
     </string>
     <string name="message_done_load_ad">広告のロードが完了しました。</string>
     <string name="message_failed_ad_loading">広告のロードに失敗しました。</string>
@@ -129,7 +144,7 @@
     <string name="message_set_daily_alarm">毎朝8時の通知をセットしました。</string>
     <string name="message_clear_daily_alarm">通知設定を解除しました。</string>
     <string name="title_settings_date_and_time">日付・時刻の設定</string>
-    <string name="title_apps_launcher">アプリを起動</string>
+    <string name="title_apps_launcher">アプリランチャー</string>
     <string name="message_failed_launching">このアプリは起動できません。</string>
     <string name="date_format">yyyy/MM/dd(E) HH:mm:ss</string>
     <string name="title_package_name_filter">パッケージ名でフィルタ</string>

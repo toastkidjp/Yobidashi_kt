@@ -265,12 +265,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 R.id.nav_search -> {
                     sendLog("nav_search")
                     startActivity(SearchActivity.makeIntent(this))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_search_history -> {
                     sendLog("nav_srch_hstry")
                     startActivity(SearchHistoryActivity.makeIntent(this))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_calendar -> {
                     sendLog("nav_cal")
@@ -282,7 +282,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 R.id.nav_favorite_search -> {
                     sendLog("nav_fav_search")
                     startActivity(FavoriteSearchActivity.makeIntent(this))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_tweet -> {
                     sendLog("nav_twt")
@@ -295,7 +295,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 R.id.nav_launcher -> {
                     sendLog("nav_lnchr")
                     startActivity(LauncherActivity.makeIntent(this))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_share -> {
                     sendLog("nav_shr")
@@ -315,23 +315,26 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 R.id.nav_about_this_app -> {
                     sendLog("nav_about")
                     startActivity(AboutThisAppActivity.makeIntent(this))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_screenshots -> {
                     sendLog("nav_screenshots")
                     startActivity(ScreenshotsActivity.makeIntent(this))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_google_play -> {
                     sendLog("nav_gplay")
                     startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
                 }
                 R.id.nav_privacy_policy -> {
                     sendLog("nav_prvcy_plcy")
                     CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back)
                             .build()
                             .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
+                }
+                R.id.nav_author -> {
+                    sendLog("nav_author")
+                    startActivity(IntentFactory.authorsApp())
                 }
                 R.id.nav_settings -> {
                     sendLog("nav_set_top")
@@ -340,6 +343,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 R.id.nav_planning_poker -> {
                     sendLog("nav_poker")
                     startActivity(PlanningPokerActivity.makeIntent(this))
+                    insertSlideInTransition()
                 }
                 R.id.nav_browser -> {
                     sendLog("nav_browser")
@@ -351,7 +355,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                             BookmarkActivity.makeIntent(this),
                             BookmarkActivity.REQUEST_CODE
                     )
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_view_history -> {
                     sendLog("nav_view_history")
@@ -359,7 +363,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                             ViewHistoryActivity.makeIntent(this),
                             ViewHistoryActivity.REQUEST_CODE
                     )
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+                    insertSlideInTransition()
                 }
                 R.id.nav_barcode -> {
                     sendLog("nav_barcode")
@@ -379,6 +383,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         if (headerView != null) {
             navBackground = headerView.findViewById(R.id.nav_header_background)
         }
+    }
+
+    private fun insertSlideInTransition() {
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
     }
 
     override fun onBackPressed() {

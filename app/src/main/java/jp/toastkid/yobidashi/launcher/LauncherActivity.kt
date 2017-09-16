@@ -16,6 +16,7 @@ import jp.toastkid.yobidashi.databinding.ActivityLauncherBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.settings.SettingsActivity
 
 /**
@@ -91,20 +92,12 @@ class LauncherActivity : BaseActivity() {
         }
 
         if (itemId == R.id.to_top) {
-            if (itemCount > 30) {
-                binding!!.appItemsView.scrollToPosition(0)
-                return true
-            }
-            binding!!.appItemsView.smoothScrollToPosition(0)
+            RecyclerViewScroller.toTop(binding!!.appItemsView, itemCount)
             return true
         }
 
         if (itemId == R.id.to_bottom) {
-            if (itemCount > 30) {
-                binding!!.appItemsView.scrollToPosition(itemCount - 1)
-                return true
-            }
-            binding!!.appItemsView.smoothScrollToPosition(itemCount)
+            RecyclerViewScroller.toBottom(binding!!.appItemsView, itemCount)
             return true
         }
 
