@@ -3,16 +3,17 @@
     <data>
         <variable name="activity" type="jp.toastkid.yobidashi.about.AboutThisAppActivity" />
     </data>
-    <FrameLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/background"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         >
-        <LinearLayout
-            android:orientation="vertical"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:background="@color/transparent"
             >
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -20,91 +21,90 @@
                 android:layout_height="@dimen/toolbar_height"
                 android:minHeight="?android:actionBarSize"
                 />
-            <FrameLayout
+        </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/c6"
+            >
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/filter_white_bb"
                 >
-                <ImageView
-                    android:id="@+id/background_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:adjustViewBounds="true"
-                    android:background="@color/c6"
-                    />
-                <LinearLayout
-                    android:orientation="vertical"
+                <FrameLayout
+                    android:id="@+id/ad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/filter_white_bb"
+                    android:layout_marginTop="4dp"
+                    android:layout_gravity="bottom"
+                    />
+
+                <include layout="@layout/primary_dark_divider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/message_about_this_app"
+                    android:textSize="16sp"
+                    />
+
+                <include layout="@layout/primary_dark_divider" />
+
+                <TextView
+                    android:id="@+id/licenses"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:paddingLeft="@dimen/settings_item_left_margin"
+                    android:drawableLeft="@drawable/ic_license_black"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_licenses"
+                    android:textSize="16sp"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{activity.licenses}"
+                    />
+
+                <include layout="@layout/primary_dark_divider" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:background="@drawable/ripple_transparent"
                     >
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="@string/message_about_this_app"
-                        android:textSize="14sp"
-                        />
-                    <TextView
-                        android:id="@+id/settings_licenses"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/settings_item_height"
-                        android:paddingLeft="@dimen/settings_item_left_margin"
-                        android:drawableLeft="@drawable/ic_license_black"
-                        android:gravity="center_vertical"
-                        android:text="@string/title_licenses"
+                        android:layout_marginLeft="@dimen/settings_item_left_margin"
+                        android:layout_gravity="center_vertical|left"
+                        android:text="@string/title_app_version"
                         android:textSize="16sp"
-                        android:background="@drawable/ripple_transparent"
-                        android:onClick="@{activity.licenses}"
                         />
-
-                    <include layout="@layout/primary_dark_divider" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/settings_item_height"
-                        android:background="@drawable/ripple_transparent"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/settings_item_left_margin"
-                            android:layout_gravity="center_vertical|left"
-                            android:text="@string/title_app_version"
-                            android:textSize="16sp"
-                            />
-                        <TextView
-                            android:id="@+id/settings_app_version"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/settings_item_left_margin"
-                            android:layout_gravity="center_vertical|right"
-                            android:textSize="16sp"
-                            />
-                    </FrameLayout>
-
-                    <include layout="@layout/primary_dark_divider" />
-
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/settings_app_version"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:background="@color/soft_background"
-                        android:text="@string/copyright"
+                        android:layout_marginRight="@dimen/settings_item_left_margin"
+                        android:layout_gravity="center_vertical|right"
+                        android:textSize="16sp"
                         />
+                </FrameLayout>
 
-                    <include layout="@layout/primary_dark_divider" />
-                </LinearLayout>
+                <include layout="@layout/primary_dark_divider" />
 
-            </FrameLayout>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/soft_background"
+                    android:text="@string/copyright"
+                    />
 
-        <FrameLayout
-            android:id="@+id/ad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            />
+                <include layout="@layout/primary_dark_divider" />
 
-    </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </layout>

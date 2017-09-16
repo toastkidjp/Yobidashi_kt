@@ -103,12 +103,25 @@
     <string name="message_introduce_ad">Show AD</string>
     <string name="message_about_this_app">
         This app provide Web Search and many functions.\n
+        \n
+        | Search experience\n
+        1. Favorite search……You could save pair of search site and keyword.\n
+        2. Many search sites.……Google, Bing, DuckDuckGo, Yelp, and so on...\n
+        3. App widget……You could set app-widget on home area or notification area.\n
+        \n
+        | Many functions\n
         1. Web Search\n
         2. Barcode Reader\n
         3. App Launcher\n
         4. Simple Tab Browser\n
         5. Calendar\n
         6. Planning Poker\n
+        \n
+        | Customize\n
+        1. Toolbar coloring\n
+        2. Background image\n
+        3. Default search site\n
+        4. Start-up activity\n
     </string>
     <string name="message_done_load_ad">It has done loading AD!</string>
     <string name="message_failed_ad_loading">It failed to load AD...</string>
