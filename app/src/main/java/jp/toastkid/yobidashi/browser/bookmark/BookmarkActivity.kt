@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 
 /**
  * @author toastkidjp
@@ -119,6 +120,14 @@ class BookmarkActivity: BaseActivity() {
                         }
                         .setCancelable(true)
                         .show()
+                return true
+            }
+            R.id.to_top -> {
+                RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
+                return true
+            }
+            R.id.to_bottom -> {
+                RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
                 return true
             }
         }
