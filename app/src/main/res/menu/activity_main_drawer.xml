@@ -126,7 +126,10 @@
                 android:icon="@drawable/ic_privacy"
                 android:title="@string/privacy_policy"
                 />
-            <item android:title="@string/copyright" />
+            <item
+                android:id="@+id/nav_author"
+                android:title="@string/copyright"
+                />
         </menu>
     </item>
 

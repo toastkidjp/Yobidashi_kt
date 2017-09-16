@@ -325,13 +325,16 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 R.id.nav_google_play -> {
                     sendLog("nav_gplay")
                     startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
-                    insertSlideInTransition()
                 }
                 R.id.nav_privacy_policy -> {
                     sendLog("nav_prvcy_plcy")
                     CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back)
                             .build()
                             .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
+                }
+                R.id.nav_author -> {
+                    sendLog("nav_author")
+                    startActivity(IntentFactory.authorsApp())
                 }
                 R.id.nav_settings -> {
                     sendLog("nav_set_top")
