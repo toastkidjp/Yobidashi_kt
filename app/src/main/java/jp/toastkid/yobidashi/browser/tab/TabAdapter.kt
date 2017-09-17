@@ -141,6 +141,7 @@ class TabAdapter(
                 }
                 backOrForwardProgress = false
                 loadedCallback()
+                tabList.save()
             }
 
             override fun onReceivedError(
@@ -350,7 +351,6 @@ class TabAdapter(
         tabList.add(newTab)
         setIndexByTab(newTab)
         loadUrl(url)
-        tabList.save()
     }
 
     private fun openBackgroundTab(url: String) {
@@ -407,7 +407,6 @@ class TabAdapter(
         }
         backOrForwardProgress = !saveHistory
         webView.loadUrl(url)
-        tabList.save()
     }
 
     fun pageUp() {
