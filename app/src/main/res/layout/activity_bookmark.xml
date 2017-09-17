@@ -11,6 +11,7 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
+            android:background="@color/c6"
             />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/histories_view"
