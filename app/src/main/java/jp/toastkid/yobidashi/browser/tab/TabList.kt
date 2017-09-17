@@ -73,8 +73,10 @@ class TabList private constructor() {
                                     ?.map { File(itemsDir, it) }
                                     ?.forEach { it.delete() }
                             tabs.forEach {
+                                val source = tabJsonAdapter?.toJson(it)?.toByteArray(charset)
+                                        ?: return@forEach
                                 Okio.buffer(Okio.sink(File(itemsDir, "${it.id}.json")))
-                                        .write(tabJsonAdapter?.toJson(it)?.toByteArray(charset))
+                                        .write(source)
                                         .flush()
                             }
                         },

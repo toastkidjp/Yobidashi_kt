@@ -37,19 +37,22 @@ class ExtendedApplication : Application() {
 
         val preferenceApplier = PreferenceApplier(this)
 
-        if (preferenceApplier.isFirstLaunch) {
-            SavedColors.insertDefaultColors(this)
-            preferenceApplier.updateLastAd()
-            BookmarkInitializer.invoke(this)
-        } else {
-            disposables.add(
-                    Completable.create { e ->
-                        DbInitter.init(this)
-                        e.onComplete()
-                    }.subscribeOn(Schedulers.io())
-                            .subscribe({}, {Timber.e(it)})
-            )
-        }
+        disposables.add(
+                Completable.create { e ->
+                    DbInitter.init(this)
+                    e.onComplete()
+                }.subscribeOn(Schedulers.io())
+                        .subscribe(
+                                {
+                                    if (preferenceApplier.isFirstLaunch) {
+                                        SavedColors.insertDefaultColors(this)
+                                        preferenceApplier.updateLastAd()
+                                        BookmarkInitializer.invoke(this)
+                                    }
+                                },
+                                { Timber.e(it) }
+                        )
+        )
 
         if (preferenceApplier.useNotificationWidget()) {
             NotificationWidget.show(this)

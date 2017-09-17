@@ -18,8 +18,6 @@ internal class Tab {
 
     var thumbnailPath: String = ""
 
-    var lastTitle: String? = null
-
     @Transient var background = false
 
     @Synchronized fun back(): String {
