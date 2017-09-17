@@ -2,7 +2,11 @@ package jp.toastkid.yobidashi
 
 import android.app.Application
 import com.squareup.leakcanary.LeakCanary
+import io.reactivex.Completable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
+import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.color.SavedColors
@@ -10,14 +14,22 @@ import timber.log.Timber
 
 /**
  * For using LeakCanary and so on...
-
+ *
  * @author toastkidjp
  */
 class ExtendedApplication : Application() {
 
+    val disposables = CompositeDisposable()
+
     override fun onCreate() {
         super.onCreate()
-        LeakCanary.install(this)
+        disposables.add(
+                Completable.create { e ->
+                    LeakCanary.install(this)
+                    e.onComplete()
+                }.subscribeOn(Schedulers.computation())
+                        .subscribe({}, {Timber.e(it)})
+        )
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -29,11 +41,24 @@ class ExtendedApplication : Application() {
             SavedColors.insertDefaultColors(this)
             preferenceApplier.updateLastAd()
             BookmarkInitializer.invoke(this)
+        } else {
+            disposables.add(
+                    Completable.create { e ->
+                        DbInitter.init(this)
+                        e.onComplete()
+                    }.subscribeOn(Schedulers.io())
+                            .subscribe({}, {Timber.e(it)})
+            )
         }
 
         if (preferenceApplier.useNotificationWidget()) {
             NotificationWidget.show(this)
         }
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        disposables.dispose()
     }
 
 }
