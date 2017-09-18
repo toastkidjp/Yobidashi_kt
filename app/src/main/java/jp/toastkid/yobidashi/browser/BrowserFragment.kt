@@ -573,10 +573,10 @@ class BrowserFragment : BaseFragment() {
 
     companion object {
 
-        private val REQUEST_CODE_VIEW_ARCHIVE = 1
+        private const val REQUEST_CODE_VIEW_ARCHIVE = 1
 
-        private val REQUEST_CODE_VOICE_SEARCH = 2
+        private const val REQUEST_CODE_VOICE_SEARCH = 2
 
-        private val REQUEST_OVERLAY_PERMISSION = 3
+        private const val REQUEST_OVERLAY_PERMISSION = 3
     }
 }

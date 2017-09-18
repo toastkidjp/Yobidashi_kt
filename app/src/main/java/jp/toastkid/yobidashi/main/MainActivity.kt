@@ -581,7 +581,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         when (requestCode) {
             ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE
                 -> if (data?.data != null) {loadUri(data.data)}
-            SearchActivity.REQUERST_CODE -> {
+            SearchActivity.REQUEST_CODE -> {
                 data.getStringExtra("query")
             }
         }
