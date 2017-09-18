@@ -476,8 +476,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         val fontColor = colorPair().fontColor()
         if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
-            (navBackground?.findViewById(R.id.nav_header_main) as TextView)
-                    .setTextColor(fontColor)
+            navBackground?.findViewById<TextView>(R.id.nav_header_main)?.setTextColor(fontColor)
             return
         }
 
@@ -499,7 +498,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             setBackgroundImage(null)
         }
 
-        (navBackground?.findViewById(R.id.nav_header_main) as TextView).setTextColor(fontColor)
+        navBackground?.findViewById<TextView>(R.id.nav_header_main)?.setTextColor(fontColor)
     }
 
     /**
@@ -507,7 +506,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
-        (navBackground!!.findViewById(R.id.background) as ImageView).setImageDrawable(background)
+        navBackground?.findViewById<ImageView>(R.id.background)?.setImageDrawable(background)
         binding.appBarMain.background.setImageDrawable(background)
         if (background == null) {
             navBackground?.setBackgroundColor(colorPair().bgColor())

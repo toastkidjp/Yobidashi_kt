@@ -34,7 +34,7 @@ object StartUpSpinnerInitializer {
                 val context = spinner.context
                 val inflater = LayoutInflater.from(context)
                 val view = inflater.inflate(R.layout.item_spinner_simple, parent, false)
-                val textView = view.findViewById(R.id.text) as TextView
+                val textView = view.findViewById<TextView>(R.id.text)
                 textView.setText(startUp.titleId)
                 return view
             }

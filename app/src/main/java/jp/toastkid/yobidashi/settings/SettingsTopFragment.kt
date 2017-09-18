@@ -538,7 +538,7 @@ class SettingsTopFragment : BaseFragment() {
                 .setPositiveButton(R.string.ok) { d, i ->
                     preferenceApplier.clear()
                     initColorFilterIfNeed()
-                    colorFilter!!.stop()
+                    colorFilter?.stop()
                     setCurrentValues()
                     Updater.update(activity)
                     Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())

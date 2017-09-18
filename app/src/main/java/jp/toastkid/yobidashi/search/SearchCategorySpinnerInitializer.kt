@@ -37,9 +37,9 @@ object SearchCategorySpinnerInitializer {
                 val context = spinner.context
                 val inflater = LayoutInflater.from(context)
                 val view = inflater.inflate(R.layout.item_spinner_search_category, parent, false)
-                val imageView = view.findViewById(R.id.search_category_image) as ImageView
+                val imageView = view.findViewById<ImageView>(R.id.search_category_image)
                 imageView.setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
-                val textView = view.findViewById(R.id.search_category_text) as TextView
+                val textView = view.findViewById<TextView>(R.id.search_category_text)
                 textView.setText(searchCategory.id)
                 return view
             }

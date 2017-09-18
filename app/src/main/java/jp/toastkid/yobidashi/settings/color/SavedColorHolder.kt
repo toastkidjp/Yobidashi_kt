@@ -11,11 +11,7 @@ import jp.toastkid.yobidashi.R
  */
 internal class SavedColorHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val textView: Button
-    val remove: View
+    val textView: Button = itemView.findViewById<Button>(R.id.color)
+    val remove: View = itemView.findViewById(R.id.color_remove)
 
-    init {
-        textView = itemView.findViewById(R.id.color) as Button
-        remove = itemView.findViewById(R.id.color_remove)
-    }
 }

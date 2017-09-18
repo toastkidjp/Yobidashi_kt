@@ -78,7 +78,7 @@ class Addition internal constructor(
      * @return
      */
     private fun initSpinner(content: View): Spinner {
-        val categorySelector = content.findViewById(R.id.favorite_search_addition_categories) as Spinner
+        val categorySelector = content.findViewById<Spinner>(R.id.favorite_search_addition_categories)
         SearchCategorySpinnerInitializer.initialize(categorySelector)
         return categorySelector
     }
@@ -90,7 +90,7 @@ class Addition internal constructor(
      * @return
      */
     private fun initInput(content: View): EditText {
-        val inputLayout = content.findViewById(R.id.favorite_search_addition_query) as TextInputLayout
+        val inputLayout = content.findViewById<TextInputLayout>(R.id.favorite_search_addition_query)
 
         return TextInputs.setEmptyAlert(inputLayout)
     }
