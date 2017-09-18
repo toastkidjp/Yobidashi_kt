@@ -12,24 +12,21 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Initializer of search category selector.
+ *
  * @author toastkidjp
  */
-
 object SearchCategorySpinnerInitializer {
 
-    fun initialize(spinner: Spinner) {
+    fun invoke(spinner: Spinner) {
         val adapter = object : BaseAdapter() {
-            override fun getCount(): Int {
-                return SearchCategory.values().size
-            }
+            override fun getCount(): Int = SearchCategory.values().size
 
-            override fun getItem(position: Int): Any {
-                return SearchCategory.values()[position]
-            }
+            override fun getItem(position: Int): SearchCategory
+                    = SearchCategory.values()[position]
 
-            override fun getItemId(position: Int): Long {
-                return SearchCategory.values()[position].id.toLong()
-            }
+            override fun getItemId(position: Int): Long
+                    = SearchCategory.values()[position].id.toLong()
 
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val searchCategory = SearchCategory.values()[position]

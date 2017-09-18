@@ -79,7 +79,7 @@ class Addition internal constructor(
      */
     private fun initSpinner(content: View): Spinner {
         val categorySelector = content.findViewById<Spinner>(R.id.favorite_search_addition_categories)
-        SearchCategorySpinnerInitializer.initialize(categorySelector)
+        SearchCategorySpinnerInitializer.invoke(categorySelector)
         return categorySelector
     }
 

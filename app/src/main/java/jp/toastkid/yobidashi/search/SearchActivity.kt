@@ -61,7 +61,7 @@ class SearchActivity : BaseActivity() {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
-        SearchCategorySpinnerInitializer.initialize(binding?.searchCategories as Spinner)
+        SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
 
         initFavoriteModule()
 

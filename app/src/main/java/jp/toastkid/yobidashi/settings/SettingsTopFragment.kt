@@ -60,7 +60,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.fragment = this
         initMenuPos()
         TextInputs.setEmptyAlert(binding.homeInputLayout)
-        SearchCategorySpinnerInitializer.initialize(binding.searchCategories as Spinner)
+        SearchCategorySpinnerInitializer.invoke(binding.searchCategories as Spinner)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier().setDefaultSearchEngine(
