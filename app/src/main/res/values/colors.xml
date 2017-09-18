@@ -17,6 +17,8 @@
     <color name="filter_white_bb">#CCFFFFFF</color>
     <color name="filter_white_aa">#AAFFFFFF</color>
 
+    <color name="default_color_filter">#22777700</color>
+
     <color name="fs_add_bg">#EEE0E0E0</color>
     <color name="fs_add_ripple">#CCAAAAAA</color>
 
