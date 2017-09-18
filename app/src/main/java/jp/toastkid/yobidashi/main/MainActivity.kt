@@ -14,10 +14,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
@@ -387,6 +384,19 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     private fun insertSlideInTransition() {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
+    }
+
+    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event?.keyCode == KeyEvent.KEYCODE_BACK) {
+            val fragment = supportFragmentManager.findFragmentById(R.id.content)
+                    ?: return super.onKeyLongPress(keyCode, event)
+
+            fragment as BaseFragment
+            if (fragment.pressLongBack()) {
+                return super.onKeyLongPress(keyCode, event)
+            }
+        }
+        return super.onKeyLongPress(keyCode, event)
     }
 
     override fun onBackPressed() {

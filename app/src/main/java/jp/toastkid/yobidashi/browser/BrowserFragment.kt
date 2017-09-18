@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.support.v4.app.FragmentActivity
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -258,14 +259,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.TAB_HISTORY -> {
-                val scaleUpAnimation = ActivityOptions.makeScaleUpAnimation(
-                        binding?.menusView, 0, 0,
-                        binding?.menusView?.width ?: 0, binding?.menusView?.height ?: 0)
-                startActivityForResult(
-                        TabHistoryActivity.makeIntent(context, tabs.currentTab()),
-                        TabHistoryActivity.REQUEST_CODE,
-                        scaleUpAnimation.toBundle()
-                        )
+                launchTabHistory(context)
             }
             Menu.USER_AGENT -> {
                 UserAgent.showSelectionDialog(
@@ -410,6 +404,20 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Launch current tab's history activity.
+     */
+    private fun launchTabHistory(context: FragmentActivity) {
+        val scaleUpAnimation = ActivityOptions.makeScaleUpAnimation(
+                binding?.menusView, 0, 0,
+                binding?.menusView?.width ?: 0, binding?.menusView?.height ?: 0)
+        startActivityForResult(
+                TabHistoryActivity.makeIntent(context, tabs.currentTab()),
+                TabHistoryActivity.REQUEST_CODE,
+                scaleUpAnimation.toBundle()
+        )
+    }
+
     private fun initTabListIfNeed(snackbarParent: View) {
         if (tabListModule == null) {
             tabListModule = TabListModule(
@@ -464,6 +472,11 @@ class BrowserFragment : BaseFragment() {
         val fabMarginBottom = resources.getDimensionPixelSize(R.dimen.fab_margin)
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
         MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
+    }
+
+    override fun pressLongBack(): Boolean {
+        launchTabHistory(activity)
+        return true
     }
 
     override fun pressBack(): Boolean {

@@ -42,6 +42,11 @@ abstract class BaseFragment : Fragment() {
     @StringRes abstract fun titleId(): Int
 
     /**
+     * Event of press long back key.
+     */
+    open fun pressLongBack(): Boolean = false
+
+    /**
      * Event of press back key.
      *
      * @return is consumed event?
