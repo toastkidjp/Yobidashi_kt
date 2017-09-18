@@ -32,7 +32,11 @@ class SuggestionModule(
 ) : BaseModule(binding.root) {
 
     /** Suggest ModuleAdapter.  */
-    private val mSuggestionAdapter: Adapter
+    private val mSuggestionAdapter: Adapter = Adapter(
+            LayoutInflater.from(context()),
+            searchInput,
+            searchCallback
+    )
 
     /** Fetcher.  */
     private val mFetcher = SuggestionFetcher()
@@ -47,11 +51,6 @@ class SuggestionModule(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        mSuggestionAdapter = Adapter(
-                LayoutInflater.from(context()),
-                searchInput,
-                searchCallback
-        )
         binding.searchSuggestions.layoutManager = LinearLayoutManager(context())
         binding.searchSuggestions.adapter = mSuggestionAdapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
@@ -88,10 +87,12 @@ class SuggestionModule(
 
         mFetcher.fetchAsync(key, { suggestions ->
             if (suggestions == null || suggestions.isEmpty()) {
-                Completable.create { e ->
-                    hide()
-                    e.onComplete()
-                }.subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+                disposables.add(
+                        Completable.create { e ->
+                            hide()
+                            e.onComplete()
+                        }.subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+                )
             } else {
                 mCache.put(key, suggestions)
                 lastSubscription = replace(suggestions)
@@ -111,7 +112,7 @@ class SuggestionModule(
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnTerminate { mSuggestionAdapter.notifyDataSetChanged() }
                         .observeOn(Schedulers.computation())
-                        .subscribe({ mSuggestionAdapter.add(it) }, {Timber.e(it)})
+                        .subscribe({ mSuggestionAdapter.add(it) }, { Timber.e(it) })
         )
     }
 
@@ -140,6 +141,7 @@ class SuggestionModule(
         if (lastSubscription != null) {
             lastSubscription!!.dispose()
         }
+        disposables.dispose()
     }
 
     companion object {
