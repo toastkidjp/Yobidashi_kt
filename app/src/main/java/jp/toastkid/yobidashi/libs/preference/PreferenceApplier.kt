@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.libs.preference
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
 import jp.toastkid.yobidashi.R
@@ -201,9 +200,11 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putInt(Key.FILTER_COLOR.name, newState).apply()
     }
 
-    @ColorInt fun filterColor(): Int {
-        return preferences.getInt(Key.FILTER_COLOR.name, Color.TRANSPARENT)
-    }
+    @ColorInt fun filterColor(): Int =
+            preferences.getInt(
+                    Key.FILTER_COLOR.name,
+                    ContextCompat.getColor(context, R.color.default_color_filter)
+            )
 
     fun setDefaultSearchEngine(category: String) {
         preferences.edit().putString(Key.DEFAULT_SEARCH_ENGINE.name, category).apply()

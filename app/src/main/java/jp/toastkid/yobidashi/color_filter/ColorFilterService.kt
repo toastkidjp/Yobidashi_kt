@@ -6,11 +6,13 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.support.annotation.ColorInt
 import android.support.v4.app.JobIntentService
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Overlay Color filter.
@@ -39,6 +41,7 @@ class ColorFilterService : JobIntentService() {
 
         if (filterView == null) {
             filterView = LayoutInflater.from(this).inflate(R.layout.color_filter, null)
+            filterView?.setBackgroundColor(PreferenceApplier(applicationContext).filterColor())
         }
 
         handler.post {
@@ -82,6 +85,13 @@ class ColorFilterService : JobIntentService() {
         internal fun stop(context: Context) {
             running = true
             enqueue(context)
+        }
+
+        /**
+         * Apply new color int.
+         */
+        internal fun color(@ColorInt color: Int) {
+            filterView?.setBackgroundColor(color)
         }
 
         private fun enqueue(context: Context) {

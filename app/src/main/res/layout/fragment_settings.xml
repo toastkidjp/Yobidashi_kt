@@ -611,6 +611,10 @@
 
                 <include layout="@layout/primary_dark_divider"/>
 
+                <include layout="@layout/fragment_setting_section_color_filter" android:id="@+id/filter_color" />
+
+                <include layout="@layout/primary_dark_divider"/>
+
                 <TextView
                     android:id="@+id/settings_device"
                     android:layout_width="match_parent"

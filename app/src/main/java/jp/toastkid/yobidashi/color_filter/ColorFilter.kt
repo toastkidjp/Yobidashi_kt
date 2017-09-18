@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.support.annotation.ColorInt
 import android.support.v4.app.Fragment
 import android.view.View
 import jp.toastkid.yobidashi.R
@@ -52,6 +53,10 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
         )
         ColorFilterService.stop(activity)
         return true
+    }
+
+    fun color(@ColorInt color: Int) {
+        ColorFilterService.color(color)
     }
 
     /**
