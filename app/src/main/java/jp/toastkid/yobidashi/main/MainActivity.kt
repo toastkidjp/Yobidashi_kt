@@ -542,22 +542,24 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     override fun hideToolbar() {
         val animate = binding.appBarMain.toolbar.animate()
-        animate.cancel();
-        animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200).start();
+        animate.cancel()
+        animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200)
+                .withEndAction { binding.appBarMain.toolbar.visibility = View.GONE }
+                .start()
         val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
         marginLayoutParams.topMargin = 0
         binding.appBarMain.content.requestLayout()
-        binding.appBarMain.toolbar.visibility = View.GONE
     }
 
     override fun showToolbar() {
         val animate = binding.appBarMain.toolbar.animate()
-        animate.cancel();
-        animate.translationY(0f).setDuration(200).start();
+        animate.cancel()
+        animate.translationY(0f).setDuration(200)
+                .withStartAction { binding.appBarMain.toolbar.visibility = View.VISIBLE }
+                .start()
         val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
         marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
         binding.appBarMain.content.requestLayout()
-        binding.appBarMain.toolbar.visibility = View.VISIBLE
     }
 
     /**
