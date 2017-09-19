@@ -34,7 +34,7 @@
     <style name="FooterButton">
         <item name="android:background">@drawable/ripple_transparent</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_height">@dimen/browser_footer_height</item>
         <item name="android:layout_weight">1</item>
         <item name="android:scaleType">centerInside</item>
     </style>

@@ -57,7 +57,7 @@ class TabAdapter(
         titleCallback: (TitlePair) -> Unit,
         val loadedCallback: () -> Unit,
         touchCallback: () -> Unit,
-        private val fabSwitcher: (Boolean) -> Unit,
+        private val scrollCallback: (Boolean) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
 
@@ -296,7 +296,7 @@ class TabAdapter(
         }
         webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
             val scrolled = vertical - oldVertical
-            fabSwitcher(0 > scrolled)
+            scrollCallback(0 > scrolled)
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()

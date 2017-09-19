@@ -108,7 +108,7 @@ class BrowserFragment : BaseFragment() {
                 { titleProcessor.onNext(it) },
                 { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
-                { if (it) binding?.fab?.show() else binding?.fab?.hide() },
+                { onScroll(it) },
                 { fragmentManager.popBackStack() }
         )
 
@@ -138,6 +138,28 @@ class BrowserFragment : BaseFragment() {
         setHasOptionsMenu(true)
 
         return binding!!.root
+    }
+
+    /**
+     * On scroll action.
+     */
+    private fun onScroll(upward: Boolean) {
+        val animate = binding?.footer?.root?.animate()
+        animate?.cancel()
+
+        if (upward) {
+            binding?.fab?.show()
+            animate?.translationY(0f)
+                    ?.setDuration(200)
+                    ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
+                    ?.start()
+        } else {
+            binding?.fab?.hide()
+            animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
+                    ?.setDuration(200)
+                    ?.withEndAction { binding?.footer?.root?.visibility = View.GONE }
+                    ?.start()
+        }
     }
 
     /**
@@ -617,7 +639,7 @@ class BrowserFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        (binding!!.menusView.adapter as Adapter).dispose()
+        (binding?.menusView?.adapter as Adapter).dispose()
         tabs.dispose()
         disposables.dispose()
         searchWithClip.dispose()
