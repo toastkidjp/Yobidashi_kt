@@ -298,4 +298,6 @@
     <string name="message_ssl_error_unknown">Occurred unknown error!</string>
     <string name="message_full_screen">This app use full screen mode.</string>
     <string name="message_cancel_full_screen">It has canceled full screen mode.</string>
+    <string name="title_filter_color">Filter\'s color</string>
+    <string name="title_default">Default</string>
 </resources>

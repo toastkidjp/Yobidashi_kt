@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi.search
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.support.annotation.ColorInt
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.widget.Toolbar
@@ -33,10 +35,11 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
+import jp.toastkid.yobidashi.search.voice.VoiceSearch
 
 /**
  * Search activity.
-
+ *
  * @author toastkidjp
  */
 class SearchActivity : BaseActivity() {
@@ -47,7 +50,7 @@ class SearchActivity : BaseActivity() {
     /** Disposables.  */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-
+    /** Favorite search module. */
     private lateinit var favoriteModule: FavoriteSearchModule
 
     /** History module.  */
@@ -56,12 +59,15 @@ class SearchActivity : BaseActivity() {
     /** Suggestion module.  */
     private lateinit var suggestionModule: SuggestionModule
 
+    /** Does use voice search? */
+    private var useVoice: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
-        SearchCategorySpinnerInitializer.initialize(binding?.searchCategories as Spinner)
+        SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
 
         initFavoriteModule()
 
@@ -195,6 +201,8 @@ class SearchActivity : BaseActivity() {
 
                 val key = s.toString()
 
+                setActionButtonState(key.isEmpty())
+
                 if (preferenceApplier.isEnableSearchHistory && historyModule != null) {
                     historyModule.query(s)
                 }
@@ -214,6 +222,15 @@ class SearchActivity : BaseActivity() {
         })
     }
 
+    private fun setActionButtonState(useVoiceSearch: Boolean) {
+        this.useVoice = useVoiceSearch
+        if (useVoiceSearch) {
+            binding?.searchAction?.setImageResource(R.drawable.ic_mic)
+        } else {
+            binding?.searchAction?.setImageResource(R.drawable.ic_search_white)
+        }
+    }
+
     /**
      * Apply color to views.
      */
@@ -226,6 +243,10 @@ class SearchActivity : BaseActivity() {
         binding?.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
         binding?.searchAction?.setColorFilter(fontColor)
         binding?.searchAction?.setOnClickListener({ view ->
+            if (useVoice) {
+                startActivityForResult(VoiceSearch.makeIntent(this), REQUEST_CODE_VOICE_SEARCH)
+                return@setOnClickListener
+            }
             search(
                     binding?.searchCategories?.selectedItem.toString(),
                     binding?.searchInput?.text.toString()
@@ -237,9 +258,8 @@ class SearchActivity : BaseActivity() {
 
     /**
      * Open search result.
-
-     * @param category search category
      *
+     * @param category search category
      * @param query    search query
      */
     private fun search(category: String, query: String) {
@@ -252,6 +272,26 @@ class SearchActivity : BaseActivity() {
     fun hideKeyboard() {
         if (binding?.searchInput != null) {
             Inputs.hideKeyboard(binding?.searchInput as EditText)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        when (requestCode) {
+            REQUEST_CODE_VOICE_SEARCH -> {
+                suggestionModule.show()
+                val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if (result?.size == 0) {
+                    return
+                }
+                suggestionModule.clear()
+                suggestionModule.addAll(result ?: emptyList())
+            }
         }
     }
 
@@ -277,12 +317,14 @@ class SearchActivity : BaseActivity() {
         /** Layout ID.  */
         private val LAYOUT_ID = R.layout.activity_search
 
+        private const val REQUEST_CODE_VOICE_SEARCH = 2
+
         fun makeIntent(context: Context): Intent {
             val intent = Intent(context, SearchActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             return intent;
         }
 
-        val REQUERST_CODE: Int = 21
+        const val REQUEST_CODE: Int = 21
     }
 }

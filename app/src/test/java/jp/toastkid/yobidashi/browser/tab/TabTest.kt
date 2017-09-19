@@ -5,6 +5,8 @@ import com.squareup.moshi.Moshi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 
 /**
@@ -12,6 +14,7 @@ import java.io.IOException
  *
  * @author toastkidjp
  */
+@RunWith(RobolectricTestRunner::class)
 class TabTest {
 
     @Test
@@ -28,17 +31,15 @@ class TabTest {
     @Throws(IOException::class)
     private fun check_fromJson(tabJsonAdapter: JsonAdapter<Tab>, json: String) {
         val fromJson = tabJsonAdapter.fromJson(json)
-        assertEquals("Google", fromJson!!.lastTitle)
-        assertEquals("file://~~", fromJson.thumbnailPath)
-        assertEquals("Title", fromJson.latest.title())
-        assertEquals("URL", fromJson.latest.url())
+        assertEquals("file://~~", fromJson?.thumbnailPath)
+        assertEquals("Title", fromJson?.latest?.title())
+        assertEquals("URL", fromJson?.latest?.url())
     }
 
     private fun check_toJson(tab: Tab, tabJsonAdapter: JsonAdapter<Tab>): String {
         val json = tabJsonAdapter.toJson(tab)
         assertTrue(json.contains("\"histories\":[{\"title\":\"Title\",\"url\":\"URL\"}]"))
         assertTrue(json.contains("\"index\":0"))
-        assertTrue(json.contains("\"lastTitle\":\"Google\""))
         assertTrue(json.contains("\"thumbnailPath\":\"file://~~\""))
         return json
     }
@@ -51,7 +52,6 @@ class TabTest {
     private fun makeTestTab(): Tab {
         val tab = Tab()
         tab.thumbnailPath = "file://~~"
-        tab.lastTitle = "Google"
         tab.addHistory(History.make("Title", "URL"))
         return tab
     }

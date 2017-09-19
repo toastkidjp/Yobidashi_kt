@@ -11,96 +11,76 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
  * Simple toasting utilities.
-
+ *
  * @author toastkidjp
  */
 object Toaster {
 
     /**
      * Short toasting.
-     * @param context
      *
+     * @param context
      * @param messageId
      */
-    fun tShort(
-            context: Context,
-            @StringRes messageId: Int
-    ) {
+    fun tShort(context: Context, @StringRes messageId: Int) {
         Toast.makeText(context, messageId, Toast.LENGTH_SHORT).show()
     }
 
     /**
      * Short toasting.
-     * @param context
      *
+     * @param context
      * @param message
      */
-    fun tShort(
-            context: Context,
-            message: String
-    ) {
+    fun tShort(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     /**
      * Show simple snackbar on short time.
-
+     *
      * @param view
-     *
      * @param messageId
-     *
      * @param pair
      */
     fun snackShort(
             view: View,
             @StringRes messageId: Int,
             pair: ColorPair
-    ): Snackbar {
-        return snackShort(view, view.context.getString(messageId), pair)
-    }
+    ): Snackbar = snackShort(view, view.context.getString(messageId), pair)
 
     /**
      * Show simple snackbar on short time.
-
+     *
      * @param view
-     *
      * @param message
-     *
      * @param pair
      */
     fun snackShort(
             view: View,
             message: String,
             pair: ColorPair
-    ): Snackbar {
-        return snack(view, message, pair, Snackbar.LENGTH_SHORT)
-    }
+    ): Snackbar = snack(view, message, pair, Snackbar.LENGTH_SHORT)
 
     /**
      * Show simple snackbar on indefinite duration.
+     *
      * @param view
-     *
      * @param message
-     *
      * @param pair
      */
     fun snackIndefinite(
             view: View,
             message: String,
             pair: ColorPair
-    ): Snackbar {
-        return snack(view, message, pair, Snackbar.LENGTH_INDEFINITE)
-    }
+    ): Snackbar = snack(view, message, pair, Snackbar.LENGTH_INDEFINITE)
 
     /**
      * Show simple snackbar on specified duration.
-
+     *
      * @param view
-     *
      * @param message
-     *
      * @param pair
-     *
      * @param duration
      */
     fun snack(
@@ -112,7 +92,7 @@ object Toaster {
         val snackbar = Snackbar.make(view, message, duration)
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(pair.bgColor())
-        (snackbarView.findViewById(android.support.design.R.id.snackbar_text) as TextView)
+        snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
                 .setTextColor(pair.fontColor())
         snackbar.show()
         return snackbar
@@ -120,14 +100,11 @@ object Toaster {
 
     /**
      * Show snackbar on long time.
+     *
      * @param view
-     *
      * @param message
-     *
      * @param actionTextId
-     *
      * @param action
-     *
      * @param pair
      */
     fun snackLong(
@@ -149,14 +126,11 @@ object Toaster {
 
     /**
      * Show snackbar on long time.
+     *
      * @param view
-     *
      * @param messageId
-     *
      * @param actionTextId
-     *
      * @param action
-     *
      * @param pair
      */
     fun snackLong(
@@ -178,53 +152,29 @@ object Toaster {
 
     /**
      * Show snackbar on long time.
+     *
      * @param view
-     *
      * @param messageId
-     *
      * @param actionTextId
-     *
      * @param action
-     *
      * @param pair
+     * @param duration default = Snackbar.LENGTH_INDEFINITE
      */
     fun withAction(
             view: View,
             messageId: String,
             @StringRes actionTextId: Int,
             action: View.OnClickListener,
-            pair: ColorPair
-    ): Snackbar {
-        return withAction(view, messageId, actionTextId, action, pair, Snackbar.LENGTH_INDEFINITE)
-    }
-
-    /**
-     * Show snackbar on long time.
-     * @param view
-     *
-     * @param messageId
-     *
-     * @param actionTextId
-     *
-     * @param action
-     *
-     * @param pair
-     */
-    private fun withAction(
-            view: View,
-            messageId: String,
-            @StringRes actionTextId: Int,
-            action: View.OnClickListener,
             pair: ColorPair,
-            duration: Int
+            duration: Int = Snackbar.LENGTH_INDEFINITE
     ): Snackbar {
         val snackbar = Snackbar.make(view, messageId, duration)
         snackbar.setAction(actionTextId, action)
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(pair.bgColor())
-        (snackbarView.findViewById(android.support.design.R.id.snackbar_text) as TextView)
+        snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
                 .setTextColor(pair.fontColor())
-        (snackbarView.findViewById(android.support.design.R.id.snackbar_action) as TextView)
+        snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_action)
                 .setTextColor(pair.fontColor())
         snackbar.show()
         return snackbar

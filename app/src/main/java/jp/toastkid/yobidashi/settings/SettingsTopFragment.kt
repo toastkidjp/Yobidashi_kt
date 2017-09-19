@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.settings
 
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -59,7 +60,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.fragment = this
         initMenuPos()
         TextInputs.setEmptyAlert(binding.homeInputLayout)
-        SearchCategorySpinnerInitializer.initialize(binding.searchCategories as Spinner)
+        SearchCategorySpinnerInitializer.invoke(binding.searchCategories as Spinner)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier().setDefaultSearchEngine(
@@ -81,6 +82,9 @@ class SettingsTopFragment : BaseFragment() {
                 // NOP
             }
         }
+        initColorFilter()
+
+        ColorFilterSettingInitializer(binding.filterColor, { colorFilter?.color(it) }).invoke()
         return binding.root
     }
 
@@ -116,6 +120,10 @@ class SettingsTopFragment : BaseFragment() {
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
         binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
         binding.browserFullscreenCheck.isChecked = preferenceApplier.fullScreen
+
+        val filterColor = preferenceApplier.filterColor()
+        binding.filterColor.sample.setBackgroundColor(filterColor)
+        binding.filterColor.alpha.setProgress(Color.alpha(filterColor))
     }
 
     /**
@@ -510,13 +518,10 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchColorFilter(v: View) {
-
-        initColorFilterIfNeed()
-
         binding.useColorFilterCheck.isChecked = colorFilter!!.switchState(this, REQUEST_OVERLAY_PERMISSION)
     }
 
-    private fun initColorFilterIfNeed() {
+    private fun initColorFilter() {
         if (colorFilter == null) {
             colorFilter = ColorFilter(activity, binding.root)
         }
@@ -537,8 +542,7 @@ class SettingsTopFragment : BaseFragment() {
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, i ->
                     preferenceApplier.clear()
-                    initColorFilterIfNeed()
-                    colorFilter!!.stop()
+                    colorFilter?.stop()
                     setCurrentValues()
                     Updater.update(activity)
                     Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())

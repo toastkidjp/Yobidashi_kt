@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimaryDark"
+        >
+        <ImageView
+            android:id="@+id/back"
+            style="@style/FooterButton"
+            android:src="@drawable/ic_back"
+            />
+        <ImageView
+            android:id="@+id/forward"
+            style="@style/FooterButton"
+            android:src="@drawable/ic_forward"
+            />
+        <ImageView
+            android:id="@+id/bookmark"
+            style="@style/FooterButton"
+            android:src="@drawable/ic_bookmark"
+            />
+        <ImageView
+            android:id="@+id/search"
+            style="@style/FooterButton"
+            android:src="@drawable/ic_search_white"
+            />
+        <ImageView
+            android:id="@+id/to_top"
+            style="@style/FooterButton"
+            android:src="@drawable/ic_top"
+            />
+        <ImageView
+            android:id="@+id/to_bottom"
+            style="@style/FooterButton"
+            android:src="@drawable/ic_bottom"
+            />
+        <ImageView
+            android:id="@+id/tab"
+            style="@style/FooterButton"
+            android:src="@drawable/ic_tab"
+            />
+
+    </LinearLayout>
+</layout>

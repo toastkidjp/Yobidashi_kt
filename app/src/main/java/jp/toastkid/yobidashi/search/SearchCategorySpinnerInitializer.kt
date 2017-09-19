@@ -12,24 +12,21 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Initializer of search category selector.
+ *
  * @author toastkidjp
  */
-
 object SearchCategorySpinnerInitializer {
 
-    fun initialize(spinner: Spinner) {
+    fun invoke(spinner: Spinner) {
         val adapter = object : BaseAdapter() {
-            override fun getCount(): Int {
-                return SearchCategory.values().size
-            }
+            override fun getCount(): Int = SearchCategory.values().size
 
-            override fun getItem(position: Int): Any {
-                return SearchCategory.values()[position]
-            }
+            override fun getItem(position: Int): SearchCategory
+                    = SearchCategory.values()[position]
 
-            override fun getItemId(position: Int): Long {
-                return SearchCategory.values()[position].id.toLong()
-            }
+            override fun getItemId(position: Int): Long
+                    = SearchCategory.values()[position].id.toLong()
 
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val searchCategory = SearchCategory.values()[position]
@@ -37,9 +34,9 @@ object SearchCategorySpinnerInitializer {
                 val context = spinner.context
                 val inflater = LayoutInflater.from(context)
                 val view = inflater.inflate(R.layout.item_spinner_search_category, parent, false)
-                val imageView = view.findViewById(R.id.search_category_image) as ImageView
+                val imageView = view.findViewById<ImageView>(R.id.search_category_image)
                 imageView.setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
-                val textView = view.findViewById(R.id.search_category_text) as TextView
+                val textView = view.findViewById<TextView>(R.id.search_category_text)
                 textView.setText(searchCategory.id)
                 return view
             }

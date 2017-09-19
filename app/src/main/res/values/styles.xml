@@ -31,6 +31,14 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+    <style name="FooterButton">
+        <item name="android:background">@drawable/ripple_transparent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/browser_footer_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="colorControlNormal">@color/filter_white</item>
         <item name="windowActionBar">false</item>

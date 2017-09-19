@@ -294,4 +294,6 @@
     <string name="message_ssl_error_unknown">原因不明のエラーが発生しました</string>
     <string name="message_full_screen">アプリ内ブラウザをフルスクリーンで表示します。</string>
     <string name="message_cancel_full_screen">フルスクリーンモードを解除しました。</string>
+    <string name="title_filter_color">カラーフィルタの色</string>
+    <string name="title_default">デフォルト</string>
 </resources>

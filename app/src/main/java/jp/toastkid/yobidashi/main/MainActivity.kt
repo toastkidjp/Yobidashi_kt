@@ -14,10 +14,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
@@ -389,6 +386,19 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
     }
 
+    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event?.keyCode == KeyEvent.KEYCODE_BACK) {
+            val fragment = supportFragmentManager.findFragmentById(R.id.content)
+                    ?: return super.onKeyLongPress(keyCode, event)
+
+            fragment as BaseFragment
+            if (fragment.pressLongBack()) {
+                return super.onKeyLongPress(keyCode, event)
+            }
+        }
+        return super.onKeyLongPress(keyCode, event)
+    }
+
     override fun onBackPressed() {
         @SuppressLint("RestrictedApi")
 
@@ -476,8 +486,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         val fontColor = colorPair().fontColor()
         if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
-            (navBackground?.findViewById(R.id.nav_header_main) as TextView)
-                    .setTextColor(fontColor)
+            navBackground?.findViewById<TextView>(R.id.nav_header_main)?.setTextColor(fontColor)
             return
         }
 
@@ -499,7 +508,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             setBackgroundImage(null)
         }
 
-        (navBackground?.findViewById(R.id.nav_header_main) as TextView).setTextColor(fontColor)
+        navBackground?.findViewById<TextView>(R.id.nav_header_main)?.setTextColor(fontColor)
     }
 
     /**
@@ -507,7 +516,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
-        (navBackground!!.findViewById(R.id.background) as ImageView).setImageDrawable(background)
+        navBackground?.findViewById<ImageView>(R.id.background)?.setImageDrawable(background)
         binding.appBarMain.background.setImageDrawable(background)
         if (background == null) {
             navBackground?.setBackgroundColor(colorPair().bgColor())
@@ -533,22 +542,24 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     override fun hideToolbar() {
         val animate = binding.appBarMain.toolbar.animate()
-        animate.cancel();
-        animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200).start();
+        animate.cancel()
+        animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200)
+                .withEndAction { binding.appBarMain.toolbar.visibility = View.GONE }
+                .start()
         val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
         marginLayoutParams.topMargin = 0
         binding.appBarMain.content.requestLayout()
-        binding.appBarMain.toolbar.visibility = View.GONE
     }
 
     override fun showToolbar() {
         val animate = binding.appBarMain.toolbar.animate()
-        animate.cancel();
-        animate.translationY(0f).setDuration(200).start();
+        animate.cancel()
+        animate.translationY(0f).setDuration(200)
+                .withStartAction { binding.appBarMain.toolbar.visibility = View.VISIBLE }
+                .start()
         val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
         marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
         binding.appBarMain.content.requestLayout()
-        binding.appBarMain.toolbar.visibility = View.VISIBLE
     }
 
     /**
@@ -572,7 +583,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         when (requestCode) {
             ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE
                 -> if (data?.data != null) {loadUri(data.data)}
-            SearchActivity.REQUERST_CODE -> {
+            SearchActivity.REQUEST_CODE -> {
                 data.getStringExtra("query")
             }
         }

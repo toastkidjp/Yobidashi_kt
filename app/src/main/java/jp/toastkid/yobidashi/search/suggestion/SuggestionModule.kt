@@ -6,10 +6,13 @@ import android.widget.EditText
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -29,7 +32,11 @@ class SuggestionModule(
 ) : BaseModule(binding.root) {
 
     /** Suggest ModuleAdapter.  */
-    private val mSuggestionAdapter: Adapter
+    private val mSuggestionAdapter: Adapter = Adapter(
+            LayoutInflater.from(context()),
+            searchInput,
+            searchCallback
+    )
 
     /** Fetcher.  */
     private val mFetcher = SuggestionFetcher()
@@ -37,15 +44,13 @@ class SuggestionModule(
     /** Cache.  */
     private val mCache = HashMap<String, List<String>>(SUGGESTION_CACHE_CAPACITY)
 
-    /** Last subscription's disposable.  */
-    private var disposable: Disposable? = null
+    /** Last subscription's lastSubscription.  */
+    private var lastSubscription: Disposable? = null
+
+    /** Composite disposables. */
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        mSuggestionAdapter = Adapter(
-                LayoutInflater.from(context()),
-                searchInput,
-                searchCallback
-        )
         binding.searchSuggestions.layoutManager = LinearLayoutManager(context())
         binding.searchSuggestions.adapter = mSuggestionAdapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
@@ -67,12 +72,12 @@ class SuggestionModule(
      */
     fun request(key: String) {
 
-        if (disposable != null) {
-            disposable!!.dispose()
+        if (lastSubscription != null) {
+            lastSubscription!!.dispose()
         }
 
         if (mCache.containsKey(key)) {
-            disposable = replace(mCache[key]!!)
+            lastSubscription = replace(mCache[key]!!)
             return
         }
 
@@ -82,20 +87,38 @@ class SuggestionModule(
 
         mFetcher.fetchAsync(key, { suggestions ->
             if (suggestions == null || suggestions.isEmpty()) {
-                Completable.create { e ->
-                    hide()
-                    e.onComplete()
-                }.subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+                disposables.add(
+                        Completable.create { e ->
+                            hide()
+                            e.onComplete()
+                        }.subscribeOn(AndroidSchedulers.mainThread()).subscribe()
+                )
             } else {
                 mCache.put(key, suggestions)
-                disposable = replace(suggestions)
+                lastSubscription = replace(suggestions)
             }
         })
     }
 
     /**
-     * Replace suggestions with specified items.
+     * Use for voice search.
+     *
+     * @param words
+     */
+    internal fun addAll(words: List<String>) {
+        disposables.add(
+                Observable.fromIterable(words)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnTerminate { mSuggestionAdapter.notifyDataSetChanged() }
+                        .observeOn(Schedulers.computation())
+                        .subscribe({ mSuggestionAdapter.add(it) }, { Timber.e(it) })
+        )
+    }
 
+    /**
+     * Replace suggestions with specified items.
+     *
      * @param suggestions
      */
     private fun replace(suggestions: List<String>): Disposable {
@@ -115,9 +138,10 @@ class SuggestionModule(
      * Dispose last subscription.
      */
     fun dispose() {
-        if (disposable != null) {
-            disposable!!.dispose()
+        if (lastSubscription != null) {
+            lastSubscription!!.dispose()
         }
+        disposables.dispose()
     }
 
     companion object {

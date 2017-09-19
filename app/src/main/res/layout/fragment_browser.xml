@@ -38,6 +38,15 @@
             android:src="@drawable/ic_menu"
             android:onClick="@{fragment.showMenu}"
             />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            >
+            <include android:id="@+id/footer" layout="@layout/browser_footer" />
+        </FrameLayout>
+
         <FrameLayout
             android:id="@+id/tab_list_container"
             android:layout_width="match_parent"
