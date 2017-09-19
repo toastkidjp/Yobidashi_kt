@@ -3,10 +3,10 @@ package jp.toastkid.yobidashi.browser.history
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AlertDialog
+import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -20,11 +20,12 @@ import java.util.*
  * @author toastkidjp
  */
 internal class ActivityAdapter(
-        context: Context,
-        relation: ViewHistory_Relation,
+        private val context: Context,
+        private val relation: ViewHistory_Relation,
         private val onClick: (ViewHistory) -> Unit,
         private val onDelete: (ViewHistory) -> Unit
-) : OrmaRecyclerViewAdapter<ViewHistory, ViewHolder>(context, relation) {
+) : RecyclerView.Adapter<ViewHolder>() {
+    override fun getItemCount(): Int = relation.reversed().size
 
     /** Layout inflater.  */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -32,9 +33,8 @@ internal class ActivityAdapter(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     private val dateFormat: ThreadLocal<DateFormat> = object: ThreadLocal<DateFormat>() {
-        override fun initialValue(): DateFormat {
-            return SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
-        }
+        override fun initialValue(): DateFormat =
+                SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,7 +43,7 @@ internal class ActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val viewHistory: ViewHistory = getItem(position)
+        val viewHistory: ViewHistory = relation.reversed().get(position)
 
         holder.setText(
                 viewHistory.title,
@@ -60,7 +60,6 @@ internal class ActivityAdapter(
         disposables.add(holder.setImage(viewHistory.favicon))
 
         holder.itemView.setOnLongClickListener { v ->
-            val context = context
             AlertDialog.Builder(context)
                     .setTitle(R.string.delete)
                     .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
@@ -81,23 +80,25 @@ internal class ActivityAdapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        val item = getItem(position)
-        removeItemAsMaybe(item)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
-                    notifyItemRemoved(position)
-                }
+        val item = relation.reversed().get(position)
+        disposables.add(
+                relation.deleteAsMaybe(item)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { i -> notifyItemRemoved(position) }
+        )
     }
 
     fun clearAll(onComplete: () -> Unit) {
-        clearAsSingle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
-                    onComplete()
-                    notifyItemRangeRemoved(0, i)
-                }
+        disposables.add(
+                relation.deleter().executeAsSingle()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { i ->
+                            onComplete()
+                            notifyItemRangeRemoved(0, i)
+                        }
+        )
     }
 
     fun dispose() {

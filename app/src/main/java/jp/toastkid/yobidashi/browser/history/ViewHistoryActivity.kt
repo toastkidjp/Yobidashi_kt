@@ -36,7 +36,7 @@ class ViewHistoryActivity: BaseActivity() {
         binding = DataBindingUtil.setContentView<ActivityViewHistoryBinding>(this, LAYOUT_ID)
         val relation = DbInitter.init(this).relationOfViewHistory()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
+        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
                 relation,
@@ -45,11 +45,8 @@ class ViewHistoryActivity: BaseActivity() {
         )
         binding.historiesView.adapter = adapter
         binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                return false
-            }
+            override fun onFling(velocityX: Int, velocityY: Int): Boolean = false
         }
-        binding.historiesView.layoutManager.scrollToPosition(adapter.itemCount - 1)
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
                     override fun onMove(
@@ -117,13 +114,11 @@ class ViewHistoryActivity: BaseActivity() {
                 return true
             }
             R.id.to_top -> {
-                // For reverse layout.
-                RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
+                RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
                 return true
             }
             R.id.to_bottom -> {
-                // For reverse layout.
-                RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
+                RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
                 return true
             }
         }
