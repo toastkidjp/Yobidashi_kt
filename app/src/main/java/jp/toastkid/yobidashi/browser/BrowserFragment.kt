@@ -50,6 +50,7 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.search.SearchActivity
@@ -78,16 +79,12 @@ class BrowserFragment : BaseFragment() {
     private var pageSearcherModule: PageSearcherModule? = null
 
     /** Title processor  */
-    private val titleProcessor: PublishProcessor<TitlePair>
+    private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
 
     /** Disposer.  */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     private lateinit var searchWithClip: SearchWithClip
-
-    init {
-        titleProcessor = PublishProcessor.create<TitlePair>()
-    }
 
     private var toolbarAction: ToolbarAction? = null
 
@@ -119,13 +116,16 @@ class BrowserFragment : BaseFragment() {
         binding?.refresher?.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
         initMenus()
 
+        val colorPair = colorPair()
+        initFooter(colorPair)
+
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
                 binding!!.root,
-                colorPair(),
+                colorPair,
                 { url -> tabs.loadWithNewTab(Uri.parse(url)) }
         )
         searchWithClip.invoke()
@@ -138,6 +138,36 @@ class BrowserFragment : BaseFragment() {
         setHasOptionsMenu(true)
 
         return binding!!.root
+    }
+
+    /**
+     * Initialize footer with [ColorPair]
+     *
+     * @param colorPair [ColorPair]
+     */
+    private fun initFooter(colorPair: ColorPair) {
+        binding?.footer?.root?.setBackgroundColor(colorPair.bgColor())
+        val fontColor = colorPair.fontColor()
+        binding?.footer?.back?.setColorFilter(fontColor)
+        binding?.footer?.back?.setOnClickListener { back() }
+
+        binding?.footer?.forward?.setColorFilter(fontColor)
+        binding?.footer?.forward?.setOnClickListener { forward() }
+
+        binding?.footer?.bookmark?.setColorFilter(fontColor)
+        binding?.footer?.bookmark?.setOnClickListener { bookmark() }
+
+        binding?.footer?.search?.setColorFilter(fontColor)
+        binding?.footer?.search?.setOnClickListener { search() }
+
+        binding?.footer?.toTop?.setColorFilter(fontColor)
+        binding?.footer?.toTop?.setOnClickListener { toTop() }
+
+        binding?.footer?.toBottom?.setColorFilter(fontColor)
+        binding?.footer?.toBottom?.setOnClickListener { toBottom() }
+
+        binding?.footer?.tab?.setColorFilter(fontColor)
+        binding?.footer?.tab?.setOnClickListener { showTabListWithParent(binding?.root as View) }
     }
 
     /**
@@ -219,18 +249,15 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.FORWARD -> {
-                val forward = tabs.forward()
-                if (forward.isNotEmpty()) {
-                    tabs.loadUrl(forward, false)
-                }
+                forward()
                 return
             }
             Menu.TOP -> {
-                tabs.pageUp()
+                toTop()
                 return
             }
             Menu.BOTTOM -> {
-                tabs.pageDown()
+                toBottom()
                 return
             }
             Menu.FIND_IN_PAGE -> {
@@ -277,8 +304,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.TAB_LIST -> {
-                initTabListIfNeed(snackbarParent)
-                switchTabList()
+                showTabListWithParent(snackbarParent)
                 return
             }
             Menu.OPEN -> {
@@ -344,7 +370,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             Menu.SEARCH -> {
-                startActivity(SearchActivity.makeIntent(context))
+                search()
                 return
             }
             Menu.SITE_SEARCH -> {
@@ -449,6 +475,37 @@ class BrowserFragment : BaseFragment() {
         return false
     }
 
+    private fun forward() {
+        val forward = tabs.forward()
+        if (forward.isNotEmpty()) {
+            tabs.loadUrl(forward, false)
+        }
+    }
+
+    private fun bookmark() {
+        startActivityForResult(
+                BookmarkActivity.makeIntent(activity),
+                BookmarkActivity.REQUEST_CODE
+        )
+    }
+
+    private fun search() {
+        startActivity(SearchActivity.makeIntent(context))
+    }
+
+    private fun showTabListWithParent(snackbarParent: View) {
+        initTabListIfNeed(snackbarParent)
+        switchTabList()
+    }
+
+    private fun toBottom() {
+        tabs.pageDown()
+    }
+
+    private fun toTop() {
+        tabs.pageUp()
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -479,9 +536,7 @@ class BrowserFragment : BaseFragment() {
         return true
     }
 
-    override fun pressBack(): Boolean {
-        return hideOption() || back()
-    }
+    override fun pressBack(): Boolean = hideOption() || back()
 
     private fun hideOption(): Boolean {
         if (tabListModule != null && tabListModule?.isVisible as Boolean) {
@@ -511,9 +566,7 @@ class BrowserFragment : BaseFragment() {
         tabListModule?.show()
     }
 
-    override fun titleId(): Int {
-        return R.string.title_browser
-    }
+    override fun titleId(): Int = R.string.title_browser
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (resultCode != Activity.RESULT_OK || intent == null) {
@@ -536,7 +589,7 @@ class BrowserFragment : BaseFragment() {
                 disposables.add(VoiceSearch.processResult(activity, intent))
                 return
             }
-            ViewHistoryActivity.REQUEST_CODE -> {
+            BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 if (intent.data != null) {tabs.loadUrl(intent.data.toString())}
             }
             TabHistoryActivity.REQUEST_CODE -> {
