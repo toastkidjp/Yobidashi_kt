@@ -134,8 +134,6 @@ class SettingsTopFragment : BaseFragment() {
         binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
         binding.browserFullscreenCheck.isChecked = preferenceApplier.fullScreen
 
-        binding
-
         val filterColor = preferenceApplier.filterColor()
         binding.filterColor.sample.setBackgroundColor(filterColor)
         binding.filterColor.alpha.setProgress(Color.alpha(filterColor))
