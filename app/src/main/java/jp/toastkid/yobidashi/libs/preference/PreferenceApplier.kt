@@ -6,6 +6,7 @@ import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
+import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -24,7 +25,7 @@ class PreferenceApplier(private val context: Context) {
         USE_DAILY_ALARM, USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
-        FULL_SCREEN
+        FULL_SCREEN, SCREEN_MODE
     }
 
     private val preferences: SharedPreferences
@@ -236,6 +237,13 @@ class PreferenceApplier(private val context: Context) {
         set (newState) {
             preferences.edit().putBoolean(Key.FULL_SCREEN.name, newState).apply()
         }
+
+    fun setBrowserScreenMode(newState: ScreenMode) {
+        preferences.edit().putString(Key.SCREEN_MODE.name, newState.name).apply()
+    }
+
+    fun browserScreenMode(): ScreenMode =
+            ScreenMode.valueOf(preferences.getString(Key.SCREEN_MODE.name, ScreenMode.EXPANDABLE.name))
 
     fun clear() {
         preferences.edit().clear().apply()

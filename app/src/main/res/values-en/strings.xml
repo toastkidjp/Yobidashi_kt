@@ -300,4 +300,9 @@
     <string name="message_cancel_full_screen">It has canceled full screen mode.</string>
     <string name="title_filter_color">Filter\'s color</string>
     <string name="title_default">Default</string>
+
+    <string name="title_header_and_footer">Header &amp; Footer</string>
+    <string name="title_screen_mode_full">Full screen</string>
+    <string name="title_screen_mode_expandable">Expandable</string>
+    <string name="title_screen_mode_fixed">Fixed</string>
 </resources>

@@ -218,6 +218,11 @@
 
                 <include layout="@layout/primary_dark_divider"/>
 
+                <include android:id="@+id/browser_expand"
+                    layout="@layout/fragment_setting_section_browser_expand_mode"/>
+
+                <include layout="@layout/primary_dark_divider"/>
+
                 <FrameLayout
                     android:id="@+id/retain_tabs"
                     android:layout_width="match_parent"
