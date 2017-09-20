@@ -265,6 +265,11 @@ class BrowserFragment : BaseFragment() {
             switchTabList()
             true
         }
+
+        menu?.findItem(R.id.setting)?.setOnMenuItemClickListener { v ->
+            startActivity(SettingsActivity.makeIntent(context))
+            true
+        }
     }
 
     /**
