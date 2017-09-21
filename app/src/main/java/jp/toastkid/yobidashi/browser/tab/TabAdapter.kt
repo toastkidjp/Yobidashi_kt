@@ -13,6 +13,7 @@ import android.view.View
 import android.webkit.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import android.widget.TextView
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,15 +54,16 @@ import java.net.HttpURLConnection
  */
 class TabAdapter(
         progress: ProgressBar,
-        val webViewContainer: FrameLayout,
+        webViewContainer: FrameLayout,
+        private val tabCount: TextView,
         titleCallback: (TitlePair) -> Unit,
-        val loadedCallback: () -> Unit,
+        private val loadedCallback: () -> Unit,
         touchCallback: () -> Unit,
         private val scrollCallback: (Boolean) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
 
-    private val tabList: TabList
+    private val tabList: TabList = TabList.loadOrInit(progress.context)
 
     private val colorPair: ColorPair
 
@@ -81,7 +83,6 @@ class TabAdapter(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        tabList = TabList.loadOrInit(progress.context)
 
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
@@ -347,6 +348,7 @@ class TabAdapter(
     }
 
     private fun openNewTab(url: String) {
+        setCurrentTabCount()
         val newTab = Tab()
         tabList.add(newTab)
         setIndexByTab(newTab)
@@ -354,6 +356,7 @@ class TabAdapter(
     }
 
     private fun openBackgroundTab(url: String) {
+        setCurrentTabCount()
         tabList.add(Tab.makeBackground(webView.context.getString(R.string.new_tab), url))
         tabList.save()
     }
@@ -519,6 +522,7 @@ class TabAdapter(
         deleteThumbnail(tab.thumbnailPath)
 
         tabList.closeTab(index)
+        setCurrentTabCount()
         if (tabList.isEmpty) {
             tabEmptyCallback()
         }
@@ -575,6 +579,7 @@ class TabAdapter(
 
     internal fun clear() {
         tabList.clear()
+        setCurrentTabCount()
     }
 
     internal fun indexOf(tab: Tab): Int = tabList.indexOf(tab)
@@ -593,6 +598,11 @@ class TabAdapter(
     }
 
     internal fun currentTab(): Tab = tabList.get(index())
+
+    private fun setCurrentTabCount() {
+        val size = size()
+        tabCount.text = if (size < 100) "$size" else "^^"
+    }
 
     fun moveTo(i: Int) {
         val url = currentTab().moveAndGet(i)

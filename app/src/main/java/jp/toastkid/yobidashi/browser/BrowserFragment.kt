@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -105,6 +106,7 @@ class BrowserFragment : BaseFragment() {
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
                 binding?.webViewContainer as FrameLayout,
+                binding?.footer?.tabCount as TextView,
                 { titleProcessor.onNext(it) },
                 { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
@@ -210,7 +212,8 @@ class BrowserFragment : BaseFragment() {
         binding?.footer?.toBottom?.setColorFilter(fontColor)
         binding?.footer?.toBottom?.setOnClickListener { toBottom() }
 
-        binding?.footer?.tab?.setColorFilter(fontColor)
+        binding?.footer?.tabIcon?.setColorFilter(fontColor)
+        binding?.footer?.tabCount?.setTextColor(fontColor)
         binding?.footer?.tab?.setOnClickListener { showTabListWithParent(binding?.root as View) }
     }
 
