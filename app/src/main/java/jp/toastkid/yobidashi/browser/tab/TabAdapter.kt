@@ -110,6 +110,11 @@ class TabAdapter(
                 isLoadFinished = true
                 progress.visibility = View.GONE
 
+                val lastScrolled = currentTab().latest.scrolled
+                if (lastScrolled != 0) {
+                    webView.scrollTo(0, lastScrolled)
+                }
+
                 val title  = view.title ?: ""
                 val urlstr = url ?: ""
 
@@ -376,7 +381,9 @@ class TabAdapter(
     }
 
     internal fun setIndexByTab(tab: Tab) {
-        setIndex(tabList.indexOf(tab))
+        val index = tabList.indexOf(tab)
+        updateScrolled()
+        setIndex(index)
     }
 
     private fun setIndex(newIndex: Int) {
@@ -598,6 +605,12 @@ class TabAdapter(
     }
 
     internal fun currentTab(): Tab = tabList.get(index())
+
+    private fun updateScrolled() {
+        val currentTab = currentTab()
+        currentTab.latest.scrolled = webView.scrollY
+        tabList.set(index(), currentTab)
+    }
 
     private fun setCurrentTabCount() {
         val size = size()

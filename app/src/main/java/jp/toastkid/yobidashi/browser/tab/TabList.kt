@@ -48,6 +48,10 @@ class TabList private constructor() {
         return tabs[position]
     }
 
+    internal fun set(index: Int, currentTab: Tab) {
+        tabs.set(index, currentTab)
+    }
+
     /**
      * Save current state to file.
      */
@@ -192,4 +196,5 @@ class TabList private constructor() {
     fun dispose() {
         disposables.dispose()
     }
+
 }
