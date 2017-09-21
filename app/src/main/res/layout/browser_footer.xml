@@ -26,21 +26,41 @@
             style="@style/FooterButton"
             android:src="@drawable/ic_search_white"
             />
+
         <ImageView
             android:id="@+id/to_top"
             style="@style/FooterButton"
-            android:src="@drawable/ic_top"
-            />
+            android:src="@drawable/ic_top" />
+
         <ImageView
             android:id="@+id/to_bottom"
             style="@style/FooterButton"
             android:src="@drawable/ic_bottom"
             />
-        <ImageView
+        <FrameLayout
             android:id="@+id/tab"
             style="@style/FooterButton"
-            android:src="@drawable/ic_tab"
-            />
+            >
+            <ImageView
+                android:id="@+id/tab_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_tab"
+                />
+            <TextView
+                android:id="@+id/tab_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:text="99"
+                />
+        </FrameLayout>
 
     </LinearLayout>
 </layout>

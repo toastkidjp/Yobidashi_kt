@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.browser.MenuPos
+import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.UserAgent
 import jp.toastkid.yobidashi.calendar.alarm.DailyAlarm
 import jp.toastkid.yobidashi.color_filter.ColorFilter
@@ -59,6 +60,7 @@ class SettingsTopFragment : BaseFragment() {
                 .inflate<FragmentSettingsBinding>(inflater!!, LAYOUT_ID, container, false)
         binding.fragment = this
         initMenuPos()
+        initBrowserExpandable()
         TextInputs.setEmptyAlert(binding.homeInputLayout)
         SearchCategorySpinnerInitializer.invoke(binding.searchCategories as Spinner)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -96,6 +98,17 @@ class SettingsTopFragment : BaseFragment() {
             }
         })
         binding.menuPosRadio.check(preferenceApplier().menuPos().id())
+    }
+
+    private fun initBrowserExpandable() {
+        binding.browserExpand.screenMode.setOnCheckedChangeListener ({ group, checkedId ->
+            when (group.checkedRadioButtonId) {
+                R.id.full_screen  -> preferenceApplier().setBrowserScreenMode(ScreenMode.FULL_SCREEN)
+                R.id.expandable   -> preferenceApplier().setBrowserScreenMode(ScreenMode.EXPANDABLE)
+                R.id.fixed        -> preferenceApplier().setBrowserScreenMode(ScreenMode.FIXED)
+            }
+        })
+        binding.browserExpand.screenMode.check(preferenceApplier().browserScreenMode().id())
     }
 
     override fun onResume() {

@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -105,6 +106,7 @@ class BrowserFragment : BaseFragment() {
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
                 binding?.webViewContainer as FrameLayout,
+                binding?.footer?.tabCount as TextView,
                 { titleProcessor.onNext(it) },
                 { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
@@ -144,22 +146,44 @@ class BrowserFragment : BaseFragment() {
      * On scroll action.
      */
     private fun onScroll(upward: Boolean) {
-        val animate = binding?.footer?.root?.animate()
-        animate?.cancel()
+
+        val browserScreenMode = preferenceApplier().browserScreenMode()
+
+        if (browserScreenMode == ScreenMode.FIXED) {
+            return
+        }
 
         if (upward) {
             binding?.fab?.show()
-            animate?.translationY(0f)
-                    ?.setDuration(200)
-                    ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
-                    ?.start()
+            if (browserScreenMode == ScreenMode.EXPANDABLE) {
+                showFooter()
+            }
         } else {
             binding?.fab?.hide()
-            animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
-                    ?.setDuration(200)
-                    ?.withEndAction { binding?.footer?.root?.visibility = View.GONE }
-                    ?.start()
+            if (browserScreenMode == ScreenMode.EXPANDABLE) {
+                hideFooter()
+            }
         }
+    }
+
+    private fun showFooter() {
+        val animate = binding?.footer?.root?.animate()
+        animate?.cancel()
+        animate?.translationY(0f)
+                ?.setDuration(200)
+                ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
+                ?.withEndAction { toolbarAction?.showToolbar() }
+                ?.start()
+    }
+
+    private fun hideFooter() {
+        val animate = binding?.footer?.root?.animate()
+        animate?.cancel()
+        animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
+                ?.setDuration(200)
+                ?.withStartAction { toolbarAction?.hideToolbar() }
+                ?.withEndAction { binding?.footer?.root?.visibility = View.GONE }
+                ?.start()
     }
 
     /**
@@ -188,7 +212,8 @@ class BrowserFragment : BaseFragment() {
         binding?.footer?.toBottom?.setColorFilter(fontColor)
         binding?.footer?.toBottom?.setOnClickListener { toBottom() }
 
-        binding?.footer?.tab?.setColorFilter(fontColor)
+        binding?.footer?.tabIcon?.setColorFilter(fontColor)
+        binding?.footer?.tabCount?.setTextColor(fontColor)
         binding?.footer?.tab?.setOnClickListener { showTabListWithParent(binding?.root as View) }
     }
 
@@ -243,6 +268,11 @@ class BrowserFragment : BaseFragment() {
             switchTabList()
             true
         }
+
+        menu?.findItem(R.id.setting)?.setOnMenuItemClickListener { v ->
+            startActivity(SettingsActivity.makeIntent(context))
+            true
+        }
     }
 
     /**
@@ -253,15 +283,6 @@ class BrowserFragment : BaseFragment() {
         val context = activity
         val snackbarParent = binding?.root as View
         when (menu) {
-            Menu.FULL_SCREEN -> {
-                val preferenceApplier = preferenceApplier()
-                if (preferenceApplier.fullScreen) {
-                    toolbarAction?.showToolbar()
-                } else {
-                    toolbarAction?.hideToolbar()
-                }
-                preferenceApplier.fullScreen = !preferenceApplier.fullScreen
-            }
             Menu.RELOAD -> {
                 tabs.reload()
                 return
@@ -534,10 +555,10 @@ class BrowserFragment : BaseFragment() {
         refreshFab()
 
         val preferenceApplier = preferenceApplier()
-        if (preferenceApplier.fullScreen) {
-            toolbarAction?.hideToolbar()
+        if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN) {
+            hideFooter()
         } else {
-            toolbarAction?.showToolbar()
+            showFooter()
         }
 
         disposables.add(tabs.reloadWebViewSettings())

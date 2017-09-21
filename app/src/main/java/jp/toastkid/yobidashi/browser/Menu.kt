@@ -27,8 +27,6 @@ internal enum class Menu(
 
     FORWARD(R.string.title_menu_forward, R.drawable.ic_forward),
 
-    FULL_SCREEN(R.string.title_full_screen, R.drawable.ic_fullscreen),
-
     RELOAD(R.string.title_menu_reload, R.drawable.ic_reload),
 
     PAGE_INFORMATION(R.string.title_menu_page_information, R.drawable.ic_info),
