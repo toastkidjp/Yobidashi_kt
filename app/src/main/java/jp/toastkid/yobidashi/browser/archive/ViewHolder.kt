@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.archive
 
+import android.support.annotation.ColorInt
 import android.support.v7.widget.RecyclerView
 import android.view.View
 
@@ -7,17 +8,14 @@ import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 
 /**
  * View holder.
-
+ *
+ * Initialize with binding object.
+ * @param binding Data binding object.
+ *
  * @author toastkidjp
  */
-internal class ViewHolder
-/**
- * Initialize with binding object.
- * @param binding
- */
-(
-        /** Data binding object.  */
-        private val binding: ItemArchiveBinding) : RecyclerView.ViewHolder(binding.root) {
+internal class ViewHolder(private val binding: ItemArchiveBinding)
+    : RecyclerView.ViewHolder(binding.root) {
 
     fun setText(name: String) {
         binding.text.text = name
@@ -29,5 +27,10 @@ internal class ViewHolder
 
     fun setSubText(s: String) {
         binding.subtext.text = s
+    }
+
+    fun setIconColor(@ColorInt color: Int) {
+        binding.icon.setColorFilter(color)
+        binding.delete.setColorFilter(color)
     }
 }

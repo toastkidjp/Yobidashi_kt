@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.Storeroom
 import timber.log.Timber
 import java.io.IOException
+import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +35,9 @@ internal class Adapter(
     /** Layout inflater.  */
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
+    /** Preference's wrapper. */
+    private val preferenceApplier = PreferenceApplier(context)
+
     /** Data binding object.  */
     private var binding: ItemArchiveBinding? = null
 
@@ -45,8 +50,8 @@ internal class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val file = archiveDir.get(position) ?: return
         holder.setText(file.name)
-        holder.setSubText(convertLastModified(file.lastModified())
-                + " / " + convertKb(file.length()) + "[KB]")
+        holder.setSubText(
+                "${convertLastModified(file.lastModified())} / ${convertKb(file.length())}[KB]")
         holder.itemView.setOnClickListener { v ->
             try {
                 callback(file.absolutePath)
@@ -58,18 +63,25 @@ internal class Adapter(
             file.delete()
             notifyItemRemoved(position)
         })
+        holder.setIconColor(preferenceApplier.color)
     }
 
-    private fun convertLastModified(lastModifiedMs: Long): String {
-        return SimpleDateFormat("yyyyMMdd HH:mm:ss", Locale.getDefault())
-                .format(Date(lastModifiedMs))
-    }
+    private fun convertLastModified(lastModifiedMs: Long): String
+            = DATE_FORMAT_HOLDER.get().format(Date(lastModifiedMs))
 
-    private fun convertKb(length: Long): String {
-        return NumberFormat.getIntegerInstance(Locale.getDefault()).format(length / 1024)
-    }
+    private fun convertKb(length: Long): String
+            = NumberFormat.getIntegerInstance(Locale.getDefault()).format(length / 1024)
 
-    override fun getItemCount(): Int {
-        return archiveDir.count
+    override fun getItemCount(): Int = archiveDir.count
+
+    companion object {
+
+        /**
+         * Date format holder.
+         */
+        private val DATE_FORMAT_HOLDER = object: ThreadLocal<DateFormat>() {
+            override fun initialValue(): DateFormat
+                    = SimpleDateFormat("yyyyMMdd HH:mm:ss", Locale.getDefault())
+        }
     }
 }

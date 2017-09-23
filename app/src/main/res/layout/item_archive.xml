@@ -11,7 +11,7 @@
             android:id="@+id/icon"
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/common_horizontal_margin"
+            android:layout_marginLeft="@dimen/search_horizontal_margin"
             android:adjustViewBounds="true"
             android:layout_gravity="left"
             android:src="@drawable/ic_archive"
@@ -55,7 +55,7 @@
             android:layout_marginRight="@dimen/common_horizontal_margin"
             android:adjustViewBounds="true"
             android:layout_gravity="right"
-            android:src="@drawable/ic_remove_circle"
+            android:src="@drawable/ic_remove_circle_white"
             />
         <View
             android:layout_width="match_parent"
