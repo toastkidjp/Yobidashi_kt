@@ -45,10 +45,17 @@ class TabList private constructor() {
     }
 
     internal fun get(position: Int): Tab {
+        if (position < 0 || tabs.size < position) {
+            return tabs[0]
+        }
         return tabs[position]
     }
 
     internal fun set(index: Int, currentTab: Tab) {
+        if (index < 0 || tabs.size < index) {
+            tabs.set(0, currentTab)
+            return
+        }
         tabs.set(index, currentTab)
     }
 
