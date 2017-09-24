@@ -650,6 +650,11 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Load archive file.
+     *
+     * @param file Archive file
+     */
     fun loadArchive(file: File) {
         try {
             tabs.loadArchive(file)

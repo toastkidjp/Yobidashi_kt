@@ -365,9 +365,9 @@ class TabAdapter(
     }
 
     private fun openNewTab(url: String) {
-        setCurrentTabCount()
         val newTab = Tab()
         tabList.add(newTab)
+        setCurrentTabCount()
         setIndexByTab(newTab)
         loadUrl(url)
     }
