@@ -85,7 +85,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     private val browserFragment: BrowserFragment = BrowserFragment()
 
     /** Home fragment.  */
-    private lateinit var homeFragment: HomeFragment
+    private val homeFragment = HomeFragment()
 
     /** Disposables.  */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -125,6 +125,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /**
      * Process intent shortcut.
+     *
+     * @param calledIntent
      */
     private fun processShortcut(calledIntent: Intent) {
         if (calledIntent.action == null) {
@@ -162,7 +164,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         when (preferenceApplier.startUp) {
             StartUp.START -> {
-                homeFragment = HomeFragment()
                 replaceFragment(homeFragment)
             }
             StartUp.APPS_LAUNCHER -> {
