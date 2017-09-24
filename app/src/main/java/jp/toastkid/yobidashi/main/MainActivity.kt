@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi.advertisement.AdInitializers
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -265,6 +266,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             invokeWithMenuId(item.itemId)
             true
         })
+        if (Archive.cannotUseArchive()) {
+            binding.navView.menu.findItem(R.id.nav_archives).isVisible = false
+        }
         val headerView = binding.navView?.getHeaderView(0)
         navBackground = headerView?.findViewById(R.id.nav_header_background)
     }
