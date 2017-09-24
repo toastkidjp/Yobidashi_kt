@@ -72,7 +72,6 @@ class CalendarFragment : BaseFragment() {
                             1 -> {
                                 logSender!!.send("cal_schdl", bundle)
                                 startActivity(IntentFactory.makeCalendar(view.date))
-
                             }
                             2 -> {
                                 logSender!!.send("cal_srch", bundle)

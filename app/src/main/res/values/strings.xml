@@ -118,7 +118,7 @@
         4. 簡易タブブラウザ\n
         5. カレンダー\n
         6. Planning Poker\n
-        7. ブルーライトカットフィルタ\n
+        7. カラーフィルタ\n
         \n
         【カスタマイズ】\n
         1. Toolbar を好きな色に変えられます。\n
@@ -222,10 +222,10 @@
     <string name="close_menu">メニューを閉じる</string>
     <string name="message_save_failed">保存に失敗しました。</string>
     <string name="message_disable_archive">OS バージョン 4.3 以下では使用できません。</string>
-    <string name="message_cannot_draw_overlay">ブルーライトフィルタ機能を使用するにはオーバレイの権限が必要です。</string>
-    <string name="message_enable_color_filter">ブルーライトフィルタを有効にしました。</string>
-    <string name="message_stop_color_filter">ブルーライトフィルタをオフにしました。</string>
-    <string name="title_color_filter">ブルーライトフィルタ</string>
+    <string name="message_cannot_draw_overlay">カラーフィルタ機能を使用するにはオーバレイの権限が必要です。</string>
+    <string name="message_enable_color_filter">カラーフィルタを有効にしました。</string>
+    <string name="message_stop_color_filter">カラーフィルタをオフにしました。</string>
+    <string name="title_color_filter">カラーフィルタ</string>
     <string name="title_site_search_by_google">サイト内をGoogleで検索</string>
     <string name="title_open_other_browser">別のブラウザで開く</string>
     <string name="title_clear_form_data">フォームデータを削除</string>

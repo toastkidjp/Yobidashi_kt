@@ -11,6 +11,8 @@ internal data class History internal constructor(private val title: String, priv
 
     fun url(): String = url
 
+    var scrolled: Int = 0
+
     companion object {
 
         /** Empty object.  */

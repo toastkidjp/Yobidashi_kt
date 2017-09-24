@@ -25,12 +25,12 @@ class ArchivesActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityArchivesBinding>(this, LAYOUT_ID)
-        binding!!.archivesView.layoutManager = LinearLayoutManager(this)
+        binding?.archivesView?.layoutManager = LinearLayoutManager(this)
         val adapter = Adapter(
                 this,
                 { filePath ->
                     val intent = Intent()
-                    intent.putExtra("FILE_NAME", filePath)
+                    intent.putExtra(EXTRA_KEY_FILE_NAME, filePath)
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                 }
@@ -39,14 +39,18 @@ class ArchivesActivity : BaseActivity() {
             finish()
             Toaster.tShort(this, R.string.message_empty_archives)
         }
-        binding!!.archivesView.adapter = adapter
+        binding?.archivesView?.adapter = adapter
     }
 
     @StringRes override fun titleId(): Int = R.string.title_archives
 
     companion object {
 
-        private val LAYOUT_ID = R.layout.activity_archives
+        const val REQUEST_CODE = 0x0040
+
+        private const val LAYOUT_ID = R.layout.activity_archives
+
+        val EXTRA_KEY_FILE_NAME = "FILE_NAME"
 
         /**
          * Make launcher intent.

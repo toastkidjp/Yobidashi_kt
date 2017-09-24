@@ -10,6 +10,7 @@ import android.os.Build
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.webkit.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -82,8 +83,19 @@ class TabAdapter(
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    init {
+    /**
+     * Animation of slide in left.
+     */
+    private val slideInLeft
+            = AnimationUtils.loadAnimation(tabCount.context, android.R.anim.slide_in_left)
 
+    /**
+     * Animation of slide in right.
+     */
+    private val slideInRight
+            = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_in_right)
+
+    init {
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
 
@@ -109,6 +121,11 @@ class TabAdapter(
                 super.onPageFinished(view, url)
                 isLoadFinished = true
                 progress.visibility = View.GONE
+
+                val lastScrolled = currentTab().latest.scrolled
+                if (lastScrolled != 0) {
+                    webView.scrollTo(0, lastScrolled)
+                }
 
                 val title  = view.title ?: ""
                 val urlstr = url ?: ""
@@ -348,9 +365,9 @@ class TabAdapter(
     }
 
     private fun openNewTab(url: String) {
-        setCurrentTabCount()
         val newTab = Tab()
         tabList.add(newTab)
+        setCurrentTabCount()
         setIndexByTab(newTab)
         loadUrl(url)
     }
@@ -376,7 +393,15 @@ class TabAdapter(
     }
 
     internal fun setIndexByTab(tab: Tab) {
-        setIndex(tabList.indexOf(tab))
+        val index = tabList.indexOf(tab)
+        updateScrolled()
+
+        if (index < index()) {
+            webView.startAnimation(slideInLeft)
+        } else {
+            webView.startAnimation(slideInRight)
+        }
+        setIndex(index)
     }
 
     private fun setIndex(newIndex: Int) {
@@ -405,7 +430,12 @@ class TabAdapter(
     }
 
     fun loadUrl(url: String, saveHistory: Boolean = true) {
-        if (TextUtils.equals(webView.url, url) || url.isEmpty()) {
+        if (url.isEmpty()) {
+            return
+        }
+
+        if (TextUtils.equals(webView.url, url)) {
+            webView.scrollTo(0, currentTab().latest.scrolled)
             return
         }
         backOrForwardProgress = !saveHistory
@@ -598,6 +628,12 @@ class TabAdapter(
     }
 
     internal fun currentTab(): Tab = tabList.get(index())
+
+    private fun updateScrolled() {
+        val currentTab = currentTab()
+        currentTab.latest.scrolled = webView.scrollY
+        tabList.set(index(), currentTab)
+    }
 
     private fun setCurrentTabCount() {
         val size = size()

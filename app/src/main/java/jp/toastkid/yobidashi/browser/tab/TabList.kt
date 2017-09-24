@@ -45,7 +45,18 @@ class TabList private constructor() {
     }
 
     internal fun get(position: Int): Tab {
+        if (position < 0 || tabs.size <= position) {
+            return tabs[0]
+        }
         return tabs[position]
+    }
+
+    internal fun set(index: Int, currentTab: Tab) {
+        if (index < 0 || tabs.size < index) {
+            tabs.set(0, currentTab)
+            return
+        }
+        tabs.set(index, currentTab)
     }
 
     /**
@@ -148,8 +159,10 @@ class TabList private constructor() {
                 itemsDir?.list()
                         ?.map{ tabJsonAdapter?.fromJson(Okio.buffer(Okio.source(File(itemsDir, it))))}
                         ?.forEach { fromJson?.add(it as Tab) }
-                
-                return fromJson as TabList
+                if (fromJson?.size() as Int <= fromJson.index) {
+                    fromJson.index = fromJson.size() - 1
+                }
+                return fromJson
             } catch (e: IOException) {
                 Timber.e(e)
             }
@@ -192,4 +205,5 @@ class TabList private constructor() {
     fun dispose() {
         disposables.dispose()
     }
+
 }

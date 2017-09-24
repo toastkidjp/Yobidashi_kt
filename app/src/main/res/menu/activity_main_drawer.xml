@@ -51,6 +51,11 @@
                 android:title="@string/title_view_history"
                 />
             <item
+                android:id="@+id/nav_archives"
+                android:icon="@drawable/ic_archive"
+                android:title="@string/title_archives"
+                />
+            <item
                 android:id="@+id/nav_screenshots"
                 android:icon="@drawable/ic_camera_black"
                 android:title="@string/title_screenshots"

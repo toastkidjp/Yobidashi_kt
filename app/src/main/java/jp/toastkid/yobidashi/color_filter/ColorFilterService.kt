@@ -45,6 +45,9 @@ class ColorFilterService : JobIntentService() {
         }
 
         handler.post {
+            if (filterView?.parent != null) {
+                windowManager?.removeView(filterView)
+            }
             windowManager?.addView(filterView, layoutParams)
             running = true
         }

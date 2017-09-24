@@ -9,6 +9,9 @@ import android.databinding.DataBindingUtil
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -30,6 +33,8 @@ import jp.toastkid.yobidashi.advertisement.AdInitializers
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.archive.Archive
+import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.screenshots.ScreenshotsActivity
@@ -59,7 +64,7 @@ import java.text.MessageFormat
 
 /**
  * Main of this calendar app.
-
+ *
  * @author toastkidjp
  */
 class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
@@ -77,10 +82,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     private var calendarFragment: CalendarFragment? = null
 
     /** Browser fragment.  */
-    private lateinit var browserFragment: BrowserFragment
+    private val browserFragment: BrowserFragment = BrowserFragment()
 
     /** Home fragment.  */
-    private lateinit var homeFragment: HomeFragment
+    private val homeFragment = HomeFragment()
 
     /** Disposables.  */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -88,6 +93,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     /** For stopping subscribing title pair.  */
     private var prevDisposable: Disposable? = null
 
+    /** Count up for displaying AD. */
     private var adCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +125,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /**
      * Process intent shortcut.
+     *
+     * @param calledIntent
      */
     private fun processShortcut(calledIntent: Intent) {
         if (calledIntent.action == null) {
@@ -156,7 +164,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         when (preferenceApplier.startUp) {
             StartUp.START -> {
-                homeFragment = HomeFragment()
                 replaceFragment(homeFragment)
             }
             StartUp.APPS_LAUNCHER -> {
@@ -175,7 +182,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     private fun loadUri(uri: Uri) {
         if (preferenceApplier.useInternalBrowser()) {
-            browserFragment = BrowserFragment()
             val args = Bundle()
             args.putParcelable("url", uri)
             browserFragment.arguments = args
@@ -258,128 +264,158 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     private fun initNavigation() {
         binding.navView.setNavigationItemSelectedListener({ item: MenuItem ->
             attemptToShowingAd()
-            when (item.itemId) {
-                R.id.nav_search -> {
-                    sendLog("nav_search")
-                    startActivity(SearchActivity.makeIntent(this))
-                    insertSlideInTransition()
-                }
-                R.id.nav_search_history -> {
-                    sendLog("nav_srch_hstry")
-                    startActivity(SearchHistoryActivity.makeIntent(this))
-                    insertSlideInTransition()
-                }
-                R.id.nav_calendar -> {
-                    sendLog("nav_cal")
-                    if (calendarFragment == null) {
-                        calendarFragment = CalendarFragment()
-                    }
-                    replaceFragment(calendarFragment as CalendarFragment)
-                }
-                R.id.nav_favorite_search -> {
-                    sendLog("nav_fav_search")
-                    startActivity(FavoriteSearchActivity.makeIntent(this))
-                    insertSlideInTransition()
-                }
-                R.id.nav_tweet -> {
-                    sendLog("nav_twt")
-                    IntentFactory.makeTwitter(
-                            this@MainActivity,
-                            colorPair(),
-                            R.drawable.ic_back
-                    ).launchUrl(this@MainActivity, Uri.parse("https://twitter.com/share"))
-                }
-                R.id.nav_launcher -> {
-                    sendLog("nav_lnchr")
-                    startActivity(LauncherActivity.makeIntent(this))
-                    insertSlideInTransition()
-                }
-                R.id.nav_share -> {
-                    sendLog("nav_shr")
-                    startActivity(IntentFactory.makeShare(makeShareMessage()))
-                }
-                R.id.nav_share_twitter -> {
-                    sendLog("nav_shr_twt")
-                    IntentFactory.makeTwitter(
-                            this@MainActivity,
-                            colorPair(),
-                            R.drawable.ic_back
-                    ).launchUrl(
-                            this@MainActivity,
-                            Uri.parse("https://twitter.com/share?text=" + Uri.encode(makeShareMessage()))
-                    )
-                }
-                R.id.nav_about_this_app -> {
-                    sendLog("nav_about")
-                    startActivity(AboutThisAppActivity.makeIntent(this))
-                    insertSlideInTransition()
-                }
-                R.id.nav_screenshots -> {
-                    sendLog("nav_screenshots")
-                    startActivity(ScreenshotsActivity.makeIntent(this))
-                    insertSlideInTransition()
-                }
-                R.id.nav_google_play -> {
-                    sendLog("nav_gplay")
-                    startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
-                }
-                R.id.nav_privacy_policy -> {
-                    sendLog("nav_prvcy_plcy")
-                    CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back)
-                            .build()
-                            .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
-                }
-                R.id.nav_author -> {
-                    sendLog("nav_author")
-                    startActivity(IntentFactory.authorsApp())
-                }
-                R.id.nav_settings -> {
-                    sendLog("nav_set_top")
-                    startActivity(SettingsActivity.makeIntent(this))
-                }
-                R.id.nav_planning_poker -> {
-                    sendLog("nav_poker")
-                    startActivity(PlanningPokerActivity.makeIntent(this))
-                    insertSlideInTransition()
-                }
-                R.id.nav_browser -> {
-                    sendLog("nav_browser")
-                    loadUri(Uri.parse(preferenceApplier.homeUrl))
-                }
-                R.id.nav_bookmark -> {
-                    sendLog("nav_bkmk")
-                    startActivityForResult(
-                            BookmarkActivity.makeIntent(this),
-                            BookmarkActivity.REQUEST_CODE
-                    )
-                    insertSlideInTransition()
-                }
-                R.id.nav_view_history -> {
-                    sendLog("nav_view_history")
-                    startActivityForResult(
-                            ViewHistoryActivity.makeIntent(this),
-                            ViewHistoryActivity.REQUEST_CODE
-                    )
-                    insertSlideInTransition()
-                }
-                R.id.nav_barcode -> {
-                    sendLog("nav_barcode")
-                    startActivity(BarcodeReaderActivity.makeIntent(this))
-                }
-                R.id.nav_instant_barcode -> {
-                    sendLog("nav_instant_barcode")
-                    InstantBarcodeGenerator(this).invoke()
-                }
-                R.id.nav_home -> {
-                    replaceFragment(homeFragment)
-                }
-            }
+            invokeWithMenuId(item.itemId)
             true
         })
-        val headerView = binding.navView?.getHeaderView(0)
-        if (headerView != null) {
-            navBackground = headerView.findViewById(R.id.nav_header_background)
+        if (Archive.cannotUseArchive()) {
+            binding.navView.menu.findItem(R.id.nav_archives).isVisible = false
         }
+        val headerView = binding.navView?.getHeaderView(0)
+        navBackground = headerView?.findViewById(R.id.nav_header_background)
+    }
+
+    /**
+     * Invoke action with Menu ID.
+     *
+     * @param menuId Menu ID
+     */
+    private fun invokeWithMenuId(@IdRes menuId: Int) {
+        when (menuId) {
+            R.id.nav_search -> {
+                startActivityWithSlideIn("nav_search", SearchActivity.makeIntent(this))
+            }
+            R.id.nav_search_history -> {
+                startActivityWithSlideIn("nav_srch_hstry", SearchHistoryActivity.makeIntent(this))
+            }
+            R.id.nav_calendar -> {
+                sendLog("nav_cal")
+                if (calendarFragment == null) {
+                    calendarFragment = CalendarFragment()
+                }
+                replaceFragment(calendarFragment as CalendarFragment)
+            }
+            R.id.nav_favorite_search -> {
+                startActivityWithSlideIn(
+                        "nav_fav_search", FavoriteSearchActivity.makeIntent(this))
+            }
+            R.id.nav_tweet -> {
+                sendLog("nav_twt")
+                IntentFactory.makeTwitter(
+                        this@MainActivity,
+                        colorPair(),
+                        R.drawable.ic_back
+                ).launchUrl(this@MainActivity, Uri.parse("https://twitter.com/share"))
+            }
+            R.id.nav_launcher -> {
+                startActivityWithSlideIn("nav_lnchr", LauncherActivity.makeIntent(this))
+            }
+            R.id.nav_share -> {
+                sendLog("nav_shr")
+                startActivity(IntentFactory.makeShare(makeShareMessage()))
+            }
+            R.id.nav_share_twitter -> {
+                sendLog("nav_shr_twt")
+                IntentFactory.makeTwitter(
+                        this@MainActivity,
+                        colorPair(),
+                        R.drawable.ic_back
+                ).launchUrl(
+                        this@MainActivity,
+                        Uri.parse("https://twitter.com/share?text=" + Uri.encode(makeShareMessage()))
+                )
+            }
+            R.id.nav_about_this_app -> {
+                startActivityWithSlideIn("nav_about", AboutThisAppActivity.makeIntent(this))
+            }
+            R.id.nav_archives -> {
+                startActivityForResultWithSlideIn(
+                        "nav_archv",
+                        ArchivesActivity.makeIntent(this),
+                        ArchivesActivity.REQUEST_CODE
+                )
+            }
+            R.id.nav_screenshots -> {
+                startActivityWithSlideIn("nav_screenshots", ScreenshotsActivity.makeIntent(this))
+            }
+            R.id.nav_google_play -> {
+                sendLog("nav_gplay")
+                startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
+            }
+            R.id.nav_privacy_policy -> {
+                sendLog("nav_prvcy_plcy")
+                CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back)
+                        .build()
+                        .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
+            }
+            R.id.nav_author -> {
+                sendLog("nav_author")
+                startActivity(IntentFactory.authorsApp())
+            }
+            R.id.nav_settings -> {
+                startActivityWithSlideIn("nav_set_top", SettingsActivity.makeIntent(this))
+            }
+            R.id.nav_planning_poker -> {
+                startActivityWithSlideIn("nav_poker", PlanningPokerActivity.makeIntent(this))
+            }
+            R.id.nav_browser -> {
+                sendLog("nav_browser")
+                loadUri(Uri.parse(preferenceApplier.homeUrl))
+            }
+            R.id.nav_bookmark -> {
+                startActivityForResultWithSlideIn(
+                        "nav_bkmk",
+                        BookmarkActivity.makeIntent(this),
+                        BookmarkActivity.REQUEST_CODE
+                )
+            }
+            R.id.nav_view_history -> {
+                startActivityForResultWithSlideIn(
+                        "nav_view_history",
+                        ViewHistoryActivity.makeIntent(this),
+                        ViewHistoryActivity.REQUEST_CODE
+                )
+            }
+            R.id.nav_barcode -> {
+                sendLog("nav_barcode")
+                startActivity(BarcodeReaderActivity.makeIntent(this))
+            }
+            R.id.nav_instant_barcode -> {
+                sendLog("nav_instant_barcode")
+                InstantBarcodeGenerator(this).invoke()
+            }
+            R.id.nav_home -> {
+                replaceFragment(homeFragment)
+            }
+        }
+    }
+
+    /**
+     * Start activity with slide in transition.
+     *
+     * @param logKey
+     * @param intent activity launcher intent
+     */
+    private fun startActivityWithSlideIn(logKey: String, intent: Intent) {
+        sendLog(logKey)
+        startActivity(intent)
+        insertSlideInTransition()
+    }
+
+    /**
+     * Start activity for result with slide in transition.
+     *
+     * @param logKey
+     * @param intent activity launcher intent
+     * @param requestCode Request code
+     */
+    private fun startActivityForResultWithSlideIn(
+            logKey: String,
+            intent: Intent,
+            requestCode: Int
+            ) {
+        sendLog(logKey)
+        startActivityForResult(intent, requestCode)
+        insertSlideInTransition()
     }
 
     private fun insertSlideInTransition() {
@@ -439,7 +475,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.common, menu)
         return true
     }
 
@@ -566,14 +602,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * Make share message.
      * @return string
      */
-    private fun makeShareMessage(): String {
-        return MessageFormat.format(getString(R.string.message_share), getString(R.string.app_name))
-    }
+    private fun makeShareMessage(): String
+            = MessageFormat.format(getString(R.string.message_share), getString(R.string.app_name))
 
     @StringRes
-    override fun titleId(): Int {
-        return R.string.app_name
-    }
+    override fun titleId(): Int = R.string.app_name
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -581,10 +614,25 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             return
         }
         when (requestCode) {
-            ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE
-                -> if (data?.data != null) {loadUri(data.data)}
-            SearchActivity.REQUEST_CODE -> {
-                data.getStringExtra("query")
+            ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE -> {
+                if (data.data != null) {
+                    loadUri(data.data)
+                }
+            }
+            ArchivesActivity.REQUEST_CODE -> {
+                try {
+                    replaceFragment(browserFragment)
+                    Handler(Looper.getMainLooper()).postDelayed(
+                            { browserFragment.loadArchive(
+                                    File(data.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))},
+                            200L
+                    )
+                } catch (e: IOException) {
+                    Timber.e(e)
+                } catch (error: OutOfMemoryError) {
+                    Timber.e(error)
+                    System.gc()
+                }
             }
         }
     }
@@ -652,10 +700,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
          *
          * @return launcher intent
          */
-        fun makeSearchIntent(
-                context: Context,
-                query: String
-        ): Intent {
+        fun makeSearchIntent(context: Context, query: String): Intent {
             val intent = Intent(context, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             if (query.isNotEmpty()) {
