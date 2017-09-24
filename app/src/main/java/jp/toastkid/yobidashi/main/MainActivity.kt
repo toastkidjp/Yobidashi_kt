@@ -9,6 +9,8 @@ import android.databinding.DataBindingUtil
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.v4.view.GravityCompat
@@ -79,7 +81,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     private var calendarFragment: CalendarFragment? = null
 
     /** Browser fragment.  */
-    private lateinit var browserFragment: BrowserFragment
+    private val browserFragment: BrowserFragment = BrowserFragment()
 
     /** Home fragment.  */
     private lateinit var homeFragment: HomeFragment
@@ -178,7 +180,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     private fun loadUri(uri: Uri) {
         if (preferenceApplier.useInternalBrowser()) {
-            browserFragment = BrowserFragment()
             val args = Bundle()
             args.putParcelable("url", uri)
             browserFragment.arguments = args
@@ -322,7 +323,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 startActivityWithSlideIn("nav_about", AboutThisAppActivity.makeIntent(this))
             }
             R.id.nav_archives -> {
-                startActivityWithSlideIn("nav_archv", ArchivesActivity.makeIntent(this))
+                startActivityForResultWithSlideIn(
+                        "nav_archv",
+                        ArchivesActivity.makeIntent(this),
+                        ArchivesActivity.REQUEST_CODE
+                )
             }
             R.id.nav_screenshots -> {
                 startActivityWithSlideIn("nav_screenshots", ScreenshotsActivity.makeIntent(this))
@@ -604,8 +609,26 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             return
         }
         when (requestCode) {
-            ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE
-                -> if (data.data != null) { loadUri(data.data) }
+            ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE -> {
+                if (data.data != null) {
+                    loadUri(data.data)
+                }
+            }
+            ArchivesActivity.REQUEST_CODE -> {
+                try {
+                    replaceFragment(browserFragment)
+                    Handler(Looper.getMainLooper()).postDelayed(
+                            { browserFragment.loadArchive(
+                                    File(data.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))},
+                            200L
+                    )
+                } catch (e: IOException) {
+                    Timber.e(e)
+                } catch (error: OutOfMemoryError) {
+                    Timber.e(error)
+                    System.gc()
+                }
+            }
         }
     }
 

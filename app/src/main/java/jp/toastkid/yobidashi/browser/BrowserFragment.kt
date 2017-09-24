@@ -132,9 +132,11 @@ class BrowserFragment : BaseFragment() {
         )
         searchWithClip.invoke()
 
-        val url = arguments.getParcelable<Uri>("url")
-        if (url != null) {
-            tabs.loadWithNewTab(url)
+        if (arguments != null && arguments.containsKey("url")) {
+            val url = arguments.getParcelable<Uri>("url")
+            if (url != null) {
+                tabs.loadWithNewTab(url)
+            }
         }
 
         setHasOptionsMenu(true)
@@ -409,7 +411,7 @@ class BrowserFragment : BaseFragment() {
                     Toaster.snackShort(snackbarParent, R.string.message_disable_archive, colorPair())
                     return
                 }
-                startActivityForResult(ArchivesActivity.makeIntent(context), REQUEST_CODE_VIEW_ARCHIVE)
+                startActivityForResult(ArchivesActivity.makeIntent(context), ArchivesActivity.REQUEST_CODE)
                 return
             }
             Menu.SEARCH -> {
@@ -616,16 +618,8 @@ class BrowserFragment : BaseFragment() {
             return
         }
         when (requestCode) {
-            REQUEST_CODE_VIEW_ARCHIVE -> {
-                try {
-                    tabs.loadArchive(File(intent.getStringExtra("FILE_NAME")))
-                } catch (e: IOException) {
-                    Timber.e(e)
-                } catch (error: OutOfMemoryError) {
-                    Timber.e(error)
-                    System.gc()
-                }
-
+            ArchivesActivity.REQUEST_CODE -> {
+                loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
                 return
             }
             REQUEST_CODE_VOICE_SEARCH -> {
@@ -656,6 +650,17 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    fun loadArchive(file: File) {
+        try {
+            tabs.loadArchive(file)
+        } catch (e: IOException) {
+            Timber.e(e)
+        } catch (error: OutOfMemoryError) {
+            Timber.e(error)
+            System.gc()
+        }
+    }
+
     fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
 
     override fun onDestroy() {
@@ -668,8 +673,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     companion object {
-
-        private const val REQUEST_CODE_VIEW_ARCHIVE = 1
 
         private const val REQUEST_CODE_VOICE_SEARCH = 2
 
