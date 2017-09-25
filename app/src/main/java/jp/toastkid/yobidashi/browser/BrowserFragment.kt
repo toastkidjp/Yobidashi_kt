@@ -32,7 +32,6 @@ import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -406,14 +405,6 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.ARCHIVE -> {
                 tabs.saveArchive()
-                return
-            }
-            Menu.VIEW_ARCHIVE -> {
-                if (Archive.cannotUseArchive()) {
-                    Toaster.snackShort(snackbarParent, R.string.message_disable_archive, colorPair())
-                    return
-                }
-                startActivityForResult(ArchivesActivity.makeIntent(context), ArchivesActivity.REQUEST_CODE)
                 return
             }
             Menu.SEARCH -> {
