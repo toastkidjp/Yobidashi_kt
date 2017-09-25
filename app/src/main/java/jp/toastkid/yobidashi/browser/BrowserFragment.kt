@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -20,17 +19,12 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.WriterException
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.BaseFragment
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
@@ -43,7 +37,6 @@ import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
-import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -361,29 +354,7 @@ class BrowserFragment : BaseFragment() {
                         .launchUrl(context, Uri.parse(tabs.currentUrl()))
             }
             Menu.SHARE_BARCODE -> {
-                val imageView = ImageView(context)
-                try {
-                    val bitmap = BarcodeEncoder()
-                            .encodeBitmap(tabs.currentUrl(), BarcodeFormat.QR_CODE, 400, 400)
-                    imageView.setImageBitmap(bitmap)
-                    AlertDialog.Builder(context)
-                            .setTitle(R.string.title_share_by_code)
-                            .setView(imageView)
-                            .setCancelable(true)
-                            .setPositiveButton(R.string.share) { d, i ->
-                                val uri = FileProvider.getUriForFile(
-                                        context,
-                                        BuildConfig.APPLICATION_ID + ".fileprovider",
-                                        ImageCache.saveBitmap(context, bitmap).absoluteFile
-                                )
-                                startActivity(IntentFactory.shareImage(uri))
-                                d.dismiss()
-                            }
-                            .show()
-                } catch (e: WriterException) {
-                    Timber.e(e)
-                    Toaster.snackShort(snackbarParent, e.message.orEmpty(), colorPair())
-                }
+                SharingUrlByBarcode.invoke(context, tabs.currentUrl())
             }
             Menu.ARCHIVE -> {
                 tabs.saveArchive()
