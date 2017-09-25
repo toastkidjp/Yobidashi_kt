@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
     byte verMajor  = 1;
     byte verMiddle = 0;
     byte verMinor  = 3;
@@ -35,7 +35,7 @@ android {
 
 dependencies {
 
-    def supportLibVersion = '26.0.0'
+    def supportLibVersion = '26.0.1'
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.android.support:customtabs:${supportLibVersion}"
@@ -49,7 +49,7 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.larswerkman:HoloColorPicker:1.5'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.3'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.4'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.squareup.moshi:moshi:1.5.0'
