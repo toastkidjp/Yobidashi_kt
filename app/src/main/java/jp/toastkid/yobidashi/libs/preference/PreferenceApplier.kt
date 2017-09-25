@@ -238,11 +238,11 @@ class PreferenceApplier(private val context: Context) {
             preferences.edit().putBoolean(Key.FULL_SCREEN.name, newState).apply()
         }
 
-    fun setBrowserScreenMode(newState: ScreenMode) {
+    internal fun setBrowserScreenMode(newState: ScreenMode) {
         preferences.edit().putString(Key.SCREEN_MODE.name, newState.name).apply()
     }
 
-    fun browserScreenMode(): ScreenMode =
+    internal fun browserScreenMode(): ScreenMode =
             ScreenMode.valueOf(preferences.getString(Key.SCREEN_MODE.name, ScreenMode.EXPANDABLE.name))
 
     fun clear() {

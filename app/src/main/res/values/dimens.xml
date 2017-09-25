@@ -11,9 +11,9 @@
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="fab_size">60dp</dimen>
     <dimen name="fab_margin_bottom">4dp</dimen>
-    <dimen name="fab_margin">40dp</dimen>
+    <dimen name="fab_margin">56dp</dimen>
     <dimen name="setting_card_margin">12dp</dimen>
-    <dimen name="fab_margin_horizontal">25dp</dimen>
+    <dimen name="fab_margin_horizontal">24dp</dimen>
 
     <dimen name="search_item_height">40dp</dimen>
     <dimen name="search_horizontal_margin">8dp</dimen>

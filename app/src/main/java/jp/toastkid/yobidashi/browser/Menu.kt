@@ -45,8 +45,6 @@ internal enum class Menu(
 
     ARCHIVE(R.string.title_archive, R.drawable.ic_archive),
 
-    VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
-
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
     SHARE_BARCODE(R.string.title_share_by_code, R.drawable.ic_barcode),
@@ -75,6 +73,6 @@ internal enum class Menu(
     companion object {
         val list: List<Menu> =
                 if (Archive.canUseArchive()) { values().toList() }
-                else { values().filter{  (it != VIEW_ARCHIVE || it != ARCHIVE) } }
+                else { values().filter{  it != ARCHIVE } }
     }
 }

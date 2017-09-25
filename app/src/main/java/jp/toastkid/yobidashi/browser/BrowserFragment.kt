@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -20,19 +19,13 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.WriterException
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.BaseFragment
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -44,7 +37,6 @@ import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
-import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -101,7 +93,7 @@ class BrowserFragment : BaseFragment() {
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBrowserBinding>(
                 inflater!!, R.layout.fragment_browser, container, false)
-        binding!!.fragment = this
+        binding?.fragment = this
 
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
@@ -126,7 +118,7 @@ class BrowserFragment : BaseFragment() {
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
-                binding!!.root,
+                binding?.root as View,
                 colorPair,
                 { url -> tabs.loadWithNewTab(Uri.parse(url)) }
         )
@@ -141,7 +133,7 @@ class BrowserFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
-        return binding!!.root
+        return binding?.root
     }
 
     /**
@@ -172,7 +164,7 @@ class BrowserFragment : BaseFragment() {
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(0f)
-                ?.setDuration(200)
+                ?.setDuration(ANIMATION_DURATION)
                 ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
                 ?.withEndAction { toolbarAction?.showToolbar() }
                 ?.start()
@@ -182,9 +174,11 @@ class BrowserFragment : BaseFragment() {
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
-                ?.setDuration(200)
-                ?.withStartAction { toolbarAction?.hideToolbar() }
-                ?.withEndAction { binding?.footer?.root?.visibility = View.GONE }
+                ?.setDuration(ANIMATION_DURATION)
+                ?.withEndAction {
+                    toolbarAction?.hideToolbar()
+                    binding?.footer?.root?.visibility = View.GONE
+                }
                 ?.start()
     }
 
@@ -223,9 +217,9 @@ class BrowserFragment : BaseFragment() {
      * Initialize menus view.
      */
     private fun initMenus() {
-        binding!!.menusView.adapter = Adapter(activity, Consumer<Menu> { this.onMenuClick(it) })
+        binding?.menusView?.adapter = Adapter(activity, Consumer<Menu> { this.onMenuClick(it) })
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.menusView.layoutManager = layoutManager
+        binding?.menusView?.layoutManager = layoutManager
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
@@ -287,48 +281,39 @@ class BrowserFragment : BaseFragment() {
         when (menu) {
             Menu.RELOAD -> {
                 tabs.reload()
-                return
             }
             Menu.BACK -> {
                 back()
-                return
             }
             Menu.FORWARD -> {
                 forward()
-                return
             }
             Menu.TOP -> {
                 toTop()
-                return
             }
             Menu.BOTTOM -> {
                 toBottom()
-                return
             }
             Menu.FIND_IN_PAGE -> {
-                if (pageSearcherModule!!.isVisible) {
-                    pageSearcherModule!!.hide()
+                if (pageSearcherModule?.isVisible ?: false) {
+                    pageSearcherModule?.hide()
                     return
                 }
-                pageSearcherModule!!.show(activity)
+                pageSearcherModule?.show(activity)
                 hideMenu()
-                return
             }
             Menu.SCREENSHOT -> {
                 tabs.currentSnap()
                 Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
-                return
             }
             Menu.SHARE -> {
                 startActivity(
                         IntentFactory.makeShare(tabs.currentTitle()
                                 + System.getProperty("line.separator") + tabs.currentUrl())
                 )
-                return
             }
             Menu.SETTING -> {
                 startActivity(SettingsActivity.makeIntent(context))
-                return
             }
             Menu.TAB_HISTORY -> {
                 launchTabHistory(context)
@@ -338,19 +323,15 @@ class BrowserFragment : BaseFragment() {
                         snackbarParent,
                         { tabs.resetUserAgent(it.text()) }
                 )
-                return
             }
             Menu.WIFI_SETTING -> {
                 startActivity(SettingsIntentFactory.wifi())
-                return
             }
             Menu.PAGE_INFORMATION -> {
                 tabs.showPageInformation()
-                return
             }
             Menu.TAB_LIST -> {
                 showTabListWithParent(snackbarParent)
-                return
             }
             Menu.OPEN -> {
                 val inputLayout = TextInputs.make(context)
@@ -360,75 +341,35 @@ class BrowserFragment : BaseFragment() {
                         .setView(inputLayout)
                         .setCancelable(true)
                         .setPositiveButton("開く") { d, i ->
-                            val url = inputLayout.editText!!.text.toString()
+                            val url = inputLayout.editText?.text.toString()
                             if (Urls.isValidUrl(url)) {
                                 tabs.loadWithNewTab(Uri.parse(url))
                             }
                         }
                         .show()
-                return
             }
             Menu.OTHER_BROWSER -> {
                 CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
                         .build()
                         .launchUrl(context, Uri.parse(tabs.currentUrl()))
-                return
             }
             Menu.SHARE_BARCODE -> {
-                val imageView = ImageView(context)
-                try {
-                    val bitmap = BarcodeEncoder()
-                            .encodeBitmap(tabs.currentUrl(), BarcodeFormat.QR_CODE, 400, 400)
-                    imageView.setImageBitmap(bitmap)
-                    AlertDialog.Builder(context)
-                            .setTitle(R.string.title_share_by_code)
-                            .setView(imageView)
-                            .setCancelable(true)
-                            .setPositiveButton(R.string.share) { d, i ->
-                                val uri = FileProvider.getUriForFile(
-                                        context,
-                                        BuildConfig.APPLICATION_ID + ".fileprovider",
-                                        ImageCache.saveBitmap(context, bitmap).absoluteFile
-                                )
-                                startActivity(IntentFactory.shareImage(uri))
-                                d.dismiss()
-                            }
-                            .show()
-                } catch (e: WriterException) {
-                    Timber.e(e)
-                    Toaster.snackShort(snackbarParent, e.message.orEmpty(), colorPair())
-                    return
-                }
-
-                return
+                SharingUrlByBarcode.invoke(context, tabs.currentUrl())
             }
             Menu.ARCHIVE -> {
                 tabs.saveArchive()
-                return
-            }
-            Menu.VIEW_ARCHIVE -> {
-                if (Archive.cannotUseArchive()) {
-                    Toaster.snackShort(snackbarParent, R.string.message_disable_archive, colorPair())
-                    return
-                }
-                startActivityForResult(ArchivesActivity.makeIntent(context), ArchivesActivity.REQUEST_CODE)
-                return
             }
             Menu.SEARCH -> {
                 search()
-                return
             }
             Menu.SITE_SEARCH -> {
                 tabs.siteSearch()
-                return
             }
             Menu.VOICE_SEARCH -> {
                 startActivityForResult(VoiceSearch.makeIntent(context), REQUEST_CODE_VOICE_SEARCH)
-                return
             }
             Menu.COLOR_FILTER -> {
                 ColorFilter(activity, snackbarParent).switchState(this, REQUEST_OVERLAY_PERMISSION)
-                return
             }
             Menu.REPLACE_HOME -> {
                 val currentUrl = tabs.currentUrl()
@@ -446,18 +387,15 @@ class BrowserFragment : BaseFragment() {
                         getString(R.string.message_replace_home_url, currentUrl) ,
                         colorPair()
                 )
-                return
             }
             Menu.LOAD_HOME -> {
                 tabs.loadHome()
-                return
             }
             Menu.VIEW_HISTORY -> {
                 startActivityForResult(
                         ViewHistoryActivity.makeIntent(context),
                         ViewHistoryActivity.REQUEST_CODE
                 )
-                return
             }
             Menu.ADD_BOOKMARK -> {
                 tabs.addBookmark{
@@ -469,9 +407,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.EXIT -> {
                 activity.finish()
-                return
             }
-            else -> return
         }
     }
 
@@ -568,12 +504,12 @@ class BrowserFragment : BaseFragment() {
 
     private fun refreshFab() {
         val preferenceApplier = preferenceApplier() as PreferenceApplier
-        binding!!.fab.setBackgroundColor(preferenceApplier.colorPair().bgColor())
+        binding?.fab?.setBackgroundColor(preferenceApplier.colorPair().bgColor())
 
         val resources = resources
         val fabMarginBottom = resources.getDimensionPixelSize(R.dimen.fab_margin)
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
-        MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
+        MenuPos.place(binding?.fab as View, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
     }
 
     override fun pressLongBack(): Boolean {
@@ -637,13 +573,13 @@ class BrowserFragment : BaseFragment() {
             REQUEST_OVERLAY_PERMISSION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
                     Toaster.snackShort(
-                            binding!!.root,
+                            binding?.root as View,
                             R.string.message_cannot_draw_overlay,
                             colorPair()
                     )
                     return
                 }
-                ColorFilter(activity, binding!!.root)
+                ColorFilter(activity, binding?.root as View)
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
                 return
             }
@@ -682,5 +618,11 @@ class BrowserFragment : BaseFragment() {
         private const val REQUEST_CODE_VOICE_SEARCH = 2
 
         private const val REQUEST_OVERLAY_PERMISSION = 3
+
+        /**
+         * Animation's dutarion.
+         */
+        private const val ANIMATION_DURATION: Long = 50L
+
     }
 }

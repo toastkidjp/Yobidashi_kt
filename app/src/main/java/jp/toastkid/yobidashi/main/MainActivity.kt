@@ -328,6 +328,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 startActivityWithSlideIn("nav_about", AboutThisAppActivity.makeIntent(this))
             }
             R.id.nav_archives -> {
+                if (Archive.cannotUseArchive()) {
+                    Toaster.snackShort(binding.root, R.string.message_disable_archive, colorPair())
+                    return
+                }
                 startActivityForResultWithSlideIn(
                         "nav_archv",
                         ArchivesActivity.makeIntent(this),

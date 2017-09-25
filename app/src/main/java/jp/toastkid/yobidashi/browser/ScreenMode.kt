@@ -8,7 +8,7 @@ import jp.toastkid.yobidashi.R
  *
  * @author toastkidjp
  */
-enum class ScreenMode(@IdRes private val id: Int) {
+internal enum class ScreenMode(@IdRes private val id: Int) {
 
     FULL_SCREEN(R.id.full_screen),
     EXPANDABLE(R.id.expandable),

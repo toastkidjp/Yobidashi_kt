@@ -32,6 +32,16 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
      * @return
      */
     fun start() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !Settings.canDrawOverlays(activity)) {
+            Toaster.snackShort(
+                    parent,
+                    R.string.message_cannot_draw_overlay,
+                    colorPair
+            )
+            return
+        }
+
         Toaster.snackShort(
                 parent,
                 R.string.message_enable_color_filter,
