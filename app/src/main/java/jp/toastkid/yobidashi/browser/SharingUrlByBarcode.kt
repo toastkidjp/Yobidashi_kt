@@ -19,7 +19,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-object SharingUrlByBarcode {
+internal object SharingUrlByBarcode {
 
     /**
      * Invoke action.
