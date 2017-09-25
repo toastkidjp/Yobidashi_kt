@@ -172,7 +172,7 @@ class BrowserFragment : BaseFragment() {
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(0f)
-                ?.setDuration(200)
+                ?.setDuration(ANIMATION_DURATION)
                 ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
                 ?.withEndAction { toolbarAction?.showToolbar() }
                 ?.start()
@@ -182,9 +182,11 @@ class BrowserFragment : BaseFragment() {
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
-                ?.setDuration(200)
-                ?.withStartAction { toolbarAction?.hideToolbar() }
-                ?.withEndAction { binding?.footer?.root?.visibility = View.GONE }
+                ?.setDuration(ANIMATION_DURATION)
+                ?.withEndAction {
+                    toolbarAction?.hideToolbar()
+                    binding?.footer?.root?.visibility = View.GONE
+                }
                 ?.start()
     }
 
@@ -682,5 +684,11 @@ class BrowserFragment : BaseFragment() {
         private const val REQUEST_CODE_VOICE_SEARCH = 2
 
         private const val REQUEST_OVERLAY_PERMISSION = 3
+
+        /**
+         * Animation's dutarion.
+         */
+        private const val ANIMATION_DURATION: Long = 50L
+
     }
 }
