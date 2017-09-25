@@ -288,23 +288,18 @@ class BrowserFragment : BaseFragment() {
         when (menu) {
             Menu.RELOAD -> {
                 tabs.reload()
-                return
             }
             Menu.BACK -> {
                 back()
-                return
             }
             Menu.FORWARD -> {
                 forward()
-                return
             }
             Menu.TOP -> {
                 toTop()
-                return
             }
             Menu.BOTTOM -> {
                 toBottom()
-                return
             }
             Menu.FIND_IN_PAGE -> {
                 if (pageSearcherModule!!.isVisible) {
@@ -313,23 +308,19 @@ class BrowserFragment : BaseFragment() {
                 }
                 pageSearcherModule!!.show(activity)
                 hideMenu()
-                return
             }
             Menu.SCREENSHOT -> {
                 tabs.currentSnap()
                 Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
-                return
             }
             Menu.SHARE -> {
                 startActivity(
                         IntentFactory.makeShare(tabs.currentTitle()
                                 + System.getProperty("line.separator") + tabs.currentUrl())
                 )
-                return
             }
             Menu.SETTING -> {
                 startActivity(SettingsActivity.makeIntent(context))
-                return
             }
             Menu.TAB_HISTORY -> {
                 launchTabHistory(context)
@@ -339,19 +330,15 @@ class BrowserFragment : BaseFragment() {
                         snackbarParent,
                         { tabs.resetUserAgent(it.text()) }
                 )
-                return
             }
             Menu.WIFI_SETTING -> {
                 startActivity(SettingsIntentFactory.wifi())
-                return
             }
             Menu.PAGE_INFORMATION -> {
                 tabs.showPageInformation()
-                return
             }
             Menu.TAB_LIST -> {
                 showTabListWithParent(snackbarParent)
-                return
             }
             Menu.OPEN -> {
                 val inputLayout = TextInputs.make(context)
@@ -367,13 +354,11 @@ class BrowserFragment : BaseFragment() {
                             }
                         }
                         .show()
-                return
             }
             Menu.OTHER_BROWSER -> {
                 CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
                         .build()
                         .launchUrl(context, Uri.parse(tabs.currentUrl()))
-                return
             }
             Menu.SHARE_BARCODE -> {
                 val imageView = ImageView(context)
@@ -398,30 +383,22 @@ class BrowserFragment : BaseFragment() {
                 } catch (e: WriterException) {
                     Timber.e(e)
                     Toaster.snackShort(snackbarParent, e.message.orEmpty(), colorPair())
-                    return
                 }
-
-                return
             }
             Menu.ARCHIVE -> {
                 tabs.saveArchive()
-                return
             }
             Menu.SEARCH -> {
                 search()
-                return
             }
             Menu.SITE_SEARCH -> {
                 tabs.siteSearch()
-                return
             }
             Menu.VOICE_SEARCH -> {
                 startActivityForResult(VoiceSearch.makeIntent(context), REQUEST_CODE_VOICE_SEARCH)
-                return
             }
             Menu.COLOR_FILTER -> {
                 ColorFilter(activity, snackbarParent).switchState(this, REQUEST_OVERLAY_PERMISSION)
-                return
             }
             Menu.REPLACE_HOME -> {
                 val currentUrl = tabs.currentUrl()
@@ -439,18 +416,15 @@ class BrowserFragment : BaseFragment() {
                         getString(R.string.message_replace_home_url, currentUrl) ,
                         colorPair()
                 )
-                return
             }
             Menu.LOAD_HOME -> {
                 tabs.loadHome()
-                return
             }
             Menu.VIEW_HISTORY -> {
                 startActivityForResult(
                         ViewHistoryActivity.makeIntent(context),
                         ViewHistoryActivity.REQUEST_CODE
                 )
-                return
             }
             Menu.ADD_BOOKMARK -> {
                 tabs.addBookmark{
@@ -462,9 +436,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.EXIT -> {
                 activity.finish()
-                return
             }
-            else -> return
         }
     }
 
