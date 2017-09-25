@@ -93,7 +93,7 @@ class BrowserFragment : BaseFragment() {
     ): View? {
         binding = DataBindingUtil.inflate<FragmentBrowserBinding>(
                 inflater!!, R.layout.fragment_browser, container, false)
-        binding!!.fragment = this
+        binding?.fragment = this
 
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
@@ -118,7 +118,7 @@ class BrowserFragment : BaseFragment() {
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
-                binding!!.root,
+                binding?.root as View,
                 colorPair,
                 { url -> tabs.loadWithNewTab(Uri.parse(url)) }
         )
@@ -133,7 +133,7 @@ class BrowserFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
-        return binding!!.root
+        return binding?.root
     }
 
     /**
@@ -217,9 +217,9 @@ class BrowserFragment : BaseFragment() {
      * Initialize menus view.
      */
     private fun initMenus() {
-        binding!!.menusView.adapter = Adapter(activity, Consumer<Menu> { this.onMenuClick(it) })
+        binding?.menusView?.adapter = Adapter(activity, Consumer<Menu> { this.onMenuClick(it) })
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.menusView.layoutManager = layoutManager
+        binding?.menusView?.layoutManager = layoutManager
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
@@ -295,11 +295,11 @@ class BrowserFragment : BaseFragment() {
                 toBottom()
             }
             Menu.FIND_IN_PAGE -> {
-                if (pageSearcherModule!!.isVisible) {
-                    pageSearcherModule!!.hide()
+                if (pageSearcherModule?.isVisible ?: false) {
+                    pageSearcherModule?.hide()
                     return
                 }
-                pageSearcherModule!!.show(activity)
+                pageSearcherModule?.show(activity)
                 hideMenu()
             }
             Menu.SCREENSHOT -> {
@@ -341,7 +341,7 @@ class BrowserFragment : BaseFragment() {
                         .setView(inputLayout)
                         .setCancelable(true)
                         .setPositiveButton("開く") { d, i ->
-                            val url = inputLayout.editText!!.text.toString()
+                            val url = inputLayout.editText?.text.toString()
                             if (Urls.isValidUrl(url)) {
                                 tabs.loadWithNewTab(Uri.parse(url))
                             }
@@ -504,12 +504,12 @@ class BrowserFragment : BaseFragment() {
 
     private fun refreshFab() {
         val preferenceApplier = preferenceApplier() as PreferenceApplier
-        binding!!.fab.setBackgroundColor(preferenceApplier.colorPair().bgColor())
+        binding?.fab?.setBackgroundColor(preferenceApplier.colorPair().bgColor())
 
         val resources = resources
         val fabMarginBottom = resources.getDimensionPixelSize(R.dimen.fab_margin)
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
-        MenuPos.place(binding!!.fab, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
+        MenuPos.place(binding?.fab as View, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
     }
 
     override fun pressLongBack(): Boolean {
@@ -573,13 +573,13 @@ class BrowserFragment : BaseFragment() {
             REQUEST_OVERLAY_PERMISSION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
                     Toaster.snackShort(
-                            binding!!.root,
+                            binding?.root as View,
                             R.string.message_cannot_draw_overlay,
                             colorPair()
                     )
                     return
                 }
-                ColorFilter(activity, binding!!.root)
+                ColorFilter(activity, binding?.root as View)
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
                 return
             }
