@@ -345,7 +345,10 @@ class TabAdapter(
 
         val currentTab = tabList.currentTab()
         val file = tabsScreenshots.assignNewFile("${currentTab.id}.png")
-        Bitmaps.compress(webView.drawingCache, file)
+        val drawingCache = webView.drawingCache
+        if (drawingCache != null) {
+            Bitmaps.compress(drawingCache, file)
+        }
         currentTab.thumbnailPath = file.absolutePath
     }
 
