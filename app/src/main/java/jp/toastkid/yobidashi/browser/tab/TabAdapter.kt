@@ -95,6 +95,12 @@ class TabAdapter(
     private val slideInRight
             = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_in_right)
 
+    /**
+     * Animation of slide up bottom.
+     */
+    private val slideUpBottom
+            = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
+
     init {
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
@@ -371,7 +377,7 @@ class TabAdapter(
         val newTab = Tab()
         tabList.add(newTab)
         setCurrentTabCount()
-        setIndexByTab(newTab)
+        setIndexByTab(newTab, true)
         loadUrl(url)
     }
 
@@ -395,9 +401,15 @@ class TabAdapter(
         return tabList.currentTab().forward()
     }
 
-    internal fun setIndexByTab(tab: Tab) {
+    internal fun setIndexByTab(tab: Tab, openNew: Boolean = false) {
         val index = tabList.indexOf(tab)
         updateScrolled()
+
+        if (openNew) {
+            webView.startAnimation(slideUpBottom)
+            setIndex(index)
+            return
+        }
 
         if (index < index()) {
             webView.startAnimation(slideInLeft)
