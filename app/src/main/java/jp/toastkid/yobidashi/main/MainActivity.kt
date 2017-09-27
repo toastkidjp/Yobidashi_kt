@@ -581,23 +581,31 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     override fun hideToolbar() {
         val animate = binding.appBarMain.toolbar.animate()
         animate.cancel()
-        animate.translationY(-resources.getDimension(R.dimen.toolbar_height)).setDuration(200)
+        animate.translationY(-resources.getDimension(R.dimen.toolbar_height))
+                .setDuration(HEADER_HIDING_DURATION)
+                .withStartAction {
+                    val marginLayoutParams
+                            = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
+                    marginLayoutParams.topMargin = 0
+                    binding.appBarMain.content.requestLayout()
+                }
                 .withEndAction { binding.appBarMain.toolbar.visibility = View.GONE }
                 .start()
-        val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
-        marginLayoutParams.topMargin = 0
-        binding.appBarMain.content.requestLayout()
     }
 
     override fun showToolbar() {
         val animate = binding.appBarMain.toolbar.animate()
         animate.cancel()
-        animate.translationY(0f).setDuration(200)
+        animate.translationY(0f)
+                .setDuration(HEADER_HIDING_DURATION)
                 .withStartAction { binding.appBarMain.toolbar.visibility = View.VISIBLE }
+                .withEndAction {
+                    val marginLayoutParams
+                            = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
+                    marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
+                    binding.appBarMain.content.requestLayout()
+                }
                 .start()
-        val marginLayoutParams = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
-        marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
-        binding.appBarMain.content.requestLayout()
     }
 
     /**
@@ -645,6 +653,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     companion object {
+
+        /**
+         * Header hiding duration.
+         */
+        private const val HEADER_HIDING_DURATION = 75L
 
         /** Layout ID.  */
         private val LAYOUT_ID = R.layout.activity_main

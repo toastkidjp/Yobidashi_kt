@@ -101,6 +101,11 @@ class TabAdapter(
     private val slideUpBottom
             = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
 
+    /**
+     * Suppressing unnecessary animation.
+     */
+    private val minimumScrolled: Int = 15
+
     init {
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
@@ -321,7 +326,9 @@ class TabAdapter(
         }
         webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
             val scrolled = vertical - oldVertical
-            scrollCallback(0 > scrolled)
+            if (Math.abs(scrolled) > minimumScrolled) {
+                scrollCallback(0 > scrolled)
+            }
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()

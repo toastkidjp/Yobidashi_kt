@@ -81,6 +81,8 @@ class BrowserFragment : BaseFragment() {
 
     private var toolbarAction: ToolbarAction? = null
 
+    private var onAnimation = false
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
@@ -178,16 +180,27 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun showFooter() {
+        if (onAnimation) {
+            return
+        }
+        onAnimation = true
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(0f)
                 ?.setDuration(ANIMATION_DURATION)
                 ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
-                ?.withEndAction { toolbarAction?.showToolbar() }
+                ?.withEndAction {
+                    toolbarAction?.showToolbar()
+                    onAnimation = false
+                }
                 ?.start()
     }
 
     private fun hideFooter() {
+        if (onAnimation) {
+            return
+        }
+        onAnimation = true
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
@@ -195,6 +208,7 @@ class BrowserFragment : BaseFragment() {
                 ?.withEndAction {
                     toolbarAction?.hideToolbar()
                     binding?.footer?.root?.visibility = View.GONE
+                    onAnimation = false
                 }
                 ?.start()
     }
@@ -639,7 +653,7 @@ class BrowserFragment : BaseFragment() {
         /**
          * Animation's dutarion.
          */
-        private const val ANIMATION_DURATION: Long = 50L
+        private const val ANIMATION_DURATION: Long = 75L
 
         /**
          * Key of args.
