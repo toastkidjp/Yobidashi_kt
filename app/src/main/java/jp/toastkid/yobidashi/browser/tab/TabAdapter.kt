@@ -108,6 +108,7 @@ class TabAdapter(
         tabsScreenshots = Storeroom(webView.context, "tabs/screenshots")
         preferenceApplier = PreferenceApplier(webView.context)
         colorPair = preferenceApplier.colorPair()
+        setCurrentTabCount()
     }
 
     private fun makeWebView(
@@ -382,9 +383,9 @@ class TabAdapter(
     }
 
     private fun openBackgroundTab(url: String) {
-        setCurrentTabCount()
         tabList.add(Tab.makeBackground(webView.context.getString(R.string.new_tab), url))
         tabList.save()
+        setCurrentTabCount()
     }
 
     private fun addHistory(title: String, url: String) {
@@ -436,11 +437,20 @@ class TabAdapter(
 
     fun size(): Int = tabList.size()
 
+    /**
+     * Simple delegation to [WebView].
+     */
     fun reload() {
         webView.reload()
     }
 
+    /**
+     * Reload current tab's latest url.
+     */
     fun reloadUrlIfNeed() {
+        if (tabList.isEmpty) {
+            return
+        }
         loadUrl(tabList.currentTab().latest.url())
     }
 
@@ -573,10 +583,13 @@ class TabAdapter(
         }
     }
 
+    /**
+     * Simple delegation.
+     *
+     * @param uri [Uri] object
+     */
     fun loadWithNewTab(uri: Uri) {
-        openNewTab()
-        setIndex(tabList.size() - 1)
-        loadUrl(uri.toString())
+        openNewTab(uri.toString())
     }
 
     /**
@@ -664,6 +677,8 @@ class TabAdapter(
     }
 
     fun enablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
+
+    fun isNotEmpty(): Boolean = !tabList.isEmpty
 
 }
 

@@ -33,7 +33,8 @@ class TabList private constructor() {
     }
 
     internal fun setIndex(newIndex: Int) {
-        index = newIndex
+        index = if (newIndex < 0 || tabs.size < newIndex) 0 else newIndex
+        Timber.i("index = ${index}")
     }
 
     fun getIndex(): Int {

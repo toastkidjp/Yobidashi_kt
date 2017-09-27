@@ -24,7 +24,8 @@ class TabListModule(
         val binding: ModuleTabListBinding,
         val tabAdapter: TabAdapter,
         private val parent: View,
-        private val closeAction: () -> Unit
+        private val closeAction: () -> Unit,
+        private val emptyAction: () -> Unit
 ) : BaseModule(binding.root) {
 
     /** Tab list adapter.  */
@@ -66,7 +67,7 @@ class TabListModule(
                     .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                     .setPositiveButton(R.string.ok) { d, i ->
                         tabAdapter.clear()
-                        closeAction()
+                        emptyAction()
                         d.dismiss()
                     }
                     .show()
@@ -88,9 +89,7 @@ class TabListModule(
                             rv: RecyclerView,
                             viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder
-                    ): Boolean {
-                        return true
-                    }
+                    ): Boolean = true
 
                     override fun onSwiped(
                             viewHolder: RecyclerView.ViewHolder,

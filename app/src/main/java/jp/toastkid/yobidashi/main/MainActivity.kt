@@ -182,9 +182,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     private fun loadUri(uri: Uri) {
         if (preferenceApplier.useInternalBrowser()) {
-            val args = Bundle()
-            args.putParcelable("url", uri)
-            browserFragment.arguments = args
+            browserFragment.arguments = BrowserFragment.makeArgs(uri)
             replaceFragment(browserFragment)
             return
         }

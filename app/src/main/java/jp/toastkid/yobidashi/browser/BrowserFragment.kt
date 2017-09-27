@@ -95,25 +95,12 @@ class BrowserFragment : BaseFragment() {
                 inflater!!, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
-        tabs = TabAdapter(
-                binding?.progress as ProgressBar,
-                binding?.webViewContainer as FrameLayout,
-                binding?.footer?.tabCount as TextView,
-                { titleProcessor.onNext(it) },
-                { binding?.refresher?.isRefreshing = false },
-                { this.hideOption() },
-                { onScroll(it) },
-                { fragmentManager.popBackStack() }
-        )
-
         binding?.refresher?.setOnRefreshListener({ tabs.reload() })
         binding?.refresher?.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
         initMenus()
 
         val colorPair = colorPair()
         initFooter(colorPair)
-
-        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
@@ -124,16 +111,46 @@ class BrowserFragment : BaseFragment() {
         )
         searchWithClip.invoke()
 
-        if (arguments != null && arguments.containsKey("url")) {
-            val url = arguments.getParcelable<Uri>("url")
-            if (url != null) {
-                tabs.loadWithNewTab(url)
-            }
-        }
+        tabs = TabAdapter(
+                binding?.progress as ProgressBar,
+                binding?.webViewContainer as FrameLayout,
+                binding?.footer?.tabCount as TextView,
+                { titleProcessor.onNext(it) },
+                { binding?.refresher?.isRefreshing = false },
+                { this.hideOption() },
+                { onScroll(it) },
+                this::onEmptyTabs
+        )
+        openInitialTab()
+
+        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    private fun onEmptyTabs() {
+        tabListModule?.hide()
+        fragmentManager.popBackStack()
+    }
+
+    /**
+     * Open initial tab when tabs is empty.
+     */
+    private fun openInitialTab() {
+        if (arguments == null
+                || !arguments.containsKey(KEY_ARGS_URL)
+                || (arguments.getInt(KEY_ARGS_LAUNCH_MODE) == 1 && tabs.isNotEmpty())
+                ) {
+            tabs.reloadUrlIfNeed()
+            return
+        }
+
+        val url = arguments.getParcelable<Uri>(KEY_ARGS_URL)
+        if (url != null) {
+            tabs.loadWithNewTab(url)
+        }
     }
 
     /**
@@ -223,7 +240,7 @@ class BrowserFragment : BaseFragment() {
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
-    fun switchMenu() {
+    private fun switchMenu() {
         hideTabList()
         if (binding?.menusView?.visibility == View.GONE) {
             showMenu(binding?.root ?: View(context))
@@ -432,8 +449,11 @@ class BrowserFragment : BaseFragment() {
                             LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
                     tabs,
                     snackbarParent,
-                    this::hideTabList
+                    this::hideTabList,
+                    this::onEmptyTabs
             )
+        }
+        if (binding?.tabListContainer?.childCount == 0) {
             binding?.tabListContainer?.addView(tabListModule?.moduleView)
         }
     }
@@ -475,7 +495,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun showTabListWithParent(snackbarParent: View) {
-        initTabListIfNeed(snackbarParent)
         switchTabList()
     }
 
@@ -533,10 +552,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun hideTabList() {
-        if (tabs.size() == 0) {
-            fragmentManager.popBackStack()
-            return
-        }
         tabListModule?.hide()
         binding?.fab?.show()
     }
@@ -611,6 +626,8 @@ class BrowserFragment : BaseFragment() {
         disposables.dispose()
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
+        binding?.tabListContainer?.removeAllViews()
+        tabListModule = null
     }
 
     companion object {
@@ -624,5 +641,25 @@ class BrowserFragment : BaseFragment() {
          */
         private const val ANIMATION_DURATION: Long = 50L
 
+        /**
+         * Key of args.
+         */
+        private val KEY_ARGS_URL = "url"
+
+        /**
+         * Key of args.
+         */
+        private val KEY_ARGS_LAUNCH_MODE = "launch_mode"
+
+        /**
+         * Make fragment's args.
+         * @param uri
+         */
+        fun makeArgs(uri: Uri): Bundle {
+            val args = Bundle()
+            args.putParcelable(KEY_ARGS_URL, uri)
+            args.putInt(KEY_ARGS_LAUNCH_MODE, 1)
+            return args
+        }
     }
 }
