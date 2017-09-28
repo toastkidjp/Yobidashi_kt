@@ -3,15 +3,16 @@ package jp.toastkid.yobidashi.libs.preference
 import android.support.annotation.ColorInt
 
 /**
+ * Color pair of toolbar and so on...
+ *
  * @author toastkidjp
  */
-class ColorPair(@param:ColorInt private val bgColor: Int, @param:ColorInt private val fontColor: Int) {
+class ColorPair(
+        @param:ColorInt private val bgColor:   Int,
+        @param:ColorInt private val fontColor: Int
+) {
 
-    fun bgColor(): Int {
-        return bgColor
-    }
+    @ColorInt fun bgColor():   Int = bgColor
 
-    fun fontColor(): Int {
-        return fontColor
-    }
+    @ColorInt fun fontColor(): Int = fontColor
 }
