@@ -96,6 +96,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     /** Count up for displaying AD. */
     private var adCount = 0
 
+    /** Use for delaying. */
+    private val uiThreadHandler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
@@ -182,11 +185,24 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     private fun loadUri(uri: Uri) {
         if (preferenceApplier.useInternalBrowser()) {
-            browserFragment.arguments = BrowserFragment.makeArgs(uri)
-            replaceFragment(browserFragment)
+            if (browserFragment.isVisible) {
+                browserFragment.loadWithNewTab(uri)
+                return
+            }
+            replaceWithBrowser(uri)
             return
         }
         CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back).build().launchUrl(this, uri)
+    }
+
+    private fun replaceWithBrowser(uri: Uri) {
+        replaceFragment(browserFragment)
+        prevDisposable = browserFragment.titlePairProcessor()
+                .subscribe { titlePair ->
+                    binding.appBarMain.toolbar.title = titlePair.title()
+                    binding.appBarMain.toolbar.subtitle = titlePair.subtitle()
+                }
+        uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
     }
 
     /**
@@ -207,15 +223,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         binding.drawerLayout.closeDrawers()
         binding.appBarMain.toolbar.setTitle(fragment.titleId())
         binding.appBarMain.toolbar.subtitle = ""
-
-        if (fragment is BrowserFragment) {
-            prevDisposable = fragment.titlePairProcessor()
-                    .subscribe { titlePair ->
-                        binding.appBarMain.toolbar.title = titlePair.title()
-                        binding.appBarMain.toolbar.subtitle = titlePair.subtitle()
-                    }
-        }
-
     }
 
     private fun initInterstitialAd() {
@@ -632,7 +639,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             ArchivesActivity.REQUEST_CODE -> {
                 try {
                     replaceFragment(browserFragment)
-                    Handler(Looper.getMainLooper()).postDelayed(
+                    uiThreadHandler.postDelayed(
                             { browserFragment.loadArchive(
                                     File(data.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))},
                             200L

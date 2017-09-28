@@ -123,7 +123,6 @@ class BrowserFragment : BaseFragment() {
                 { onScroll(it) },
                 this::onEmptyTabs
         )
-        openInitialTab()
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
@@ -135,24 +134,6 @@ class BrowserFragment : BaseFragment() {
     private fun onEmptyTabs() {
         tabListModule?.hide()
         fragmentManager.popBackStack()
-    }
-
-    /**
-     * Open initial tab when tabs is empty.
-     */
-    private fun openInitialTab() {
-        if (arguments == null
-                || !arguments.containsKey(KEY_ARGS_URL)
-                || (arguments.getInt(KEY_ARGS_LAUNCH_MODE) == 1 && tabs.isNotEmpty())
-                ) {
-            tabs.reloadUrlIfNeed()
-            return
-        }
-
-        val url = arguments.getParcelable<Uri>(KEY_ARGS_URL)
-        if (url != null) {
-            tabs.loadWithNewTab(url)
-        }
     }
 
     /**
@@ -631,6 +612,10 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    fun loadWithNewTab(uri: Uri) {
+        tabs.loadWithNewTab(uri)
+    }
+
     fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
 
     override fun onDestroy() {
@@ -655,25 +640,5 @@ class BrowserFragment : BaseFragment() {
          */
         private const val ANIMATION_DURATION: Long = 75L
 
-        /**
-         * Key of args.
-         */
-        private val KEY_ARGS_URL = "url"
-
-        /**
-         * Key of args.
-         */
-        private val KEY_ARGS_LAUNCH_MODE = "launch_mode"
-
-        /**
-         * Make fragment's args.
-         * @param uri
-         */
-        fun makeArgs(uri: Uri): Bundle {
-            val args = Bundle()
-            args.putParcelable(KEY_ARGS_URL, uri)
-            args.putInt(KEY_ARGS_LAUNCH_MODE, 1)
-            return args
-        }
     }
 }
