@@ -81,6 +81,8 @@ class BrowserFragment : BaseFragment() {
 
     private var toolbarAction: ToolbarAction? = null
 
+    private var onAnimation = false
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
@@ -95,25 +97,12 @@ class BrowserFragment : BaseFragment() {
                 inflater!!, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
-        tabs = TabAdapter(
-                binding?.progress as ProgressBar,
-                binding?.webViewContainer as FrameLayout,
-                binding?.footer?.tabCount as TextView,
-                { titleProcessor.onNext(it) },
-                { binding?.refresher?.isRefreshing = false },
-                { this.hideOption() },
-                { onScroll(it) },
-                { fragmentManager.popBackStack() }
-        )
-
         binding?.refresher?.setOnRefreshListener({ tabs.reload() })
         binding?.refresher?.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
         initMenus()
 
         val colorPair = colorPair()
         initFooter(colorPair)
-
-        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
@@ -124,16 +113,27 @@ class BrowserFragment : BaseFragment() {
         )
         searchWithClip.invoke()
 
-        if (arguments != null && arguments.containsKey("url")) {
-            val url = arguments.getParcelable<Uri>("url")
-            if (url != null) {
-                tabs.loadWithNewTab(url)
-            }
-        }
+        tabs = TabAdapter(
+                binding?.progress as ProgressBar,
+                binding?.webViewContainer as FrameLayout,
+                binding?.footer?.tabCount as TextView,
+                { titleProcessor.onNext(it) },
+                { binding?.refresher?.isRefreshing = false },
+                { this.hideOption() },
+                { onScroll(it) },
+                this::onEmptyTabs
+        )
+
+        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    private fun onEmptyTabs() {
+        tabListModule?.hide()
+        fragmentManager.popBackStack()
     }
 
     /**
@@ -161,16 +161,27 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun showFooter() {
+        if (onAnimation) {
+            return
+        }
+        onAnimation = true
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(0f)
                 ?.setDuration(ANIMATION_DURATION)
                 ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
-                ?.withEndAction { toolbarAction?.showToolbar() }
+                ?.withEndAction {
+                    toolbarAction?.showToolbar()
+                    onAnimation = false
+                }
                 ?.start()
     }
 
     private fun hideFooter() {
+        if (onAnimation) {
+            return
+        }
+        onAnimation = true
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
@@ -178,6 +189,7 @@ class BrowserFragment : BaseFragment() {
                 ?.withEndAction {
                     toolbarAction?.hideToolbar()
                     binding?.footer?.root?.visibility = View.GONE
+                    onAnimation = false
                 }
                 ?.start()
     }
@@ -223,7 +235,7 @@ class BrowserFragment : BaseFragment() {
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
-    fun switchMenu() {
+    private fun switchMenu() {
         hideTabList()
         if (binding?.menusView?.visibility == View.GONE) {
             showMenu(binding?.root ?: View(context))
@@ -432,8 +444,11 @@ class BrowserFragment : BaseFragment() {
                             LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
                     tabs,
                     snackbarParent,
-                    this::hideTabList
+                    this::hideTabList,
+                    this::onEmptyTabs
             )
+        }
+        if (binding?.tabListContainer?.childCount == 0) {
             binding?.tabListContainer?.addView(tabListModule?.moduleView)
         }
     }
@@ -475,7 +490,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun showTabListWithParent(snackbarParent: View) {
-        initTabListIfNeed(snackbarParent)
         switchTabList()
     }
 
@@ -533,10 +547,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     private fun hideTabList() {
-        if (tabs.size() == 0) {
-            fragmentManager.popBackStack()
-            return
-        }
         tabListModule?.hide()
         binding?.fab?.show()
     }
@@ -602,6 +612,10 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    fun loadWithNewTab(uri: Uri) {
+        tabs.loadWithNewTab(uri)
+    }
+
     fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
 
     override fun onDestroy() {
@@ -611,6 +625,8 @@ class BrowserFragment : BaseFragment() {
         disposables.dispose()
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
+        binding?.tabListContainer?.removeAllViews()
+        tabListModule = null
     }
 
     companion object {
@@ -622,7 +638,7 @@ class BrowserFragment : BaseFragment() {
         /**
          * Animation's dutarion.
          */
-        private const val ANIMATION_DURATION: Long = 50L
+        private const val ANIMATION_DURATION: Long = 75L
 
     }
 }

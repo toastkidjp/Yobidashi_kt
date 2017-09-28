@@ -236,8 +236,8 @@ class SearchActivity : BaseActivity() {
      */
     private fun applyColor() {
         val colorPair : ColorPair = colorPair()
-        @ColorInt val bgColor = colorPair.bgColor()
-        @ColorInt val fontColor = colorPair.fontColor()
+        @ColorInt val bgColor:   Int = colorPair.bgColor()
+        @ColorInt val fontColor: Int = colorPair.fontColor()
         Colors.setEditTextColor(binding?.searchInput as EditText, fontColor)
 
         binding?.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))

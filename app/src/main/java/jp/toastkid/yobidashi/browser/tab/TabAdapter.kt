@@ -95,6 +95,17 @@ class TabAdapter(
     private val slideInRight
             = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_in_right)
 
+    /**
+     * Animation of slide up bottom.
+     */
+    private val slideUpBottom
+            = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
+
+    /**
+     * Suppressing unnecessary animation.
+     */
+    private val minimumScrolled: Int = 15
+
     init {
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
@@ -102,6 +113,7 @@ class TabAdapter(
         tabsScreenshots = Storeroom(webView.context, "tabs/screenshots")
         preferenceApplier = PreferenceApplier(webView.context)
         colorPair = preferenceApplier.colorPair()
+        setCurrentTabCount()
     }
 
     private fun makeWebView(
@@ -314,7 +326,9 @@ class TabAdapter(
         }
         webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
             val scrolled = vertical - oldVertical
-            scrollCallback(0 > scrolled)
+            if (Math.abs(scrolled) > minimumScrolled) {
+                scrollCallback(0 > scrolled)
+            }
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
@@ -371,14 +385,14 @@ class TabAdapter(
         val newTab = Tab()
         tabList.add(newTab)
         setCurrentTabCount()
-        setIndexByTab(newTab)
+        setIndexByTab(newTab, true)
         loadUrl(url)
     }
 
     private fun openBackgroundTab(url: String) {
-        setCurrentTabCount()
         tabList.add(Tab.makeBackground(webView.context.getString(R.string.new_tab), url))
         tabList.save()
+        setCurrentTabCount()
     }
 
     private fun addHistory(title: String, url: String) {
@@ -395,9 +409,15 @@ class TabAdapter(
         return tabList.currentTab().forward()
     }
 
-    internal fun setIndexByTab(tab: Tab) {
+    internal fun setIndexByTab(tab: Tab, openNew: Boolean = false) {
         val index = tabList.indexOf(tab)
         updateScrolled()
+
+        if (openNew) {
+            webView.startAnimation(slideUpBottom)
+            setIndex(index)
+            return
+        }
 
         if (index < index()) {
             webView.startAnimation(slideInLeft)
@@ -424,11 +444,20 @@ class TabAdapter(
 
     fun size(): Int = tabList.size()
 
+    /**
+     * Simple delegation to [WebView].
+     */
     fun reload() {
         webView.reload()
     }
 
+    /**
+     * Reload current tab's latest url.
+     */
     fun reloadUrlIfNeed() {
+        if (tabList.isEmpty) {
+            return
+        }
         loadUrl(tabList.currentTab().latest.url())
     }
 
@@ -561,10 +590,13 @@ class TabAdapter(
         }
     }
 
+    /**
+     * Simple delegation.
+     *
+     * @param uri [Uri] object
+     */
     fun loadWithNewTab(uri: Uri) {
-        openNewTab()
-        setIndex(tabList.size() - 1)
-        loadUrl(uri.toString())
+        openNewTab(uri.toString())
     }
 
     /**
@@ -652,6 +684,8 @@ class TabAdapter(
     }
 
     fun enablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
+
+    fun isNotEmpty(): Boolean = !tabList.isEmpty
 
 }
 

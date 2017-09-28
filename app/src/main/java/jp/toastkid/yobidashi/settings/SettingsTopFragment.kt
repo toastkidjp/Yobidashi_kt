@@ -39,15 +39,19 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 
 /**
  * Settings top fragment.
-
+ *
  * @author toastkidjp
  */
 class SettingsTopFragment : BaseFragment() {
 
-    /** Data binding object.  */
+    /**
+     * Data binding object.
+     */
     private lateinit var binding: FragmentSettingsBinding
 
-    /** Color filter.  */
+    /**
+     * Color filter.
+     */
     private var colorFilter: ColorFilter? = null
 
     override fun onCreateView(
@@ -69,9 +73,7 @@ class SettingsTopFragment : BaseFragment() {
                         SearchCategory.values()[binding.searchCategories.selectedItemPosition].name)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // NOP
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
         StartUpSpinnerInitializer.initialize(binding.startUpItems)
         binding.startUpItems.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
@@ -80,9 +82,7 @@ class SettingsTopFragment : BaseFragment() {
                         StartUp.values()[binding.startUpItems.selectedItemPosition]
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // NOP
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
         initColorFilter()
 
@@ -141,6 +141,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Call color setting.
+     *
      * @param view
      */
     fun colorSettings(view: View) {
@@ -150,7 +151,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Call background setting.
-
+     *
      * @param view
      */
     fun backgroundSettings(view: View) {
@@ -160,7 +161,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Clear background setting.
-
+     *
      * @param view
      */
     fun clearBackgroundSettings(view: View) {
@@ -175,6 +176,8 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Open search categories spinner.
+     *
+     * @param v
      */
     fun openSearchCategory(v: View) {
         binding.searchCategories.performClick()
@@ -182,6 +185,8 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Open startup spinner.
+     *
+     * @param v
      */
     fun openStartup(v: View) {
         binding.startUpItems.performClick()
@@ -205,6 +210,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * UserAgent setting.
+     *
      * @param v
      */
     fun userAgent(v: View) {
@@ -237,7 +243,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Switch browser.
-
+     *
      * @param v
      */
     fun switchInternalBrowser(v: View) {
@@ -251,6 +257,9 @@ class SettingsTopFragment : BaseFragment() {
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 
+    /**
+     * Switch full screen mode.
+     */
     fun switchFullScreen(v: View) {
         val preferenceApplier = preferenceApplier()
         val newState = !preferenceApplier.fullScreen
@@ -264,7 +273,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Switch retaining tabs.
-
+     *
      * @param v
      */
     fun switchRetainTabs(v: View) {
