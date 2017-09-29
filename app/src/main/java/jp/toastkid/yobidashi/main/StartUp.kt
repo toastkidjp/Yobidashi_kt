@@ -5,6 +5,11 @@ import android.support.annotation.StringRes
 import jp.toastkid.yobidashi.R
 
 /**
+ * Start-up view definition.
+ *
+ * @param titleId
+ * @param radioButtonId
+ *
  * @author toastkidjp
  */
 enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
@@ -21,16 +26,9 @@ enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
             return valueOf(name)
         }
 
-        fun getDefault(): StartUp {
-            return START
-        }
+        private fun getDefault(): StartUp = START
 
-        fun findIndex(startUp: StartUp): Int? {
-            return (0..values().size - 1).find { values()[it] == startUp }
-        }
-
-        fun findById(@IdRes checkedRadioButtonId: Int): StartUp {
-            return values().find { it.radioButtonId == checkedRadioButtonId } ?: START
-        }
+        fun findById(@IdRes checkedRadioButtonId: Int): StartUp =
+                values().find { it.radioButtonId == checkedRadioButtonId } ?: START
     }
 }
