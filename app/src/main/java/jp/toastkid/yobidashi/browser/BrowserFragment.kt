@@ -72,7 +72,7 @@ class BrowserFragment : BaseFragment() {
     private var pageSearcherModule: PageSearcherModule? = null
 
     /** Title processor  */
-    private var titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
+    private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
 
     /** Disposer.  */
     private val disposables: CompositeDisposable = CompositeDisposable()
