@@ -286,7 +286,6 @@
     <string name="message_confirm_exit">Would you like to exit this app?</string>
     <string name="title_settings_display">Display setting</string>
     <string name="message_empty_histories">There are no histories.</string>
-    <string name="title_full_screen">Full screen mode</string>
 
     <string name="title_ssl_connection_error">TLS Error!</string>
     <string name="message_ssl_error_first_line">This site\'s certificate can\'t be trusted.
@@ -296,8 +295,6 @@
     <string name="message_ssl_error_not_yet_valid">This site\'s certificate is not yet valid.\n\nStart time=</string>
     <string name="message_ssl_error_untrusted">CA is untrusted.\n\nCA=</string>
     <string name="message_ssl_error_unknown">Occurred unknown error!</string>
-    <string name="message_full_screen">This app use full screen mode.</string>
-    <string name="message_cancel_full_screen">It has canceled full screen mode.</string>
     <string name="title_filter_color">Filter\'s color</string>
     <string name="title_default">Default</string>
 

@@ -190,34 +190,6 @@
 
                 <include layout="@layout/primary_dark_divider"/>
 
-                <FrameLayout
-                    android:id="@+id/browser_fullscreen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchFullScreen}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/settings_item_left_margin"
-                        android:gravity="center_vertical"
-                        android:text="@string/title_full_screen"
-                        />
-                    <CheckBox
-                        android:id="@+id/browser_fullscreen_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="right"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
-
-                <include layout="@layout/primary_dark_divider"/>
-
                 <include android:id="@+id/browser_expand"
                     layout="@layout/fragment_setting_section_browser_expand_mode"/>
 
