@@ -195,14 +195,16 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back).build().launchUrl(this, uri)
     }
 
-    private fun replaceWithBrowser(uri: Uri) {
+    private fun replaceWithBrowser(uri: Uri = Uri.EMPTY) {
         replaceFragment(browserFragment)
         prevDisposable = browserFragment.titlePairProcessor()
                 .subscribe { titlePair ->
-                    binding.appBarMain.toolbar.title = titlePair.title()
+                    binding.appBarMain.toolbar.title    = titlePair.title()
                     binding.appBarMain.toolbar.subtitle = titlePair.subtitle()
                 }
-        uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
+        if (uri != Uri.EMPTY) {
+            uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
+        }
     }
 
     /**
@@ -638,7 +640,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             ArchivesActivity.REQUEST_CODE -> {
                 try {
-                    replaceFragment(browserFragment)
+                    replaceWithBrowser()
                     uiThreadHandler.postDelayed(
                             { browserFragment.loadArchive(
                                     File(data.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))},
