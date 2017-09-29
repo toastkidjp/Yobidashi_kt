@@ -35,7 +35,6 @@ import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
-import timber.log.Timber
 
 /**
  * Settings top fragment.
@@ -190,7 +189,7 @@ class SettingsTopFragment : BaseFragment() {
         preferenceApplier.enableSearchWithClip = newState
         binding.enableSearchWithClipCheck.isChecked = newState
 
-        @StringRes val messageId
+        @StringRes val messageId: Int
                 = if (newState) { R.string.message_enable_swc } else { R.string.message_disable_swc }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
@@ -218,7 +217,7 @@ class SettingsTopFragment : BaseFragment() {
         preferenceApplier.setUseNotificationWidget(newState)
         binding.useNotificationWidgetCheck.isChecked = newState
 
-        @StringRes var messageId = R.string.message_done_showing_notification_widget
+        @StringRes var messageId: Int = R.string.message_done_showing_notification_widget
         if (newState) {
             NotificationWidget.show(context)
         } else {
@@ -238,7 +237,7 @@ class SettingsTopFragment : BaseFragment() {
         val newState = !preferenceApplier.useInternalBrowser()
         preferenceApplier.setUseInternalBrowser(newState)
         binding.useInternalBrowserCheck.isChecked = newState
-        @StringRes val messageId
+        @StringRes val messageId: Int
                 = if (newState) { R.string.message_use_internal_browser }
                   else { R.string.message_use_chrome }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
@@ -254,7 +253,7 @@ class SettingsTopFragment : BaseFragment() {
         val newState = !preferenceApplier.doesRetainTabs()
         preferenceApplier.setRetainTabs(newState)
         binding.retainTabsCheck.isChecked = newState
-        @StringRes val messageId = if (newState)
+        @StringRes val messageId: Int = if (newState)
             R.string.message_check_retain_tabs
         else
             R.string.message_check_doesnot_retain_tabs
@@ -297,7 +296,7 @@ class SettingsTopFragment : BaseFragment() {
         val newState = !preferenceApplier.useJavaScript()
         preferenceApplier.setUseJavaScript(newState)
         binding.browserJsCheck.isChecked = newState
-        @StringRes val messageId = if (newState)
+        @StringRes val messageId: Int = if (newState)
             R.string.message_js_enabled
         else
             R.string.message_js_disabled
@@ -306,7 +305,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Switch loading images.
-
+     *
      * @param v
      */
     fun switchLoadingImage(v: View) {
@@ -318,7 +317,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Switching saving form data.
-
+     *
      * @param v
      */
     fun switchSaveFormData(v: View) {
@@ -330,7 +329,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Switch saving view history.
-
+     *
      * @param v
      */
     fun switchViewHistory(v: View) {
@@ -342,7 +341,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Switching daily alarm.
-
+     *
      * @param v
      */
     fun switchDailyAlarm(v: View) {
@@ -379,7 +378,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Call device settings.
-
+     *
      * @param v
      */
     fun deviceSetting(v: View) {
@@ -389,7 +388,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Call Wi-Fi settings.
-
+     *
      * @param v
      */
     fun wifi(v: View) {
@@ -399,7 +398,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Call Wireless settings.
-
+     *
      * @param v
      */
     fun wireless(v: View) {
@@ -429,7 +428,7 @@ class SettingsTopFragment : BaseFragment() {
 
     /**
      * Call all app settings.
-
+     *
      * @param v
      */
     fun allApps(v: View) {
@@ -437,9 +436,7 @@ class SettingsTopFragment : BaseFragment() {
         startActivity(SettingsIntentFactory.allApps())
     }
 
-    override fun titleId(): Int {
-        return R.string.title_settings
-    }
+    override fun titleId(): Int = R.string.title_settings
 
     /**
      * Show all menu module.
