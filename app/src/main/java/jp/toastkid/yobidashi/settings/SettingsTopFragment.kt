@@ -30,12 +30,12 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.main.StartUp
-import jp.toastkid.yobidashi.main.StartUpSpinnerInitializer
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
+import timber.log.Timber
 
 /**
  * Settings top fragment.
@@ -75,14 +75,9 @@ class SettingsTopFragment : BaseFragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
-        StartUpSpinnerInitializer.initialize(binding.startUpItems)
-        binding.startUpItems.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                preferenceApplier().startUp =
-                        StartUp.values()[binding.startUpItems.selectedItemPosition]
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        binding.startUpItems.startUpSelector.setOnCheckedChangeListener { radioGroup, checkedId ->
+            preferenceApplier().startUp = StartUp.findById(checkedId)
         }
         initColorFilter()
 
@@ -132,7 +127,8 @@ class SettingsTopFragment : BaseFragment() {
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
         binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
-        binding.browserFullscreenCheck.isChecked = preferenceApplier.fullScreen
+
+        binding.startUpItems.startUpSelector.check(preferenceApplier.startUp.radioButtonId)
 
         val filterColor = preferenceApplier.filterColor()
         binding.filterColor.sample.setBackgroundColor(filterColor)
@@ -181,15 +177,6 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun openSearchCategory(v: View) {
         binding.searchCategories.performClick()
-    }
-
-    /**
-     * Open startup spinner.
-     *
-     * @param v
-     */
-    fun openStartup(v: View) {
-        binding.startUpItems.performClick()
     }
 
     /**
@@ -254,20 +241,6 @@ class SettingsTopFragment : BaseFragment() {
         @StringRes val messageId
                 = if (newState) { R.string.message_use_internal_browser }
                   else { R.string.message_use_chrome }
-        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
-    }
-
-    /**
-     * Switch full screen mode.
-     */
-    fun switchFullScreen(v: View) {
-        val preferenceApplier = preferenceApplier()
-        val newState = !preferenceApplier.fullScreen
-        preferenceApplier.fullScreen = newState
-        binding.browserFullscreenCheck.isChecked = newState
-        @StringRes val messageId =
-                if (newState) { R.string.message_full_screen }
-                else          { R.string.message_cancel_full_screen }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 

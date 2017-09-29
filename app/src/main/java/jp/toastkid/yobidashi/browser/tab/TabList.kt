@@ -10,6 +10,8 @@ import okio.Okio
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 /**
  * First collection of [Tab].
@@ -18,15 +20,11 @@ import java.io.IOException
  */
 class TabList private constructor() {
 
-    @Transient private val tabs: MutableList<Tab>
+    @Transient private val tabs: MutableList<Tab> = mutableListOf<Tab>()
 
     @Transient private val disposables = CompositeDisposable()
 
     private var index: Int = 0
-
-    init {
-        this.tabs = mutableListOf<Tab>()
-    }
 
     internal fun currentTab(): Tab {
         return tabs.get(index)
@@ -64,14 +62,8 @@ class TabList private constructor() {
      * Save current state to file.
      */
     internal fun save() {
-        val initJsonAdapterIfNeed = Completable.create { e ->
-            initJsonAdapterIfNeed()
-            e.onComplete()
-        }
-        val initTabJsonAdapterIfNeed = Completable.create { e ->
-            initTabJsonAdapterIfNeed()
-            e.onComplete()
-        }
+        val initJsonAdapterIfNeed    = Completable.fromAction { initJsonAdapterIfNeed() }
+        val initTabJsonAdapterIfNeed = Completable.fromAction { initTabJsonAdapterIfNeed() }
 
         disposables.add(Completable.ambArray(initJsonAdapterIfNeed, initTabJsonAdapterIfNeed)
                 .subscribeOn(Schedulers.io())
@@ -81,15 +73,17 @@ class TabList private constructor() {
                             val charset = charset("UTF-8")
                             Okio.buffer(Okio.sink(tabsFile))
                                     .write(json?.toByteArray(charset)).flush()
-                            itemsDir?.list()
-                                    ?.map { File(itemsDir, it) }
-                                    ?.forEach { it.delete() }
-                            tabs.forEach {
-                                val source = tabJsonAdapter?.toJson(it)?.toByteArray(charset)
-                                        ?: return@forEach
-                                Okio.buffer(Okio.sink(File(itemsDir, "${it.id}.json")))
-                                        .write(source)
-                                        .flush()
+                            savingLock.withLock {
+                                itemsDir?.list()
+                                        ?.map { File(itemsDir, it) }
+                                        ?.forEach { it.delete() }
+                                tabs.forEach {
+                                    val source = tabJsonAdapter?.toJson(it)?.toByteArray(charset)
+                                            ?: return@forEach
+                                    Okio.buffer(Okio.sink(File(itemsDir, "${it.id}.json")))
+                                            .write(source)
+                                            .flush()
+                                }
                             }
                         },
                         { Timber.e(it) }
@@ -135,6 +129,8 @@ class TabList private constructor() {
         private val TABS_DIR = "tabs"
 
         private val TABS_ITEM_DIR = TABS_DIR + "/items"
+
+        private val savingLock = ReentrantLock()
 
         private var tabsFile: File? = null
 
