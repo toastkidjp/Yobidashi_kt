@@ -89,48 +89,37 @@ class HomeFragment : BaseFragment() {
         when (menu) {
             Menu.CODE_READER -> {
                 startActivity(BarcodeReaderActivity.makeIntent(activity))
-                return
             }
             Menu.SHARE_BARCODE -> {
                 InstantBarcodeGenerator(activity).invoke()
-                return
             }
             Menu.LAUNCHER -> {
                 startActivity(LauncherActivity.makeIntent(activity))
-                return
             }
             Menu.BROWSER -> {
                 action!!.action(Command.OPEN_BROWSER)
-                return
             }
             Menu.PLANNING_POKER -> {
                 startActivity(PlanningPokerActivity.makeIntent(activity))
-                return
             }
             Menu.SETTING -> {
                 startActivity(SettingsActivity.makeIntent(activity))
-                return
             }
             Menu.COLOR_SETTING -> {
                 startActivity(ColorSettingActivity.makeIntent(activity))
-                return
             }
             Menu.BACKGROUND_SETTING -> {
                 startActivity(BackgroundSettingActivity.makeIntent(activity))
-                return
             }
             Menu.WIFI_SETTING -> {
                 startActivity(SettingsIntentFactory.wifi())
-                return
             }
             Menu.COLOR_FILTER -> {
                 ColorFilter(activity, binding.root)
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
-                return
             }
             Menu.EXIT -> {
                 activity.finish()
-                return
             }
         }
     }
@@ -145,8 +134,8 @@ class HomeFragment : BaseFragment() {
                     ContextCompat.getColor(activity, R.color.darkgray_scale)
         )
         val colorPair = colorPair()
-        @ColorInt val bgColor = colorPair.bgColor()
-        @ColorInt val fontColor = colorPair.fontColor()
+        @ColorInt val bgColor:   Int = colorPair.bgColor()
+        @ColorInt val fontColor: Int = colorPair.fontColor()
         binding.mainTitle.setTextColor(colorPair().fontColor())
         binding.searchInput.setTextColor(bgColor)
         binding.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
@@ -166,7 +155,7 @@ class HomeFragment : BaseFragment() {
             binding.searchBar.transitionName = "share"
         }
 
-        action!!.action(Command.OPEN_SEARCH)
+        action?.action(Command.OPEN_SEARCH)
     }
 
     /**
@@ -209,9 +198,7 @@ class HomeFragment : BaseFragment() {
         disposables.dispose()
     }
 
-    override fun titleId(): Int {
-        return R.string.title_home
-    }
+    override fun titleId(): Int = R.string.title_home
 
     companion object {
 
