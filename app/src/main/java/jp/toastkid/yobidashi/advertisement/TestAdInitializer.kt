@@ -6,13 +6,12 @@ import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 
 /**
+ * For test environment AD initializer.
+ *
+ * @param context need ApplicationContext
  * @author toastkidjp
  */
-internal class TestAdInitializer
-/**
- * @param context need ApplicationContext
- */
-(context: Context) : AdInitializer {
+internal class TestAdInitializer(context: Context) : AdInitializer {
 
     init {
         if (!BuildConfig.DEBUG) {
@@ -23,7 +22,9 @@ internal class TestAdInitializer
     }
 
     /**
-     * Do AdRequest.
+     * Do AdRequest with [AdView].
+     *
+     * @param adView [AdView]
      */
     override fun invoke(adView: AdView) {
         if (!BuildConfig.DEBUG) {
@@ -46,6 +47,11 @@ internal class TestAdInitializer
         adView.loadAd(makeTestAdRequest())
     }
 
+    /**
+     * Make test [AdRequest] instance.
+     *
+     * @return [AdRequest] instance
+     */
     private fun makeTestAdRequest(): AdRequest {
         return AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
