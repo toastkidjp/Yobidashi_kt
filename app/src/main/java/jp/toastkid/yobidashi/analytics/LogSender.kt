@@ -9,28 +9,20 @@ import jp.toastkid.yobidashi.BuildConfig
 
 /**
  * Analytics logger wrapper.
-
+ *
+ * @param context Initialize with [Context]
  * @author toastkidjp
  */
-class LogSender
-/**
- * Initialize with [Context].
- * @param context
- */
-(context: Context) {
+class LogSender(context: Context) {
 
     /** Firebase analytics log sender.  */
-    private val sender: FirebaseAnalytics
-
-    init {
-        sender = FirebaseAnalytics.getInstance(context)
-    }
+    private val sender: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     /**
      * Send log.
-     * @param key
      *
-     * @param bundle
+     * @param key
+     * @param bundle default: EMPTY
      */
     @JvmOverloads fun send(key: String, bundle: Bundle = Bundle.EMPTY) {
         if (BuildConfig.DEBUG) {
@@ -40,7 +32,3 @@ class LogSender
     }
 
 }
-/**
- * Send empty parameter log.
- * @param key
- */
