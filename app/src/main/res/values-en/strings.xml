@@ -305,4 +305,5 @@
     <string name="title_screen_mode_full">Full screen</string>
     <string name="title_screen_mode_expandable">Expandable</string>
     <string name="title_screen_mode_fixed">Fixed</string>
+    <string name="message_has_opened_fragment">It has been opened.</string>
 </resources>

@@ -300,4 +300,5 @@
     <string name="title_screen_mode_expandable">スクロールで隠す</string>
     <string name="title_screen_mode_fixed">固定</string>
     <string name="title_header_and_footer">ヘッダとフッタ</string>
+    <string name="message_has_opened_fragment">すでに開いています。</string>
 </resources>

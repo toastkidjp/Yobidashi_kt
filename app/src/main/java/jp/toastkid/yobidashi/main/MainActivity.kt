@@ -217,6 +217,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             prevDisposable?.dispose()
         }
 
+        if (fragment.isVisible) {
+            snackSuppressOpenFragment()
+            return
+        }
+
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.replace(R.id.content, fragment)
@@ -370,6 +375,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_browser -> {
                 sendLog("nav_browser")
+                if (browserFragment.isVisible) {
+                    snackSuppressOpenFragment()
+                    return
+                }
                 loadUri(Uri.parse(preferenceApplier.homeUrl))
             }
             R.id.nav_bookmark -> {
@@ -615,6 +624,13 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     binding.appBarMain.content.requestLayout()
                 }
                 .start()
+    }
+
+    /**
+     * Show snackbar with confirm message of suppressed replacing fragment.
+     */
+    private fun snackSuppressOpenFragment() {
+        Toaster.snackShort(binding.root, R.string.message_has_opened_fragment, colorPair())
     }
 
     /**
