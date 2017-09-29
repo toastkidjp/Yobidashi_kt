@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/OneLineTextMenu"
+            android:drawableLeft="@drawable/ic_launch_black"
+            android:text="@string/title_setting_startup"
+            />
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            >
+
+            <RadioGroup
+                android:id="@+id/start_up_selector"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+                <RadioButton
+                    android:id="@+id/start_up_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/BackgroundEmphasisStyle"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/title_startup_start"
+                    android:drawableBottom="@mipmap/thumbnail_start"
+                    />
+
+                <RadioButton
+                    android:id="@+id/start_up_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/BackgroundEmphasisStyle"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/title_search"
+                    android:drawableBottom="@mipmap/thumbnail_search"
+                    />
+
+                <RadioButton
+                    android:id="@+id/start_up_browser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/BackgroundEmphasisStyle"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/title_browser"
+                    android:drawableBottom="@mipmap/thumbnail_browser"
+                    />
+
+                <RadioButton
+                    android:id="@+id/start_up_launcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/BackgroundEmphasisStyle"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/title_apps_launcher"
+                    android:drawableBottom="@mipmap/thumbnail_launcher"
+                    />
+            </RadioGroup>
+        </HorizontalScrollView>
+    </FrameLayout>
+</layout>

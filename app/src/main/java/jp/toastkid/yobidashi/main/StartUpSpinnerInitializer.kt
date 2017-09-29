@@ -10,6 +10,8 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * TODO Delete it.
+ *
  * @author toastkidjp
  */
 object StartUpSpinnerInitializer {
