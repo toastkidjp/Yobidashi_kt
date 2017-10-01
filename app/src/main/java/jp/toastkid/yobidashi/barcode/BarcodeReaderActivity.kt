@@ -24,15 +24,19 @@ import jp.toastkid.yobidashi.main.MainActivity
 
 /**
  * Barcode reader activity.
-
+ *
  * @author toastkidjp
  */
 class BarcodeReaderActivity : BaseActivity() {
 
-    /** Data Binding object.  */
+    /**
+     * Data Binding object.
+     */
     private var binding: ActivityBarcodeReaderBinding? = null
 
-    /** Previous snackbar.  */
+    /**
+     * Previous snackbar.
+     */
     private var snackbar: Snackbar? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,17 +47,16 @@ class BarcodeReaderActivity : BaseActivity() {
         setSupportActionBar(binding!!.toolbar)
         initToolbar(binding!!.toolbar)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
-                return
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
+            return
         }
         startDecode()
     }
 
     private fun startDecode() {
-        binding!!.barcodeView.decodeContinuous(object : BarcodeCallback {
+        binding?.barcodeView?.decodeContinuous(object : BarcodeCallback {
 
             internal var previousDecoded = ""
 
@@ -65,19 +68,18 @@ class BarcodeReaderActivity : BaseActivity() {
                 previousDecoded = text
 
                 if (snackbar != null) {
-                    snackbar!!.dismiss()
+                    snackbar?.dismiss()
                 }
                 showResult(text)
             }
 
-            override fun possibleResultPoints(list: List<ResultPoint>) {
-                // NOP.
-            }
+            override fun possibleResultPoints(list: List<ResultPoint>) = Unit
         })
     }
 
     /**
      * Show result with snackbar.
+     *
      * @param text
      */
     private fun showResult(text: String) {
@@ -96,13 +98,13 @@ class BarcodeReaderActivity : BaseActivity() {
 
     public override fun onResume() {
         super.onResume()
-        binding!!.barcodeView.resume()
-        binding!!.toolbar.setTitleTextColor(colorPair().fontColor())
+        binding?.barcodeView?.resume()
+        binding?.toolbar?.setTitleTextColor(colorPair().fontColor())
     }
 
     public override fun onPause() {
         super.onPause()
-        binding!!.barcodeView.pause()
+        binding?.barcodeView?.pause()
     }
 
     override fun onRequestPermissionsResult(
@@ -111,7 +113,7 @@ class BarcodeReaderActivity : BaseActivity() {
             grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             startDecode()
             return
         }
@@ -119,9 +121,7 @@ class BarcodeReaderActivity : BaseActivity() {
         finish()
     }
 
-    override fun titleId(): Int {
-        return R.string.title_camera
-    }
+    override fun titleId(): Int = R.string.title_camera
 
     companion object {
 
@@ -130,9 +130,9 @@ class BarcodeReaderActivity : BaseActivity() {
 
         /**
          * Make this activity's intent.
-         * @param context
          *
-         * @return
+         * @param context
+         * @return [Intent]
          */
         fun makeIntent(context: Context): Intent {
             val intent = Intent(context, BarcodeReaderActivity::class.java)
