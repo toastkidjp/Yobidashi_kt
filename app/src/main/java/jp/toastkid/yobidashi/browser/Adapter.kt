@@ -27,19 +27,29 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 internal class Adapter(context: Context, consumer: Consumer<Menu>)
     : RecyclerView.Adapter<ViewHolder>() {
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /** Menu.  */
+    /**
+     * Menu.
+     */
     private val menus: List<Menu> = Menu.list
 
-    /** Color pair.  */
+    /**
+     * Color pair.
+     */
     private val colorPair: ColorPair
 
-    /** Menu action publisher.  */
+    /**
+     * Menu action publisher.
+     */
     private val menuPublishProcessor: PublishProcessor<Menu>
 
-    /** Subscription disposable.  */
+    /**
+     * Subscription disposable.
+     */
     private val disposable: Disposable?
 
     init {
@@ -49,10 +59,10 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
         disposable = menuPublishProcessor.subscribe(consumer)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = DataBindingUtil.inflate<ItemBrowserMenuBinding>(inflater, R.layout.item_browser_menu, parent, false)
-        return ViewHolder(binding)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+            ViewHolder(DataBindingUtil.inflate<ItemBrowserMenuBinding>(
+                    inflater, R.layout.item_browser_menu, parent, false)
+            )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val menu = menus[position % menus.size]
@@ -63,9 +73,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
 
     }
 
-    override fun getItemCount(): Int {
-        return MAXIMUM
-    }
+    override fun getItemCount(): Int = MAXIMUM
 
     /**
      * Dispose subscription.
@@ -76,18 +84,20 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
 
     companion object {
 
-        /** Maximum length of menus.  */
+        /**
+         * Maximum length of menus.
+         */
         private val MAXIMUM = Menu.values().size * 20
 
-        /** Medium position of menus.  */
+        /**
+         * Medium position of menus.
+         */
         private val MEDIUM = MAXIMUM / 2
 
         /**
          * Return medium position of menus.
-         * @return
+         * @return MEDIUM
          */
-        fun mediumPosition(): Int {
-            return MEDIUM
-        }
+        fun mediumPosition(): Int = MEDIUM
     }
 }
