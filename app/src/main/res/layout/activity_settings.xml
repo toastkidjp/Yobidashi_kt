@@ -60,7 +60,7 @@
                     android:id="@+id/category_other"
                     android:text="@string/subhead_others"
                     style="@style/FakeTabStyle"
-                    android:onClick="@{activity.switchOthers}"
+                    android:onClick="@{activity.switchOther}"
                     />
             </RadioGroup>
         </HorizontalScrollView>
