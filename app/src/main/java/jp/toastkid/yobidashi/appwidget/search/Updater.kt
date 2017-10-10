@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.appwidget.search
 
+import android.appwidget.AppWidgetManager
 import android.content.ContextWrapper
 import android.content.Intent
 
@@ -16,7 +17,7 @@ internal object Updater {
     /**
      * Update app-widget intent.
      */
-    private val INTENT_UPDATE_WIDGET = Intent("UPDATE_WIDGET")
+    private val INTENT_UPDATE_WIDGET = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
 
     /**
      * Do update app-widget.
@@ -24,7 +25,10 @@ internal object Updater {
      * @param wrapper [ContextWrapper]
      */
     fun update(wrapper: ContextWrapper) {
-        wrapper.sendBroadcast(INTENT_UPDATE_WIDGET)
+        Provider.updateWidget(
+                wrapper.applicationContext,
+                RemoteViewsFactory.make(wrapper)
+        )
 
         if (PreferenceApplier(wrapper).useNotificationWidget()) {
             NotificationWidget.refresh(wrapper)
