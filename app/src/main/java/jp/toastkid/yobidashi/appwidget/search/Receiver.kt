@@ -5,9 +5,10 @@ import android.content.Context
 import android.content.Intent
 
 /**
+ * Broadcast receiver.
+ *
  * @author toastkidjp
  */
-
 class Receiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {

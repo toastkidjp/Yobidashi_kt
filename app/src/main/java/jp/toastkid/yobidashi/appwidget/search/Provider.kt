@@ -7,10 +7,11 @@ import android.content.Context
 import android.widget.RemoteViews
 
 /**
+ * Web-search type app-widget provider.
+ *
  * @author toastkidjp
  */
-
-class Provider : AppWidgetProvider() {
+internal class Provider : AppWidgetProvider() {
 
     override fun onUpdate(
             context: Context,
@@ -24,14 +25,14 @@ class Provider : AppWidgetProvider() {
 
         /**
          * Update widget.
-         * @param context
          *
+         * @param context
          * @param remoteViews
          */
         fun updateWidget(context: Context, remoteViews: RemoteViews) {
-            val myWidget = ComponentName(context, Provider::class.java)
+            val componentName = ComponentName(context, Provider::class.java)
             val manager = AppWidgetManager.getInstance(context)
-            manager.updateAppWidget(myWidget, remoteViews)
+            manager.updateAppWidget(componentName, remoteViews)
         }
     }
 }

@@ -8,17 +8,19 @@ import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**
  * App-Widget updater.
-
+ *
  * @author toastkidjp
  */
-object Updater {
+internal object Updater {
 
-    /** Update app-widget intent.  */
+    /**
+     * Update app-widget intent.
+     */
     private val INTENT_UPDATE_WIDGET = Intent("UPDATE_WIDGET")
 
     /**
      * Do update app-widget.
-
+     *
      * @param wrapper [ContextWrapper]
      */
     fun update(wrapper: ContextWrapper) {
