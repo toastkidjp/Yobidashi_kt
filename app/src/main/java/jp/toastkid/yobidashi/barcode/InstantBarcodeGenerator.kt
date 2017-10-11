@@ -17,13 +17,11 @@ import timber.log.Timber
  * Instant barcode generator.
  * Initialize with context.
  * 
- * @param context
+ * @param context Context
  * 
  * @author toastkidjp
  */
-class InstantBarcodeGenerator(
-        /** Context  */
-        private val context: Context) {
+class InstantBarcodeGenerator(private val context: Context) {
 
     /**
      * Launch generator.
