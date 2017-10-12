@@ -3,9 +3,10 @@ package jp.toastkid.yobidashi.browser.screenshots
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-
+import android.support.v7.widget.GridLayoutManager
+import android.view.View
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityScreenshotsBinding
@@ -24,7 +25,7 @@ class ScreenshotsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val adapter = Adapter(this)
+        val adapter = Adapter(this, { onClickItem(it) })
         if (adapter.itemCount == 0) {
             finish()
             Toaster.tShort(this, R.string.message_empty_screenshots)
@@ -32,8 +33,25 @@ class ScreenshotsActivity : BaseActivity() {
         }
 
         binding = DataBindingUtil.setContentView<ActivityScreenshotsBinding>(this, LAYOUT_ID)
-        binding!!.screenshotsView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.screenshotsView.adapter = adapter
+        binding?.screenshotsView?.layoutManager =
+                GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false)
+        binding?.screenshotsView?.adapter = adapter
+
+        binding?.preview?.setOnClickListener { binding?.preview?.visibility = View.GONE }
+        binding?.screenshotsView?.setOnClickListener { finish() }
+    }
+
+    private fun onClickItem(bitmap: Bitmap) {
+        when (binding?.preview?.visibility) {
+            View.VISIBLE -> {
+                binding?.preview?.visibility = View.GONE
+                binding?.image?.setImageBitmap(null)
+            }
+            View.GONE -> {
+                binding?.image?.setImageBitmap(bitmap)
+                binding?.preview?.visibility = View.VISIBLE
+            }
+        }
     }
 
     public override fun titleId(): Int {

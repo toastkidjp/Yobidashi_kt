@@ -1,11 +1,11 @@
 package jp.toastkid.yobidashi.browser.screenshots
 
-import android.net.Uri
+import android.graphics.Bitmap
+import android.support.annotation.ColorInt
 import android.support.v7.widget.RecyclerView
-
-import java.io.File
-
-import jp.toastkid.yobidashi.databinding.ItemImageCardBinding
+import jp.toastkid.yobidashi.databinding.ItemScreenshotBinding
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 /**
  * Screenshot's view holder.
@@ -19,13 +19,39 @@ internal class ViewHolder
  */
 (
         /** Data binding object.  */
-        private val binding: ItemImageCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val binding: ItemScreenshotBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    private val dateFormatHolder = object : ThreadLocal<DateFormat>() {
+        override fun initialValue(): DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS")
+    }
 
     /**
-     * Set image file.
-     * @param file
+     * Set image bitmap.
+     * @param bitmap
      */
-    fun setImage(file: File) {
-        binding.image.setImageURI(Uri.fromFile(file))
+    fun setImage(bitmap: Bitmap) {
+        binding.image.setImageBitmap(bitmap)
     }
+
+    /**
+     * Set icon's color.
+     * @param color Color Int
+     */
+    fun setIconColor(@ColorInt color: Int) {
+        binding.delete.setColorFilter(color)
+        binding.share.setColorFilter(color)
+    }
+
+    fun setDeleteAction(function: () -> Unit) {
+        binding.delete.setOnClickListener { function() }
+    }
+
+    fun setShareAction(function: () -> Unit) {
+        binding.share.setOnClickListener { function() }
+    }
+
+    fun setTimestamp(lastModified: Long) {
+        binding.datetime.text = dateFormatHolder.get().format(lastModified)
+    }
+
 }
