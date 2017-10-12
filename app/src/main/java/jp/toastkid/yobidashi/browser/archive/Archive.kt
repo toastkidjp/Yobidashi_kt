@@ -10,27 +10,28 @@ import java.io.IOException
 
 /**
  * Archive dir.
-
+ *
  * @author toastkidjp
  */
-object Archive {
+internal object Archive {
 
-    /** Archive folder name.  */
+    /**
+     * Archive folder name.
+     */
     private val ARCHIVE_DIR = "archive"
 
     /**
      * Make new object.
-
+     *
      * @param context
      *
-     * @return
+     * @return [Storeroom] object.
      */
-    fun makeNew(context: Context): Storeroom {
-        return Storeroom(context, ARCHIVE_DIR)
-    }
+    fun makeNew(context: Context): Storeroom = Storeroom(context, ARCHIVE_DIR)
 
     /**
      * Save web archive.
+     *
      * @param webView
      */
     fun save(webView: WebView) {
@@ -40,22 +41,28 @@ object Archive {
         )
     }
 
+    /**
+     * Supporting archive file extension.
+     */
     private val fileExtension: String
         get() = if (canUseArchive()) ".mht" else ".xml"
 
-    fun cannotUseArchive(): Boolean {
-        return !canUseArchive()
-    }
+    /**
+     * Return can use archive.
+     * @return If runtime environment SDK is Kitkat and upper, return false.
+     */
+    fun cannotUseArchive(): Boolean = !canUseArchive()
 
-    fun canUseArchive(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-    }
+    /**
+     * Return can use archive.
+     * @return If runtime environment SDK is Kitkat and upper, return true.
+     */
+    fun canUseArchive(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     /**
      * Load archive.
-
-     * @param webView
      *
+     * @param webView
      * @param file
      *
      * @throws IOException

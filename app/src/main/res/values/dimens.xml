@@ -24,4 +24,7 @@
     <dimen name="browser_footer_height">48dp</dimen>
 
     <dimen name="toolbar_activity_content_top_margin">52dp</dimen>
+    <dimen name="close_icon_size">32dp</dimen>
+    <dimen name="tab_list_item_width">160dp</dimen>
+    <dimen name="tab_list_item_height">208dp</dimen>
 </resources>
