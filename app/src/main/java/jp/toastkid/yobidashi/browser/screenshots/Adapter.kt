@@ -19,36 +19,30 @@ import jp.toastkid.yobidashi.libs.storage.Storeroom
 
 /**
  * Screenshot's adapter.
- * TODO clean up code.
-
+ *
+ * @param context Initialize with [Context]
  * @author toastkidjp
  */
-internal class Adapter
-/**
- * Initialize with [Context].
- * @param context
- */
-(context: Context, private val onClick: (Bitmap) -> Unit) : RecyclerView.Adapter<ViewHolder>() {
+internal class Adapter(context: Context, private val onClick: (Bitmap) -> Unit)
+    : RecyclerView.Adapter<ViewHolder>() {
 
-    /** Files dir wrapper.  */
-    private val screenshots: Storeroom
+    /**
+     * Files dir wrapper.
+     */
+    private val screenshots: Storeroom = Storeroom(context, Screenshot.DIR)
 
-    /** Layout inflater.  */
-    private val inflater: LayoutInflater
+    /**
+     * Layout inflater.
+     */
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /** For using snackbar.  */
-    private val colorPair: ColorPair
+    /**
+     * For using snackbar.
+     */
+    private val colorPair: ColorPair = PreferenceApplier(context).colorPair()
 
-    init {
-        screenshots = Storeroom(context, Screenshot.DIR)
-        inflater = LayoutInflater.from(context)
-        colorPair = PreferenceApplier(context).colorPair()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-                DataBindingUtil.inflate(inflater, R.layout.item_screenshot, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+            ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_screenshot, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val screenshotFile = screenshots.get(position)!!
@@ -84,7 +78,5 @@ internal class Adapter
         )
     }
 
-    override fun getItemCount(): Int {
-        return screenshots.count
-    }
+    override fun getItemCount(): Int = screenshots.count
 }
