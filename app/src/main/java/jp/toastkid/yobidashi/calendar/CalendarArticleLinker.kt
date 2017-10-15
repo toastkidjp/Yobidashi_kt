@@ -8,6 +8,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * TODO clean up code
  * @author toastkidjp
  */
 class CalendarArticleLinker

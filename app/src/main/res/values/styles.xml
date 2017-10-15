@@ -89,4 +89,11 @@
         <item name="android:button">@android:color/transparent</item>
         <item name="android:background">@drawable/emphasis</item>
     </style>
+
+    <style name="DateMenuCardStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:foreground">@drawable/ripple_transparent</item>
+    </style>
 </resources>

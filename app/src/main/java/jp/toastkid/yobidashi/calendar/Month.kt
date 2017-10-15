@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi.calendar
 
-import java.util.Calendar
+import java.util.*
 
 /**
  * For using convert [java.util.Calendar]'s month to String.
-
+ *
  * @author toastkidjp
  */
 internal object Month {
@@ -15,21 +15,19 @@ internal object Month {
      *
      * @return string form
      */
-    operator fun get(month: Int): String {
-        when (month) {
-            Calendar.JANUARY -> return "January"
-            Calendar.FEBRUARY -> return "February"
-            Calendar.MARCH -> return "March"
-            Calendar.APRIL -> return "April"
-            Calendar.MAY -> return "May"
-            Calendar.JUNE -> return "June"
-            Calendar.JULY -> return "July"
-            Calendar.AUGUST -> return "August"
-            Calendar.SEPTEMBER -> return "September"
-            Calendar.OCTOBER -> return "October"
-            Calendar.NOVEMBER -> return "November"
-            Calendar.DECEMBER -> return "December"
-        }
-        return ""
+    operator fun get(month: Int): String = when (month) {
+        Calendar.JANUARY -> "January"
+        Calendar.FEBRUARY -> "February"
+        Calendar.MARCH ->  "March"
+        Calendar.APRIL ->  "April"
+        Calendar.MAY ->  "May"
+        Calendar.JUNE ->  "June"
+        Calendar.JULY ->  "July"
+        Calendar.AUGUST -> "August"
+        Calendar.SEPTEMBER -> "September"
+        Calendar.OCTOBER -> "October"
+        Calendar.NOVEMBER -> "November"
+        Calendar.DECEMBER -> "December"
+        else -> ""
     }
 }

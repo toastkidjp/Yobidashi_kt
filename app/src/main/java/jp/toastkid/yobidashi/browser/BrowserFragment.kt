@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -61,27 +60,50 @@ import java.io.IOException
  */
 class BrowserFragment : BaseFragment() {
 
-    /** Data binding object.  */
+    /**
+     * Data binding object.
+     */
     private var binding: FragmentBrowserBinding? = null
 
-    /** Archive folder.  */
+    /**
+     * Archive folder.
+     */
     private lateinit var tabs: TabAdapter
 
+    /**
+     * Tab list module.
+     */
     private var tabListModule: TabListModule? = null
 
+    /**
+     * Find-in-page module.
+     */
     private var pageSearcherModule: PageSearcherModule? = null
 
-    /** Title processor  */
+    /**
+     * PublishProcessor of title pair.
+     */
     private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
 
-    /** Disposer.  */
+    /**
+     * Composite disposer.
+     */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    /**
+     * Search-with-clip object.
+     */
     private lateinit var searchWithClip: SearchWithClip
 
+    /**
+     * Toolbar action object.
+     */
     private var toolbarAction: ToolbarAction? = null
 
-    private var onAnimation = false
+    /**
+     * For disabling busy show & hide animation.
+     */
+    private var lastAnimated: Long = 0L
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -131,6 +153,9 @@ class BrowserFragment : BaseFragment() {
         return binding?.root
     }
 
+    /**
+     * Action on empty tabs.
+     */
     private fun onEmptyTabs() {
         tabListModule?.hide()
         fragmentManager.popBackStack()
@@ -138,6 +163,8 @@ class BrowserFragment : BaseFragment() {
 
     /**
      * On scroll action.
+     *
+     * @param upward is scroll on upward
      */
     private fun onScroll(upward: Boolean) {
 
@@ -160,28 +187,31 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Show footer with animation.
+     */
     private fun showFooter() {
-        if (onAnimation) {
+        if (disallowAnimation()) {
             return
         }
-        onAnimation = true
+        lastAnimated = System.currentTimeMillis()
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(0f)
                 ?.setDuration(ANIMATION_DURATION)
                 ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
-                ?.withEndAction {
-                    toolbarAction?.showToolbar()
-                    onAnimation = false
-                }
+                ?.withEndAction { toolbarAction?.showToolbar() }
                 ?.start()
     }
 
+    /**
+     * Hide footer with animation.
+     */
     private fun hideFooter() {
-        if (onAnimation) {
+        if (disallowAnimation()) {
             return
         }
-        onAnimation = true
+        lastAnimated = System.currentTimeMillis()
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
@@ -189,10 +219,14 @@ class BrowserFragment : BaseFragment() {
                 ?.withEndAction {
                     toolbarAction?.hideToolbar()
                     binding?.footer?.root?.visibility = View.GONE
-                    onAnimation = false
                 }
                 ?.start()
     }
+
+    /**
+     * Check disallow header & footer's animation.
+     */
+    private fun disallowAnimation(): Boolean = (System.currentTimeMillis() - lastAnimated) < ALLOWABLE_INTERVAL_MS
 
     /**
      * Initialize footer with [ColorPair]
@@ -222,7 +256,7 @@ class BrowserFragment : BaseFragment() {
 
         binding?.footer?.tabIcon?.setColorFilter(fontColor)
         binding?.footer?.tabCount?.setTextColor(fontColor)
-        binding?.footer?.tab?.setOnClickListener { showTabListWithParent(binding?.root as View) }
+        binding?.footer?.tab?.setOnClickListener { switchTabList() }
     }
 
     /**
@@ -235,6 +269,9 @@ class BrowserFragment : BaseFragment() {
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
+    /**
+     * Switch menu visibility.
+     */
     private fun switchMenu() {
         hideTabList()
         if (binding?.menusView?.visibility == View.GONE) {
@@ -247,7 +284,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Show quick control menu.
      *
-     * @param ignored
+     * @param ignored defined for Data-Binding
      */
     fun showMenu(ignored: View) {
         binding?.fab?.hide()
@@ -285,6 +322,7 @@ class BrowserFragment : BaseFragment() {
 
     /**
      * Menu action.
+     *
      * @param menu
      */
     private fun onMenuClick(menu: Menu) {
@@ -343,7 +381,7 @@ class BrowserFragment : BaseFragment() {
                 tabs.showPageInformation()
             }
             Menu.TAB_LIST -> {
-                showTabListWithParent(snackbarParent)
+                switchTabList()
             }
             Menu.OPEN -> {
                 val inputLayout = TextInputs.make(context)
@@ -425,8 +463,10 @@ class BrowserFragment : BaseFragment() {
 
     /**
      * Launch current tab's history activity.
+     *
+     * @param context
      */
-    private fun launchTabHistory(context: FragmentActivity) {
+    private fun launchTabHistory(context: Context) {
         val scaleUpAnimation = ActivityOptions.makeScaleUpAnimation(
                 binding?.menusView, 0, 0,
                 binding?.menusView?.width ?: 0, binding?.menusView?.height ?: 0)
@@ -437,6 +477,11 @@ class BrowserFragment : BaseFragment() {
         )
     }
 
+    /**
+     * Initialize tab list.
+     *
+     * @param snackbarParent Snackbar's parent view.
+     */
     private fun initTabListIfNeed(snackbarParent: View) {
         if (tabListModule == null) {
             tabListModule = TabListModule(
@@ -453,6 +498,9 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Switch tab list visibility.
+     */
     private fun switchTabList() {
         initTabListIfNeed(binding?.root as View)
         if (tabListModule?.isVisible ?: false) {
@@ -462,6 +510,9 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Do browser back action.
+     */
     private fun back(): Boolean {
         val back = tabs.back()
         if (back.isNotEmpty()) {
@@ -471,6 +522,9 @@ class BrowserFragment : BaseFragment() {
         return false
     }
 
+    /**
+     * Do browser forward action.
+     */
     private fun forward() {
         val forward = tabs.forward()
         if (forward.isNotEmpty()) {
@@ -478,6 +532,9 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Show bookmark activity.
+     */
     private fun bookmark() {
         startActivityForResult(
                 BookmarkActivity.makeIntent(activity),
@@ -485,18 +542,23 @@ class BrowserFragment : BaseFragment() {
         )
     }
 
+    /**
+     * Show search activity.
+     */
     private fun search() {
         startActivity(SearchActivity.makeIntent(context))
     }
 
-    private fun showTabListWithParent(snackbarParent: View) {
-        switchTabList()
-    }
-
+    /**
+     * Go to bottom.
+     */
     private fun toBottom() {
         tabs.pageDown()
     }
 
+    /**
+     * Go to top.
+     */
     private fun toTop() {
         tabs.pageUp()
     }
@@ -516,6 +578,9 @@ class BrowserFragment : BaseFragment() {
         disposables.add(tabs.reloadWebViewSettings())
     }
 
+    /**
+     * Refresh fab.
+     */
     private fun refreshFab() {
         val preferenceApplier = preferenceApplier() as PreferenceApplier
         binding?.fab?.setBackgroundColor(preferenceApplier.colorPair().bgColor())
@@ -533,6 +598,9 @@ class BrowserFragment : BaseFragment() {
 
     override fun pressBack(): Boolean = hideOption() || back()
 
+    /**
+     * Hide option menus.
+     */
     private fun hideOption(): Boolean {
         if (tabListModule != null && tabListModule?.isVisible as Boolean) {
             hideTabList()
@@ -546,11 +614,17 @@ class BrowserFragment : BaseFragment() {
         return false
     }
 
+    /**
+     * Hide tab list.
+     */
     private fun hideTabList() {
         tabListModule?.hide()
         binding?.fab?.show()
     }
 
+    /**
+     * Show tab list.
+     */
     private fun showTabList() {
         hideMenu()
         binding?.fab?.hide()
@@ -612,10 +686,18 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Load with opening new tab.
+     *
+     * @param uri [Uri]
+     */
     fun loadWithNewTab(uri: Uri) {
         tabs.loadWithNewTab(uri)
     }
 
+    /**
+     * Return [PublishProcessor<TitlePair>] object.
+     */
     fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
 
     override fun onDestroy() {
@@ -639,6 +721,11 @@ class BrowserFragment : BaseFragment() {
          * Animation's dutarion.
          */
         private const val ANIMATION_DURATION: Long = 75L
+
+        /**
+         * Allowable interval milliseconds.
+         */
+        private const val ALLOWABLE_INTERVAL_MS = 500L
 
     }
 }
