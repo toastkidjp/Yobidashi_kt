@@ -732,23 +732,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             return intent
         }
 
-        /**
-         * Make launcher intent with search query.
-         *
-         * @param context
-         * @param query
-         *
-         * @return launcher intent
-         */
-        fun makeSearchIntent(context: Context, query: String): Intent {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            if (query.isNotEmpty()) {
-                intent.putExtra(SearchManager.QUERY, query)
-            }
-            return intent
-        }
-
     }
 
 }

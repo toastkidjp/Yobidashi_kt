@@ -140,6 +140,12 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
+        <activity
+            android:name=".calendar.DateDetailActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
+            />
 
         <service android:name=".search.favorite.AddingFavoriteSearchService">
             <intent-filter>
