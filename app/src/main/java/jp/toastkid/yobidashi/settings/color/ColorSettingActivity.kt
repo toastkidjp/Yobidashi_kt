@@ -6,10 +6,12 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
@@ -25,20 +27,32 @@ import jp.toastkid.yobidashi.libs.db.DbInitter
 
 /**
  * Color setting activity.
-
+ *
  * @author toastkidjp
  */
 class ColorSettingActivity : BaseActivity() {
 
+    /**
+     * Initial background color.
+     */
     private var initialBgColor: Int = 0
 
+    /**
+     * Initial font color.
+     */
     private var initialFontColor: Int = 0
 
+    /**
+     * Data-Binding object.
+     */
     private var binding: ActivitySettingsColorBinding? = null
 
+    /**
+     * Saved color's adapter.
+     */
     private var adapter: OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>? = null
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_color)
         binding = DataBindingUtil.setContentView<ActivitySettingsColorBinding>(this, R.layout.activity_settings_color)
@@ -52,13 +66,16 @@ class ColorSettingActivity : BaseActivity() {
         initialFontColor = colorPair.fontColor()
         binding!!.settingsColorPrev.setTextColor(initialFontColor)
 
-        initPalette()
+        initPalettes()
         initToolbar(binding!!.settingsColorToolbar)
         binding!!.settingsColorToolbar.inflateMenu(R.menu.color_setting_toolbar_menu)
         initSavedColors()
     }
 
-    private fun initPalette() {
+    /**
+     * Initialize background and font palettes.
+     */
+    private fun initPalettes() {
         binding?.backgroundPalette?.addSVBar(binding!!.backgroundSvbar)
         binding?.backgroundPalette?.addOpacityBar(binding!!.backgroundOpacitybar)
         binding?.backgroundPalette?.setOnColorChangedListener ({ c ->
@@ -76,24 +93,27 @@ class ColorSettingActivity : BaseActivity() {
         refresh()
     }
 
+    /**
+     * Initialize saved color's section.
+     */
     private fun initSavedColors() {
 
         adapter = SavedColorAdapter(this, DbInitter.init(this).relationOfSavedColor())
-        binding!!.savedColors.adapter = adapter
-        binding!!.savedColors.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding!!.clearSavedColor.setOnClickListener({ v ->
+        binding?.savedColors?.adapter = adapter
+        binding?.savedColors?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding?.clearSavedColor?.setOnClickListener{ _ ->
             SavedColors.showClearColorsDialog(
                     this,
-                    binding!!.settingsColorToolbar,
-                    adapter!!.relation as SavedColor_Relation
+                    binding?.settingsColorToolbar as Toolbar,
+                    adapter?.relation as SavedColor_Relation
             )
-        })
+        }
     }
 
     /**
      * Bind value and action to holder's view.
-     * @param holder Holder
      *
+     * @param holder Holder
      * @param color  [SavedColor] object
      */
     private fun bindView(holder: SavedColorHolder, color: SavedColor) {
@@ -112,12 +132,20 @@ class ColorSettingActivity : BaseActivity() {
         refresh()
     }
 
+    /**
+     * Refresh with current color.
+     */
     private fun refresh() {
-        applyColorToToolbar(binding!!.settingsColorToolbar)
-        Colors.setBgAndText(binding!!.settingsColorOk, colorPair())
+        applyColorToToolbar(binding?.settingsColorToolbar as Toolbar)
+        Colors.setBgAndText(binding?.settingsColorOk as TextView, colorPair())
     }
 
-    fun ok(view: View) {
+    /**
+     * OK button's action.
+     *
+     * @param ignored defined for Data-Binding
+     */
+    fun ok(ignored: View) {
         val bgColor = binding!!.backgroundPalette.color
         val fontColor = binding!!.fontPalette.color
 
@@ -132,33 +160,41 @@ class ColorSettingActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io()).subscribe()
     }
 
+    /**
+     * Commit new color.
+     *
+     * @param bgColor   Background color int
+     * @param fontColor Font color int
+     */
     private fun commitNewColor(bgColor: Int, fontColor: Int) {
-        preferenceApplier!!.color = bgColor
-
-        preferenceApplier!!.fontColor = fontColor
+        preferenceApplier.color = bgColor
+        preferenceApplier.fontColor = fontColor
 
         refresh()
 
-        binding!!.backgroundPalette.color = bgColor
-        binding!!.fontPalette.color = fontColor
+        binding?.backgroundPalette?.color = bgColor
+        binding?.fontPalette?.color = fontColor
         Updater.update(this)
 
         Toaster.snackShort(binding!!.settingsColorToolbar, R.string.settings_color_done_commit, colorPair())
     }
 
-    fun reset(view: View) {
-        preferenceApplier!!.color = initialBgColor
+    /**
+     * Reset button's action.
+     *
+     * @param ignored defined for Data-Binding
+     */
+    fun reset(ignored: View) {
+        preferenceApplier.color = initialBgColor
 
-        preferenceApplier!!.fontColor = initialFontColor
+        preferenceApplier.fontColor = initialFontColor
 
         refresh()
         Updater.update(this)
         Toaster.snackShort(binding!!.settingsColorToolbar, R.string.settings_color_done_reset, colorPair())
     }
 
-    override fun titleId(): Int {
-        return R.string.title_settings_color
-    }
+    override fun titleId(): Int = R.string.title_settings_color
 
     override fun clickMenu(item: MenuItem): Boolean {
         if (item.itemId == R.id.color_settings_toolbar_menu_add_recommend) {
@@ -185,7 +221,11 @@ class ColorSettingActivity : BaseActivity() {
         return super.clickMenu(item)
     }
 
-    private inner class SavedColorAdapter(context: Context, relation: Relation<SavedColor, *>) : OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>(context, relation) {
+    /**
+     * Saved color's adapter.
+     */
+    private inner class SavedColorAdapter(context: Context, relation: Relation<SavedColor, *>)
+        : OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>(context, relation) {
 
         override fun onCreateViewHolder(
                 parent: ViewGroup,
@@ -199,15 +239,14 @@ class ColorSettingActivity : BaseActivity() {
             bindView(holder, relation.get(position))
         }
 
-        override fun getItemCount(): Int {
-            return relation.count()
-        }
+        override fun getItemCount(): Int = relation.count()
     }
 
     companion object {
 
         /**
          * Make launcher intent.
+         *
          * @param context Context
          *
          * @return [Intent]
