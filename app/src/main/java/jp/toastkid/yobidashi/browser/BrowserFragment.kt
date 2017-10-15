@@ -81,7 +81,10 @@ class BrowserFragment : BaseFragment() {
 
     private var toolbarAction: ToolbarAction? = null
 
-    private var onAnimation = false
+    /**
+     * For disabling busy show & hide animation.
+     */
+    private var lastAnimated: Long = 0L
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -131,6 +134,9 @@ class BrowserFragment : BaseFragment() {
         return binding?.root
     }
 
+    /**
+     * Action on empty tabs.
+     */
     private fun onEmptyTabs() {
         tabListModule?.hide()
         fragmentManager.popBackStack()
@@ -138,6 +144,8 @@ class BrowserFragment : BaseFragment() {
 
     /**
      * On scroll action.
+     *
+     * @param upward is scroll on upward
      */
     private fun onScroll(upward: Boolean) {
 
@@ -160,28 +168,31 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Show footer with animation.
+     */
     private fun showFooter() {
-        if (onAnimation) {
+        if (disallowAnimation()) {
             return
         }
-        onAnimation = true
+        lastAnimated = System.currentTimeMillis()
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(0f)
                 ?.setDuration(ANIMATION_DURATION)
                 ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
-                ?.withEndAction {
-                    toolbarAction?.showToolbar()
-                    onAnimation = false
-                }
+                ?.withEndAction { toolbarAction?.showToolbar() }
                 ?.start()
     }
 
+    /**
+     * Hide footer with animation.
+     */
     private fun hideFooter() {
-        if (onAnimation) {
+        if (disallowAnimation()) {
             return
         }
-        onAnimation = true
+        lastAnimated = System.currentTimeMillis()
         val animate = binding?.footer?.root?.animate()
         animate?.cancel()
         animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
@@ -189,10 +200,14 @@ class BrowserFragment : BaseFragment() {
                 ?.withEndAction {
                     toolbarAction?.hideToolbar()
                     binding?.footer?.root?.visibility = View.GONE
-                    onAnimation = false
                 }
                 ?.start()
     }
+
+    /**
+     * Check disallow header & footer's animation.
+     */
+    private fun disallowAnimation(): Boolean = (System.currentTimeMillis() - lastAnimated) < 500L
 
     /**
      * Initialize footer with [ColorPair]
@@ -235,6 +250,9 @@ class BrowserFragment : BaseFragment() {
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
 
+    /**
+     * Switch menu visibility.
+     */
     private fun switchMenu() {
         hideTabList()
         if (binding?.menusView?.visibility == View.GONE) {
@@ -247,7 +265,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Show quick control menu.
      *
-     * @param ignored
+     * @param ignored defined for Data-Binding
      */
     fun showMenu(ignored: View) {
         binding?.fab?.hide()

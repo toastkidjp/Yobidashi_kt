@@ -104,7 +104,7 @@ class TabAdapter(
     /**
      * Suppressing unnecessary animation.
      */
-    private val minimumScrolled: Int = 15
+    private val minimumScrolled: Int = 10
 
     init {
         webView = makeWebView(progress, titleCallback, touchCallback)
