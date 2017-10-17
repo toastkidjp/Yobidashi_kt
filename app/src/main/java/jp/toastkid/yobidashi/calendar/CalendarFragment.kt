@@ -7,7 +7,6 @@ import android.support.annotation.StringRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.analytics.LogSender
@@ -15,8 +14,7 @@ import jp.toastkid.yobidashi.databinding.FragmentCalendarBinding
 
 /**
  * Calendar fragment.
- * TODO clean up code
-
+ *
  * @author toastkidjp
  */
 class CalendarFragment : BaseFragment() {
@@ -45,22 +43,19 @@ class CalendarFragment : BaseFragment() {
         binding = DataBindingUtil.inflate<FragmentCalendarBinding>(
                 inflater!!, R.layout.fragment_calendar, container, false)
         initCalendarView()
-        return binding!!.root
+        return binding?.root
     }
 
     /**
      * Initialize calendar view.
      */
     private fun initCalendarView() {
-        binding!!.calendar.date = System.currentTimeMillis()
-        binding!!.calendar.setOnDateChangeListener(
-                CalendarView.OnDateChangeListener { view, year, month, dayOfMonth ->
-                    startActivity(DateDetailActivity.makeIntent(activity, year, month, dayOfMonth))
-        })
+        binding?.calendar?.date = System.currentTimeMillis()
+        binding?.calendar?.setOnDateChangeListener{ view, year, month, dayOfMonth ->
+            startActivity(DateDetailActivity.makeIntent(activity, year, month, dayOfMonth))
+        }
     }
 
     @StringRes
-    override fun titleId(): Int {
-        return R.string.title_calendar
-    }
+    override fun titleId(): Int = R.string.title_calendar
 }

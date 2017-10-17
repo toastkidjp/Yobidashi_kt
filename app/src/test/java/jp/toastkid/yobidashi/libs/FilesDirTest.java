@@ -6,37 +6,37 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
-import jp.toastkid.yobidashi.libs.storage.Storeroom;
+import jp.toastkid.yobidashi.libs.storage.FilesDir;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * {@link Storeroom}'s test case.
+ * {@link FilesDir}'s test case.
  *
  * @author toastkidjp
  */
 @RunWith(RobolectricTestRunner.class)
-public class StoreroomTest {
+public class FilesDirTest {
 
     /** Test object. */
-    private Storeroom storeroom;
+    private FilesDir filesDir;
 
     /**
      * Initialize test object before each test method.
      */
     @Before
     public void setUp() {
-        storeroom = new Storeroom(RuntimeEnvironment.application, "test");
+        filesDir = new FilesDir(RuntimeEnvironment.application, "test");
     }
 
     /**
-     * Check {@link Storeroom#assignNewFile(String)}.
+     * Check {@link FilesDir#assignNewFile(String)}.
      */
     @Test
     public void test_assignNewFile() {
         assertEquals(
                 "あま_しお_ちゃ_ん.html",
-                storeroom.assignNewFile("あま/しお\\ちゃ|ん.html").getName()
+                filesDir.assignNewFile("あま/しお\\ちゃ|ん.html").getName()
         );
     }
 }

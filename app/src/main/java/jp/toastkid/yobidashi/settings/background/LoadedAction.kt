@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -76,7 +76,7 @@ internal class LoadedAction (
      */
     @Throws(FileNotFoundException::class)
     private fun storeImageToFile(context: Context, image: Bitmap) {
-        val output = Storeroom(context, BackgroundSettingActivity.BACKGROUND_DIR).assignNewFile(uri)
+        val output = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR).assignNewFile(uri)
         PreferenceApplier(context).backgroundImagePath = output.path
         image.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
     }

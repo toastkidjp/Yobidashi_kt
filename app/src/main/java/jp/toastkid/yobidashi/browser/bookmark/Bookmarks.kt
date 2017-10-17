@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
 import android.net.Uri
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
  * @author toastkidjp
@@ -10,6 +10,6 @@ import jp.toastkid.yobidashi.libs.storage.Storeroom
 object Bookmarks {
 
     fun makeFaviconUrl(context: Context, url: String): String {
-        return Storeroom(context, "favicons").assignNewFile(Uri.parse(url).host + ".png").absolutePath
+        return FilesDir(context, "favicons").assignNewFile(Uri.parse(url).host + ".png").absolutePath
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.webkit.WebView
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import java.io.File
 import java.io.IOException
 
@@ -25,9 +25,9 @@ internal object Archive {
      *
      * @param context
      *
-     * @return [Storeroom] object.
+     * @return [FilesDir] object.
      */
-    fun makeNew(context: Context): Storeroom = Storeroom(context, ARCHIVE_DIR)
+    fun makeNew(context: Context): FilesDir = FilesDir(context, ARCHIVE_DIR)
 
     /**
      * Save web archive.
