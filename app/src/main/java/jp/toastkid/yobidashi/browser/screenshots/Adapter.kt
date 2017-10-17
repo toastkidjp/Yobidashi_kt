@@ -50,7 +50,7 @@ internal class Adapter(context: Context, private val onClick: (Bitmap) -> Unit)
         holder.setImage(bitmap)
         holder.setIconColor(colorPair.bgColor())
         holder.setDeleteAction {
-            if (screenshots.remove(position)) {
+            if (screenshots.removeAt(position)) {
                 notifyItemRemoved(position)
                 Toaster.snackShort(holder.itemView, R.string.done_clear, colorPair)
             }
