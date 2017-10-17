@@ -6,7 +6,7 @@ import android.graphics.Bitmap
 import java.io.File
 
 import jp.toastkid.yobidashi.libs.Bitmaps
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
  * Screen shot.
@@ -27,7 +27,7 @@ object Screenshot {
      * @return
      */
     fun save(context: Context, bitmap: Bitmap): File {
-        val file = Storeroom(context, DIR).assignNewFile(System.currentTimeMillis().toString() + ".png")
+        val file = FilesDir(context, DIR).assignNewFile(System.currentTimeMillis().toString() + ".png")
         Bitmaps.compress(bitmap, file)
         return file
     }

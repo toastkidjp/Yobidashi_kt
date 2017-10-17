@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
  * Screenshot's adapter.
@@ -29,7 +29,7 @@ internal class Adapter(context: Context, private val onClick: (Bitmap) -> Unit)
     /**
      * Files dir wrapper.
      */
-    private val screenshots: Storeroom = Storeroom(context, Screenshot.DIR)
+    private val screenshots: FilesDir = FilesDir(context, Screenshot.DIR)
 
     /**
      * Layout inflater.

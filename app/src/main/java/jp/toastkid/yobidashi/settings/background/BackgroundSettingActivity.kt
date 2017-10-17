@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBackgroundSettingBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
  * Background settings.
@@ -30,7 +30,7 @@ class BackgroundSettingActivity : BaseActivity() {
     private var adapter: Adapter? = null
 
     /** Wrapper of FilesDir.  */
-    private var storeroom: Storeroom? = null
+    private var filesDir: FilesDir? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +40,14 @@ class BackgroundSettingActivity : BaseActivity() {
         initToolbar(binding!!.toolbar)
         binding!!.toolbar.inflateMenu(R.menu.background_setting_menu)
 
-        storeroom = Storeroom(this, BACKGROUND_DIR)
+        filesDir = FilesDir(this, BACKGROUND_DIR)
 
         initImagesView()
     }
 
     private fun initImagesView() {
         binding!!.imagesView.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false)
-        adapter = Adapter(preferenceApplier, storeroom!!)
+        adapter = Adapter(preferenceApplier, filesDir!!)
         binding!!.imagesView.adapter = adapter
     }
 
@@ -77,7 +77,7 @@ class BackgroundSettingActivity : BaseActivity() {
     private fun clearImages() {
         ClearImages(this, {
             sendLog("clear_bg_img")
-            storeroom!!.clean()
+            filesDir!!.clean()
             Toaster.snackShort(
                     binding!!.fabParent,
                     getString(R.string.message_success_image_removal),

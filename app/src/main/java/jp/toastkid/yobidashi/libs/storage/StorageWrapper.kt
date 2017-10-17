@@ -126,7 +126,7 @@ class CacheDir(context: Context, dirName: String) : StorageWrapper(context, dirN
  *
  * @author toastkidjp
  */
-class Storeroom(context: Context, dirName: String) : StorageWrapper(context, dirName) {
+class FilesDir(context: Context, dirName: String) : StorageWrapper(context, dirName) {
 
     override fun getDir(context: Context): File = context.filesDir
 }

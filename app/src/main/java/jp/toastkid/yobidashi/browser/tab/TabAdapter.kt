@@ -36,7 +36,7 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SiteSearch
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
@@ -75,7 +75,7 @@ class TabAdapter(
 
     private var backOrForwardProgress: Boolean = false
 
-    private val tabsScreenshots: Storeroom
+    private val tabsScreenshots: FilesDir
 
     private val faviconApplier: FaviconApplier = FaviconApplier(progress.context)
 
@@ -110,7 +110,7 @@ class TabAdapter(
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
 
-        tabsScreenshots = Storeroom(webView.context, "tabs/screenshots")
+        tabsScreenshots = FilesDir(webView.context, "tabs/screenshots")
         preferenceApplier = PreferenceApplier(webView.context)
         colorPair = preferenceApplier.colorPair()
         setCurrentTabCount()
@@ -346,7 +346,7 @@ class TabAdapter(
                 .filter { it.code() == HttpURLConnection.HTTP_OK }
                 .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
                 .map {
-                    val storeroom = Storeroom(webView.context, BackgroundSettingActivity.BACKGROUND_DIR)
+                    val storeroom = FilesDir(webView.context, BackgroundSettingActivity.BACKGROUND_DIR)
                     val file = storeroom.assignNewFile(Uri.parse(url))
                     Bitmaps.compress(it, file)
                     file

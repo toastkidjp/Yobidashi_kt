@@ -7,19 +7,19 @@ import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.SavedImageBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
  * RecyclerView's adapter.
  *
  * @param preferenceApplier Preferences wrapper.
- * @param storeroom FilesDir wrapper.
+ * @param filesDir FilesDir wrapper.
  *
  * @author toastkidjp
  */
 internal class Adapter(
         private val preferenceApplier: PreferenceApplier,
-        private val storeroom: Storeroom
+        private val filesDir: FilesDir
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,10 +33,10 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.applyContent(storeroom.get(position)!!)
+        holder.applyContent(filesDir.get(position)!!)
     }
 
     override fun getItemCount(): Int {
-        return storeroom.count
+        return filesDir.count
     }
 }

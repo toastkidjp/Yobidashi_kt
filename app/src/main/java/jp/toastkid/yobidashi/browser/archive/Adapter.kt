@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import timber.log.Timber
 import java.io.IOException
 import java.text.DateFormat
@@ -30,7 +30,7 @@ internal class Adapter(
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /** Archive folder wrapper.  */
-    private val archiveDir: Storeroom = Archive.makeNew(context)
+    private val archiveDir: FilesDir = Archive.makeNew(context)
 
     /** Layout inflater.  */
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)

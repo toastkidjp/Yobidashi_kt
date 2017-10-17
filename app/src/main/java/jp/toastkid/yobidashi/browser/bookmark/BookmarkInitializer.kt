@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
 import android.net.Uri
-import jp.toastkid.yobidashi.libs.storage.Storeroom
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import java.util.*
 
 /**
@@ -29,7 +29,7 @@ object BookmarkInitializer {
             )
 
     fun invoke(context: Context) {
-        val favicons = Storeroom(context, "favicons")
+        val favicons = FilesDir(context, "favicons")
 
         DEFAULT_BOOKMARKS.entries.forEach {
             BookmarkInsertion(
