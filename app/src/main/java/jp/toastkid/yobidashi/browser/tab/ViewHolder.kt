@@ -7,7 +7,7 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
- * Tab item view's holder.
+ * WebTab item view's holder.
 
  * @author toastkidjp
  */

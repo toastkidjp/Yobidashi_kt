@@ -299,4 +299,5 @@
     <string name="title_header_and_footer">ヘッダとフッタ</string>
     <string name="message_has_opened_fragment">すでに開いています。</string>
     <string name="title_activity_date_detail">Detail</string>
+    <string name="title_editor">メモ</string>
 </resources>

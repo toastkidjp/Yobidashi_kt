@@ -10,12 +10,12 @@ import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 
 /**
- * [Tab]'s test case.
+ * [WebTab]'s test case.
  *
  * @author toastkidjp
  */
 @RunWith(RobolectricTestRunner::class)
-class TabTest {
+class WebTabTest {
 
     @Test
     @Throws(IOException::class)
@@ -29,14 +29,14 @@ class TabTest {
     }
 
     @Throws(IOException::class)
-    private fun check_fromJson(tabJsonAdapter: JsonAdapter<Tab>, json: String) {
+    private fun check_fromJson(tabJsonAdapter: JsonAdapter<WebTab>, json: String) {
         val fromJson = tabJsonAdapter.fromJson(json)
         assertEquals("file://~~", fromJson?.thumbnailPath)
         assertEquals("Title", fromJson?.latest?.title())
         assertEquals("URL", fromJson?.latest?.url())
     }
 
-    private fun check_toJson(tab: Tab, tabJsonAdapter: JsonAdapter<Tab>): String {
+    private fun check_toJson(tab: WebTab, tabJsonAdapter: JsonAdapter<WebTab>): String {
         val json = tabJsonAdapter.toJson(tab)
         assertTrue(json.contains("\"histories\":[{\"title\":\"Title\",\"url\":\"URL\"}]"))
         assertTrue(json.contains("\"index\":0"))
@@ -44,13 +44,13 @@ class TabTest {
         return json
     }
 
-    private fun makeTabJsonAdapter(): JsonAdapter<Tab> {
+    private fun makeTabJsonAdapter(): JsonAdapter<WebTab> {
         val moshi = Moshi.Builder().build()
-        return moshi.adapter(Tab::class.java)
+        return moshi.adapter(WebTab::class.java)
     }
 
-    private fun makeTestTab(): Tab {
-        val tab = Tab()
+    private fun makeTestTab(): WebTab {
+        val tab = WebTab()
         tab.thumbnailPath = "file://~~"
         tab.addHistory(History.make("Title", "URL"))
         return tab

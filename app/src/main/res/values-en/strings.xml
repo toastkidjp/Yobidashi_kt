@@ -304,4 +304,5 @@
     <string name="title_screen_mode_fixed">Fixed</string>
     <string name="message_has_opened_fragment">It has been opened.</string>
     <string name="title_activity_date_detail">Detail</string>
+    <string name="title_editor">Text Editor</string>
 </resources>

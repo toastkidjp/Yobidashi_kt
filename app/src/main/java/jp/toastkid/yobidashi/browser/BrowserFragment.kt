@@ -32,10 +32,12 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.tab.TabAdapter
 import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
 import jp.toastkid.yobidashi.browser.tab.TabListModule
+import jp.toastkid.yobidashi.browser.tab.WebTab
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
+import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -71,7 +73,7 @@ class BrowserFragment : BaseFragment() {
     private lateinit var tabs: TabAdapter
 
     /**
-     * Tab list module.
+     * WebTab list module.
      */
     private var tabListModule: TabListModule? = null
 
@@ -79,6 +81,14 @@ class BrowserFragment : BaseFragment() {
      * Find-in-page module.
      */
     private var pageSearcherModule: PageSearcherModule? = null
+
+    /**
+     * Editor area.
+     */
+    private val editor: EditorModule by lazy {
+        EditorModule(DataBindingUtil.inflate(
+                layoutInflater, R.layout.module_editor, binding?.webViewContainer, false))
+    }
 
     /**
      * PublishProcessor of title pair.
@@ -453,7 +463,12 @@ class BrowserFragment : BaseFragment() {
                             BookmarkActivity.makeIntent(activity),
                             BookmarkActivity.REQUEST_CODE
                     )
-                };
+                }
+            }
+            Menu.EDITOR -> {
+                binding?.webViewContainer?.removeAllViews()
+                binding?.webViewContainer?.addView(editor.view())
+                // TODO
             }
             Menu.EXIT -> {
                 activity.finish()
@@ -470,11 +485,14 @@ class BrowserFragment : BaseFragment() {
         val scaleUpAnimation = ActivityOptions.makeScaleUpAnimation(
                 binding?.menusView, 0, 0,
                 binding?.menusView?.width ?: 0, binding?.menusView?.height ?: 0)
-        startActivityForResult(
-                TabHistoryActivity.makeIntent(context, tabs.currentTab()),
-                TabHistoryActivity.REQUEST_CODE,
-                scaleUpAnimation.toBundle()
-        )
+        val currentTab = tabs.currentTab()
+        if (currentTab is WebTab) {
+            startActivityForResult(
+                    TabHistoryActivity.makeIntent(context, currentTab),
+                    TabHistoryActivity.REQUEST_CODE,
+                    scaleUpAnimation.toBundle()
+            )
+        }
     }
 
     /**
