@@ -13,13 +13,11 @@ import java.util.*
  * License files viewer.
  *
  * Initialize with context.
- * @param context
+ * @param context For using makeNew assets and show dialog.
  *
  * @author toastkidjp
  */
-class LicenseViewer(
-        /** For using makeNew assets and show dialog.   */
-        private val mContext: Context) {
+class LicenseViewer(private val mContext: Context) {
 
     /**
      * Invoke viewer.
@@ -54,14 +52,20 @@ class LicenseViewer(
 
     }
 
+    /**
+     * Read string from passed [InputStream].
+     *
+     * @param inputStream [InputStream]]
+     */
     @Throws(IOException::class)
-    private fun readUtf8(i: InputStream): String {
-        return Okio.buffer(Okio.source(i)).readUtf8()
-    }
+    private fun readUtf8(inputStream: InputStream): String
+            = Okio.buffer(Okio.source(inputStream)).readUtf8()
 
     companion object {
 
-        /** Directory name.  */
+        /**
+         * Directory name.
+         */
         private val DIRECTORY_OF_LICENSES = "licenses"
     }
 }
