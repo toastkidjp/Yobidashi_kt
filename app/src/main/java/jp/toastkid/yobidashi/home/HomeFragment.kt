@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
@@ -21,10 +20,8 @@ import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
-import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentHomeBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -114,10 +111,6 @@ class HomeFragment : BaseFragment() {
             Menu.WIFI_SETTING -> {
                 startActivity(SettingsIntentFactory.wifi())
             }
-            Menu.COLOR_FILTER -> {
-                ColorFilter(activity, binding.root)
-                        .switchState(this, REQUEST_OVERLAY_PERMISSION)
-            }
             Menu.EXIT -> {
                 activity.finish()
             }
@@ -176,19 +169,6 @@ class HomeFragment : BaseFragment() {
                 disposables.add(VoiceSearch.processResult(activity, data))
                 return
             }
-            REQUEST_OVERLAY_PERMISSION -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
-                    Toaster.snackShort(
-                            binding.root,
-                            R.string.message_cannot_draw_overlay,
-                            colorPair()
-                    )
-                    return
-                }
-                ColorFilter(activity, binding.root)
-                        .switchState(this, REQUEST_OVERLAY_PERMISSION)
-                return
-            }
         }
     }
 
@@ -206,7 +186,5 @@ class HomeFragment : BaseFragment() {
         private val LAYOUT_ID = R.layout.fragment_home
 
         private val REQUEST_CODE_VOICE_SEARCH = 2
-
-        private val REQUEST_OVERLAY_PERMISSION = 3
     }
 }

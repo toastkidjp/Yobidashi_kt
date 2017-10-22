@@ -49,8 +49,6 @@ internal enum class Menu(
 
     SHARE_BARCODE(R.string.title_share_by_code, R.drawable.ic_barcode),
 
-    COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
-
     REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
 
     LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
@@ -66,6 +64,8 @@ internal enum class Menu(
     SEARCH(R.string.title_search_action, R.drawable.ic_search_white),
 
     SETTING(R.string.title_settings, R.drawable.ic_settings),
+
+    EDITOR(R.string.title_editor, R.drawable.ic_edit),
 
     EXIT(R.string.exit, R.drawable.ic_exit)
     ;

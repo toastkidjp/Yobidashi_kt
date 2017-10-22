@@ -76,6 +76,11 @@
                 android:title="@string/title_instant_barcode"
                 />
             <item
+                android:id="@+id/nav_color_filter"
+                android:icon="@drawable/ic_color_filter_black"
+                android:title="@string/title_color_filter"
+                />
+            <item
                 android:id="@+id/nav_launcher"
                 android:icon="@drawable/ic_launch_black"
                 android:title="@string/title_apps_launcher"

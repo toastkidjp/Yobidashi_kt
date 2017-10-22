@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
@@ -28,16 +29,32 @@ import java.util.*
 internal class Adapter(private val context: Context, private val parent: View)
     : RecyclerView.Adapter<ViewHolder>() {
 
+    /**
+     * Master list.
+     */
     private val master: List<ApplicationInfo>
 
+    /**
+     * Current list.
+     */
     private val installedApps: MutableList<ApplicationInfo>
 
+    /**
+     * Preferences wrapper.
+     */
     private val preferenceApplier: PreferenceApplier
 
-    private val packageManager: PackageManager
+    /**
+     * Package manager.
+     */
+    private val packageManager: PackageManager = context.packageManager
+
+    /**
+     * Disposables.
+     */
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        this.packageManager = context.packageManager
         this.master = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
         this.installedApps = ArrayList(master)
         this.preferenceApplier = PreferenceApplier(context)
@@ -62,26 +79,39 @@ internal class Adapter(private val context: Context, private val parent: View)
         try {
             val packageInfo = packageManager.getPackageInfo(info.packageName, PackageManager.GET_META_DATA)
             holder.setVersionInformation(packageInfo.versionName + "(" + packageInfo.versionCode + ")")
-            holder.setInstalled(packageInfo.firstInstallTime)
+            holder.setInstalledMs(packageInfo.firstInstallTime)
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.e(e)
         }
 
+        setOnClick(holder, info)
+    }
+
+    /**
+     * Set on click actions.
+     *
+     * @param holder [ViewHolder]
+     * @param info [ApplicationInfo]
+     */
+    private fun setOnClick(holder: ViewHolder, info: ApplicationInfo) {
         val intent = packageManager.getLaunchIntentForPackage(info.packageName)
         if (intent == null) {
-            holder.itemView.setOnClickListener { v -> snackCannotLaunch() }
-        } else {
-            holder.itemView.setOnClickListener { v ->
-                try {
-                    context.startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    Timber.e(e)
-                    snackCannotLaunch()
-                }
+            holder.itemView.setOnClickListener { snackCannotLaunch() }
+            return
+        }
+        holder.itemView.setOnClickListener {
+            try {
+                context.startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                Timber.e(e)
+                snackCannotLaunch()
             }
         }
     }
 
+    /**
+     * Show cannot launch message with snackbar.
+     */
     private fun snackCannotLaunch() {
         Toaster.snackShort(
                 parent,
@@ -90,6 +120,11 @@ internal class Adapter(private val context: Context, private val parent: View)
         )
     }
 
+    /**
+     * Do filtering with text.
+     *
+     * @param str filter query
+     */
     fun filter(str: String) {
         installedApps.clear()
         if (TextUtils.isEmpty(str)) {
@@ -97,16 +132,23 @@ internal class Adapter(private val context: Context, private val parent: View)
             notifyDataSetChanged()
             return
         }
-        Observable.fromIterable(master)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.computation())
-                .filter { appInfo -> appInfo.packageName.contains(str) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete { this.notifyDataSetChanged() }
-                .subscribe { installedApps.add(it) }
+        disposables.add(
+                Observable.fromIterable(master)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(Schedulers.computation())
+                        .filter { appInfo -> appInfo.packageName.contains(str) }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnComplete { this.notifyDataSetChanged() }
+                        .subscribe { installedApps.add(it) }
+        )
     }
 
-    override fun getItemCount(): Int {
-        return installedApps.size
+    override fun getItemCount(): Int = installedApps.size
+
+    /**
+     * Dispose disposables.
+     */
+    fun dispose() {
+        disposables.dispose()
     }
 }

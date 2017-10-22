@@ -14,18 +14,18 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
- * Tab history adapter.
+ * WebTab history adapter.
  * Initialize with context and so on...
  *
  * @param context
- * @param tab Tab list model
+ * @param tab WebTab list model
  * @param closeAction Closing action
  *
  * @author toastkidjp
  */
 internal class TabHistoryAdapter(
         private val context: Context,
-        private val tab: Tab,
+        private val tab: WebTab,
         private val clickCallback: (Int) -> Unit
 ) : RecyclerView.Adapter<TabHistoryViewHolder>() {
 

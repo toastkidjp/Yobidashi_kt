@@ -78,7 +78,7 @@ class DateDetailActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (binding.toolbar != null) applyColorToToolbar(binding.toolbar as Toolbar)
+        binding.toolbar?.let { applyColorToToolbar(it) }
     }
 
     override fun titleId(): Int = R.string.title_activity_date_detail

@@ -3,9 +3,7 @@ package jp.toastkid.yobidashi.browser.tab
 import android.content.Context
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import okio.Okio
 import timber.log.Timber
 import java.io.File
@@ -32,7 +30,6 @@ class TabList private constructor() {
 
     internal fun setIndex(newIndex: Int) {
         index = if (newIndex < 0 || tabs.size < newIndex) 0 else newIndex
-        Timber.i("index = ${index}")
     }
 
     fun getIndex(): Int {
@@ -62,32 +59,25 @@ class TabList private constructor() {
      * Save current state to file.
      */
     internal fun save() {
-        val initJsonAdapterIfNeed    = Completable.fromAction { initJsonAdapterIfNeed() }
-        val initTabJsonAdapterIfNeed = Completable.fromAction { initTabJsonAdapterIfNeed() }
-
-        disposables.add(Completable.ambArray(initJsonAdapterIfNeed, initTabJsonAdapterIfNeed)
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            val json = jsonAdapter?.toJson(this)
-                            val charset = charset("UTF-8")
-                            Okio.buffer(Okio.sink(tabsFile))
-                                    .write(json?.toByteArray(charset)).flush()
-                            savingLock.withLock {
-                                itemsDir?.list()
-                                        ?.map { File(itemsDir, it) }
-                                        ?.forEach { it.delete() }
-                                tabs.forEach {
-                                    val source = tabJsonAdapter?.toJson(it)?.toByteArray(charset)
-                                            ?: return@forEach
-                                    Okio.buffer(Okio.sink(File(itemsDir, "${it.id}.json")))
-                                            .write(source)
-                                            .flush()
-                                }
-                            }
-                        },
-                        { Timber.e(it) }
-                ))
+        val json = jsonAdapter.toJson(this)
+        Okio.buffer(Okio.sink(tabsFile)).write(json.toByteArray(charset)).flush()
+        savingLock.withLock {
+            itemsDir?.list()
+                    ?.map { File(itemsDir, it) }
+                    ?.forEach { it.delete() }
+            tabs.forEach { tab ->
+                val source: ByteArray? = when {
+                    tab is WebTab    -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    tab is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    else            -> ByteArray(0)
+                }
+                source?.let {
+                    Okio.buffer(Okio.sink(File(itemsDir, "${tab.id()}.json")))
+                            .write(source)
+                            .flush()
+                }
+            }
+        }
     }
 
     internal val isEmpty: Boolean
@@ -106,16 +96,13 @@ class TabList private constructor() {
     }
 
     private fun remove(tab: Tab) {
-        File(itemsDir, tab.id + ".json").delete()
+        File(itemsDir, tab.id() + ".json").delete()
         tabs.remove(tab)
     }
 
     internal fun clear() {
         for (tab in tabs) {
-            val lastScreenshot = File(tab.thumbnailPath)
-            if (lastScreenshot.exists()) {
-                lastScreenshot.delete()
-            }
+            tab.deleteLastThumbnail()
         }
         tabs.clear()
         index = 0
@@ -126,17 +113,27 @@ class TabList private constructor() {
 
     companion object {
 
-        private val TABS_DIR = "tabs"
+        private const val TABS_DIR = "tabs"
 
-        private val TABS_ITEM_DIR = TABS_DIR + "/items"
+        private const val TABS_ITEM_DIR = TABS_DIR + "/items"
 
         private val savingLock = ReentrantLock()
 
         private var tabsFile: File? = null
 
-        private var tabJsonAdapter: JsonAdapter<Tab>? = null
+        private val charset = charset("UTF-8")
 
-        private var jsonAdapter: JsonAdapter<TabList>? = null
+        private val jsonAdapter: JsonAdapter<TabList> by lazy {
+            Moshi.Builder().build().adapter(TabList::class.java)
+        }
+
+        private val webTabJsonAdapter: JsonAdapter<WebTab> by lazy {
+            Moshi.Builder().build().adapter(WebTab::class.java)
+        }
+
+        private val editorTabJsonAdapter: JsonAdapter<EditorTab> by lazy {
+            Moshi.Builder().build().adapter(EditorTab::class.java)
+        }
 
         private var itemsDir: File? = null
 
@@ -147,15 +144,19 @@ class TabList private constructor() {
             }
 
             try {
-                initJsonAdapterIfNeed()
-                initTabJsonAdapterIfNeed()
-
                 val fromJson: TabList?
-                        = jsonAdapter?.fromJson(Okio.buffer(Okio.source(tabsFile as File)))
+                        = jsonAdapter.fromJson(Okio.buffer(Okio.source(tabsFile as File)))
 
                 itemsDir?.list()
-                        ?.map{ tabJsonAdapter?.fromJson(Okio.buffer(Okio.source(File(itemsDir, it))))}
-                        ?.forEach { fromJson?.add(it as Tab) }
+                        ?.map {
+                            val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).readUtf8()
+                            if (json.contains("editorTab")) {
+                                editorTabJsonAdapter.fromJson(json)
+                            } else {
+                                webTabJsonAdapter.fromJson(json)
+                            }
+                        }
+                        ?.forEach { it?.let { fromJson?.add(it) } }
                 if (fromJson?.size() as Int <= fromJson.index) {
                     fromJson.index = fromJson.size() - 1
                 }
@@ -178,20 +179,6 @@ class TabList private constructor() {
             if (itemsDir != null && !(itemsDir as File).exists()) {
                 itemsDir?.mkdirs()
             }
-        }
-
-        private fun initTabJsonAdapterIfNeed() {
-            if (tabJsonAdapter != null) {
-                return
-            }
-            tabJsonAdapter = Moshi.Builder().build().adapter(Tab::class.java)
-        }
-
-        private fun initJsonAdapterIfNeed() {
-            if (jsonAdapter != null) {
-                return
-            }
-            jsonAdapter = Moshi.Builder().build().adapter(TabList::class.java)
         }
     }
 

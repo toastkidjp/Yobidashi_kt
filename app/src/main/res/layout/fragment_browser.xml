@@ -19,6 +19,7 @@
                 android:layout_height="match_parent"
                 />
         </android.support.v4.widget.SwipeRefreshLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/menus_view"
             android:layout_width="match_parent"
@@ -45,6 +46,13 @@
             android:layout_gravity="bottom"
             >
             <include android:id="@+id/footer" layout="@layout/browser_footer" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <include android:id="@+id/editor" layout="@layout/module_editor" />
         </FrameLayout>
 
         <FrameLayout

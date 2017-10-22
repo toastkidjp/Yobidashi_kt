@@ -3,6 +3,11 @@ package jp.toastkid.yobidashi.libs.network
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
+
+
+
+
 
 /**
  * Method object of downloading.
@@ -14,12 +19,16 @@ class DownloadAction(
         val url: String
 ) {
     fun invoke() {
-        val request = DownloadManager.Request(Uri.parse(url))
+        val uri = Uri.parse(url)
+        val request = DownloadManager.Request(uri)
 
         request.allowScanningByMediaScanner()
         request.setNotificationVisibility(
                 DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setVisibleInDownloadsUi(true)
+        request.setDestinationInExternalFilesDir(
+                context, Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
+        context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).mkdirs()
         val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         dm.enqueue(request)
     }

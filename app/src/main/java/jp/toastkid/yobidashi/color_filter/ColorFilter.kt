@@ -7,7 +7,6 @@ import android.os.Build
 import android.provider.Settings
 import android.support.annotation.ColorInt
 import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
@@ -77,11 +76,10 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
     /**
      * Switch color filter's state.
      *
-     * @param fragment
-     * @param requestCode
+     * @param activity
      */
-    fun switchState(fragment: Fragment, requestCode: Int): Boolean {
-        val preferenceApplier = PreferenceApplier(fragment.activity)
+    fun switchState(activity: Activity): Boolean {
+        val preferenceApplier = PreferenceApplier(activity)
         val newState = !preferenceApplier.useColorFilter()
         if (!newState) {
             stop()
@@ -89,14 +87,22 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
             return newState
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !Settings.canDrawOverlays(fragment.activity)) {
+                && !Settings.canDrawOverlays(activity)) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + fragment.activity.packageName))
-            fragment.startActivityForResult(intent, requestCode)
+                    Uri.parse("package:" + activity.packageName))
+            activity.startActivityForResult(intent, REQUEST_CODE)
             return !newState
         }
         start()
         preferenceApplier.setUseColorFilter(newState)
         return newState
+    }
+
+    companion object {
+
+        /**
+         * Request code of overlay permission.
+         */
+        const val REQUEST_CODE = 3
     }
 }
