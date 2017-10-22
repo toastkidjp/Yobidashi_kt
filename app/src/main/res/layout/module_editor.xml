@@ -26,7 +26,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="?android:attr/buttonBarStyle"
-                android:text="Save"
+                android:text="@string/save"
                 android:drawableTop="@drawable/ic_save"
                 android:foreground="@drawable/ripple_transparent"
                 />
@@ -36,7 +36,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="?android:attr/buttonBarStyle"
-                android:text="Load"
+                android:text="@string/load"
                 android:drawableTop="@drawable/ic_load"
                 android:foreground="@drawable/ripple_transparent"
                 />
@@ -46,27 +46,27 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="?android:attr/buttonBarStyle"
-                android:text="Clip"
+                android:text="@string/clip"
                 android:drawableTop="@drawable/ic_clip"
                 android:foreground="@drawable/ripple_transparent"
                 />
             <Button
-                android:id="@+id/tab"
+                android:id="@+id/tab_list"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="?android:attr/buttonBarStyle"
-                android:text="Tab"
+                android:text="@string/tab_list"
                 android:drawableTop="@drawable/ic_tab"
                 android:foreground="@drawable/ripple_transparent"
                 />
             <Button
-                android:id="@+id/exit"
+                android:id="@+id/close"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 style="?android:attr/buttonBarStyle"
-                android:text="Exit"
+                android:text="@string/close"
                 android:drawableTop="@drawable/ic_close"
                 android:foreground="@drawable/ripple_transparent"
                 />

@@ -57,13 +57,13 @@ class EditorModule(
         binding.save.setOnClickListener { save() }
         binding.load.setOnClickListener { load() }
         binding.clip.setOnClickListener { clip() }
-        binding.tab.setOnClickListener  { switchTabAction() }
-        binding.exit.setOnClickListener { hide() }
+        binding.tabList.setOnClickListener  { switchTabAction() }
+        binding.close.setOnClickListener { hide() }
         Colors.setBgAndText(binding.save, preferenceApplier.colorPair())
         Colors.setBgAndText(binding.load, preferenceApplier.colorPair())
         Colors.setBgAndText(binding.clip, preferenceApplier.colorPair())
-        Colors.setBgAndText(binding.tab, preferenceApplier.colorPair())
-        Colors.setBgAndText(binding.exit, preferenceApplier.colorPair())
+        Colors.setBgAndText(binding.tabList, preferenceApplier.colorPair())
+        Colors.setBgAndText(binding.close, preferenceApplier.colorPair())
     }
 
     /**

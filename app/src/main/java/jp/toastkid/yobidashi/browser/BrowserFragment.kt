@@ -272,7 +272,7 @@ class BrowserFragment : BaseFragment() {
 
         binding?.footer?.tabIcon?.setColorFilter(fontColor)
         binding?.footer?.tabCount?.setTextColor(fontColor)
-        binding?.footer?.tab?.setOnClickListener { switchTabList() }
+        binding?.footer?.tabList?.setOnClickListener { switchTabList() }
     }
 
     /**

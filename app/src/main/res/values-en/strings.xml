@@ -311,4 +311,7 @@
     <string name="title_dialog_input_file_name">Input file name</string>
     <string name="message_requires_permission_storage" >
         If you want to use this function, you should permit using storage to this app.</string>
+    <string name="load">Load</string>
+    <string name="clip">Clip</string>
+    <string name="tab_list">Tab</string>
 </resources>

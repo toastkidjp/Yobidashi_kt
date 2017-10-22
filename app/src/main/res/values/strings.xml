@@ -306,4 +306,7 @@
     <string name="title_dialog_input_file_name">ファイル名入力</string>
     <string name="message_requires_permission_storage">
         メモを使用するにはストレージの権限が必要です。</string>
+    <string name="load">ファイルを開く</string>
+    <string name="clip">クリップボードにコピー</string>
+    <string name="tab_list">タブ一覧</string>
 </resources>

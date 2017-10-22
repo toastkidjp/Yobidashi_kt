@@ -38,7 +38,7 @@
             android:src="@drawable/ic_bottom"
             />
         <FrameLayout
-            android:id="@+id/tab"
+            android:id="@+id/tab_list"
             style="@style/FooterButton"
             >
             <ImageView
