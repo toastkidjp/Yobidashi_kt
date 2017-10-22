@@ -54,9 +54,9 @@ internal class Adapter(
             closeAction()
         }
         if (tab is WebTab) {
-            holder.setTitle(tab.latest.title())
             holder.setImagePath(tab.thumbnailPath)
         }
+        holder.setTitle(tab.title())
         holder.setCloseAction(View.OnClickListener { _ -> closeAt(tabAdapter.indexOf(tab)) })
         holder.setColor(colorPair)
         holder.setBackgroundColor(

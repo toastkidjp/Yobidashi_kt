@@ -1,11 +1,13 @@
 package jp.toastkid.yobidashi.browser
 
+import android.Manifest
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
@@ -35,6 +37,7 @@ import jp.toastkid.yobidashi.browser.tab.TabListModule
 import jp.toastkid.yobidashi.browser.tab.WebTab
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
+import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.editor.EditorModule
@@ -83,14 +86,6 @@ class BrowserFragment : BaseFragment() {
     private var pageSearcherModule: PageSearcherModule? = null
 
     /**
-     * Editor area.
-     */
-    private val editor: EditorModule by lazy {
-        EditorModule(DataBindingUtil.inflate(
-                layoutInflater, R.layout.module_editor, binding?.webViewContainer, false))
-    }
-
-    /**
      * PublishProcessor of title pair.
      */
     private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
@@ -114,6 +109,18 @@ class BrowserFragment : BaseFragment() {
      * For disabling busy show & hide animation.
      */
     private var lastAnimated: Long = 0L
+
+    /**
+     * Editor area.
+     */
+    private val editor: EditorModule by lazy {
+        EditorModule(
+                binding?.editor as ModuleEditorBinding,
+                { intent, requestCode -> startActivityForResult(intent, requestCode) },
+                { switchTabList() },
+                { closeTabList() }
+                )
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -148,6 +155,7 @@ class BrowserFragment : BaseFragment() {
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
                 binding?.webViewContainer as FrameLayout,
+                editor,
                 binding?.footer?.tabCount as TextView,
                 { titleProcessor.onNext(it) },
                 { binding?.refresher?.isRefreshing = false },
@@ -400,7 +408,7 @@ class BrowserFragment : BaseFragment() {
                         .setTitle(R.string.title_open_url)
                         .setView(inputLayout)
                         .setCancelable(true)
-                        .setPositiveButton("開く") { d, i ->
+                        .setPositiveButton(R.string.open) { d, i ->
                             val url = inputLayout.editText?.text.toString()
                             if (Urls.isValidUrl(url)) {
                                 tabs.loadWithNewTab(Uri.parse(url))
@@ -466,9 +474,20 @@ class BrowserFragment : BaseFragment() {
                 }
             }
             Menu.EDITOR -> {
-                binding?.webViewContainer?.removeAllViews()
-                binding?.webViewContainer?.addView(editor.view())
-                // TODO
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        && (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED
+                            || activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED
+                        )
+                        ) {
+                    requestPermissions(arrayOf(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            ), 1)
+                    return
+                }
+                openEditorTab()
             }
             Menu.EXIT -> {
                 activity.finish()
@@ -526,6 +545,10 @@ class BrowserFragment : BaseFragment() {
         } else {
             showTabList()
         }
+    }
+
+    private inline fun closeTabList() {
+        tabListModule?.let { if (it.isVisible) { it.hide() } }
     }
 
     /**
@@ -685,7 +708,28 @@ class BrowserFragment : BaseFragment() {
                         .switchState(this, REQUEST_OVERLAY_PERMISSION)
                 return
             }
+            EditorModule.REQUEST_CODE_LOAD -> {
+                editor.readFromFileUri(intent.data)
+            }
         }
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openEditorTab()
+            return
+        }
+        Toaster.tShort(activity, R.string.message_requires_permission_storage)
+    }
+
+    private inline fun openEditorTab() {
+        // TODO
+        tabs.openNewEditorTab()
     }
 
     /**

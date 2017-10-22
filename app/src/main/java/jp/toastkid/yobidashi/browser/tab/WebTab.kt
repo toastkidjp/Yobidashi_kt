@@ -86,6 +86,8 @@ internal class WebTab: Tab {
         }
     }
 
+    override fun title(): String = latest.title()
+
     companion object {
 
         fun makeBackground(title: String, url: String): WebTab {

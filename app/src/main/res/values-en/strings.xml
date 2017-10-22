@@ -305,4 +305,10 @@
     <string name="message_has_opened_fragment">It has been opened.</string>
     <string name="title_activity_date_detail">Detail</string>
     <string name="title_editor">Text Editor</string>
+    <string name="done_load">It has loaded.</string>
+    <string name="done_save">It has saved to file.</string>
+    <string name="save">Save</string>
+    <string name="title_dialog_input_file_name">Input file name</string>
+    <string name="message_requires_permission_storage" >
+        If you want to use this function, you should permit using storage to this app.</string>
 </resources>

@@ -21,4 +21,6 @@ internal class EditorTab: Tab {
 
     override fun deleteLastThumbnail() = Unit
 
+    override fun title(): String = "Editor"
+
 }

@@ -18,4 +18,6 @@ internal interface Tab {
     fun forward(): String = ""
 
     fun deleteLastThumbnail()
+
+    fun title(): String
 }

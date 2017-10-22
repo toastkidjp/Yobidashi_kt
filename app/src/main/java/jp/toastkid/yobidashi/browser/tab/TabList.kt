@@ -83,7 +83,7 @@ class TabList private constructor() {
     internal val isEmpty: Boolean
         get() = tabs.isEmpty()
 
-    internal fun add(newTab: WebTab) {
+    internal fun add(newTab: Tab) {
         tabs.add(newTab)
     }
 
@@ -156,7 +156,7 @@ class TabList private constructor() {
                                 webTabJsonAdapter.fromJson(json)
                             }
                         }
-                        ?.forEach { fromJson?.add(it as WebTab) }
+                        ?.forEach { it?.let { fromJson?.add(it) } }
                 if (fromJson?.size() as Int <= fromJson.index) {
                     fromJson.index = fromJson.size() - 1
                 }

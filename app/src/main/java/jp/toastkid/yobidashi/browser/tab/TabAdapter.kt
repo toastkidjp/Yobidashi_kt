@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
+import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -56,6 +57,7 @@ import java.net.HttpURLConnection
 class TabAdapter(
         progress: ProgressBar,
         webViewContainer: FrameLayout,
+        private val editor: EditorModule,
         private val tabCount: TextView,
         titleCallback: (TitlePair) -> Unit,
         private val loadedCallback: () -> Unit,
@@ -382,6 +384,13 @@ class TabAdapter(
         }
     }
 
+    fun openNewEditorTab() {
+        val editorTab = EditorTab()
+        tabList.add(editorTab)
+        setCurrentTabCount()
+        setIndexByTab(editorTab, true)
+    }
+
     internal fun openNewTab() {
         openNewTab(preferenceApplier.homeUrl)
     }
@@ -444,10 +453,15 @@ class TabAdapter(
 
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
+            if (editor.isVisible) {
+                editor.hide()
+            }
             val latest = currentTab.latest
             if (latest !== History.EMPTY) {
                 loadUrl(latest.url())
             }
+        } else {
+            editor.show()
         }
     }
 
