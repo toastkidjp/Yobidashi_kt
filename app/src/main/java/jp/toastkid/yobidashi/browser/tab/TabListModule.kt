@@ -16,7 +16,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
- * Tab list module.
+ * WebTab list module.
  *
  * @author toastkidjp
  */
@@ -28,7 +28,7 @@ class TabListModule(
         private val emptyAction: () -> Unit
 ) : BaseModule(binding.root) {
 
-    /** Tab list adapter.  */
+    /** WebTab list adapter.  */
     private var adapter: Adapter? = null
 
     /** For showing snackbar.  */

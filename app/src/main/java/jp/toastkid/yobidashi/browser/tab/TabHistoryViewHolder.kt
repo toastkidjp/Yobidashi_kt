@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
- * Tab item view's holder.
+ * WebTab item view's holder.
  *
  * @author toastkidjp
  */

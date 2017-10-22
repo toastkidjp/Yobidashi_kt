@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
+import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -56,6 +57,7 @@ import java.net.HttpURLConnection
 class TabAdapter(
         progress: ProgressBar,
         webViewContainer: FrameLayout,
+        private val editor: EditorModule,
         private val tabCount: TextView,
         titleCallback: (TitlePair) -> Unit,
         private val loadedCallback: () -> Unit,
@@ -134,7 +136,8 @@ class TabAdapter(
                 isLoadFinished = true
                 progress.visibility = View.GONE
 
-                val lastScrolled = currentTab().latest.scrolled
+                val currentTab = currentTab()
+                val lastScrolled = currentTab.getScrolled()
                 if (lastScrolled != 0) {
                     webView.scrollTo(0, lastScrolled)
                 }
@@ -148,7 +151,9 @@ class TabAdapter(
                     Timber.e(e)
                 }
 
-                deleteThumbnail(tabList.currentTab().thumbnailPath)
+                if (currentTab is WebTab) {
+                    deleteThumbnail(currentTab.thumbnailPath)
+                }
 
                 saveNewThumbnail()
 
@@ -358,12 +363,14 @@ class TabAdapter(
         webView.buildDrawingCache()
 
         val currentTab = tabList.currentTab()
-        val file = tabsScreenshots.assignNewFile("${currentTab.id}.png")
-        val drawingCache = webView.drawingCache
-        if (drawingCache != null) {
-            Bitmaps.compress(drawingCache, file)
+        if (currentTab is WebTab) {
+            val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+            val drawingCache = webView.drawingCache
+            if (drawingCache != null) {
+                Bitmaps.compress(drawingCache, file)
+            }
+            currentTab.thumbnailPath = file.absolutePath
         }
-        currentTab.thumbnailPath = file.absolutePath
     }
 
     private fun deleteThumbnail(thumbnailPath: String) {
@@ -377,12 +384,19 @@ class TabAdapter(
         }
     }
 
+    fun openNewEditorTab() {
+        val editorTab = EditorTab()
+        tabList.add(editorTab)
+        setCurrentTabCount()
+        setIndexByTab(editorTab, true)
+    }
+
     internal fun openNewTab() {
         openNewTab(preferenceApplier.homeUrl)
     }
 
     private fun openNewTab(url: String) {
-        val newTab = Tab()
+        val newTab = WebTab()
         tabList.add(newTab)
         setCurrentTabCount()
         setIndexByTab(newTab, true)
@@ -390,13 +404,16 @@ class TabAdapter(
     }
 
     private fun openBackgroundTab(url: String) {
-        tabList.add(Tab.makeBackground(webView.context.getString(R.string.new_tab), url))
+        tabList.add(WebTab.makeBackground(webView.context.getString(R.string.new_tab), url))
         tabList.save()
         setCurrentTabCount()
     }
 
     private fun addHistory(title: String, url: String) {
-        tabList.currentTab().addHistory(History.make(title, url))
+        val currentTab = tabList.currentTab()
+        if (currentTab is WebTab) {
+            currentTab.addHistory(History.make(title, url))
+        }
     }
 
     fun back(): String {
@@ -434,9 +451,17 @@ class TabAdapter(
         }
         tabList.setIndex(newIndex)
 
-        val latest = tabList.currentTab().latest
-        if (latest !== History.EMPTY) {
-            loadUrl(latest.url())
+        val currentTab = tabList.currentTab()
+        if (currentTab is WebTab) {
+            if (editor.isVisible) {
+                editor.hide()
+            }
+            val latest = currentTab.latest
+            if (latest !== History.EMPTY) {
+                loadUrl(latest.url())
+            }
+        } else {
+            editor.show()
         }
     }
 
@@ -458,7 +483,7 @@ class TabAdapter(
         if (tabList.isEmpty) {
             return
         }
-        loadUrl(tabList.currentTab().latest.url())
+        loadUrl(tabList.currentTab().getUrl())
     }
 
     fun loadUrl(url: String, saveHistory: Boolean = true) {
@@ -467,7 +492,7 @@ class TabAdapter(
         }
 
         if (TextUtils.equals(webView.url, url)) {
-            webView.scrollTo(0, currentTab().latest.scrolled)
+            webView.scrollTo(0, currentTab().getScrolled())
             return
         }
         backOrForwardProgress = !saveHistory
@@ -581,7 +606,9 @@ class TabAdapter(
             return
         }
         val tab = tabList.get(index)
-        deleteThumbnail(tab.thumbnailPath)
+        if (tab is WebTab) {
+            deleteThumbnail(tab.thumbnailPath)
+        }
 
         tabList.closeTab(index)
         setCurrentTabCount()
@@ -666,7 +693,7 @@ class TabAdapter(
 
     private fun updateScrolled() {
         val currentTab = currentTab()
-        currentTab.latest.scrolled = webView.scrollY
+        currentTab.setScrolled(webView.scrollY)
         tabList.set(index(), currentTab)
     }
 
@@ -676,11 +703,14 @@ class TabAdapter(
     }
 
     fun moveTo(i: Int) {
-        val url = currentTab().moveAndGet(i)
-        if (url.isEmpty()) {
-            return
+        val currentTab = currentTab()
+        if (currentTab is WebTab) {
+            val url = currentTab.moveAndGet(i)
+            if (url.isEmpty()) {
+                return
+            }
+            loadUrl(url, false)
         }
-        loadUrl(url, false)
     }
 
     fun enablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0

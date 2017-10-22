@@ -67,6 +67,8 @@ internal enum class Menu(
 
     SETTING(R.string.title_settings, R.drawable.ic_settings),
 
+    EDITOR(R.string.title_editor, R.drawable.ic_edit),
+
     EXIT(R.string.exit, R.drawable.ic_exit)
     ;
 

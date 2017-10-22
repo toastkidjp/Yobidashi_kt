@@ -14,10 +14,10 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
- * Tab list adapter.
+ * WebTab list adapter.
  * Initialize with context and so on...
  * @param context
- * @param tabAdapter Tab list model
+ * @param tabAdapter WebTab list model
  * @param closeAction Closing action
  *
  * @author toastkidjp
@@ -53,8 +53,10 @@ internal class Adapter(
             tabAdapter.setIndexByTab(tab)
             closeAction()
         }
-        holder.setTitle(tab.latest.title())
-        holder.setImagePath(tab.thumbnailPath)
+        if (tab is WebTab) {
+            holder.setImagePath(tab.thumbnailPath)
+        }
+        holder.setTitle(tab.title())
         holder.setCloseAction(View.OnClickListener { _ -> closeAt(tabAdapter.indexOf(tab)) })
         holder.setColor(colorPair)
         holder.setBackgroundColor(

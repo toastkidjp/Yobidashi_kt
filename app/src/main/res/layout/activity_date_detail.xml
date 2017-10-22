@@ -30,7 +30,7 @@
             >
             <android.support.v7.widget.CardView
                 android:id="@+id/open_article"
-                style="@style/DateMenuCardStyle"
+                style="@style/MenuCardStyle"
                 app:cardElevation="4dp"
                 >
                 <ImageView
@@ -52,7 +52,7 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/add_schedule"
-                style="@style/DateMenuCardStyle"
+                style="@style/MenuCardStyle"
                 app:cardElevation="4dp"
                 >
                 <ImageView
@@ -74,7 +74,7 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/search"
-                style="@style/DateMenuCardStyle"
+                style="@style/MenuCardStyle"
                 app:cardElevation="4dp"
                 >
                 <ImageView
