@@ -1,11 +1,8 @@
 package jp.toastkid.yobidashi.settings
 
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.text.Html
@@ -51,7 +48,7 @@ class SettingsTopFragment : BaseFragment() {
     /**
      * Color filter.
      */
-    private var colorFilter: ColorFilter? = null
+    private val colorFilter: ColorFilter by lazy { ColorFilter(activity, binding.root) }
 
     override fun onCreateView(
             inflater: LayoutInflater?,
@@ -78,7 +75,6 @@ class SettingsTopFragment : BaseFragment() {
         binding.startUpItems.startUpSelector.setOnCheckedChangeListener { radioGroup, checkedId ->
             preferenceApplier().startUp = StartUp.findById(checkedId)
         }
-        initColorFilter()
 
         ColorFilterSettingInitializer(binding.filterColor, { colorFilter?.color(it) }).invoke()
         return binding.root
@@ -510,13 +506,7 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchColorFilter(v: View) {
-        binding.useColorFilterCheck.isChecked = colorFilter!!.switchState(this, REQUEST_OVERLAY_PERMISSION)
-    }
-
-    private fun initColorFilter() {
-        if (colorFilter == null) {
-            colorFilter = ColorFilter(activity, binding.root)
-        }
+        binding.useColorFilterCheck.isChecked = colorFilter!!.switchState(activity)
     }
 
     /**
@@ -542,26 +532,11 @@ class SettingsTopFragment : BaseFragment() {
                 .show()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_OVERLAY_PERMISSION) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
-                Toaster.snackShort(
-                        binding.root,
-                        R.string.message_cannot_draw_overlay,
-                        colorPair()
-                )
-                return
-            }
-            colorFilter!!.start()
-        }
-    }
-
     companion object {
 
-        /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.fragment_settings
-
-        /** Request code of overlay permission.  */
-        private val REQUEST_OVERLAY_PERMISSION = 1
+        /**
+         * Layout ID.
+         */
+        private const val LAYOUT_ID: Int = R.layout.fragment_settings
     }
 }

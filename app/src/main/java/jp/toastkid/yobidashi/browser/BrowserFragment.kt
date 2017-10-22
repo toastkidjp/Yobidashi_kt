@@ -12,7 +12,6 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -35,7 +34,6 @@ import jp.toastkid.yobidashi.browser.tab.TabAdapter
 import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
 import jp.toastkid.yobidashi.browser.tab.TabListModule
 import jp.toastkid.yobidashi.browser.tab.WebTab
-import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
@@ -436,9 +434,6 @@ class BrowserFragment : BaseFragment() {
             Menu.VOICE_SEARCH -> {
                 startActivityForResult(VoiceSearch.makeIntent(context), REQUEST_CODE_VOICE_SEARCH)
             }
-            Menu.COLOR_FILTER -> {
-                ColorFilter(activity, snackbarParent).switchState(this, REQUEST_OVERLAY_PERMISSION)
-            }
             Menu.REPLACE_HOME -> {
                 val currentUrl = tabs.currentUrl()
                 if (Urls.isInvalidUrl(currentUrl)) {
@@ -695,19 +690,6 @@ class BrowserFragment : BaseFragment() {
                     tabs.moveTo(intent.getIntExtra(TabHistoryActivity.EXTRA_KEY_INDEX, 0))
                 }
             }
-            REQUEST_OVERLAY_PERMISSION -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.message_cannot_draw_overlay,
-                            colorPair()
-                    )
-                    return
-                }
-                ColorFilter(activity, binding?.root as View)
-                        .switchState(this, REQUEST_OVERLAY_PERMISSION)
-                return
-            }
             EditorModule.REQUEST_CODE_LOAD -> {
                 editor.readFromFileUri(intent.data)
             }
@@ -776,8 +758,6 @@ class BrowserFragment : BaseFragment() {
     companion object {
 
         private const val REQUEST_CODE_VOICE_SEARCH = 2
-
-        private const val REQUEST_OVERLAY_PERMISSION = 3
 
         /**
          * Animation's dutarion.

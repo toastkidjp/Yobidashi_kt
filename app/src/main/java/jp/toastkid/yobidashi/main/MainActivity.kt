@@ -8,9 +8,11 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
 import android.support.v4.view.GravityCompat
@@ -317,6 +319,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                         colorPair(),
                         R.drawable.ic_back
                 ).launchUrl(this@MainActivity, Uri.parse("https://twitter.com/share"))
+            }
+            R.id.nav_color_filter -> {
+                ColorFilter(this, binding.root).switchState(this)
             }
             R.id.nav_launcher -> {
                 startActivityWithSlideIn("nav_lnchr", LauncherActivity.makeIntent(this))
@@ -668,6 +673,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     Timber.e(error)
                     System.gc()
                 }
+            }
+            ColorFilter.REQUEST_CODE -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                    Toaster.snackShort(
+                            binding.root,
+                            R.string.message_cannot_draw_overlay,
+                            colorPair()
+                    )
+                    return
+                }
+                ColorFilter(this, binding.root).switchState(this)
             }
         }
     }

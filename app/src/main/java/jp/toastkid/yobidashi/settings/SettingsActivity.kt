@@ -3,14 +3,18 @@ package jp.toastkid.yobidashi.settings
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivitySettingsBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.libs.Toaster
 
 /**
  * Settings activity.
@@ -115,6 +119,21 @@ class SettingsActivity : BaseActivity() {
      */
     fun switchOthers(v: View) {
         fragment.showOthers()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ColorFilter.REQUEST_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+                Toaster.snackShort(
+                        binding.root,
+                        R.string.message_cannot_draw_overlay,
+                        colorPair()
+                )
+                return
+            }
+            ColorFilter(this, binding.root).start()
+        }
     }
 
     companion object {

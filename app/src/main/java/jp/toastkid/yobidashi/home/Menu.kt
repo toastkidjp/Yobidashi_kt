@@ -10,8 +10,6 @@ import jp.toastkid.yobidashi.R
  */
 internal enum class Menu private constructor(@param:StringRes val titleId: Int, @param:DrawableRes val iconId: Int) {
 
-    COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
-
     CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
 
     SHARE_BARCODE(R.string.title_share_by_code, R.drawable.ic_share),
