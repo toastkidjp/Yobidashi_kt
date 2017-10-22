@@ -79,7 +79,7 @@ internal class Adapter(private val context: Context, private val parent: View)
         try {
             val packageInfo = packageManager.getPackageInfo(info.packageName, PackageManager.GET_META_DATA)
             holder.setVersionInformation(packageInfo.versionName + "(" + packageInfo.versionCode + ")")
-            holder.setInstalled(packageInfo.firstInstallTime)
+            holder.setInstalledMs(packageInfo.firstInstallTime)
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.e(e)
         }
