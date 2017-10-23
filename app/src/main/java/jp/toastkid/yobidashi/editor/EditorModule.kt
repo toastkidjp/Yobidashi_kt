@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -127,11 +128,15 @@ class EditorModule(
      */
     private fun saveToFile() {
         Okio.buffer(Okio.sink(File(path))).write(contentBytes()).flush()
-        Toaster.snackShort(
-                binding.root,
-                "${context().getString(R.string.done_save)}: $path",
-                preferenceApplier.colorPair()
-        )
+        MediaScannerConnection.scanFile(
+                binding.root.context,
+                arrayOf(path),
+                null,
+                { _, _ -> Toaster.snackShort(
+                        binding.root,
+                        "${context().getString(R.string.done_save)}: $path",
+                        preferenceApplier.colorPair()
+                ) })
     }
 
     /**
