@@ -11,8 +11,10 @@
         <EditText
             android:id="@+id/editor_input"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="textImeMultiLine"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="44dp"
+            android:inputType="textMultiLine"
+            android:minLines="10"
             />
         <LinearLayout
             android:orientation="horizontal"
