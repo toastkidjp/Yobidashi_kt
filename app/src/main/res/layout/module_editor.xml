@@ -8,14 +8,20 @@
         android:fitsSystemWindows="true"
         android:visibility="gone"
         >
-        <EditText
-            android:id="@+id/editor_input"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="44dp"
-            android:inputType="textMultiLine"
-            android:minLines="10"
-            />
+            android:fitsSystemWindows="true"
+            >
+            <EditText
+                android:id="@+id/editor_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="44dp"
+                android:inputType="textMultiLine"
+                android:minLines="10"
+                />
+        </ScrollView>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
