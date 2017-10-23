@@ -18,7 +18,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import okio.Okio
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -35,7 +34,8 @@ class EditorModule(
         private val binding: ModuleEditorBinding,
         private val intentLauncher: (Intent, Int) -> Unit,
         private val switchTabAction: () -> Unit,
-        private val closeTabAction: () -> Unit
+        private val closeTabAction: () -> Unit,
+        private val saveTabCallback: (File) -> Unit
 ): BaseModule(binding.root) {
 
     /**
@@ -117,6 +117,7 @@ class EditorModule(
                     }
                     newFile.createNewFile()
                     path = newFile.absolutePath
+                    saveTabCallback(newFile)
                     saveToFile()
                 }
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
@@ -164,12 +165,22 @@ class EditorModule(
      * @param data [Uri]
      */
     fun readFromFileUri(data: Uri) {
-        extractFileFromUri(data)?.let {
-            val text = Okio.buffer(Okio.source(it)).readUtf8()
-            Timber.i("Read: ${it.absolutePath} - ${text}")
-            binding.editorInput.setText(text)
-            Toaster.snackShort(binding.root, R.string.done_load, preferenceApplier.colorPair())
+        extractFileFromUri(data)?.let { readFromFile(it) }
+    }
+
+    /**
+     * Read content from [File].
+     *
+     * @param file [File]
+     */
+    fun readFromFile(file: File) {
+        if (!file.exists() || !file.canRead()) {
+            return
         }
+        val text = Okio.buffer(Okio.source(file)).readUtf8()
+        binding.editorInput.setText(text)
+        Toaster.snackShort(binding.root, R.string.done_load, preferenceApplier.colorPair())
+        saveTabCallback(file)
     }
 
     /**
@@ -208,6 +219,13 @@ class EditorModule(
     override fun show() {
         super.show()
         closeTabAction()
+    }
+
+    override fun hide() {
+        super.hide()
+        if (path.isNotEmpty()) {
+            saveToFile()
+        }
     }
 
     companion object {

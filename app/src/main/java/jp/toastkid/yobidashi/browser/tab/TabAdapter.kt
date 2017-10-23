@@ -460,8 +460,14 @@ class TabAdapter(
             if (latest !== History.EMPTY) {
                 loadUrl(latest.url())
             }
-        } else {
+            return
+        }
+        if (currentTab is EditorTab) {
+            if (currentTab.path.isNotBlank()) {
+                editor.readFromFile(File(currentTab.path))
+            }
             editor.show()
+            tabList.save()
         }
     }
 
@@ -649,6 +655,10 @@ class TabAdapter(
     }
 
     fun index(): Int = tabList.getIndex()
+
+    fun saveTabList() {
+        tabList.save()
+    }
 
     /**
      * Dispose this object's fields.
