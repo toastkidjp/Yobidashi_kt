@@ -309,4 +309,5 @@
     <string name="load">ファイルを開く</string>
     <string name="clip">クリップボードにコピー</string>
     <string name="tab_list">タブ一覧</string>
+    <string name="message_cannot_read_file">ファイルを読み込めませんでした。</string>
 </resources>

@@ -468,6 +468,8 @@ class TabAdapter(
         if (currentTab is EditorTab) {
             if (currentTab.path.isNotBlank()) {
                 editor.readFromFile(File(currentTab.path))
+            } else {
+                editor.clearPath()
             }
             editor.show()
             tabList.save()

@@ -8,6 +8,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.view.View
 import jp.toastkid.yobidashi.R
@@ -175,12 +176,22 @@ class EditorModule(
      */
     fun readFromFile(file: File) {
         if (!file.exists() || !file.canRead()) {
+            snackText(R.string.message_cannot_read_file)
+            clearPath()
             return
         }
         val text = Okio.buffer(Okio.source(file)).readUtf8()
         binding.editorInput.setText(text)
-        Toaster.snackShort(binding.root, R.string.done_load, preferenceApplier.colorPair())
+        snackText(R.string.done_load)
         saveTabCallback(file)
+    }
+
+    /**
+     * Clear current file path and reset edit-text.
+     */
+    fun clearPath() {
+        path = ""
+        binding.editorInput.setText("")
     }
 
     /**
@@ -216,6 +227,15 @@ class EditorModule(
      */
     private inline fun contentBytes(): ByteArray = content().toByteArray()
 
+    /**
+     * Show snackbar with specified id text.
+     *
+     * @param id
+     */
+    private inline fun snackText(@StringRes id: Int) {
+        Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
+    }
+
     override fun show() {
         super.show()
         closeTabAction()
@@ -236,4 +256,5 @@ class EditorModule(
         const val REQUEST_CODE_LOAD: Int = 10111
 
     }
+
 }
