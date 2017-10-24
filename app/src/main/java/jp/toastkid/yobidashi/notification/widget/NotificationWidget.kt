@@ -9,12 +9,14 @@ import jp.toastkid.yobidashi.R
 
 /**
  * Notification widget's launcher.
-
+ *
  * @author toastkidjp
  */
 object NotificationWidget {
 
-    /** Notification ID.  */
+    /**
+     * Notification ID.
+     */
     private val ID = 1
 
     /**
@@ -22,10 +24,16 @@ object NotificationWidget {
      * @param context
      */
     fun show(context: Context) {
-        val notification = makeNotification(context)
-        NotificationManagerCompat.from(context).notify(ID, notification)
+        NotificationManagerCompat
+                .from(context)
+                .notify(ID, makeNotification(context))
     }
 
+    /**
+     * Make notification widget.
+     *
+     * @param context
+     */
     private fun makeNotification(context: Context): Notification {
         return NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_search_white)
@@ -40,7 +48,9 @@ object NotificationWidget {
      * @param context
      */
     fun hide(context: Context) {
-        NotificationManagerCompat.from(context).cancel(ID)
+        NotificationManagerCompat
+                .from(context)
+                .cancel(ID)
     }
 
     /**
