@@ -63,6 +63,8 @@ class EditorModule(
         binding.clip.setOnClickListener { clip() }
         binding.tabList.setOnClickListener { switchTabAction() }
         binding.close.setOnClickListener { hide() }
+        binding.toTop.setOnClickListener { top() }
+        binding.toBottom.setOnClickListener { bottom() }
         binding.clear.setOnClickListener {
             val context = binding.root.context
             AlertDialog.Builder(context)
@@ -81,6 +83,8 @@ class EditorModule(
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
         Colors.setBgAndText(binding.close, colorPair)
+        Colors.setBgAndText(binding.toTop, colorPair)
+        Colors.setBgAndText(binding.toBottom, colorPair)
         Colors.setBgAndText(binding.clear, colorPair)
     }
 
@@ -155,6 +159,20 @@ class EditorModule(
                         "${context().getString(R.string.done_save)}: $path",
                         preferenceApplier.colorPair()
                 ) })
+    }
+
+    /**
+     * Go to top.
+     */
+    private inline fun top() {
+        binding.editorInput.setSelection(0)
+    }
+
+    /**
+     * Go to bottom.
+     */
+    private inline fun bottom() {
+        binding.editorInput.setSelection(binding.editorInput.text.length)
     }
 
     /**
