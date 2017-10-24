@@ -48,6 +48,14 @@ class TabListModule(
 
         initRecyclerView(binding.recyclerView)
 
+        binding.addEditorTab.setOnClickListener {
+            it.isClickable = false
+            tabAdapter.openNewEditorTab()
+            adapter?.notifyItemInserted((adapter?.itemCount ?: 1) - 1)
+            closeAction()
+            it.isClickable = true
+        }
+
         initAddTabButton(binding.addTab)
 
         initClearTabs(binding.clearTabs)
