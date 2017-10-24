@@ -109,7 +109,7 @@ class EditorModule(
 
         val context = binding.root.context
         val inputLayout = TextInputs.make(context)
-        inputLayout.editText?.setText("memo")
+        inputLayout.editText?.setText(context.getString(R.string.default_text_file_name))
         AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)

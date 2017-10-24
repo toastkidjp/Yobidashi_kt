@@ -311,4 +311,5 @@
     <string name="tab_list">タブ一覧</string>
     <string name="message_cannot_read_file">ファイルを読み込めませんでした。</string>
     <string name="title_clear_text">テキストをクリア</string>
+    <string name="default_text_file_name">memo</string>
 </resources>

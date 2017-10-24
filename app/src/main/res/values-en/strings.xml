@@ -316,4 +316,5 @@
     <string name="tab_list">Tab</string>
     <string name="message_cannot_read_file">It could not read text from file...</string>
     <string name="title_clear_text">Clear text</string>
+    <string name="default_text_file_name">memo</string>
 </resources>
