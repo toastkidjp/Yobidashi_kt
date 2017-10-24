@@ -30,10 +30,7 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
-import jp.toastkid.yobidashi.browser.tab.TabAdapter
-import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
-import jp.toastkid.yobidashi.browser.tab.TabListModule
-import jp.toastkid.yobidashi.browser.tab.WebTab
+import jp.toastkid.yobidashi.browser.tab.*
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
@@ -116,7 +113,14 @@ class BrowserFragment : BaseFragment() {
                 binding?.editor as ModuleEditorBinding,
                 { intent, requestCode -> startActivityForResult(intent, requestCode) },
                 { switchTabList() },
-                { closeTabList() }
+                { closeTabList() },
+                { file ->
+                    val currentTab = tabs.currentTab()
+                    if (currentTab is EditorTab) {
+                        currentTab.setFileInformation(file)
+                        tabs.saveTabList()
+                    }
+                }
                 )
     }
 

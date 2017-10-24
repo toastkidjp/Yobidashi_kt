@@ -4,10 +4,13 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
+import android.text.Html
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
@@ -17,7 +20,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import okio.Okio
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -27,6 +29,7 @@ import java.io.File
  * @param intentLauncher
  * @param switchTabAction
  * @param closeTabAction
+ * @param saveTabCallback
  *
  * @author toastkidjp
  */
@@ -34,7 +37,8 @@ class EditorModule(
         private val binding: ModuleEditorBinding,
         private val intentLauncher: (Intent, Int) -> Unit,
         private val switchTabAction: () -> Unit,
-        private val closeTabAction: () -> Unit
+        private val closeTabAction: () -> Unit,
+        private val saveTabCallback: (File) -> Unit
 ): BaseModule(binding.root) {
 
     /**
@@ -57,13 +61,31 @@ class EditorModule(
         binding.save.setOnClickListener { save() }
         binding.load.setOnClickListener { load() }
         binding.clip.setOnClickListener { clip() }
-        binding.tabList.setOnClickListener  { switchTabAction() }
+        binding.tabList.setOnClickListener { switchTabAction() }
         binding.close.setOnClickListener { hide() }
-        Colors.setBgAndText(binding.save, preferenceApplier.colorPair())
-        Colors.setBgAndText(binding.load, preferenceApplier.colorPair())
-        Colors.setBgAndText(binding.clip, preferenceApplier.colorPair())
-        Colors.setBgAndText(binding.tabList, preferenceApplier.colorPair())
-        Colors.setBgAndText(binding.close, preferenceApplier.colorPair())
+        binding.toTop.setOnClickListener { top() }
+        binding.toBottom.setOnClickListener { bottom() }
+        binding.clear.setOnClickListener {
+            val context = binding.root.context
+            AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.title_clear_text))
+                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
+                    .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
+                    .setPositiveButton(R.string.ok, {d, i ->
+                        clearInput()
+                        d.dismiss()
+                    })
+                    .show()
+        }
+        val colorPair = preferenceApplier.colorPair()
+        Colors.setBgAndText(binding.save, colorPair)
+        Colors.setBgAndText(binding.load, colorPair)
+        Colors.setBgAndText(binding.clip, colorPair)
+        Colors.setBgAndText(binding.tabList, colorPair)
+        Colors.setBgAndText(binding.close, colorPair)
+        Colors.setBgAndText(binding.toTop, colorPair)
+        Colors.setBgAndText(binding.toBottom, colorPair)
+        Colors.setBgAndText(binding.clear, colorPair)
     }
 
     /**
@@ -91,7 +113,7 @@ class EditorModule(
 
         val context = binding.root.context
         val inputLayout = TextInputs.make(context)
-        inputLayout.editText?.setText("memo")
+        inputLayout.editText?.setText(context.getString(R.string.default_text_file_name))
         AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)
@@ -116,6 +138,7 @@ class EditorModule(
                     }
                     newFile.createNewFile()
                     path = newFile.absolutePath
+                    saveTabCallback(newFile)
                     saveToFile()
                 }
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
@@ -127,11 +150,29 @@ class EditorModule(
      */
     private fun saveToFile() {
         Okio.buffer(Okio.sink(File(path))).write(contentBytes()).flush()
-        Toaster.snackShort(
-                binding.root,
-                "${context().getString(R.string.done_save)}: $path",
-                preferenceApplier.colorPair()
-        )
+        MediaScannerConnection.scanFile(
+                binding.root.context,
+                arrayOf(path),
+                null,
+                { _, _ -> Toaster.snackShort(
+                        binding.root,
+                        "${context().getString(R.string.done_save)}: $path",
+                        preferenceApplier.colorPair()
+                ) })
+    }
+
+    /**
+     * Go to top.
+     */
+    private inline fun top() {
+        binding.editorInput.setSelection(0)
+    }
+
+    /**
+     * Go to bottom.
+     */
+    private inline fun bottom() {
+        binding.editorInput.setSelection(binding.editorInput.text.length)
     }
 
     /**
@@ -159,12 +200,39 @@ class EditorModule(
      * @param data [Uri]
      */
     fun readFromFileUri(data: Uri) {
-        extractFileFromUri(data)?.let {
-            val text = Okio.buffer(Okio.source(it)).readUtf8()
-            Timber.i("Read: ${it.absolutePath} - ${text}")
-            binding.editorInput.setText(text)
-            Toaster.snackShort(binding.root, R.string.done_load, preferenceApplier.colorPair())
+        extractFileFromUri(data)?.let { readFromFile(it) }
+    }
+
+    /**
+     * Read content from [File].
+     *
+     * @param file [File]
+     */
+    fun readFromFile(file: File) {
+        if (!file.exists() || !file.canRead()) {
+            snackText(R.string.message_cannot_read_file)
+            clearPath()
+            return
         }
+        val text = Okio.buffer(Okio.source(file)).readUtf8()
+        binding.editorInput.setText(text)
+        snackText(R.string.done_load)
+        saveTabCallback(file)
+    }
+
+    /**
+     * Clear current file path and reset edit-text.
+     */
+    fun clearPath() {
+        path = ""
+        clearInput()
+    }
+
+    /**
+     * Clear input text.
+     */
+    private inline fun clearInput() {
+        binding.editorInput.setText("")
     }
 
     /**
@@ -200,9 +268,25 @@ class EditorModule(
      */
     private inline fun contentBytes(): ByteArray = content().toByteArray()
 
+    /**
+     * Show snackbar with specified id text.
+     *
+     * @param id
+     */
+    private inline fun snackText(@StringRes id: Int) {
+        Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
+    }
+
     override fun show() {
         super.show()
         closeTabAction()
+    }
+
+    override fun hide() {
+        super.hide()
+        if (path.isNotEmpty()) {
+            saveToFile()
+        }
     }
 
     companion object {
@@ -213,4 +297,5 @@ class EditorModule(
         const val REQUEST_CODE_LOAD: Int = 10111
 
     }
+
 }

@@ -10,15 +10,15 @@ import jp.toastkid.yobidashi.R
 
 /**
  * Dialog wrapper.
-
+ *
  * @author toastkidjp
  */
 internal object ImageDialog {
 
     /**
      * Show dialog with image.
-     * @param context
      *
+     * @param context
      * @param uri
      *
      * @param background

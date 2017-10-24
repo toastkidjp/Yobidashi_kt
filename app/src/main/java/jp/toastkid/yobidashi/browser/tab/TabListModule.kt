@@ -48,6 +48,8 @@ class TabListModule(
 
         initRecyclerView(binding.recyclerView)
 
+        initAddEditorTabButton()
+
         initAddTabButton(binding.addTab)
 
         initClearTabs(binding.clearTabs)
@@ -56,6 +58,19 @@ class TabListModule(
         val resources = context().resources
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
         MenuPos.place(binding.fabs, 0, fabMarginHorizontal, menuPos)
+    }
+
+    /**
+     * Initialize add-editor-tab button.
+     */
+    private fun initAddEditorTabButton() {
+        binding.addEditorTab.setOnClickListener {
+            it.isClickable = false
+            tabAdapter.openNewEditorTab()
+            adapter?.notifyItemInserted((adapter?.itemCount ?: 1) - 1)
+            closeAction()
+            it.isClickable = true
+        }
     }
 
     private fun initClearTabs(clearTabs: FloatingActionButton) {

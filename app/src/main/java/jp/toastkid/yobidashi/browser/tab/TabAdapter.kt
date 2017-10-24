@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
+import android.os.Environment
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
@@ -318,8 +319,10 @@ class TabAdapter(
             }
         }
         webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
-            val request = DownloadManager.Request(Uri.parse(url))
+            val uri = Uri.parse(url)
+            val request = DownloadManager.Request(uri)
             request.allowScanningByMediaScanner()
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
             request.setNotificationVisibility(
                     DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             request.setVisibleInDownloadsUi(true)
@@ -460,8 +463,16 @@ class TabAdapter(
             if (latest !== History.EMPTY) {
                 loadUrl(latest.url())
             }
-        } else {
+            return
+        }
+        if (currentTab is EditorTab) {
+            if (currentTab.path.isNotBlank()) {
+                editor.readFromFile(File(currentTab.path))
+            } else {
+                editor.clearPath()
+            }
             editor.show()
+            tabList.save()
         }
     }
 
@@ -649,6 +660,10 @@ class TabAdapter(
     }
 
     fun index(): Int = tabList.getIndex()
+
+    fun saveTabList() {
+        tabList.save()
+    }
 
     /**
      * Dispose this object's fields.
