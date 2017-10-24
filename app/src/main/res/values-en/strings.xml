@@ -315,4 +315,5 @@
     <string name="clip">Clip</string>
     <string name="tab_list">Tab</string>
     <string name="message_cannot_read_file">It could not read text from file...</string>
+    <string name="title_clear_text">Clear text</string>
 </resources>

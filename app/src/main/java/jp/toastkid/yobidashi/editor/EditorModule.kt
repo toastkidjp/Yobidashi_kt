@@ -10,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
+import android.text.Html
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
@@ -62,12 +63,25 @@ class EditorModule(
         binding.clip.setOnClickListener { clip() }
         binding.tabList.setOnClickListener { switchTabAction() }
         binding.close.setOnClickListener { hide() }
+        binding.clear.setOnClickListener {
+            val context = binding.root.context
+            AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.title_clear_text))
+                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
+                    .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
+                    .setPositiveButton(R.string.ok, {d, i ->
+                        clearInput()
+                        d.dismiss()
+                    })
+                    .show()
+        }
         val colorPair = preferenceApplier.colorPair()
         Colors.setBgAndText(binding.save, colorPair)
         Colors.setBgAndText(binding.load, colorPair)
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
         Colors.setBgAndText(binding.close, colorPair)
+        Colors.setBgAndText(binding.clear, colorPair)
     }
 
     /**
@@ -193,6 +207,13 @@ class EditorModule(
      */
     fun clearPath() {
         path = ""
+        clearInput()
+    }
+
+    /**
+     * Clear input text.
+     */
+    private inline fun clearInput() {
         binding.editorInput.setText("")
     }
 
