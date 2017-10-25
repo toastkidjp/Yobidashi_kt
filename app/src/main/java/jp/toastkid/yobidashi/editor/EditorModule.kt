@@ -70,6 +70,7 @@ class EditorModule(
         binding.clip.setOnClickListener { clip() }
         binding.tabList.setOnClickListener { switchTabAction() }
         binding.close.setOnClickListener { hide() }
+        binding.backup.setOnClickListener { backup() }
         binding.toTop.setOnClickListener { top() }
         binding.toBottom.setOnClickListener { bottom() }
         binding.clear.setOnClickListener {
@@ -90,9 +91,22 @@ class EditorModule(
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
         Colors.setBgAndText(binding.close, colorPair)
+        Colors.setBgAndText(binding.backup, colorPair)
         Colors.setBgAndText(binding.toTop, colorPair)
         Colors.setBgAndText(binding.toBottom, colorPair)
         Colors.setBgAndText(binding.clear, colorPair)
+    }
+
+    /**
+     * Backup current file.
+     */
+    private inline fun backup() {
+        if (path.isEmpty()) {
+            save()
+            return
+        }
+        val fileName = removeExtension(File(path).name) + "_backup.txt"
+        saveToFile(assignFile(binding.root.context, fileName).absolutePath)
     }
 
     /**
@@ -114,7 +128,7 @@ class EditorModule(
      */
     fun save() {
         if (path.isNotEmpty()) {
-            saveToFile()
+            saveToFile(path)
             return
         }
 
@@ -129,41 +143,66 @@ class EditorModule(
                     if (inputLayout.editText?.text?.isEmpty() as Boolean) {
                         return@setPositiveButton
                     }
-                    val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                    if (!externalFilesDir.exists()) {
-                        externalFilesDir.mkdirs()
-                    }
-                    var newFile = File(
-                            externalFilesDir,
-                            "${inputLayout.editText?.text.toString()}.txt"
-                    )
+
+                    var newFile = assignFile(context, "${inputLayout.editText?.text.toString()}.txt")
                     while (newFile.exists()) {
-                        newFile = File(
-                                externalFilesDir,
-                                "${newFile.name.substring(0, newFile.name.lastIndexOf("."))}_.txt"
+                        newFile = assignFile(
+                                context,
+                                "${removeExtension(newFile.name)}_.txt"
                         )
                     }
-                    newFile.createNewFile()
                     path = newFile.absolutePath
                     saveTabCallback(newFile)
-                    saveToFile()
+                    saveToFile(path)
                 }
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                 .show()
     }
 
     /**
-     * Save content to file.
+     * Remove extension from passed text.
+     *
+     * @param fileName
+     * @return string
      */
-    private fun saveToFile() {
-        Okio.buffer(Okio.sink(File(path))).write(contentBytes()).flush()
+    private inline fun removeExtension(fileName: String): String {
+        val endIndex = fileName.lastIndexOf(".")
+        return if (endIndex == -1) fileName else fileName.substring(0, endIndex)
+    }
+
+    /**
+     * Assign file in environment download directory.
+     *
+     * @param context
+     * @param fileName
+     * @return [File]
+     */
+    private inline fun assignFile(context: Context, fileName: String): File {
+        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        if (!externalFilesDir.exists()) {
+            externalFilesDir.mkdirs()
+        }
+        return File(externalFilesDir, fileName)
+    }
+
+    /**
+     * Save content to file.
+     *
+     * @param filePath
+     */
+    private fun saveToFile(filePath: String) {
+        val file = File(filePath)
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+        Okio.buffer(Okio.sink(file)).write(contentBytes()).flush()
         MediaScannerConnection.scanFile(
                 binding.root.context,
-                arrayOf(path),
+                arrayOf(filePath),
                 null,
                 { _, _ -> Toaster.snackShort(
                         binding.root,
-                        "${context().getString(R.string.done_save)}: $path",
+                        "${context().getString(R.string.done_save)}: $filePath",
                         preferenceApplier.colorPair()
                 ) })
     }
@@ -292,7 +331,7 @@ class EditorModule(
     override fun hide() {
         super.hide()
         if (path.isNotEmpty()) {
-            saveToFile()
+            saveToFile(path)
         }
     }
 
