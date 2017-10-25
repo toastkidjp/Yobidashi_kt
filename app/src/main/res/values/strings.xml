@@ -87,7 +87,7 @@
 
     <string name="title_background_image_setting">背景画像設定</string>
     <string name="add_background_image">背景画像を追加</string>
-    <string name="clear_all">背景画像をすべて削除</string>
+    <string name="clear_all">すべて削除</string>
     <string name="message_change_background_image">背景画像を変更しました。</string>
     <string name="message_reset_bg_image">背景画像を解除しました。</string>
     <string name="title_settings_wifi">Wi-Fi の設定</string>
@@ -312,4 +312,5 @@
     <string name="message_cannot_read_file">ファイルを読み込めませんでした。</string>
     <string name="title_clear_text">テキストをクリア</string>
     <string name="default_text_file_name">memo</string>
+    <string name="save_backup">バックアップ</string>
 </resources>
