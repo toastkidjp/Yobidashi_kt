@@ -10,25 +10,30 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * App Widget's RemoteViews factory.
-
+ *
  * @author toastkidjp
  */
 internal object RemoteViewsFactory {
 
-    /** Method name.  */
-    private val METHOD_NAME_SET_COLOR_FILTER = "setColorFilter"
+    /**
+     * Method name.
+     */
+    private val METHOD_NAME_SET_COLOR_FILTER: String = "setColorFilter"
 
-    /** Method name.  */
-    private val METHOD_NAME_SET_BACKGROUND_COLOR = "setBackgroundColor"
+    /**
+     * Method name.
+     */
+    private val METHOD_NAME_SET_BACKGROUND_COLOR: String = "setBackgroundColor"
 
-    /** Layout ID.  */
-    private val APPWIDGET_LAYOUT_ID = R.layout.appwidget_layout
+    /**
+     * Layout ID.
+     */
+    private val APPWIDGET_LAYOUT_ID: Int = R.layout.appwidget_layout
 
     /**
      * Make RemoteViews.
-
-     * @param context
      *
+     * @param context
      * @return RemoteViews
      */
     fun make(context: Context): RemoteViews {
@@ -46,22 +51,19 @@ internal object RemoteViewsFactory {
 
     /**
      * Set background color to remote views.
-     * @param remoteViews
      *
+     * @param remoteViews
      * @param backgroundColor
      */
     private fun setBackgroundColor(
             remoteViews: RemoteViews,
             @ColorInt backgroundColor: Int
-    ) {
-        remoteViews.setInt(
-                R.id.widget_background, METHOD_NAME_SET_BACKGROUND_COLOR, backgroundColor)
-    }
+    ) = remoteViews.setInt(R.id.widget_background, METHOD_NAME_SET_BACKGROUND_COLOR, backgroundColor)
 
     /**
      * Set font color to remote views.
-     * @param remoteViews
      *
+     * @param remoteViews
      * @param fontColor
      */
     private fun setFontColor(
@@ -78,8 +80,8 @@ internal object RemoteViewsFactory {
 
     /**
      * Set pending intents.
-     * @param context
      *
+     * @param context
      * @param remoteViews
      */
     private fun setTapActions(context: Context, remoteViews: RemoteViews) {
