@@ -263,6 +263,7 @@ class EditorModule(
         val text = Okio.buffer(Okio.source(file)).readUtf8()
         binding.editorInput.setText(text)
         snackText(R.string.done_load)
+        path = file.absolutePath
         saveTabCallback(file)
     }
 
