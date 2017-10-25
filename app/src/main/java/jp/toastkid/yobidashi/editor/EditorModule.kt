@@ -53,6 +53,13 @@ class EditorModule(
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(binding.root.context)
 
     /**
+     * Default file name.
+     */
+    private val defaultFileName by lazy {
+        binding.root.context.getString(R.string.default_text_file_name)
+    }
+
+    /**
      * File path.
      */
     private var path: String = ""
@@ -113,7 +120,7 @@ class EditorModule(
 
         val context = binding.root.context
         val inputLayout = TextInputs.make(context)
-        inputLayout.editText?.setText(context.getString(R.string.default_text_file_name))
+        inputLayout.editText?.setText(defaultFileName)
         AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)
