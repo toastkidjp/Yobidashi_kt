@@ -19,7 +19,7 @@ import timber.log.Timber
  */
 class ExtendedApplication : Application() {
 
-    val disposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     override fun onCreate() {
         super.onCreate()
@@ -43,13 +43,7 @@ class ExtendedApplication : Application() {
                     e.onComplete()
                 }.subscribeOn(Schedulers.io())
                         .subscribe(
-                                {
-                                    if (preferenceApplier.isFirstLaunch) {
-                                        SavedColors.insertDefaultColors(this)
-                                        preferenceApplier.updateLastAd()
-                                        BookmarkInitializer.invoke(this)
-                                    }
-                                },
+                                { processForFirstLaunch(preferenceApplier) },
                                 { Timber.e(it) }
                         )
         )
@@ -57,6 +51,16 @@ class ExtendedApplication : Application() {
         if (preferenceApplier.useNotificationWidget()) {
             NotificationWidget.show(this)
         }
+    }
+
+    private fun processForFirstLaunch(preferenceApplier: PreferenceApplier) {
+        if (!preferenceApplier.isFirstLaunch) {
+            return
+        }
+
+        SavedColors.insertDefaultColors(this)
+        preferenceApplier.updateLastAd()
+        BookmarkInitializer.invoke(this)
     }
 
     override fun onTerminate() {
