@@ -65,16 +65,22 @@ class EditorModule(
     private var path: String = ""
 
     init {
+        val context = binding.root.context
+
         binding.save.setOnClickListener { save() }
         binding.load.setOnClickListener { load() }
         binding.clip.setOnClickListener { clip() }
         binding.tabList.setOnClickListener { switchTabAction() }
-        binding.close.setOnClickListener { hide() }
+        binding.count.setOnClickListener {
+            Toaster.tShort(
+                    context,
+                    context.getString(R.string.message_character_count, "${content().length}")
+            )
+        }
         binding.backup.setOnClickListener { backup() }
         binding.toTop.setOnClickListener { top() }
         binding.toBottom.setOnClickListener { bottom() }
         binding.clear.setOnClickListener {
-            val context = binding.root.context
             AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.title_clear_text))
                     .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
@@ -90,7 +96,7 @@ class EditorModule(
         Colors.setBgAndText(binding.load, colorPair)
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
-        Colors.setBgAndText(binding.close, colorPair)
+        Colors.setBgAndText(binding.count, colorPair)
         Colors.setBgAndText(binding.backup, colorPair)
         Colors.setBgAndText(binding.toTop, colorPair)
         Colors.setBgAndText(binding.toBottom, colorPair)
