@@ -165,14 +165,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_provider" />
         </receiver>
-        <receiver android:name=".calendar.alarm.DailyCalendarReceiver" android:process=":remote" />
-        <receiver android:name=".calendar.alarm.TimeChangedReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.DATE_CHANGED" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.intent.action.TIME_SET" />
-            </intent-filter>
-        </receiver>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

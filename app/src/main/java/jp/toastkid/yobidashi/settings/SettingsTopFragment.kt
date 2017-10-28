@@ -18,7 +18,6 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.UserAgent
-import jp.toastkid.yobidashi.calendar.alarm.DailyAlarm
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.Colors
@@ -112,7 +111,6 @@ class SettingsTopFragment : BaseFragment() {
         binding.useInternalBrowserCheck.isChecked = preferenceApplier.useInternalBrowser()
         binding.retainTabsCheck.isChecked = preferenceApplier.doesRetainTabs()
         binding.useNotificationWidgetCheck.isChecked = preferenceApplier.useNotificationWidget()
-        binding.useDailyAlarmCheck.isChecked = preferenceApplier.doesUseDailyAlarm()
         Colors.setBgAndText(binding.homeButton, colorPair())
         binding.homeInputLayout.editText!!.setText(preferenceApplier.homeUrl)
         binding.browserJsCheck.isChecked = preferenceApplier.useJavaScript()
@@ -333,43 +331,6 @@ class SettingsTopFragment : BaseFragment() {
         val newState = !preferenceApplier.saveViewHistory
         preferenceApplier.saveViewHistory = newState
         binding.saveViewHistoryCheck.isChecked = newState
-    }
-
-    /**
-     * Switching daily alarm.
-     *
-     * @param v
-     */
-    fun switchDailyAlarm(v: View) {
-        val preferenceApplier = preferenceApplier()
-        val newState = !preferenceApplier.doesUseDailyAlarm()
-        binding.useDailyAlarmCheck.isChecked = newState
-
-        val dailyAlarm = DailyAlarm(context)
-        val useDailyAlarm = preferenceApplier.doesUseDailyAlarm()
-        if (useDailyAlarm) {
-            dailyAlarm.reset()
-        }
-
-        if (newState) {
-            preferenceApplier.useDailyAlarm()
-            dailyAlarm.reset()
-            Toaster.snackShort(
-                    binding.root,
-                    R.string.message_set_daily_alarm,
-                    preferenceApplier.colorPair()
-            )
-            sendLog("nav_daily_set")
-        } else {
-            preferenceApplier.notUseDailyAlarm()
-            dailyAlarm.cancel()
-            Toaster.snackShort(
-                    binding.root,
-                    R.string.message_clear_daily_alarm,
-                    preferenceApplier.colorPair()
-            )
-            sendLog("nav_daily_cancel")
-        }
     }
 
     /**
