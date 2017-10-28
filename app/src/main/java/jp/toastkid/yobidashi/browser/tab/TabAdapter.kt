@@ -429,6 +429,13 @@ class TabAdapter(
         return tabList.currentTab().forward()
     }
 
+    internal fun setCurrentTab() {
+        if (size() <= 0) {
+            return
+        }
+        setIndexByTab(currentTab())
+    }
+
     internal fun setIndexByTab(tab: Tab, openNew: Boolean = false) {
         val index = tabList.indexOf(tab)
         updateScrolled()
@@ -478,6 +485,11 @@ class TabAdapter(
 
     private fun checkIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
 
+    /**
+     * Return current tab count.
+     *
+     * @return tab count
+     */
     fun size(): Int = tabList.size()
 
     /**

@@ -735,6 +735,20 @@ class BrowserFragment : BaseFragment() {
     }
 
     /**
+     * Set current tab.
+     */
+    fun setLastTab() {
+        tabs.setCurrentTab()
+    }
+
+    /**
+     * Reload current tab if need.
+     */
+    fun reloadUrlIfNeed() {
+        tabs.reloadUrlIfNeed()
+    }
+
+    /**
      * Load with opening new tab.
      *
      * @param uri [Uri]
