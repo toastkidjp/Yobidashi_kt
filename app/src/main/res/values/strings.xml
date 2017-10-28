@@ -313,4 +313,5 @@
     <string name="title_clear_text">テキストをクリア</string>
     <string name="default_text_file_name">memo</string>
     <string name="save_backup">バックアップ</string>
+    <string name="title_torch">ライト</string>
 </resources>

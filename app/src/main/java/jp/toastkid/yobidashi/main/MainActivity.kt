@@ -59,6 +59,7 @@ import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -100,6 +101,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /** Use for delaying. */
     private val uiThreadHandler = Handler(Looper.getMainLooper())
+
+    /**
+     * Torch API facade.
+     */
+    private val torch by lazy { Torch(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -400,6 +406,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
+            R.id.nav_torch -> {
+                sendLog("nav_torch")
+                torch.switch()
+            }
             R.id.nav_barcode -> {
                 sendLog("nav_barcode")
                 startActivity(BarcodeReaderActivity.makeIntent(this))
@@ -691,6 +701,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     override fun onDestroy() {
         super.onDestroy()
         disposables.dispose()
+        torch.dispose()
     }
 
     companion object {
