@@ -314,4 +314,6 @@
     <string name="default_text_file_name">memo</string>
     <string name="save_backup">バックアップ</string>
     <string name="title_torch">ライト</string>
+    <string name="title_count">文字数</string>
+    <string name="message_character_count">文字数: %d</string>
 </resources>

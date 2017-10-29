@@ -3,9 +3,7 @@ package jp.toastkid.yobidashi.libs.intent
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
-import jp.toastkid.yobidashi.calendar.alarm.DailyCalendarReceiver
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.SearchActivity
@@ -52,21 +50,6 @@ object PendingIntentFactory {
                 context,
                 3,
                 MainActivity.makeIntent(context),
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-
-    /**
-     * Daily notification intent.
-     * @param context
-     *
-     * @return
-     */
-    fun daily(context: Context): PendingIntent {
-        return PendingIntent.getBroadcast(
-                context,
-                4,
-                Intent(context, DailyCalendarReceiver::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
     }

@@ -30,6 +30,7 @@ import java.io.File
  * @param switchTabAction
  * @param closeTabAction
  * @param saveTabCallback
+ * @param toolbarCallback
  *
  * @author toastkidjp
  */
@@ -38,7 +39,8 @@ class EditorModule(
         private val intentLauncher: (Intent, Int) -> Unit,
         private val switchTabAction: () -> Unit,
         private val closeTabAction: () -> Unit,
-        private val saveTabCallback: (File) -> Unit
+        private val saveTabCallback: (File) -> Unit,
+        private val toolbarCallback: (Boolean) -> Unit
 ): BaseModule(binding.root) {
 
     /**
@@ -65,16 +67,22 @@ class EditorModule(
     private var path: String = ""
 
     init {
+        val context = binding.root.context
+
         binding.save.setOnClickListener { save() }
         binding.load.setOnClickListener { load() }
         binding.clip.setOnClickListener { clip() }
         binding.tabList.setOnClickListener { switchTabAction() }
-        binding.close.setOnClickListener { hide() }
+        binding.count.setOnClickListener {
+            Toaster.tShort(
+                    context,
+                    context.getString(R.string.message_character_count, content().length)
+            )
+        }
         binding.backup.setOnClickListener { backup() }
         binding.toTop.setOnClickListener { top() }
         binding.toBottom.setOnClickListener { bottom() }
         binding.clear.setOnClickListener {
-            val context = binding.root.context
             AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.title_clear_text))
                     .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
@@ -90,7 +98,7 @@ class EditorModule(
         Colors.setBgAndText(binding.load, colorPair)
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
-        Colors.setBgAndText(binding.close, colorPair)
+        Colors.setBgAndText(binding.count, colorPair)
         Colors.setBgAndText(binding.backup, colorPair)
         Colors.setBgAndText(binding.toTop, colorPair)
         Colors.setBgAndText(binding.toBottom, colorPair)
@@ -327,6 +335,7 @@ class EditorModule(
     override fun show() {
         super.show()
         closeTabAction()
+        toolbarCallback(true)
     }
 
     override fun hide() {
@@ -334,6 +343,7 @@ class EditorModule(
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
+        toolbarCallback(false)
     }
 
     companion object {

@@ -182,13 +182,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 finish()
             }
             StartUp.BROWSER -> {
-                loadUri(Uri.parse(preferenceApplier.homeUrl))
+                replaceWithBrowser(Uri.EMPTY)
             }
             StartUp.SEARCH -> {
                 startActivity(SearchActivity.makeIntent(this))
             }
         }
 
+    }
+
+    private inline fun loadHomeUrl() {
+        loadUri(Uri.parse(preferenceApplier.homeUrl))
     }
 
     private fun loadUri(uri: Uri) {
@@ -210,9 +214,14 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     binding.appBarMain.toolbar.title    = titlePair.title()
                     binding.appBarMain.toolbar.subtitle = titlePair.subtitle()
                 }
-        if (uri != Uri.EMPTY) {
-            uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
-        }
+
+        uiThreadHandler.postDelayed(
+                {
+                    if (uri != Uri.EMPTY) { browserFragment.loadWithNewTab(uri) }
+                    else { browserFragment.setLastTab() }
+                },
+                200L
+        )
     }
 
     /**
@@ -390,7 +399,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     snackSuppressOpenFragment()
                     return
                 }
-                loadUri(Uri.parse(preferenceApplier.homeUrl))
+                loadHomeUrl()
             }
             R.id.nav_bookmark -> {
                 startActivityForResultWithSlideIn(
@@ -597,7 +606,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     override fun action(c: Command) {
         when (c) {
             Command.OPEN_BROWSER -> {
-                loadUri(Uri.parse(preferenceApplier.homeUrl))
+                loadHomeUrl()
                 return
             }
             Command.OPEN_SEARCH -> {

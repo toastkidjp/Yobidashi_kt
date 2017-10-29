@@ -20,9 +20,15 @@ import java.util.*
  */
 class PreferenceApplier(private val context: Context) {
 
+    @SuppressWarnings("unused")
+    @Deprecated("These keys are deprecated.")
+    private enum class DefunctKey {
+        USE_DAILY_ALARM
+    }
+
     private enum class Key {
         BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, BG_IMAGE, LAST_AD_DATE,
-        USE_DAILY_ALARM, USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
+        USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE
@@ -96,18 +102,6 @@ class PreferenceApplier(private val context: Context) {
     fun allowShowingAd(): Boolean {
         val today = Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_YEAR)
         return today != preferences.getInt(Key.LAST_AD_DATE.name, -1)
-    }
-
-    fun useDailyAlarm() {
-        preferences.edit().putBoolean(Key.USE_DAILY_ALARM.name, false).apply()
-    }
-
-    fun notUseDailyAlarm() {
-        preferences.edit().putBoolean(Key.USE_DAILY_ALARM.name, false).apply()
-    }
-
-    fun doesUseDailyAlarm(): Boolean {
-        return preferences.getBoolean(Key.USE_DAILY_ALARM.name, false)
     }
 
     fun setUseNotificationWidget(newState: Boolean) {

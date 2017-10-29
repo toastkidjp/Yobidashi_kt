@@ -319,4 +319,6 @@
     <string name="default_text_file_name">memo</string>
     <string name="save_backup">Backup</string>
     <string name="title_torch">Torch</string>
+    <string name="title_count">Count</string>
+    <string name="message_character_count">Characters: %d</string>
 </resources>

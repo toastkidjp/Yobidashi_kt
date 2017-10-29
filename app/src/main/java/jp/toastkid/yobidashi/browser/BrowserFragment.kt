@@ -120,7 +120,8 @@ class BrowserFragment : BaseFragment() {
                         currentTab.setFileInformation(file)
                         tabs.saveTabList()
                     }
-                }
+                },
+                { if (it) hideFooter() else showFooter() }
                 )
     }
 
@@ -608,14 +609,15 @@ class BrowserFragment : BaseFragment() {
 
         refreshFab()
 
-        val preferenceApplier = preferenceApplier()
-        if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN) {
-            hideFooter()
-        } else {
-            showFooter()
-        }
-
         disposables.add(tabs.reloadWebViewSettings())
+
+        val preferenceApplier = preferenceApplier()
+        if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
+                || editor.isVisible) {
+            hideFooter()
+            return
+        }
+        showFooter()
     }
 
     /**
@@ -732,6 +734,20 @@ class BrowserFragment : BaseFragment() {
             Timber.e(error)
             System.gc()
         }
+    }
+
+    /**
+     * Set current tab.
+     */
+    fun setLastTab() {
+        tabs.setCurrentTab()
+    }
+
+    /**
+     * Reload current tab if need.
+     */
+    fun reloadUrlIfNeed() {
+        tabs.reloadUrlIfNeed()
     }
 
     /**
