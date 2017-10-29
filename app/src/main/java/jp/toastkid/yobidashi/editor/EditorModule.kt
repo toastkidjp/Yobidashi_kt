@@ -30,6 +30,7 @@ import java.io.File
  * @param switchTabAction
  * @param closeTabAction
  * @param saveTabCallback
+ * @param toolbarCallback
  *
  * @author toastkidjp
  */
@@ -38,7 +39,8 @@ class EditorModule(
         private val intentLauncher: (Intent, Int) -> Unit,
         private val switchTabAction: () -> Unit,
         private val closeTabAction: () -> Unit,
-        private val saveTabCallback: (File) -> Unit
+        private val saveTabCallback: (File) -> Unit,
+        private val toolbarCallback: (Boolean) -> Unit
 ): BaseModule(binding.root) {
 
     /**
@@ -74,7 +76,7 @@ class EditorModule(
         binding.count.setOnClickListener {
             Toaster.tShort(
                     context,
-                    context.getString(R.string.message_character_count, "${content().length}")
+                    context.getString(R.string.message_character_count, content().length)
             )
         }
         binding.backup.setOnClickListener { backup() }
@@ -333,6 +335,7 @@ class EditorModule(
     override fun show() {
         super.show()
         closeTabAction()
+        toolbarCallback(true)
     }
 
     override fun hide() {
@@ -340,6 +343,7 @@ class EditorModule(
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
+        toolbarCallback(false)
     }
 
     companion object {
