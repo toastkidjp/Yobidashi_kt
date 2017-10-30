@@ -146,7 +146,7 @@ class BrowserFragment : BaseFragment() {
         val colorPair = colorPair()
         initFooter(colorPair)
 
-        val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val cm = context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
                 binding?.root as View,
