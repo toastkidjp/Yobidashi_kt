@@ -764,6 +764,11 @@ class BrowserFragment : BaseFragment() {
      */
     fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
 
+    override fun onPause() {
+        super.onPause()
+        editor.saveIfNeed()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         (binding?.menusView?.adapter as Adapter).dispose()

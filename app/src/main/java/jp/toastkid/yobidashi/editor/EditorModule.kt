@@ -168,6 +168,15 @@ class EditorModule(
     }
 
     /**
+     * Call from fragment's onPause().
+     */
+    fun saveIfNeed() {
+        if (path.isNotEmpty()) {
+            saveToFile(path)
+        }
+    }
+
+    /**
      * Remove extension from passed text.
      *
      * @param fileName
