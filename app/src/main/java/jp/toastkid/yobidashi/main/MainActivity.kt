@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.main
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
@@ -480,8 +479,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     override fun onBackPressed() {
-        @SuppressLint("RestrictedApi")
-
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             return
@@ -499,7 +496,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         }
 
         if (supportFragmentManager.backStackEntryCount == 1) {
-            finish()
+            confirmExit()
             return
         }
 
@@ -510,7 +507,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         AlertDialog.Builder(this)
                 .setTitle(R.string.confirmation)
                 .setMessage(R.string.message_confirm_exit)
-                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
                 .setPositiveButton(R.string.ok, { d, i ->
                     d.dismiss()
                     finish()
