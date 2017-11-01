@@ -436,6 +436,11 @@ class TabAdapter(
         setIndexByTab(currentTab())
     }
 
+    /**
+     *
+     * @param tab
+     * @param openNew default false
+     */
     internal fun setIndexByTab(tab: Tab, openNew: Boolean = false) {
         val index = tabList.indexOf(tab)
         updateScrolled()
@@ -541,15 +546,7 @@ class TabAdapter(
         webView.reload()
     }
 
-    fun clearCache() {
-        webView.clearCache(true)
-    }
-
-    fun clearFormData() {
-        webView.clearFormData()
-    }
-
-    fun currentUrl(): String = webView.url
+    fun currentUrl(): String? = webView.url
 
     fun currentTitle(): String = webView.title
 
@@ -688,6 +685,7 @@ class TabAdapter(
             tabList.clear()
             tabsScreenshots.clean()
         }
+        webView.destroy()
         disposables.dispose()
         tabList.dispose()
     }
@@ -743,6 +741,8 @@ class TabAdapter(
     fun enablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
 
     fun isNotEmpty(): Boolean = !tabList.isEmpty
+
+    override fun toString(): String = tabList.toString()
 
 }
 

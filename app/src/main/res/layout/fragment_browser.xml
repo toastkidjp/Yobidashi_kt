@@ -48,12 +48,7 @@
             <include android:id="@+id/footer" layout="@layout/browser_footer" />
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <include android:id="@+id/editor" layout="@layout/module_editor" />
-        </FrameLayout>
+        <include android:id="@+id/editor" layout="@layout/module_editor" />
 
         <FrameLayout
             android:id="@+id/tab_list_container"

@@ -11,7 +11,6 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
-import timber.log.Timber
 
 /**
  * Search action with clipboard text.
@@ -53,8 +52,6 @@ class SearchWithClip(
             if (text == null || text.isEmpty()) {
                 return@OnPrimaryClipChangedListener
             }
-
-            Timber.i("${hashCode()} " + text.toString())
 
             val context = parent.context
             Toaster.snackLong(

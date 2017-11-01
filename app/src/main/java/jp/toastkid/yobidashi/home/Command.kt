@@ -6,5 +6,5 @@ package jp.toastkid.yobidashi.home
  * @author toastkidjp
  */
 enum class Command {
-    OPEN_BROWSER, OPEN_SEARCH, OPEN_HOME
+    OPEN_BROWSER, OPEN_SEARCH
 }
