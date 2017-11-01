@@ -55,13 +55,6 @@ class EditorModule(
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(binding.root.context)
 
     /**
-     * Default file name.
-     */
-    private val defaultFileName by lazy {
-        binding.root.context.getString(R.string.default_text_file_name)
-    }
-
-    /**
      * File path.
      */
     private var path: String = ""
@@ -142,7 +135,7 @@ class EditorModule(
 
         val context = binding.root.context
         val inputLayout = TextInputs.make(context)
-        inputLayout.editText?.setText(defaultFileName)
+        inputLayout.editText?.setText(DEFAULT_FILE_NAME)
         AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)
@@ -165,6 +158,15 @@ class EditorModule(
                 }
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                 .show()
+    }
+
+    /**
+     * Call from fragment's onPause().
+     */
+    fun saveIfNeed() {
+        if (path.isNotEmpty()) {
+            saveToFile(path)
+        }
     }
 
     /**
@@ -353,6 +355,10 @@ class EditorModule(
          */
         const val REQUEST_CODE_LOAD: Int = 10111
 
+        /**
+         * Default file name.
+         */
+        private const val DEFAULT_FILE_NAME: String = "memo"
     }
 
 }

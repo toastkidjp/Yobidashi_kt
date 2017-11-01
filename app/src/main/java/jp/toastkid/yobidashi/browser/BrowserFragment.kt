@@ -22,6 +22,7 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.BaseFragment
@@ -73,7 +74,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * WebTab list module.
      */
-    private var tabListModule: TabListModule? = null
+    private lateinit var tabListModule: TabListModule
 
     /**
      * Find-in-page module.
@@ -108,22 +109,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Editor area.
      */
-    private val editor: EditorModule by lazy {
-        EditorModule(
-                binding?.editor as ModuleEditorBinding,
-                { intent, requestCode -> startActivityForResult(intent, requestCode) },
-                { switchTabList() },
-                { closeTabList() },
-                { file ->
-                    val currentTab = tabs.currentTab()
-                    if (currentTab is EditorTab) {
-                        currentTab.setFileInformation(file)
-                        tabs.saveTabList()
-                    }
-                },
-                { if (it) hideFooter() else showFooter() }
-                )
-    }
+    private lateinit var editor: EditorModule
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -146,7 +132,7 @@ class BrowserFragment : BaseFragment() {
         val colorPair = colorPair()
         initFooter(colorPair)
 
-        val cm = activity.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val cm = context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
                 binding?.root as View,
@@ -154,6 +140,21 @@ class BrowserFragment : BaseFragment() {
                 { url -> tabs.loadWithNewTab(Uri.parse(url)) }
         )
         searchWithClip.invoke()
+
+        editor = EditorModule(
+                binding?.editor as ModuleEditorBinding,
+                { intent, requestCode -> startActivityForResult(intent, requestCode) },
+                { switchTabList() },
+                { closeTabList() },
+                { file ->
+                    val currentTab = tabs.currentTab()
+                    if (currentTab is EditorTab) {
+                        currentTab.setFileInformation(file)
+                        tabs.saveTabList()
+                    }
+                },
+                { if (it) hideFooter() else showFooter() }
+        )
 
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
@@ -164,6 +165,15 @@ class BrowserFragment : BaseFragment() {
                 { binding?.refresher?.isRefreshing = false },
                 { this.hideOption() },
                 { onScroll(it) },
+                this::onEmptyTabs
+        )
+
+        tabListModule = TabListModule(
+                DataBindingUtil.inflate<ModuleTabListBinding>(
+                        LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
+                tabs,
+                binding?.root as View,
+                this::hideTabList,
                 this::onEmptyTabs
         )
 
@@ -178,7 +188,7 @@ class BrowserFragment : BaseFragment() {
      * Action on empty tabs.
      */
     private fun onEmptyTabs() {
-        tabListModule?.hide()
+        tabListModule.hide()
         fragmentManager.popBackStack()
     }
 
@@ -425,7 +435,7 @@ class BrowserFragment : BaseFragment() {
                         .launchUrl(context, Uri.parse(tabs.currentUrl()))
             }
             Menu.SHARE_BARCODE -> {
-                SharingUrlByBarcode.invoke(context, tabs.currentUrl())
+                SharingUrlByBarcode.invoke(context, tabs.currentUrl() ?: "")
             }
             Menu.ARCHIVE -> {
                 tabs.saveArchive()
@@ -441,20 +451,22 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.REPLACE_HOME -> {
                 val currentUrl = tabs.currentUrl()
-                if (Urls.isInvalidUrl(currentUrl)) {
+                currentUrl?.let {
+                    if (Urls.isInvalidUrl(currentUrl)) {
+                        Toaster.snackShort(
+                                snackbarParent,
+                                R.string.message_cannot_replace_home_url,
+                                colorPair()
+                        )
+                        return
+                    }
+                    preferenceApplier().homeUrl = currentUrl
                     Toaster.snackShort(
                             snackbarParent,
-                            R.string.message_cannot_replace_home_url,
+                            getString(R.string.message_replace_home_url, currentUrl) ,
                             colorPair()
                     )
-                    return
                 }
-                preferenceApplier().homeUrl = currentUrl
-                Toaster.snackShort(
-                        snackbarParent,
-                        getString(R.string.message_replace_home_url, currentUrl) ,
-                        colorPair()
-                )
             }
             Menu.LOAD_HOME -> {
                 tabs.loadHome()
@@ -519,19 +531,9 @@ class BrowserFragment : BaseFragment() {
      *
      * @param snackbarParent Snackbar's parent view.
      */
-    private fun initTabListIfNeed(snackbarParent: View) {
-        if (tabListModule == null) {
-            tabListModule = TabListModule(
-                    DataBindingUtil.inflate<ModuleTabListBinding>(
-                            LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
-                    tabs,
-                    snackbarParent,
-                    this::hideTabList,
-                    this::onEmptyTabs
-            )
-        }
+    private fun initTabListIfNeed(ignored: View) {
         if (binding?.tabListContainer?.childCount == 0) {
-            binding?.tabListContainer?.addView(tabListModule?.moduleView)
+            binding?.tabListContainer?.addView(tabListModule.moduleView)
         }
     }
 
@@ -540,7 +542,7 @@ class BrowserFragment : BaseFragment() {
      */
     private fun switchTabList() {
         initTabListIfNeed(binding?.root as View)
-        if (tabListModule?.isVisible ?: false) {
+        if (tabListModule.isVisible ?: false) {
             hideTabList()
         } else {
             showTabList()
@@ -548,7 +550,7 @@ class BrowserFragment : BaseFragment() {
     }
 
     private inline fun closeTabList() {
-        tabListModule?.let { if (it.isVisible) { it.hide() } }
+        tabListModule.let { if (it.isVisible) { it.hide() } }
     }
 
     /**
@@ -611,12 +613,19 @@ class BrowserFragment : BaseFragment() {
 
         disposables.add(tabs.reloadWebViewSettings())
 
+        if (tabs.isNotEmpty()) {
+            tabs.setCurrentTab()
+        } else {
+            tabs.loadWithNewTab(Uri.parse(preferenceApplier().homeUrl))
+        }
+
         val preferenceApplier = preferenceApplier()
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
                 || editor.isVisible) {
             hideFooter()
             return
         }
+
         showFooter()
     }
 
@@ -644,7 +653,7 @@ class BrowserFragment : BaseFragment() {
      * Hide option menus.
      */
     private fun hideOption(): Boolean {
-        if (tabListModule != null && tabListModule?.isVisible as Boolean) {
+        if (tabListModule != null && tabListModule.isVisible as Boolean) {
             hideTabList()
             return true
         }
@@ -660,7 +669,7 @@ class BrowserFragment : BaseFragment() {
      * Hide tab list.
      */
     private fun hideTabList() {
-        tabListModule?.hide()
+        tabListModule.hide()
         binding?.fab?.show()
     }
 
@@ -670,7 +679,7 @@ class BrowserFragment : BaseFragment() {
     private fun showTabList() {
         hideMenu()
         binding?.fab?.hide()
-        tabListModule?.show()
+        tabListModule.show()
     }
 
     override fun titleId(): Int = R.string.title_browser
@@ -737,20 +746,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     /**
-     * Set current tab.
-     */
-    fun setLastTab() {
-        tabs.setCurrentTab()
-    }
-
-    /**
-     * Reload current tab if need.
-     */
-    fun reloadUrlIfNeed() {
-        tabs.reloadUrlIfNeed()
-    }
-
-    /**
      * Load with opening new tab.
      *
      * @param uri [Uri]
@@ -760,9 +755,16 @@ class BrowserFragment : BaseFragment() {
     }
 
     /**
-     * Return [PublishProcessor<TitlePair>] object.
+     * Set consumer to titleProcessor.
      */
-    fun titlePairProcessor(): PublishProcessor<TitlePair> = titleProcessor
+    fun setConsumer(consumer: Consumer<TitlePair>): Disposable =
+            titleProcessor.subscribe(consumer, Consumer { Timber.e(it) })
+
+    override fun onPause() {
+        super.onPause()
+        editor.saveIfNeed()
+        binding?.tabListContainer?.removeAllViews()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -771,8 +773,6 @@ class BrowserFragment : BaseFragment() {
         disposables.dispose()
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
-        binding?.tabListContainer?.removeAllViews()
-        tabListModule = null
     }
 
     companion object {
@@ -790,4 +790,5 @@ class BrowserFragment : BaseFragment() {
         private const val ALLOWABLE_INTERVAL_MS = 500L
 
     }
+
 }

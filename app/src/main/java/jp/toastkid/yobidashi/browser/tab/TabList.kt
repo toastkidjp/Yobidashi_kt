@@ -60,16 +60,17 @@ class TabList private constructor() {
      */
     internal fun save() {
         val json = jsonAdapter.toJson(this)
-        Okio.buffer(Okio.sink(tabsFile)).write(json.toByteArray(charset)).flush()
+        tabsFile?.let { Okio.buffer(Okio.sink(it)).write(json.toByteArray(charset)).flush() }
         savingLock.withLock {
-            itemsDir?.list()
-                    ?.map { File(itemsDir, it) }
-                    ?.forEach { it.delete() }
+            itemsDir?.let {
+                it.deleteRecursively()
+                it.mkdirs()
+            }
             tabs.forEach { tab ->
                 val source: ByteArray? = when {
                     tab is WebTab    -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     tab is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    else            -> ByteArray(0)
+                    else             -> ByteArray(0)
                 }
                 source?.let {
                     Okio.buffer(Okio.sink(File(itemsDir, "${tab.id()}.json")))
@@ -189,5 +190,7 @@ class TabList private constructor() {
     fun dispose() {
         disposables.dispose()
     }
+
+    override fun toString(): String = tabs.toString()
 
 }

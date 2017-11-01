@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.main
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
@@ -26,6 +25,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.BuildConfig
@@ -81,17 +81,19 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     /** Interstitial AD.  */
     private var interstitialAd: InterstitialAd? = null
 
-    /** Calendar.  */
-    private var calendarFragment: CalendarFragment? = null
-
     /** Browser fragment.  */
-    private val browserFragment: BrowserFragment = BrowserFragment()
+    private val browserFragment: BrowserFragment by lazy { BrowserFragment() }
 
     /** Home fragment.  */
-    private val homeFragment = HomeFragment()
+    private val homeFragment by lazy { HomeFragment() }
+
+    /**
+     * Calendar fragment.
+     */
+    private val calendarFragment by lazy { CalendarFragment() }
 
     /** Disposables.  */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
 
     /** For stopping subscribing title pair.  */
     private var prevDisposable: Disposable? = null
@@ -209,19 +211,13 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     private fun replaceWithBrowser(uri: Uri = Uri.EMPTY) {
         replaceFragment(browserFragment)
-        prevDisposable = browserFragment.titlePairProcessor()
-                .subscribe { titlePair ->
-                    binding.appBarMain.toolbar.title    = titlePair.title()
-                    binding.appBarMain.toolbar.subtitle = titlePair.subtitle()
-                }
-
-        uiThreadHandler.postDelayed(
-                {
-                    if (uri != Uri.EMPTY) { browserFragment.loadWithNewTab(uri) }
-                    else { browserFragment.setLastTab() }
-                },
-                200L
-        )
+        if (uri != Uri.EMPTY) {
+            uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
+        }
+        prevDisposable = browserFragment.setConsumer(Consumer {
+            binding.appBarMain.toolbar.title    = it.title()
+            binding.appBarMain.toolbar.subtitle = it.subtitle()
+        })
     }
 
     /**
@@ -242,7 +238,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.replace(R.id.content, fragment)
-        transaction.addToBackStack(null)
+        transaction.addToBackStack("${fragment.hashCode()}")
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
         binding.appBarMain.toolbar.setTitle(fragment.titleId())
@@ -318,10 +314,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_calendar -> {
                 sendLog("nav_cal")
-                if (calendarFragment == null) {
-                    calendarFragment = CalendarFragment()
-                }
-                replaceFragment(calendarFragment as CalendarFragment)
+                replaceFragment(calendarFragment)
             }
             R.id.nav_favorite_search -> {
                 startActivityWithSlideIn(
@@ -393,14 +386,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             R.id.nav_planning_poker -> {
                 startActivityWithSlideIn("nav_poker", PlanningPokerActivity.makeIntent(this))
             }
-            R.id.nav_browser -> {
-                sendLog("nav_browser")
-                if (browserFragment.isVisible) {
-                    snackSuppressOpenFragment()
-                    return
-                }
-                loadHomeUrl()
-            }
             R.id.nav_bookmark -> {
                 startActivityForResultWithSlideIn(
                         "nav_bkmk",
@@ -426,9 +411,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             R.id.nav_instant_barcode -> {
                 sendLog("nav_instant_barcode")
                 InstantBarcodeGenerator(this).invoke()
-            }
-            R.id.nav_home -> {
-                replaceFragment(homeFragment)
             }
         }
     }
@@ -480,8 +462,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     override fun onBackPressed() {
-        @SuppressLint("RestrictedApi")
-
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             return
@@ -499,18 +479,18 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         }
 
         if (supportFragmentManager.backStackEntryCount == 1) {
-            finish()
+            confirmExit()
             return
         }
 
-        super.onBackPressed()
+        supportFragmentManager.popBackStack()
     }
 
     private fun confirmExit() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.confirmation)
                 .setMessage(R.string.message_confirm_exit)
-                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
                 .setPositiveButton(R.string.ok, { d, i ->
                     d.dismiss()
                     finish()
@@ -606,15 +586,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     override fun action(c: Command) {
         when (c) {
             Command.OPEN_BROWSER -> {
-                loadHomeUrl()
+                replaceWithBrowser()
                 return
             }
             Command.OPEN_SEARCH -> {
                 startActivity(SearchActivity.makeIntent(this))
-                return
-            }
-            Command.OPEN_HOME -> {
-                replaceFragment(homeFragment)
                 return
             }
         }

@@ -21,15 +21,15 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * @author toastkidjp
  */
 class TabListModule(
-        val binding: ModuleTabListBinding,
-        val tabAdapter: TabAdapter,
+        private val binding: ModuleTabListBinding,
+        private val tabAdapter: TabAdapter,
         private val parent: View,
         private val closeAction: () -> Unit,
         private val emptyAction: () -> Unit
 ) : BaseModule(binding.root) {
 
     /** WebTab list adapter.  */
-    private var adapter: Adapter? = null
+    private val adapter: Adapter by lazy { Adapter(context(), tabAdapter, closeAction) }
 
     /** For showing snackbar.  */
     private val colorPair: ColorPair
@@ -67,7 +67,7 @@ class TabListModule(
         binding.addEditorTab.setOnClickListener {
             it.isClickable = false
             tabAdapter.openNewEditorTab()
-            adapter?.notifyItemInserted((adapter?.itemCount ?: 1) - 1)
+            adapter.notifyItemInserted((adapter.itemCount ?: 1) - 1)
             closeAction()
             it.isClickable = true
         }
@@ -109,11 +109,8 @@ class TabListModule(
                     override fun onSwiped(
                             viewHolder: RecyclerView.ViewHolder,
                             direction: Int
-                    ) {
-                        (viewHolder as ViewHolder).close()
-                    }
+                    ) = (viewHolder as ViewHolder).close()
                 }).attachToRecyclerView(recyclerView)
-        adapter = Adapter(context(), tabAdapter, closeAction)
         recyclerView.adapter = adapter
     }
 
@@ -129,7 +126,7 @@ class TabListModule(
         addTab.setOnClickListener { v ->
             addTab.isClickable = false
             tabAdapter.openNewTab()
-            adapter!!.notifyItemInserted(adapter!!.itemCount - 1)
+            adapter.notifyItemInserted(adapter.itemCount - 1)
             closeAction()
             addTab.isClickable = true
         }
@@ -137,8 +134,8 @@ class TabListModule(
 
     override fun show() {
         binding.recyclerView.layoutManager.scrollToPosition(tabAdapter.index())
-        adapter?.setCurrentIndex(tabAdapter.index())
-        adapter?.notifyDataSetChanged()
+        adapter.setCurrentIndex(tabAdapter.index())
+        adapter.notifyDataSetChanged()
         super.show()
         if (firstLaunch) {
             Toaster.snackShort(parent, R.string.message_tutorial_remove_tab, colorPair)
