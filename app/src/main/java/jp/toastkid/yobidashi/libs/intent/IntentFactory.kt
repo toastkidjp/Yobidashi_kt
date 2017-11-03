@@ -111,4 +111,17 @@ object IntentFactory {
         intent.data = uri
         return intent
     }
+
+
+    /**
+     * Make Storage Access Framework intent.
+     *
+     * @param type mime type
+     * @return [Intent]
+     */
+    fun makeStorageAccess(type: String): Intent {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = type
+        return intent
+    }
 }

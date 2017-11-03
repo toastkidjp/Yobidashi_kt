@@ -15,13 +15,13 @@ import java.io.File
 class ExportedFileParserTest {
 
     /**
-     * Check of {@link ExportedFileParser#parse}.
+     * Check of {@link ExportedFileParser#invoke}.
      */
     @Test
-    fun test_parse() {
+    fun testInvoke() {
         val htmlFile = File(ExportedFileParserTest::class.java.classLoader
                 .getResource("bookmark/sample.html").toURI())
-        val bookmarks = ExportedFileParser.parse(htmlFile)
+        val bookmarks = ExportedFileParser(htmlFile)
         //bookmarks.forEach { println(Moshi.Builder().build().adapter(Bookmark::class.java).toJson(it)) }
         assertEquals(19, bookmarks.size)
     }

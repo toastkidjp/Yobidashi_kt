@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import java.io.File
@@ -29,9 +28,8 @@ object ExportedFileParser {
      *
      * @param htmlFile
      */
-    fun parse(htmlFile: File): List<Bookmark> {
-        val doc: Document = Jsoup.parse(htmlFile, "UTF-8")
-        parseDl(doc.select("dl"))
+    operator fun invoke(htmlFile: File): List<Bookmark> {
+        parseDl(Jsoup.parse(htmlFile, "UTF-8").select("dl"))
         return bookmarks
     }
 

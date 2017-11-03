@@ -321,4 +321,5 @@
     <string name="title_count">Count</string>
     <string name="message_character_count">Characters: %d</string>
     <string name="title_add_folder">Add Folder</string>
+    <string name="title_import_bookmark">Import Bookmark</string>
 </resources>
