@@ -14,8 +14,11 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark_Relation
 import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
+import java.util.*
 
 /**
+ * TODO clean up code.
+ *
  * @author toastkidjp
  */
 internal class ActivityAdapter(
@@ -25,6 +28,8 @@ internal class ActivityAdapter(
         private val onDelete: (Bookmark) -> Unit
 ) : RecyclerView.Adapter<ViewHolder> () {
 
+    private val rootFolderName = "root"
+
     /** Items. */
     private val items: MutableList<Bookmark> = mutableListOf()
 
@@ -32,6 +37,8 @@ internal class ActivityAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     private val disposables: CompositeDisposable = CompositeDisposable()
+
+    private val folderHistory: Stack<String> = Stack()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate<ItemBookmarkBinding>(
@@ -43,6 +50,7 @@ internal class ActivityAdapter(
         holder.setText(bookmark.title, bookmark.url)
         holder.itemView.setOnClickListener { v ->
             if (bookmark.folder) {
+                folderHistory.push(bookmark.parent)
                 query(bookmark.title)
             } else {
                 onClick(bookmark)
@@ -78,20 +86,40 @@ internal class ActivityAdapter(
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
+    fun currentFolderName(): String {
+        return if (items.isEmpty()) folderHistory.peek() else items.get(0).parent
+    }
+
+    fun back(): Boolean {
+        if (folderHistory.isEmpty()) {
+            return false
+        }
+        query(folderHistory.pop())
+        return true
+    }
+
     fun showRoot() {
-        query("root")
+        query(rootFolderName)
     }
 
     fun query(title: String) {
-        relation.selector()
-                .parentEq(title)
-                .executeAsObservable()
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe { items.clear() }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate { notifyDataSetChanged() }
-                .observeOn(Schedulers.computation())
-                .subscribe{ items.add(it) }
+        disposables.add(
+                relation.selector()
+                        .parentEq(title)
+                        .executeAsObservable()
+                        .subscribeOn(Schedulers.io())
+                        .doOnSubscribe { items.clear() }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnTerminate {
+                            notifyDataSetChanged()
+                        }
+                        .observeOn(Schedulers.computation())
+                        .subscribe{ items.add(it) }
+        )
+    }
+
+    fun reload() {
+        query(currentFolderName())
     }
 
     /**
