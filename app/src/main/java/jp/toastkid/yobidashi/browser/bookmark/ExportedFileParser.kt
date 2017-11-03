@@ -39,11 +39,6 @@ object ExportedFileParser {
      * @param elements
      */
     private fun parseDl(elements: Elements) {
-        val folder = Bookmark()
-        folder.title = ROOT_FOLDER_NAME
-        folder.folder = true
-        bookmarks.add(folder)
-
         var childFolderName = ROOT_FOLDER_NAME
         elements.toList().forEach {
             it.children().toList().forEach { childFolderName = parseChild(it, childFolderName) }

@@ -23,6 +23,6 @@ class ExportedFileParserTest {
                 .getResource("bookmark/sample.html").toURI())
         val bookmarks = ExportedFileParser(htmlFile)
         //bookmarks.forEach { println(Moshi.Builder().build().adapter(Bookmark::class.java).toJson(it)) }
-        assertEquals(19, bookmarks.size)
+        assertEquals(18, bookmarks.size)
     }
 }
