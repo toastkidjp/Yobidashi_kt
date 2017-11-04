@@ -530,7 +530,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     private fun attemptToShowingAd() {
-        if (interstitialAd!!.isLoaded && 4 <= adCount && preferenceApplier.allowShowingAd()) {
+        if (interstitialAd!!.isLoaded
+                && AD_DISPLAYING <= adCount
+                && preferenceApplier.allowShowingAd()) {
             Toaster.snackShort(
                     binding.appBarMain.toolbar,
                     R.string.message_please_view_ad,
@@ -708,6 +710,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         /** For using daily alarm.  */
         private val KEY_EXTRA_DOM = "dom"
+
+        /**
+         * AD displaying count.
+         */
+        private const val AD_DISPLAYING: Int = 3
 
         /**
          * Make launcher intent.
