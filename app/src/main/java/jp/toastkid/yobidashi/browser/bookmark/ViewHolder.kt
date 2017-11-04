@@ -48,7 +48,9 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
     }
 
     private fun setDefaultIcon() {
-        binding.icon.setImageResource(R.drawable.ic_bookmark_black)
+        binding.icon.setImageResource(
+                R.drawable.ic_bookmark_black
+        )
     }
 
     fun setOnClickAdd(history: Bookmark, onClickAdd: (Bookmark) -> Unit) {

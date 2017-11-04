@@ -478,12 +478,7 @@ class BrowserFragment : BaseFragment() {
                 )
             }
             Menu.ADD_BOOKMARK -> {
-                tabs.addBookmark{
-                    startActivityForResult(
-                            BookmarkActivity.makeIntent(activity),
-                            BookmarkActivity.REQUEST_CODE
-                    )
-                }
+                tabs.addBookmark { bookmark() }
             }
             Menu.EDITOR -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -698,7 +693,7 @@ class BrowserFragment : BaseFragment() {
                 return
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
-                if (intent.data != null) {tabs.loadUrl(intent.data.toString())}
+                if (intent.data != null) { tabs.loadWithNewTab(intent.data) }
             }
             TabHistoryActivity.REQUEST_CODE -> {
                 if (intent.hasExtra(TabHistoryActivity.EXTRA_KEY_INDEX)) {
