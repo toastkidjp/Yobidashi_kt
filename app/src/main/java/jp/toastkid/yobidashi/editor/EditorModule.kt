@@ -20,6 +20,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchActivity
 import okio.Okio
 import java.io.File
 
@@ -66,6 +67,7 @@ class EditorModule(
         binding.save.setOnClickListener { save() }
         binding.load.setOnClickListener { load() }
         binding.clip.setOnClickListener { clip() }
+        binding.search.setOnClickListener { context.startActivity(SearchActivity.makeIntent(context)) }
         binding.tabList.setOnClickListener { switchTabAction() }
         binding.count.setOnClickListener {
             Toaster.tShort(
@@ -90,6 +92,7 @@ class EditorModule(
         val colorPair = preferenceApplier.colorPair()
         Colors.setBgAndText(binding.save, colorPair)
         Colors.setBgAndText(binding.load, colorPair)
+        Colors.setBgAndText(binding.search, colorPair)
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
         Colors.setBgAndText(binding.count, colorPair)

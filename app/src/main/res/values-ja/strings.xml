@@ -29,6 +29,7 @@
     <string name="cancel">キャンセル</string>
     <string name="ok">決定</string>
     <string name="share">シェア</string>
+    <string name="search">検索</string>
 
     <string name="title_search_action">検索</string>
     <string name="action_settings">設定</string>
