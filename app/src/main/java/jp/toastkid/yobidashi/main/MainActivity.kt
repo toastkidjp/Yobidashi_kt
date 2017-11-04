@@ -412,6 +412,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 sendLog("nav_instant_barcode")
                 InstantBarcodeGenerator(this).invoke()
             }
+            R.id.nav_home -> {
+                sendLog("nav_home")
+                replaceFragment(homeFragment)
+            }
         }
     }
 
