@@ -23,7 +23,7 @@ object ImageLoader {
      * Read uri image content.
 
      * <pre>
-     * Uri.parse(new File(backgroundImagePath).toURI().toString())
+     * Uri.invoke(new File(backgroundImagePath).toURI().toString())
     </pre> *
 
      * @param context Context

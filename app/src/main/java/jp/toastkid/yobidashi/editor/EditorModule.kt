@@ -7,7 +7,6 @@ import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
-import android.provider.MediaStore
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.text.Html
@@ -15,9 +14,11 @@ import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.Colors
+import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import okio.Okio
 import java.io.File
@@ -235,19 +236,7 @@ class EditorModule(
      * Load content from file with Storage Access Framework.
      */
     private inline fun load() {
-        intentLauncher(makeStorageAccessIntent("text/plain"), REQUEST_CODE_LOAD)
-    }
-
-    /**
-     * Make Storage Access Framework intent.
-     *
-     * @param type mime type
-     * @return [Intent]
-     */
-    private inline fun makeStorageAccessIntent(type: String): Intent {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = type
-        return intent
+        intentLauncher(IntentFactory.makeStorageAccess("text/plain"), REQUEST_CODE_LOAD)
     }
 
     /**
@@ -256,7 +245,7 @@ class EditorModule(
      * @param data [Uri]
      */
     fun readFromFileUri(data: Uri) {
-        extractFileFromUri(data)?.let { readFromFile(it) }
+        FileExtractorFromUri(binding.root.context, data)?.let { readFromFile(it) }
     }
 
     /**
@@ -290,25 +279,6 @@ class EditorModule(
      */
     private inline fun clearInput() {
         binding.editorInput.setText("")
-    }
-
-    /**
-     * Extract [File] object from [Uri]. This method is nullable.
-     *
-     * @param uri [Uri]
-     * @return [File] (Nullable)
-     */
-    private inline fun extractFileFromUri(uri: Uri): File? {
-        val projection = arrayOf(MediaStore.MediaColumns.DATA)
-        val cursor = binding.root.context.contentResolver.query(uri, projection, null, null, null)
-        return cursor?.let {
-            var path: String? = null
-            if (cursor.moveToFirst()) {
-                path = cursor.getString(0)
-            }
-            cursor.close()
-            return path?.let{ File(path) }
-        }
     }
 
     /**

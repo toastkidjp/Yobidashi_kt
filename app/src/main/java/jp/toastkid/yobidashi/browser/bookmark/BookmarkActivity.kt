@@ -13,27 +13,49 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Html
 import android.view.MenuItem
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
+import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import timber.log.Timber
+import java.io.File
 
 /**
+ * Bookmark list activity.
+ *
  * @author toastkidjp
  */
 class BookmarkActivity: BaseActivity() {
 
+    /**
+     * Data binding object.
+     */
     private lateinit var binding: ActivityBookmarkBinding
 
+    /**
+     * Adapter.
+     */
     private lateinit var adapter: ActivityAdapter
+
+    /**
+     * Composite of disposables.
+     */
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityBookmarkBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         val relation = DbInitter.init(this).relationOfBookmark()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -77,6 +99,11 @@ class BookmarkActivity: BaseActivity() {
         adapter.showRoot()
     }
 
+    /**
+     * Finish this activity with result.
+     *
+     * @param uri
+     */
     private fun finishWithResult(uri: Uri) {
         val intent = Intent()
         intent.setData(uri)
@@ -122,6 +149,36 @@ class BookmarkActivity: BaseActivity() {
                         .show()
                 return true
             }
+            R.id.add_folder -> {
+                val inputLayout = TextInputs.make(this)
+                AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.title_dialog_input_file_name))
+                        .setView(inputLayout)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.save) { d, i ->
+                            inputLayout.editText?.text?.toString()?.let {
+                                Completable.fromAction {
+                                    BookmarkInsertion(
+                                            this,
+                                            it,
+                                            parent = adapter.currentFolderName(),
+                                            folder = true
+                                    ).insert() }
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe { adapter.reload() }
+                            }
+                        }
+                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                        .show()
+            }
+            R.id.import_bookmark -> {
+                startActivityForResult(
+                        IntentFactory.makeStorageAccess("text/html"),
+                        REQUEST_CODE_IMPORT_BOOKMARK
+                )
+                return true
+            }
             R.id.to_top -> {
                 RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
                 return true
@@ -134,21 +191,87 @@ class BookmarkActivity: BaseActivity() {
         return super.clickMenu(item)
     }
 
+    override fun onBackPressed() {
+        if (adapter.back()) {
+            return
+        }
+        super.onBackPressed()
+    }
+
     override fun titleId(): Int = R.string.title_bookmark
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        if (intent == null || resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        when (requestCode) {
+            REQUEST_CODE_IMPORT_BOOKMARK ->
+                FileExtractorFromUri(this, intent.data)?.let { importBookmark(it) }
+        }
+    }
+
+    /**
+     * Import bookmark from selected HTML file.
+     *
+     * @param file Bookmark exported html.
+     */
+    private fun importBookmark(file: File) {
+        disposables.add(
+                Completable.fromAction {
+                    ExportedFileParser(file).forEach {
+                        BookmarkInsertion(
+                                this,
+                                title  = it.title,
+                                url    = it.url,
+                                folder = it.folder,
+                                parent = it.parent
+                        ).insert()
+                    }
+                }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                {
+                                    adapter.reload()
+                                    Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
+                                },
+                                { Timber.e(it) }
+                        )
+        )
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         adapter.dispose()
+        disposables.dispose()
     }
 
     companion object {
-        @LayoutRes const val LAYOUT_ID: Int = R.layout.activity_bookmark
 
-        /** Request code. */
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private const val LAYOUT_ID: Int = R.layout.activity_bookmark
+
+        /**
+         * Request code.
+         */
         const val REQUEST_CODE: Int = 202
 
+        /**
+         * Request code of importing bookmarks.
+         */
+        private const val REQUEST_CODE_IMPORT_BOOKMARK = 12211
+
+        /**
+         * Make launching intent.
+         *
+         * @param context [Context]
+         */
         fun makeIntent(context: Context): Intent {
-            val intent: Intent = Intent(context, BookmarkActivity::class.java)
+            val intent = Intent(context, BookmarkActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             return intent
         }

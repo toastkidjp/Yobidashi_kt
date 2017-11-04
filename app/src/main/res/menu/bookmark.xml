@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/clear"
+        android:id="@+id/add_folder"
         android:orderInCategory="100"
-        android:title="@string/title_clear_bookmark"
+        android:title="@string/title_add_folder"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/import_bookmark"
+        android:orderInCategory="100"
+        android:title="@string/title_import_bookmark"
         android:checkable="false"
         app:showAsAction="never"
         />
+
     <item
         android:id="@+id/add_default"
         android:orderInCategory="100"
@@ -16,17 +25,26 @@
         app:showAsAction="never"
         />
 
-
     <item
         android:id="@+id/to_top"
         android:orderInCategory="100"
         android:title="@string/top_mark"
         app:showAsAction="never"
         />
+
     <item
         android:id="@+id/to_bottom"
         android:orderInCategory="101"
         android:title="@string/bottom_mark"
         app:showAsAction="never"
         />
+
+    <item
+        android:id="@+id/clear"
+        android:orderInCategory="100"
+        android:title="@string/title_clear_bookmark"
+        android:checkable="false"
+        app:showAsAction="never"
+        />
+
 </menu>
