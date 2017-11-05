@@ -26,7 +26,7 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
     /**
      * Snackbar's color.
      */
-    private val colorPair: ColorPair = PreferenceApplier(activity).colorPair()
+    private val colorPair: ColorPair = PreferenceApplier(activity.applicationContext).colorPair()
 
     /**
      * Start color filter.
@@ -41,7 +41,7 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
         }
 
         snackShort(R.string.message_enable_color_filter)
-        ColorFilterService.start(activity)
+        ColorFilterService.start(activity.applicationContext)
     }
 
     /**
@@ -51,7 +51,7 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
      */
     fun stop(): Boolean {
         snackShort(R.string.message_stop_color_filter)
-        ColorFilterService.stop(activity)
+        ColorFilterService.stop(activity.applicationContext)
         return true
     }
 
