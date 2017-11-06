@@ -115,10 +115,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, LAYOUT_ID)
 
-        initToolbar(binding.appBarMain.toolbar)
-        setSupportActionBar(binding.appBarMain.toolbar)
-
-        initDrawer(binding.appBarMain.toolbar)
+        binding.appBarMain?.toolbar?.let {
+            initToolbar(it)
+            setSupportActionBar(it)
+            initDrawer(it)
+        }
 
         initNavigation()
 
@@ -215,8 +216,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
         }
         prevDisposable = browserFragment.setConsumer(Consumer {
-            binding.appBarMain.toolbar.title    = it.title()
-            binding.appBarMain.toolbar.subtitle = it.subtitle()
+            binding.appBarMain?.toolbar?.title    = it.title()
+            binding.appBarMain?.toolbar?.subtitle = it.subtitle()
         })
     }
 
@@ -241,8 +242,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         transaction.addToBackStack("${fragment.hashCode()}")
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
-        binding.appBarMain.toolbar.setTitle(fragment.titleId())
-        binding.appBarMain.toolbar.subtitle = ""
+        binding.appBarMain?.toolbar?.let {
+            it.setTitle(fragment.titleId())
+            it.subtitle = ""
+        }
     }
 
     private fun initInterstitialAd() {
@@ -412,6 +415,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 sendLog("nav_instant_barcode")
                 InstantBarcodeGenerator(this).invoke()
             }
+            R.id.nav_home -> {
+                sendLog("nav_home")
+                replaceFragment(homeFragment)
+            }
         }
     }
 
@@ -520,15 +527,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     private fun refresh() {
-        applyColorToToolbar(binding.appBarMain.toolbar)
+        applyColorToToolbar(binding.appBarMain?.toolbar as Toolbar)
 
         applyBackgrounds()
     }
 
     private fun attemptToShowingAd() {
-        if (interstitialAd!!.isLoaded && 4 <= adCount && preferenceApplier.allowShowingAd()) {
+        if (interstitialAd!!.isLoaded
+                && AD_DISPLAYING <= adCount
+                && preferenceApplier.allowShowingAd()) {
             Toaster.snackShort(
-                    binding.appBarMain.toolbar,
+                    binding.appBarMain?.toolbar as Toolbar,
                     R.string.message_please_view_ad,
                     colorPair()
             )
@@ -577,7 +586,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
         navBackground?.findViewById<ImageView>(R.id.background)?.setImageDrawable(background)
-        binding.appBarMain.background.setImageDrawable(background)
+        binding.appBarMain?.background?.setImageDrawable(background)
         if (background == null) {
             navBackground?.setBackgroundColor(colorPair().bgColor())
         }
@@ -597,33 +606,35 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     override fun hideToolbar() {
-        val animate = binding.appBarMain.toolbar.animate()
-        animate.cancel()
-        animate.translationY(-resources.getDimension(R.dimen.toolbar_height))
-                .setDuration(HEADER_HIDING_DURATION)
-                .withStartAction {
-                    val marginLayoutParams
-                            = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
-                    marginLayoutParams.topMargin = 0
-                    binding.appBarMain.content.requestLayout()
-                }
-                .withEndAction { binding.appBarMain.toolbar.visibility = View.GONE }
-                .start()
+        binding.appBarMain?.toolbar?.animate()?.let {
+            it.cancel()
+            it.translationY(-resources.getDimension(R.dimen.toolbar_height))
+                    .setDuration(HEADER_HIDING_DURATION)
+                    .withStartAction {
+                        val marginLayoutParams
+                                = binding.appBarMain?.content?.layoutParams as ViewGroup.MarginLayoutParams
+                        marginLayoutParams.topMargin = 0
+                        binding.appBarMain?.content?.requestLayout()
+                    }
+                    .withEndAction { binding.appBarMain?.toolbar?.visibility = View.GONE }
+                    .start()
+        }
     }
 
     override fun showToolbar() {
-        val animate = binding.appBarMain.toolbar.animate()
-        animate.cancel()
-        animate.translationY(0f)
-                .setDuration(HEADER_HIDING_DURATION)
-                .withStartAction { binding.appBarMain.toolbar.visibility = View.VISIBLE }
-                .withEndAction {
-                    val marginLayoutParams
-                            = binding.appBarMain.content.layoutParams as ViewGroup.MarginLayoutParams
-                    marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
-                    binding.appBarMain.content.requestLayout()
-                }
-                .start()
+        binding.appBarMain?.toolbar?.animate()?.let {
+            it.cancel()
+            it.translationY(0f)
+                    .setDuration(HEADER_HIDING_DURATION)
+                    .withStartAction { binding.appBarMain?.toolbar?.visibility = View.VISIBLE }
+                    .withEndAction {
+                        val marginLayoutParams
+                                = binding.appBarMain?.content?.layoutParams as ViewGroup.MarginLayoutParams
+                        marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
+                        binding.appBarMain?.content?.requestLayout()
+                    }
+                    .start()
+        }
     }
 
     /**
@@ -704,6 +715,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         /** For using daily alarm.  */
         private val KEY_EXTRA_DOM = "dom"
+
+        /**
+         * AD displaying count.
+         */
+        private const val AD_DISPLAYING: Int = 3
 
         /**
          * Make launcher intent.

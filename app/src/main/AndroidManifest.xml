@@ -61,7 +61,7 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_settings"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             />
         <activity

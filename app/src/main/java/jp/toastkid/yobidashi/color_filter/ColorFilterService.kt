@@ -76,18 +76,22 @@ class ColorFilterService : JobIntentService() {
 
         /**
          * Draw filter.
+         *
+         * @param applicationContext Application context.
          */
-        internal fun start(context: Context) {
+        internal fun start(applicationContext: Context) {
             running = false
-            enqueue(context)
+            enqueue(applicationContext)
         }
 
         /**
          * Remove filter.
+         *
+         * @param applicationContext Application context.
          */
-        internal fun stop(context: Context) {
+        internal fun stop(applicationContext: Context) {
             running = true
-            enqueue(context)
+            enqueue(applicationContext)
         }
 
         /**

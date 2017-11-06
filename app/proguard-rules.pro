@@ -7,6 +7,8 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+-keepclassmembers enum jp.toastkid.yobidashi.** { *; }
+
 ## For OkHttp
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement

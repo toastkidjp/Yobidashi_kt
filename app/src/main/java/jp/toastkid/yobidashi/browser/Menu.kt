@@ -59,7 +59,7 @@ internal enum class Menu(
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 
-    SITE_SEARCH(R.string.title_site_search_by_google, R.drawable.googleg_disabled_color_18),
+    SITE_SEARCH(R.string.title_site_search_by_google, R.drawable.ic_google),
 
     SEARCH(R.string.title_search_action, R.drawable.ic_search_white),
 

@@ -86,9 +86,9 @@ internal class ActivityAdapter(
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
-    fun currentFolderName(): String {
-        return if (items.isEmpty()) folderHistory.peek() else items.get(0).parent
-    }
+    fun currentFolderName(): String =
+            if (items.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
+            else items.get(0).parent
 
     fun back(): Boolean {
         if (folderHistory.isEmpty()) {
