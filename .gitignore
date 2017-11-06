@@ -16,3 +16,4 @@ gradle/
 gradlew
 gradlew.bat
 .idea/
+/app/signing

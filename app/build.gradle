@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.github.triplet.play'
 
 android {
     compileSdkVersion 26
@@ -9,16 +10,32 @@ android {
     byte verMiddle = 0;
     byte verMinor  = 9;
 
+    apply from: 'signingConfigs/config.gradle', to: android
+
+    playAccountConfigs {
+        defaultAccountConfig {
+            serviceAccountEmail = 'tk-bot@api-6327630184664180575-715630.iam.gserviceaccount.com'
+            jsonFile = file('signing/Google Play Android Developer-cbf2176b721a.json')
+        }
+    }
+
+    play {
+        track = 'beta'
+        untrackOld = true
+    }
+
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
         minSdkVersion 16
         targetSdkVersion 26
-        if (verMiddle >= 100 || verMinor >= 100) {
+        if (verMiddle >= 100 || verMinor >= 10_000) {
             throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
         }
-        versionCode ((verMajor * 10000) + (verMiddle * 100) + verMinor)
+        versionCode ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
         versionName "${verMajor}.${verMiddle}.${verMinor}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        playAccountConfig = playAccountConfigs.defaultAccountConfig
     }
     buildTypes {
         debug {
@@ -30,6 +47,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     dataBinding {
