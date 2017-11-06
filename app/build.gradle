@@ -19,6 +19,7 @@ android {
         versionCode ((verMajor * 10000) + (verMiddle * 100) + verMinor)
         versionName "${verMajor}.${verMiddle}.${verMinor}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -34,7 +35,7 @@ android {
 
 dependencies {
 
-    def supportLibVersion = '26.1.0'
+    def supportLibVersion = '26.0.2'
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
     implementation "com.android.support:design:${supportLibVersion}"
     implementation "com.android.support:customtabs:${supportLibVersion}"
@@ -55,6 +56,7 @@ dependencies {
     implementation 'com.squareup.moshi:moshi:1.5.0'
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
+    implementation 'com.android.support:multidex:1.0.2'
 
     kapt 'com.android.databinding:compiler:3.0.0'
     kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'

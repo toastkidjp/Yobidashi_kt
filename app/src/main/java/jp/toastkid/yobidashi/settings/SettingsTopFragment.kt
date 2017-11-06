@@ -19,6 +19,7 @@ import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.UserAgent
 import jp.toastkid.yobidashi.color_filter.ColorFilter
+import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBinding
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.TextInputs
@@ -71,11 +72,14 @@ class SettingsTopFragment : BaseFragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
 
-        binding.startUpItems.startUpSelector.setOnCheckedChangeListener { radioGroup, checkedId ->
+        binding.startUpItems?.startUpSelector?.setOnCheckedChangeListener { radioGroup, checkedId ->
             preferenceApplier().startUp = StartUp.findById(checkedId)
         }
 
-        ColorFilterSettingInitializer(binding.filterColor, { colorFilter?.color(it) }).invoke()
+        ColorFilterSettingInitializer(
+                binding.filterColor as FragmentSettingSectionColorFilterBinding,
+                { colorFilter.color(it) }
+        ).invoke()
         return binding.root
     }
 
@@ -90,14 +94,14 @@ class SettingsTopFragment : BaseFragment() {
     }
 
     private fun initBrowserExpandable() {
-        binding.browserExpand.screenMode.setOnCheckedChangeListener ({ group, checkedId ->
+        binding.browserExpand?.screenMode?.setOnCheckedChangeListener ({ group, checkedId ->
             when (group.checkedRadioButtonId) {
                 R.id.full_screen  -> preferenceApplier().setBrowserScreenMode(ScreenMode.FULL_SCREEN)
                 R.id.expandable   -> preferenceApplier().setBrowserScreenMode(ScreenMode.EXPANDABLE)
                 R.id.fixed        -> preferenceApplier().setBrowserScreenMode(ScreenMode.FIXED)
             }
         })
-        binding.browserExpand.screenMode.check(preferenceApplier().browserScreenMode().id())
+        binding.browserExpand?.screenMode?.check(preferenceApplier().browserScreenMode().id())
     }
 
     override fun onResume() {
@@ -121,11 +125,11 @@ class SettingsTopFragment : BaseFragment() {
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
         binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
 
-        binding.startUpItems.startUpSelector.check(preferenceApplier.startUp.radioButtonId)
+        binding.startUpItems?.startUpSelector?.check(preferenceApplier.startUp.radioButtonId)
 
         val filterColor = preferenceApplier.filterColor()
-        binding.filterColor.sample.setBackgroundColor(filterColor)
-        binding.filterColor.alpha.setProgress(Color.alpha(filterColor))
+        binding.filterColor?.sample?.setBackgroundColor(filterColor)
+        binding.filterColor?.alpha?.setProgress(Color.alpha(filterColor))
     }
 
     /**
