@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
+apply from: 'signing/config.gradle', to: android
 
 android {
     compileSdkVersion 26
@@ -9,8 +10,6 @@ android {
     byte verMajor  = 1;
     byte verMiddle = 0;
     byte verMinor  = 9;
-
-    apply from: 'signingConfigs/config.gradle', to: android
 
     playAccountConfigs {
         defaultAccountConfig {
