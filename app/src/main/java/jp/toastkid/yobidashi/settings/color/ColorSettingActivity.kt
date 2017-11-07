@@ -123,10 +123,13 @@ class ColorSettingActivity : BaseActivity() {
 
         commitNewColor(bgColor, fontColor)
 
-        val bundle = Bundle()
-        bundle.putString("bg", Integer.toHexString(bgColor))
-        bundle.putString("font", Integer.toHexString(fontColor))
-        sendLog("color_set", bundle)
+        sendLog(
+                "color_set",
+                Bundle().apply {
+                    putString("bg", Integer.toHexString(bgColor))
+                    putString("font", Integer.toHexString(fontColor))
+                }
+        )
 
         adapter!!.addItemAsSingle(SavedColors.makeSavedColor(bgColor, fontColor))
                 .subscribeOn(Schedulers.io()).subscribe()

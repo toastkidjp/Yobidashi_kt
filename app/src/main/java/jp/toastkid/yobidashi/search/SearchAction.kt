@@ -5,6 +5,7 @@ import android.os.Bundle
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.analytics.LogSender
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 
@@ -34,12 +35,15 @@ class SearchAction(
             Disposables.empty()
         }
 
-        val bundle = Bundle()
-        bundle.putString("category", category)
-        bundle.putString("query", query)
-        logSender.send("search", bundle)
+        logSender.send(
+                "search",
+                Bundle().apply {
+                    putString("category", category)
+                    putString("query", query)
+                }
+        )
 
-        val colorPair = preferenceApplier.colorPair()
+        val colorPair: ColorPair = preferenceApplier.colorPair()
         if (preferenceApplier.useInternalBrowser()) {
             InternalSearchIntentLauncher(activityContext)
                     .setCategory(category)
