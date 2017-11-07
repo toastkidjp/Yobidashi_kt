@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 object SearchCategorySpinnerInitializer {
 
     fun invoke(spinner: Spinner) {
-        val adapter = object : BaseAdapter() {
+        spinner.adapter = object : BaseAdapter() {
             override fun getCount(): Int = SearchCategory.values().size
 
             override fun getItem(position: Int): SearchCategory
@@ -41,7 +41,6 @@ object SearchCategorySpinnerInitializer {
                 return view
             }
         }
-        spinner.adapter = adapter
         spinner.setSelection(SearchCategory.findIndex(
                 PreferenceApplier(spinner.context).getDefaultSearchEngine()))
     }
