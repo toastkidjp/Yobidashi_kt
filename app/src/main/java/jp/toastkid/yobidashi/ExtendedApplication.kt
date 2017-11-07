@@ -19,15 +19,16 @@ import timber.log.Timber
  */
 class ExtendedApplication : Application() {
 
+    /**
+     * [CompositeDisposable].
+     */
     private val disposables = CompositeDisposable()
 
     override fun onCreate() {
         super.onCreate()
         disposables.add(
-                Completable.create { e ->
-                    LeakCanary.install(this)
-                    e.onComplete()
-                }.subscribeOn(Schedulers.computation())
+                Completable.fromAction { LeakCanary.install(this) }
+                        .subscribeOn(Schedulers.computation())
                         .subscribe({}, {Timber.e(it)})
         )
 
@@ -38,10 +39,8 @@ class ExtendedApplication : Application() {
         val preferenceApplier = PreferenceApplier(this)
 
         disposables.add(
-                Completable.create { e ->
-                    DbInitter.init(this)
-                    e.onComplete()
-                }.subscribeOn(Schedulers.io())
+                Completable.fromAction { DbInitter.init(this) }
+                        .subscribeOn(Schedulers.io())
                         .subscribe(
                                 { processForFirstLaunch(preferenceApplier) },
                                 { Timber.e(it) }
@@ -53,6 +52,11 @@ class ExtendedApplication : Application() {
         }
     }
 
+    /**
+     * Process for first launch.
+     *
+     * @param preferenceApplier
+     */
     private fun processForFirstLaunch(preferenceApplier: PreferenceApplier) {
         if (!preferenceApplier.isFirstLaunch) {
             return
