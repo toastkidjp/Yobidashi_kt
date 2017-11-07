@@ -22,22 +22,41 @@ import java.util.*
  */
 object SavedColors {
 
+    /**
+     * Set saved colors.
+     *
+     * @param tv
+     * @param color
+     */
     internal fun setSaved(tv: TextView, color: SavedColor) {
         tv.setBackgroundColor(color.bgColor)
         tv.setTextColor(color.fontColor)
     }
 
+    /**
+     * Make saved color.
+     *
+     * @param bgColor
+     * @param fontColor
+     */
     internal fun makeSavedColor(
             @ColorInt bgColor: Int,
             @ColorInt fontColor: Int
     ): SavedColor {
-        val color = SavedColor()
+        var color = SavedColor()
         color.bgColor = bgColor
         color.fontColor = fontColor
 
         return color
     }
 
+    /**
+     * Show clear colors dialog.
+     *
+     * @param context
+     * @param view
+     * @param relation
+     */
     internal fun showClearColorsDialog(
             context: Context,
             view: View,
@@ -52,6 +71,13 @@ object SavedColors {
                 .show()
     }
 
+    /**
+     * Delete all asynchronously.
+     *
+     * @param view
+     * @param deleter
+     * @param d
+     */
     private fun deleteAllAsync(
             view: View,
             deleter: SavedColor_Deleter,
@@ -59,7 +85,7 @@ object SavedColors {
     ) {
         deleter.executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { t, t2 ->
+                .subscribe { _, _ ->
                     Toaster.snackShort(
                             view,
                             R.string.settings_color_delete,
@@ -71,11 +97,11 @@ object SavedColors {
 
     /**
      * Insert default colors.
+     *
      * @param context
      */
     fun insertDefaultColors(context: Context) {
-
-        Completable.create { e ->
+        Completable.fromAction {
             DbInitter.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAllAsObservable(DefaultColors.make(context))
@@ -83,22 +109,30 @@ object SavedColors {
         }.subscribeOn(Schedulers.io()).subscribe({}, {Timber.e(it)})
     }
 
-    fun insertRandomColor(context: Context) {
+    /**
+     * Insert random colors.
+     *
+     * @param context
+     */
+    fun insertRandomColors(context: Context) {
 
         val random = Random()
-        @ColorInt val bg = Color.argb(
+
+        val bg = Color.argb(
                 random.nextInt(255),
                 random.nextInt(255),
                 random.nextInt(255),
                 random.nextInt(255)
         )
-        @ColorInt val font = Color.argb(
+
+        val font = Color.argb(
                 random.nextInt(255),
                 random.nextInt(255),
                 random.nextInt(255),
                 random.nextInt(255)
         )
-        Completable.create { e ->
+
+        Completable.fromAction {
             DbInitter.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAsSingle(makeSavedColor(bg, font))
