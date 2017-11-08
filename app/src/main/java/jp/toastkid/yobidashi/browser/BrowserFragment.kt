@@ -156,7 +156,10 @@ class BrowserFragment : BaseFragment() {
                         tabs.saveTabList()
                     }
                 },
-                { if (it) hideFooter() else showFooter() }
+                { if (it) {
+                    hideFooter()
+                    binding?.fab?.hide()
+                  } else showFooter() }
         )
 
         tabs = TabAdapter(
