@@ -92,6 +92,19 @@ class EditorModule(
                     .show()
         }
 
+        binding.editorInput.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(contentEditable: Editable?) {
+                setContentTextLengthCount(context)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+
+        })
+    }
+
+    fun applyColor() {
         val colorPair = preferenceApplier.colorPair()
         Colors.setBgAndText(binding.save, colorPair)
         Colors.setBgAndText(binding.load, colorPair)
@@ -104,16 +117,7 @@ class EditorModule(
         Colors.setBgAndText(binding.toBottom, colorPair)
         Colors.setBgAndText(binding.clear, colorPair)
 
-        binding.editorInput.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(contentEditable: Editable?) {
-                setContentTextLengthCount(context)
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
-
-        })
+        Colors.setBgAndText(binding.counter, colorPair)
     }
 
     /**

@@ -609,6 +609,8 @@ class BrowserFragment : BaseFragment() {
 
         refreshFab()
 
+        editor.applyColor()
+
         disposables.add(tabs.reloadWebViewSettings())
 
         if (tabs.isNotEmpty()) {

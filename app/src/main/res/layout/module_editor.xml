@@ -133,7 +133,7 @@
             android:id="@+id/counter"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_marginLeft="16dp"
+            android:paddingLeft="16dp"
             android:layout_gravity="bottom"
             android:gravity="center_vertical"
             android:textSize="14sp"
