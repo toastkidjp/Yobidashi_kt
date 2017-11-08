@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -8,25 +8,11 @@
         android:background="@color/soft_background"
         android:visibility="visible"
         >
-        <ScrollView
-            android:id="@+id/editor_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="44dp"
-            android:fitsSystemWindows="true"
-            >
-            <EditText
-                android:id="@+id/editor_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:minLines="10"
-                />
-        </ScrollView>
+
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             >
             <LinearLayout
                 android:orientation="horizontal"
@@ -125,5 +111,33 @@
                     />
             </LinearLayout>
         </HorizontalScrollView>
+
+        <ScrollView
+            android:id="@+id/editor_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:layout_marginBottom="44dp"
+            android:fitsSystemWindows="true"
+            >
+            <EditText
+                android:id="@+id/editor_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="10"
+                />
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/counter"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            tools:text="tomato"
+            />
     </FrameLayout>
 </layout>
