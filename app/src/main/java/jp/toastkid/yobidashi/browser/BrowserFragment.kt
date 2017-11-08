@@ -125,8 +125,11 @@ class BrowserFragment : BaseFragment() {
                 inflater!!, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
-        binding?.refresher?.setOnRefreshListener({ tabs.reload() })
-        binding?.refresher?.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
+        binding?.refresher?.let {
+            it.setOnRefreshListener { tabs.reload() }
+            it.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
+        }
+
         initMenus()
 
         val colorPair = colorPair()
@@ -619,6 +622,11 @@ class BrowserFragment : BaseFragment() {
                 || editor.isVisible) {
             hideFooter()
             return
+        }
+
+        binding?.refresher?.let {
+            it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
+            it.setColorSchemeColors(preferenceApplier.fontColor)
         }
 
         showFooter()
