@@ -71,12 +71,6 @@ class EditorModule(
         binding.clip.setOnClickListener { clip() }
         binding.search.setOnClickListener { context.startActivity(SearchActivity.makeIntent(context)) }
         binding.tabList.setOnClickListener { switchTabAction() }
-        binding.count.setOnClickListener {
-            Toaster.tShort(
-                    context,
-                    context.getString(R.string.message_character_count, content().length)
-            )
-        }
         binding.backup.setOnClickListener { backup() }
         binding.toTop.setOnClickListener { top() }
         binding.toBottom.setOnClickListener { bottom() }
@@ -111,7 +105,6 @@ class EditorModule(
         Colors.setBgAndText(binding.search, colorPair)
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
-        Colors.setBgAndText(binding.count, colorPair)
         Colors.setBgAndText(binding.backup, colorPair)
         Colors.setBgAndText(binding.toTop, colorPair)
         Colors.setBgAndText(binding.toBottom, colorPair)

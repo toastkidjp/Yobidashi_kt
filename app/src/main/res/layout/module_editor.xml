@@ -65,15 +65,6 @@
                     android:foreground="@drawable/ripple_transparent"
                     />
                 <Button
-                    android:id="@+id/count"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/title_count"
-                    android:drawableTop="@drawable/ic_numbers"
-                    android:foreground="@drawable/ripple_transparent"
-                    />
-                <Button
                     android:id="@+id/backup"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
