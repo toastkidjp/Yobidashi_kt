@@ -54,8 +54,7 @@ class DateDetailActivity : BaseActivity() {
         val month = intent.getIntExtra(KEY_MONTH, 0)
         val dayOfMonth = intent.getIntExtra(KEY_DAY_OF_MONTH, 1)
         val dateTitle = DateTitleFactory.makeDateTitle(this, month, dayOfMonth)
-        val bundle = Bundle()
-        bundle.putString("daily", dateTitle)
+        val bundle = Bundle().apply { putString("daily", dateTitle) }
 
         binding.openArticle.setOnClickListener {
             logSender?.send("cal_wkp", bundle)

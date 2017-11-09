@@ -125,12 +125,15 @@ class BrowserFragment : BaseFragment() {
                 inflater!!, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
-        binding?.refresher?.setOnRefreshListener({ tabs.reload() })
-        binding?.refresher?.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
+        binding?.refresher?.let {
+            it.setOnRefreshListener { tabs.reload() }
+            it.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
+        }
+
         initMenus()
+        initFooter()
 
         val colorPair = colorPair()
-        initFooter(colorPair)
 
         val cm = context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
@@ -153,7 +156,10 @@ class BrowserFragment : BaseFragment() {
                         tabs.saveTabList()
                     }
                 },
-                { if (it) hideFooter() else showFooter() }
+                { if (it) {
+                    hideFooter()
+                    binding?.fab?.hide()
+                  } else showFooter() }
         )
 
         tabs = TabAdapter(
@@ -260,33 +266,15 @@ class BrowserFragment : BaseFragment() {
     private fun disallowAnimation(): Boolean = (System.currentTimeMillis() - lastAnimated) < ALLOWABLE_INTERVAL_MS
 
     /**
-     * Initialize footer with [ColorPair]
-     *
-     * @param colorPair [ColorPair]
+     * Initialize footer.
      */
-    private fun initFooter(colorPair: ColorPair) {
-        binding?.footer?.root?.setBackgroundColor(colorPair.bgColor())
-        val fontColor = colorPair.fontColor()
-        binding?.footer?.back?.setColorFilter(fontColor)
+    private fun initFooter() {
         binding?.footer?.back?.setOnClickListener { back() }
-
-        binding?.footer?.forward?.setColorFilter(fontColor)
         binding?.footer?.forward?.setOnClickListener { forward() }
-
-        binding?.footer?.bookmark?.setColorFilter(fontColor)
         binding?.footer?.bookmark?.setOnClickListener { bookmark() }
-
-        binding?.footer?.search?.setColorFilter(fontColor)
         binding?.footer?.search?.setOnClickListener { search() }
-
-        binding?.footer?.toTop?.setColorFilter(fontColor)
         binding?.footer?.toTop?.setOnClickListener { toTop() }
-
-        binding?.footer?.toBottom?.setColorFilter(fontColor)
         binding?.footer?.toBottom?.setOnClickListener { toBottom() }
-
-        binding?.footer?.tabIcon?.setColorFilter(fontColor)
-        binding?.footer?.tabCount?.setTextColor(fontColor)
         binding?.footer?.tabList?.setOnClickListener { switchTabList() }
     }
 
@@ -606,6 +594,9 @@ class BrowserFragment : BaseFragment() {
 
         refreshFab()
 
+        applyFooterColor(colorPair())
+        editor.applyColor()
+
         disposables.add(tabs.reloadWebViewSettings())
 
         if (tabs.isNotEmpty()) {
@@ -621,7 +612,30 @@ class BrowserFragment : BaseFragment() {
             return
         }
 
+        binding?.refresher?.let {
+            it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
+            it.setColorSchemeColors(preferenceApplier.fontColor)
+        }
+
         showFooter()
+    }
+
+    /**
+     * Apply footer color with [ColorPair].
+     *
+     * @param colorPair [ColorPair]
+     */
+    private fun applyFooterColor(colorPair: ColorPair) {
+        binding?.footer?.root?.setBackgroundColor(colorPair.bgColor())
+        val fontColor = colorPair.fontColor()
+        binding?.footer?.back?.setColorFilter(fontColor)
+        binding?.footer?.forward?.setColorFilter(fontColor)
+        binding?.footer?.bookmark?.setColorFilter(fontColor)
+        binding?.footer?.search?.setColorFilter(fontColor)
+        binding?.footer?.toTop?.setColorFilter(fontColor)
+        binding?.footer?.toBottom?.setColorFilter(fontColor)
+        binding?.footer?.tabIcon?.setColorFilter(fontColor)
+        binding?.footer?.tabCount?.setTextColor(fontColor)
     }
 
     /**

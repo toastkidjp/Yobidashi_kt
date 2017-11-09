@@ -9,7 +9,9 @@ import android.net.Uri
 import android.os.Environment
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
@@ -69,12 +71,6 @@ class EditorModule(
         binding.clip.setOnClickListener { clip() }
         binding.search.setOnClickListener { context.startActivity(SearchActivity.makeIntent(context)) }
         binding.tabList.setOnClickListener { switchTabAction() }
-        binding.count.setOnClickListener {
-            Toaster.tShort(
-                    context,
-                    context.getString(R.string.message_character_count, content().length)
-            )
-        }
         binding.backup.setOnClickListener { backup() }
         binding.toTop.setOnClickListener { top() }
         binding.toBottom.setOnClickListener { bottom() }
@@ -89,17 +85,42 @@ class EditorModule(
                     })
                     .show()
         }
+
+        binding.editorInput.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(contentEditable: Editable?) {
+                setContentTextLengthCount(context)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
+
+        })
+    }
+
+    fun applyColor() {
         val colorPair = preferenceApplier.colorPair()
         Colors.setBgAndText(binding.save, colorPair)
         Colors.setBgAndText(binding.load, colorPair)
         Colors.setBgAndText(binding.search, colorPair)
         Colors.setBgAndText(binding.clip, colorPair)
         Colors.setBgAndText(binding.tabList, colorPair)
-        Colors.setBgAndText(binding.count, colorPair)
         Colors.setBgAndText(binding.backup, colorPair)
         Colors.setBgAndText(binding.toTop, colorPair)
         Colors.setBgAndText(binding.toBottom, colorPair)
         Colors.setBgAndText(binding.clear, colorPair)
+
+        Colors.setBgAndText(binding.counter, colorPair)
+    }
+
+    /**
+     * Set content text length count to binding.counter.
+     *
+     * @param context Context
+     */
+    private fun setContentTextLengthCount(context: Context) {
+        binding.counter.text =
+                context.getString(R.string.message_character_count, content().length)
     }
 
     /**
@@ -140,6 +161,7 @@ class EditorModule(
         val context = binding.root.context
         val inputLayout = TextInputs.make(context)
         inputLayout.editText?.setText(DEFAULT_FILE_NAME)
+
         AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)
@@ -281,7 +303,15 @@ class EditorModule(
      * Clear input text.
      */
     private inline fun clearInput() {
-        binding.editorInput.setText("")
+        setContentText("")
+    }
+
+    /**
+     * Set content string and set text length.
+     */
+    private fun setContentText(contentStr: String) {
+        binding.editorInput.setText(contentStr)
+        setContentTextLengthCount(binding.root.context)
     }
 
     /**

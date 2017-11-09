@@ -18,7 +18,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
                 android:layout_gravity="top|center_horizontal"
-                android:scaleType="centerCrop"
+                android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 android:src="@mipmap/ic_launcher_round"
                 />

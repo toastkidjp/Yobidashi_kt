@@ -176,7 +176,6 @@ class TabAdapter(
                     }
                 }
                 backOrForwardProgress = false
-                loadedCallback()
                 tabList.save()
             }
 
@@ -203,6 +202,11 @@ class TabAdapter(
         val webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
+
+                if (60 <= newProgress) {
+                    loadedCallback()
+                }
+
                 if (!isLoadFinished) {
                     progress.progress = newProgress
                     try {
