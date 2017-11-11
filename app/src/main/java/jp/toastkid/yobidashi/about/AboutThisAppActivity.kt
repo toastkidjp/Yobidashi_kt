@@ -8,13 +8,13 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.NativeExpressAdView
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.advertisement.AdInitializers
 import jp.toastkid.yobidashi.advertisement.NativeAdFactory
 import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
-import jp.toastkid.yobidashi.libs.LicenseViewer
 import jp.toastkid.yobidashi.libs.Toaster
 
 /**
@@ -85,8 +85,10 @@ class AboutThisAppActivity : BaseActivity() {
      * Show licenses dialog.
      * @param view
      */
-    fun licenses(ignored: View) {
-        LicenseViewer(this).invoke()
+    fun licenses(view: View) {
+        val intent = Intent(this, OssLicensesMenuActivity::class.java)
+        intent.putExtra("title", view.context.getString(R.string.title_licenses))
+        startActivity(intent)
     }
 
     override fun onDestroy() {

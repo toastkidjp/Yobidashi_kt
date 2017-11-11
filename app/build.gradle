@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
+apply plugin: 'com.google.gms.oss.licenses.plugin'
 apply from: 'signing/config.gradle', to: android
 
 android {
@@ -66,6 +67,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:${firebaseVersion}"
     implementation "com.google.firebase:firebase-ads:${firebaseVersion}"
     implementation "com.google.firebase:firebase-crash:${firebaseVersion}"
+    implementation "com.google.android.gms:play-services-oss-licenses:${firebaseVersion}"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.jakewharton.timber:timber:4.5.1'
