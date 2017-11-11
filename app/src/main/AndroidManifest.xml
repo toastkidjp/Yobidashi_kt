@@ -149,6 +149,15 @@
             android:launchMode="singleTop"
             />
 
+        <activity
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            />
+        <activity
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            />
+
         <service android:name=".search.favorite.AddingFavoriteSearchService">
             <intent-filter>
                 <action android:name="ADD_ITEM" />

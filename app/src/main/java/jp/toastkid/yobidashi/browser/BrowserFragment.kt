@@ -125,7 +125,7 @@ class BrowserFragment : BaseFragment() {
                 inflater!!, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
-        binding?.refresher?.let {
+        binding?.webViewContainer?.let {
             it.setOnRefreshListener { tabs.reload() }
             it.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
         }
@@ -164,11 +164,11 @@ class BrowserFragment : BaseFragment() {
 
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
-                binding?.webViewContainer as FrameLayout,
+                binding?.webViewContainer as ViewGroup,
                 editor,
                 binding?.footer?.tabCount as TextView,
                 { titleProcessor.onNext(it) },
-                { binding?.refresher?.isRefreshing = false },
+                { binding?.webViewContainer?.isRefreshing = false },
                 { this.hideOption() },
                 { onScroll(it) },
                 this::onEmptyTabs
@@ -612,7 +612,7 @@ class BrowserFragment : BaseFragment() {
             return
         }
 
-        binding?.refresher?.let {
+        binding?.webViewContainer?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }

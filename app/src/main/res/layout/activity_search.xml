@@ -32,14 +32,14 @@
                 android:layout_marginRight="@dimen/search_horizontal_margin"
                 >
 
+                <include android:id="@+id/suggestion_module"
+                    layout="@layout/module_search_suggestion" />
+
                 <include android:id="@+id/favorite_module"
                     layout="@layout/module_search_favorite" />
 
                 <include android:id="@+id/history_module"
                     layout="@layout/module_search_history" />
-
-                <include android:id="@+id/suggestion_module"
-                    layout="@layout/module_search_suggestion" />
 
             </LinearLayout>
 

@@ -11,9 +11,9 @@ import android.os.Environment
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
-import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import io.reactivex.Maybe
@@ -57,7 +57,7 @@ import java.net.HttpURLConnection
  */
 class TabAdapter(
         progress: ProgressBar,
-        webViewContainer: FrameLayout,
+        webViewContainer: ViewGroup,
         private val editor: EditorModule,
         private val tabCount: TextView,
         titleCallback: (TitlePair) -> Unit,
