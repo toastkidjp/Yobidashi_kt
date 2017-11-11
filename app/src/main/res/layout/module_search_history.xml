@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/search_vertical_margin"
+        android:layout_marginBottom="@dimen/search_vertical_margin"
         app:cardElevation="3dp"
         android:visibility="gone"
         android:background="@color/filter_white_bb"
