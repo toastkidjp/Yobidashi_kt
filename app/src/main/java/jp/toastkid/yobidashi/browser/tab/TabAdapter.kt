@@ -283,7 +283,7 @@ class TabAdapter(
                     }
                     AlertDialog.Builder(progress.context)
                             .setTitle("URL: " + url)
-                            .setItems(R.array.url_menu, { dialog, which ->
+                            .setItems(R.array.url_menu, { _, which ->
                                 when (which) {
                                     0 -> openNewTab(url)
                                     1 -> openBackgroundTab(url)
@@ -291,7 +291,6 @@ class TabAdapter(
                                     3 -> Clipboard.clip(v.context, url)
                                 }
                             })
-                            .setCancelable(true)
                             .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
                             .show()
                     false

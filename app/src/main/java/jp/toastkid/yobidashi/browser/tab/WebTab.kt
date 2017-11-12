@@ -90,11 +90,15 @@ internal class WebTab: Tab {
 
     companion object {
 
-        fun makeBackground(title: String, url: String): WebTab {
-            val backgroundTab = WebTab()
-            backgroundTab.addHistory(History.make(title, url))
-            backgroundTab.background = true
-            return backgroundTab
+        /**
+         * Make [WebTab] for opening by background.
+         *
+         * @param title Title
+         * @param url URL
+         */
+        fun makeBackground(title: String, url: String): WebTab = WebTab().apply {
+            addHistory(History.make(title, url))
+            background = true
         }
     }
 
