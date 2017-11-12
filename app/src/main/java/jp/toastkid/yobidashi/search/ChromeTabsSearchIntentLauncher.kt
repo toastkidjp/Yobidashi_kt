@@ -58,7 +58,7 @@ internal class ChromeTabsSearchIntentLauncher(private val context: Context) : Se
                         PendingIntentFactory.favoriteSearchAdding(context, category, query)
                 )
                 .build()
-        intent.launchUrl(context, UrlFactory().make(context, category, query))
+        intent.launchUrl(context, UrlFactory.make(context, category, query))
     }
 
 }

@@ -28,7 +28,7 @@ internal class InternalSearchIntentLauncher(private val context: Context) : Sear
         context.startActivity(
                 MainActivity.makeBrowserIntent(
                         context,
-                        UrlFactory().make(context, category, query)
+                        UrlFactory.make(context, category, query)
                 )
         )
     }
