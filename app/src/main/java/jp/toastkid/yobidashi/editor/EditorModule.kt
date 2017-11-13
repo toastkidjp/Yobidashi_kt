@@ -51,7 +51,8 @@ class EditorModule(
      * Use for clipping text.
      */
     private val cm: ClipboardManager
-            = binding.root.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            = binding.root.context.applicationContext
+                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     /**
      * Preferences wrapper.
