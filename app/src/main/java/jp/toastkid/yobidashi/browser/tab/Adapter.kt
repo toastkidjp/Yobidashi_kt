@@ -9,13 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemTabListBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * WebTab list adapter.
  * Initialize with context and so on...
+ *
  * @param context
  * @param tabAdapter WebTab list model
  * @param closeAction Closing action
@@ -28,28 +28,29 @@ internal class Adapter(
         private val closeAction: () -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
-    /** For getting Data binding object.  */
-    private val inflater: LayoutInflater
+    /**
+     * For getting Data binding object.
+     */
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /** For snackbar and view color.  */
-    private val colorPair: ColorPair
+    /**
+     * For snackbar and view color.
+     */
+    private val colorPair: ColorPair = PreferenceApplier(context).colorPair()
 
-    /** Current index. */
+    /**
+     * Current index.
+     */
     private var index = -1;
-
-    init {
-        this.inflater = LayoutInflater.from(context)
-        this.colorPair = PreferenceApplier(context).colorPair()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                DataBindingUtil.inflate<ItemTabListBinding>(inflater, R.layout.item_tab_list, parent, false))
+                DataBindingUtil.inflate(inflater, R.layout.item_tab_list, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tab = tabAdapter.getTabByIndex(position)
-        holder.itemView.setOnClickListener { _ ->
+        holder.itemView.setOnClickListener {
             tabAdapter.setIndexByTab(tab)
             closeAction()
         }
@@ -59,7 +60,7 @@ internal class Adapter(
             holder.setEditorImage(colorPair.bgColor())
         }
         holder.setTitle(tab.title())
-        holder.setCloseAction(View.OnClickListener { _ -> closeAt(tabAdapter.indexOf(tab)) })
+        holder.setCloseAction(View.OnClickListener { closeAt(tabAdapter.indexOf(tab)) })
         holder.setColor(colorPair)
         holder.setBackgroundColor(
                 if (index == position) {
@@ -67,7 +68,7 @@ internal class Adapter(
                 } else {
                     Color.TRANSPARENT
                 }
-        );
+        )
     }
 
     /**
@@ -79,10 +80,11 @@ internal class Adapter(
         notifyItemRemoved(position)
     }
 
-    override fun getItemCount(): Int {
-        return tabAdapter.size()
-    }
+    override fun getItemCount(): Int = tabAdapter.size()
 
+    /**
+     * Set current index.
+     */
     fun setCurrentIndex(newIndex: Int) {
         index = newIndex
     }
