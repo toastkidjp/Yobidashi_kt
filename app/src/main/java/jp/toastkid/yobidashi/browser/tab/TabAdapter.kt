@@ -29,6 +29,7 @@ import jp.toastkid.yobidashi.browser.UserAgent
 import jp.toastkid.yobidashi.browser.WebViewFactory
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
+import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
 import jp.toastkid.yobidashi.editor.EditorModule
@@ -707,7 +708,7 @@ class TabAdapter(
     fun addBookmark(callback: () -> Unit) {
         val context = webView.context
         BookmarkInsertion(
-                context, webView.title, webView.url, faviconApplier.makePath(webView.url), "root").insert()
+                context, webView.title, webView.url, faviconApplier.makePath(webView.url), Bookmarks.ROOT_FOLDER_NAME).insert()
         Toaster.snackLong(
                 webView,
                 context.getString(R.string.message_done_added_bookmark),

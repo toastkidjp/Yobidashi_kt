@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.bookmark.model
 import com.github.gfx.android.orma.annotation.Column
 import com.github.gfx.android.orma.annotation.PrimaryKey
 import com.github.gfx.android.orma.annotation.Table
+import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 
 /**
  * Bookmark model.
@@ -25,7 +26,7 @@ class Bookmark {
     var favicon: String = ""
 
     @Column(indexed = true)
-    var parent: String = "root"
+    var parent: String = Bookmarks.ROOT_FOLDER_NAME
 
     @Column(indexed = true)
     var folder: Boolean = false
