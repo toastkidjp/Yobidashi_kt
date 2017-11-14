@@ -36,6 +36,7 @@ import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
+import timber.log.Timber
 
 /**
  * Search activity.
@@ -44,22 +45,34 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
  */
 class SearchActivity : BaseActivity() {
 
-    /** View binder.  */
-    private var binding: ActivitySearchBinding? = null
-
-    /** Disposables.  */
+    /**
+     * Disposables.
+     */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    /** Favorite search module. */
+    /**
+     * View binder.
+     */
+    private var binding: ActivitySearchBinding? = null
+
+    /**
+     * Favorite search module.
+     */
     private lateinit var favoriteModule: FavoriteSearchModule
 
-    /** History module.  */
+    /**
+     * History module.
+     */
     private lateinit var historyModule: HistoryModule
 
-    /** Suggestion module.  */
+    /**
+     * Suggestion module.
+     */
     private lateinit var suggestionModule: SuggestionModule
 
-    /** Does use voice search? */
+    /**
+     * Does use voice search?
+     */
     private var useVoice: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,14 +106,17 @@ class SearchActivity : BaseActivity() {
             binding?.searchBar?.transitionName = "share"
         }
 
-        initToolbar(binding?.toolbar as Toolbar)
-        binding?.toolbar?.setNavigationIcon(null)
-        binding?.toolbar?.setPadding(0,0,0,0);
-        binding?.toolbar?.setContentInsetsAbsolute(0,0);
-        binding?.toolbar?.inflateMenu(R.menu.search_menu)
-        val menu = binding?.toolbar?.menu
-        menu?.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
-        menu?.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+        binding?.toolbar?.let {
+            initToolbar(it)
+            it.setNavigationIcon(null)
+            it.setPadding(0,0,0,0);
+            it.setContentInsetsAbsolute(0,0);
+
+            it.inflateMenu(R.menu.search_menu)
+            it.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
+            it.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+        }
+
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
@@ -130,7 +146,7 @@ class SearchActivity : BaseActivity() {
 
     private fun initFavoriteModule() {
         disposables.add(
-                Completable.create { e ->
+                Completable.fromAction {
                     favoriteModule = FavoriteSearchModule(
                             binding?.favoriteModule as ModuleSearchFavoriteBinding,
                             { fav -> search(fav.category as String, fav.query as String) },
@@ -141,10 +157,9 @@ class SearchActivity : BaseActivity() {
                                         binding?.searchInput?.text.toString().length)
                             }
                     )
-                    e.onComplete()
                 }
                         .subscribeOn(Schedulers.newThread())
-                        .subscribe { favoriteModule.query("") }
+                        .subscribe( { favoriteModule.query("") }, { Timber.e(it) })
         )
     }
 
@@ -153,7 +168,7 @@ class SearchActivity : BaseActivity() {
      */
     private fun initHistoryModule() {
         disposables.add(
-                Completable.create { e ->
+                Completable.fromAction {
                     historyModule = HistoryModule(
                             binding?.historyModule as ModuleSearchHistoryBinding,
                             { history -> search(history.category as String, history.query as String) },
@@ -164,14 +179,11 @@ class SearchActivity : BaseActivity() {
                                         binding?.searchInput?.text.toString().length)
                             }
                     )
-                    e.onComplete()
-                }
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe {
-                            if (preferenceApplier.isEnableSearchHistory) {
-                                historyModule.query("")
-                            }
-                        }
+                }.subscribeOn(Schedulers.newThread())
+                        .subscribe(
+                                { if (preferenceApplier.isEnableSearchHistory) { historyModule.query("") } },
+                                { Timber.e(it) }
+                        )
         )
     }
 
@@ -184,44 +196,50 @@ class SearchActivity : BaseActivity() {
         ImageLoader.setImageToImageView(binding?.background as ImageView, backgroundImagePath)
     }
 
+    /**
+     * Initialize search input.
+     */
     private fun initSearchInput() {
-        binding?.searchInput?.setOnEditorActionListener({ v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
-            }
-            true
-        })
-        binding?.searchInput?.addTextChangedListener(object : TextWatcher {
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // NOP.
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-                val key = s.toString()
-
-                setActionButtonState(key.isEmpty())
-
-                if (preferenceApplier.isEnableSearchHistory && historyModule != null) {
-                    historyModule.query(s)
+        binding?.searchInput?.let {
+            it.setOnEditorActionListener({ v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
                 }
-                favoriteModule.query(s)
+                true
+            })
+            it.addTextChangedListener(object : TextWatcher {
 
-                if (preferenceApplier.isDisableSuggestion) {
-                    suggestionModule.clear()
-                    return
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+                    val key = s.toString()
+
+                    setActionButtonState(key.isEmpty())
+
+                    if (preferenceApplier.isEnableSearchHistory) {
+                        historyModule.query(s)
+                    }
+                    favoriteModule.query(s)
+
+                    if (preferenceApplier.isDisableSuggestion) {
+                        suggestionModule.clear()
+                        return
+                    }
+
+                    suggestionModule.request(key)
                 }
 
-                suggestionModule.request(key)
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                // NOP.
-            }
-        })
+                override fun afterTextChanged(s: Editable) = Unit
+            })
+        }
     }
 
+    /**
+     * Set action button state.
+     *
+     * @param useVoiceSearch
+     */
     private fun setActionButtonState(useVoiceSearch: Boolean) {
         this.useVoice = useVoiceSearch
         if (useVoiceSearch) {
@@ -308,23 +326,29 @@ class SearchActivity : BaseActivity() {
         suggestionModule.dispose()
     }
 
-    override fun titleId(): Int {
-        return R.string.title_search
-    }
+    override fun titleId(): Int = R.string.title_search
 
     companion object {
 
-        /** Layout ID.  */
+        /**
+         * Layout ID.
+         */
         private val LAYOUT_ID = R.layout.activity_search
 
+        /**
+         * Request code.
+         */
         private const val REQUEST_CODE_VOICE_SEARCH = 2
 
+        /**
+         * Make launch intent.
+         *
+         * @param context [Context]
+         */
         fun makeIntent(context: Context): Intent {
             val intent = Intent(context, SearchActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             return intent;
         }
-
-        const val REQUEST_CODE: Int = 21
     }
 }
