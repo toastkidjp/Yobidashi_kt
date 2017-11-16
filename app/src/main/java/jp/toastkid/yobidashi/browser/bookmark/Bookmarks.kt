@@ -9,6 +9,8 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
  */
 object Bookmarks {
 
+    const val ROOT_FOLDER_NAME: String = "root"
+
     fun makeFaviconUrl(context: Context, url: String): String {
         return FilesDir(context, "favicons").assignNewFile(Uri.parse(url).host + ".png").absolutePath
     }

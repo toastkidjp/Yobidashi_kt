@@ -19,11 +19,6 @@ object ExportedFileParser {
     private val bookmarks: MutableList<Bookmark> = mutableListOf()
 
     /**
-     * Root folder name.
-     */
-    private const val ROOT_FOLDER_NAME = "root"
-
-    /**
      * Parse bookmark html file.
      *
      * @param htmlFile
@@ -39,7 +34,7 @@ object ExportedFileParser {
      * @param elements
      */
     private fun parseDl(elements: Elements) {
-        var childFolderName = ROOT_FOLDER_NAME
+        var childFolderName = Bookmarks.ROOT_FOLDER_NAME
         elements.toList().forEach {
             it.children().toList().forEach { childFolderName = parseChild(it, childFolderName) }
         }

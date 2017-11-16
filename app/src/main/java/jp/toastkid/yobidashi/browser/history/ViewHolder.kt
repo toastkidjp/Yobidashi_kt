@@ -61,7 +61,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
                             history.title,
                             history.url,
                             Bookmarks.makeFaviconUrl(context, history.url),
-                            "root",
+                            Bookmarks.ROOT_FOLDER_NAME,
                             false
                         ).insert()
                         d.dismiss()

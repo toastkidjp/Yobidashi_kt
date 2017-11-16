@@ -233,15 +233,13 @@ class EditorModule(
             file.createNewFile()
         }
         Okio.buffer(Okio.sink(file)).write(contentBytes()).flush()
+        val context = binding.root.context
         MediaScannerConnection.scanFile(
-                binding.root.context,
+                context,
                 arrayOf(filePath),
                 null,
-                { _, _ -> Toaster.snackShort(
-                        binding.root,
-                        "${context().getString(R.string.done_save)}: $filePath",
-                        preferenceApplier.colorPair()
-                ) })
+                { _, _ ->  })
+        Toaster.tShort(context, "${context().getString(R.string.done_save)}: $filePath")
     }
 
     /**

@@ -37,7 +37,7 @@ object BookmarkInitializer {
                     it.key,
                     it.value,
                     favicons.assignNewFile(Uri.parse(it.value).host + ".png").absolutePath,
-                    "root"
+                    Bookmarks.ROOT_FOLDER_NAME
             ).insert()
         }
     }

@@ -28,8 +28,6 @@ internal class ActivityAdapter(
         private val onDelete: (Bookmark) -> Unit
 ) : RecyclerView.Adapter<ViewHolder> () {
 
-    private val rootFolderName = "root"
-
     /** Items. */
     private val items: MutableList<Bookmark> = mutableListOf()
 
@@ -99,7 +97,7 @@ internal class ActivityAdapter(
     }
 
     fun showRoot() {
-        query(rootFolderName)
+        query(Bookmarks.ROOT_FOLDER_NAME)
     }
 
     fun query(title: String) {

@@ -4,6 +4,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
+import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.databinding.ItemTabHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
@@ -45,7 +46,7 @@ internal class TabHistoryViewHolder(private val binding: ItemTabHistoryBinding)
                     .setCancelable(true)
                     .setNegativeButton(R.string.cancel, { d, i -> d.cancel()})
                     .setPositiveButton(R.string.title_add, { d, i ->
-                        BookmarkInsertion(context, title, url, faviconPath, "root").insert()
+                        BookmarkInsertion(context, title, url, faviconPath, Bookmarks.ROOT_FOLDER_NAME).insert()
                         Toaster.snackShort(
                                 binding.root,
                                 context.getString(R.string.message_done_added_bookmark),
