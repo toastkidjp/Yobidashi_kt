@@ -18,7 +18,6 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import io.reactivex.disposables.CompositeDisposable
@@ -734,7 +733,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     private inline fun openEditorTab() {
-        // TODO
         tabs.openNewEditorTab()
     }
 
