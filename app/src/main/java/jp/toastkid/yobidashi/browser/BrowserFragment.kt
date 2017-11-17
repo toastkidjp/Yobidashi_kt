@@ -678,6 +678,9 @@ class BrowserFragment : BaseFragment() {
      */
     private fun hideTabList() {
         tabListModule.hide()
+        if (tabs.currentTab() is EditorTab) {
+            return
+        }
         binding?.fab?.show()
     }
 
