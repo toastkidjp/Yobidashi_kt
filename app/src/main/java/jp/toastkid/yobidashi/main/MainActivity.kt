@@ -19,7 +19,6 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.*
-import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
@@ -553,6 +552,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     private fun applyBackgrounds() {
         val backgroundImagePath = backgroundImagePath
         val fontColor = colorPair().fontColor()
+        navBackground?.setBackgroundColor(colorPair().bgColor())
         if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
             navBackground?.findViewById<TextView>(R.id.nav_header_main)?.setTextColor(fontColor)
@@ -585,11 +585,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
-        navBackground?.findViewById<ImageView>(R.id.background)?.setImageDrawable(background)
+        binding.drawerBackground.setImageDrawable(background)
         binding.appBarMain?.background?.setImageDrawable(background)
-        if (background == null) {
-            navBackground?.setBackgroundColor(colorPair().bgColor())
-        }
     }
 
     override fun action(c: Command) {
