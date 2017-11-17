@@ -13,6 +13,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.support.annotation.IdRes
+import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -71,19 +72,29 @@ import java.text.MessageFormat
  */
 class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
-    /** Navigation's background.  */
+    /**
+     * Navigation's background.
+     */
     private var navBackground: View? = null
 
-    /** Data binding object.  */
+    /**
+     * Data binding object.
+     */
     private lateinit var binding: ActivityMainBinding
 
-    /** Interstitial AD.  */
+    /**
+     * Interstitial AD.
+     */
     private var interstitialAd: InterstitialAd? = null
 
-    /** Browser fragment.  */
+    /**
+     * Browser fragment.
+     */
     private val browserFragment: BrowserFragment by lazy { BrowserFragment() }
 
-    /** Home fragment.  */
+    /**
+     * Home fragment.
+     */
     private val homeFragment by lazy { HomeFragment() }
 
     /**
@@ -91,16 +102,24 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      */
     private val calendarFragment by lazy { CalendarFragment() }
 
-    /** Disposables.  */
+    /**
+     * Disposables.
+     */
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
 
-    /** For stopping subscribing title pair.  */
+    /**
+     * For stopping subscribing title pair.
+     */
     private var prevDisposable: Disposable? = null
 
-    /** Count up for displaying AD. */
+    /**
+     * Count up for displaying AD.
+     */
     private var adCount = 0
 
-    /** Use for delaying. */
+    /**
+     * Use for delaying.
+     */
     private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     /**
@@ -193,10 +212,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     }
 
-    private inline fun loadHomeUrl() {
-        loadUri(Uri.parse(preferenceApplier.homeUrl))
-    }
-
+    /**
+     * Load Uri.
+     *
+     * @param uri
+     */
     private fun loadUri(uri: Uri) {
         if (preferenceApplier.useInternalBrowser()) {
             if (browserFragment.isVisible) {
@@ -209,6 +229,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back).build().launchUrl(this, uri)
     }
 
+    /**
+     * Replace with [BrowserFragment].
+     *
+     * @param uri default empty.
+     */
     private fun replaceWithBrowser(uri: Uri = Uri.EMPTY) {
         replaceFragment(browserFragment)
         if (uri != Uri.EMPTY) {
@@ -222,6 +247,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /**
      * Replace with passed fragment.
+     *
      * @param fragment {@link BaseFragment} instance
      */
     private fun replaceFragment(fragment: BaseFragment) {
@@ -247,6 +273,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         }
     }
 
+    /**
+     * Initialize interstitial AD.
+     */
     private fun initInterstitialAd() {
         if (interstitialAd == null) {
             interstitialAd = InterstitialAd(applicationContext)
@@ -271,6 +300,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /**
      * Initialize drawer.
+     *
      * @param toolbar
      */
     private fun initDrawer(toolbar: Toolbar) {
@@ -289,15 +319,15 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * Initialize navigation.
      */
     private fun initNavigation() {
-        binding.navView.setNavigationItemSelectedListener({ item: MenuItem ->
-            attemptToShowingAd()
+        binding.navView.setNavigationItemSelectedListener { item: MenuItem ->
+            attemptToShowAd()
             invokeWithMenuId(item.itemId)
             true
-        })
+        }
         if (Archive.cannotUseArchive()) {
             binding.navView.menu.findItem(R.id.nav_archives).isVisible = false
         }
-        val headerView = binding.navView?.getHeaderView(0)
+        val headerView = binding.navView.getHeaderView(0)
         navBackground = headerView?.findViewById(R.id.nav_header_background)
     }
 
@@ -450,6 +480,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         insertSlideInTransition()
     }
 
+    /**
+     * Insert slide-in transition.
+     */
     private fun insertSlideInTransition() {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
     }
@@ -492,6 +525,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         supportFragmentManager.popBackStack()
     }
 
+    /**
+     * Show confirm exit.
+     */
     private fun confirmExit() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.confirmation)
@@ -525,13 +561,19 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         refresh()
     }
 
+    /**
+     * Refresh toolbar and background.
+     */
     private fun refresh() {
         applyColorToToolbar(binding.appBarMain?.toolbar as Toolbar)
 
         applyBackgrounds()
     }
 
-    private fun attemptToShowingAd() {
+    /**
+     * Attempt to show AD.
+     */
+    private fun attemptToShowAd() {
         if (interstitialAd!!.isLoaded
                 && AD_DISPLAYING <= adCount
                 && preferenceApplier.allowShowingAd()) {
@@ -582,6 +624,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     /**
      * Set background image.
+     *
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
@@ -704,14 +747,21 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
          */
         private const val HEADER_HIDING_DURATION = 75L
 
-        /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.activity_main
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.activity_main
 
-        /** For using daily alarm.  */
-        private val KEY_EXTRA_MONTH = "month"
+        /**
+         * For using daily alarm.
+         */
+        private const val KEY_EXTRA_MONTH = "month"
 
-        /** For using daily alarm.  */
-        private val KEY_EXTRA_DOM = "dom"
+        /**
+         * For using daily alarm.
+         */
+        private const val KEY_EXTRA_DOM = "dom"
 
         /**
          * AD displaying count.
@@ -733,6 +783,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         /**
          * Make browser intent.
          * @param context
+         * @param uri
          *
          * @return
          */
