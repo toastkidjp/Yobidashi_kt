@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.main
 
+import android.Manifest
 import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
@@ -23,6 +24,7 @@ import android.view.*
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
+import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
@@ -417,6 +419,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_planning_poker -> {
                 startActivityWithSlideIn("nav_poker", PlanningPokerActivity.makeIntent(this))
+            }
+            R.id.nav_camera -> {
+                disposables.add(
+                        RxPermissions(this)
+                                .request(Manifest.permission.CAMERA)
+                                .filter { it }
+                                .subscribe(
+                                        { startActivityWithSlideIn("nav_camera", IntentFactory.makeCamera()) },
+                                        { Timber.e(it) }
+                                )
+                )
             }
             R.id.nav_bookmark -> {
                 startActivityForResultWithSlideIn(

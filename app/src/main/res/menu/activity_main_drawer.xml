@@ -101,6 +101,11 @@
                 android:title="@string/title_planning_poker"
                 />
             <item
+                android:id="@+id/nav_camera"
+                android:icon="@drawable/ic_camera_black"
+                android:title="@string/title_camera"
+                />
+            <item
                 android:id="@+id/nav_tweet"
                 android:icon="@drawable/ic_tweet_black"
                 android:title="@string/title_tweet_action"

@@ -3,10 +3,12 @@ package jp.toastkid.yobidashi.libs.intent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.support.annotation.DrawableRes
 import android.support.customtabs.CustomTabsIntent
-
 import jp.toastkid.yobidashi.libs.preference.ColorPair
+
+
 
 /**
  * Common [android.content.Intent] factory.
@@ -124,4 +126,6 @@ object IntentFactory {
         intent.type = type
         return intent
     }
+
+    fun makeCamera(): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 }
