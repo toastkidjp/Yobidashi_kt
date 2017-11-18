@@ -4,6 +4,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minWidth="44dp"
         android:layout_margin="4dp"
         android:foreground="@drawable/ripple_transparent"
         android:background="@color/filter_white_bb"
