@@ -126,7 +126,7 @@ class BrowserFragment : BaseFragment() {
 
         binding?.webViewContainer?.let {
             it.setOnRefreshListener { tabs.reload() }
-            it.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
+            it.setOnChildScrollUpCallback { _, _ -> tabs.disablePullToRefresh() }
         }
 
         initMenus()
