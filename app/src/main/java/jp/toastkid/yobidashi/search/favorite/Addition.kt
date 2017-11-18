@@ -110,7 +110,7 @@ class Addition internal constructor(
 
         val category = categorySelector.selectedItem.toString()
 
-        FavoriteSearchInsertion(context, category, query).insert()
+        FavoriteSearchInsertion(context, category, query).invoke()
 
         val message = MessageFormat.format(
                 context.getString(R.string.favorite_search_addition_successful_format),

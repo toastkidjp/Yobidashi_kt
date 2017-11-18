@@ -1,11 +1,8 @@
 package jp.toastkid.yobidashi.search.history
 
-import android.content.Context
 import android.support.annotation.DrawableRes
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchInsertion
 
@@ -34,19 +31,9 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun setFavorite(category: String, query: String) {
-        binding.searchHistoryBookmark.setOnClickListener ({ v ->
-            val context: Context = v.context
-            val s = ""
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.title_adding_favorite_search)
-                    .setMessage(context.getString(R.string.message_add_favorite_search, category, query))
-                    .setPositiveButton(
-                            R.string.title_add,
-                            {d, i -> FavoriteSearchInsertion(context, category, query).insert() }
-                    )
-                    .setCancelable(true)
-                    .show()
-        })
+        binding.searchHistoryBookmark.setOnClickListener { v ->
+            FavoriteSearchInsertion(v.context, category, query).invoke()
+        }
     }
 
     fun setAddIcon(@DrawableRes addIcon: Int) {
