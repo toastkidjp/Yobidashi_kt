@@ -282,22 +282,21 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         if (interstitialAd == null) {
             interstitialAd = InterstitialAd(applicationContext)
         }
-        if (interstitialAd == null) {
-            return
-        }
-        interstitialAd?.adUnitId = getString(R.string.unit_id_interstitial)
-        interstitialAd?.adListener = object : AdListener() {
-            val toolbar: Toolbar = binding.appBarMain?.toolbar as Toolbar
-            override fun onAdClosed() {
-                super.onAdClosed()
-                Toaster.snackShort(
-                        toolbar,
-                        R.string.thank_you_for_using,
-                        colorPair()
-                )
+
+        interstitialAd?.let {
+            it.adUnitId = getString(R.string.unit_id_interstitial)
+            it.adListener = object : AdListener() {
+                override fun onAdClosed() {
+                    super.onAdClosed()
+                    Toaster.snackShort(
+                            binding.appBarMain?.toolbar as Toolbar,
+                            R.string.thank_you_for_using,
+                            colorPair()
+                    )
+                }
             }
+            AdInitializers.find(this).invoke(it)
         }
-        AdInitializers.find(this).invoke(interstitialAd as InterstitialAd)
     }
 
     /**
