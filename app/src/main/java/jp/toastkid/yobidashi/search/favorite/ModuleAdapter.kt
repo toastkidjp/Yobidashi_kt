@@ -66,7 +66,7 @@ internal class ModuleAdapter(
             AlertDialog.Builder(context)
                     .setTitle(R.string.delete)
                     .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setCancelable(true)
+                    .setNegativeButton(R.string.cancel, { d, i -> d.cancel()} )
                     .setPositiveButton(R.string.ok) { d, i ->
                         removeAt(position)
                         d.dismiss()
