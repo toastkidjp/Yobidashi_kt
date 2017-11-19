@@ -8,6 +8,12 @@
         />
 
     <item
+        android:id="@+id/nav_option_menu"
+        android:icon="@drawable/ic_option_menu"
+        android:title="@string/title_option_menu"
+        />
+
+    <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/title_settings"
@@ -99,6 +105,11 @@
                 android:id="@+id/nav_planning_poker"
                 android:icon="@drawable/ic_card_black"
                 android:title="@string/title_planning_poker"
+                />
+            <item
+                android:id="@+id/nav_camera"
+                android:icon="@drawable/ic_camera_black"
+                android:title="@string/title_camera"
                 />
             <item
                 android:id="@+id/nav_tweet"

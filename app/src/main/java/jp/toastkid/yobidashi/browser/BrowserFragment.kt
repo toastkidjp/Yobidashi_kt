@@ -36,6 +36,7 @@ import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.editor.EditorModule
+import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -126,7 +127,7 @@ class BrowserFragment : BaseFragment() {
 
         binding?.webViewContainer?.let {
             it.setOnRefreshListener { tabs.reload() }
-            it.setOnChildScrollUpCallback { _, _ -> tabs.enablePullToRefresh() }
+            it.setOnChildScrollUpCallback { _, _ -> tabs.disablePullToRefresh() }
         }
 
         initMenus()
@@ -270,8 +271,12 @@ class BrowserFragment : BaseFragment() {
     private fun initFooter() {
         binding?.footer?.back?.setOnClickListener { back() }
         binding?.footer?.forward?.setOnClickListener { forward() }
-        binding?.footer?.bookmark?.setOnClickListener { bookmark() }
-        binding?.footer?.search?.setOnClickListener { search() }
+        binding?.footer?.bookmark?.setOnClickListener {
+            bookmark(ActivityOptionsFactory.makeScaleUpBundle(it))
+        }
+        binding?.footer?.search?.setOnClickListener {
+            search(ActivityOptionsFactory.makeScaleUpBundle(it))
+        }
         binding?.footer?.toTop?.setOnClickListener { toTop() }
         binding?.footer?.toBottom?.setOnClickListener { toBottom() }
         binding?.footer?.tabList?.setOnClickListener { switchTabList() }
@@ -428,7 +433,7 @@ class BrowserFragment : BaseFragment() {
                 tabs.saveArchive()
             }
             Menu.SEARCH -> {
-                search()
+                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
             }
             Menu.SITE_SEARCH -> {
                 tabs.siteSearch()
@@ -465,7 +470,9 @@ class BrowserFragment : BaseFragment() {
                 )
             }
             Menu.ADD_BOOKMARK -> {
-                tabs.addBookmark { bookmark() }
+                tabs.addBookmark {
+                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
+                }
             }
             Menu.EDITOR -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -559,19 +566,24 @@ class BrowserFragment : BaseFragment() {
 
     /**
      * Show bookmark activity.
+     *
+     * @param option [ActivityOptions]
      */
-    private fun bookmark() {
+    private fun bookmark(option: ActivityOptions) {
         startActivityForResult(
                 BookmarkActivity.makeIntent(activity),
-                BookmarkActivity.REQUEST_CODE
+                BookmarkActivity.REQUEST_CODE,
+                option.toBundle()
         )
     }
 
     /**
      * Show search activity.
+     *
+     * @param option [ActivityOptions]
      */
-    private fun search() {
-        startActivity(SearchActivity.makeIntent(context))
+    private fun search(option: ActivityOptions) {
+        startActivity(SearchActivity.makeIntent(context), option.toBundle())
     }
 
     /**
@@ -678,6 +690,9 @@ class BrowserFragment : BaseFragment() {
      */
     private fun hideTabList() {
         tabListModule.hide()
+        if (tabs.currentTab() is EditorTab) {
+            return
+        }
         binding?.fab?.show()
     }
 

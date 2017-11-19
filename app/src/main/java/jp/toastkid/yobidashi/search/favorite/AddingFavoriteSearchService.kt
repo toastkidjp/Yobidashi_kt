@@ -19,7 +19,7 @@ class AddingFavoriteSearchService : Service() {
                 applicationContext,
                 intent.getStringExtra(EXTRA_KEY_CATEGORY),
                 intent.getStringExtra(EXTRA_KEY_QUERY)
-        ).insert()
+        ).invoke()
         return Service.START_STICKY_COMPATIBILITY
     }
 

@@ -742,7 +742,10 @@ class TabAdapter(
         }
     }
 
-    fun enablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
+    /**
+     * Is disable Pull-to-Refresh?
+     */
+    fun disablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
 
     fun isNotEmpty(): Boolean = !tabList.isEmpty
 

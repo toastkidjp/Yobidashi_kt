@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -18,15 +17,12 @@ class FavoriteSearchInsertion(
         private val query: String
 ) {
 
-    fun insert() {
-        insertFavoriteSearch(makeFavoriteSearch(category, query))
-    }
-
-    private fun insertFavoriteSearch(favoriteSearch: FavoriteSearch) {
-        Completable.create { e ->
-            DbInitter.init(context).insertIntoFavoriteSearch(favoriteSearch)
-            e.onComplete()
-        }
+    /**
+     * Invoke action.
+     */
+    fun invoke() {
+        Completable
+                .fromAction { insert() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -36,11 +32,24 @@ class FavoriteSearchInsertion(
                 }
     }
 
-    private fun makeFavoriteSearch(category: String, query: String): FavoriteSearch {
-        val fs = FavoriteSearch()
-        fs.category = category
-        fs.query = query
-        return fs
+    /**
+     * Insert record.
+     */
+    private fun insert() {
+        DbInitter.init(context).insertIntoFavoriteSearch(makeFavoriteSearch(category, query))
+    }
+
+    /**
+     * Make object.
+     *
+     * @param c Category string
+     * @param q Query
+     */
+    private fun makeFavoriteSearch(c: String, q: String): FavoriteSearch {
+        return FavoriteSearch().apply {
+            category = c
+            query = q
+        }
     }
 
 }

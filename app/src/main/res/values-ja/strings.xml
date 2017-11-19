@@ -320,4 +320,9 @@
     <string name="message_character_count">文字数: %d</string>
     <string name="title_add_folder">フォルダを追加</string>
     <string name="title_import_bookmark">ブックマークをインポート</string>
+
+    <string name="top">上へ</string>
+    <string name="bottom">下へ</string>
+
+    <string name="title_option_menu">オプションメニュー</string>
 </resources>
