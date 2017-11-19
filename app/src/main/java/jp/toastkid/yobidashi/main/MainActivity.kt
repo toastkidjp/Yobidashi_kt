@@ -413,6 +413,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 sendLog("nav_author")
                 startActivity(IntentFactory.authorsApp())
             }
+            R.id.nav_option_menu -> {
+                binding.appBarMain?.toolbar?.showOverflowMenu()
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            }
             R.id.nav_settings -> {
                 startActivityWithSlideIn("nav_set_top", SettingsActivity.makeIntent(this))
             }

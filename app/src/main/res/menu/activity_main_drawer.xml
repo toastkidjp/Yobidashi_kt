@@ -8,6 +8,12 @@
         />
 
     <item
+        android:id="@+id/nav_option_menu"
+        android:icon="@drawable/ic_option_menu"
+        android:title="@string/title_option_menu"
+        />
+
+    <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/title_settings"

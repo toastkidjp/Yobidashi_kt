@@ -329,4 +329,6 @@
 
     <string name="top">top</string>
     <string name="bottom">bottom</string>
+
+    <string name="title_option_menu">Option Menu</string>
 </resources>

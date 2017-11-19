@@ -323,4 +323,6 @@
 
     <string name="top">上へ</string>
     <string name="bottom">下へ</string>
+
+    <string name="title_option_menu">オプションメニュー</string>
 </resources>
