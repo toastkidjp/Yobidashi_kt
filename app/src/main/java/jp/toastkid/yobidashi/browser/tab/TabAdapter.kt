@@ -338,7 +338,7 @@ class TabAdapter(
         }
         webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
             val scrolled = vertical - oldVertical
-            if (Math.abs(scrolled) > minimumScrolled) {
+            if (Math.abs(scrolled) > minimumScrolled && currentTab() is WebTab) {
                 scrollCallback(0 > scrolled)
             }
         }
@@ -474,6 +474,7 @@ class TabAdapter(
         if (currentTab is WebTab) {
             if (editor.isVisible) {
                 editor.hide()
+                webView.isEnabled = true
             }
             val latest = currentTab.latest
             if (latest !== History.EMPTY) {
@@ -488,6 +489,7 @@ class TabAdapter(
                 editor.clearPath()
             }
             editor.show()
+            webView.isEnabled = false
             tabList.save()
         }
     }
