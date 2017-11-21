@@ -1,73 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_background"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="@color/transparent"
     >
     <FrameLayout
+        android:id="@+id/widget_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="90dp"
+        android:background="@drawable/ripple_appwidget"
         >
-        <FrameLayout
-            android:id="@+id/widget_search"
+        <ImageView
+            android:id="@+id/widget_search_image"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|left"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_search_white"
+            />
+        <TextView
+            android:id="@+id/widget_search_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="90dp"
-            android:background="@drawable/ripple_appwidget"
-            >
-            <ImageView
-                android:id="@+id/widget_search_image"
-                android:layout_width="24dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical|left"
-                android:adjustViewBounds="true"
-                android:src="@drawable/ic_search_white"
-                />
-            <TextView
-                android:id="@+id/widget_search_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:gravity="center_vertical"
-                android:text="@string/app_widget_search"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                />
-            <LinearLayout
-                android:id="@+id/widget_search_border"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="5dp"
-                android:layout_gravity="bottom"
-                android:background="@color/white"
-                />
-        </FrameLayout>
-
-        <ImageView
-            android:id="@+id/widget_launcher"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="56dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_launcher"
-            android:background="@drawable/ripple_appwidget"
+            android:layout_marginLeft="30dp"
+            android:gravity="center_vertical"
+            android:text="@string/app_widget_search"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             />
-
         <ImageView
-            android:id="@+id/widget_barcode_reader"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="8dp"
-            android:layout_gravity="center_vertical|right"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_barcode"
-            android:background="@drawable/ripple_appwidget"
+            android:id="@+id/widget_search_border"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
             />
     </FrameLayout>
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/widget_launcher"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="56dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_launcher"
+        android:background="@drawable/ripple_appwidget"
+        />
+
+    <ImageView
+        android:id="@+id/widget_barcode_reader"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="8dp"
+        android:layout_gravity="center_vertical|right"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_barcode"
+        android:background="@drawable/ripple_appwidget"
+        />
+</FrameLayout>
