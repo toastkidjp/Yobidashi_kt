@@ -38,7 +38,7 @@ class BackgroundSettingActivity : BaseActivity() {
     /**
      * Wrapper of FilesDir.
      */
-    private var filesDir: FilesDir? = null
+    private lateinit var filesDir: FilesDir
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,20 +66,29 @@ class BackgroundSettingActivity : BaseActivity() {
                     LinearLayoutManager.HORIZONTAL,
                     false
             )
-            adapter = Adapter(preferenceApplier, filesDir!!)
+            adapter = Adapter(preferenceApplier, filesDir)
             it.imagesView.adapter = adapter
+            if (adapter?.itemCount == 0) {
+                Toaster.withAction(
+                        it.imagesView,
+                        getString(R.string.message_snackbar_suggestion_select_background_image),
+                        R.string.select,
+                        View.OnClickListener { launchAdding(it) },
+                        colorPair()
+                        )
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        applyColorToToolbar(binding!!.toolbar)
+        binding?.toolbar?.let { applyColorToToolbar(it) }
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
-                launchAdding(binding!!.fab)
+                binding?.fab?.let { launchAdding(it) }
                 return true
             }
             R.id.background_settings_toolbar_menu_clear -> {
@@ -106,13 +115,13 @@ class BackgroundSettingActivity : BaseActivity() {
     private fun clearImages() {
         ClearImages(this, {
             sendLog("clear_bg_img")
-            filesDir!!.clean()
+            filesDir.clean()
             Toaster.snackShort(
-                    binding!!.fabParent,
+                    binding?.fabParent as View,
                     getString(R.string.message_success_image_removal),
                     colorPair()
             )
-            adapter!!.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
         }).invoke()
     }
 
@@ -125,7 +134,7 @@ class BackgroundSettingActivity : BaseActivity() {
         if (requestCode == IMAGE_READ_REQUEST
                 && resultCode == Activity.RESULT_OK
                 && data != null) {
-            LoadedAction(data, binding!!.fabParent, colorPair(), { adapter?.notifyDataSetChanged() })
+            LoadedAction(data, binding?.fabParent as View, colorPair(), { adapter?.notifyDataSetChanged() })
                     .invoke()
             sendLog("set_img")
         }
