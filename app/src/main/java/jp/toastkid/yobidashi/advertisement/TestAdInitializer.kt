@@ -57,6 +57,7 @@ internal class TestAdInitializer(context: Context) : AdInitializer {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice("59A864957D348217B858A8CE956AA352")
                 .addTestDevice("41D3185792903C624B6E9045EBF43BB3")
+                .addTestDevice("FF30448442F5EAE65974D6E0FEB4C1BD")
                 .build()
     }
 
