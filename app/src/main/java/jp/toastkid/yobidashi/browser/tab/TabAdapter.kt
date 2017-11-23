@@ -88,18 +88,6 @@ class TabAdapter(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
-     * Animation of slide in left.
-     */
-    private val slideInLeft
-            = AnimationUtils.loadAnimation(tabCount.context, android.R.anim.slide_in_left)
-
-    /**
-     * Animation of slide in right.
-     */
-    private val slideInRight
-            = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_in_right)
-
-    /**
      * Animation of slide up bottom.
      */
     private val slideUpBottom
@@ -450,16 +438,11 @@ class TabAdapter(
         updateScrolled()
 
         if (openNew) {
-            webView.startAnimation(slideUpBottom)
             setIndex(index)
+            webView.startAnimation(slideUpBottom)
             return
         }
 
-        if (index < index()) {
-            webView.startAnimation(slideInLeft)
-        } else {
-            webView.startAnimation(slideInRight)
-        }
         setIndex(index)
     }
 
