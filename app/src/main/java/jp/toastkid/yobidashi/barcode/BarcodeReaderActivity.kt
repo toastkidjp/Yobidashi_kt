@@ -17,6 +17,7 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBarcodeReaderBinding
+import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -98,7 +99,9 @@ class BarcodeReaderActivity : BaseActivity() {
      * Open result text with browser.
      */
     fun open(ignored: View) {
-        getResultText()?.let { startActivity(MainActivity.makeBrowserIntent(this, Uri.parse(it))) }
+        getResultText()?.let {
+            startActivity(MainActivity.makeBrowserIntent(this, Uri.parse(it)))
+        }
     }
 
     /**
@@ -123,7 +126,15 @@ class BarcodeReaderActivity : BaseActivity() {
     public override fun onResume() {
         super.onResume()
         binding?.barcodeView?.resume()
-        binding?.toolbar?.setTitleTextColor(colorPair().fontColor())
+        val colorPair = colorPair()
+        binding?.toolbar?.setTitleTextColor(colorPair.fontColor())
+        binding?.let {
+            it.resultArea.setBackgroundColor(colorPair.bgColor())
+            Colors.setBgAndText(it.clip, colorPair)
+            Colors.setBgAndText(it.share, colorPair)
+            Colors.setBgAndText(it.open, colorPair)
+            Colors.setBgAndText(it.result, colorPair)
+        }
     }
 
     public override fun onPause() {
