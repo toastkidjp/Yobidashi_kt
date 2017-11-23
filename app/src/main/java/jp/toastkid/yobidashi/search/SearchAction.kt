@@ -1,12 +1,17 @@
 package jp.toastkid.yobidashi.search
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.analytics.LogSender
+import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 
 /**
@@ -43,13 +48,26 @@ class SearchAction(
                 }
         )
 
+        val validUrl = Urls.isValidUrl(query)
+
         val colorPair: ColorPair = preferenceApplier.colorPair()
         if (preferenceApplier.useInternalBrowser()) {
+            if (validUrl) {
+                activityContext.startActivity(
+                        MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
+                return disposable
+            }
             InternalSearchIntentLauncher(activityContext)
                     .setCategory(category)
                     .setQuery(query)
                     .invoke()
         } else {
+            if (validUrl) {
+                CustomTabsFactory.make(activityContext, colorPair, R.drawable.ic_back)
+                        .build()
+                        .launchUrl(activityContext, Uri.parse(query))
+                return disposable
+            }
             ChromeTabsSearchIntentLauncher(activityContext)
                     .setBackgroundColor(colorPair.bgColor())
                     .setFontColor(colorPair.fontColor())

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -21,7 +20,7 @@ import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.search.SearchAction
 
 /**
  * Barcode reader activity.
@@ -100,7 +99,7 @@ class BarcodeReaderActivity : BaseActivity() {
      */
     fun open(ignored: View) {
         getResultText()?.let {
-            startActivity(MainActivity.makeBrowserIntent(this, Uri.parse(it)))
+            SearchAction(this, preferenceApplier.getDefaultSearchEngine(), it).invoke()
         }
     }
 
