@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
@@ -18,72 +20,108 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
  * Background settings.
-
+ *
  * @author toastkidjp
  */
 class BackgroundSettingActivity : BaseActivity() {
 
-    /** Data Binding object.  */
+    /**
+     * Data Binding object.
+     */
     private var binding: ActivityBackgroundSettingBinding? = null
 
-    /** ModuleAdapter.  */
+    /**
+     * ModuleAdapter.
+     */
     private var adapter: Adapter? = null
 
-    /** Wrapper of FilesDir.  */
-    private var filesDir: FilesDir? = null
+    /**
+     * Wrapper of FilesDir.
+     */
+    private lateinit var filesDir: FilesDir
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityBackgroundSettingBinding>(this, LAYOUT_ID)
-        binding!!.activity = this
-        initToolbar(binding!!.toolbar)
-        binding!!.toolbar.inflateMenu(R.menu.background_setting_menu)
+        binding?.let {
+            it.activity = this
+            initToolbar(it.toolbar)
+            it.toolbar.inflateMenu(R.menu.background_setting_menu)
+        }
 
         filesDir = FilesDir(this, BACKGROUND_DIR)
 
         initImagesView()
     }
 
+    /**
+     * Initialize images RecyclerView.
+     */
     private fun initImagesView() {
-        binding!!.imagesView.layoutManager = GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false)
-        adapter = Adapter(preferenceApplier, filesDir!!)
-        binding!!.imagesView.adapter = adapter
+        binding?.let {
+            it.imagesView.layoutManager = GridLayoutManager(
+                    this,
+                    2,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+            )
+            adapter = Adapter(preferenceApplier, filesDir)
+            it.imagesView.adapter = adapter
+            if (adapter?.itemCount == 0) {
+                Toaster.withAction(
+                        it.imagesView,
+                        getString(R.string.message_snackbar_suggestion_select_background_image),
+                        R.string.select,
+                        View.OnClickListener { launchAdding(it) },
+                        colorPair()
+                        )
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        applyColorToToolbar(binding!!.toolbar)
+        binding?.toolbar?.let { applyColorToToolbar(it) }
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.background_settings_toolbar_menu_add) {
-            launchAdding(binding!!.fab)
-            return true
+        return when (item.itemId) {
+            R.id.background_settings_toolbar_menu_add -> {
+                binding?.fab?.let { launchAdding(it) }
+                return true
+            }
+            R.id.background_settings_toolbar_menu_clear -> {
+                clearImages()
+                return true
+            }
+            else -> super.clickMenu(item)
         }
-        if (itemId == R.id.background_settings_toolbar_menu_clear) {
-            clearImages()
-            return true
-        }
-        return super.clickMenu(item)
     }
 
-    fun launchAdding(v: View) {
+    /**
+     * Launch Adding action.
+     *
+     * @param ignored For use Data Binding.
+     */
+    fun launchAdding(ignored: View) {
         sendLog("set_bg_img")
         startActivityForResult(IntentFactory.makePickImage(), IMAGE_READ_REQUEST)
     }
 
+    /**
+     * Clear all images.
+     */
     private fun clearImages() {
         ClearImages(this, {
             sendLog("clear_bg_img")
-            filesDir!!.clean()
+            filesDir.clean()
             Toaster.snackShort(
-                    binding!!.fabParent,
+                    binding?.fabParent as View,
                     getString(R.string.message_success_image_removal),
                     colorPair()
             )
-            adapter!!.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
         }).invoke()
     }
 
@@ -96,27 +134,33 @@ class BackgroundSettingActivity : BaseActivity() {
         if (requestCode == IMAGE_READ_REQUEST
                 && resultCode == Activity.RESULT_OK
                 && data != null) {
-            LoadedAction(data, binding!!.fabParent, colorPair(), { adapter?.notifyDataSetChanged() })
+            LoadedAction(data, binding?.fabParent as View, colorPair(), { adapter?.notifyDataSetChanged() })
                     .invoke()
             sendLog("set_img")
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun titleId(): Int {
-        return R.string.title_background_image_setting
-    }
+    @StringRes
+    override fun titleId(): Int = R.string.title_background_image_setting
 
     companion object {
 
-        /** Background image dir.  */
-        val BACKGROUND_DIR = "background_dir"
+        /**
+         * Background image dir.
+         */
+        const val BACKGROUND_DIR: String = "background_dir"
 
-        /** Request code.  */
-        private val IMAGE_READ_REQUEST = 136
+        /**
+         * Request code.
+         */
+        private const val IMAGE_READ_REQUEST: Int = 136
 
-        /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.activity_background_setting
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private const val LAYOUT_ID: Int = R.layout.activity_background_setting
 
         /**
          * Make launcher intent.
@@ -124,11 +168,9 @@ class BackgroundSettingActivity : BaseActivity() {
          *
          * @return [Intent]
          */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, BackgroundSettingActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
+        fun makeIntent(context: Context): Intent =
+                Intent(context, BackgroundSettingActivity::class.java)
+                        .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
     }
 
 }

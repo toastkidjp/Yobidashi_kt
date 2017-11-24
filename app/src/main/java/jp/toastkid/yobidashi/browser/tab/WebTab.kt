@@ -23,6 +23,9 @@ internal class WebTab: Tab {
 
     @Synchronized override fun back(): String {
         val nextIndex = if (index == 0) index else index - 1
+        if (nextIndex < 0) {
+            return ""
+        }
         val sameIndex = nextIndex == index
         index = nextIndex
         return if (sameIndex) "" else histories[nextIndex].url()

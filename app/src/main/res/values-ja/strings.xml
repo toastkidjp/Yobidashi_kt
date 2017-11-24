@@ -30,6 +30,7 @@
     <string name="ok">決定</string>
     <string name="share">シェア</string>
     <string name="search">検索</string>
+    <string name="select">選択</string>
 
     <string name="title_search_action">検索</string>
     <string name="action_settings">設定</string>
@@ -325,4 +326,6 @@
     <string name="bottom">下へ</string>
 
     <string name="title_option_menu">オプションメニュー</string>
+    <string name="message_snackbar_suggestion_select_background_image">
+        好きな画像を背景画像を設定しましょう！</string>
 </resources>

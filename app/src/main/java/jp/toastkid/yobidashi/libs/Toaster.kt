@@ -154,7 +154,7 @@ object Toaster {
      * Show snackbar on long time.
      *
      * @param view
-     * @param messageId
+     * @param message
      * @param actionTextId
      * @param action
      * @param pair
@@ -162,13 +162,13 @@ object Toaster {
      */
     fun withAction(
             view: View,
-            messageId: String,
+            message: String,
             @StringRes actionTextId: Int,
             action: View.OnClickListener,
             pair: ColorPair,
             duration: Int = Snackbar.LENGTH_INDEFINITE
     ): Snackbar {
-        val snackbar = Snackbar.make(view, messageId, duration)
+        val snackbar = Snackbar.make(view, message, duration)
         snackbar.setAction(actionTextId, action)
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(pair.bgColor())
