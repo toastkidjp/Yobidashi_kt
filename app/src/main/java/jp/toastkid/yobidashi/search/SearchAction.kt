@@ -15,6 +15,11 @@ import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 
 /**
+ * Search action shortcut.
+ *
+ * @param activityContext Activity's context
+ * @param category Search Category
+ * @param query Search query (or URL)
  * @author toastkidjp
  */
 class SearchAction(
@@ -23,15 +28,19 @@ class SearchAction(
         private val query: String
 ) {
 
-    private val logSender: LogSender
+    /**
+     * Log sender.
+     */
+    private val logSender: LogSender = LogSender(activityContext)
 
-    private val preferenceApplier: PreferenceApplier
+    /**
+     * Preferences wrapper.
+     */
+    private val preferenceApplier: PreferenceApplier = PreferenceApplier(activityContext)
 
-    init {
-        this.logSender = LogSender(activityContext)
-        this.preferenceApplier = PreferenceApplier(activityContext)
-    }
-
+    /**
+     * Invoke action.
+     */
     operator fun invoke(): Disposable {
 
         val disposable = if (preferenceApplier.isEnableSearchHistory) {
@@ -50,32 +59,51 @@ class SearchAction(
 
         val validUrl = Urls.isValidUrl(query)
 
-        val colorPair: ColorPair = preferenceApplier.colorPair()
         if (preferenceApplier.useInternalBrowser()) {
-            if (validUrl) {
-                activityContext.startActivity(
-                        MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
-                return disposable
-            }
-            InternalSearchIntentLauncher(activityContext)
-                    .setCategory(category)
-                    .setQuery(query)
-                    .invoke()
+            withInternalBrowser(validUrl)
         } else {
-            if (validUrl) {
-                CustomTabsFactory.make(activityContext, colorPair, R.drawable.ic_back)
-                        .build()
-                        .launchUrl(activityContext, Uri.parse(query))
-                return disposable
-            }
-            ChromeTabsSearchIntentLauncher(activityContext)
-                    .setBackgroundColor(colorPair.bgColor())
-                    .setFontColor(colorPair.fontColor())
-                    .setCategory(category)
-                    .setQuery(query)
-                    .invoke()
+            withChromeTabs(validUrl)
         }
         return disposable
+    }
+
+    /**
+     * Action with internal browser.
+     *
+     * @param validUrl passed query is URL.
+     */
+    private fun withInternalBrowser(validUrl: Boolean) {
+        if (validUrl) {
+            activityContext.startActivity(
+                    MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
+            return
+        }
+        InternalSearchIntentLauncher(activityContext)
+                .setCategory(category)
+                .setQuery(query)
+                .invoke()
+    }
+
+    /**
+     * Action with custom chrome tabs.
+     *
+     * @param validUrl passed query is URL.
+     */
+    private fun withChromeTabs(validUrl: Boolean) {
+        val colorPair: ColorPair = preferenceApplier.colorPair()
+
+        if (validUrl) {
+            CustomTabsFactory.make(activityContext, colorPair, R.drawable.ic_back)
+                    .build()
+                    .launchUrl(activityContext, Uri.parse(query))
+            return
+        }
+        ChromeTabsSearchIntentLauncher(activityContext)
+                .setBackgroundColor(colorPair.bgColor())
+                .setFontColor(colorPair.fontColor())
+                .setCategory(category)
+                .setQuery(query)
+                .invoke()
     }
 
 }
