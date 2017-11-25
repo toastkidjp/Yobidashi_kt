@@ -7,42 +7,45 @@ import android.view.View
 
 /**
  * Facade of module.
-
+ *
+ * @param moduleView Module's view.
  * @author toastkidjp
  */
-abstract class BaseModule
-/**
- * Initialize with parent.
- * @param parent
- */
-(
-        /**
-         * Module's view.
-         */
-        val moduleView: View) {
+abstract class BaseModule(val moduleView: View) {
 
-    private val mainThreadHandler: Handler
+    /**
+     * For running view operation.
+     */
+    private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
-    init {
-        mainThreadHandler = Handler(Looper.getMainLooper())
-    }
-
+    /**
+     * Show this module.
+     */
     open fun show() {
         if (moduleView.visibility == View.GONE) {
             mainThreadHandler.post { moduleView.visibility = View.VISIBLE }
         }
     }
 
+    /**
+     * Hide this module.
+     */
     open fun hide() {
         if (moduleView.visibility == View.VISIBLE) {
             mainThreadHandler.post { moduleView.visibility = View.GONE }
         }
     }
 
+    /**
+     * Is visible this module visible.
+     */
     val isVisible: Boolean
         get() = moduleView.visibility == View.VISIBLE
 
-    fun context(): Context {
-        return moduleView.context
-    }
+    /**
+     * Return view context.
+     *
+     * @return context
+     */
+    fun context(): Context = moduleView.context
 }
