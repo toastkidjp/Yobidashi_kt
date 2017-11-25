@@ -41,4 +41,9 @@ class Bookmark {
         return orma.relationOfBookmark()._idEq(1)
     }
 
+    override fun toString(): String {
+        return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', parent='$parent', folder=$folder, view_count=$view_count, last_viewed=$last_viewed)"
+    }
+
+
 }
