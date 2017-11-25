@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.databinding.FragmentHomeBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -47,6 +48,11 @@ class HomeFragment : BaseFragment() {
     private var action: FragmentReplaceAction? = null
 
     /**
+     * For hiding toolbar.
+     */
+    private var toolbarAction: ToolbarAction? = null
+
+    /**
      * ModuleAdapter.
      */
     private var adapter: Adapter? = null
@@ -59,6 +65,7 @@ class HomeFragment : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         action = context as FragmentReplaceAction?
+        toolbarAction = context as ToolbarAction?
     }
 
     override fun onCreateView(
@@ -144,6 +151,10 @@ class HomeFragment : BaseFragment() {
         binding.searchIcon.setColorFilter(bgColor)
         binding.voiceSearch.setColorFilter(bgColor)
         binding.searchInputBorder.setBackgroundColor(bgColor)
+
+        binding.menusView.requestLayout()
+
+        toolbarAction?.hideToolbar()
     }
 
     /**
