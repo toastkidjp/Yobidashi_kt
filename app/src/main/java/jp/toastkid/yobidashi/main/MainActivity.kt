@@ -25,9 +25,11 @@ import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.BuildConfig
@@ -143,7 +145,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         initNavigation()
 
-        initInterstitialAd()
+        disposables.add(
+                Completable.fromAction { initInterstitialAd() }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
+        )
 
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
@@ -295,7 +301,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     )
                 }
             }
-            AdInitializers.find(this).invoke(it)
+            val adInitializer = AdInitializers.find(this)
+            runOnUiThread { adInitializer.invoke(it) }
         }
     }
 
