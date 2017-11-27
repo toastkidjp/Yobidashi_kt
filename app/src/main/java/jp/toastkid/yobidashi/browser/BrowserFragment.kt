@@ -343,10 +343,14 @@ class BrowserFragment : BaseFragment() {
         }
 
         menu?.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
-            tabs.stopLoading()
-            Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
+            stopCurrentLoading()
             true
         }
+    }
+
+    private fun stopCurrentLoading() {
+        tabs.stopLoading()
+        Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
     }
 
     /**
@@ -411,6 +415,9 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.TAB_LIST -> {
                 switchTabList()
+            }
+            Menu.STOP_LOADING -> {
+                stopCurrentLoading()
             }
             Menu.OPEN -> {
                 val inputLayout = TextInputs.make(context)
