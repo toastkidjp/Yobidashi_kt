@@ -473,6 +473,7 @@ class TabAdapter(
             }
             editor.show()
             webView.isEnabled = false
+            webView.stopLoading()
             tabList.save()
         }
     }
