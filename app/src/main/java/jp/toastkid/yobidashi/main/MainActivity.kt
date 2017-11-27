@@ -131,6 +131,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      */
     private val torch by lazy { Torch(this) }
 
+    /**
+     * RxPermissions.
+     */
+    private val rxPermissions by lazy { RxPermissions(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
@@ -338,8 +343,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         val headerView = binding.navView.getHeaderView(0)
         navBackground = headerView?.findViewById(R.id.nav_header_background)
     }
-
-    private val rxPermissions by lazy { RxPermissions(this) }
 
     /**
      * Invoke action with Menu ID.
