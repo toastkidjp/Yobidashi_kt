@@ -341,6 +341,12 @@ class BrowserFragment : BaseFragment() {
             startActivity(SettingsActivity.makeIntent(context))
             true
         }
+
+        menu?.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
+            tabs.stopLoading()
+            Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
+            true
+        }
     }
 
     /**

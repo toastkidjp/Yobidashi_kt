@@ -473,7 +473,7 @@ class TabAdapter(
             }
             editor.show()
             webView.isEnabled = false
-            webView.stopLoading()
+            stopLoading()
             tabList.save()
         }
     }
@@ -726,6 +726,13 @@ class TabAdapter(
             }
             loadUrl(url, false)
         }
+    }
+
+    /**
+     * Stop loading in current tab.
+     */
+    fun stopLoading() {
+        webView.stopLoading()
     }
 
     /**
