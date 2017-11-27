@@ -339,6 +339,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         navBackground = headerView?.findViewById(R.id.nav_header_background)
     }
 
+    private val rxPermissions by lazy { RxPermissions(this) }
+
     /**
      * Invoke action with Menu ID.
      *
@@ -431,15 +433,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 startActivityWithSlideIn("nav_poker", PlanningPokerActivity.makeIntent(this))
             }
             R.id.nav_camera -> {
-                disposables.add(
-                        RxPermissions(this)
-                                .request(Manifest.permission.CAMERA)
-                                .filter { it }
-                                .subscribe(
-                                        { startActivityWithSlideIn("nav_camera", IntentFactory.makeCamera()) },
-                                        { Timber.e(it) }
-                                )
-                )
+                sendLog("nav_camera")
+                useCameraPermission { startActivityWithSlideIn("nav_camera", IntentFactory.makeCamera()) }
             }
             R.id.nav_bookmark -> {
                 startActivityForResultWithSlideIn(
@@ -457,7 +452,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_torch -> {
                 sendLog("nav_torch")
-                torch.switch()
+                useCameraPermission { torch.switch() }
             }
             R.id.nav_barcode -> {
                 sendLog("nav_barcode")
@@ -472,6 +467,23 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 replaceFragment(homeFragment)
             }
         }
+    }
+
+    /**
+     * Use camera permission with specified action.
+     *
+     * @param onGranted action
+     */
+    private fun useCameraPermission(onGranted: () -> Unit) {
+        disposables.add(
+                rxPermissions
+                        .request(Manifest.permission.CAMERA)
+                        .filter { it }
+                        .subscribe(
+                                { onGranted() },
+                                { Timber.e(it) }
+                        )
+        )
     }
 
     /**
