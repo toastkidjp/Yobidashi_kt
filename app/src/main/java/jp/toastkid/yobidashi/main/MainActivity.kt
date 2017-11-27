@@ -27,7 +27,6 @@ import com.google.android.gms.ads.InterstitialAd
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
@@ -110,11 +109,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * Disposables.
      */
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
-
-    /**
-     * For stopping subscribing title pair.
-     */
-    private var prevDisposable: Disposable? = null
 
     /**
      * Count up for displaying AD.
@@ -252,10 +246,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         if (uri != Uri.EMPTY) {
             uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
         }
-        prevDisposable = browserFragment.setConsumer(Consumer {
+        browserFragment.consumer = Consumer {
             binding.appBarMain?.toolbar?.title    = it.title()
             binding.appBarMain?.toolbar?.subtitle = it.subtitle()
-        })
+        }
     }
 
     /**
@@ -264,10 +258,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * @param fragment {@link BaseFragment} instance
      */
     private fun replaceFragment(fragment: BaseFragment) {
-
-        if (prevDisposable != null) {
-            prevDisposable?.dispose()
-        }
 
         if (fragment.isVisible) {
             snackSuppressOpenFragment()
