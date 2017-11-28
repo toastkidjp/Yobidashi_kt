@@ -21,7 +21,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
 import jp.toastkid.yobidashi.BaseFragment
@@ -110,6 +109,11 @@ class BrowserFragment : BaseFragment() {
      * Editor area.
      */
     private lateinit var editor: EditorModule
+
+    /**
+     * Set consumer to titleProcessor.
+     */
+    var consumer: Consumer<TitlePair>? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -341,6 +345,16 @@ class BrowserFragment : BaseFragment() {
             startActivity(SettingsActivity.makeIntent(context))
             true
         }
+
+        menu?.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
+            stopCurrentLoading()
+            true
+        }
+    }
+
+    private fun stopCurrentLoading() {
+        tabs.stopLoading()
+        Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
     }
 
     /**
@@ -405,6 +419,9 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.TAB_LIST -> {
                 switchTabList()
+            }
+            Menu.STOP_LOADING -> {
+                stopCurrentLoading()
             }
             Menu.OPEN -> {
                 val inputLayout = TextInputs.make(context)
@@ -609,6 +626,7 @@ class BrowserFragment : BaseFragment() {
         editor.applyColor()
 
         disposables.add(tabs.reloadWebViewSettings())
+        disposables.add(titleProcessor.subscribe(consumer))
 
         if (tabs.isNotEmpty()) {
             tabs.setCurrentTab()
@@ -775,12 +793,6 @@ class BrowserFragment : BaseFragment() {
     fun loadWithNewTab(uri: Uri) {
         tabs.loadWithNewTab(uri)
     }
-
-    /**
-     * Set consumer to titleProcessor.
-     */
-    fun setConsumer(consumer: Consumer<TitlePair>): Disposable =
-            titleProcessor.subscribe(consumer, Consumer { Timber.e(it) })
 
     override fun onPause() {
         super.onPause()

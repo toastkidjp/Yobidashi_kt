@@ -25,9 +25,10 @@ import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.BuildConfig
@@ -110,11 +111,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
 
     /**
-     * For stopping subscribing title pair.
-     */
-    private var prevDisposable: Disposable? = null
-
-    /**
      * Count up for displaying AD.
      */
     private var adCount = 0
@@ -128,6 +124,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * Torch API facade.
      */
     private val torch by lazy { Torch(this) }
+
+    /**
+     * RxPermissions.
+     */
+    private val rxPermissions by lazy { RxPermissions(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,7 +144,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         initNavigation()
 
-        initInterstitialAd()
+        disposables.add(
+                Completable.fromAction { initInterstitialAd() }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
+        )
 
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
@@ -241,10 +246,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         if (uri != Uri.EMPTY) {
             uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
         }
-        prevDisposable = browserFragment.setConsumer(Consumer {
+        browserFragment.consumer = Consumer {
             binding.appBarMain?.toolbar?.title    = it.title()
             binding.appBarMain?.toolbar?.subtitle = it.subtitle()
-        })
+        }
     }
 
     /**
@@ -253,10 +258,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * @param fragment {@link BaseFragment} instance
      */
     private fun replaceFragment(fragment: BaseFragment) {
-
-        if (prevDisposable != null) {
-            prevDisposable?.dispose()
-        }
 
         if (fragment.isVisible) {
             snackSuppressOpenFragment()
@@ -295,7 +296,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     )
                 }
             }
-            AdInitializers.find(this).invoke(it)
+            val adInitializer = AdInitializers.find(this)
+            runOnUiThread { adInitializer.invoke(it) }
         }
     }
 
@@ -424,15 +426,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 startActivityWithSlideIn("nav_poker", PlanningPokerActivity.makeIntent(this))
             }
             R.id.nav_camera -> {
-                disposables.add(
-                        RxPermissions(this)
-                                .request(Manifest.permission.CAMERA)
-                                .filter { it }
-                                .subscribe(
-                                        { startActivityWithSlideIn("nav_camera", IntentFactory.makeCamera()) },
-                                        { Timber.e(it) }
-                                )
-                )
+                sendLog("nav_camera")
+                useCameraPermission { startActivityWithSlideIn("nav_camera", IntentFactory.makeCamera()) }
             }
             R.id.nav_bookmark -> {
                 startActivityForResultWithSlideIn(
@@ -450,7 +445,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_torch -> {
                 sendLog("nav_torch")
-                torch.switch()
+                useCameraPermission { torch.switch() }
             }
             R.id.nav_barcode -> {
                 sendLog("nav_barcode")
@@ -465,6 +460,23 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 replaceFragment(homeFragment)
             }
         }
+    }
+
+    /**
+     * Use camera permission with specified action.
+     *
+     * @param onGranted action
+     */
+    private fun useCameraPermission(onGranted: () -> Unit) {
+        disposables.add(
+                rxPermissions
+                        .request(Manifest.permission.CAMERA)
+                        .filter { it }
+                        .subscribe(
+                                { onGranted() },
+                                { Timber.e(it) }
+                        )
+        )
     }
 
     /**

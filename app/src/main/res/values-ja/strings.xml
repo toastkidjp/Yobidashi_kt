@@ -328,4 +328,7 @@
     <string name="title_option_menu">オプションメニュー</string>
     <string name="message_snackbar_suggestion_select_background_image">
         好きな画像を背景画像を設定しましょう！</string>
+    <string name="title_stop_loading">ロード中止</string>
+    <string name="message_stop_loading">ロードを中止しました。</string>
+    <string name="message_fail_to_connect_to_camera">カメラを利用できないため、起動できませんでした。</string>
 </resources>

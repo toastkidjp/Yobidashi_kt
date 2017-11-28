@@ -17,6 +17,8 @@ internal enum class Menu(
 
     TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
 
+    STOP_LOADING(R.string.title_stop_loading, R.drawable.ic_close),
+
     TAB_HISTORY(R.string.title_tab_histories, R.drawable.ic_history),
 
     TOP(R.string.title_menu_to_top, R.drawable.ic_top),

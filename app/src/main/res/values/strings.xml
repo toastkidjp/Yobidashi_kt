@@ -333,4 +333,7 @@
 
     <string name="title_option_menu">Option Menu</string>
     <string name="message_snackbar_suggestion_select_background_image">Let\'s select your favorite image!</string>
+    <string name="title_stop_loading">Stop loading</string>
+    <string name="message_stop_loading">It has stopped loading.</string>
+    <string name="message_fail_to_connect_to_camera">Fail to connect to camera service.</string>
 </resources>
