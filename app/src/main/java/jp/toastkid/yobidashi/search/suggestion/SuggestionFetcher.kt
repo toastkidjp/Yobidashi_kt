@@ -40,7 +40,7 @@ class SuggestionFetcher {
                 if (response.body() == null) {
                     return
                 }
-                listCallback(SuggestionParser().parse(response.body()?.string() ?: ""))
+                listCallback(SuggestionParser.parse(response.body()?.string() ?: ""))
             }
         })
     }
