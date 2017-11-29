@@ -336,4 +336,6 @@
     <string name="title_stop_loading">Stop loading</string>
     <string name="message_stop_loading">It has stopped loading.</string>
     <string name="message_fail_to_connect_to_camera">Fail to connect to camera service.</string>
+    <string name="title_tab_background_search">Search of \'%s\'</string>
+    <string name="message_background_search">It has launched search \'%s\'.</string>
 </resources>

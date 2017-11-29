@@ -148,15 +148,7 @@ class TabList private constructor() {
                 val fromJson: TabList?
                         = jsonAdapter.fromJson(Okio.buffer(Okio.source(tabsFile as File)))
 
-                itemsDir?.list()
-                        ?.map {
-                            val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).readUtf8()
-                            if (json.contains("editorTab")) {
-                                editorTabJsonAdapter.fromJson(json)
-                            } else {
-                                webTabJsonAdapter.fromJson(json)
-                            }
-                        }
+                loadTabsFromDir()
                         ?.forEach { it?.let { fromJson?.add(it) } }
                 if (fromJson?.size() as Int <= fromJson.index) {
                     fromJson.index = fromJson.size() - 1
@@ -167,6 +159,18 @@ class TabList private constructor() {
             }
 
             return TabList()
+        }
+
+        internal fun loadTabsFromDir(): List<Tab?>? {
+            return itemsDir?.list()
+                    ?.map {
+                        val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).readUtf8()
+                        if (json.contains("editorTab")) {
+                            editorTabJsonAdapter.fromJson(json)
+                        } else {
+                            webTabJsonAdapter.fromJson(json)
+                        }
+                    }
         }
 
         private fun initTabsFile(context: Context) {
@@ -192,5 +196,15 @@ class TabList private constructor() {
     }
 
     override fun toString(): String = tabs.toString()
+
+    /**
+     * Load background tab from file if needs.
+     */
+    fun loadBackgroundTabsFromDirIfNeed() {
+        BackgroundTabQueue.iterate {
+            tabs.add(WebTab.makeBackground(it.first, it.second.toString()))
+        }
+        save()
+    }
 
 }

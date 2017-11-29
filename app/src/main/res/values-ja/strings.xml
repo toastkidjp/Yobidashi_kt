@@ -331,4 +331,6 @@
     <string name="title_stop_loading">ロード中止</string>
     <string name="message_stop_loading">ロードを中止しました。</string>
     <string name="message_fail_to_connect_to_camera">カメラを利用できないため、起動できませんでした。</string>
+    <string name="title_tab_background_search">Search of %s</string>
+    <string name="message_background_search">It has launched search \'%s\'.</string>
 </resources>

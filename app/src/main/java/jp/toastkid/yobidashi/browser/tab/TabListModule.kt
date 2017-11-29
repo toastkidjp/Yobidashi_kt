@@ -143,8 +143,4 @@ class TabListModule(
         }
     }
 
-    override fun hide() {
-        super.hide()
-        tabAdapter.reloadUrlIfNeed()
-    }
 }

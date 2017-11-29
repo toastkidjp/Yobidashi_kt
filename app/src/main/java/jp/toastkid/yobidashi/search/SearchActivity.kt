@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
@@ -29,6 +30,7 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
@@ -94,6 +96,7 @@ class SearchActivity : BaseActivity() {
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
                 binding?.searchInput as EditText,
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
+                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) },
                 this::hideKeyboard
         )
 
@@ -280,8 +283,15 @@ class SearchActivity : BaseActivity() {
      * @param category search category
      * @param query    search query
      */
-    private fun search(category: String, query: String) {
-        disposables.add(SearchAction(this, category, query).invoke())
+    private fun search(category: String, query: String, onBackground: Boolean = false) {
+        disposables.add(SearchAction(this, category, query, onBackground).invoke())
+        if (onBackground) {
+            Toaster.snackShort(
+                    binding?.root as View,
+                    getString(R.string.message_background_search, query),
+                    colorPair()
+            )
+        }
     }
 
     /**
