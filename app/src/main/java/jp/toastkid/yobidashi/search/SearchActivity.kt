@@ -120,6 +120,11 @@ class SearchActivity : BaseActivity() {
             it.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
         }
 
+        Toaster.snackShort(
+                binding?.background as View,
+                getString(R.string.message_search_on_background),
+                colorPair()
+                )
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
