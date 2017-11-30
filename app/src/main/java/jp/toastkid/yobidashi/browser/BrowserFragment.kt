@@ -61,11 +61,6 @@ import java.io.IOException
 class BrowserFragment : BaseFragment() {
 
     /**
-     * Data binding object.
-     */
-    private var binding: FragmentBrowserBinding? = null
-
-    /**
      * Archive folder.
      */
     private lateinit var tabs: TabAdapter
@@ -76,9 +71,29 @@ class BrowserFragment : BaseFragment() {
     private lateinit var tabListModule: TabListModule
 
     /**
+     * Search-with-clip object.
+     */
+    private lateinit var searchWithClip: SearchWithClip
+
+    /**
+     * Editor area.
+     */
+    private lateinit var editor: EditorModule
+
+    /**
+     * Data binding object.
+     */
+    private var binding: FragmentBrowserBinding? = null
+
+    /**
      * Find-in-page module.
      */
     private var pageSearcherModule: PageSearcherModule? = null
+
+    /**
+     * Toolbar action object.
+     */
+    private var toolbarAction: ToolbarAction? = null
 
     /**
      * PublishProcessor of title pair.
@@ -91,24 +106,9 @@ class BrowserFragment : BaseFragment() {
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
-     * Search-with-clip object.
-     */
-    private lateinit var searchWithClip: SearchWithClip
-
-    /**
-     * Toolbar action object.
-     */
-    private var toolbarAction: ToolbarAction? = null
-
-    /**
      * For disabling busy show & hide animation.
      */
     private var lastAnimated: Long = 0L
-
-    /**
-     * Editor area.
-     */
-    private lateinit var editor: EditorModule
 
     /**
      * Set consumer to titleProcessor.
@@ -236,13 +236,15 @@ class BrowserFragment : BaseFragment() {
             return
         }
         lastAnimated = System.currentTimeMillis()
-        val animate = binding?.footer?.root?.animate()
-        animate?.cancel()
-        animate?.translationY(0f)
-                ?.setDuration(ANIMATION_DURATION)
-                ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
-                ?.withEndAction { toolbarAction?.showToolbar() }
-                ?.start()
+
+        binding?.footer?.root?.animate()?.let {
+            it.cancel()
+            it.translationY(0f)
+                    ?.setDuration(ANIMATION_DURATION)
+                    ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
+                    ?.withEndAction { toolbarAction?.showToolbar() }
+                    ?.start()
+        }
     }
 
     /**
@@ -253,37 +255,37 @@ class BrowserFragment : BaseFragment() {
             return
         }
         lastAnimated = System.currentTimeMillis()
-        val animate = binding?.footer?.root?.animate()
-        animate?.cancel()
-        animate?.translationY(resources.getDimension(R.dimen.browser_footer_height))
-                ?.setDuration(ANIMATION_DURATION)
-                ?.withEndAction {
-                    toolbarAction?.hideToolbar()
-                    binding?.footer?.root?.visibility = View.GONE
-                }
-                ?.start()
+        binding?.footer?.root?.animate()?.let {
+            it.cancel()
+            it.translationY(resources.getDimension(R.dimen.browser_footer_height))
+                    ?.setDuration(ANIMATION_DURATION)
+                    ?.withEndAction {
+                        toolbarAction?.hideToolbar()
+                        binding?.footer?.root?.visibility = View.GONE
+                    }
+                    ?.start()
+        }
     }
 
     /**
      * Check disallow header & footer's animation.
      */
-    private fun disallowAnimation(): Boolean = (System.currentTimeMillis() - lastAnimated) < ALLOWABLE_INTERVAL_MS
+    private fun disallowAnimation(): Boolean
+            = (System.currentTimeMillis() - lastAnimated) < ALLOWABLE_INTERVAL_MS
 
     /**
      * Initialize footer.
      */
     private fun initFooter() {
-        binding?.footer?.back?.setOnClickListener { back() }
-        binding?.footer?.forward?.setOnClickListener { forward() }
-        binding?.footer?.bookmark?.setOnClickListener {
-            bookmark(ActivityOptionsFactory.makeScaleUpBundle(it))
+        binding?.footer?.let {
+            it.back.setOnClickListener { back() }
+            it.forward.setOnClickListener { forward() }
+            it.bookmark.setOnClickListener { bookmark(ActivityOptionsFactory.makeScaleUpBundle(it)) }
+            it.search.setOnClickListener { search(ActivityOptionsFactory.makeScaleUpBundle(it)) }
+            it.toTop.setOnClickListener { toTop() }
+            it.toBottom.setOnClickListener { toBottom() }
+            it.tabList.setOnClickListener { switchTabList() }
         }
-        binding?.footer?.search?.setOnClickListener {
-            search(ActivityOptionsFactory.makeScaleUpBundle(it))
-        }
-        binding?.footer?.toTop?.setOnClickListener { toTop() }
-        binding?.footer?.toBottom?.setOnClickListener { toBottom() }
-        binding?.footer?.tabList?.setOnClickListener { switchTabList() }
     }
 
     /**
@@ -331,27 +333,32 @@ class BrowserFragment : BaseFragment() {
 
         inflater?.inflate(R.menu.browser, menu)
 
-        menu?.findItem(R.id.open_menu)?.setOnMenuItemClickListener { v ->
-            switchMenu()
-            true
-        }
+        menu?.let {
+            it.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
+                switchMenu()
+                true
+            }
 
-        menu?.findItem(R.id.open_tabs)?.setOnMenuItemClickListener { v ->
-            switchTabList()
-            true
-        }
+            it.findItem(R.id.open_tabs)?.setOnMenuItemClickListener {
+                switchTabList()
+                true
+            }
 
-        menu?.findItem(R.id.setting)?.setOnMenuItemClickListener { v ->
-            startActivity(SettingsActivity.makeIntent(context))
-            true
-        }
+            it.findItem(R.id.setting)?.setOnMenuItemClickListener {
+                startActivity(SettingsActivity.makeIntent(context))
+                true
+            }
 
-        menu?.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
-            stopCurrentLoading()
-            true
+            it.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
+                stopCurrentLoading()
+                true
+            }
         }
     }
 
+    /**
+     * Stop current tab's loading.
+     */
     private fun stopCurrentLoading() {
         tabs.stopLoading()
         Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
@@ -555,6 +562,9 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Close tab list module.
+     */
     private inline fun closeTabList() {
         tabListModule.let { if (it.isVisible) { it.hide() } }
     }
@@ -655,16 +665,18 @@ class BrowserFragment : BaseFragment() {
      * @param colorPair [ColorPair]
      */
     private fun applyFooterColor(colorPair: ColorPair) {
-        binding?.footer?.root?.setBackgroundColor(colorPair.bgColor())
-        val fontColor = colorPair.fontColor()
-        binding?.footer?.back?.setColorFilter(fontColor)
-        binding?.footer?.forward?.setColorFilter(fontColor)
-        binding?.footer?.bookmark?.setColorFilter(fontColor)
-        binding?.footer?.search?.setColorFilter(fontColor)
-        binding?.footer?.toTop?.setColorFilter(fontColor)
-        binding?.footer?.toBottom?.setColorFilter(fontColor)
-        binding?.footer?.tabIcon?.setColorFilter(fontColor)
-        binding?.footer?.tabCount?.setTextColor(fontColor)
+        binding?.footer?.let {
+            val fontColor = colorPair.fontColor()
+            it.root?.setBackgroundColor(colorPair.bgColor())
+            it.back.setColorFilter(fontColor)
+            it.forward.setColorFilter(fontColor)
+            it.bookmark.setColorFilter(fontColor)
+            it.search.setColorFilter(fontColor)
+            it.toTop.setColorFilter(fontColor)
+            it.toBottom.setColorFilter(fontColor)
+            it.tabIcon.setColorFilter(fontColor)
+            it.tabCount.setTextColor(fontColor)
+        }
     }
 
     /**
@@ -765,6 +777,9 @@ class BrowserFragment : BaseFragment() {
         Toaster.tShort(activity, R.string.message_requires_permission_storage)
     }
 
+    /**
+     * Open editor tab.
+     */
     private inline fun openEditorTab() {
         tabs.openNewEditorTab()
     }
@@ -811,7 +826,10 @@ class BrowserFragment : BaseFragment() {
 
     companion object {
 
-        private const val REQUEST_CODE_VOICE_SEARCH = 2
+        /**
+         * Request code of voice search.
+         */
+        private const val REQUEST_CODE_VOICE_SEARCH: Int = 2
 
         /**
          * Animation's dutarion.
@@ -821,7 +839,7 @@ class BrowserFragment : BaseFragment() {
         /**
          * Allowable interval milliseconds.
          */
-        private const val ALLOWABLE_INTERVAL_MS = 500L
+        private const val ALLOWABLE_INTERVAL_MS: Long = 500L
 
     }
 
