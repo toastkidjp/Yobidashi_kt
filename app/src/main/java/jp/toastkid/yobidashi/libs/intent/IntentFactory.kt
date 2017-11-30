@@ -12,7 +12,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
  * Common [android.content.Intent] factory.
-
+ *
  * @author toastkidjp
  */
 object IntentFactory {
@@ -127,5 +127,18 @@ object IntentFactory {
         return intent
     }
 
+    /**
+     * Make camera launching intent.
+     */
     fun makeCamera(): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+    /**
+     * Make dial intent.
+     */
+    fun dial(uri: Uri): Intent = Intent(Intent.ACTION_DIAL, uri)
+
+    /**
+     * Make dial intent.
+     */
+    fun mailTo(uri: Uri): Intent = Intent(Intent.ACTION_SENDTO, uri)
 }

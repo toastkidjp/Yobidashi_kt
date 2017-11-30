@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.tab
 
+import android.annotation.TargetApi
 import android.app.DownloadManager
 import android.content.Context
 import android.graphics.Bitmap
@@ -36,6 +37,7 @@ import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -186,6 +188,28 @@ class TabAdapter(
                         .setMessage(SslErrorMessageGenerator.generate(context, error))
                         .setPositiveButton(R.string.ok, {d, i -> d.dismiss()})
                         .show()
+            }
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
+                    shouldOverrideUrlLoading(view, request?.url?.toString())
+
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                url?.let {
+                    val context: Context? = view?.context
+                    val uri: Uri = Uri.parse(url)
+                    if (it.startsWith("tel:")) {
+                        context?.startActivity(IntentFactory.dial(uri))
+                        view?.reload()
+                        return true
+                    }
+                    if (it.startsWith("mailto:")) {
+                        context?.startActivity(IntentFactory.mailTo(uri))
+                        view?.reload()
+                        return true
+                    }
+                }
+                return super.shouldOverrideUrlLoading(view, url)
             }
         }
         val webChromeClient = object : WebChromeClient() {
