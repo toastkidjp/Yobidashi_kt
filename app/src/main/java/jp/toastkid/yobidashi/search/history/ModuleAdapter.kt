@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AlertDialog
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
@@ -12,6 +10,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 import java.util.*
@@ -62,16 +63,17 @@ internal class ModuleAdapter(
 
         holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
-            val context = context
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.delete)
-                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setNegativeButton(R.string.cancel, { d, i -> d.cancel()} )
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        removeAt(position)
-                        d.dismiss()
-                    }
-                    .show()
+            SearchAction(
+                    context,
+                    searchHistory.category ?: "",
+                    searchHistory.query ?: "",
+                    true
+            ).invoke()
+            Toaster.snackShort(
+                    holder.itemView,
+                    context.getString(R.string.message_background_search, searchHistory.query),
+                    PreferenceApplier(context).colorPair()
+            )
             true
         }
         holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
@@ -109,9 +111,9 @@ internal class ModuleAdapter(
      * Remove item with position.
      * @param position
      */
-    private fun removeAt(position: Int) {
+    fun removeAt(position: Int): Disposable {
         val item = selected[position]
-        removeItemAsMaybe(item)
+        return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { i ->

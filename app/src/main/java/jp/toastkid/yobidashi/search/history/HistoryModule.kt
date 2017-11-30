@@ -1,17 +1,21 @@
 package jp.toastkid.yobidashi.search.history
 
+import android.os.Handler
+import android.os.Looper
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
+import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
 
 /**
  * Search hisotry module.
-
+TODO Clean up code.
  * @author toastkidjp
  */
 class HistoryModule
@@ -42,6 +46,13 @@ class HistoryModule
     /** Last subscription.  */
     private var disposable: Disposable? = null
 
+    /**
+     * Use for disposing.
+     */
+    private val disposables: CompositeDisposable = CompositeDisposable()
+
+    private val uiThreadhandler = Handler(Looper.getMainLooper())
+
     init {
 
         binding.module = this
@@ -62,6 +73,10 @@ class HistoryModule
                 onTouch()
                 return false
             }
+        }
+        uiThreadhandler.post {
+            RightSwipeActionAttacher
+                    .invoke(binding.searchHistories, { disposables.add(moduleAdapter.removeAt(it)) })
         }
     }
 
