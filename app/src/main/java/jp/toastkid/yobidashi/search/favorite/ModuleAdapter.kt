@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AlertDialog
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
@@ -12,6 +10,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 import java.util.*
@@ -47,31 +48,32 @@ internal class ModuleAdapter(
     }
 
     override fun onBindViewHolder(holder: ModuleViewHolder, position: Int) {
-        val searchHistory = selected[position]
-        holder.setText(searchHistory.query!!)
+        val favorite = selected[position]
+        holder.setText(favorite.query!!)
         holder.itemView.setOnClickListener { v ->
             try {
-                onClick(searchHistory)
+                onClick(favorite)
             } catch (e: Exception) {
                 Timber.e(e)
             }
         }
-        holder.setOnClickAdd(searchHistory, onClickAdd)
+        holder.setOnClickAdd(favorite, onClickAdd)
 
         holder.setAddIcon(R.drawable.ic_add_circle_search)
 
-        holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
+        holder.setImageRes(SearchCategory.findByCategory(favorite.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
-            val context = context
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.delete)
-                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setNegativeButton(R.string.cancel, { d, i -> d.cancel()} )
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        removeAt(position)
-                        d.dismiss()
-                    }
-                    .show()
+            SearchAction(
+                    context,
+                    favorite.category ?: "",
+                    favorite.query ?: "",
+                    true
+            ).invoke()
+            Toaster.snackShort(
+                    holder.itemView,
+                    context.getString(R.string.message_background_search, favorite.query),
+                    PreferenceApplier(context).colorPair()
+            )
             true
         }
         holder.switchDividerVisibility(position != (itemCount - 1))
@@ -108,9 +110,9 @@ internal class ModuleAdapter(
      * Remove item with position.
      * @param position
      */
-    private fun removeAt(position: Int) {
+    fun removeAt(position: Int): Disposable {
         val item = selected[position]
-        removeItemAsMaybe(item)
+        return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { i ->

@@ -22,7 +22,8 @@ import timber.log.Timber
 internal class Adapter (
         private val mInflater: LayoutInflater,
         private val mSearchInput: EditText,
-        private val mSuggestionsCallback: (String) -> Unit
+        private val mSuggestionsCallback: (String) -> Unit,
+        private val onLongClicked: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /** Suggestion items.  */
@@ -58,6 +59,10 @@ internal class Adapter (
         val item = mSuggestions[position]
         holder.setText(item)
         holder.itemView.setOnClickListener { v -> onItemClicked(item) }
+        holder.itemView.setOnLongClickListener {
+            onLongClicked(item)
+            true
+        }
         holder.setOnClickAdd(View.OnClickListener{ v -> onAddClicked(item) })
         holder.switchDividerVisibility(position != (itemCount - 1))
     }

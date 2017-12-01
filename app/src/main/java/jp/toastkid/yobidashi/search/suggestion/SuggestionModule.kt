@@ -28,6 +28,7 @@ class SuggestionModule(
         binding: ModuleSearchSuggestionBinding,
         searchInput: EditText,
         searchCallback: (String) -> Unit,
+        searchBackgroundCallback: (String) -> Unit,
         onClick: () -> Unit
 ) : BaseModule(binding.root) {
 
@@ -35,7 +36,8 @@ class SuggestionModule(
     private val mSuggestionAdapter: Adapter = Adapter(
             LayoutInflater.from(context()),
             searchInput,
-            searchCallback
+            searchCallback,
+            searchBackgroundCallback
     )
 
     /** Fetcher.  */
