@@ -86,6 +86,7 @@ internal class ActivityAdapter(
 
     fun currentFolderName(): String =
             if (items.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
+            else if (items.isEmpty()) Bookmarks.ROOT_FOLDER_NAME
             else items.get(0).parent
 
     fun back(): Boolean {

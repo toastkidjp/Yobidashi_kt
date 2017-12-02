@@ -321,6 +321,7 @@
     <string name="message_character_count">文字数: %d</string>
     <string name="title_add_folder">フォルダを追加</string>
     <string name="title_import_bookmark">ブックマークをインポート</string>
+    <string name="title_export_bookmark">ブックマークをエクスポート</string>
 
     <string name="top">上へ</string>
     <string name="bottom">下へ</string>
@@ -328,4 +329,5 @@
     <string name="title_option_menu">オプションメニュー</string>
     <string name="message_snackbar_suggestion_select_background_image">
         好きな画像を背景画像を設定しましょう！</string>
+    <string name="message_disusable_menu">この機能はOS 4.4以降でのみ利用可能です。</string>
 </resources>

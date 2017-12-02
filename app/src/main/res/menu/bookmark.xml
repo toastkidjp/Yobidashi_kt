@@ -18,6 +18,14 @@
         />
 
     <item
+        android:id="@+id/export_bookmark"
+        android:orderInCategory="100"
+        android:title="@string/title_export_bookmark"
+        android:checkable="false"
+        app:showAsAction="never"
+        />
+
+    <item
         android:id="@+id/add_default"
         android:orderInCategory="100"
         android:title="@string/title_add_default_bookmark"

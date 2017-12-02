@@ -8,7 +8,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
  *
  * @author toastkidjp
  */
-class Exporter(private val bookmarks: List<Bookmark?>) {
+class Exporter(private val bookmarks: Iterable<Bookmark?>) {
 
     fun invoke(): String {
         val builder = StringBuilder()
@@ -17,18 +17,23 @@ class Exporter(private val bookmarks: List<Bookmark?>) {
                 .append("<TITLE>Bookmarks</TITLE>\n")
                 .append("<H1>ブックマークメニュー</H1><DL><p>\n")
         bookmarks.filter { TextUtils.equals("root", it?.parent) }
-                .forEach { convertDirectory(builder, it) }
+                .forEach {
+                    if (it?.folder ?: false) { convertDirectory(builder, it) }
+                    else { convertBookmarkItem(builder, it) }
+                }
         builder.append("</DL>")
         return builder.toString()
     }
 
-    fun convertDirectory(builder: StringBuilder, item: Bookmark?) {
+    private fun convertDirectory(builder: StringBuilder, item: Bookmark?) {
         item?.let {
             builder.append("<DT><H3>${it.title}</H3>\n")
-            builder.append("<DL><p>\n")
-            val dirBookmarks = getDirBookmarks(it.title)
-            dirBookmarks.forEach {
-                if (it?.folder ?: false) {
+                    .append("<DL><p>\n")
+            getDirBookmarks(it.title).forEach {
+                if (it == null) {
+                    return@forEach
+                }
+                if (it.folder) {
                     convertDirectory(builder, it)
                 } else {
                     convertBookmarkItem(builder, it)
@@ -38,10 +43,10 @@ class Exporter(private val bookmarks: List<Bookmark?>) {
         }
     }
 
-    fun convertBookmarkItem(builder: StringBuilder, item: Bookmark?) {
+    private fun convertBookmarkItem(builder: StringBuilder, item: Bookmark?) {
         item?.let { builder.append("<DT><A href='${it.url}'>${it.title}</A>\n") }
     }
 
-    fun getDirBookmarks(parent: String): List<Bookmark?> =
+    private fun getDirBookmarks(parent: String): List<Bookmark?> =
             bookmarks.filter { TextUtils.equals(parent, it?.parent) }
 }

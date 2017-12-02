@@ -2,9 +2,12 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.text.TextUtils
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import okio.Okio
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.io.File
+import java.io.InputStream
 
 /**
  * Parser of exported bookmark html file.
@@ -28,12 +31,23 @@ object ExportedFileParser {
      *
      * @param htmlFile
      */
-    operator fun invoke(htmlFile: File): List<Bookmark> {
-        Jsoup.parse(htmlFile, ENCODE).select("dl").first().children()
+    operator fun invoke(htmlFile: File): List<Bookmark> = read(Jsoup.parse(htmlFile, ENCODE))
+
+    /**
+     * Parse bookmark html file.
+     *
+     * @param htmlFile
+     */
+    operator fun invoke(inputStream: InputStream): List<Bookmark> =
+            read(Jsoup.parse(Okio.buffer(Okio.source(inputStream)).readUtf8(), ENCODE))
+
+    private fun read(doc: Document): List<Bookmark> {
+        doc.select("dl")
+                .first()
+                .children()
                 .forEach { parseChild(it,  Bookmarks.ROOT_FOLDER_NAME)?.let { bookmarks.add(it) } }
         return bookmarks
     }
-
 
     /**
      * Parse child content.

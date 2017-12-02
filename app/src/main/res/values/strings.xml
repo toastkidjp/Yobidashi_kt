@@ -327,10 +327,12 @@
     <string name="message_character_count">Characters: %d</string>
     <string name="title_add_folder">Add Folder</string>
     <string name="title_import_bookmark">Import Bookmark</string>
+    <string name="title_export_bookmark">Export Bookmark</string>
 
     <string name="top">top</string>
     <string name="bottom">bottom</string>
 
     <string name="title_option_menu">Option Menu</string>
     <string name="message_snackbar_suggestion_select_background_image">Let\'s select your favorite image!</string>
+    <string name="message_disusable_menu">Sorry, but this device couldn\'t use this menu.</string>
 </resources>
