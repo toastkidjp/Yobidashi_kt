@@ -785,6 +785,7 @@ class BrowserFragment : BaseFragment() {
      */
     private inline fun openEditorTab() {
         tabs.openNewEditorTab()
+        tabs.replaceToCurrentTab()
     }
 
     /**
