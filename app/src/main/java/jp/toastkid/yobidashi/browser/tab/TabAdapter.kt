@@ -536,7 +536,6 @@ class TabAdapter(
         if (url.isEmpty()) {
             return
         }
-
         if (TextUtils.equals(webView.url, url)) {
             webView.scrollTo(0, currentTab().getScrolled())
             return
@@ -771,6 +770,14 @@ class TabAdapter(
     fun isNotEmpty(): Boolean = !tabList.isEmpty
 
     override fun toString(): String = tabList.toString()
+
+    /**
+     * It's simple delegation.
+     */
+    fun loadBackgroundTabsFromDirIfNeed() {
+        tabList.loadBackgroundTabsFromDirIfNeed()
+        setCurrentTabCount()
+    }
 
 }
 

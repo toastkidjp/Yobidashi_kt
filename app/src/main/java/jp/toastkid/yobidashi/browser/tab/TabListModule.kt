@@ -156,4 +156,5 @@ class TabListModule(
             tabAdapter.reloadUrlIfNeed()
         }
     }
+
 }

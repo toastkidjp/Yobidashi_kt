@@ -7,6 +7,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.analytics.LogSender
+import jp.toastkid.yobidashi.browser.tab.BackgroundTabQueue
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -20,12 +21,14 @@ import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
  * @param activityContext Activity's context
  * @param category Search Category
  * @param query Search query (or URL)
+ * @param onBackground
  * @author toastkidjp
  */
 class SearchAction(
         private val activityContext: Context,
         private val category: String,
-        private val query: String
+        private val query: String,
+        private val onBackground: Boolean = false
 ) {
 
     /**
@@ -76,6 +79,13 @@ class SearchAction(
         if (validUrl) {
             activityContext.startActivity(
                     MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
+            return
+        }
+        if (onBackground) {
+            BackgroundTabQueue.add(
+                    activityContext.getString(R.string.title_tab_background_search, query),
+                    UrlFactory.make(activityContext, category, query)
+            )
             return
         }
         InternalSearchIntentLauncher(activityContext)

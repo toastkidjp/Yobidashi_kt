@@ -638,6 +638,8 @@ class BrowserFragment : BaseFragment() {
         disposables.add(tabs.reloadWebViewSettings())
         disposables.add(titleProcessor.subscribe(consumer))
 
+        tabs.loadBackgroundTabsFromDirIfNeed()
+
         if (tabs.isNotEmpty()) {
             tabs.setCurrentTab()
         } else {
