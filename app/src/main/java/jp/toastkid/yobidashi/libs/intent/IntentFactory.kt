@@ -1,8 +1,10 @@
 package jp.toastkid.yobidashi.libs.intent
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.support.annotation.DrawableRes
 import android.support.customtabs.CustomTabsIntent
@@ -12,7 +14,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
  * Common [android.content.Intent] factory.
-
+ *
  * @author toastkidjp
  */
 object IntentFactory {
@@ -114,7 +116,6 @@ object IntentFactory {
         return intent
     }
 
-
     /**
      * Make Storage Access Framework intent.
      *
@@ -124,8 +125,37 @@ object IntentFactory {
     fun makeStorageAccess(type: String): Intent {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = type
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         return intent
     }
 
+    /**
+     * Make create document intent on Storage Access Framework.
+     *
+     * @param type mime type
+     * @return [Intent]
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    fun makeDocumentOnStorage(type: String, fileName: String): Intent {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.type = type
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_TITLE, fileName)
+        return intent
+    }
+
+    /**
+     * Make camera launching intent.
+     */
     fun makeCamera(): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+    /**
+     * Make dial intent.
+     */
+    fun dial(uri: Uri): Intent = Intent(Intent.ACTION_DIAL, uri)
+
+    /**
+     * Make dial intent.
+     */
+    fun mailTo(uri: Uri): Intent = Intent(Intent.ACTION_SENDTO, uri)
 }

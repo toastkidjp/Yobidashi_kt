@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Html
+import android.text.TextUtils
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
@@ -36,6 +37,11 @@ class TabListModule(
 
     /** For showing snackbar.  */
     private var firstLaunch: Boolean = true
+
+    /**
+     * Tab ID when this module opened.
+     */
+    private var lastTabId: String = ""
 
     /**
      * Initialize with parent.
@@ -140,6 +146,14 @@ class TabListModule(
         if (firstLaunch) {
             Toaster.snackShort(parent, R.string.message_tutorial_remove_tab, colorPair)
             firstLaunch = false
+        }
+        lastTabId = tabAdapter.currentTabId()
+    }
+
+    override fun hide() {
+        super.hide()
+        if (!TextUtils.equals(lastTabId, tabAdapter.currentTabId())) {
+            tabAdapter.reloadUrlIfNeed()
         }
     }
 

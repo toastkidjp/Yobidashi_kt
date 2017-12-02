@@ -1,10 +1,13 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
+import android.text.TextUtils
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import okio.Okio
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
 import java.io.File
+import java.io.InputStream
 
 /**
  * Parser of exported bookmark html file.
@@ -14,30 +17,36 @@ import java.io.File
 object ExportedFileParser {
 
     /**
-     * Bookmark items.
+     * Bookmark container.
      */
     private val bookmarks: MutableList<Bookmark> = mutableListOf()
+
+    /**
+     * Bookmark html encoding.
+     */
+    private const val ENCODE = "UTF-8"
 
     /**
      * Parse bookmark html file.
      *
      * @param htmlFile
      */
-    operator fun invoke(htmlFile: File): List<Bookmark> {
-        parseDl(Jsoup.parse(htmlFile, "UTF-8").select("dl"))
-        return bookmarks
-    }
+    operator fun invoke(htmlFile: File): List<Bookmark> = read(Jsoup.parse(htmlFile, ENCODE))
 
     /**
-     * Parse dl tag's section.
+     * Parse bookmark html file.
      *
-     * @param elements
+     * @param htmlFile
      */
-    private fun parseDl(elements: Elements) {
-        var childFolderName = Bookmarks.ROOT_FOLDER_NAME
-        elements.toList().forEach {
-            it.children().toList().forEach { childFolderName = parseChild(it, childFolderName) }
-        }
+    operator fun invoke(inputStream: InputStream): List<Bookmark> =
+            read(Jsoup.parse(Okio.buffer(Okio.source(inputStream)).readUtf8(), ENCODE))
+
+    private fun read(doc: Document): List<Bookmark> {
+        doc.select("dl")
+                .first()
+                .children()
+                .forEach { parseChild(it,  Bookmarks.ROOT_FOLDER_NAME)?.let { bookmarks.add(it) } }
+        return bookmarks
     }
 
     /**
@@ -46,31 +55,23 @@ object ExportedFileParser {
      * @param child
      * @param folderName
      */
-    private fun parseChild(child: Element, folderName: String): String {
-        var childFolderName = folderName
-        child.children().toList().forEach {
-            when (it.tagName()) {
-                "dl" -> {
-                    parseChild(it, childFolderName)
-                }
-                "h3" -> {
-                    childFolderName = it.text()
-                    val childFolder = Bookmark()
-                    childFolder.title = childFolderName
-                    childFolder.parent = folderName
-                    childFolder.folder = true
-                    bookmarks.add(childFolder)
-                }
-                "a" -> {
+    private fun parseChild(child: Element, folderName: String): Bookmark? =
+            child.select("h3, a").first()?.let {
+                if (TextUtils.equals("a", it.tagName())) {
                     val bookmark = Bookmark()
-                    bookmark.title = it.text()
-                    bookmark.url = it.attr("href")
-                    bookmark.parent = childFolderName
+                    bookmark.title  = it.text()
+                    bookmark.url    = it.attr("href")
+                    bookmark.parent = folderName
                     bookmark.folder = false
-                    bookmarks.add(bookmark)
+                    return bookmark
                 }
+                val childFolder = Bookmark()
+                childFolder.parent = folderName
+                childFolder.title  = it.text()
+                childFolder.folder = true
+                child.select("dl").first()?.children()?.forEach {
+                    parseChild(it, childFolder.title)?.let { bookmarks.add(it) }
+                }
+                return childFolder
             }
-        }
-        return childFolderName
-    }
 }
