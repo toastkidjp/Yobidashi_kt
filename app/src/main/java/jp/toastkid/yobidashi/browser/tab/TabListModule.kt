@@ -147,12 +147,12 @@ class TabListModule(
             Toaster.snackShort(parent, R.string.message_tutorial_remove_tab, colorPair)
             firstLaunch = false
         }
-        lastTabId = tabAdapter.currentTab().id()
+        lastTabId = tabAdapter.currentTabId()
     }
 
     override fun hide() {
         super.hide()
-        if (!TextUtils.equals(lastTabId, tabAdapter.currentTab().id())) {
+        if (!TextUtils.equals(lastTabId, tabAdapter.currentTabId())) {
             tabAdapter.reloadUrlIfNeed()
         }
     }

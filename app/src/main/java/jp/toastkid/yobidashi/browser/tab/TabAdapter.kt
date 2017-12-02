@@ -476,8 +476,6 @@ class TabAdapter(
             return
         }
         tabList.setIndex(newIndex)
-
-        replaceToCurrentTab()
     }
 
     private fun replaceToCurrentTab() {
@@ -732,6 +730,8 @@ class TabAdapter(
     }
 
     internal fun currentTab(): Tab = tabList.get(index())
+
+    internal fun currentTabId(): String = currentTab().id()
 
     private fun updateScrolled() {
         val currentTab = currentTab()
