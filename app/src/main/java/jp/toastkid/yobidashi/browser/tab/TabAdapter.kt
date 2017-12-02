@@ -767,6 +767,8 @@ class TabAdapter(
      */
     fun disablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
 
+    fun isEmpty(): Boolean = tabList.isEmpty
+
     fun isNotEmpty(): Boolean = !tabList.isEmpty
 
     override fun toString(): String = tabList.toString()

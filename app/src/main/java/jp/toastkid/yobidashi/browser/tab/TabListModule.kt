@@ -152,6 +152,11 @@ class TabListModule(
 
     override fun hide() {
         super.hide()
+
+        if (tabAdapter.isEmpty()) {
+            return
+        }
+
         if (!TextUtils.equals(lastTabId, tabAdapter.currentTabId())) {
             tabAdapter.reloadUrlIfNeed()
         }
