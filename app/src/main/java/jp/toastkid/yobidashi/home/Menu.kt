@@ -12,8 +12,6 @@ internal enum class Menu private constructor(@param:StringRes val titleId: Int, 
 
     CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
 
-    SHARE_BARCODE(R.string.title_share_by_code, R.drawable.ic_share),
-
     LAUNCHER(R.string.title_apps_launcher, R.drawable.ic_launcher),
 
     BROWSER(R.string.title_browser, R.drawable.ic_web),

@@ -8,40 +8,31 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
- * TODO clean up code
+ * Calendar article linker.
+ *
+ * @param context
+ * @param month
+ * @param dayOfMonth
+ *
  * @author toastkidjp
  */
-class CalendarArticleLinker
-/**
-
- * @param context
- *
- * @param month
- *
- * @param dayOfMonth
- */
-(
+class CalendarArticleLinker(
         private val context: Context,
         private val month: Int,
         private val dayOfMonth: Int
 ) {
 
-    private val applier: PreferenceApplier
-
-    init {
-        applier = PreferenceApplier(context)
-    }
-
-    operator fun invoke() {
-        openCalendarArticle()
-    }
+    /**
+     * Preferences wrapper.
+     */
+    private val applier: PreferenceApplier = PreferenceApplier(context)
 
     /**
      * Open calendar wikipedia article.
      */
-    private fun openCalendarArticle() {
+    operator fun invoke() {
         val url = DateArticleUrlFactory.make(context, month, dayOfMonth)
-        if (url.length == 0) {
+        if (url.isEmpty()) {
             return
         }
         CustomTabsFactory
