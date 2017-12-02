@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AlertDialog
@@ -13,6 +15,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Html
 import android.view.MenuItem
+import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -20,15 +23,14 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
-import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import okio.Okio
 import timber.log.Timber
-import java.io.File
 
 /**
  * Bookmark list activity.
@@ -173,10 +175,50 @@ class BookmarkActivity: BaseActivity() {
                         .show()
             }
             R.id.import_bookmark -> {
-                startActivityForResult(
-                        IntentFactory.makeStorageAccess("text/html"),
-                        REQUEST_CODE_IMPORT_BOOKMARK
-                )
+                RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .subscribe(
+                                { granted ->
+                                    if (!granted) {
+                                        Toaster.snackShort(
+                                                binding.root,
+                                                R.string.message_requires_permission_storage,
+                                                colorPair()
+                                        )
+                                        return@subscribe
+                                    }
+                                    startActivityForResult(
+                                            IntentFactory.makeStorageAccess("text/html"),
+                                            REQUEST_CODE_IMPORT_BOOKMARK
+                                    )
+                                },
+                                { Timber.e(it) }
+                        )
+                return true
+            }
+            R.id.export_bookmark -> {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                    Toaster.snackShort(binding.root, R.string.message_disusable_menu, colorPair())
+                    return true
+                }
+                RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .subscribe(
+                                { granted ->
+                                    if (!granted) {
+                                        Toaster.snackShort(
+                                                binding.root,
+                                                R.string.message_requires_permission_storage,
+                                                colorPair()
+                                        )
+                                        return@subscribe
+                                    }
+                                    startActivityForResult(
+                                        IntentFactory.makeDocumentOnStorage(
+                                                "text/html", "bookmark.html"),
+                                        REQUEST_CODE_EXPORT_BOOKMARK
+                                    )
+                                },
+                                { Timber.e(it) }
+                        )
                 return true
             }
             R.id.to_top -> {
@@ -206,20 +248,20 @@ class BookmarkActivity: BaseActivity() {
         }
 
         when (requestCode) {
-            REQUEST_CODE_IMPORT_BOOKMARK ->
-                FileExtractorFromUri(this, intent.data)?.let { importBookmark(it) }
+            REQUEST_CODE_IMPORT_BOOKMARK -> importBookmark(intent.data)
+            REQUEST_CODE_EXPORT_BOOKMARK -> exportBookmark(intent.data)
         }
     }
 
     /**
      * Import bookmark from selected HTML file.
      *
-     * @param file Bookmark exported html.
+     * @param uri Bookmark exported html's Uri.
      */
-    private fun importBookmark(file: File) {
+    private fun importBookmark(uri: Uri) {
         disposables.add(
                 Completable.fromAction {
-                    ExportedFileParser(file).forEach {
+                    ExportedFileParser(contentResolver.openInputStream(uri)).forEach {
                         BookmarkInsertion(
                                 this,
                                 title  = it.title,
@@ -239,6 +281,18 @@ class BookmarkActivity: BaseActivity() {
                                 { Timber.e(it) }
                         )
         )
+    }
+
+    /**
+     * Export bookmark.
+     *
+     * @param uri
+     */
+    private fun exportBookmark(uri: Uri) {
+        val bookmarks = DbInitter.init(this).relationOfBookmark().selector().toList()
+        Okio.buffer(Okio.sink(contentResolver.openOutputStream(uri)))
+                .writeUtf8(Exporter(bookmarks).invoke())
+                .flush()
     }
 
     override fun onDestroy() {
@@ -264,6 +318,11 @@ class BookmarkActivity: BaseActivity() {
          * Request code of importing bookmarks.
          */
         private const val REQUEST_CODE_IMPORT_BOOKMARK = 12211
+
+        /**
+         * Request code of exporting bookmarks.
+         */
+        private const val REQUEST_CODE_EXPORT_BOOKMARK = 12212
 
         /**
          * Make launching intent.
