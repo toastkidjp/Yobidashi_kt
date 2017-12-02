@@ -92,7 +92,7 @@ class TabAdapter(
     /**
      * Animation of slide up bottom.
      */
-    private val slideUpBottom
+    private val slideUpFromBottom
             = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
 
     /**
@@ -463,7 +463,7 @@ class TabAdapter(
 
         if (openNew) {
             setIndex(index)
-            webView.startAnimation(slideUpBottom)
+            webView.startAnimation(slideUpFromBottom)
             return
         }
 
@@ -478,7 +478,7 @@ class TabAdapter(
         tabList.setIndex(newIndex)
     }
 
-    private fun replaceToCurrentTab() {
+    fun replaceToCurrentTab() {
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
             if (editor.isVisible) {
@@ -766,6 +766,8 @@ class TabAdapter(
      * Is disable Pull-to-Refresh?
      */
     fun disablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
+
+    fun isEmpty(): Boolean = tabList.isEmpty
 
     fun isNotEmpty(): Boolean = !tabList.isEmpty
 

@@ -642,6 +642,7 @@ class BrowserFragment : BaseFragment() {
 
         if (tabs.isNotEmpty()) {
             tabs.setCurrentTab()
+            tabs.replaceToCurrentTab()
         } else {
             tabs.loadWithNewTab(Uri.parse(preferenceApplier().homeUrl))
         }
@@ -784,6 +785,7 @@ class BrowserFragment : BaseFragment() {
      */
     private inline fun openEditorTab() {
         tabs.openNewEditorTab()
+        tabs.replaceToCurrentTab()
     }
 
     /**
