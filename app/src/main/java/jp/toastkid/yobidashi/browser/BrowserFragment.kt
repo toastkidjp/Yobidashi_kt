@@ -642,6 +642,7 @@ class BrowserFragment : BaseFragment() {
 
         if (tabs.isNotEmpty()) {
             tabs.setCurrentTab()
+            tabs.replaceToCurrentTab()
         } else {
             tabs.loadWithNewTab(Uri.parse(preferenceApplier().homeUrl))
         }

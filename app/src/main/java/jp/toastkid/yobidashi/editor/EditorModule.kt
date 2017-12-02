@@ -13,6 +13,7 @@ import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
 import android.view.View
+import android.view.animation.AnimationUtils
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.Colors
@@ -59,6 +60,12 @@ class EditorModule(
      * Preferences wrapper.
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(binding.root.context)
+
+    /**
+     * Animation of slide up bottom.
+     */
+    private val slideUpFromBottom
+            = AnimationUtils.loadAnimation(binding.root.context, R.anim.slide_up)
 
     /**
      * File path.
@@ -342,6 +349,7 @@ class EditorModule(
 
     override fun show() {
         super.show()
+        binding.root.startAnimation(slideUpFromBottom)
         toolbarCallback(true)
     }
 
