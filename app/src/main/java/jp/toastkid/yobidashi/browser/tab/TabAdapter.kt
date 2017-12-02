@@ -477,6 +477,10 @@ class TabAdapter(
         }
         tabList.setIndex(newIndex)
 
+        replaceToCurrentTab()
+    }
+
+    private fun replaceToCurrentTab() {
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
             if (editor.isVisible) {
@@ -525,7 +529,7 @@ class TabAdapter(
         if (tabList.isEmpty) {
             return
         }
-        loadUrl(tabList.currentTab().getUrl())
+        replaceToCurrentTab()
     }
 
     fun loadUrl(url: String, saveHistory: Boolean = true) {

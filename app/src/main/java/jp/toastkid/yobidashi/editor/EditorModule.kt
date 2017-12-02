@@ -342,7 +342,6 @@ class EditorModule(
 
     override fun show() {
         super.show()
-        closeTabAction()
         toolbarCallback(true)
     }
 
