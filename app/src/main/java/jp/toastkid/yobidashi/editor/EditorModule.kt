@@ -349,7 +349,6 @@ class EditorModule(
 
     override fun show() {
         super.show()
-        binding.root.startAnimation(slideUpFromBottom)
         toolbarCallback(true)
     }
 

@@ -478,7 +478,12 @@ class TabAdapter(
         tabList.setIndex(newIndex)
     }
 
-    fun replaceToCurrentTab() {
+    /**
+     * Replace visibilities for current tab.
+     *
+     * @param withAnimation for suppress redundant animation.
+     */
+    fun replaceToCurrentTab(withAnimation: Boolean = true) {
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
             if (editor.isVisible) {
@@ -497,7 +502,12 @@ class TabAdapter(
             } else {
                 editor.clearPath()
             }
+
             editor.show()
+            if (withAnimation) {
+                editor.view().startAnimation(slideUpFromBottom)
+            }
+
             webView.isEnabled = false
             stopLoading()
             tabList.save()
