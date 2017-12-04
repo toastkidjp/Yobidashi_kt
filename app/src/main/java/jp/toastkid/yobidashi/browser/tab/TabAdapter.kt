@@ -505,7 +505,7 @@ class TabAdapter(
 
             editor.show()
             if (withAnimation) {
-                editor.view().startAnimation(slideUpFromBottom)
+                editor.animate(slideUpFromBottom)
             }
 
             webView.isEnabled = false
