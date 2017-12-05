@@ -10,7 +10,6 @@ import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 
@@ -36,7 +35,7 @@ internal class ActivityAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate<ItemSearchHistoryBinding>(
+        return ViewHolder(DataBindingUtil.inflate(
                 inflater, R.layout.item_search_history, parent, false))
     }
 

@@ -56,7 +56,7 @@ internal class TabHistoryAdapter(
                 } else {
                     Color.TRANSPARENT
                 }
-        );
+        )
     }
 
     override fun getItemCount(): Int = tab.histories.size

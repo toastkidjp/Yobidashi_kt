@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
  * @author toastkidjp
  */
-enum class UserAgent private constructor(private val title: String, private val text: String) {
+enum class UserAgent constructor(private val title: String, private val text: String) {
     DEFAULT("Default", ""),
     ANDROID("Android", "Mozilla/5.0 (Linux; Android 7.1.1; Nexus 5X Build/N4F26I) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36"),
     IPHONE("iPhone", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_2 like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Version/10.0 Mobile/14C92 Safari/602.1\n"),

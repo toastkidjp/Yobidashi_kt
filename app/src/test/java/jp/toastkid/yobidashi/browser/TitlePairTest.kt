@@ -10,11 +10,14 @@ import org.junit.Test
  */
 class TitlePairTest {
 
+    /**
+     * Check of [TitlePair].
+     */
     @Test
     fun test() {
         val title = "title"
         val sub = "subtitle"
-        val titlePair = TitlePair.make(title, sub);
+        val titlePair = TitlePair.make(title, sub)
 
         Assert.assertEquals(title, titlePair.title())
         Assert.assertEquals(sub, titlePair.subtitle())

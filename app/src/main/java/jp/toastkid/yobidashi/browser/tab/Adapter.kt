@@ -41,7 +41,7 @@ internal class Adapter(
     /**
      * Current index.
      */
-    private var index = -1;
+    private var index = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

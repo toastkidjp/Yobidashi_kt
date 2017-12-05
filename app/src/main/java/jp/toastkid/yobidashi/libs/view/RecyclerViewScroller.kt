@@ -9,10 +9,10 @@ object RecyclerViewScroller {
 
     fun toTop(recyclerView: RecyclerView, itemCount: Int) {
         if (itemCount > 30) {
-            recyclerView.scrollToPosition(0);
+            recyclerView.scrollToPosition(0)
             return
         }
-        recyclerView.smoothScrollToPosition(0);
+        recyclerView.smoothScrollToPosition(0)
     }
 
     fun toBottom(recyclerView: RecyclerView, itemCount: Int) {

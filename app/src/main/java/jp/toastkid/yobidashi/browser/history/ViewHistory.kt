@@ -16,10 +16,10 @@ class ViewHistory {
     var _id: Long = 0
 
     @Column
-    var title: String = "";
+    var title: String = ""
 
     @Column(unique = true)
-    var url: String = "";
+    var url: String = ""
 
     @Column
     var favicon: String = ""

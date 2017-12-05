@@ -25,7 +25,6 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchActivity
 import okio.Okio
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -272,7 +271,6 @@ class EditorModule(
      */
     fun readFromFileUri(data: Uri) {
         FileExtractorFromUri(binding.root.context, data)?.let {
-            Timber.i("it ~ ${it}")
             readFromFile(File(it))
         }
     }

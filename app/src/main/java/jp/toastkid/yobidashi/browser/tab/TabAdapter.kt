@@ -356,7 +356,7 @@ class TabAdapter(
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
-                    .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path);
+                    .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path)
         }
         return webView
     }
