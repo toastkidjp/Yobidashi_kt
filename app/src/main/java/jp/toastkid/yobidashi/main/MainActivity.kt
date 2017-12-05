@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
+import jp.toastkid.yobidashi.libs.intent.ImplicitIntentInvoker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
@@ -362,6 +363,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                         colorPair(),
                         R.drawable.ic_back
                 ).launchUrl(this@MainActivity, Uri.parse("https://twitter.com/share"))
+            }
+            R.id.nav_intent_invoker -> {
+                sendLog("nav_intnt")
+                ImplicitIntentInvoker.showDialog(this)
             }
             R.id.nav_color_filter -> {
                 ColorFilter(this, binding.root).switchState(this)

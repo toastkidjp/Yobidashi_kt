@@ -337,4 +337,9 @@
     <string name="title_tab_background_search">「%s」の検索結果</string>
     <string name="message_background_search">「%s」をバックグラウンドで検索します。</string>
     <string name="message_search_on_background">検索候補をロングタップすると、複数のキーワードをバックグラウンドで検索できます。</string>
+    <string name="message_invoking_intent">It attempts to invoke %s</string>
+    <string name="title_invoker_dialog">Implicit Intent Invoker</string>
+    <string name="message_invoker_dialog">Could you please input any intent action name?</string>
+    <string name="invoke">Invoke</string>
+    <string name="message_invoking_intent_failed">No Activity found to handle Intent \"%s\".</string>
 </resources>
