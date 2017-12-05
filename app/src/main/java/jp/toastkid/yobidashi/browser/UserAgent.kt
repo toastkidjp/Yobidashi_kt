@@ -8,7 +8,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Browser's user agent.
-
+ *
  * @author toastkidjp
  */
 enum class UserAgent constructor(private val title: String, private val text: String) {
@@ -18,17 +18,13 @@ enum class UserAgent constructor(private val title: String, private val text: St
     IPAD("iPad", "Mozilla/5.0 (iPad; CPU OS 10_2 like Mac OS X) AppleWebKit/602.3.12 (KHTML, like Gecko) Version/10.0 Mobile/14C92 Safari/602.1"),
     PC("PC", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393");
 
-    fun title(): String {
-        return title
-    }
+    fun title(): String = title
 
-    fun text(): String {
-        return text
-    }
+    fun text(): String = text
 
     companion object {
 
-        fun titles(): Array<String> {
+        private fun titles(): Array<String> {
             val titles = ArrayList<String>(values().size)
             for (i in 0..values().size - 1) {
                 titles.add(values()[i].title)
@@ -36,8 +32,8 @@ enum class UserAgent constructor(private val title: String, private val text: St
             return titles.toArray(arrayOf<String>())
         }
 
-        fun findCurrentIndex(name: String): Int {
-            for (i in 0..values().size - 1) {
+        private fun findCurrentIndex(name: String): Int {
+            for (i in 0 until values().size) {
                 if (values()[i].name == name) {
                     return i
                 }
