@@ -45,9 +45,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Splash">
+    <style name="AppTheme.Splash">>
         <item name="android:windowBackground">@drawable/splash</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
     </style>
 
     <style name="Border">

@@ -31,7 +31,24 @@ object Clipboard {
      * @param text
      */
     fun clip(context: Context, text: String) {
-        val cm = context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        cm.primaryClip = ClipData(TEXT_DATA, ClipData.Item(text))
+        val cm = clipboardManager(context)
+        cm?.primaryClip = ClipData(TEXT_DATA, ClipData.Item(text))
     }
+
+    /**
+     * Get primary cliped item.
+     *
+     * @param context
+     */
+    fun getPrimary(context: Context): CharSequence? =
+            clipboardManager(context)?.primaryClip?.getItemAt(0)?.text
+
+    /**
+     * Get clipboard.
+     *
+     * @param context
+     */
+    private fun clipboardManager(context: Context): ClipboardManager? =
+            context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+
 }

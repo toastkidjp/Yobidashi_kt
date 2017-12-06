@@ -112,8 +112,8 @@ class SearchActivity : BaseActivity() {
         binding?.toolbar?.let {
             initToolbar(it)
             it.setNavigationIcon(null)
-            it.setPadding(0,0,0,0);
-            it.setContentInsetsAbsolute(0,0);
+            it.setPadding(0,0,0,0)
+            it.setContentInsetsAbsolute(0,0)
 
             it.inflateMenu(R.menu.search_menu)
             it.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
@@ -148,7 +148,7 @@ class SearchActivity : BaseActivity() {
                 startActivity(SearchHistoryActivity.makeIntent(this))
                 true
             }
-            else -> super.clickMenu(item);
+            else -> super.clickMenu(item)
         }
     }
 
@@ -363,7 +363,7 @@ class SearchActivity : BaseActivity() {
         fun makeIntent(context: Context): Intent {
             val intent = Intent(context, SearchActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent;
+            return intent
         }
     }
 }

@@ -15,11 +15,11 @@ internal class CustomWebView(context: Context) : WebView(context) {
 
     var scrollListener: (Int, Int, Int, Int) -> Unit = { _, _, _, _  -> }
 
-    var scrolling: Int = 0;
+    var scrolling: Int = 0
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_UP) {
-            scrolling = 0;
+            scrolling = 0
         }
         return super.onTouchEvent(event)
     }

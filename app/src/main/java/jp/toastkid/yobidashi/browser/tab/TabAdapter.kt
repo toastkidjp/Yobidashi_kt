@@ -356,7 +356,7 @@ class TabAdapter(
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
-                    .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path);
+                    .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path)
         }
         return webView
     }
@@ -478,7 +478,12 @@ class TabAdapter(
         tabList.setIndex(newIndex)
     }
 
-    fun replaceToCurrentTab() {
+    /**
+     * Replace visibilities for current tab.
+     *
+     * @param withAnimation for suppress redundant animation.
+     */
+    fun replaceToCurrentTab(withAnimation: Boolean = true) {
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
             if (editor.isVisible) {
@@ -497,7 +502,12 @@ class TabAdapter(
             } else {
                 editor.clearPath()
             }
+
             editor.show()
+            if (withAnimation) {
+                editor.animate(slideUpFromBottom)
+            }
+
             webView.isEnabled = false
             stopLoading()
             tabList.save()
