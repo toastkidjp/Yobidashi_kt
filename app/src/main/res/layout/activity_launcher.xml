@@ -34,7 +34,7 @@
                         android:background="@drawable/ripple_transparent"
                         android:inputType="text"
                         />
-                    <LinearLayout
+                    <View
                         android:id="@+id/input_border"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
