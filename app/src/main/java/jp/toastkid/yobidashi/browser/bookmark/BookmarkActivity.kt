@@ -19,6 +19,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
@@ -193,6 +194,7 @@ class BookmarkActivity: BaseActivity() {
                                 },
                                 { Timber.e(it) }
                         )
+                        .addTo(disposables)
                 return true
             }
             R.id.export_bookmark -> {
@@ -219,6 +221,7 @@ class BookmarkActivity: BaseActivity() {
                                 },
                                 { Timber.e(it) }
                         )
+                        .addTo(disposables)
                 return true
             }
             R.id.to_top -> {
@@ -259,28 +262,26 @@ class BookmarkActivity: BaseActivity() {
      * @param uri Bookmark exported html's Uri.
      */
     private fun importBookmark(uri: Uri) {
-        disposables.add(
-                Completable.fromAction {
-                    ExportedFileParser(contentResolver.openInputStream(uri)).forEach {
-                        BookmarkInsertion(
-                                this,
-                                title  = it.title,
-                                url    = it.url,
-                                folder = it.folder,
-                                parent = it.parent
-                        ).insert()
-                    }
-                }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                {
-                                    adapter.reload()
-                                    Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
-                                },
-                                { Timber.e(it) }
-                        )
-        )
+        Completable.fromAction {
+            ExportedFileParser(contentResolver.openInputStream(uri)).forEach {
+                BookmarkInsertion(
+                        this,
+                        title  = it.title,
+                        url    = it.url,
+                        folder = it.folder,
+                        parent = it.parent
+                ).insert()
+            }
+        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            adapter.reload()
+                            Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
+                        },
+                        { Timber.e(it) }
+                ).addTo(disposables)
     }
 
     /**

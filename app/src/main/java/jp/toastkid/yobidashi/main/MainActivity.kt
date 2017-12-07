@@ -28,6 +28,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
@@ -145,11 +146,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         initNavigation()
 
-        disposables.add(
-                Completable.fromAction { initInterstitialAd() }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-        )
+        Completable.fromAction { initInterstitialAd() }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+                .addTo(disposables)
 
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
@@ -185,10 +185,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     preferenceApplier.getDefaultSearchEngine()
                 }
 
-                disposables.add(
-                        SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
-                                .invoke()
-                )
+                SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
+                        .invoke()
+                        .addTo(disposables)
                 return
             }
         }
@@ -473,15 +472,14 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * @param onGranted action
      */
     private fun useCameraPermission(onGranted: () -> Unit) {
-        disposables.add(
-                rxPermissions
-                        .request(Manifest.permission.CAMERA)
-                        .filter { it }
-                        .subscribe(
-                                { onGranted() },
-                                { Timber.e(it) }
-                        )
-        )
+        rxPermissions
+                .request(Manifest.permission.CAMERA)
+                .filter { it }
+                .subscribe(
+                        { onGranted() },
+                        { Timber.e(it) }
+                )
+                .addTo(disposables)
     }
 
     /**

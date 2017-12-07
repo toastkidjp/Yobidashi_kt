@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
@@ -65,7 +66,7 @@ internal class ActivityAdapter(
             holder.setImage(bookmark.favicon)
         }
 
-        disposables.add(holder.setImage(bookmark.favicon))
+        holder.setImage(bookmark.favicon).addTo(disposables)
 
         holder.itemView.setOnLongClickListener { v ->
             val context = v.context
@@ -102,19 +103,18 @@ internal class ActivityAdapter(
     }
 
     fun query(title: String) {
-        disposables.add(
-                relation.selector()
-                        .parentEq(title)
-                        .executeAsObservable()
-                        .subscribeOn(Schedulers.io())
-                        .doOnSubscribe { items.clear() }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnTerminate {
-                            notifyDataSetChanged()
-                        }
-                        .observeOn(Schedulers.computation())
-                        .subscribe{ items.add(it) }
-        )
+        relation.selector()
+                .parentEq(title)
+                .executeAsObservable()
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe { items.clear() }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate {
+                    notifyDataSetChanged()
+                }
+                .observeOn(Schedulers.computation())
+                .subscribe{ items.add(it) }
+                .addTo(disposables)
     }
 
     fun reload() {
@@ -141,6 +141,7 @@ internal class ActivityAdapter(
                     items.remove(item)
                     notifyItemRemoved(position)
                 }
+                .addTo(disposables)
     }
 
     fun clearAll(onComplete: () -> Unit) {
@@ -153,11 +154,10 @@ internal class ActivityAdapter(
                     items.clear()
                     notifyItemRangeRemoved(0, i)
                 }
+                .addTo(disposables)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     fun dispose() {
         disposables.clear()

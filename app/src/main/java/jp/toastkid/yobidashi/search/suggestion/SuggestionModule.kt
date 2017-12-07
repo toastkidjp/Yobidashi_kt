@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.facade.BaseModule
@@ -89,12 +90,10 @@ class SuggestionModule(
 
         mFetcher.fetchAsync(key, { suggestions ->
             if (suggestions == null || suggestions.isEmpty()) {
-                disposables.add(
-                        Completable.create { e ->
-                            hide()
-                            e.onComplete()
-                        }.subscribeOn(AndroidSchedulers.mainThread()).subscribe()
-                )
+                Completable.create { e ->
+                    hide()
+                    e.onComplete()
+                }.subscribeOn(AndroidSchedulers.mainThread()).subscribe().addTo(disposables)
             } else {
                 mCache.put(key, suggestions)
                 lastSubscription = replace(suggestions)
@@ -108,14 +107,13 @@ class SuggestionModule(
      * @param words
      */
     internal fun addAll(words: List<String>) {
-        disposables.add(
-                Observable.fromIterable(words)
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnTerminate { mSuggestionAdapter.notifyDataSetChanged() }
-                        .observeOn(Schedulers.computation())
-                        .subscribe({ mSuggestionAdapter.add(it) }, { Timber.e(it) })
-        )
+        Observable.fromIterable(words)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate { mSuggestionAdapter.notifyDataSetChanged() }
+                .observeOn(Schedulers.computation())
+                .subscribe({ mSuggestionAdapter.add(it) }, { Timber.e(it) })
+                .addTo(disposables)
     }
 
     /**
@@ -140,9 +138,7 @@ class SuggestionModule(
      * Dispose last subscription.
      */
     fun dispose() {
-        if (lastSubscription != null) {
-            lastSubscription!!.dispose()
-        }
+        lastSubscription?.dispose()
         disposables.clear()
     }
 

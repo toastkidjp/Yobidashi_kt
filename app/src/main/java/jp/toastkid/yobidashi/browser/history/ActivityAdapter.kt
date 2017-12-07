@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
@@ -57,7 +58,7 @@ internal class ActivityAdapter(
         }
         holder.setOnClickBookmark(viewHistory)
 
-        disposables.add(holder.setImage(viewHistory.favicon))
+        holder.setImage(viewHistory.favicon).addTo(disposables)
 
         holder.itemView.setOnLongClickListener { v ->
             AlertDialog.Builder(context)
@@ -81,24 +82,22 @@ internal class ActivityAdapter(
      */
     fun removeAt(position: Int) {
         val item = relation.reversed().get(position)
-        disposables.add(
-                relation.deleteAsMaybe(item)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { i -> notifyItemRemoved(position) }
-        )
+        relation.deleteAsMaybe(item)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { i -> notifyItemRemoved(position) }
+                .addTo(disposables)
     }
 
     fun clearAll(onComplete: () -> Unit) {
-        disposables.add(
-                relation.deleter().executeAsSingle()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { i ->
-                            onComplete()
-                            notifyItemRangeRemoved(0, i)
-                        }
-        )
+        relation.deleter().executeAsSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { i ->
+                    onComplete()
+                    notifyItemRangeRemoved(0, i)
+                }
+                .addTo(disposables)
     }
 
     fun dispose() {
