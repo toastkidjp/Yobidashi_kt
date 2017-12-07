@@ -127,7 +127,7 @@ class FavoriteSearchFragment : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        disposables.dispose()
+        disposables.clear()
     }
 
     companion object {

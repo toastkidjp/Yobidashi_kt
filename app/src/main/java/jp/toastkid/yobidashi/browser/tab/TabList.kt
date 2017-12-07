@@ -192,7 +192,7 @@ class TabList private constructor() {
     }
 
     fun dispose() {
-        disposables.dispose()
+        disposables.clear()
     }
 
     override fun toString(): String = tabs.toString()

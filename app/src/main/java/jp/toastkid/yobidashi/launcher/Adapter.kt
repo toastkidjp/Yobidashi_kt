@@ -149,6 +149,6 @@ internal class Adapter(private val context: Context, private val parent: View)
      * Dispose disposables.
      */
     fun dispose() {
-        disposables.dispose()
+        disposables.clear()
     }
 }

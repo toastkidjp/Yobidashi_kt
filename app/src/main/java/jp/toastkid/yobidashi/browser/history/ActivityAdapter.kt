@@ -102,7 +102,7 @@ internal class ActivityAdapter(
     }
 
     fun dispose() {
-        disposables.dispose()
+        disposables.clear()
     }
 
 }

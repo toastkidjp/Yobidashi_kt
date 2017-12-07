@@ -194,7 +194,7 @@ class HomeFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         adapter?.dispose()
-        disposables.dispose()
+        disposables.clear()
     }
 
     @StringRes

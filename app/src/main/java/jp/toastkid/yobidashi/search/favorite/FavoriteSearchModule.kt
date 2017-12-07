@@ -108,7 +108,7 @@ class FavoriteSearchModule
      */
     fun dispose() {
         disposable?.dispose()
-        disposables.dispose()
+        disposables.clear()
     }
 
 }

@@ -711,7 +711,7 @@ class TabAdapter(
             tabsScreenshots.clean()
         }
         webView.destroy()
-        disposables.dispose()
+        disposables.clear()
         tabList.dispose()
     }
 

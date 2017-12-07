@@ -143,7 +143,7 @@ class SuggestionModule(
         if (lastSubscription != null) {
             lastSubscription!!.dispose()
         }
-        disposables.dispose()
+        disposables.clear()
     }
 
     companion object {

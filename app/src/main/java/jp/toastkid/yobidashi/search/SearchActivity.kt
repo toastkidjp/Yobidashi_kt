@@ -335,7 +335,7 @@ class SearchActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables.dispose()
+        disposables.clear()
         favoriteModule.dispose()
         historyModule.dispose()
         suggestionModule.dispose()

@@ -69,7 +69,7 @@ class ExtendedApplication : Application() {
 
     override fun onTerminate() {
         super.onTerminate()
-        disposables.dispose()
+        disposables.clear()
     }
 
 }

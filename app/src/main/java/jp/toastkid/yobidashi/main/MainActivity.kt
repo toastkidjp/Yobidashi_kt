@@ -769,7 +769,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables.dispose()
+        disposables.clear()
         torch.dispose()
     }
 

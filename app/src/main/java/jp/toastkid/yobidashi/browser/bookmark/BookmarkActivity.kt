@@ -298,7 +298,7 @@ class BookmarkActivity: BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         adapter.dispose()
-        disposables.dispose()
+        disposables.clear()
     }
 
     companion object {

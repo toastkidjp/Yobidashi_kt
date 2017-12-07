@@ -823,7 +823,7 @@ class BrowserFragment : BaseFragment() {
         super.onDestroy()
         (binding?.menusView?.adapter as Adapter).dispose()
         tabs.dispose()
-        disposables.dispose()
+        disposables.clear()
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
     }
