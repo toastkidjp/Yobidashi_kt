@@ -10,10 +10,10 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
@@ -133,7 +133,7 @@ internal class Adapter(private val context: Context, private val parent: View)
             notifyDataSetChanged()
             return
         }
-        Observable.fromIterable(master)
+        master.toObservable()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
                 .filter { appInfo -> appInfo.packageName.contains(str) }

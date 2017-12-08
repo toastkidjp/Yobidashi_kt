@@ -4,11 +4,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.widget.EditText
 import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.facade.BaseModule
@@ -80,7 +80,7 @@ class SuggestionModule(
         }
 
         if (mCache.containsKey(key)) {
-            lastSubscription = replace(mCache[key]!!)
+            lastSubscription = replace(mCache[key]!!).addTo(disposables)
             return
         }
 
@@ -96,7 +96,7 @@ class SuggestionModule(
                 }.subscribeOn(AndroidSchedulers.mainThread()).subscribe().addTo(disposables)
             } else {
                 mCache.put(key, suggestions)
-                lastSubscription = replace(suggestions)
+                lastSubscription = replace(suggestions).addTo(disposables)
             }
         })
     }
@@ -107,7 +107,7 @@ class SuggestionModule(
      * @param words
      */
     internal fun addAll(words: List<String>) {
-        Observable.fromIterable(words)
+        words.toObservable()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate { mSuggestionAdapter.notifyDataSetChanged() }
@@ -123,7 +123,7 @@ class SuggestionModule(
      */
     private fun replace(suggestions: List<String>): Disposable {
 
-        return Observable.fromIterable(suggestions)
+        return suggestions.toObservable()
                 .doOnNext { mSuggestionAdapter.add(it) }
                 .doOnSubscribe { d -> mSuggestionAdapter.clear() }
                 .doOnTerminate {

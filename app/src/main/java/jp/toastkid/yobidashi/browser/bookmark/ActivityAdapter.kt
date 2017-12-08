@@ -63,10 +63,8 @@ internal class ActivityAdapter(
         if (bookmark.folder) {
             holder.setImageId(R.drawable.ic_folder_black)
         } else {
-            holder.setImage(bookmark.favicon)
+            holder.setImage(bookmark.favicon).addTo(disposables)
         }
-
-        holder.setImage(bookmark.favicon).addTo(disposables)
 
         holder.itemView.setOnLongClickListener { v ->
             val context = v.context
