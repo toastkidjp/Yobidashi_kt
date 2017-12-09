@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
@@ -76,7 +77,7 @@ class FavoriteSearchModule
         }
         uiThreadhandler.post {
             RightSwipeActionAttacher
-                    .invoke(binding.searchFavorites, { disposables.add(moduleAdapter.removeAt(it)) })
+                    .invoke(binding.searchFavorites, { moduleAdapter.removeAt(it).addTo(disposables) })
         }
     }
 
@@ -85,9 +86,7 @@ class FavoriteSearchModule
      * @param s
      */
     fun query(s: CharSequence) {
-        if (disposable != null) {
-            disposable!!.dispose()
-        }
+        disposable?.dispose()
         disposable = moduleAdapter.query(s)
     }
 
@@ -108,7 +107,7 @@ class FavoriteSearchModule
      */
     fun dispose() {
         disposable?.dispose()
-        disposables.dispose()
+        disposables.clear()
     }
 
 }

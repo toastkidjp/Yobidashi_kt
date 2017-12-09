@@ -22,6 +22,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
@@ -263,24 +264,22 @@ class TabAdapter(
                             .setItems(R.array.image_menu, { dialog, which ->
                                 when (which) {
                                     0 -> {
-                                        disposables.add(
-                                                storeImage(url, webView).subscribe{file ->
-                                                    preferenceApplier.backgroundImagePath = file.absolutePath
-                                                    Toaster.snackShort(
-                                                            webView,
-                                                            R.string.message_change_background_image,
-                                                            preferenceApplier.colorPair()
-                                                    )
-                                                }
-                                        )
+                                        storeImage(url, webView).subscribe{file ->
+                                            preferenceApplier.backgroundImagePath = file.absolutePath
+                                            Toaster.snackShort(
+                                                    webView,
+                                                    R.string.message_change_background_image,
+                                                    preferenceApplier.colorPair()
+                                            )
+                                        }.addTo(disposables)
                                     }
-                                    1 -> disposables.add(storeImage(url, webView).subscribe({
+                                    1 -> storeImage(url, webView).subscribe({
                                         Toaster.snackShort(
                                                 webView,
                                                 R.string.message_done_save,
                                                 preferenceApplier.colorPair()
                                         )
-                                    }))
+                                    }).addTo(disposables)
                                     2 -> ImageDownloadAction(webView, hitResult).invoke()
                                 }
                             })
@@ -361,6 +360,12 @@ class TabAdapter(
         return webView
     }
 
+    /**
+     * TODO replace with fromCallable.
+     *
+     * @param url
+     * @param webView
+     */
     private fun storeImage(url: String, webView: WebView): Maybe<File> {
         return Single.create<Response> { e ->
             val client = HttpClientFactory.make()
@@ -711,7 +716,7 @@ class TabAdapter(
             tabsScreenshots.clean()
         }
         webView.destroy()
-        disposables.dispose()
+        disposables.clear()
         tabList.dispose()
     }
 

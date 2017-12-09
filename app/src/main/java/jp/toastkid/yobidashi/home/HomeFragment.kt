@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
@@ -185,8 +186,7 @@ class HomeFragment : BaseFragment() {
 
         when (requestCode) {
             REQUEST_CODE_VOICE_SEARCH -> {
-                disposables.add(VoiceSearch.processResult(activity, data))
-                return
+                VoiceSearch.processResult(activity, data).addTo(disposables)
             }
         }
     }
@@ -194,7 +194,7 @@ class HomeFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         adapter?.dispose()
-        disposables.dispose()
+        disposables.clear()
     }
 
     @StringRes

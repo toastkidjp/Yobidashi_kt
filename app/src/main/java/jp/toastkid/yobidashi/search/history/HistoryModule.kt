@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
@@ -76,7 +77,7 @@ class HistoryModule
         }
         uiThreadhandler.post {
             RightSwipeActionAttacher
-                    .invoke(binding.searchHistories, { disposables.add(moduleAdapter.removeAt(it)) })
+                    .invoke(binding.searchHistories, { moduleAdapter.removeAt(it).addTo(disposables) })
         }
     }
 
@@ -85,17 +86,15 @@ class HistoryModule
      * @param s
      */
     fun query(s: CharSequence) {
-        if (disposable != null) {
-            disposable!!.dispose()
-        }
+        disposable?.dispose()
         disposable = moduleAdapter.query(s)
     }
 
     /**
      * Clear search history.
-     * @param view
+     * @param ignored
      */
-    fun clearHistory(view: View) {
+    fun clearHistory(ignored: View) {
         Clear(binding.root, relation.deleter())
                 .invoke{
                     moduleAdapter.clear()
@@ -107,9 +106,7 @@ class HistoryModule
      * Dispose last subscription.
      */
     fun dispose() {
-        if (disposable != null) {
-            disposable!!.dispose()
-        }
+        disposable?.dispose()
     }
 
 }
