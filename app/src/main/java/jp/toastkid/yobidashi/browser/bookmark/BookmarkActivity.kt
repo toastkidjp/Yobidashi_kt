@@ -188,7 +188,7 @@ class BookmarkActivity: BaseActivity() {
                                         return@subscribe
                                     }
                                     startActivityForResult(
-                                            IntentFactory.makeStorageAccess("text/html"),
+                                            IntentFactory.makeGetContent("text/html"),
                                             REQUEST_CODE_IMPORT_BOOKMARK
                                     )
                                 },

@@ -180,12 +180,16 @@ class BrowserFragment : BaseFragment() {
                   } else showFooter() }
         )
 
-        pdf = PdfModule(context, binding?.moduleContainer as ViewGroup)
+        pdf = PdfModule(
+                context,
+                binding?.moduleContainer as ViewGroup
+                )
 
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
                 binding?.webViewContainer as ViewGroup,
                 editor,
+                pdf,
                 binding?.footer?.tabCount as TextView,
                 { titleProcessor.onNext(it) },
                 { binding?.webViewContainer?.isRefreshing = false },
@@ -538,7 +542,7 @@ class BrowserFragment : BaseFragment() {
                                 return@subscribe
                             }
                             startActivityForResult(
-                                    IntentFactory.makeStorageAccess("application/pdf"),
+                                    IntentFactory.makeOpenDocument("application/pdf"),
                                     REQUEST_CODE_OPEN_PDF
                             )
                         }
@@ -789,7 +793,11 @@ class BrowserFragment : BaseFragment() {
                 VoiceSearch.processResult(activity, intent).addTo(disposables)
             }
             REQUEST_CODE_OPEN_PDF -> {
-                pdf.load(intent.data)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    val takeFlags: Int = intent.getFlags() and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    context.contentResolver.takePersistableUriPermission(intent.data, takeFlags)
+                }
+                openPdf(intent.data)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 if (intent.data != null) { tabs.loadWithNewTab(intent.data) }
@@ -805,6 +813,13 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    private fun openPdf(uri: Uri) {
+        tabs.openNewPdfTab(uri)
+    }
+
+    /**
+     * TODO rewrite with RxPermissions.
+     */
     override fun onRequestPermissionsResult(
             requestCode: Int,
             permissions: Array<String>,

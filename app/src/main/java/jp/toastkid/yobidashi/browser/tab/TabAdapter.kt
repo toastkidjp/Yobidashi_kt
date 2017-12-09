@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
+import jp.toastkid.yobidashi.browser.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.Bitmaps
@@ -63,6 +64,7 @@ class TabAdapter(
         progress: ProgressBar,
         webViewContainer: ViewGroup,
         private val editor: EditorModule,
+        private val pdf: PdfModule,
         private val tabCount: TextView,
         titleCallback: (TitlePair) -> Unit,
         private val loadedCallback: () -> Unit,
@@ -408,11 +410,21 @@ class TabAdapter(
         }
     }
 
-    fun openNewEditorTab() {
+    internal fun openNewEditorTab() {
         val editorTab = EditorTab()
         tabList.add(editorTab)
         setCurrentTabCount()
         setIndexByTab(editorTab, true)
+    }
+
+    internal fun openNewPdfTab(uri: Uri) {
+        val pdfTab = PdfTab().apply {
+            setTitle(uri.path)
+            setPath(uri.toString())
+        }
+        tabList.add(pdfTab)
+        setCurrentTabCount()
+        setIndexByTab(pdfTab, true)
     }
 
     internal fun openNewTab() {
@@ -490,32 +502,52 @@ class TabAdapter(
      */
     fun replaceToCurrentTab(withAnimation: Boolean = true) {
         val currentTab = tabList.currentTab()
-        if (currentTab is WebTab) {
-            if (editor.isVisible) {
-                editor.hide()
-                webView.isEnabled = true
+        when (currentTab) {
+            is WebTab -> {
+                if (editor.isVisible) {
+                    editor.hide()
+                    webView.isEnabled = true
+                }
+                if (pdf.isVisible) {
+                    pdf.hide()
+                    webView.isEnabled = true
+                }
+                val latest = currentTab.latest
+                if (latest !== History.EMPTY) {
+                    loadUrl(latest.url())
+                }
             }
-            val latest = currentTab.latest
-            if (latest !== History.EMPTY) {
-                loadUrl(latest.url())
-            }
-            return
-        }
-        if (currentTab is EditorTab) {
-            if (currentTab.path.isNotBlank()) {
-                editor.readFromFile(File(currentTab.path))
-            } else {
-                editor.clearPath()
-            }
+            is EditorTab -> {
+                if (currentTab.path.isNotBlank()) {
+                    editor.readFromFile(File(currentTab.path))
+                } else {
+                    editor.clearPath()
+                }
 
-            editor.show()
-            if (withAnimation) {
-                editor.animate(slideUpFromBottom)
-            }
+                editor.show()
+                if (withAnimation) {
+                    editor.animate(slideUpFromBottom)
+                }
 
-            webView.isEnabled = false
-            stopLoading()
-            tabList.save()
+                webView.isEnabled = false
+                stopLoading()
+                tabList.save()
+            }
+            is PdfTab -> {
+                pdf.show()
+
+                val url: String = currentTab.getUrl()
+                if (url.isNotEmpty()) {
+                    try {
+                        pdf.load(Uri.parse(url))
+                    } catch (e: SecurityException) {
+                        Timber.e(e)
+                    }
+                }
+                webView.isEnabled = false
+                stopLoading()
+                tabList.save()
+            }
         }
     }
 

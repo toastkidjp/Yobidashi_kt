@@ -18,6 +18,8 @@ import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.ImagePreviewActivity
 import java.io.File
 
+
+
 /**
  * PDF Viewer's adapter.
  *
@@ -68,9 +70,11 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
      * Load PDF from [Uri].
      *
      * @param uri
+     * @throws SecurityException
      */
     fun load(uri: Uri) {
-        fileDescriptor = context.contentResolver.openFileDescriptor(uri, "r" )
+        val contentResolver = context.contentResolver
+        fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
         pdfRenderer = PdfRenderer(fileDescriptor)
     }
 

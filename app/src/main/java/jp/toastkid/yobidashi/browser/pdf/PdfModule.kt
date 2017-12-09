@@ -13,9 +13,15 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 /**
  * PDF Module.
  *
+ * @param context
+ * @param parent
+ *
  * @author toastkidjp
  */
-class PdfModule(val context: Context, val parent: ViewGroup): BaseModule(parent) {
+class PdfModule(
+        val context: Context,
+        val parent: ViewGroup
+): BaseModule(parent) {
 
     /**
      * Data binding object.
