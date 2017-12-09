@@ -337,6 +337,10 @@
     <string name="title_tab_background_search">「%s」の検索結果</string>
     <string name="message_background_search">「%s」をバックグラウンドで検索します。</string>
     <string name="message_search_on_background">検索候補をロングタップすると、複数のキーワードをバックグラウンドで検索できます。</string>
+
+    <string name="title_open_pdf">PDF を開く</string>
+    <string name="message_illegal_image_path">画像の指定が不正です。</string>
+
     <string name="message_invoking_intent">「%s」で起動します。</string>
     <string name="title_invoker_dialog">暗黙的インテントで起動(開発者向け)</string>
     <string name="message_invoker_dialog">ActionName を入力してください。</string>
