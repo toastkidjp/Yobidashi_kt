@@ -14,7 +14,6 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark_Relation
-import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
 import java.util.*
 
 /**
@@ -29,20 +28,28 @@ internal class ActivityAdapter(
         private val onDelete: (Bookmark) -> Unit
 ) : RecyclerView.Adapter<ViewHolder> () {
 
-    /** Items. */
+    /**
+     * Items.
+     */
     private val items: MutableList<Bookmark> = mutableListOf()
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
+    /**
+     * [CompositeDisposable].
+     */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    /**
+     * Folder moving history.
+     */
     private val folderHistory: Stack<String> = Stack()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate<ItemBookmarkBinding>(
-                inflater, R.layout.item_bookmark, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+            ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_bookmark, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark: Bookmark = items.get(position)
@@ -83,11 +90,17 @@ internal class ActivityAdapter(
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
+    /**
+     * Return current folder name.
+     */
     fun currentFolderName(): String =
             if (items.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
             else if (items.isEmpty()) Bookmarks.ROOT_FOLDER_NAME
             else items.get(0).parent
 
+    /**
+     * Back to previous folder.
+     */
     fun back(): Boolean {
         if (folderHistory.isEmpty()) {
             return false
@@ -96,10 +109,18 @@ internal class ActivityAdapter(
         return true
     }
 
+    /**
+     * Show root folder.
+     */
     fun showRoot() {
         query(Bookmarks.ROOT_FOLDER_NAME)
     }
 
+    /**
+     * Query with specified title.
+     *
+     * @param title
+     */
     fun query(title: String) {
         relation.selector()
                 .parentEq(title)
@@ -115,6 +136,9 @@ internal class ActivityAdapter(
                 .addTo(disposables)
     }
 
+    /**
+     * Reload.
+     */
     fun reload() {
         query(currentFolderName())
     }
@@ -129,7 +153,9 @@ internal class ActivityAdapter(
 
     /**
      * Remove item.
-     * @param position
+     *
+     * @param item [Bookmark]
+     * @param position position
      */
     fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
         relation.deleteAsMaybe(item)
@@ -142,6 +168,11 @@ internal class ActivityAdapter(
                 .addTo(disposables)
     }
 
+    /**
+     * Clear all items.
+     *
+     * @param onComplete callback
+     */
     fun clearAll(onComplete: () -> Unit) {
         relation.deleter()
                 .executeAsSingle()
@@ -157,6 +188,9 @@ internal class ActivityAdapter(
 
     override fun getItemCount(): Int = items.size
 
+    /**
+     * Dispose all disposable instances.
+     */
     fun dispose() {
         disposables.clear()
     }
