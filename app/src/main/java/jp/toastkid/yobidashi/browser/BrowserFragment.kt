@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
@@ -29,6 +30,7 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.tab.*
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
@@ -61,6 +63,11 @@ import java.io.IOException
 class BrowserFragment : BaseFragment() {
 
     /**
+     * RxPermissions.
+     */
+    private var rxPermissions: RxPermissions? = null
+
+    /**
      * Archive folder.
      */
     private lateinit var tabs: TabAdapter
@@ -76,9 +83,14 @@ class BrowserFragment : BaseFragment() {
     private lateinit var searchWithClip: SearchWithClip
 
     /**
-     * Editor area.
+     * Editor module.
      */
     private lateinit var editor: EditorModule
+
+    /**
+     * PDF module.
+     */
+    private lateinit var pdf: PdfModule
 
     /**
      * Data binding object.
@@ -118,6 +130,7 @@ class BrowserFragment : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
+        rxPermissions = RxPermissions(activity)
     }
 
     override fun onCreateView(
@@ -165,6 +178,8 @@ class BrowserFragment : BaseFragment() {
                     binding?.fab?.hide()
                   } else showFooter() }
         )
+
+        pdf = PdfModule(context, binding?.moduleContainer as ViewGroup)
 
         tabs = TabAdapter(
                 binding?.progress as ProgressBar,
@@ -514,6 +529,19 @@ class BrowserFragment : BaseFragment() {
                 }
                 openEditorTab()
             }
+            Menu.PDF -> {
+                rxPermissions
+                        ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        ?.subscribe { granted ->
+                            if (!granted) {
+                                return@subscribe
+                            }
+                            startActivityForResult(
+                                    IntentFactory.makeStorageAccess("application/pdf"),
+                                    REQUEST_CODE_OPEN_PDF
+                            )
+                        }
+            }
             Menu.EXIT -> {
                 activity.finish()
             }
@@ -747,11 +775,12 @@ class BrowserFragment : BaseFragment() {
         when (requestCode) {
             ArchivesActivity.REQUEST_CODE -> {
                 loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
-                return
             }
             REQUEST_CODE_VOICE_SEARCH -> {
                 disposables.add(VoiceSearch.processResult(activity, intent))
-                return
+            }
+            REQUEST_CODE_OPEN_PDF -> {
+                pdf.load(intent.data)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 if (intent.data != null) { tabs.loadWithNewTab(intent.data) }
@@ -834,6 +863,11 @@ class BrowserFragment : BaseFragment() {
          * Request code of voice search.
          */
         private const val REQUEST_CODE_VOICE_SEARCH: Int = 2
+
+        /**
+         * Request code of opening PDF.
+         */
+        private const val REQUEST_CODE_OPEN_PDF: Int = 3
 
         /**
          * Animation's dutarion.

@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
+import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import jp.toastkid.yobidashi.R
@@ -69,12 +70,18 @@ internal enum class Menu(
 
     EDITOR(R.string.title_editor, R.drawable.ic_edit),
 
+    PDF(R.string.title_open_pdf, R.drawable.ic_pdf),
+
     EXIT(R.string.exit, R.drawable.ic_exit)
     ;
 
     companion object {
         val list: List<Menu> =
                 if (Archive.canUseArchive()) { values().toList() }
-                else { values().filter{  it != ARCHIVE } }
+                else { values().filter { filter(it) } }
+
+        private fun filter(it: Menu): Boolean {
+            return it != ARCHIVE && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || it != PDF)
+        }
     }
 }

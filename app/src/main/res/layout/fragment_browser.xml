@@ -54,6 +54,12 @@
 
         <include android:id="@+id/sip" layout="@layout/module_searcher" />
 
+        <FrameLayout
+            android:id="@+id/module_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
         <ProgressBar
             android:id="@+id/progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

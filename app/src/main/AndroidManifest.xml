@@ -148,6 +148,11 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
+        <activity
+            android:theme="@style/AppTheme.Translucent"
+            android:name=".libs.ImagePreviewActivity"
+            android:launchMode="singleTop"
+            />
 
         <activity
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
