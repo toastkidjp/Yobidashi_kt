@@ -20,6 +20,7 @@ import android.widget.ImageView
 import android.widget.Spinner
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
@@ -112,8 +113,8 @@ class SearchActivity : BaseActivity() {
         binding?.toolbar?.let {
             initToolbar(it)
             it.setNavigationIcon(null)
-            it.setPadding(0,0,0,0);
-            it.setContentInsetsAbsolute(0,0);
+            it.setPadding(0,0,0,0)
+            it.setContentInsetsAbsolute(0,0)
 
             it.inflateMenu(R.menu.search_menu)
             it.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
@@ -148,51 +149,49 @@ class SearchActivity : BaseActivity() {
                 startActivity(SearchHistoryActivity.makeIntent(this))
                 true
             }
-            else -> super.clickMenu(item);
+            else -> super.clickMenu(item)
         }
     }
 
     private fun initFavoriteModule() {
-        disposables.add(
-                Completable.fromAction {
-                    favoriteModule = FavoriteSearchModule(
-                            binding?.favoriteModule as ModuleSearchFavoriteBinding,
-                            { fav -> search(fav.category as String, fav.query as String) },
-                            this::hideKeyboard,
-                            { fav ->
-                                binding?.searchInput?.setText("${fav.query} ")
-                                binding?.searchInput?.setSelection(
-                                        binding?.searchInput?.text.toString().length)
-                            }
-                    )
-                }
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe( { favoriteModule.query("") }, { Timber.e(it) })
-        )
+        Completable.fromAction {
+            favoriteModule = FavoriteSearchModule(
+                    binding?.favoriteModule as ModuleSearchFavoriteBinding,
+                    { fav -> search(fav.category as String, fav.query as String) },
+                    this::hideKeyboard,
+                    { fav ->
+                        binding?.searchInput?.setText("${fav.query} ")
+                        binding?.searchInput?.setSelection(
+                                binding?.searchInput?.text.toString().length)
+                    }
+            )
+        }
+                .subscribeOn(Schedulers.newThread())
+                .subscribe( { favoriteModule.query("") }, { Timber.e(it) })
+                .addTo(disposables)
     }
 
     /**
      * Initialize history module asynchronously.
      */
     private fun initHistoryModule() {
-        disposables.add(
-                Completable.fromAction {
-                    historyModule = HistoryModule(
-                            binding?.historyModule as ModuleSearchHistoryBinding,
-                            { history -> search(history.category as String, history.query as String) },
-                            this::hideKeyboard,
-                            { searchHistory ->
-                                binding?.searchInput?.setText("${searchHistory.query} ")
-                                binding?.searchInput?.setSelection(
-                                        binding?.searchInput?.text.toString().length)
-                            }
-                    )
-                }.subscribeOn(Schedulers.newThread())
-                        .subscribe(
-                                { if (preferenceApplier.isEnableSearchHistory) { historyModule.query("") } },
-                                { Timber.e(it) }
-                        )
-        )
+        Completable.fromAction {
+            historyModule = HistoryModule(
+                    binding?.historyModule as ModuleSearchHistoryBinding,
+                    { history -> search(history.category as String, history.query as String) },
+                    this::hideKeyboard,
+                    { searchHistory ->
+                        binding?.searchInput?.setText("${searchHistory.query} ")
+                        binding?.searchInput?.setSelection(
+                                binding?.searchInput?.text.toString().length)
+                    }
+            )
+        }.subscribeOn(Schedulers.newThread())
+                .subscribe(
+                        { if (preferenceApplier.isEnableSearchHistory) { historyModule.query("") } },
+                        { Timber.e(it) }
+                )
+                .addTo(disposables)
     }
 
     override fun onResume() {
@@ -289,7 +288,9 @@ class SearchActivity : BaseActivity() {
      * @param query    search query
      */
     private fun search(category: String, query: String, onBackground: Boolean = false) {
-        disposables.add(SearchAction(this, category, query, onBackground).invoke())
+        SearchAction(this, category, query, onBackground)
+                .invoke()
+                .addTo(disposables)
         if (onBackground) {
             Toaster.snackShort(
                     binding?.root as View,
@@ -303,9 +304,7 @@ class SearchActivity : BaseActivity() {
      * Hide software keyboard.
      */
     fun hideKeyboard() {
-        if (binding?.searchInput != null) {
-            Inputs.hideKeyboard(binding?.searchInput as EditText)
-        }
+        binding?.searchInput?.let { Inputs.hideKeyboard(it) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -335,7 +334,7 @@ class SearchActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables.dispose()
+        disposables.clear()
         favoriteModule.dispose()
         historyModule.dispose()
         suggestionModule.dispose()
@@ -363,7 +362,7 @@ class SearchActivity : BaseActivity() {
         fun makeIntent(context: Context): Intent {
             val intent = Intent(context, SearchActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent;
+            return intent
         }
     }
 }

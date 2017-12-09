@@ -35,13 +35,7 @@
             android:onClick="@{fragment.showMenu}"
             />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            >
-            <include android:id="@+id/footer" layout="@layout/browser_footer" />
-        </FrameLayout>
+        <include android:id="@+id/footer" layout="@layout/browser_footer" />
 
         <include android:id="@+id/editor" layout="@layout/module_editor" />
 

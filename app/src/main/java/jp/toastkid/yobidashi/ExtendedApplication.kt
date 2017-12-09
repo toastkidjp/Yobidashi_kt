@@ -4,6 +4,7 @@ import android.app.Application
 import com.squareup.leakcanary.LeakCanary
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
 import jp.toastkid.yobidashi.libs.db.DbInitter
@@ -26,11 +27,10 @@ class ExtendedApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        disposables.add(
-                Completable.fromAction { LeakCanary.install(this) }
-                        .subscribeOn(Schedulers.computation())
-                        .subscribe({}, {Timber.e(it)})
-        )
+        Completable.fromAction { LeakCanary.install(this) }
+                .subscribeOn(Schedulers.computation())
+                .subscribe({}, {Timber.e(it)})
+                .addTo(disposables)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
@@ -38,14 +38,12 @@ class ExtendedApplication : Application() {
 
         val preferenceApplier = PreferenceApplier(this)
 
-        disposables.add(
-                Completable.fromAction { DbInitter.init(this) }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(
-                                { processForFirstLaunch(preferenceApplier) },
-                                { Timber.e(it) }
-                        )
-        )
+        Completable.fromAction { DbInitter.init(this) }
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        { processForFirstLaunch(preferenceApplier) },
+                        { Timber.e(it) }
+                ).addTo(disposables)
 
         if (preferenceApplier.useNotificationWidget()) {
             NotificationWidget.show(this)
@@ -69,7 +67,7 @@ class ExtendedApplication : Application() {
 
     override fun onTerminate() {
         super.onTerminate()
-        disposables.dispose()
+        disposables.clear()
     }
 
 }

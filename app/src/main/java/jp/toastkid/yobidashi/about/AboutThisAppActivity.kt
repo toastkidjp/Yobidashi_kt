@@ -34,7 +34,7 @@ class AboutThisAppActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityAboutBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
 
         if (binding?.toolbar != null) {

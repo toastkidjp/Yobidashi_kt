@@ -28,6 +28,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
@@ -54,6 +55,7 @@ import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
+import jp.toastkid.yobidashi.libs.intent.ImplicitIntentInvoker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
@@ -144,11 +146,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         initNavigation()
 
-        disposables.add(
-                Completable.fromAction { initInterstitialAd() }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-        )
+        Completable.fromAction { initInterstitialAd() }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+                .addTo(disposables)
 
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
@@ -184,10 +185,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     preferenceApplier.getDefaultSearchEngine()
                 }
 
-                disposables.add(
-                        SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
-                                .invoke()
-                )
+                SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
+                        .invoke()
+                        .addTo(disposables)
                 return
             }
         }
@@ -363,6 +363,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                         R.drawable.ic_back
                 ).launchUrl(this@MainActivity, Uri.parse("https://twitter.com/share"))
             }
+            R.id.nav_intent_invoker -> {
+                sendLog("nav_intnt")
+                ImplicitIntentInvoker.showDialog(this)
+            }
             R.id.nav_color_filter -> {
                 ColorFilter(this, binding.root).switchState(this)
             }
@@ -468,15 +472,14 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * @param onGranted action
      */
     private fun useCameraPermission(onGranted: () -> Unit) {
-        disposables.add(
-                rxPermissions
-                        .request(Manifest.permission.CAMERA)
-                        .filter { it }
-                        .subscribe(
-                                { onGranted() },
-                                { Timber.e(it) }
-                        )
-        )
+        rxPermissions
+                .request(Manifest.permission.CAMERA)
+                .filter { it }
+                .subscribe(
+                        { onGranted() },
+                        { Timber.e(it) }
+                )
+                .addTo(disposables)
     }
 
     /**
@@ -764,7 +767,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables.dispose()
+        disposables.clear()
         torch.dispose()
     }
 

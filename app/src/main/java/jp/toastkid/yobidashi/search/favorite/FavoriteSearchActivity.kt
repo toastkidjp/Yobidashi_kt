@@ -56,7 +56,7 @@ class FavoriteSearchActivity : BaseActivity() {
         @LayoutRes const val LAYOUT_ID: Int = R.layout.activity_empty
 
         fun makeIntent(context: Context): Intent {
-            val intent: Intent = Intent(context, FavoriteSearchActivity::class.java)
+            val intent = Intent(context, FavoriteSearchActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             return intent
         }

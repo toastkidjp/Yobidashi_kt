@@ -9,15 +9,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark_Relation
-import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
 import java.util.*
 
 /**
- * TODO clean up code.
+ * Bookmark activity's adapter.
  *
  * @author toastkidjp
  */
@@ -28,20 +28,28 @@ internal class ActivityAdapter(
         private val onDelete: (Bookmark) -> Unit
 ) : RecyclerView.Adapter<ViewHolder> () {
 
-    /** Items. */
+    /**
+     * Items.
+     */
     private val items: MutableList<Bookmark> = mutableListOf()
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
+    /**
+     * [CompositeDisposable].
+     */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    /**
+     * Folder moving history.
+     */
     private val folderHistory: Stack<String> = Stack()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate<ItemBookmarkBinding>(
-                inflater, R.layout.item_bookmark, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+            ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_bookmark, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark: Bookmark = items.get(position)
@@ -62,10 +70,8 @@ internal class ActivityAdapter(
         if (bookmark.folder) {
             holder.setImageId(R.drawable.ic_folder_black)
         } else {
-            holder.setImage(bookmark.favicon)
+            holder.setImage(bookmark.favicon).addTo(disposables)
         }
-
-        disposables.add(holder.setImage(bookmark.favicon))
 
         holder.itemView.setOnLongClickListener { v ->
             val context = v.context
@@ -84,11 +90,17 @@ internal class ActivityAdapter(
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
+    /**
+     * Return current folder name.
+     */
     fun currentFolderName(): String =
             if (items.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
             else if (items.isEmpty()) Bookmarks.ROOT_FOLDER_NAME
             else items.get(0).parent
 
+    /**
+     * Back to previous folder.
+     */
     fun back(): Boolean {
         if (folderHistory.isEmpty()) {
             return false
@@ -97,26 +109,36 @@ internal class ActivityAdapter(
         return true
     }
 
+    /**
+     * Show root folder.
+     */
     fun showRoot() {
         query(Bookmarks.ROOT_FOLDER_NAME)
     }
 
+    /**
+     * Query with specified title.
+     *
+     * @param title
+     */
     fun query(title: String) {
-        disposables.add(
-                relation.selector()
-                        .parentEq(title)
-                        .executeAsObservable()
-                        .subscribeOn(Schedulers.io())
-                        .doOnSubscribe { items.clear() }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnTerminate {
-                            notifyDataSetChanged()
-                        }
-                        .observeOn(Schedulers.computation())
-                        .subscribe{ items.add(it) }
-        )
+        relation.selector()
+                .parentEq(title)
+                .executeAsObservable()
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe { items.clear() }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate {
+                    notifyDataSetChanged()
+                }
+                .observeOn(Schedulers.computation())
+                .subscribe{ items.add(it) }
+                .addTo(disposables)
     }
 
+    /**
+     * Reload.
+     */
     fun reload() {
         query(currentFolderName())
     }
@@ -131,7 +153,9 @@ internal class ActivityAdapter(
 
     /**
      * Remove item.
-     * @param position
+     *
+     * @param item [Bookmark]
+     * @param position position
      */
     fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
         relation.deleteAsMaybe(item)
@@ -141,8 +165,14 @@ internal class ActivityAdapter(
                     items.remove(item)
                     notifyItemRemoved(position)
                 }
+                .addTo(disposables)
     }
 
+    /**
+     * Clear all items.
+     *
+     * @param onComplete callback
+     */
     fun clearAll(onComplete: () -> Unit) {
         relation.deleter()
                 .executeAsSingle()
@@ -153,14 +183,16 @@ internal class ActivityAdapter(
                     items.clear()
                     notifyItemRangeRemoved(0, i)
                 }
+                .addTo(disposables)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
+    /**
+     * Dispose all disposable instances.
+     */
     fun dispose() {
-        disposables.dispose()
+        disposables.clear()
     }
 
 }

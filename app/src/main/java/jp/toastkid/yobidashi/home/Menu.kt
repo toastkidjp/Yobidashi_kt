@@ -8,7 +8,7 @@ import jp.toastkid.yobidashi.R
 /**
  * @author toastkidjp
  */
-internal enum class Menu private constructor(@param:StringRes val titleId: Int, @param:DrawableRes val iconId: Int) {
+internal enum class Menu constructor(@param:StringRes val titleId: Int, @param:DrawableRes val iconId: Int) {
 
     CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
 

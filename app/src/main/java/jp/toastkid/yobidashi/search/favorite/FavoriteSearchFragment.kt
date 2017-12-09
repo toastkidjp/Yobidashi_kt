@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
@@ -90,7 +91,7 @@ class FavoriteSearchFragment : BaseFragment() {
      * @param query    Search query
      */
     private fun startSearch(category: SearchCategory, query: String) {
-        disposables.add(SearchAction(activity, category.name, query).invoke())
+        SearchAction(activity, category.name, query).invoke().addTo(disposables)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -127,7 +128,7 @@ class FavoriteSearchFragment : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        disposables.dispose()
+        disposables.clear()
     }
 
     companion object {

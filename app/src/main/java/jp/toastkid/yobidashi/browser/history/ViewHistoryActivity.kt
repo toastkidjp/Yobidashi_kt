@@ -139,7 +139,7 @@ class ViewHistoryActivity: BaseActivity() {
         const val REQUEST_CODE: Int = 201
 
         fun makeIntent(context: Context): Intent {
-            val intent: Intent = Intent(context, ViewHistoryActivity::class.java)
+            val intent = Intent(context, ViewHistoryActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             return intent
         }

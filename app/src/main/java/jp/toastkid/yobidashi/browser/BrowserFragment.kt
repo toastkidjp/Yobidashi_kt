@@ -24,6 +24,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.processors.PublishProcessor
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -663,14 +664,16 @@ class BrowserFragment : BaseFragment() {
         applyFooterColor(colorPair())
         editor.applyColor()
 
-        disposables.add(tabs.reloadWebViewSettings())
-        disposables.add(titleProcessor.subscribe(consumer))
+        disposables.addAll(
+                tabs.reloadWebViewSettings(),
+                titleProcessor.subscribe(consumer)
+        )
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
         if (tabs.isNotEmpty()) {
             tabs.setCurrentTab()
-            tabs.replaceToCurrentTab()
+            tabs.replaceToCurrentTab(false)
         } else {
             tabs.loadWithNewTab(Uri.parse(preferenceApplier().homeUrl))
         }
@@ -777,7 +780,7 @@ class BrowserFragment : BaseFragment() {
                 loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
             }
             REQUEST_CODE_VOICE_SEARCH -> {
-                disposables.add(VoiceSearch.processResult(activity, intent))
+                VoiceSearch.processResult(activity, intent).addTo(disposables)
             }
             REQUEST_CODE_OPEN_PDF -> {
                 pdf.load(intent.data)
@@ -852,7 +855,7 @@ class BrowserFragment : BaseFragment() {
         super.onDestroy()
         (binding?.menusView?.adapter as Adapter).dispose()
         tabs.dispose()
-        disposables.dispose()
+        disposables.clear()
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
     }
