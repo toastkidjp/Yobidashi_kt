@@ -32,7 +32,6 @@ class ImagePreviewActivity(): BaseActivity() {
         val imagePath = intent.getStringExtra(EXTRA_KEY_IMAGE_PATH)
         ImageLoader.setImageToImageView(binding.image, imagePath)
         binding.close.setOnClickListener { finish() }
-        binding.background.setOnClickListener { finish() }
     }
 
     override fun titleId(): Int = R.string.app_name
