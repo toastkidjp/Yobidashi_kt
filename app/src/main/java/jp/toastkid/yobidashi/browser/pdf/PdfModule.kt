@@ -8,13 +8,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
+import jp.toastkid.yobidashi.libs.facade.BaseModule
 
 /**
  * PDF Module.
  *
  * @author toastkidjp
  */
-class PdfModule(val context: Context, val parent: ViewGroup) {
+class PdfModule(val context: Context, val parent: ViewGroup): BaseModule(parent) {
 
     /**
      * Data binding object.
