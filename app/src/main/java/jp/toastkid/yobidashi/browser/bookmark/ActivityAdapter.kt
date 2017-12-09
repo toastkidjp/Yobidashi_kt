@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark_Relation
 import java.util.*
 
 /**
- * TODO clean up code.
+ * Bookmark activity's adapter.
  *
  * @author toastkidjp
  */
