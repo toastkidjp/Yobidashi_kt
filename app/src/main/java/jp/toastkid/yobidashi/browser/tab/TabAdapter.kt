@@ -524,6 +524,9 @@ class TabAdapter(
                     editor.clearPath()
                 }
 
+                if (pdf.isVisible) {
+                    pdf.hide()
+                }
                 editor.show()
                 if (withAnimation) {
                     editor.animate(slideUpFromBottom)
@@ -534,6 +537,9 @@ class TabAdapter(
                 tabList.save()
             }
             is PdfTab -> {
+                if (editor.isVisible) {
+                    editor.hide()
+                }
                 pdf.show()
 
                 val url: String = currentTab.getUrl()
