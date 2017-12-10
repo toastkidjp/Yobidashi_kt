@@ -107,7 +107,7 @@ class TabAdapter(
         webView = makeWebView(progress, titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
 
-        tabsScreenshots = FilesDir(webView.context, "tabs/screenshots")
+        tabsScreenshots = makeNewScreenshotDir(webView.context)
         preferenceApplier = PreferenceApplier(webView.context)
         colorPair = preferenceApplier.colorPair()
         setCurrentTabCount()
@@ -546,6 +546,7 @@ class TabAdapter(
                 if (url.isNotEmpty()) {
                     try {
                         pdf.load(Uri.parse(url))
+                        currentTab.thumbnailPath = pdf.assignNewThumbnail(currentTab.id())
                     } catch (e: SecurityException) {
                         Timber.e(e)
                     }
@@ -834,5 +835,18 @@ class TabAdapter(
         setCurrentTabCount()
     }
 
+    companion object {
+
+        /**
+         * Directory path to screenshot.
+         */
+        private const val SCREENSHOT_DIR_PATH: String = "tabs/screenshots";
+
+        /**
+         * Make new screenshot dir wrapper instance.
+         */
+        fun makeNewScreenshotDir(context: Context): FilesDir = FilesDir(context, SCREENSHOT_DIR_PATH)
+
+    }
 }
 

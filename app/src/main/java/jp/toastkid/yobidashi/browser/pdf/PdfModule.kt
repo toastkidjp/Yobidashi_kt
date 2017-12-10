@@ -38,10 +38,14 @@ class PdfModule(
      */
     private val adapter = Adapter(context)
 
+    /**
+     * LayoutManager.
+     */
+    private val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
     init {
         binding.pdfImages.adapter = adapter
-        binding.pdfImages.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.pdfImages.layoutManager = layoutManager
     }
 
     /**
@@ -55,4 +59,20 @@ class PdfModule(
             parent.addView(binding.root)
         }
     }
+
+    /**
+     * Assign new thumbnail image.
+     *
+     * @param id
+     */
+    fun assignNewThumbnail(id: String): String = adapter.assignNewThumbnail(id, getSafeIndex())
+
+    /**
+     * Get safe index.
+     */
+    private fun getSafeIndex(): Int {
+        val index = layoutManager.findFirstVisibleItemPosition()
+        return if (index < 0 || index < adapter.itemCount) 0 else index
+    }
+
 }

@@ -15,7 +15,7 @@ import java.io.IOException
 object Bitmaps {
 
     /**
-     * Save bitmap to file.
+     * Save bitmap to PNG file.
 
      * @param bitmap
      *
