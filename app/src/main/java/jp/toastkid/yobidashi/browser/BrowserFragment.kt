@@ -7,7 +7,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
@@ -519,20 +518,22 @@ class BrowserFragment : BaseFragment() {
                 }
             }
             Menu.EDITOR -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED
-                            || activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED
+                rxPermissions
+                        ?.request(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
                         )
-                        ) {
-                    requestPermissions(arrayOf(
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            ), 1)
-                    return
-                }
-                openEditorTab()
+                        ?.subscribe (
+                                { granted ->
+                                    if (!granted) {
+                                        Toaster.tShort(activity, R.string.message_requires_permission_storage)
+                                        return@subscribe
+                                    }
+                                    openEditorTab()
+                                },
+                                { Timber.e(it) }
+                        )
+                        ?.addTo(disposables)
             }
             Menu.PDF -> {
                 rxPermissions
@@ -815,22 +816,6 @@ class BrowserFragment : BaseFragment() {
 
     private fun openPdf(uri: Uri) {
         tabs.openNewPdfTab(uri)
-    }
-
-    /**
-     * TODO rewrite with RxPermissions.
-     */
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openEditorTab()
-            return
-        }
-        Toaster.tShort(activity, R.string.message_requires_permission_storage)
     }
 
     /**
