@@ -54,10 +54,10 @@ internal class Adapter(
             tabAdapter.setIndexByTab(tab)
             closeAction()
         }
-        if (tab is WebTab) {
-            holder.setImagePath(tab.thumbnailPath)
-        } else {
-            holder.setEditorImage(colorPair.bgColor())
+        when (tab) {
+            is WebTab -> holder.setImagePath(tab.thumbnailPath)
+            is PdfTab -> holder.setImagePath(tab.thumbnailPath)
+            else -> holder.setEditorImage(colorPair.bgColor())
         }
         holder.setTitle(tab.title())
         holder.setCloseAction(View.OnClickListener { closeAt(tabAdapter.indexOf(tab)) })
