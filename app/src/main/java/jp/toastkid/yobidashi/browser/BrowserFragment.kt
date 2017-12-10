@@ -743,11 +743,6 @@ class BrowserFragment : BaseFragment() {
      */
     private fun hideOption(): Boolean {
 
-        if (pdf.isVisible) {
-            pdf.hide()
-            return true
-        }
-
         if (tabListModule != null && tabListModule.isVisible as Boolean) {
             hideTabList()
             return true
