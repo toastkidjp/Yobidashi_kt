@@ -465,9 +465,11 @@ class BrowserFragment : BaseFragment() {
                         .show()
             }
             Menu.OTHER_BROWSER -> {
-                CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
-                        .build()
-                        .launchUrl(context, Uri.parse(tabs.currentUrl()))
+                tabs.currentUrl()?.let {
+                    CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
+                            .build()
+                            .launchUrl(context, Uri.parse(it))
+                }
             }
             Menu.SHARE_BARCODE -> {
                 SharingUrlByBarcode.invoke(context, tabs.currentUrl() ?: "")
