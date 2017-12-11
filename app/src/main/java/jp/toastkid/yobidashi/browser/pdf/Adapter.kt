@@ -88,6 +88,7 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
      * Assign new thumbnail file to specified tab ID.
      *
      * @param tabId tab ID
+     * @param index
      */
     fun assignNewThumbnail(tabId: String, index: Int): String {
         pdfRenderer?.let {
