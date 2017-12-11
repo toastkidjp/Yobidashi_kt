@@ -24,6 +24,7 @@ import java.io.File
 /**
  * PDF Viewer's adapter.
  *
+ * @param context [Context]
  * @author toastkidjp
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
