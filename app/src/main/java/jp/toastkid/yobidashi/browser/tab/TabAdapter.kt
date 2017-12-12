@@ -551,6 +551,11 @@ class TabAdapter(
                         Timber.e(e)
                     }
                 }
+
+                if (withAnimation) {
+                    pdf.animate(slideUpFromBottom)
+                }
+
                 webView.isEnabled = false
                 stopLoading()
                 tabList.save()

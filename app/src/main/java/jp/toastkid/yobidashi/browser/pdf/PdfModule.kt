@@ -6,6 +6,7 @@ import android.net.Uri
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.Animation
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.libs.facade.BaseModule
@@ -73,6 +74,15 @@ class PdfModule(
     private fun getSafeIndex(): Int {
         val index = layoutManager.findFirstVisibleItemPosition()
         return if (index < 0 || index < adapter.itemCount) 0 else index
+    }
+
+    /**
+     * Animate root view.
+     *
+     * @param animation
+     */
+    fun animate(animation: Animation) {
+        binding.root.startAnimation(animation)
     }
 
 }

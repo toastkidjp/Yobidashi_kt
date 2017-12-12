@@ -83,6 +83,7 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
         val contentResolver = context.contentResolver
         fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
         pdfRenderer = PdfRenderer(fileDescriptor)
+        notifyDataSetChanged()
     }
 
     /**
@@ -92,6 +93,9 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
      * @param index
      */
     fun assignNewThumbnail(tabId: String, index: Int): String {
+        if (index < 0) {
+            return ""
+        }
         pdfRenderer?.let {
             val file = screenshotDir.assignNewFile(tabId + ".png")
             Bitmaps.compress(

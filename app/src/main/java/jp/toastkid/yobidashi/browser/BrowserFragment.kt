@@ -545,20 +545,6 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
-    private fun openPdfFromStorage() {
-        rxPermissions
-                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                ?.subscribe { granted ->
-                    if (!granted) {
-                        return@subscribe
-                    }
-                    startActivityForResult(
-                            IntentFactory.makeOpenDocument("application/pdf"),
-                            REQUEST_CODE_OPEN_PDF
-                    )
-                }
-    }
-
     /**
      * Launch current tab's history activity.
      *
@@ -814,6 +800,28 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Open PDF from storage.
+     */
+    private fun openPdfFromStorage() {
+        rxPermissions
+                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                ?.subscribe { granted ->
+                    if (!granted) {
+                        return@subscribe
+                    }
+                    startActivityForResult(
+                            IntentFactory.makeOpenDocument("application/pdf"),
+                            REQUEST_CODE_OPEN_PDF
+                    )
+                }
+    }
+
+    /**
+     * Open PDF by [Uri].
+     *
+     * @param uri
+     */
     private fun openPdf(uri: Uri) {
         tabs.openNewPdfTab(uri)
     }
