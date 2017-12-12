@@ -35,7 +35,6 @@ import jp.toastkid.yobidashi.browser.tab.*
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
-import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.TextInputs
@@ -138,8 +137,7 @@ class BrowserFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate<FragmentBrowserBinding>(
-                inflater!!, R.layout.fragment_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
         binding?.webViewContainer?.let {
@@ -190,19 +188,20 @@ class BrowserFragment : BaseFragment() {
                 editor,
                 pdf,
                 binding?.footer?.tabCount as TextView,
-                { titleProcessor.onNext(it) },
+                titleProcessor::onNext,
                 { binding?.webViewContainer?.isRefreshing = false },
-                { this.hideOption() },
-                { onScroll(it) },
+                this::hideOption,
+                this::onScroll,
                 this::onEmptyTabs
         )
 
         tabListModule = TabListModule(
-                DataBindingUtil.inflate<ModuleTabListBinding>(
+                DataBindingUtil.inflate(
                         LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
                 tabs,
                 binding?.root as View,
                 this::hideTabList,
+                this::openPdfFromStorage,
                 this::onEmptyTabs
         )
 
@@ -538,22 +537,26 @@ class BrowserFragment : BaseFragment() {
                         ?.addTo(disposables)
             }
             Menu.PDF -> {
-                rxPermissions
-                        ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        ?.subscribe { granted ->
-                            if (!granted) {
-                                return@subscribe
-                            }
-                            startActivityForResult(
-                                    IntentFactory.makeOpenDocument("application/pdf"),
-                                    REQUEST_CODE_OPEN_PDF
-                            )
-                        }
+                openPdfFromStorage()
             }
             Menu.EXIT -> {
                 activity.finish()
             }
         }
+    }
+
+    private fun openPdfFromStorage() {
+        rxPermissions
+                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                ?.subscribe { granted ->
+                    if (!granted) {
+                        return@subscribe
+                    }
+                    startActivityForResult(
+                            IntentFactory.makeOpenDocument("application/pdf"),
+                            REQUEST_CODE_OPEN_PDF
+                    )
+                }
     }
 
     /**

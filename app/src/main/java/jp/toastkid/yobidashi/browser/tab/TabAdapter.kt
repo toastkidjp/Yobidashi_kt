@@ -68,7 +68,7 @@ class TabAdapter(
         private val tabCount: TextView,
         titleCallback: (TitlePair) -> Unit,
         private val loadedCallback: () -> Unit,
-        touchCallback: () -> Unit,
+        touchCallback: () -> Boolean,
         private val scrollCallback: (Boolean) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
@@ -116,7 +116,7 @@ class TabAdapter(
     private fun makeWebView(
             progress: ProgressBar,
             titleCallback: (TitlePair) -> Unit,
-            touchCallback: () -> Unit
+            touchCallback: () -> Boolean
     ): CustomWebView {
         val webViewClient = object : WebViewClient() {
 

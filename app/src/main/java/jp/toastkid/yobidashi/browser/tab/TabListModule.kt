@@ -26,6 +26,7 @@ class TabListModule(
         private val tabAdapter: TabAdapter,
         private val parent: View,
         private val closeAction: () -> Unit,
+        private val openPdfAction: () -> Unit,
         private val emptyAction: () -> Unit
 ) : BaseModule(binding.root) {
 
@@ -59,6 +60,8 @@ class TabListModule(
         initAddTabButton(binding.addTab)
 
         initClearTabs(binding.clearTabs)
+
+        binding.addPdfTab.setOnClickListener { openPdfAction() }
 
         val menuPos = preferenceApplier.menuPos()
         val resources = context().resources
