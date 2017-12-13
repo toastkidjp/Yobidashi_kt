@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.browser.tab.model
 
 import java.io.File
 import java.util.*

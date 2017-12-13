@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
 import android.util.LongSparseArray

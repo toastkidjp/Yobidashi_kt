@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
 import android.view.MotionEvent

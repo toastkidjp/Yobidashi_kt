@@ -32,6 +32,8 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.tab.*
+import jp.toastkid.yobidashi.browser.tab.model.EditorTab
+import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding

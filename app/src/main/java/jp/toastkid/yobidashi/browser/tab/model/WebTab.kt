@@ -1,6 +1,7 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.browser.tab.model
 
 import android.text.TextUtils
+import jp.toastkid.yobidashi.browser.tab.History
 import java.io.File
 import java.util.*
 

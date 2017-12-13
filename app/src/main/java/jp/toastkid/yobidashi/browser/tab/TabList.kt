@@ -4,6 +4,10 @@ import android.content.Context
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.reactivex.disposables.CompositeDisposable
+import jp.toastkid.yobidashi.browser.tab.model.EditorTab
+import jp.toastkid.yobidashi.browser.tab.model.PdfTab
+import jp.toastkid.yobidashi.browser.tab.model.Tab
+import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import okio.Okio
 import timber.log.Timber
 import java.io.File
@@ -68,9 +72,9 @@ class TabList private constructor() {
             }
             tabs.forEach { tab ->
                 val source: ByteArray? = when {
-                    tab is WebTab    -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    tab is WebTab -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     tab is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    tab is PdfTab    -> pdfTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    tab is PdfTab -> pdfTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     else             -> ByteArray(0)
                 }
                 source?.let {
