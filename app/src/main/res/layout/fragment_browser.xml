@@ -54,13 +54,5 @@
 
         <include android:id="@+id/sip" layout="@layout/module_searcher" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-6dp"
-            android:layout_gravity="top"
-            />
     </android.support.design.widget.CoordinatorLayout>
 </layout>

@@ -17,7 +17,6 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
@@ -31,7 +30,9 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.pdf.PdfModule
-import jp.toastkid.yobidashi.browser.tab.*
+import jp.toastkid.yobidashi.browser.tab.TabAdapter
+import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
+import jp.toastkid.yobidashi.browser.tab.TabListModule
 import jp.toastkid.yobidashi.browser.tab.model.EditorTab
 import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
@@ -114,6 +115,11 @@ class BrowserFragment : BaseFragment() {
     private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
 
     /**
+     * PublishProcessor of title pair.
+     */
+    private val progressProcessor: PublishProcessor<Int> = PublishProcessor.create<Int>()
+
+    /**
      * Composite disposer.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -127,6 +133,11 @@ class BrowserFragment : BaseFragment() {
      * Set consumer to titleProcessor.
      */
     var consumer: Consumer<TitlePair>? = null
+
+    /**
+     * Set consumer to titleProcessor.
+     */
+    var progressConsumer: Consumer<Int>? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -185,13 +196,15 @@ class BrowserFragment : BaseFragment() {
                 )
 
         tabs = TabAdapter(
-                binding?.progress as ProgressBar,
                 binding?.webViewContainer as ViewGroup,
                 editor,
                 pdf,
                 binding?.footer?.tabCount as TextView,
                 titleProcessor::onNext,
-                { binding?.webViewContainer?.isRefreshing = false },
+                { progress, loading ->
+                    if (!loading) { binding?.webViewContainer?.isRefreshing = false}
+                    progressProcessor.onNext(progress)
+                },
                 this::hideOption,
                 this::onScroll,
                 this::onEmptyTabs
@@ -664,7 +677,8 @@ class BrowserFragment : BaseFragment() {
 
         disposables.addAll(
                 tabs.reloadWebViewSettings(),
-                titleProcessor.subscribe(consumer)
+                titleProcessor.subscribe(consumer),
+                progressProcessor.subscribe(progressConsumer)
         )
 
         tabs.loadBackgroundTabsFromDirIfNeed()

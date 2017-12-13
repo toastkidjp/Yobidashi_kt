@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
-import android.widget.ProgressBar
 import android.widget.TextView
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -64,19 +63,18 @@ import java.net.HttpURLConnection
  * @author toastkidjp
  */
 class TabAdapter(
-        progress: ProgressBar,
         webViewContainer: ViewGroup,
         private val editor: EditorModule,
         private val pdf: PdfModule,
         private val tabCount: TextView,
         titleCallback: (TitlePair) -> Unit,
-        private val loadedCallback: () -> Unit,
+        private val loadingCallback: (Int, Boolean) -> Unit,
         touchCallback: () -> Boolean,
         private val scrollCallback: (Boolean) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
 
-    private val tabList: TabList = TabList.loadOrInit(progress.context)
+    private val tabList: TabList = TabList.loadOrInit(webViewContainer.context)
 
     private val colorPair: ColorPair
 
@@ -89,7 +87,7 @@ class TabAdapter(
 
     private val tabsScreenshots: FilesDir
 
-    private val faviconApplier: FaviconApplier = FaviconApplier(progress.context)
+    private val faviconApplier: FaviconApplier = FaviconApplier(webViewContainer.context)
 
     private val preferenceApplier: PreferenceApplier
 
@@ -107,7 +105,7 @@ class TabAdapter(
     private val minimumScrolled: Int = 10
 
     init {
-        webView = makeWebView(progress, titleCallback, touchCallback)
+        webView = makeWebView(titleCallback, touchCallback)
         webViewContainer.addView(this.webView)
 
         tabsScreenshots = makeNewScreenshotDir(webView.context)
@@ -117,7 +115,6 @@ class TabAdapter(
     }
 
     private fun makeWebView(
-            progress: ProgressBar,
             titleCallback: (TitlePair) -> Unit,
             touchCallback: () -> Boolean
     ): CustomWebView {
@@ -125,14 +122,14 @@ class TabAdapter(
 
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
-                progress.visibility = View.VISIBLE
+                loadingCallback(0, true)
                 isLoadFinished = false
             }
 
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
                 isLoadFinished = true
-                progress.visibility = View.GONE
+                loadingCallback(100, false)
 
                 val currentTab = currentTab()
                 val lastScrolled = currentTab.getScrolled()
@@ -180,7 +177,7 @@ class TabAdapter(
                     view: WebView, request: WebResourceRequest, error: WebResourceError) {
                 super.onReceivedError(view, request, error)
                 backOrForwardProgress = false
-                loadedCallback()
+                loadingCallback(100, false)
             }
 
             override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
@@ -222,17 +219,12 @@ class TabAdapter(
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
 
-                if (60 <= newProgress) {
-                    loadedCallback()
-                }
+                loadingCallback(newProgress, newProgress < 65)
 
                 if (!isLoadFinished) {
-                    progress.progress = newProgress
                     try {
-                        titleCallback(TitlePair.make(
-                                view.context.getString(R.string.prefix_loading) + newProgress + "%",
-                                view.url ?: ""
-                        )
+                        titleCallback(
+                                TitlePair.make(view.context.getString(R.string.prefix_loading) + newProgress + "%", view.url ?: "")
                         )
                     } catch (e: Exception) {
                         Timber.e(e)
@@ -249,7 +241,7 @@ class TabAdapter(
             }
         }
 
-        val webView = WebViewFactory.make(progress.context)
+        val webView = WebViewFactory.make(tabCount.context)
         webView.setWebViewClient(webViewClient)
         webView.setWebChromeClient(webChromeClient)
         webView.setOnTouchListener { _, _ ->
@@ -264,7 +256,7 @@ class TabAdapter(
                     if (url.isEmpty()) {
                         return@setOnLongClickListener false
                     }
-                    AlertDialog.Builder(progress.context)
+                    AlertDialog.Builder(webView.context)
                             .setTitle("Image: " + url)
                             .setItems(R.array.image_menu, { dialog, which ->
                                 when (which) {
@@ -298,7 +290,7 @@ class TabAdapter(
                     if (url.isEmpty()) {
                         return@setOnLongClickListener false
                     }
-                    AlertDialog.Builder(progress.context)
+                    AlertDialog.Builder(tabCount.context)
                             .setTitle("URL: " + url)
                             .setItems(R.array.url_menu, { _, which ->
                                 when (which) {

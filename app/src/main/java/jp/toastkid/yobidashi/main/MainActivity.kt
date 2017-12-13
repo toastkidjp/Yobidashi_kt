@@ -253,6 +253,15 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             binding.appBarMain?.toolbar?.title    = it.title()
             binding.appBarMain?.toolbar?.subtitle = it.subtitle()
         }
+        browserFragment.progressConsumer = Consumer {
+            if (70 < it) {
+                binding.appBarMain?.progress?.visibility = View.GONE
+                return@Consumer
+            } else {
+                binding.appBarMain?.progress?.visibility = View.VISIBLE
+            }
+            binding.appBarMain?.progress?.progress = it
+        }
     }
 
     /**
