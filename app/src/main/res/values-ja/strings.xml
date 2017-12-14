@@ -346,4 +346,5 @@
     <string name="message_invoker_dialog">ActionName を入力してください。</string>
     <string name="invoke">起動</string>
     <string name="message_invoking_intent_failed">「%s」では起動できませんでした。</string>
+    <string name="title_close_preview">プレビューを閉じる</string>
 </resources>
