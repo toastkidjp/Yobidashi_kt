@@ -352,5 +352,6 @@
     <string name="invoke">Invoke</string>
     <string name="message_invoking_intent_failed">No Activity found to handle Intent \"%s\".</string>
     <string name="title_close_preview">Close preview</string>
+    <string name="message_opening_preview">It has opened preview.</string>
 
 </resources>

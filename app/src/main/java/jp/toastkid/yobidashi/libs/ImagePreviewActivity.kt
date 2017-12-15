@@ -9,7 +9,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
 import android.view.MenuItem
+import android.view.View
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityImagePreviewBinding
@@ -19,9 +21,6 @@ import java.io.File
 /**
  * Image preview.
  *
- * TODO: Implement opened snack.
- * TODO: Implement saved snack.
- *
  * @author toastkidjp
  */
 class ImagePreviewActivity(): BaseActivity() {
@@ -29,7 +28,12 @@ class ImagePreviewActivity(): BaseActivity() {
     /**
      * Image file's path.
      */
-    var imagePath: String = ""
+    private var imagePath: String = ""
+
+    /**
+     * Snackbar parent view.
+     */
+    private lateinit var snackbarParent: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +57,19 @@ class ImagePreviewActivity(): BaseActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.toolbar.inflateMenu(R.menu.activity_image_preview)
         binding.toolbar.setOnMenuItemClickListener{ this.clickMenu(it) }
+
+        snackbarParent = binding.root
+
+        showSnackbar(R.string.message_opening_preview)
+    }
+
+    /**
+     * Show snackbar with specified message ID.
+     *
+     * @param messageId
+     */
+    private fun showSnackbar(@StringRes messageId: Int) {
+        Toaster.snackShort(snackbarParent, messageId, colorPair())
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
@@ -82,6 +99,7 @@ class ImagePreviewActivity(): BaseActivity() {
             }
             ImageLoader.loadBitmap(this, Uri.parse(File(imagePath).toURI().toString()))
                 ?.compress(Bitmap.CompressFormat.PNG, 100, contentResolver.openOutputStream(it.data))
+            showSnackbar(R.string.done_save)
         }
     }
 
