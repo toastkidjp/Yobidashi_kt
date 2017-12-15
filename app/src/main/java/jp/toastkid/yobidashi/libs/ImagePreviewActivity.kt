@@ -17,12 +17,18 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import java.io.File
 
 /**
+ * Image preview.
+ *
+ * TODO: Implement opened snack.
+ * TODO: Implement saved snack.
+ *
  * @author toastkidjp
  */
 class ImagePreviewActivity(): BaseActivity() {
 
-    var path: String? = null
-
+    /**
+     * Image file's path.
+     */
     var imagePath: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +45,7 @@ class ImagePreviewActivity(): BaseActivity() {
         setContentView(LAYOUT_ID)
         val binding: ActivityImagePreviewBinding =
                 DataBindingUtil.setContentView(this, LAYOUT_ID)
+
         imagePath = intent.getStringExtra(EXTRA_KEY_IMAGE_PATH)
         ImageLoader.setImageToImageView(binding.image, imagePath)
 
@@ -80,22 +87,35 @@ class ImagePreviewActivity(): BaseActivity() {
 
     override fun titleId(): Int = R.string.app_name
 
-    override fun onDestroy() {
-        super.onDestroy()
-        path?.let { File(path).delete() }
-    }
-
     companion object {
 
+        /**
+         * This activity's layout ID.
+         */
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.activity_image_preview
 
+        /**
+         * Extra key of image-path.
+         */
         private const val EXTRA_KEY_IMAGE_PATH: String = "image_path"
 
+        /**
+         * File type.
+         */
         private const val STORE_FILE_TYPE: String = "image/png"
 
+        /**
+         * Default file name.
+         */
         private const val DEFAULT_STORE_FILE_NAME: String = "image.png"
 
+        /**
+         * Make this activity's intent.
+         *
+         * @param context
+         * @param file
+         */
         fun makeIntent(context: Context, file: File): Intent =
                 Intent(context, ImagePreviewActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
