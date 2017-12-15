@@ -67,7 +67,7 @@ class TabAdapter(
         private val editor: EditorModule,
         private val pdf: PdfModule,
         private val tabCount: TextView,
-        titleCallback: (TitlePair) -> Unit,
+        private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
         touchCallback: () -> Boolean,
         private val scrollCallback: (Boolean) -> Unit,
@@ -103,6 +103,11 @@ class TabAdapter(
      * Suppressing unnecessary animation.
      */
     private val minimumScrolled: Int = 10
+
+    /**
+     * PDF tab's dummy title.
+     */
+    private val pdfTabTitle: String = "PDF Tab"
 
     init {
         webView = makeWebView(titleCallback, touchCallback)
@@ -540,8 +545,10 @@ class TabAdapter(
                 val url: String = currentTab.getUrl()
                 if (url.isNotEmpty()) {
                     try {
-                        pdf.load(Uri.parse(url))
+                        val uri = Uri.parse(url)
+                        pdf.load(uri)
                         currentTab.thumbnailPath = pdf.assignNewThumbnail(currentTab.id())
+                        titleCallback(TitlePair.make(pdfTabTitle, uri.lastPathSegment ?: url))
                     } catch (e: SecurityException) {
                         Timber.e(e)
                     }
