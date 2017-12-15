@@ -20,9 +20,18 @@
             android:layout_gravity="right|bottom"
             >
             <android.support.design.widget.FloatingActionButton
+                android:id="@+id/add_search_tab"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_search_white"
+                android:background="@drawable/ripple_transparent"
+                />
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_pdf_tab"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/add_search_tab"
                 android:src="@drawable/ic_pdf"
                 android:background="@drawable/ripple_transparent"
                 />
