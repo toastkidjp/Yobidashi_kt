@@ -261,7 +261,7 @@ class EditorModule(
      * Load content from file with Storage Access Framework.
      */
     private inline fun load() {
-        intentLauncher(IntentFactory.makeStorageAccess("text/plain"), REQUEST_CODE_LOAD)
+        intentLauncher(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD)
     }
 
     /**

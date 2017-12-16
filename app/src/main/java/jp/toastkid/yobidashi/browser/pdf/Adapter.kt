@@ -13,14 +13,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.tab.TabAdapter
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
+import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.ImagePreviewActivity
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import java.io.File
 
 /**
  * PDF Viewer's adapter.
  *
+ * @param context [Context]
  * @author toastkidjp
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -30,6 +34,11 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
      * Layout inflater.
      */
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
+
+    /**
+     * Use for save tab's thumbnail.
+     */
+    private val screenshotDir: FilesDir by lazy { TabAdapter.makeNewScreenshotDir(context) }
 
     /**
      * File descriptor.
@@ -68,10 +77,34 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
      * Load PDF from [Uri].
      *
      * @param uri
+     * @throws SecurityException
      */
     fun load(uri: Uri) {
-        fileDescriptor = context.contentResolver.openFileDescriptor(uri, "r" )
+        val contentResolver = context.contentResolver
+        fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
         pdfRenderer = PdfRenderer(fileDescriptor)
+        notifyDataSetChanged()
+    }
+
+    /**
+     * Assign new thumbnail file to specified tab ID.
+     *
+     * @param tabId tab ID
+     * @param index
+     */
+    fun assignNewThumbnail(tabId: String, index: Int): String {
+        if (index < 0) {
+            return ""
+        }
+        pdfRenderer?.let {
+            val file = screenshotDir.assignNewFile(tabId + ".png")
+            Bitmaps.compress(
+                    PdfImageFactory.invoke(it.openPage(index)),
+                    file
+            )
+            return file.absolutePath
+        }
+        return ""
     }
 
     /**

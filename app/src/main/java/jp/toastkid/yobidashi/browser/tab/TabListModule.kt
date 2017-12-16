@@ -15,6 +15,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchActivity
 
 /**
  * WebTab list module.
@@ -26,6 +27,7 @@ class TabListModule(
         private val tabAdapter: TabAdapter,
         private val parent: View,
         private val closeAction: () -> Unit,
+        private val openPdfAction: () -> Unit,
         private val emptyAction: () -> Unit
 ) : BaseModule(binding.root) {
 
@@ -60,8 +62,16 @@ class TabListModule(
 
         initClearTabs(binding.clearTabs)
 
+        binding.addPdfTab.setOnClickListener { openPdfAction() }
+
+        val context = context()
+
+        binding.addSearchTab.setOnClickListener {
+            context.startActivity(SearchActivity.makeIntent(context))
+        }
+
         val menuPos = preferenceApplier.menuPos()
-        val resources = context().resources
+        val resources = context.resources
         val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
         MenuPos.place(binding.fabs, 0, fabMarginHorizontal, menuPos)
     }

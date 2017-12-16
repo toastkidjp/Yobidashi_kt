@@ -20,7 +20,10 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
@@ -249,6 +252,15 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         browserFragment.consumer = Consumer {
             binding.appBarMain?.toolbar?.title    = it.title()
             binding.appBarMain?.toolbar?.subtitle = it.subtitle()
+        }
+        browserFragment.progressConsumer = Consumer {
+            if (70 < it) {
+                binding.appBarMain?.progress?.visibility = View.GONE
+                return@Consumer
+            } else {
+                binding.appBarMain?.progress?.visibility = View.VISIBLE
+            }
+            binding.appBarMain?.progress?.progress = it
         }
     }
 
@@ -681,13 +693,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             it.cancel()
             it.translationY(-resources.getDimension(R.dimen.toolbar_height))
                     .setDuration(HEADER_HIDING_DURATION)
-                    .withStartAction {
-                        val marginLayoutParams
-                                = binding.appBarMain?.content?.layoutParams as ViewGroup.MarginLayoutParams
-                        marginLayoutParams.topMargin = 0
-                        binding.appBarMain?.content?.requestLayout()
-                    }
-                    .withEndAction { binding.appBarMain?.toolbar?.visibility = View.GONE }
+                    .withStartAction { binding.appBarMain?.content?.requestLayout() }
+                    .withEndAction   { binding.appBarMain?.toolbar?.visibility = View.GONE }
                     .start()
         }
     }
@@ -698,12 +705,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             it.translationY(0f)
                     .setDuration(HEADER_HIDING_DURATION)
                     .withStartAction { binding.appBarMain?.toolbar?.visibility = View.VISIBLE }
-                    .withEndAction {
-                        val marginLayoutParams
-                                = binding.appBarMain?.content?.layoutParams as ViewGroup.MarginLayoutParams
-                        marginLayoutParams.topMargin = resources.getDimensionPixelSize(R.dimen.toolbar_height)
-                        binding.appBarMain?.content?.requestLayout()
-                    }
+                    .withEndAction   { binding.appBarMain?.content?.requestLayout() }
                     .start()
         }
     }

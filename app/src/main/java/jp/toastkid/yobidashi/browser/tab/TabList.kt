@@ -4,6 +4,10 @@ import android.content.Context
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.reactivex.disposables.CompositeDisposable
+import jp.toastkid.yobidashi.browser.tab.model.EditorTab
+import jp.toastkid.yobidashi.browser.tab.model.PdfTab
+import jp.toastkid.yobidashi.browser.tab.model.Tab
+import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import okio.Okio
 import timber.log.Timber
 import java.io.File
@@ -13,7 +17,7 @@ import kotlin.concurrent.withLock
 
 /**
  * First collection of [Tab].
- *
+ * TODO clean up code.
  * @author toastkidjp
  */
 class TabList private constructor() {
@@ -68,8 +72,9 @@ class TabList private constructor() {
             }
             tabs.forEach { tab ->
                 val source: ByteArray? = when {
-                    tab is WebTab    -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    tab is WebTab -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     tab is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    tab is PdfTab -> pdfTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     else             -> ByteArray(0)
                 }
                 source?.let {
@@ -96,7 +101,7 @@ class TabList private constructor() {
         remove(tab)
     }
 
-    private fun remove(tab: Tab) {
+    internal fun remove(tab: Tab) {
         File(itemsDir, tab.id() + ".json").delete()
         tabs.remove(tab)
     }
@@ -136,6 +141,10 @@ class TabList private constructor() {
             Moshi.Builder().build().adapter(EditorTab::class.java)
         }
 
+        private val pdfTabJsonAdapter: JsonAdapter<PdfTab> by lazy {
+            Moshi.Builder().build().adapter(PdfTab::class.java)
+        }
+
         private var itemsDir: File? = null
 
         internal fun loadOrInit(context: Context): TabList {
@@ -167,6 +176,8 @@ class TabList private constructor() {
                         val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).readUtf8()
                         if (json.contains("editorTab")) {
                             editorTabJsonAdapter.fromJson(json)
+                        } else if (json.contains("pdfTab")) {
+                            pdfTabJsonAdapter.fromJson(json)
                         } else {
                             webTabJsonAdapter.fromJson(json)
                         }

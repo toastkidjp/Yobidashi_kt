@@ -7,7 +7,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
@@ -18,7 +17,6 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
@@ -32,11 +30,14 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.pdf.PdfModule
-import jp.toastkid.yobidashi.browser.tab.*
+import jp.toastkid.yobidashi.browser.tab.TabAdapter
+import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
+import jp.toastkid.yobidashi.browser.tab.TabListModule
+import jp.toastkid.yobidashi.browser.tab.model.EditorTab
+import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
-import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.TextInputs
@@ -114,6 +115,11 @@ class BrowserFragment : BaseFragment() {
     private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
 
     /**
+     * PublishProcessor of title pair.
+     */
+    private val progressProcessor: PublishProcessor<Int> = PublishProcessor.create<Int>()
+
+    /**
      * Composite disposer.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -128,6 +134,11 @@ class BrowserFragment : BaseFragment() {
      */
     var consumer: Consumer<TitlePair>? = null
 
+    /**
+     * Set consumer to titleProcessor.
+     */
+    var progressConsumer: Consumer<Int>? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
@@ -139,8 +150,7 @@ class BrowserFragment : BaseFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate<FragmentBrowserBinding>(
-                inflater!!, R.layout.fragment_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
         binding?.webViewContainer?.let {
@@ -180,26 +190,33 @@ class BrowserFragment : BaseFragment() {
                   } else showFooter() }
         )
 
-        pdf = PdfModule(context, binding?.moduleContainer as ViewGroup)
+        pdf = PdfModule(
+                context,
+                binding?.moduleContainer as ViewGroup
+                )
 
         tabs = TabAdapter(
-                binding?.progress as ProgressBar,
                 binding?.webViewContainer as ViewGroup,
                 editor,
+                pdf,
                 binding?.footer?.tabCount as TextView,
-                { titleProcessor.onNext(it) },
-                { binding?.webViewContainer?.isRefreshing = false },
-                { this.hideOption() },
-                { onScroll(it) },
+                titleProcessor::onNext,
+                { progress, loading ->
+                    if (!loading) { binding?.webViewContainer?.isRefreshing = false}
+                    progressProcessor.onNext(progress)
+                },
+                this::hideOption,
+                this::onScroll,
                 this::onEmptyTabs
         )
 
         tabListModule = TabListModule(
-                DataBindingUtil.inflate<ModuleTabListBinding>(
+                DataBindingUtil.inflate(
                         LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
                 tabs,
                 binding?.root as View,
                 this::hideTabList,
+                this::openPdfFromStorage,
                 this::onEmptyTabs
         )
 
@@ -462,9 +479,11 @@ class BrowserFragment : BaseFragment() {
                         .show()
             }
             Menu.OTHER_BROWSER -> {
-                CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
-                        .build()
-                        .launchUrl(context, Uri.parse(tabs.currentUrl()))
+                tabs.currentUrl()?.let {
+                    CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
+                            .build()
+                            .launchUrl(context, Uri.parse(it))
+                }
             }
             Menu.SHARE_BARCODE -> {
                 SharingUrlByBarcode.invoke(context, tabs.currentUrl() ?: "")
@@ -515,33 +534,25 @@ class BrowserFragment : BaseFragment() {
                 }
             }
             Menu.EDITOR -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        && (activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED
-                            || activity.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED
+                rxPermissions
+                        ?.request(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
                         )
-                        ) {
-                    requestPermissions(arrayOf(
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            ), 1)
-                    return
-                }
-                openEditorTab()
+                        ?.subscribe (
+                                { granted ->
+                                    if (!granted) {
+                                        Toaster.tShort(activity, R.string.message_requires_permission_storage)
+                                        return@subscribe
+                                    }
+                                    openEditorTab()
+                                },
+                                { Timber.e(it) }
+                        )
+                        ?.addTo(disposables)
             }
             Menu.PDF -> {
-                rxPermissions
-                        ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        ?.subscribe { granted ->
-                            if (!granted) {
-                                return@subscribe
-                            }
-                            startActivityForResult(
-                                    IntentFactory.makeStorageAccess("application/pdf"),
-                                    REQUEST_CODE_OPEN_PDF
-                            )
-                        }
+                openPdfFromStorage()
             }
             Menu.EXIT -> {
                 activity.finish()
@@ -666,7 +677,8 @@ class BrowserFragment : BaseFragment() {
 
         disposables.addAll(
                 tabs.reloadWebViewSettings(),
-                titleProcessor.subscribe(consumer)
+                titleProcessor.subscribe(consumer),
+                progressProcessor.subscribe(progressConsumer)
         )
 
         tabs.loadBackgroundTabsFromDirIfNeed()
@@ -737,6 +749,7 @@ class BrowserFragment : BaseFragment() {
      * Hide option menus.
      */
     private fun hideOption(): Boolean {
+
         if (tabListModule != null && tabListModule.isVisible as Boolean) {
             hideTabList()
             return true
@@ -783,7 +796,11 @@ class BrowserFragment : BaseFragment() {
                 VoiceSearch.processResult(activity, intent).addTo(disposables)
             }
             REQUEST_CODE_OPEN_PDF -> {
-                pdf.load(intent.data)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    val takeFlags: Int = intent.getFlags() and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    context.contentResolver.takePersistableUriPermission(intent.data, takeFlags)
+                }
+                openPdf(intent.data)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 if (intent.data != null) { tabs.loadWithNewTab(intent.data) }
@@ -799,17 +816,30 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openEditorTab()
-            return
-        }
-        Toaster.tShort(activity, R.string.message_requires_permission_storage)
+    /**
+     * Open PDF from storage.
+     */
+    private fun openPdfFromStorage() {
+        rxPermissions
+                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                ?.subscribe { granted ->
+                    if (!granted) {
+                        return@subscribe
+                    }
+                    startActivityForResult(
+                            IntentFactory.makeOpenDocument("application/pdf"),
+                            REQUEST_CODE_OPEN_PDF
+                    )
+                }
+    }
+
+    /**
+     * Open PDF by [Uri].
+     *
+     * @param uri
+     */
+    private fun openPdf(uri: Uri) {
+        tabs.openNewPdfTab(uri)
     }
 
     /**

@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.tab
 
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

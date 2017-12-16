@@ -122,8 +122,22 @@ object IntentFactory {
      * @param type mime type
      * @return [Intent]
      */
-    fun makeStorageAccess(type: String): Intent {
+    fun makeGetContent(type: String): Intent {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = type
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        return intent
+    }
+
+    /**
+     * Make Storage Access Framework intent.
+     *
+     * @param type mime type
+     * @return [Intent]
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    fun makeOpenDocument(type: String): Intent {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.type = type
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         return intent
