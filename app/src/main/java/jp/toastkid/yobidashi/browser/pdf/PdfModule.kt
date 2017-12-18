@@ -21,7 +21,8 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
  */
 class PdfModule(
         val context: Context,
-        val parent: ViewGroup
+        val parent: ViewGroup,
+        private val toolbarCallback: (Boolean) -> Unit
 ): BaseModule(parent) {
 
     /**
@@ -83,6 +84,16 @@ class PdfModule(
      */
     fun animate(animation: Animation) {
         binding.root.startAnimation(animation)
+    }
+
+    override fun show() {
+        super.show()
+        toolbarCallback(true)
+    }
+
+    override fun hide() {
+        super.hide()
+        toolbarCallback(false)
     }
 
 }

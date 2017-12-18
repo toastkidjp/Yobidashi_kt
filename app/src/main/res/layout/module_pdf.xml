@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pdf_images"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/pdf_images"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
-    </FrameLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 </layout>

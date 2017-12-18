@@ -184,15 +184,20 @@ class BrowserFragment : BaseFragment() {
                         tabs.saveTabList()
                     }
                 },
-                { if (it) {
-                    hideFooter()
-                    binding?.fab?.hide()
-                  } else showFooter() }
+                {
+                    if (it) {
+                        hideFooter()
+                        binding?.fab?.hide()
+                    } else {
+                        if (tabs.currentTab() is WebTab) { showFooter() }
+                    }
+                }
         )
 
         pdf = PdfModule(
                 context,
-                binding?.moduleContainer as ViewGroup
+                binding?.moduleContainer as ViewGroup,
+                { if (it) { hideFooter() } else { if (tabs.currentTab() is WebTab) { showFooter() } } }
                 )
 
         tabs = TabAdapter(
@@ -692,7 +697,9 @@ class BrowserFragment : BaseFragment() {
 
         val preferenceApplier = preferenceApplier()
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
-                || editor.isVisible) {
+                || editor.isVisible
+                || pdf.isVisible
+                ) {
             hideFooter()
             return
         }
