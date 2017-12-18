@@ -50,7 +50,6 @@ import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SiteSearch
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import okhttp3.Request
-import okhttp3.Response
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -98,16 +97,6 @@ class TabAdapter(
      */
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
-
-    /**
-     * Suppressing unnecessary animation.
-     */
-    private val minimumScrolled: Int = 10
-
-    /**
-     * PDF tab's dummy title.
-     */
-    private val pdfTabTitle: String = "PDF Tab"
 
     init {
         webView = makeWebView(titleCallback, touchCallback)
@@ -220,6 +209,7 @@ class TabAdapter(
                 return super.shouldOverrideUrlLoading(view, url)
             }
         }
+
         val webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
@@ -351,7 +341,7 @@ class TabAdapter(
         }
         webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
             val scrolled = vertical - oldVertical
-            if (Math.abs(scrolled) > minimumScrolled && currentTab() is WebTab) {
+            if (Math.abs(scrolled) > MINIMUM_SCROLLED && currentTab() is WebTab) {
                 scrollCallback(0 > scrolled)
             }
         }
@@ -369,10 +359,10 @@ class TabAdapter(
      * @param webView
      */
     private fun storeImage(url: String, webView: WebView): Maybe<File> {
-        return Single.create<Response> { e ->
-            val client = HttpClientFactory.make()
-            e.onSuccess(client.newCall(Request.Builder().url(url).build()).execute())
-        }.subscribeOn(Schedulers.io())
+        return Single.fromCallable {
+            HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute()
+        }
+                .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .filter { it.code() == HttpURLConnection.HTTP_OK }
                 .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
@@ -547,7 +537,7 @@ class TabAdapter(
                         val uri = Uri.parse(url)
                         pdf.load(uri)
                         currentTab.thumbnailPath = pdf.assignNewThumbnail(currentTab.id())
-                        titleCallback(TitlePair.make(pdfTabTitle, uri.lastPathSegment ?: url))
+                        titleCallback(TitlePair.make(PDF_TAB_TITLE, uri.lastPathSegment ?: url))
                     } catch (e: SecurityException) {
                         Timber.e(e)
                     }
@@ -861,6 +851,21 @@ class TabAdapter(
          * Directory path to screenshot.
          */
         private const val SCREENSHOT_DIR_PATH: String = "tabs/screenshots";
+
+        /**
+         * Suppressing unnecessary animation.
+         */
+        private const val MINIMUM_SCROLLED: Int = 10
+
+        /**
+         * PDF tab's dummy title.
+         */
+        private const val PDF_TAB_TITLE: String = "PDF Tab"
+
+        /**
+         * HTTP Client.
+         */
+        private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
 
         /**
          * Make new screenshot dir wrapper instance.
