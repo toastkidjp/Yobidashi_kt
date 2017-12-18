@@ -886,6 +886,7 @@ class BrowserFragment : BaseFragment() {
         super.onPause()
         editor.saveIfNeed()
         binding?.tabListContainer?.removeAllViews()
+        tabs.saveTabList()
     }
 
     override fun onDestroy() {
