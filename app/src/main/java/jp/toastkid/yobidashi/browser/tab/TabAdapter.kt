@@ -63,7 +63,7 @@ import java.net.HttpURLConnection
  * @author toastkidjp
  */
 class TabAdapter(
-        webViewContainer: ViewGroup,
+        private val webViewContainer: ViewGroup,
         private val editor: EditorModule,
         private val pdf: PdfModule,
         private val tabCount: TextView,
@@ -506,11 +506,11 @@ class TabAdapter(
             is WebTab -> {
                 if (editor.isVisible) {
                     editor.hide()
-                    webView.isEnabled = true
+                    enableWebView()
                 }
                 if (pdf.isVisible) {
                     pdf.hide()
-                    webView.isEnabled = true
+                    enableWebView()
                 }
                 val latest = currentTab.latest
                 if (latest !== History.EMPTY) {
@@ -532,8 +532,7 @@ class TabAdapter(
                     editor.animate(slideUpFromBottom)
                 }
 
-                webView.isEnabled = false
-                stopLoading()
+                disableWebView()
                 tabList.save()
             }
             is PdfTab -> {
@@ -558,11 +557,25 @@ class TabAdapter(
                     pdf.animate(slideUpFromBottom)
                 }
 
-                webView.isEnabled = false
-                stopLoading()
+                disableWebView()
                 tabList.save()
             }
         }
+    }
+
+    /**
+     * Enable [WebView].
+     */
+    private inline fun enableWebView() {
+        webView.isEnabled = true
+    }
+
+    /**
+     * Disble [WebView].
+     */
+    private inline fun disableWebView() {
+        webView.isEnabled = false
+        stopLoading()
     }
 
     private fun checkIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
