@@ -28,6 +28,8 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.menu.Adapter
+import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.tab.TabAdapter
