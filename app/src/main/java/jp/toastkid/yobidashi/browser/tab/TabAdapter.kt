@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
 import android.widget.TextView
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -536,7 +537,10 @@ class TabAdapter(
                     try {
                         val uri = Uri.parse(url)
                         pdf.load(uri)
-                        currentTab.thumbnailPath = pdf.assignNewThumbnail(currentTab.id())
+                        Completable.fromAction { currentTab.thumbnailPath = pdf.assignNewThumbnail(currentTab.id()) }
+                                .subscribeOn(Schedulers.io())
+                                .subscribe()
+                                .addTo(disposables)
                         titleCallback(TitlePair.make(PDF_TAB_TITLE, uri.lastPathSegment ?: url))
                     } catch (e: SecurityException) {
                         Timber.e(e)

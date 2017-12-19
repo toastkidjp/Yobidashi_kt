@@ -58,10 +58,10 @@ class PdfModule(
      * @param uri
      */
     fun load(uri: Uri) {
-        adapter.load(uri)
         if (parent.childCount == 0) {
             parent.addView(binding.root)
         }
+        adapter.load(uri)
     }
 
     /**
