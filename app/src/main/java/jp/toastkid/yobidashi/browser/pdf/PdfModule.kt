@@ -10,6 +10,7 @@ import android.view.animation.Animation
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.libs.facade.BaseModule
+import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 
 /**
  * PDF Module.
@@ -94,6 +95,14 @@ class PdfModule(
     override fun hide() {
         super.hide()
         toolbarCallback(false)
+    }
+
+    internal fun pageUp() {
+        RecyclerViewScroller.toTop(binding.pdfImages, adapter.itemCount)
+    }
+
+    internal fun pageDown() {
+        RecyclerViewScroller.toBottom(binding.pdfImages, adapter.itemCount)
     }
 
 }

@@ -607,11 +607,17 @@ class TabAdapter(
     }
 
     fun pageUp() {
-        webView.pageUp(true)
+        when (currentTab()) {
+            is WebTab -> webView.pageUp(true)
+            is PdfTab -> pdf.pageUp()
+        }
     }
 
     fun pageDown() {
-        webView.pageDown(true)
+        when (currentTab()) {
+            is WebTab -> webView.pageDown(true)
+            is PdfTab -> pdf.pageDown()
+        }
     }
 
     fun currentSnap() {
@@ -758,9 +764,7 @@ class TabAdapter(
      */
     fun dispose() {
         webView.destroy()
-        if (preferenceApplier.doesRetainTabs()) {
-            tabList.save()
-        } else {
+        if (!preferenceApplier.doesRetainTabs()) {
             tabList.clear()
             tabsScreenshots.clean()
         }
