@@ -49,6 +49,7 @@ class PdfModule(
     init {
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
+        binding.pdfImages.setHasFixedSize(true)
     }
 
     /**
