@@ -647,7 +647,11 @@ class TabAdapter(
      * Invoke site search.
      */
     fun siteSearch() {
-        SiteSearch.invoke(webView)
+        if (currentTab() is WebTab) {
+            SiteSearch.invoke(webView)
+            return
+        }
+        Toaster.snackShort(webViewContainer, "This menu can be used on only web page.", colorPair)
     }
 
     /**

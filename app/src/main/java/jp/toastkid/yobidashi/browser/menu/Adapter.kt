@@ -66,9 +66,9 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val menu = menus[position % menus.size]
-        holder.setColorPair(colorPair)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
+        holder.setColorPair(colorPair, menu != Menu.SITE_SEARCH)
         holder.setOnClick(View.OnClickListener{ v -> menuPublishProcessor.onNext(menu) })
 
     }
