@@ -3,29 +3,41 @@ package jp.toastkid.yobidashi.libs
 import android.content.Context
 import android.support.design.widget.TextInputLayout
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
+import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.LinearLayout
 import jp.toastkid.yobidashi.R
 
 /**
+ * [TextInputLayout] utility.
+ *
  * @author toastkidjp
  */
 object TextInputs  {
 
+    /**
+     * EditText's layout params.
+     */
+    private val LAYOUT_PARAMS = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+    )
+
+    /**
+     * Set empty alert.
+     *
+     * @param inputLayout
+     */
     fun setEmptyAlert(inputLayout: TextInputLayout): EditText {
-        val input = inputLayout.editText
-        if (input == null) {
-            return input!!
-        }
+        val input: EditText? = inputLayout.editText
 
-        input.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        input?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-            }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
 
             override fun afterTextChanged(s: Editable) {
                 if (s.toString().isEmpty()) {
@@ -36,12 +48,24 @@ object TextInputs  {
                 inputLayout.isErrorEnabled = false
             }
         })
-        return input
+        return input ?: EditText(inputLayout.context)
     }
 
-    fun make(context: Context): TextInputLayout {
-        val inputLayout = TextInputLayout(context)
-        inputLayout.addView(EditText(context))
-        return inputLayout
-    }
+    /**
+     * Make [TextInputLayout] instance.
+     */
+    fun make(context: Context): TextInputLayout =
+            TextInputLayout(context)
+                .apply {
+                    addView(
+                            EditText(context).apply {
+                                maxLines   = 1
+                                inputType  = InputType.TYPE_CLASS_TEXT
+                                imeOptions = EditorInfo.IME_ACTION_SEARCH
+                            },
+                            0,
+                            LAYOUT_PARAMS
+                    )
+                }
+
 }
