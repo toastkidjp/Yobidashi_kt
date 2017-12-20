@@ -349,4 +349,5 @@
     <string name="title_close_preview">プレビューを閉じる</string>
     <string name="message_opening_preview">プレビューを開きました。</string>
     <string name="hint_please_input">検索キーワードを入力</string>
+    <string name="message_failed_tab_read">タブの読み込みに失敗しました。</string>
 </resources>

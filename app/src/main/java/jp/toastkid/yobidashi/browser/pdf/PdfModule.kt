@@ -7,10 +7,19 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.Animation
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.tab.TabAdapter
+import jp.toastkid.yobidashi.browser.tab.model.PdfTab
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
+import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.facade.BaseModule
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import timber.log.Timber
 
 /**
  * PDF Module.
@@ -46,6 +55,11 @@ class PdfModule(
      */
     private val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+    /**
+     * Use for save tab's thumbnail.
+     */
+    private val screenshotDir: FilesDir by lazy { TabAdapter.makeNewScreenshotDir(context) }
+
     init {
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
@@ -55,21 +69,37 @@ class PdfModule(
     /**
      * Load PDF content from [Uri].
      *
+     * TODO: keeping position.
+     *
      * @param uri
      */
     fun load(uri: Uri) {
+        adapter.load(uri)
+        layoutManager.scrollToPosition(0)
         if (parent.childCount == 0) {
             parent.addView(binding.root)
         }
-        adapter.load(uri)
     }
 
     /**
      * Assign new thumbnail image.
      *
-     * @param id
+     * @param id Tab's ID
+     * @param tab [PdfTab]
      */
-    fun assignNewThumbnail(id: String): String = adapter.assignNewThumbnail(id, getSafeIndex())
+    internal fun assignNewThumbnail(id: String, tab: PdfTab): Disposable =
+            Completable.fromAction { binding.pdfImages.invalidate() }
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    binding.pdfImages.buildDrawingCache()
+                    binding.pdfImages.drawingCache?.let {
+                        val file = screenshotDir.assignNewFile(id + ".png")
+                        Bitmaps.compress(binding.pdfImages.drawingCache, file)
+                        tab.thumbnailPath = file.absolutePath
+                    }
+                }, { Timber.e(it) }
+                )
 
     /**
      * Get safe index.

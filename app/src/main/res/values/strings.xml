@@ -354,5 +354,6 @@
     <string name="title_close_preview">Close preview</string>
     <string name="message_opening_preview">It has opened preview.</string>
     <string name="hint_please_input">Could you please input word?</string>
+    <string name="message_failed_tab_read">It has failed reading tab.</string>
 
 </resources>

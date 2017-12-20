@@ -20,8 +20,8 @@ object PdfImageFactory {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun invoke(currentPage: PdfRenderer.Page): Bitmap {
-        val bitmap: Bitmap = Bitmap.createBitmap(currentPage.getWidth(), currentPage.getHeight(),
-        Bitmap.Config.ARGB_8888)
+        val bitmap: Bitmap = Bitmap.createBitmap(
+                currentPage.width, currentPage.height, Bitmap.Config.ARGB_8888)
         currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
         currentPage.close()
         return bitmap

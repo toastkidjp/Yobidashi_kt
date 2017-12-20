@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
 import android.widget.TextView
-import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -382,6 +381,7 @@ class TabAdapter(
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
             val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+            // TODO clean up code.
             val drawingCache = webView.drawingCache
             if (drawingCache != null) {
                 Bitmaps.compress(drawingCache, file)
@@ -537,13 +537,14 @@ class TabAdapter(
                     try {
                         val uri = Uri.parse(url)
                         pdf.load(uri)
-                        Completable.fromAction { currentTab.thumbnailPath = pdf.assignNewThumbnail(currentTab.id()) }
-                                .subscribeOn(Schedulers.io())
-                                .subscribe()
-                                .addTo(disposables)
+                        pdf.assignNewThumbnail(currentTab.id(), currentTab).addTo(disposables)
                         titleCallback(TitlePair.make(PDF_TAB_TITLE, uri.lastPathSegment ?: url))
                     } catch (e: SecurityException) {
-                        Timber.e(e)
+                        failRead(e)
+                        return
+                    } catch (e: IllegalStateException) {
+                        failRead(e)
+                        return
                     }
                 }
 
@@ -555,6 +556,13 @@ class TabAdapter(
                 tabList.save()
             }
         }
+    }
+
+    private fun failRead(e: Throwable) {
+        Timber.e(e)
+        Toaster.snackShort(webViewContainer, R.string.message_failed_tab_read, colorPair)
+        closeTab(index())
+        return
     }
 
     /**
