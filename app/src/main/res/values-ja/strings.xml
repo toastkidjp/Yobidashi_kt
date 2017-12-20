@@ -347,6 +347,6 @@
     <string name="invoke">起動</string>
     <string name="message_invoking_intent_failed">「%s」では起動できませんでした。</string>
     <string name="title_close_preview">プレビューを閉じる</string>
-    <string name="message_opening_preview">It has opened preview.</string>
+    <string name="message_opening_preview">プレビューを開きました。</string>
     <string name="hint_please_input">検索キーワードを入力</string>
 </resources>
