@@ -45,7 +45,8 @@ class EditorModule(
         private val switchTabAction: () -> Unit,
         private val closeTabAction: () -> Unit,
         private val saveTabCallback: (File) -> Unit,
-        private val toolbarCallback: (Boolean) -> Unit
+        private val toolbarCallback: (Boolean) -> Unit,
+        hideOption: () -> Boolean
 ): BaseModule(binding.root) {
 
     /**
@@ -98,6 +99,10 @@ class EditorModule(
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         })
+
+        binding.editorInput.setOnTouchListener { _, _ ->
+            hideOption()
+        }
     }
 
     fun applyColor() {

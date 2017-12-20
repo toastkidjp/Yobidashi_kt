@@ -193,14 +193,15 @@ class BrowserFragment : BaseFragment() {
                     } else {
                         if (tabs.currentTab() is WebTab) { showFooter() }
                     }
-                }
+                },
+                this::hideOption
         )
 
         pdf = PdfModule(
                 context,
                 binding?.moduleContainer as ViewGroup,
                 { if (it) { hideFooter() } else { if (tabs.currentTab() is WebTab) { showFooter() } } }
-                )
+        )
 
         tabs = TabAdapter(
                 binding?.webViewContainer as ViewGroup,
@@ -839,8 +840,7 @@ class BrowserFragment : BaseFragment() {
                             IntentFactory.makeOpenDocument("application/pdf"),
                             REQUEST_CODE_OPEN_PDF
                     )
-                    hideTabList()
-                    hideMenu()
+                    hideOption()
                 }
     }
 
@@ -859,6 +859,7 @@ class BrowserFragment : BaseFragment() {
     private inline fun openEditorTab() {
         tabs.openNewEditorTab()
         tabs.replaceToCurrentTab()
+        hideMenu()
     }
 
     /**

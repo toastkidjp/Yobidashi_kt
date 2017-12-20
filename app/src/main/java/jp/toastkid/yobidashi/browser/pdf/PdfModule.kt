@@ -30,9 +30,9 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class PdfModule(
-        val context: Context,
-        val parent: ViewGroup,
-        private val toolbarCallback: (Boolean) -> Unit
+        private val context: Context,
+        private val parent: ViewGroup,
+        private val toolbarCallback: (Boolean) -> Unit,
 ): BaseModule(parent) {
 
     /**
