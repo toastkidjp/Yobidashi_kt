@@ -32,7 +32,7 @@ import timber.log.Timber
 class PdfModule(
         private val context: Context,
         private val parent: ViewGroup,
-        private val toolbarCallback: (Boolean) -> Unit,
+        private val toolbarCallback: (Boolean) -> Unit
 ): BaseModule(parent) {
 
     /**
