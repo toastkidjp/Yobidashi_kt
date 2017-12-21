@@ -21,8 +21,8 @@ import android.widget.TextView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
-import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -112,14 +112,14 @@ class BrowserFragment : BaseFragment() {
     private var toolbarAction: ToolbarAction? = null
 
     /**
-     * PublishProcessor of title pair.
+     * PublishSubject of title pair.
      */
-    private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
+    private val titleSubject: PublishSubject<TitlePair> = PublishSubject.create<TitlePair>()
 
     /**
-     * PublishProcessor of title pair.
+     * PublishSubject of title pair.
      */
-    private val progressProcessor: PublishProcessor<Int> = PublishProcessor.create<Int>()
+    private val progressSubject: PublishSubject<Int> = PublishSubject.create<Int>()
 
     /**
      * Composite disposer.
@@ -132,12 +132,12 @@ class BrowserFragment : BaseFragment() {
     private var lastAnimated: Long = 0L
 
     /**
-     * Set consumer to titleProcessor.
+     * Set consumer to titleSubject.
      */
     var consumer: Consumer<TitlePair>? = null
 
     /**
-     * Set consumer to titleProcessor.
+     * Set consumer to titleSubject.
      */
     var progressConsumer: Consumer<Int>? = null
 
@@ -208,10 +208,10 @@ class BrowserFragment : BaseFragment() {
                 editor,
                 pdf,
                 binding?.footer?.tabCount as TextView,
-                titleProcessor::onNext,
+                titleSubject::onNext,
                 { progress, loading ->
                     if (!loading) { binding?.webViewContainer?.isRefreshing = false}
-                    progressProcessor.onNext(progress)
+                    progressSubject.onNext(progress)
                 },
                 this::hideOption,
                 this::onScroll,
@@ -685,8 +685,8 @@ class BrowserFragment : BaseFragment() {
 
         disposables.addAll(
                 tabs.reloadWebViewSettings(),
-                titleProcessor.subscribe(consumer),
-                progressProcessor.subscribe(progressConsumer)
+                titleSubject.subscribe(consumer),
+                progressSubject.subscribe(progressConsumer)
         )
 
         tabs.loadBackgroundTabsFromDirIfNeed()

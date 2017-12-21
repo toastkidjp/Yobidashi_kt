@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-import io.reactivex.processors.PublishProcessor
+import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -43,9 +43,9 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
     private val colorPair: ColorPair
 
     /**
-     * Menu action publisher.
+     * Menu action subject.
      */
-    private val menuPublishProcessor: PublishProcessor<Menu>
+    private val menuSubject: PublishSubject<Menu>
 
     /**
      * Subscription disposable.
@@ -55,8 +55,8 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
     init {
         val preferenceApplier = PreferenceApplier(context)
         colorPair = preferenceApplier.colorPair()
-        menuPublishProcessor = PublishProcessor.create<Menu>()
-        disposable = menuPublishProcessor.subscribe(consumer)
+        menuSubject = PublishSubject.create<Menu>()
+        disposable = menuSubject.subscribe(consumer)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -69,7 +69,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
         holder.setColorPair(colorPair)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
-        holder.setOnClick(View.OnClickListener { v -> menuPublishProcessor.onNext(menu) })
+        holder.setOnClick(View.OnClickListener { v -> menuSubject.onNext(menu) })
     }
 
     override fun getItemCount(): Int = MAXIMUM
