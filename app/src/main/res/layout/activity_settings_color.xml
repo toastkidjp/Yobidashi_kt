@@ -147,7 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="32dp"
                         app:cardBackgroundColor="@color/soft_background"
-                        app:cardElevation="4dp"
+                        app:cardElevation="2dp"
                         >
 
                         <TextView
