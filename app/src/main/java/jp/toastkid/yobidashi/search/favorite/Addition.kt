@@ -66,8 +66,8 @@ class Addition internal constructor(
      */
     internal operator fun invoke() {
         val colorPair = PreferenceApplier(context).colorPair()
-        Colors.setBgAndText(binding.close, colorPair)
-        Colors.setBgAndText(binding.add, colorPair)
+        Colors.setColors(binding.close, colorPair)
+        Colors.setColors(binding.add, colorPair)
         parent.visibility = View.VISIBLE
     }
 

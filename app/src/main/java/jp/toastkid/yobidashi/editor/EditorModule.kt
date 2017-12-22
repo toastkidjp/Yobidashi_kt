@@ -39,6 +39,7 @@ import java.util.*
  * @param closeTabAction
  * @param saveTabCallback
  * @param toolbarCallback
+ * @param hideOption
  *
  * @author toastkidjp
  */
@@ -120,15 +121,15 @@ class EditorModule(
 
     fun applyColor() {
         val colorPair = preferenceApplier.colorPair()
-        Colors.setBgAndText(binding.save, colorPair)
-        Colors.setBgAndText(binding.load, colorPair)
-        Colors.setBgAndText(binding.search, colorPair)
-        Colors.setBgAndText(binding.clip, colorPair)
-        Colors.setBgAndText(binding.tabList, colorPair)
-        Colors.setBgAndText(binding.backup, colorPair)
-        Colors.setBgAndText(binding.toTop, colorPair)
-        Colors.setBgAndText(binding.toBottom, colorPair)
-        Colors.setBgAndText(binding.clear, colorPair)
+        Colors.setColors(binding.save, colorPair)
+        Colors.setColors(binding.load, colorPair)
+        Colors.setColors(binding.search, colorPair)
+        Colors.setColors(binding.clip, colorPair)
+        Colors.setColors(binding.tabList, colorPair)
+        Colors.setColors(binding.backup, colorPair)
+        Colors.setColors(binding.toTop, colorPair)
+        Colors.setColors(binding.toBottom, colorPair)
+        Colors.setColors(binding.clear, colorPair)
 
         binding.footer.setBackgroundColor(colorPair.bgColor())
         binding.counter.setTextColor(colorPair.fontColor())
