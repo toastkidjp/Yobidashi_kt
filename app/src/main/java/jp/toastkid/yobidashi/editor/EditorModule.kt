@@ -26,6 +26,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchActivity
 import okio.Okio
 import java.io.File
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Editor activity.
@@ -60,6 +63,16 @@ class EditorModule(
      * Preferences wrapper.
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(binding.root.context)
+
+    /**
+     * Default date format holder.
+     */
+    private val dateFormatHolder: ThreadLocal<DateFormat> by lazy {
+        object: ThreadLocal<DateFormat>() {
+            override fun initialValue(): DateFormat =
+                    SimpleDateFormat(binding.root.context.getString(R.string.date_format), Locale.getDefault())
+        }
+    }
 
     /**
      * File path.
@@ -117,7 +130,9 @@ class EditorModule(
         Colors.setBgAndText(binding.toBottom, colorPair)
         Colors.setBgAndText(binding.clear, colorPair)
 
-        Colors.setBgAndText(binding.counter, colorPair)
+        binding.footer.setBackgroundColor(colorPair.bgColor())
+        binding.counter.setTextColor(colorPair.fontColor())
+        binding.lastSaved.setTextColor(colorPair.fontColor())
     }
 
     /**
@@ -246,6 +261,7 @@ class EditorModule(
                 null,
                 { _, _ ->  })
         Toaster.tShort(context, "${context().getString(R.string.done_save)}: $filePath")
+        setLastSaved(file.lastModified())
     }
 
     /**
@@ -296,6 +312,19 @@ class EditorModule(
         snackText(R.string.done_load)
         path = file.absolutePath
         saveTabCallback(file)
+
+        setLastSaved(file.lastModified())
+    }
+
+    /**
+     * Set last modified time.
+     *
+     * @param ms
+     */
+    private fun setLastSaved(ms: Long) {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = ms
+        binding.lastSaved.setText("Last saved: " + dateFormatHolder.get().format(calendar.time))
     }
 
     /**
@@ -304,6 +333,7 @@ class EditorModule(
     fun clearPath() {
         path = ""
         clearInput()
+        binding.lastSaved.setText("")
     }
 
     /**
