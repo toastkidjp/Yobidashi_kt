@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.search.SearchAction
 
 /**
  * Voice search use case.
-
+ *
  * @author toastkidjp
  */
 object VoiceSearch {
@@ -22,10 +22,9 @@ object VoiceSearch {
 
     /**
      * Make intent.
-
-     * @param context
      *
-     * @return
+     * @param context
+     * @return [Intent]
      */
     fun makeIntent(context: Context): Intent {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -39,10 +38,11 @@ object VoiceSearch {
 
     /**
      * Process activity result.
-
-     * @param context
      *
+     * @param context
      * @param data
+     *
+     * @return [Disposable]
      */
     fun processResult(context: Context, data: Intent): Disposable {
         val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
