@@ -89,7 +89,7 @@
 
     <string name="production_app_admob_id">ca-app-pub-5751262573448755~1704109822</string>
     <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
-    <string name="unit_id_native_large_ad">ca-app-pub-5751262573448755/1285307423</string>
+    <string name="unit_id_banner_ad">ca-app-pub-5751262573448755/3489764085</string>
 
     <string name="copyright">(c) @toastkidjp</string>
     <string name="clear_all">Clear All</string>
@@ -355,5 +355,6 @@
     <string name="message_opening_preview">It has opened preview.</string>
     <string name="hint_please_input">Could you please input word?</string>
     <string name="message_failed_tab_read">It has failed reading tab.</string>
+    <string name="ad">AD</string>
 
 </resources>

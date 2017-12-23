@@ -76,7 +76,7 @@
             />
         <activity
             android:name=".about.AboutThisAppActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             />
         <activity

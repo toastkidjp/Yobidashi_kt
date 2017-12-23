@@ -5,22 +5,30 @@
     </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
-            android:background="@color/transparent"
             >
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 android:minHeight="?android:actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:layout_scrollFlags="scroll|enterAlways"
                 />
+
+            <include android:id="@+id/ad_container" layout="@layout/module_ad_container" />
+
         </android.support.design.widget.AppBarLayout>
 
         <ScrollView
@@ -28,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/c6"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
             <LinearLayout
                 android:orientation="vertical"
@@ -35,13 +44,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/filter_white_bb"
                 >
-                <FrameLayout
-                    android:id="@+id/ad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_gravity="bottom"
-                    />
 
                 <include layout="@layout/primary_dark_divider" />
 
