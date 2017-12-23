@@ -16,6 +16,11 @@ import jp.toastkid.yobidashi.search.SearchAction
 object VoiceSearch {
 
     /**
+     * Request Code.
+     */
+    const val REQUEST_CODE: Int = 19001
+
+    /**
      * Make intent.
 
      * @param context
