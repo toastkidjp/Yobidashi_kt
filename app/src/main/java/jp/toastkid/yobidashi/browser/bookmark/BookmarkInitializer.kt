@@ -11,21 +11,21 @@ import java.util.*
 object BookmarkInitializer {
 
     private val DEFAULT_BOOKMARKS: Map<String, String> = mapOf(
-            "Google Translate" to "https://translate.google.co.jp/",
-            "Twitter" to "https://twitter.com",
-            "Google" to "https://www.google.com",
+            "Google Translate" to "https://translate.google.com/",
+            "Twitter" to "https://twitter.com/",
+            "Google" to "https://www.google.com/",
             "YouTube" to "https://www.youtube.com/",
-            "Bing" to "https://www.bing.com",
+            "Bing" to "https://www.bing.com/",
             "Yandex" to "https://yandex.com/",
-            "Wikipedia" to "https://${Locale.getDefault().language}.wikipedia.org",
-            "Instagram" to "https://www.instagram.com",
+            "Wikipedia" to "https://${Locale.getDefault().language}.wikipedia.org/",
+            "Instagram" to "https://www.instagram.com/",
             "Google Map" to "https://www.google.co.jp/maps/",
             "Yelp" to "https://www.yelp.com/",
-            "Amazon" to "https://www.amazon.com",
+            "Amazon" to "https://www.amazon.com/",
             "Facebook" to "https://www.facebook.com/",
             "Project Gutenberg" to "http://www.gutenberg.org/",
-            "Yahoo!" to "https://www.yahoo.com",
-            "Yahoo! JAPAN" to "https://www.yahoo.co.jp"
+            "Yahoo!" to "https://www.yahoo.com/",
+            "Yahoo! JAPAN" to "https://www.yahoo.co.jp/"
             )
 
     fun invoke(context: Context) {
