@@ -506,7 +506,7 @@ class BrowserFragment : BaseFragment() {
                 tabs.siteSearch()
             }
             Menu.VOICE_SEARCH -> {
-                startActivityForResult(VoiceSearch.makeIntent(context), REQUEST_CODE_VOICE_SEARCH)
+                startActivityForResult(VoiceSearch.makeIntent(context), VoiceSearch.REQUEST_CODE)
             }
             Menu.REPLACE_HOME -> {
                 val currentUrl = tabs.currentUrl()
@@ -802,7 +802,7 @@ class BrowserFragment : BaseFragment() {
             ArchivesActivity.REQUEST_CODE -> {
                 loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
             }
-            REQUEST_CODE_VOICE_SEARCH -> {
+            VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(activity, intent).addTo(disposables)
             }
             REQUEST_CODE_OPEN_PDF -> {
@@ -908,11 +908,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     companion object {
-
-        /**
-         * Request code of voice search.
-         */
-        private const val REQUEST_CODE_VOICE_SEARCH: Int = 2
 
         /**
          * Request code of opening PDF.
