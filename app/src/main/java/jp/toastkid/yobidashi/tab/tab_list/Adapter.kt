@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab.tab_list
+package jp.toastkid.yobidashi.tab.tab_list
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.tab.TabAdapter
-import jp.toastkid.yobidashi.browser.tab.model.PdfTab
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.model.PdfTab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 

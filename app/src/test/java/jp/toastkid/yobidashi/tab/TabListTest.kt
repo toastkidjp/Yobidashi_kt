@@ -1,7 +1,7 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab
 
 import com.squareup.moshi.Moshi
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Assert.assertEquals

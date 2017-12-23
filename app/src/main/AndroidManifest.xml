@@ -137,7 +137,7 @@
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".browser.tab.history.TabHistoryActivity"
+            android:name="jp.toastkid.yobidashi.tab.history.TabHistoryActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"

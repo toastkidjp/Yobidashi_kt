@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab.tab_list
+package jp.toastkid.yobidashi.tab.tab_list
 
 import android.graphics.Color
 import android.support.annotation.ColorInt

@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab
 
 import android.net.Uri
 import java.util.*

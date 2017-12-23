@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.pdf
+package jp.toastkid.yobidashi.pdf
 
 import android.annotation.TargetApi
 import android.content.Context

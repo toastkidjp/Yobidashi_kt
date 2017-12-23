@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.pdf
+package jp.toastkid.yobidashi.pdf
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -12,8 +12,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.tab.TabAdapter
-import jp.toastkid.yobidashi.browser.tab.model.PdfTab
+import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.facade.BaseModule

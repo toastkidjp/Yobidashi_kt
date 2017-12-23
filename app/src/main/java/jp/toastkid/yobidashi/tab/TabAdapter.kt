@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab
 
 import android.annotation.TargetApi
 import android.app.DownloadManager
@@ -29,12 +29,12 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
-import jp.toastkid.yobidashi.browser.pdf.PdfModule
+import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
-import jp.toastkid.yobidashi.browser.tab.model.EditorTab
-import jp.toastkid.yobidashi.browser.tab.model.PdfTab
-import jp.toastkid.yobidashi.browser.tab.model.Tab
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.PdfTab
+import jp.toastkid.yobidashi.tab.model.Tab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.editor.EditorModule
