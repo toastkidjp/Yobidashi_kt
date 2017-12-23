@@ -29,12 +29,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
-import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
-import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.PdfTab
-import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.editor.EditorModule
@@ -46,9 +41,14 @@ import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SiteSearch
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
+import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.PdfTab
+import jp.toastkid.yobidashi.tab.model.Tab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import okhttp3.Request
 import timber.log.Timber
 import java.io.File
@@ -537,7 +537,8 @@ class TabAdapter(
                     try {
                         val uri = Uri.parse(url)
                         pdf.load(uri)
-                        pdf.assignNewThumbnail(currentTab.id(), currentTab).addTo(disposables)
+                        pdf.scrollTo(currentTab.getScrolled())
+                        pdf.assignNewThumbnail(currentTab).addTo(disposables)
                         titleCallback(TitlePair.make(PDF_TAB_TITLE, uri.lastPathSegment ?: url))
                     } catch (e: SecurityException) {
                         failRead(e)
@@ -847,6 +848,17 @@ class TabAdapter(
     }
 
     /**
+     * Update current tab state.
+     */
+    fun updateCurrentTab() {
+        val currentTab = currentTab()
+        if (currentTab is PdfTab) {
+            currentTab.setScrolled(pdf.currentItemPosition())
+            tabList.set(index(), currentTab)
+        }
+    }
+
+    /**
      * Is disable Pull-to-Refresh?
      */
     fun disablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
@@ -893,5 +905,6 @@ class TabAdapter(
         fun makeNewScreenshotDir(context: Context): FilesDir = FilesDir(context, SCREENSHOT_DIR_PATH)
 
     }
+
 }
 

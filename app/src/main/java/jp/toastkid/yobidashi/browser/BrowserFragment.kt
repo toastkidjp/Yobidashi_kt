@@ -31,12 +31,6 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Adapter
 import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
-import jp.toastkid.yobidashi.pdf.PdfModule
-import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.history.TabHistoryActivity
-import jp.toastkid.yobidashi.tab.tab_list.TabListModule
-import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
@@ -51,10 +45,16 @@ import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ToolbarAction
+import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.history.TabHistoryActivity
+import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.tab_list.TabListModule
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -170,15 +170,15 @@ class BrowserFragment : BaseFragment() {
                 cm,
                 binding?.root as View,
                 colorPair,
-                { url -> tabs.loadWithNewTab(Uri.parse(url)) }
+                { tabs.loadWithNewTab(Uri.parse(it)) }
         )
         searchWithClip.invoke()
 
         editor = EditorModule(
                 binding?.editor as ModuleEditorBinding,
                 { intent, requestCode -> startActivityForResult(intent, requestCode) },
-                { switchTabList() },
-                { closeTabList() },
+                this::switchTabList,
+                this::closeTabList,
                 { file ->
                     val currentTab = tabs.currentTab()
                     if (currentTab is EditorTab) {
@@ -606,6 +606,7 @@ class BrowserFragment : BaseFragment() {
         if (tabListModule.isVisible ?: false) {
             hideTabList()
         } else {
+            tabs.updateCurrentTab()
             showTabList()
         }
     }
