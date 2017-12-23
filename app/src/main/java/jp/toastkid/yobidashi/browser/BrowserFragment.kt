@@ -33,8 +33,8 @@ import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.tab.TabAdapter
-import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
-import jp.toastkid.yobidashi.browser.tab.TabListModule
+import jp.toastkid.yobidashi.browser.tab.history.TabHistoryActivity
+import jp.toastkid.yobidashi.browser.tab.tab_list.TabListModule
 import jp.toastkid.yobidashi.browser.tab.model.EditorTab
 import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding

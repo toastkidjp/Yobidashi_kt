@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.browser.tab.history
 
 import android.content.Context
 import android.databinding.DataBindingUtil
