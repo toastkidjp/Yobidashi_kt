@@ -316,13 +316,15 @@ class SearchActivity : BaseActivity() {
 
         when (requestCode) {
             VoiceSearch.REQUEST_CODE -> {
-                suggestionModule.show()
-                val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (result?.size == 0) {
-                    return
+                suggestionModule.run {
+                    show()
+                    val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (result?.size == 0) {
+                        return
+                    }
+                    clear()
+                    addAll(result ?: emptyList())
                 }
-                suggestionModule.clear()
-                suggestionModule.addAll(result ?: emptyList())
             }
         }
     }

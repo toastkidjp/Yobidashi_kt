@@ -26,15 +26,14 @@ object VoiceSearch {
      * @param context
      * @return [Intent]
      */
-    fun makeIntent(context: Context): Intent {
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
-        )
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
-        return intent
-    }
+    fun makeIntent(context: Context): Intent =
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(
+                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
+                )
+                putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+            }
 
     /**
      * Process activity result.
