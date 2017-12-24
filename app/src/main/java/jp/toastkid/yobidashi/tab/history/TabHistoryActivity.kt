@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab.history
 
 import android.app.Activity
 import android.content.Context
@@ -11,7 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.squareup.moshi.Moshi
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.ActivityTabHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 

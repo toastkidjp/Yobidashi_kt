@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab.tab_list
 
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AlertDialog
@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
+import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule

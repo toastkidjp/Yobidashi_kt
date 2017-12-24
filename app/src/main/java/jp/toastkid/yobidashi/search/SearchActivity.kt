@@ -269,7 +269,7 @@ class SearchActivity : BaseActivity() {
         binding?.searchAction?.setColorFilter(fontColor)
         binding?.searchAction?.setOnClickListener({ view ->
             if (useVoice) {
-                startActivityForResult(VoiceSearch.makeIntent(this), REQUEST_CODE_VOICE_SEARCH)
+                startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
                 return@setOnClickListener
             }
             search(
@@ -315,14 +315,16 @@ class SearchActivity : BaseActivity() {
         }
 
         when (requestCode) {
-            REQUEST_CODE_VOICE_SEARCH -> {
-                suggestionModule.show()
-                val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if (result?.size == 0) {
-                    return
+            VoiceSearch.REQUEST_CODE -> {
+                suggestionModule.run {
+                    show()
+                    val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (result?.size == 0) {
+                        return
+                    }
+                    clear()
+                    addAll(result ?: emptyList())
                 }
-                suggestionModule.clear()
-                suggestionModule.addAll(result ?: emptyList())
             }
         }
     }
@@ -347,12 +349,7 @@ class SearchActivity : BaseActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_search
-
-        /**
-         * Request code.
-         */
-        private const val REQUEST_CODE_VOICE_SEARCH = 2
+        private const val LAYOUT_ID = R.layout.activity_search
 
         /**
          * Make launch intent.

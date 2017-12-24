@@ -1,13 +1,13 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab
 
 import android.content.Context
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.reactivex.disposables.CompositeDisposable
-import jp.toastkid.yobidashi.browser.tab.model.EditorTab
-import jp.toastkid.yobidashi.browser.tab.model.PdfTab
-import jp.toastkid.yobidashi.browser.tab.model.Tab
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.PdfTab
+import jp.toastkid.yobidashi.tab.model.Tab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import okio.Okio
 import timber.log.Timber
 import java.io.File

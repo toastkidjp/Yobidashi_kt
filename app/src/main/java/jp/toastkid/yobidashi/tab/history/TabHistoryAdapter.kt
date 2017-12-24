@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab.history
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.ItemTabHistoryBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier

@@ -10,34 +10,38 @@ import jp.toastkid.yobidashi.search.SearchAction
 
 /**
  * Voice search use case.
-
+ *
  * @author toastkidjp
  */
 object VoiceSearch {
 
     /**
-     * Make intent.
-
-     * @param context
-     *
-     * @return
+     * Request Code.
      */
-    fun makeIntent(context: Context): Intent {
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
-        )
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
-        return intent
-    }
+    const val REQUEST_CODE: Int = 19001
+
+    /**
+     * Make intent.
+     *
+     * @param context
+     * @return [Intent]
+     */
+    fun makeIntent(context: Context): Intent =
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(
+                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
+                )
+                putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+            }
 
     /**
      * Process activity result.
-
-     * @param context
      *
+     * @param context
      * @param data
+     *
+     * @return [Disposable]
      */
     fun processResult(context: Context, data: Intent): Disposable {
         val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)

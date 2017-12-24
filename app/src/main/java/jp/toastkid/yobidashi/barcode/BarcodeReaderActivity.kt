@@ -129,10 +129,10 @@ class BarcodeReaderActivity : BaseActivity() {
         binding?.toolbar?.setTitleTextColor(colorPair.fontColor())
         binding?.let {
             it.resultArea.setBackgroundColor(colorPair.bgColor())
-            Colors.setBgAndText(it.clip, colorPair)
-            Colors.setBgAndText(it.share, colorPair)
-            Colors.setBgAndText(it.open, colorPair)
-            Colors.setBgAndText(it.result, colorPair)
+            Colors.setColors(it.clip, colorPair)
+            Colors.setColors(it.share, colorPair)
+            Colors.setColors(it.open, colorPair)
+            Colors.setColors(it.result, colorPair)
         }
     }
 

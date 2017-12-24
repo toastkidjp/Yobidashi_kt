@@ -26,6 +26,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchActivity
 import okio.Okio
 import java.io.File
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Editor activity.
@@ -36,6 +39,7 @@ import java.io.File
  * @param closeTabAction
  * @param saveTabCallback
  * @param toolbarCallback
+ * @param hideOption
  *
  * @author toastkidjp
  */
@@ -45,7 +49,8 @@ class EditorModule(
         private val switchTabAction: () -> Unit,
         private val closeTabAction: () -> Unit,
         private val saveTabCallback: (File) -> Unit,
-        private val toolbarCallback: (Boolean) -> Unit
+        private val toolbarCallback: (Boolean) -> Unit,
+        hideOption: () -> Boolean
 ): BaseModule(binding.root) {
 
     /**
@@ -59,6 +64,16 @@ class EditorModule(
      * Preferences wrapper.
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(binding.root.context)
+
+    /**
+     * Default date format holder.
+     */
+    private val dateFormatHolder: ThreadLocal<DateFormat> by lazy {
+        object: ThreadLocal<DateFormat>() {
+            override fun initialValue(): DateFormat =
+                    SimpleDateFormat(binding.root.context.getString(R.string.date_format), Locale.getDefault())
+        }
+    }
 
     /**
      * File path.
@@ -98,21 +113,27 @@ class EditorModule(
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         })
+
+        binding.editorInput.setOnTouchListener { _, _ ->
+            hideOption()
+        }
     }
 
     fun applyColor() {
         val colorPair = preferenceApplier.colorPair()
-        Colors.setBgAndText(binding.save, colorPair)
-        Colors.setBgAndText(binding.load, colorPair)
-        Colors.setBgAndText(binding.search, colorPair)
-        Colors.setBgAndText(binding.clip, colorPair)
-        Colors.setBgAndText(binding.tabList, colorPair)
-        Colors.setBgAndText(binding.backup, colorPair)
-        Colors.setBgAndText(binding.toTop, colorPair)
-        Colors.setBgAndText(binding.toBottom, colorPair)
-        Colors.setBgAndText(binding.clear, colorPair)
+        Colors.setColors(binding.save, colorPair)
+        Colors.setColors(binding.load, colorPair)
+        Colors.setColors(binding.search, colorPair)
+        Colors.setColors(binding.clip, colorPair)
+        Colors.setColors(binding.tabList, colorPair)
+        Colors.setColors(binding.backup, colorPair)
+        Colors.setColors(binding.toTop, colorPair)
+        Colors.setColors(binding.toBottom, colorPair)
+        Colors.setColors(binding.clear, colorPair)
 
-        Colors.setBgAndText(binding.counter, colorPair)
+        binding.footer.setBackgroundColor(colorPair.bgColor())
+        binding.counter.setTextColor(colorPair.fontColor())
+        binding.lastSaved.setTextColor(colorPair.fontColor())
     }
 
     /**
@@ -241,6 +262,7 @@ class EditorModule(
                 null,
                 { _, _ ->  })
         Toaster.tShort(context, "${context().getString(R.string.done_save)}: $filePath")
+        setLastSaved(file.lastModified())
     }
 
     /**
@@ -291,6 +313,19 @@ class EditorModule(
         snackText(R.string.done_load)
         path = file.absolutePath
         saveTabCallback(file)
+
+        setLastSaved(file.lastModified())
+    }
+
+    /**
+     * Set last modified time.
+     *
+     * @param ms
+     */
+    private fun setLastSaved(ms: Long) {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = ms
+        binding.lastSaved.setText("Last saved: " + dateFormatHolder.get().format(calendar.time))
     }
 
     /**
@@ -299,6 +334,7 @@ class EditorModule(
     fun clearPath() {
         path = ""
         clearInput()
+        binding.lastSaved.setText("")
     }
 
     /**

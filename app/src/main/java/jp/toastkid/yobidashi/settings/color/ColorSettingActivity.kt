@@ -137,7 +137,7 @@ class ColorSettingActivity : BaseActivity() {
      */
     private fun refresh() {
         applyColorToToolbar(binding?.settingsColorToolbar as Toolbar)
-        Colors.setBgAndText(binding?.settingsColorOk as TextView, colorPair())
+        Colors.setColors(binding?.settingsColorOk as TextView, colorPair())
     }
 
     /**

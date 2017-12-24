@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.menu
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -6,10 +6,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-import io.reactivex.processors.PublishProcessor
+import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemBrowserMenuBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -45,7 +44,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
     /**
      * Menu action publisher.
      */
-    private val menuPublishProcessor: PublishProcessor<Menu>
+    private val menuSubject: PublishSubject<Menu>
 
     /**
      * Subscription disposable.
@@ -55,8 +54,8 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
     init {
         val preferenceApplier = PreferenceApplier(context)
         colorPair = preferenceApplier.colorPair()
-        menuPublishProcessor = PublishProcessor.create<Menu>()
-        disposable = menuPublishProcessor.subscribe(consumer)
+        menuSubject = PublishSubject.create<Menu>()
+        disposable = menuSubject.subscribe(consumer)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -66,10 +65,10 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val menu = menus[position % menus.size]
-        holder.setColorPair(colorPair)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
-        holder.setOnClick(View.OnClickListener{ v -> menuPublishProcessor.onNext(menu) })
+        holder.setColorPair(colorPair, menu != Menu.SITE_SEARCH)
+        holder.setOnClick(View.OnClickListener{ v -> menuSubject.onNext(menu) })
 
     }
 

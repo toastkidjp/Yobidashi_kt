@@ -176,7 +176,7 @@ class HomeFragment : BaseFragment() {
      * @param ignored
      */
     fun voiceSearch(ignored: View) {
-        startActivityForResult(VoiceSearch.makeIntent(activity), REQUEST_CODE_VOICE_SEARCH)
+        startActivityForResult(VoiceSearch.makeIntent(activity), VoiceSearch.REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -185,7 +185,7 @@ class HomeFragment : BaseFragment() {
         }
 
         when (requestCode) {
-            REQUEST_CODE_VOICE_SEARCH -> {
+            VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(activity, data).addTo(disposables)
             }
         }
@@ -207,9 +207,5 @@ class HomeFragment : BaseFragment() {
          */
         private const val LAYOUT_ID: Int = R.layout.fragment_home
 
-        /**
-         * Request code.
-         */
-        private const val REQUEST_CODE_VOICE_SEARCH: Int = 2
     }
 }

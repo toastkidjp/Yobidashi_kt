@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab
 
 import android.annotation.TargetApi
 import android.app.DownloadManager
@@ -29,12 +29,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
-import jp.toastkid.yobidashi.browser.pdf.PdfModule
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
-import jp.toastkid.yobidashi.browser.tab.model.EditorTab
-import jp.toastkid.yobidashi.browser.tab.model.PdfTab
-import jp.toastkid.yobidashi.browser.tab.model.Tab
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.editor.EditorModule
@@ -46,11 +41,15 @@ import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SiteSearch
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
+import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.PdfTab
+import jp.toastkid.yobidashi.tab.model.Tab
+import jp.toastkid.yobidashi.tab.model.WebTab
 import okhttp3.Request
-import okhttp3.Response
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -63,7 +62,7 @@ import java.net.HttpURLConnection
  * @author toastkidjp
  */
 class TabAdapter(
-        webViewContainer: ViewGroup,
+        private val webViewContainer: ViewGroup,
         private val editor: EditorModule,
         private val pdf: PdfModule,
         private val tabCount: TextView,
@@ -98,16 +97,6 @@ class TabAdapter(
      */
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
-
-    /**
-     * Suppressing unnecessary animation.
-     */
-    private val minimumScrolled: Int = 10
-
-    /**
-     * PDF tab's dummy title.
-     */
-    private val pdfTabTitle: String = "PDF Tab"
 
     init {
         webView = makeWebView(titleCallback, touchCallback)
@@ -220,6 +209,7 @@ class TabAdapter(
                 return super.shouldOverrideUrlLoading(view, url)
             }
         }
+
         val webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
@@ -351,7 +341,7 @@ class TabAdapter(
         }
         webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
             val scrolled = vertical - oldVertical
-            if (Math.abs(scrolled) > minimumScrolled && currentTab() is WebTab) {
+            if (Math.abs(scrolled) > MINIMUM_SCROLLED && currentTab() is WebTab) {
                 scrollCallback(0 > scrolled)
             }
         }
@@ -369,10 +359,10 @@ class TabAdapter(
      * @param webView
      */
     private fun storeImage(url: String, webView: WebView): Maybe<File> {
-        return Single.create<Response> { e ->
-            val client = HttpClientFactory.make()
-            e.onSuccess(client.newCall(Request.Builder().url(url).build()).execute())
-        }.subscribeOn(Schedulers.io())
+        return Single.fromCallable {
+            HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute()
+        }
+                .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .filter { it.code() == HttpURLConnection.HTTP_OK }
                 .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
@@ -391,6 +381,7 @@ class TabAdapter(
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
             val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+            // TODO clean up code.
             val drawingCache = webView.drawingCache
             if (drawingCache != null) {
                 Bitmaps.compress(drawingCache, file)
@@ -506,11 +497,11 @@ class TabAdapter(
             is WebTab -> {
                 if (editor.isVisible) {
                     editor.hide()
-                    webView.isEnabled = true
+                    enableWebView()
                 }
                 if (pdf.isVisible) {
                     pdf.hide()
-                    webView.isEnabled = true
+                    enableWebView()
                 }
                 val latest = currentTab.latest
                 if (latest !== History.EMPTY) {
@@ -532,8 +523,7 @@ class TabAdapter(
                     editor.animate(slideUpFromBottom)
                 }
 
-                webView.isEnabled = false
-                stopLoading()
+                disableWebView()
                 tabList.save()
             }
             is PdfTab -> {
@@ -547,10 +537,15 @@ class TabAdapter(
                     try {
                         val uri = Uri.parse(url)
                         pdf.load(uri)
-                        currentTab.thumbnailPath = pdf.assignNewThumbnail(currentTab.id())
-                        titleCallback(TitlePair.make(pdfTabTitle, uri.lastPathSegment ?: url))
+                        pdf.scrollTo(currentTab.getScrolled())
+                        pdf.assignNewThumbnail(currentTab).addTo(disposables)
+                        titleCallback(TitlePair.make(PDF_TAB_TITLE, uri.lastPathSegment ?: url))
                     } catch (e: SecurityException) {
-                        Timber.e(e)
+                        failRead(e)
+                        return
+                    } catch (e: IllegalStateException) {
+                        failRead(e)
+                        return
                     }
                 }
 
@@ -558,11 +553,32 @@ class TabAdapter(
                     pdf.animate(slideUpFromBottom)
                 }
 
-                webView.isEnabled = false
-                stopLoading()
+                disableWebView()
                 tabList.save()
             }
         }
+    }
+
+    private fun failRead(e: Throwable) {
+        Timber.e(e)
+        Toaster.snackShort(webViewContainer, R.string.message_failed_tab_read, colorPair)
+        closeTab(index())
+        return
+    }
+
+    /**
+     * Enable [WebView].
+     */
+    private inline fun enableWebView() {
+        webView.isEnabled = true
+    }
+
+    /**
+     * Disble [WebView].
+     */
+    private inline fun disableWebView() {
+        webView.isEnabled = false
+        stopLoading()
     }
 
     private fun checkIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
@@ -604,11 +620,17 @@ class TabAdapter(
     }
 
     fun pageUp() {
-        webView.pageUp(true)
+        when (currentTab()) {
+            is WebTab -> webView.pageUp(true)
+            is PdfTab -> pdf.pageUp()
+        }
     }
 
     fun pageDown() {
-        webView.pageDown(true)
+        when (currentTab()) {
+            is WebTab -> webView.pageDown(true)
+            is PdfTab -> pdf.pageDown()
+        }
     }
 
     fun currentSnap() {
@@ -634,7 +656,11 @@ class TabAdapter(
      * Invoke site search.
      */
     fun siteSearch() {
-        SiteSearch.invoke(webView)
+        if (currentTab() is WebTab) {
+            SiteSearch.invoke(webView)
+            return
+        }
+        Toaster.snackShort(webViewContainer, "This menu can be used on only web page.", colorPair)
     }
 
     /**
@@ -755,9 +781,7 @@ class TabAdapter(
      */
     fun dispose() {
         webView.destroy()
-        if (preferenceApplier.doesRetainTabs()) {
-            tabList.save()
-        } else {
+        if (!preferenceApplier.doesRetainTabs()) {
             tabList.clear()
             tabsScreenshots.clean()
         }
@@ -824,6 +848,17 @@ class TabAdapter(
     }
 
     /**
+     * Update current tab state.
+     */
+    fun updateCurrentTab() {
+        val currentTab = currentTab()
+        if (currentTab is PdfTab) {
+            currentTab.setScrolled(pdf.currentItemPosition())
+            tabList.set(index(), currentTab)
+        }
+    }
+
+    /**
      * Is disable Pull-to-Refresh?
      */
     fun disablePullToRefresh(): Boolean = !webView.enablePullToRefresh || webView.scrollY != 0
@@ -850,10 +885,26 @@ class TabAdapter(
         private const val SCREENSHOT_DIR_PATH: String = "tabs/screenshots";
 
         /**
+         * Suppressing unnecessary animation.
+         */
+        private const val MINIMUM_SCROLLED: Int = 10
+
+        /**
+         * PDF tab's dummy title.
+         */
+        private const val PDF_TAB_TITLE: String = "PDF Tab"
+
+        /**
+         * HTTP Client.
+         */
+        private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
+
+        /**
          * Make new screenshot dir wrapper instance.
          */
         fun makeNewScreenshotDir(context: Context): FilesDir = FilesDir(context, SCREENSHOT_DIR_PATH)
 
     }
+
 }
 

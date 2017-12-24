@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab.model
+package jp.toastkid.yobidashi.tab.model
 
 import java.io.File
 import java.util.*
@@ -20,11 +20,15 @@ class PdfTab: Tab {
 
     private val id: String = UUID.randomUUID().toString()
 
+    private var position: Int = 0
+
     override fun id(): String = id
 
-    override fun setScrolled(scrollY: Int) = Unit
+    override fun setScrolled(scrollY: Int) {
+        position = scrollY
+    }
 
-    override fun getScrolled(): Int = 0
+    override fun getScrolled(): Int = position
 
     override fun deleteLastThumbnail() {
         val lastScreenshot = File(thumbnailPath)

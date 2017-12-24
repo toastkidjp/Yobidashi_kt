@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.analytics.LogSender
-import jp.toastkid.yobidashi.browser.tab.BackgroundTabQueue
+import jp.toastkid.yobidashi.tab.BackgroundTabQueue
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair

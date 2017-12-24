@@ -87,7 +87,6 @@ internal class ActivityAdapter(
                     .show()
             true
         }
-        holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
     /**

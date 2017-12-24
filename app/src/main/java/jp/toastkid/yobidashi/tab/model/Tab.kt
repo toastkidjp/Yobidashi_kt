@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab.model
+package jp.toastkid.yobidashi.tab.model
 
 /**
  * @author toastkidjp

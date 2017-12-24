@@ -115,7 +115,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.useInternalBrowserCheck.isChecked = preferenceApplier.useInternalBrowser()
         binding.retainTabsCheck.isChecked = preferenceApplier.doesRetainTabs()
         binding.useNotificationWidgetCheck.isChecked = preferenceApplier.useNotificationWidget()
-        Colors.setBgAndText(binding.homeButton, colorPair())
+        Colors.setColors(binding.homeButton, colorPair())
         binding.homeInputLayout.editText!!.setText(preferenceApplier.homeUrl)
         binding.browserJsCheck.isChecked = preferenceApplier.useJavaScript()
         binding.useImageCheck.isChecked = preferenceApplier.doesLoadImage()

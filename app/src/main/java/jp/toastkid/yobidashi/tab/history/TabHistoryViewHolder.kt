@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.tab
+package jp.toastkid.yobidashi.tab.history
 
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView

@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.pdf
+package jp.toastkid.yobidashi.pdf
 
 import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView

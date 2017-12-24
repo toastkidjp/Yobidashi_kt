@@ -21,20 +21,16 @@ import android.widget.TextView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
-import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.menu.Adapter
+import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
-import jp.toastkid.yobidashi.browser.pdf.PdfModule
-import jp.toastkid.yobidashi.browser.tab.TabAdapter
-import jp.toastkid.yobidashi.browser.tab.TabHistoryActivity
-import jp.toastkid.yobidashi.browser.tab.TabListModule
-import jp.toastkid.yobidashi.browser.tab.model.EditorTab
-import jp.toastkid.yobidashi.browser.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
@@ -49,10 +45,16 @@ import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ToolbarAction
+import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.history.TabHistoryActivity
+import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.tab_list.TabListModule
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -110,14 +112,14 @@ class BrowserFragment : BaseFragment() {
     private var toolbarAction: ToolbarAction? = null
 
     /**
-     * PublishProcessor of title pair.
+     * PublishSubject of title pair.
      */
-    private val titleProcessor: PublishProcessor<TitlePair> = PublishProcessor.create<TitlePair>()
+    private val titleSubject: PublishSubject<TitlePair> = PublishSubject.create<TitlePair>()
 
     /**
-     * PublishProcessor of title pair.
+     * PublishSubject of title pair.
      */
-    private val progressProcessor: PublishProcessor<Int> = PublishProcessor.create<Int>()
+    private val progressSubject: PublishSubject<Int> = PublishSubject.create<Int>()
 
     /**
      * Composite disposer.
@@ -130,12 +132,12 @@ class BrowserFragment : BaseFragment() {
     private var lastAnimated: Long = 0L
 
     /**
-     * Set consumer to titleProcessor.
+     * Set consumer to titleSubject.
      */
     var consumer: Consumer<TitlePair>? = null
 
     /**
-     * Set consumer to titleProcessor.
+     * Set consumer to titleSubject.
      */
     var progressConsumer: Consumer<Int>? = null
 
@@ -168,15 +170,15 @@ class BrowserFragment : BaseFragment() {
                 cm,
                 binding?.root as View,
                 colorPair,
-                { url -> tabs.loadWithNewTab(Uri.parse(url)) }
+                { tabs.loadWithNewTab(Uri.parse(it)) }
         )
         searchWithClip.invoke()
 
         editor = EditorModule(
                 binding?.editor as ModuleEditorBinding,
                 { intent, requestCode -> startActivityForResult(intent, requestCode) },
-                { switchTabList() },
-                { closeTabList() },
+                this::switchTabList,
+                this::closeTabList,
                 { file ->
                     val currentTab = tabs.currentTab()
                     if (currentTab is EditorTab) {
@@ -184,26 +186,32 @@ class BrowserFragment : BaseFragment() {
                         tabs.saveTabList()
                     }
                 },
-                { if (it) {
-                    hideFooter()
-                    binding?.fab?.hide()
-                  } else showFooter() }
+                {
+                    if (it) {
+                        hideFooter()
+                        binding?.fab?.hide()
+                    } else {
+                        if (tabs.currentTab() is WebTab) { showFooter() }
+                    }
+                },
+                this::hideOption
         )
 
         pdf = PdfModule(
                 context,
-                binding?.moduleContainer as ViewGroup
-                )
+                binding?.moduleContainer as ViewGroup,
+                { if (it) { hideFooter() } else { if (tabs.currentTab() is WebTab) { showFooter() } } }
+        )
 
         tabs = TabAdapter(
                 binding?.webViewContainer as ViewGroup,
                 editor,
                 pdf,
                 binding?.footer?.tabCount as TextView,
-                titleProcessor::onNext,
+                titleSubject::onNext,
                 { progress, loading ->
                     if (!loading) { binding?.webViewContainer?.isRefreshing = false}
-                    progressProcessor.onNext(progress)
+                    progressSubject.onNext(progress)
                 },
                 this::hideOption,
                 this::onScroll,
@@ -498,7 +506,7 @@ class BrowserFragment : BaseFragment() {
                 tabs.siteSearch()
             }
             Menu.VOICE_SEARCH -> {
-                startActivityForResult(VoiceSearch.makeIntent(context), REQUEST_CODE_VOICE_SEARCH)
+                startActivityForResult(VoiceSearch.makeIntent(context), VoiceSearch.REQUEST_CODE)
             }
             Menu.REPLACE_HOME -> {
                 val currentUrl = tabs.currentUrl()
@@ -598,6 +606,7 @@ class BrowserFragment : BaseFragment() {
         if (tabListModule.isVisible ?: false) {
             hideTabList()
         } else {
+            tabs.updateCurrentTab()
             showTabList()
         }
     }
@@ -677,8 +686,8 @@ class BrowserFragment : BaseFragment() {
 
         disposables.addAll(
                 tabs.reloadWebViewSettings(),
-                titleProcessor.subscribe(consumer),
-                progressProcessor.subscribe(progressConsumer)
+                titleSubject.subscribe(consumer),
+                progressSubject.subscribe(progressConsumer)
         )
 
         tabs.loadBackgroundTabsFromDirIfNeed()
@@ -692,7 +701,9 @@ class BrowserFragment : BaseFragment() {
 
         val preferenceApplier = preferenceApplier()
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
-                || editor.isVisible) {
+                || editor.isVisible
+                || pdf.isVisible
+                ) {
             hideFooter()
             return
         }
@@ -792,7 +803,7 @@ class BrowserFragment : BaseFragment() {
             ArchivesActivity.REQUEST_CODE -> {
                 loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
             }
-            REQUEST_CODE_VOICE_SEARCH -> {
+            VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(activity, intent).addTo(disposables)
             }
             REQUEST_CODE_OPEN_PDF -> {
@@ -830,6 +841,7 @@ class BrowserFragment : BaseFragment() {
                             IntentFactory.makeOpenDocument("application/pdf"),
                             REQUEST_CODE_OPEN_PDF
                     )
+                    hideOption()
                 }
     }
 
@@ -848,6 +860,7 @@ class BrowserFragment : BaseFragment() {
     private inline fun openEditorTab() {
         tabs.openNewEditorTab()
         tabs.replaceToCurrentTab()
+        hideMenu()
     }
 
     /**
@@ -881,6 +894,11 @@ class BrowserFragment : BaseFragment() {
         binding?.tabListContainer?.removeAllViews()
     }
 
+    override fun onStop() {
+        super.onStop()
+        tabs.saveTabList()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         (binding?.menusView?.adapter as Adapter).dispose()
@@ -891,11 +909,6 @@ class BrowserFragment : BaseFragment() {
     }
 
     companion object {
-
-        /**
-         * Request code of voice search.
-         */
-        private const val REQUEST_CODE_VOICE_SEARCH: Int = 2
 
         /**
          * Request code of opening PDF.

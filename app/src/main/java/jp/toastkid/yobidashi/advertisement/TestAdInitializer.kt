@@ -1,7 +1,10 @@
 package jp.toastkid.yobidashi.advertisement
 
 import android.content.Context
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 
@@ -38,13 +41,6 @@ internal class TestAdInitializer(context: Context) : AdInitializer {
             throw IllegalStateException()
         }
         interstitialAd.loadAd(makeTestAdRequest())
-    }
-
-    override fun invoke(adView: NativeExpressAdView) {
-        if (!BuildConfig.DEBUG) {
-            throw IllegalStateException()
-        }
-        adView.loadAd(makeTestAdRequest())
     }
 
     /**

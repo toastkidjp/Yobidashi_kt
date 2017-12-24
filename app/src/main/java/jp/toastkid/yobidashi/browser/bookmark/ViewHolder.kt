@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.support.annotation.DrawableRes
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -55,10 +54,6 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
 
     fun setOnClickAdd(history: Bookmark, onClickAdd: (Bookmark) -> Unit) {
         binding.delete.setOnClickListener ({ _ -> onClickAdd(history) })
-    }
-
-    fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
     }
 
 }

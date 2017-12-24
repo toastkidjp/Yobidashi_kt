@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/soft_background"
-        android:visibility="gone"
+        android:visibility="visible"
         >
 
         <HorizontalScrollView
@@ -121,15 +121,30 @@
                 />
         </ScrollView>
 
-        <TextView
-            android:id="@+id/counter"
+        <LinearLayout
+            android:id="@+id/footer"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:paddingLeft="16dp"
+            android:layout_height="@dimen/browser_footer_height"
             android:layout_gravity="bottom"
             android:gravity="center_vertical"
-            android:textSize="14sp"
-            tools:text="tomato"
-            />
+            android:paddingLeft="8dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                tools:text="character count: 444"
+                />
+
+            <TextView
+                android:id="@+id/last_saved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                tools:text="Last saved: 2017/12/22 11:18:19"
+                />
+        </LinearLayout>
     </FrameLayout>
 </layout>

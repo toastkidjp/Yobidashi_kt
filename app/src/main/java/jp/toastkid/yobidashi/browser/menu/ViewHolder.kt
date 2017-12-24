@@ -1,5 +1,6 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.menu
 
+import android.graphics.Color
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v7.widget.RecyclerView
@@ -23,10 +24,12 @@ internal class ViewHolder(private val binding: ItemBrowserMenuBinding) : Recycle
         binding.image.setImageResource(iconId)
     }
 
-    fun setColorPair(pair: ColorPair) {
+    fun setColorPair(pair: ColorPair, useIconColorFilter: Boolean) {
         itemView.setBackgroundColor(pair.bgColor())
         binding.text.setTextColor(pair.fontColor())
-        binding.image.setColorFilter(pair.fontColor())
+        binding.image.setColorFilter(
+                if (useIconColorFilter) { pair.fontColor() } else { Color.TRANSPARENT }
+        )
     }
 
     fun setOnClick(onClick: View.OnClickListener) {
