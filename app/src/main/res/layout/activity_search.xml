@@ -32,6 +32,9 @@
                 android:layout_marginRight="@dimen/search_horizontal_margin"
                 >
 
+                <include android:id="@+id/url_suggestion_module"
+                    layout="@layout/module_url_suggestion" />
+
                 <include android:id="@+id/suggestion_module"
                     layout="@layout/module_search_suggestion" />
 
