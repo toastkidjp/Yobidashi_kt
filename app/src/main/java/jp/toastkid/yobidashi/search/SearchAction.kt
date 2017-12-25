@@ -7,13 +7,13 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.analytics.LogSender
-import jp.toastkid.yobidashi.tab.BackgroundTabQueue
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
+import jp.toastkid.yobidashi.tab.BackgroundTabQueue
 
 /**
  * Search action shortcut.
@@ -46,7 +46,7 @@ class SearchAction(
      */
     operator fun invoke(): Disposable {
 
-        val disposable = if (preferenceApplier.isEnableSearchHistory) {
+        val disposable = if (preferenceApplier.isEnableSearchHistory && isNotUrl(query)) {
             SearchHistoryInsertion.make(activityContext, category, query).insert()
         } else {
             Disposables.empty()
@@ -69,6 +69,13 @@ class SearchAction(
         }
         return disposable
     }
+
+    /**
+     * Check passed query is not URL.
+     *
+     * @param query
+     */
+    private fun isNotUrl(query: String): Boolean = !query.contains("://")
 
     /**
      * Action with internal browser.
