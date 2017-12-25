@@ -6,8 +6,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.history.ViewHistory
+import jp.toastkid.yobidashi.browser.history.ViewHistory_Relation
+import timber.log.Timber
 
 /**
  * URL suggestion module's adapter.
@@ -19,6 +24,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistory
  */
 class Adapter(
         context: Context,
+        private val removeAt: (Int) -> Unit,
         private val browseCallback: (String) -> Unit,
         private val browseBackgroundCallback: (String) -> Unit
 ): RecyclerView.Adapter<ViewHolder>() {
@@ -49,6 +55,7 @@ class Adapter(
             browseBackgroundCallback(item.url)
             true
         })
+        holder?.setDelete(View.OnClickListener { removeAt(position) })
     }
 
     override fun getItemCount(): Int = suggestions.size
@@ -71,7 +78,36 @@ class Adapter(
 
     /**
      * Return is not empty for controlling visibility.
+     *
+     * @return is not empty?
      */
     fun isNotEmpty(): Boolean = suggestions.isNotEmpty()
 
+    /**
+     * Return item.
+     *
+     * @return item
+     */
+    fun get(index: Int): ViewHistory = suggestions.get(index)
+
+    /**
+     * Remove at index.
+     *
+     * @param relation
+     * @param index
+     * @return disposable
+     */
+    fun removeAt(relation: ViewHistory_Relation, index: Int): Disposable {
+        val item = get(index)
+        return relation.deleteAsMaybe(item)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            suggestions.remove(item)
+                            notifyItemRemoved(index)
+                        },
+                        Timber::e
+                )
+    }
 }

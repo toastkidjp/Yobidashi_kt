@@ -47,4 +47,13 @@ class ViewHolder(private val binding: ItemBookmarkBinding): RecyclerView.ViewHol
         binding.root.setOnLongClickListener(longClickListener)
     }
 
+    /**
+     * Set on click listener to delete button.
+     *
+     * @param listener
+     */
+    fun setDelete(listener: View.OnClickListener) {
+        binding.delete.setOnClickListener(listener)
+    }
+
 }
