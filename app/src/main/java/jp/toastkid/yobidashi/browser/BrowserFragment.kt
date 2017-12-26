@@ -681,7 +681,8 @@ class BrowserFragment : BaseFragment() {
 
         refreshFab()
 
-        applyFooterColor(colorPair())
+        val colorPair = colorPair()
+        applyFooterColor(colorPair)
         editor.applyColor()
 
         disposables.addAll(
@@ -691,6 +692,10 @@ class BrowserFragment : BaseFragment() {
         )
 
         tabs.loadBackgroundTabsFromDirIfNeed()
+
+        if (pdf.isVisible) {
+            pdf.applyColor(colorPair)
+        }
 
         if (tabs.isNotEmpty()) {
             tabs.setCurrentTab()
