@@ -19,7 +19,6 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.settings.SettingsActivity
-import timber.log.Timber
 
 
 /**
@@ -78,7 +77,6 @@ class LauncherActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (TextUtils.equals(prev, s)) {
-                    Timber.i("$prev $s")
                     return
                 }
                 prev = s.toString()
