@@ -685,9 +685,10 @@ class BrowserFragment : BaseFragment() {
         applyFooterColor(colorPair)
         editor.applyColor()
 
+        consumer?.let { titleSubject.subscribe(it).addTo(disposables) }
+
         disposables.addAll(
                 tabs.reloadWebViewSettings(),
-                titleSubject.subscribe(consumer),
                 progressSubject.subscribe(progressConsumer)
         )
 
