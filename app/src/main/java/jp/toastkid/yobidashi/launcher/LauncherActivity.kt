@@ -8,9 +8,9 @@ import android.support.annotation.IdRes
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.MenuItem
-
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityLauncherBinding
@@ -19,6 +19,8 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.settings.SettingsActivity
+import timber.log.Timber
+
 
 /**
  * App Launcher.
@@ -61,7 +63,6 @@ class LauncherActivity : BaseActivity() {
                 return false
             }
         }
-
         initInput(adapter)
     }
 
@@ -72,10 +73,17 @@ class LauncherActivity : BaseActivity() {
      */
     private fun initInput(adapter: Adapter) {
         binding.filter.addTextChangedListener(object : TextWatcher {
+            var prev: String = ""
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (TextUtils.equals(prev, s)) {
+                    Timber.i("$prev $s")
+                    return
+                }
+                prev = s.toString()
                 adapter.filter(s.toString())
+                binding.appItemsView.scheduleLayoutAnimation();
             }
 
             override fun afterTextChanged(s: Editable) = Unit

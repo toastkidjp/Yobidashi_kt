@@ -65,6 +65,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layoutAnimation="@anim/layout_slide_in_right"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 />
         </FrameLayout>
