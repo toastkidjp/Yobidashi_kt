@@ -17,34 +17,33 @@ import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
 /**
  * Search hisotry module.
 TODO Clean up code.
+ * @param binding Data binding object
+ * @param searchCallback
+ * @param onTouch
+ * @param onClickAdd
+ *
  * @author toastkidjp
  */
-class HistoryModule
-/**
- * Initialize with Data Binding object and so on...
- * @param binding
- *
- * @param searchCallback
- *
- * @param onTouch
- *
- * @param onClickAdd
- */
-(
-        /** Data binding object  */
+class HistoryModule(
         private val binding: ModuleSearchHistoryBinding,
         searchCallback: (SearchHistory) -> Unit,
         onTouch: () -> Unit,
         onClickAdd: (SearchHistory) -> Unit
 ) : BaseModule(binding.root) {
 
-    /** RecyclerView's moduleAdapter.  */
+    /**
+     * RecyclerView's moduleAdapter.
+     */
     private val moduleAdapter: ModuleAdapter
 
-    /** Database relation.  */
+    /**
+     * Database relation.
+     */
     private val relation: SearchHistory_Relation
 
-    /** Last subscription.  */
+    /**
+     * Last subscription.
+     */
     private var disposable: Disposable? = null
 
     /**
@@ -52,15 +51,18 @@ class HistoryModule
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    /**
+     * For executing on UI thread.
+     */
     private val uiThreadhandler = Handler(Looper.getMainLooper())
 
     init {
-
         binding.module = this
 
         relation = DbInitter.init(context()).relationOfSearchHistory()
 
-        binding.searchHistories.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
+        binding.searchHistories.layoutManager =
+                LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
         moduleAdapter = ModuleAdapter(
                 context(),
                 relation,
@@ -83,6 +85,7 @@ class HistoryModule
 
     /**
      * Query table with passed word.
+     *
      * @param s
      */
     fun query(s: CharSequence) {
@@ -92,7 +95,8 @@ class HistoryModule
 
     /**
      * Clear search history.
-     * @param ignored
+     *
+     * @param ignored for Data Binding
      */
     fun clearHistory(ignored: View) {
         Clear(binding.root, relation.deleter())
