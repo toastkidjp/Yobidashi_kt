@@ -681,16 +681,22 @@ class BrowserFragment : BaseFragment() {
 
         refreshFab()
 
-        applyFooterColor(colorPair())
+        val colorPair = colorPair()
+        applyFooterColor(colorPair)
         editor.applyColor()
+
+        consumer?.let { titleSubject.subscribe(it).addTo(disposables) }
 
         disposables.addAll(
                 tabs.reloadWebViewSettings(),
-                titleSubject.subscribe(consumer),
                 progressSubject.subscribe(progressConsumer)
         )
 
         tabs.loadBackgroundTabsFromDirIfNeed()
+
+        if (pdf.isVisible) {
+            pdf.applyColor(colorPair)
+        }
 
         if (tabs.isNotEmpty()) {
             tabs.setCurrentTab()

@@ -820,7 +820,9 @@ class TabAdapter(
 
     private fun updateScrolled() {
         val currentTab = currentTab()
-        currentTab.setScrolled(webView.scrollY)
+        if (currentTab is WebTab) {
+            currentTab.setScrolled(webView.scrollY)
+        }
         tabList.set(index(), currentTab)
     }
 

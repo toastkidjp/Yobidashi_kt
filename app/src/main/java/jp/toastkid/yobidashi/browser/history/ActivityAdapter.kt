@@ -12,12 +12,18 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
+ * View history activity's adapter.
+ *
+ * @param context
+ * @param relation
+ * @param onClick
+ * @param onDelete
+ *
  * @author toastkidjp
  */
 internal class ActivityAdapter(
@@ -26,22 +32,27 @@ internal class ActivityAdapter(
         private val onClick: (ViewHistory) -> Unit,
         private val onDelete: (ViewHistory) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
-    override fun getItemCount(): Int = relation.reversed().size
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
+    /**
+     * Disposables.
+     */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    /**
+     * Date format holder.
+     */
     private val dateFormat: ThreadLocal<DateFormat> = object: ThreadLocal<DateFormat>() {
         override fun initialValue(): DateFormat =
                 SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate<ItemViewHistoryBinding>(
-                inflater, R.layout.item_view_history, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+            ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_view_history, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val viewHistory: ViewHistory = relation.reversed().get(position)
@@ -76,8 +87,11 @@ internal class ActivityAdapter(
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
+    override fun getItemCount(): Int = relation.reversed().size
+
     /**
      * Remove item with position.
+     *
      * @param position
      */
     fun removeAt(position: Int) {
@@ -89,6 +103,11 @@ internal class ActivityAdapter(
                 .addTo(disposables)
     }
 
+    /**
+     * Clear all item.
+     *
+     * @param onComplete
+     */
     fun clearAll(onComplete: () -> Unit) {
         relation.deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
@@ -100,6 +119,9 @@ internal class ActivityAdapter(
                 .addTo(disposables)
     }
 
+    /**
+     * Dispose all disposables.
+     */
     fun dispose() {
         disposables.clear()
     }

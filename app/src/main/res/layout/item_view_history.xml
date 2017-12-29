@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <FrameLayout
+    <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:layout_margin="4dp"
         android:foreground="@drawable/ripple_transparent"
-        android:background="@color/filter_white_bb"
+        app:cardBackgroundColor="@color/filter_white_bb"
+        app:cardElevation="3dp"
         >
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="24dp"
+            android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="8dp"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_history_black"
             />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="48dp"
             android:layout_marginRight="60dp"
             >
             <TextView
@@ -51,7 +55,7 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/darkgray_scale"
                 android:textSize="12sp"
-                android:text="https://www.yahoo.com"
+                android:text="2017/12/12 08:08:08"
                 />
         </RelativeLayout>
         <ImageView
@@ -81,5 +85,5 @@
             android:layout_marginLeft="40dp"
             android:background="@color/search_divider"
             />
-    </FrameLayout>
+    </android.support.v7.widget.CardView>
 </layout>

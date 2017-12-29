@@ -9,6 +9,7 @@
         android:layout_margin="4dp"
         android:foreground="@drawable/ripple_transparent"
         app:cardBackgroundColor="@color/filter_white_bb"
+        app:cardElevation="3dp"
         >
         <ImageView
             android:id="@+id/icon"

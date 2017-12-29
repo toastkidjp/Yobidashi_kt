@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
@@ -237,7 +238,12 @@ class EditorModule(
      * @return [File]
      */
     private inline fun assignFile(context: Context, fileName: String): File {
-        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        val externalFilesDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        } else {
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        }
+
         if (!externalFilesDir.exists()) {
             externalFilesDir.mkdirs()
         }

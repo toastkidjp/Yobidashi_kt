@@ -24,10 +24,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ActivitySearchBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
+import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
@@ -38,6 +35,7 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
+import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import timber.log.Timber
 
@@ -74,6 +72,11 @@ class SearchActivity : BaseActivity() {
     private lateinit var suggestionModule: SuggestionModule
 
     /**
+     * Suggestion module.
+     */
+    private lateinit var urlSuggestionModule: UrlSuggestionModule
+
+    /**
      * Does use voice search?
      */
     private var useVoice: Boolean = true
@@ -99,6 +102,12 @@ class SearchActivity : BaseActivity() {
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) },
                 this::hideKeyboard
+        )
+
+        urlSuggestionModule = UrlSuggestionModule(
+                binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
+                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
+                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) }
         )
 
         binding?.scroll?.setOnTouchListener({ v, event ->
@@ -228,6 +237,7 @@ class SearchActivity : BaseActivity() {
                         historyModule.query(s)
                     }
                     favoriteModule.query(s)
+                    urlSuggestionModule.query(s)
 
                     if (preferenceApplier.isDisableSuggestion) {
                         suggestionModule.clear()
@@ -340,6 +350,7 @@ class SearchActivity : BaseActivity() {
         favoriteModule.dispose()
         historyModule.dispose()
         suggestionModule.dispose()
+        urlSuggestionModule.dispose()
     }
 
     override fun titleId(): Int = R.string.title_search

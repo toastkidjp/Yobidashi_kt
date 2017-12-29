@@ -228,8 +228,8 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:gravity="center_vertical"
-                    style="@style/OneLineTextMenu"
                     android:drawableLeft="@drawable/ic_home_black"
                     android:text="@string/title_home"
                     />
@@ -248,13 +248,15 @@
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:maxLines="1"
+                            android:inputType="text"
                             />
                     </android.support.design.widget.TextInputLayout>
 
                     <Button
                         android:id="@+id/home_button"
                         android:layout_width="80dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"
                         android:text="@string/settings_color_commit"
                         style="?android:attr/buttonBarStyle"
