@@ -10,13 +10,13 @@ import android.text.TextUtils
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
-import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchActivity
+import jp.toastkid.yobidashi.tab.TabAdapter
 
 /**
  * WebTab list module.
@@ -153,6 +153,7 @@ class TabListModule(
         binding.recyclerView.layoutManager.scrollToPosition(tabAdapter.index())
         adapter.setCurrentIndex(tabAdapter.index())
         adapter.notifyDataSetChanged()
+        binding.recyclerView.scheduleLayoutAnimation()
         super.show()
         if (firstLaunch) {
             Toaster.snackShort(parent, R.string.message_tutorial_remove_tab, colorPair)
