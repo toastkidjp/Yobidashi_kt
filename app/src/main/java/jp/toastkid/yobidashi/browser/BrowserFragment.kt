@@ -767,6 +767,10 @@ class BrowserFragment : BaseFragment() {
 
     override fun pressBack(): Boolean = hideOption() || back()
 
+    override fun tapHeader() {
+        startActivity(SearchActivity.makeIntentWithQuery(context, tabs.currentUrl() ?: ""))
+    }
+
     /**
      * Hide option menus.
      */

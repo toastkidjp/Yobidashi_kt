@@ -16,6 +16,7 @@ import android.provider.Settings
 import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
@@ -145,6 +146,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             initToolbar(it)
             setSupportActionBar(it)
             initDrawer(it)
+            it.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
 
         initNavigation()
@@ -275,6 +277,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             snackSuppressOpenFragment()
             return
         }
+        fragment
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
@@ -532,13 +535,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
     override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
         if (event?.keyCode == KeyEvent.KEYCODE_BACK) {
-            val fragment = supportFragmentManager.findFragmentById(R.id.content)
-                    ?: return super.onKeyLongPress(keyCode, event)
-
-            fragment as BaseFragment
-            if (fragment.pressLongBack()) {
-                return super.onKeyLongPress(keyCode, event)
-            }
+            return findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
         }
         return super.onKeyLongPress(keyCode, event)
     }
@@ -549,12 +546,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             return
         }
 
-        val fragment = supportFragmentManager.findFragmentById(R.id.content)
+        val fragment: BaseFragment? = findCurrentFragment()
         if (fragment == null) {
             confirmExit()
             return
         }
-        fragment as BaseFragment
 
         if (fragment.pressBack()) {
             return
@@ -566,6 +562,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         }
 
         supportFragmentManager.popBackStack()
+    }
+
+    /**
+     * Find current fragment.
+     *
+     * @return fragment or null
+     */
+    private fun findCurrentFragment(): BaseFragment? {
+        val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.content)
+
+        return if (fragment != null) fragment as BaseFragment else null
     }
 
     /**

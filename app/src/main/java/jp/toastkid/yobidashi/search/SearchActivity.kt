@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.support.annotation.ColorInt
+import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.widget.Toolbar
 import android.text.Editable
@@ -81,6 +83,11 @@ class SearchActivity : BaseActivity() {
      */
     private var useVoice: Boolean = true
 
+    /**
+     * Without exit animation flag.
+     */
+    private var withoutExitAnimation: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
@@ -128,6 +135,13 @@ class SearchActivity : BaseActivity() {
             it.inflateMenu(R.menu.search_menu)
             it.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
             it.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+
+            // Set query.
+            intent?.getStringExtra(EXTRA_KEY_QUERY)?.let {
+                binding?.searchInput?.setText(it)
+                overridePendingTransition(0, 0)
+                withoutExitAnimation = true
+            }
         }
 
         Toaster.snackShort(
@@ -353,6 +367,14 @@ class SearchActivity : BaseActivity() {
         urlSuggestionModule.dispose()
     }
 
+    override fun finish() {
+        super.finish()
+        if (withoutExitAnimation) {
+            overridePendingTransition(0, 0)
+        }
+    }
+
+    @StringRes
     override fun titleId(): Int = R.string.title_search
 
     companion object {
@@ -360,17 +382,31 @@ class SearchActivity : BaseActivity() {
         /**
          * Layout ID.
          */
-        private const val LAYOUT_ID = R.layout.activity_search
+        @LayoutRes
+        private const val LAYOUT_ID: Int = R.layout.activity_search
 
         /**
-         * Make launch intent.
+         * Extra key.
+         */
+        private const val EXTRA_KEY_QUERY: String = "query"
+
+        /**
+         * Make launch [Intent].
          *
          * @param context [Context]
          */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, SearchActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
+        fun makeIntent(context: Context): Intent =
+                Intent(context, SearchActivity::class.java)
+                        .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
+
+        /**
+         * Make launcher [Intent] with query.
+         *
+         * @param context [Context]
+         * @param query Query
+         */
+        fun makeIntentWithQuery(context: Context, query: String): Intent =
+                makeIntent(context).apply { putExtra(EXTRA_KEY_QUERY, query) }
+
     }
 }
