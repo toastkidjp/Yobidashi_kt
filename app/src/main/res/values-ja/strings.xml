@@ -351,4 +351,5 @@
     <string name="hint_please_input">検索キーワードを入力</string>
     <string name="message_failed_tab_read">タブの読み込みに失敗しました。</string>
     <string name="ad">広告</string>
+    <string name="title_close_header">ヘッダを閉じる</string>
 </resources>

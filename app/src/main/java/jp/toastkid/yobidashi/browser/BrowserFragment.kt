@@ -394,6 +394,11 @@ class BrowserFragment : BaseFragment() {
                 stopCurrentLoading()
                 true
             }
+
+            it.findItem(R.id.close_header)?.setOnMenuItemClickListener {
+                hideFooter()
+                true
+            }
         }
     }
 
