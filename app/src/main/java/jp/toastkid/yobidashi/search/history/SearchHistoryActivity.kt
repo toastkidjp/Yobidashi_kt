@@ -75,6 +75,7 @@ class SearchHistoryActivity : BaseActivity() {
 
         initToolbar(binding.toolbar)
         binding.toolbar.inflateMenu(R.menu.search_history)
+        binding.historiesView.scheduleLayoutAnimation()
     }
 
     override fun onResume() {
