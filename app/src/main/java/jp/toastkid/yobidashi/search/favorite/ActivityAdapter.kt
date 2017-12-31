@@ -14,6 +14,8 @@ import jp.toastkid.yobidashi.search.BackgroundSeachAction
 import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
+ * TODO Clean up code.
+ *
  * @author toastkidjp
  */
 internal class ActivityAdapter(
@@ -64,12 +66,8 @@ internal class ActivityAdapter(
             toasterCallback(R.string.settings_color_delete)
         })
 
-        holder.itemView.setOnLongClickListener({
-            BackgroundSeachAction(
-                    holder.itemView,
-                    favoriteSearch.category,
-                    favoriteSearch.query
-            ).invoke()
+        holder.itemView.setOnLongClickListener({ v ->
+            BackgroundSeachAction(v, favoriteSearch.category, favoriteSearch.query).invoke()
             true
         })
     }

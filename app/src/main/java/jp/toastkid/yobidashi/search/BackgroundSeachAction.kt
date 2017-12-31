@@ -12,12 +12,14 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * @param snackbarParent
  * @param category
  * @param query
+ * @param saveHistory
  * @author toastkidjp
  */
 class BackgroundSeachAction(
         private val snackbarParent: View,
         private val category: String?,
-        private val query: String?
+        private val query: String?,
+        private val saveHistory: Boolean = true
         ) {
 
     /**
@@ -41,7 +43,7 @@ class BackgroundSeachAction(
                 category ?: "",
                 query ?: "",
                 true,
-                false
+                saveHistory
         ).invoke()
     }
 

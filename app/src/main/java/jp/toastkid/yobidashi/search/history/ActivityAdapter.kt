@@ -8,9 +8,7 @@ import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.BackgroundSeachAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 
@@ -58,18 +56,7 @@ internal class ActivityAdapter(
             holder.setFavorite(it.category as String, it.query as String)
             holder.setImageRes(SearchCategory.findByCategory(it.category as String).iconId)
             holder.itemView.setOnLongClickListener { v ->
-                SearchAction(
-                        context,
-                        it.category ?: "",
-                        it.query ?: "",
-                        true,
-                        false
-                ).invoke()
-                Toaster.snackShort(
-                        holder.itemView,
-                        context.getString(R.string.message_background_search, it.query),
-                        PreferenceApplier(context).colorPair()
-                )
+                BackgroundSeachAction(v, it.category, it.query, false).invoke()
                 true
             }
         }
