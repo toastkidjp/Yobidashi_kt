@@ -356,5 +356,7 @@
     <string name="hint_please_input">Could you please input word?</string>
     <string name="message_failed_tab_read">It has failed reading tab.</string>
     <string name="ad">AD</string>
+    <string name="title_close_header">Close Header</string>
+    <string name="title_use_favorite_search">Use Favorite Search</string>
 
 </resources>

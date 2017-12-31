@@ -394,6 +394,11 @@ class BrowserFragment : BaseFragment() {
                 stopCurrentLoading()
                 true
             }
+
+            it.findItem(R.id.close_header)?.setOnMenuItemClickListener {
+                hideFooter()
+                true
+            }
         }
     }
 
@@ -761,6 +766,10 @@ class BrowserFragment : BaseFragment() {
     }
 
     override fun pressBack(): Boolean = hideOption() || back()
+
+    override fun tapHeader() {
+        startActivity(SearchActivity.makeIntentWithQuery(context, tabs.currentUrl() ?: ""))
+    }
 
     /**
      * Hide option menus.

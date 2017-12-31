@@ -22,13 +22,15 @@ import jp.toastkid.yobidashi.tab.BackgroundTabQueue
  * @param category Search Category
  * @param query Search query (or URL)
  * @param onBackground
+ * @param saveHistory
  * @author toastkidjp
  */
 class SearchAction(
         private val activityContext: Context,
         private val category: String,
         private val query: String,
-        private val onBackground: Boolean = false
+        private val onBackground: Boolean = false,
+        private val saveHistory: Boolean = true
 ) {
 
     /**
@@ -46,7 +48,7 @@ class SearchAction(
      */
     operator fun invoke(): Disposable {
 
-        val disposable = if (preferenceApplier.isEnableSearchHistory && isNotUrl(query)) {
+        val disposable = if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
             SearchHistoryInsertion.make(activityContext, category, query).insert()
         } else {
             Disposables.empty()

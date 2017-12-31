@@ -35,6 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:nestedScrollingEnabled="false"
+                    android:layoutAnimation="@anim/layout_slide_in_right"
                     />
             </android.support.v7.widget.CardView>
         </ScrollView>

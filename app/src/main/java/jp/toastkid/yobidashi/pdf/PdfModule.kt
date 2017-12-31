@@ -119,11 +119,11 @@ class PdfModule(
      * @param uri
      */
     fun load(uri: Uri) {
-        adapter.load(uri)
-        binding.pdfImages.scheduleLayoutAnimation()
         if (parent.childCount == 0) {
             parent.addView(binding.root)
         }
+        adapter.load(uri)
+        binding.pdfImages.scheduleLayoutAnimation()
         binding.seek.max = adapter.itemCount
     }
 

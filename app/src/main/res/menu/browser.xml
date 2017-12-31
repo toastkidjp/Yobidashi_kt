@@ -28,4 +28,11 @@
         android:checkable="false"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/close_header"
+        android:orderInCategory="100"
+        android:title="@string/title_close_header"
+        android:checkable="false"
+        app:showAsAction="never"
+        />
 </menu>

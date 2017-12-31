@@ -54,6 +54,11 @@ abstract class BaseFragment : Fragment() {
     open fun pressBack(): Boolean = false
 
     /**
+     * Header tap action.
+     */
+    open fun tapHeader() = Unit
+
+    /**
      * Get Preferences wrapper.
      *
      * @return [PreferenceApplier]

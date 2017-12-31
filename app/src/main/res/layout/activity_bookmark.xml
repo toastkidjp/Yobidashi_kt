@@ -20,6 +20,7 @@
             android:layout_marginTop="@dimen/toolbar_activity_content_top_margin"
             android:layout_marginLeft="@dimen/search_horizontal_margin"
             android:layout_marginRight="@dimen/search_horizontal_margin"
+            android:layoutAnimation="@anim/layout_slide_in_right"
             />
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
