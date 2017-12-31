@@ -10,6 +10,7 @@ import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemFavoriteSearchBinding
+import jp.toastkid.yobidashi.search.BackgroundSeachAction
 import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
@@ -61,6 +62,15 @@ internal class ActivityAdapter(
         holder.setRemoveAction(View.OnClickListener {
             removeItemAsMaybe(favoriteSearch).subscribeOn(Schedulers.io()).subscribe()
             toasterCallback(R.string.settings_color_delete)
+        })
+
+        holder.itemView.setOnLongClickListener({
+            BackgroundSeachAction(
+                    holder.itemView,
+                    favoriteSearch.category,
+                    favoriteSearch.query
+            ).invoke()
+            true
         })
     }
 }
