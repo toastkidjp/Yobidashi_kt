@@ -2,14 +2,15 @@ package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AlertDialog
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 
@@ -40,38 +41,40 @@ internal class ActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val searchHistory = getItem(position)
-        holder.setText(searchHistory.query!!)
-        holder.itemView.setOnClickListener { v ->
-            try {
-                onClick(searchHistory)
-            } catch (e: Exception) {
-                Timber.e(e)
+        val searchHistory: SearchHistory? = getItem(position)
+        searchHistory?.let {
+            it.query?.let { holder.setText(it) }
+            holder.itemView.setOnClickListener { v ->
+                try {
+                    onClick(it)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
             }
-        }
-        holder.setOnClickAdd(searchHistory) {history ->
-            removeAt(position)
-            onDelete.invoke(history)
+            holder.setOnClickAdd(it) {history ->
+                removeAt(position)
+                onDelete.invoke(history)
+            }
+            holder.setFavorite(it.category as String, it.query as String)
+            holder.setImageRes(SearchCategory.findByCategory(it.category as String).iconId)
+            holder.itemView.setOnLongClickListener { v ->
+                SearchAction(
+                        context,
+                        it.category ?: "",
+                        it.query ?: "",
+                        true,
+                        false
+                ).invoke()
+                Toaster.snackShort(
+                        holder.itemView,
+                        context.getString(R.string.message_background_search, it.query),
+                        PreferenceApplier(context).colorPair()
+                )
+                true
+            }
         }
 
         holder.setAddIcon(R.drawable.ic_remove_search)
-
-        holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
-        holder.itemView.setOnLongClickListener { v ->
-            val context = context
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.delete)
-                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        removeAt(position)
-                        d.dismiss()
-                    }
-                    .show()
-            true
-        }
-        holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
