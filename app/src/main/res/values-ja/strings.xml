@@ -83,7 +83,7 @@
 
     <string name="production_app_admob_id">ca-app-pub-5751262573448755~1704109822</string>
     <string name="unit_id_interstitial">ca-app-pub-5751262573448755/4657576229</string>
-    <string name="unit_id_native_large_ad">ca-app-pub-5751262573448755/1285307423</string>
+    <string name="unit_id_banner_ad">ca-app-pub-5751262573448755/3489764085</string>
 
     <string name="copyright">(c) @toastkidjp</string>
 
