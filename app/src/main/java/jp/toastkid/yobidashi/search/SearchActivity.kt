@@ -224,6 +224,11 @@ class SearchActivity : BaseActivity() {
         applyColorToToolbar(binding?.toolbar as Toolbar)
 
         ImageLoader.setImageToImageView(binding?.background as ImageView, backgroundImagePath)
+
+        suggestionModule.enable = preferenceApplier.isEnableSuggestion
+        historyModule.enable = preferenceApplier.isEnableSearchHistory
+        favoriteModule.enable = preferenceApplier.isEnableFavoriteSearch
+        urlSuggestionModule.enable = preferenceApplier.isEnableViewHistory
     }
 
     /**

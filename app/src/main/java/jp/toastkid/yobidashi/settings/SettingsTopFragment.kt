@@ -122,7 +122,13 @@ class SettingsTopFragment : BaseFragment() {
         binding.saveFormCheck.isChecked = preferenceApplier.doesSaveForm()
         binding.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
+
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
+        binding.useSuggestionCheck.isChecked = preferenceApplier.isEnableSuggestion
+        binding.useHistoryCheck.isChecked = preferenceApplier.isEnableSearchHistory
+        binding.useFavoriteCheck.isChecked = preferenceApplier.isEnableFavoriteSearch
+        binding.useViewHistoryCheck.isChecked = preferenceApplier.isEnableViewHistory
+
         binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
 
         binding.startUpItems?.startUpSelector?.check(preferenceApplier.startUp.radioButtonId)
@@ -190,6 +196,34 @@ class SettingsTopFragment : BaseFragment() {
         @StringRes val messageId: Int
                 = if (newState) { R.string.message_enable_swc } else { R.string.message_disable_swc }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+    }
+
+    fun switchUseSuggestion(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.isEnableSuggestion
+        preferenceApplier.switchEnableSuggestion()
+        binding.useSuggestionCheck.isChecked = newState
+    }
+
+    fun switchUseSearchHistory(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.isEnableSearchHistory
+        preferenceApplier.switchEnableSearchHistory()
+        binding.useHistoryCheck.isChecked = newState
+    }
+
+    fun switchUseFavoriteSearch(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.isEnableFavoriteSearch
+        preferenceApplier.switchEnableFavoriteSearch()
+        binding.useFavoriteCheck.isChecked = newState
+    }
+
+    fun switchUseViewHistory(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.isEnableViewHistory
+        preferenceApplier.switchEnableViewHistory()
+        binding.useViewHistoryCheck.isChecked = newState
     }
 
     /**

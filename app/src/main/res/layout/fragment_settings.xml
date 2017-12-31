@@ -140,7 +140,115 @@
                         />
                 </FrameLayout>
 
+                <include layout="@layout/primary_dark_divider"/>
 
+                <FrameLayout
+                    android:id="@+id/use_suggestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment.switchUseSuggestion}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_open_in_browser_black"
+                        android:text="@string/title_enable_suggestion"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_suggestion_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/use_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment.switchUseSearchHistory}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_history_black"
+                        android:text="@string/title_use_search_history"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_history_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/use_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment.switchUseFavoriteSearch}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_favorite"
+                        android:text="@string/title_use_favorite_search"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_favorite_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/use_view_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment.switchUseViewHistory}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_web_black"
+                        android:text="Use view history"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_view_history_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 

@@ -18,11 +18,13 @@ abstract class BaseModule(val moduleView: View) {
      */
     private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
+    var enable: Boolean = true
+
     /**
      * Show this module.
      */
     open fun show() {
-        if (moduleView.visibility == View.GONE) {
+        if (moduleView.visibility == View.GONE && enable) {
             mainThreadHandler.post { moduleView.visibility = View.VISIBLE }
         }
     }

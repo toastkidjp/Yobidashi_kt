@@ -27,7 +27,8 @@ class PreferenceApplier(private val context: Context) {
     }
 
     private enum class Key {
-        BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, BG_IMAGE, LAST_AD_DATE,
+        BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY,
+        ENABLE_FAVORITE_SEARCH,BG_IMAGE, LAST_AD_DATE,
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
@@ -62,12 +63,27 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putBoolean(Key.ENABLE_SUGGESTION.name, !isEnableSuggestion).apply()
     }
 
-
     val isEnableSearchHistory: Boolean
         get() = preferences.getBoolean(Key.ENABLE_SEARCH_HISTORY.name, true)
 
     fun switchEnableSearchHistory() {
         preferences.edit().putBoolean(Key.ENABLE_SEARCH_HISTORY.name, !isEnableSearchHistory)
+                .apply()
+    }
+
+    val isEnableFavoriteSearch: Boolean
+        get() = preferences.getBoolean(Key.ENABLE_FAVORITE_SEARCH.name, true)
+
+    fun switchEnableFavoriteSearch() {
+        preferences.edit().putBoolean(Key.ENABLE_FAVORITE_SEARCH.name, !isEnableFavoriteSearch)
+                .apply()
+    }
+
+    val isEnableViewHistory: Boolean
+        get() = preferences.getBoolean(Key.ENABLE_VIEW_HISTORY.name, true)
+
+    fun switchEnableViewHistory() {
+        preferences.edit().putBoolean(Key.ENABLE_VIEW_HISTORY.name, !isEnableViewHistory)
                 .apply()
     }
 
