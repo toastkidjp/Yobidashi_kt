@@ -26,20 +26,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.InterstitialAd
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
-import jp.toastkid.yobidashi.advertisement.AdInitializers
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -92,11 +87,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     private lateinit var binding: ActivityMainBinding
 
     /**
-     * Interstitial AD.
-     */
-    private var interstitialAd: InterstitialAd? = null
-
-    /**
      * Browser fragment.
      */
     private val browserFragment: BrowserFragment by lazy { BrowserFragment() }
@@ -115,11 +105,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * Disposables.
      */
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
-
-    /**
-     * Count up for displaying AD.
-     */
-    private var adCount = 0
 
     /**
      * Use for delaying.
@@ -146,15 +131,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             initToolbar(it)
             setSupportActionBar(it)
             initDrawer(it)
-            it.setOnClickListener { findCurrentFragment()?.tapHeader() }
+            findCurrentFragment()?.let { fragment ->
+                it.setOnClickListener { fragment.tapHeader() }
+            }
         }
 
         initNavigation()
-
-        Completable.fromAction { initInterstitialAd() }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
-                .addTo(disposables)
 
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
@@ -292,31 +274,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     }
 
     /**
-     * Initialize interstitial AD.
-     */
-    private fun initInterstitialAd() {
-        if (interstitialAd == null) {
-            interstitialAd = InterstitialAd(applicationContext)
-        }
-
-        interstitialAd?.let {
-            it.adUnitId = getString(R.string.unit_id_interstitial)
-            it.adListener = object : AdListener() {
-                override fun onAdClosed() {
-                    super.onAdClosed()
-                    Toaster.snackShort(
-                            binding.appBarMain?.toolbar as Toolbar,
-                            R.string.thank_you_for_using,
-                            colorPair()
-                    )
-                }
-            }
-            val adInitializer = AdInitializers.find(this)
-            runOnUiThread { adInitializer.invoke(it) }
-        }
-    }
-
-    /**
      * Initialize drawer.
      *
      * @param toolbar
@@ -338,7 +295,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      */
     private fun initNavigation() {
         binding.navView.setNavigationItemSelectedListener { item: MenuItem ->
-            attemptToShowAd()
             invokeWithMenuId(item.itemId)
             true
         }
@@ -618,24 +574,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         applyColorToToolbar(binding.appBarMain?.toolbar as Toolbar)
 
         applyBackgrounds()
-    }
-
-    /**
-     * Attempt to show AD.
-     */
-    private fun attemptToShowAd() {
-        if (interstitialAd!!.isLoaded
-                && AD_DISPLAYING <= adCount
-                && preferenceApplier.allowShowingAd()) {
-            Toaster.snackShort(
-                    binding.appBarMain?.toolbar as Toolbar,
-                    R.string.message_please_view_ad,
-                    colorPair()
-            )
-            interstitialAd!!.show()
-            preferenceApplier.updateLastAd()
-        }
-        adCount++
     }
 
     /**
