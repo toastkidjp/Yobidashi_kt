@@ -224,7 +224,8 @@ class BrowserFragment : BaseFragment() {
                 tabs,
                 binding?.root as View,
                 this::hideTabList,
-                this::openPdfFromStorage,
+                this::openEditorTab,
+                this::openPdfTabFromStorage,
                 this::onEmptyTabs
         )
 
@@ -547,25 +548,10 @@ class BrowserFragment : BaseFragment() {
                 }
             }
             Menu.EDITOR -> {
-                rxPermissions
-                        ?.request(
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        )
-                        ?.subscribe (
-                                { granted ->
-                                    if (!granted) {
-                                        Toaster.tShort(activity, R.string.message_requires_permission_storage)
-                                        return@subscribe
-                                    }
-                                    openEditorTab()
-                                },
-                                { Timber.e(it) }
-                        )
-                        ?.addTo(disposables)
+                openEditorTab()
             }
             Menu.PDF -> {
-                openPdfFromStorage()
+                openPdfTabFromStorage()
             }
             Menu.EXIT -> {
                 activity.finish()
@@ -826,7 +812,7 @@ class BrowserFragment : BaseFragment() {
                     val takeFlags: Int = intent.getFlags() and Intent.FLAG_GRANT_READ_URI_PERMISSION
                     context.contentResolver.takePersistableUriPermission(intent.data, takeFlags)
                 }
-                openPdf(intent.data)
+                tabs.openNewPdfTab(intent.data)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 if (intent.data != null) { tabs.loadWithNewTab(intent.data) }
@@ -845,7 +831,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Open PDF from storage.
      */
-    private fun openPdfFromStorage() {
+    private fun openPdfTabFromStorage() {
         rxPermissions
                 ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
                 ?.subscribe { granted ->
@@ -861,21 +847,27 @@ class BrowserFragment : BaseFragment() {
     }
 
     /**
-     * Open PDF by [Uri].
-     *
-     * @param uri
+     * Open Editor tab.
      */
-    private fun openPdf(uri: Uri) {
-        tabs.openNewPdfTab(uri)
-    }
-
-    /**
-     * Open editor tab.
-     */
-    private inline fun openEditorTab() {
-        tabs.openNewEditorTab()
-        tabs.replaceToCurrentTab()
-        hideMenu()
+    private fun openEditorTab() {
+        rxPermissions
+                ?.request(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                ?.subscribe(
+                        { granted ->
+                            if (!granted) {
+                                Toaster.tShort(activity, R.string.message_requires_permission_storage)
+                                return@subscribe
+                            }
+                            tabs.openNewEditorTab()
+                            tabs.replaceToCurrentTab()
+                            hideMenu()
+                        },
+                        Timber::e
+                )
+                ?.addTo(disposables)
     }
 
     /**

@@ -28,6 +28,7 @@ class TabListModule(
         private val tabAdapter: TabAdapter,
         private val parent: View,
         private val closeAction: () -> Unit,
+        private val openEditorAction: () -> Unit,
         private val openPdfAction: () -> Unit,
         private val emptyAction: () -> Unit
 ) : BaseModule(binding.root) {
@@ -83,8 +84,7 @@ class TabListModule(
     private fun initAddEditorTabButton() {
         binding.addEditorTab.setOnClickListener {
             it.isClickable = false
-            tabAdapter.openNewEditorTab()
-            adapter.notifyItemInserted((adapter.itemCount ?: 1) - 1)
+            openEditorAction()
             closeAction()
             it.isClickable = true
         }
