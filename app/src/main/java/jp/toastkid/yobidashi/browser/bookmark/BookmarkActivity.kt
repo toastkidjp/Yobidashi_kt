@@ -66,7 +66,8 @@ class BookmarkActivity: BaseActivity() {
                 this,
                 relation,
                 { history -> finishWithResult(Uri.parse(history.url)) },
-                { history -> Toaster.snackShort(binding.root, history.title, colorPair()) }
+                { history -> Toaster.snackShort(binding.root, history.title, colorPair()) },
+                binding.historiesView::scheduleLayoutAnimation
         )
         binding.historiesView.adapter = adapter
         binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {

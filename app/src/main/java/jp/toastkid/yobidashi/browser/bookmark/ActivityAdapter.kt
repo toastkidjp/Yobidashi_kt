@@ -3,6 +3,8 @@ package jp.toastkid.yobidashi.browser.bookmark
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark_Relation
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.tab.BackgroundTabQueue
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -27,7 +30,8 @@ internal class ActivityAdapter(
         context: Context,
         private val relation: Bookmark_Relation,
         private val onClick: (Bookmark) -> Unit,
-        private val onDelete: (Bookmark) -> Unit
+        private val onDelete: (Bookmark) -> Unit,
+        private val onRefresh: () -> Unit
 ) : RecyclerView.Adapter<ViewHolder> () {
 
     /**
@@ -49,6 +53,11 @@ internal class ActivityAdapter(
      * Folder moving history.
      */
     private val folderHistory: Stack<String> = Stack()
+
+    /**
+     * Use for run on main thread.
+     */
+    private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_bookmark, parent, false))
@@ -123,12 +132,17 @@ internal class ActivityAdapter(
                 .executeAsObservable()
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { items.clear() }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate {
-                    notifyDataSetChanged()
-                }
                 .observeOn(Schedulers.computation())
-                .subscribe{ items.add(it) }
+                .subscribe(
+                        { items.add(it) },
+                        Timber::e,
+                        {
+                            mainThreadHandler.post({
+                                notifyDataSetChanged()
+                                onRefresh()
+                            })
+                        }
+                )
                 .addTo(disposables)
     }
 
