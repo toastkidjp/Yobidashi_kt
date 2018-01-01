@@ -260,7 +260,11 @@ class EditorModule(
         if (!file.exists()) {
             file.createNewFile()
         }
-        Okio.buffer(Okio.sink(file)).write(contentBytes()).flush()
+        Okio.buffer(Okio.sink(file)).run {
+            write(contentBytes())
+            flush()
+            close()
+        }
         val context = binding.root.context
         MediaScannerConnection.scanFile(
                 context,
@@ -314,7 +318,11 @@ class EditorModule(
             clearPath()
             return
         }
-        val text = Okio.buffer(Okio.source(file)).readUtf8()
+        val text = Okio.buffer(Okio.source(file)).let {
+            val readUtf8 = it.readUtf8()
+            it.close()
+            return@let readUtf8
+        }
         binding.editorInput.setText(text)
         snackText(R.string.done_load)
         path = file.absolutePath

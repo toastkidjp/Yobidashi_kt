@@ -64,7 +64,13 @@ class TabList private constructor() {
      */
     internal fun save() {
         val json = jsonAdapter.toJson(this)
-        tabsFile?.let { Okio.buffer(Okio.sink(it)).write(json.toByteArray(charset)).flush() }
+        tabsFile?.let {
+            Okio.buffer(Okio.sink(it)).run {
+                write(json.toByteArray(charset))
+                flush()
+                close()
+            }
+        }
         savingLock.withLock {
             itemsDir?.let {
                 it.deleteRecursively()
@@ -78,9 +84,11 @@ class TabList private constructor() {
                     else             -> ByteArray(0)
                 }
                 source?.let {
-                    Okio.buffer(Okio.sink(File(itemsDir, "${tab.id()}.json")))
-                            .write(source)
-                            .flush()
+                    Okio.buffer(Okio.sink(File(itemsDir, "${tab.id()}.json"))).run {
+                        write(source)
+                        flush()
+                        close()
+                    }
                 }
             }
         }
@@ -154,8 +162,11 @@ class TabList private constructor() {
             }
 
             try {
-                val fromJson: TabList?
-                        = jsonAdapter.fromJson(Okio.buffer(Okio.source(tabsFile as File)))
+                val fromJson: TabList? = Okio.buffer(Okio.source(tabsFile as File)).let {
+                    val from: TabList? = jsonAdapter.fromJson(it)
+                    it.close()
+                    return@let from
+                }
 
                 loadTabsFromDir()
                         ?.forEach { it?.let { fromJson?.add(it) } }
@@ -173,7 +184,11 @@ class TabList private constructor() {
         internal fun loadTabsFromDir(): List<Tab?>? {
             return itemsDir?.list()
                     ?.map {
-                        val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).readUtf8()
+                        val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).let {
+                            val readUtf8 = it.readUtf8()
+                            it.close()
+                            return@let readUtf8
+                        }
                         if (json.contains("editorTab")) {
                             editorTabJsonAdapter.fromJson(json)
                         } else if (json.contains("pdfTab")) {
