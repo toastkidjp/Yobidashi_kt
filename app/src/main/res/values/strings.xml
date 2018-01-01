@@ -341,6 +341,7 @@
     <string name="message_fail_to_connect_to_camera">Fail to connect to camera service.</string>
     <string name="title_tab_background_search">Search of \'%s\'</string>
     <string name="message_background_search">It has launched search \'%s\'.</string>
+    <string name="message_background_tab">It has launched tab \'%s\' on background.</string>
     <string name="message_search_on_background">You could search on background with long-tap suggestion item.</string>
 
     <string name="title_open_pdf">Open PDF</string>

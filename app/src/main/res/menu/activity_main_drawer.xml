@@ -42,11 +42,6 @@
     <item android:title="@string/title_browser">
         <menu>
             <item
-                android:id="@+id/nav_browser"
-                android:icon="@drawable/ic_web_black"
-                android:title="@string/title_browser"
-                />
-            <item
                 android:id="@+id/nav_bookmark"
                 android:icon="@drawable/ic_bookmark_black"
                 android:title="@string/title_bookmark"

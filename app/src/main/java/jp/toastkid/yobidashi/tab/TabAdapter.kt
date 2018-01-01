@@ -401,6 +401,9 @@ class TabAdapter(
         }
     }
 
+    /**
+     * This method allow calling from only [BrowserFragment].
+     */
     internal fun openNewEditorTab() {
         val editorTab = EditorTab()
         tabList.add(editorTab)

@@ -69,7 +69,6 @@ class PdfModule(
     init {
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
-        binding.pdfImages.setHasFixedSize(true)
 
         binding.seek.max = adapter.itemCount
         binding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {

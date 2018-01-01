@@ -16,35 +16,33 @@ import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
 
 /**
  * Search hisotry module.
-TODO clean up code.
+ *
+ * @param binding Data binding object
+ * @param searchCallback
+ * @param onTouch
+ * @param onClickAdd
  * @author toastkidjp
  */
-class FavoriteSearchModule
-/**
- * Initialize with Data Binding object and so on...
- * @param binding
- *
- * @param searchCallback
- *
- * @param onTouch
- *
- * @param onClickAdd
- */
-(
-        /** Data binding object  */
+class FavoriteSearchModule(
         private val binding: ModuleSearchFavoriteBinding,
         searchCallback: (FavoriteSearch) -> Unit,
         onTouch: () -> Unit,
         onClickAdd: (FavoriteSearch) -> Unit
 ) : BaseModule(binding.root) {
 
-    /** RecyclerView's moduleAdapter.  */
+    /**
+     * RecyclerView's moduleAdapter.
+     */
     private val moduleAdapter: ModuleAdapter
 
-    /** Database relation.  */
+    /**
+     * Database relation.
+     */
     private val relation: FavoriteSearch_Relation
 
-    /** Last subscription.  */
+    /**
+     * Last subscription.
+     */
     private var disposable: Disposable? = null
 
     /**
@@ -52,7 +50,10 @@ class FavoriteSearchModule
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    private val uiThreadhandler = Handler(Looper.getMainLooper())
+    /**
+     * For executing on UI thread.
+     */
+    private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     init {
 
@@ -75,7 +76,7 @@ class FavoriteSearchModule
                 return false
             }
         }
-        uiThreadhandler.post {
+        uiThreadHandler.post {
             RightSwipeActionAttacher
                     .invoke(binding.searchFavorites, { moduleAdapter.removeAt(it).addTo(disposables) })
         }
@@ -92,7 +93,7 @@ class FavoriteSearchModule
 
     /**
      * Clear search history.
-     * @param view
+     * @param ignored for Data Binding
      */
     fun clearHistory(ignored: View) {
         Clear(binding.root, relation.deleter())

@@ -2,9 +2,10 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AlertDialog
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.support.v7.widget.RecyclerView
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,6 +15,10 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark_Relation
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.tab.BackgroundTabQueue
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -25,7 +30,8 @@ internal class ActivityAdapter(
         context: Context,
         private val relation: Bookmark_Relation,
         private val onClick: (Bookmark) -> Unit,
-        private val onDelete: (Bookmark) -> Unit
+        private val onDelete: (Bookmark) -> Unit,
+        private val onRefresh: () -> Unit
 ) : RecyclerView.Adapter<ViewHolder> () {
 
     /**
@@ -47,6 +53,11 @@ internal class ActivityAdapter(
      * Folder moving history.
      */
     private val folderHistory: Stack<String> = Stack()
+
+    /**
+     * Use for run on main thread.
+     */
+    private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_bookmark, parent, false))
@@ -74,17 +85,12 @@ internal class ActivityAdapter(
         }
 
         holder.itemView.setOnLongClickListener { v ->
-            val context = v.context
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.delete)
-                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        remove(bookmark)
-                        d.dismiss()
-                    }
-                    .show()
+            BackgroundTabQueue.add(bookmark.title, Uri.parse(bookmark.url))
+            Toaster.snackShort(
+                    v,
+                    v.context.getString(R.string.message_background_tab, bookmark.title),
+                    PreferenceApplier(v.context).colorPair()
+            )
             true
         }
     }
@@ -126,12 +132,17 @@ internal class ActivityAdapter(
                 .executeAsObservable()
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { items.clear() }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate {
-                    notifyDataSetChanged()
-                }
                 .observeOn(Schedulers.computation())
-                .subscribe{ items.add(it) }
+                .subscribe(
+                        { items.add(it) },
+                        Timber::e,
+                        {
+                            mainThreadHandler.post({
+                                notifyDataSetChanged()
+                                onRefresh()
+                            })
+                        }
+                )
                 .addTo(disposables)
     }
 
