@@ -131,9 +131,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             initToolbar(it)
             setSupportActionBar(it)
             initDrawer(it)
-            findCurrentFragment()?.let { fragment ->
-                it.setOnClickListener { fragment.tapHeader() }
-            }
+            it.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
 
         initNavigation()
