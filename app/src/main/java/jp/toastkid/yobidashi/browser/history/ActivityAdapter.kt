@@ -2,9 +2,8 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v7.app.AlertDialog
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,6 +11,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.tab.BackgroundTabQueue
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -72,16 +74,12 @@ internal class ActivityAdapter(
         holder.setImage(viewHistory.favicon).addTo(disposables)
 
         holder.itemView.setOnLongClickListener { v ->
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.delete)
-                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        removeAt(position)
-                        d.dismiss()
-                    }
-                    .show()
+            BackgroundTabQueue.add(viewHistory.title, Uri.parse(viewHistory.url))
+            Toaster.snackShort(
+                    v,
+                    v.context.getString(R.string.message_background_tab, viewHistory.title),
+                    PreferenceApplier(v.context).colorPair()
+            )
             true
         }
         holder.switchDividerVisibility(position != (itemCount - 1))
