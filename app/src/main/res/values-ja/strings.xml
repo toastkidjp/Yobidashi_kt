@@ -355,4 +355,5 @@
     <string name="title_close_header">ヘッダを閉じる</string>
     <string name="title_use_favorite_search">お気に入り検索を使う</string>
     <string name="invert_content_coloring">コンテンツの色を反転させる</string>
+    <string name="title_clear_coolie">Coolie を削除</string>
 </resources>
