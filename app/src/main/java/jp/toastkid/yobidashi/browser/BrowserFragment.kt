@@ -842,7 +842,6 @@ class BrowserFragment : BaseFragment() {
                             IntentFactory.makeOpenDocument("application/pdf"),
                             REQUEST_CODE_OPEN_PDF
                     )
-                    hideOption()
                 }
     }
 
@@ -899,6 +898,7 @@ class BrowserFragment : BaseFragment() {
         super.onPause()
         editor.saveIfNeed()
         binding?.tabListContainer?.removeAllViews()
+        hideOption()
     }
 
     override fun onStop() {
