@@ -375,6 +375,33 @@
                 <include layout="@layout/primary_dark_divider"/>
 
                 <FrameLayout
+                    android:id="@+id/use_inversion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment.switchUseInversion}"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_enable_javascript"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_inversion_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
                     android:id="@+id/browser_js"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

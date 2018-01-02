@@ -131,6 +131,8 @@ class SettingsTopFragment : BaseFragment() {
 
         binding.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
 
+        binding.useInversionCheck.isChecked = preferenceApplier.useInversion
+
         binding.startUpItems?.startUpSelector?.check(preferenceApplier.startUp.radioButtonId)
 
         val filterColor = preferenceApplier.filterColor()
@@ -317,6 +319,18 @@ class SettingsTopFragment : BaseFragment() {
                 getString(R.string.message_commit_home, input),
                 colorPair()
         )
+    }
+
+    /**
+     * Switch content inversion enabling.
+     *
+     * @param v
+     */
+    fun switchUseInversion(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.useInversion
+        preferenceApplier.useInversion = newState
+        binding.useInversionCheck.isChecked = newState
     }
 
     /**
