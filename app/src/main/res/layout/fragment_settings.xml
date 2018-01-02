@@ -386,7 +386,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/settings_item_left_margin"
                         android:gravity="center_vertical"
-                        android:text="@string/title_enable_javascript"
+                        android:text="@string/invert_content_coloring"
                         />
                     <CheckBox
                         android:id="@+id/use_inversion_check"
