@@ -97,7 +97,6 @@
     <string name="message_change_background_image">It has changed background image.</string>
     <string name="title_background_image_setting">Background Image Setting</string>
     <string name="message_reset_bg_image">It has reset background image.</string>
-    <string name="title_tweet_action">Tweet</string>
     <string name="title_ad">Ad</string>
     <string name="title_loading_ad">Loading...</string>
     <string name="thank_you_for_using">Thank you for using!</string>
