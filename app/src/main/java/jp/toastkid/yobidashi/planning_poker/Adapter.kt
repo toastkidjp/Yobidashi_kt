@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.databinding.CardItemBinding
 
 /**
  * RecyclerView's adapter.
-
+ *
  * @author toastkidjp
  */
 internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
@@ -32,20 +32,23 @@ internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
         holder.itemView.setOnClickListener { v -> holder.open() }
     }
 
-    override fun getItemCount(): Int {
-        return MAXIMUM_SIZE
-    }
+    override fun getItemCount(): Int = MAXIMUM_SIZE
 
     companion object {
 
-        /** Maximum size.  */
+        /**
+         * Maximum size.
+         */
         private val MAXIMUM_SIZE = Suite.values().size * 20
 
-        /** Medium.  */
+        /**
+         * Medium.
+         */
         private val MEDIUM = MAXIMUM_SIZE / 2
 
-        fun medium(): Int {
-            return MEDIUM
-        }
+        /**
+         * Return medium number.
+         */
+        fun medium(): Int = MEDIUM
     }
 }
