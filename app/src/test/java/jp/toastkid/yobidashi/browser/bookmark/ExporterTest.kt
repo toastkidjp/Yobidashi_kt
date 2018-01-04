@@ -37,16 +37,19 @@ class ExporterTest {
     @Test
     fun test_invoke() {
         val adapter = Moshi.Builder().build().adapter(Bookmark::class.java)
-        val message = Exporter(readSource().map { adapter.fromJson(it) }.toList()).invoke()
+        val message = Exporter(readSource()?.map { adapter.fromJson(it) }?.toList()!!).invoke()
         assertEquals(readExpected(), message.replace("\n", ""))
     }
 
     /**
      * Read [Bookmark] objects from source.
      */
-    private fun readSource() =
-            Okio.buffer(Okio.source(classLoader.getResourceAsStream(sourcePath)))
-                    .readUtf8().split("\n")
+    private fun readSource(): List<String>? =
+            Okio.buffer(Okio.source(classLoader.getResourceAsStream(sourcePath))).let {
+                val sourceText: String? = it.readUtf8()
+                it.close()
+                return sourceText?.split("\n")
+            }
 
     /**
      * Read expected html string.

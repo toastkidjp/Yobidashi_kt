@@ -58,6 +58,10 @@ enum class SearchCategory(
             R.drawable.ic_sns,
             "https://twitter.com/search?src=typd&q="
     ),
+    FACEBOOK(R.string.search_category_facebook,
+            R.drawable.ic_facebook,
+            "https://m.facebook.com/search?query="
+    ),
     INSTAGRAM(R.string.search_category_instagram,
             R.drawable.ic_instagram_logo,
             "https://www.instagram.com/explore/tags/"

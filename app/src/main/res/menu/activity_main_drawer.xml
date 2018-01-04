@@ -111,11 +111,6 @@
                 android:icon="@drawable/ic_link_black"
                 android:title="@string/title_invoker_dialog"
                 />
-            <item
-                android:id="@+id/nav_tweet"
-                android:icon="@drawable/ic_tweet_black"
-                android:title="@string/title_tweet_action"
-                />
         </menu>
     </item>
 

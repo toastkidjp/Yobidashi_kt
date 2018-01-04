@@ -19,7 +19,11 @@ class SuggestionParserTest {
     fun test_parse() {
         val file = File(SuggestionParserTest::class.java.classLoader
                 .getResource("suggestion/google.xml").toURI())
-        val xml = Okio.buffer(Okio.source(file)).readUtf8()
+        val xml = Okio.buffer(Okio.source(file)).let {
+            val text = it.readUtf8()
+            it.close()
+            return@let text
+        }
         val suggestions = SuggestionParser.parse(xml)
         assertEquals(10, suggestions.size)
     }

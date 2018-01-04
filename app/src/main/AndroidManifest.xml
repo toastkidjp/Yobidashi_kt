@@ -19,7 +19,7 @@
         >
         <activity
             android:name=".main.MainActivity"
-            android:label="@string/app_name"
+            android:label="${app_name}"
             android:theme="@style/AppTheme.Splash"
             android:configChanges="orientation|screenSize|locale"
             android:launchMode="singleTop"
@@ -182,7 +182,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="jp.toastkid.yobidashi.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

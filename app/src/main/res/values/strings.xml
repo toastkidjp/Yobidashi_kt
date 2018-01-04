@@ -9,6 +9,7 @@
     <string name="search_category_map">Map</string>
     <string name="search_category_apps">Apps</string>
     <string name="search_category_twitter">Twitter</string>
+    <string name="search_category_facebook">Facebook</string>
     <string name="search_category_instagram">Instagram</string>
     <string name="search_category_youtube">Video</string>
     <string name="search_category_wikipedia">Wikipedia</string>
@@ -97,7 +98,6 @@
     <string name="message_change_background_image">It has changed background image.</string>
     <string name="title_background_image_setting">Background Image Setting</string>
     <string name="message_reset_bg_image">It has reset background image.</string>
-    <string name="title_tweet_action">Tweet</string>
     <string name="title_ad">Ad</string>
     <string name="title_loading_ad">Loading...</string>
     <string name="thank_you_for_using">Thank you for using!</string>
@@ -359,5 +359,7 @@
     <string name="ad">AD</string>
     <string name="title_close_header">Close Header</string>
     <string name="title_use_favorite_search">Use Favorite Search</string>
+    <string name="invert_content_coloring">Invert content coloring</string>
+    <string name="title_clear_coolie">Clear Coolie</string>
 
 </resources>

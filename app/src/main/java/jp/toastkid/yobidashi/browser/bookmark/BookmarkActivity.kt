@@ -292,9 +292,11 @@ class BookmarkActivity: BaseActivity() {
      */
     private fun exportBookmark(uri: Uri) {
         val bookmarks = DbInitter.init(this).relationOfBookmark().selector().toList()
-        Okio.buffer(Okio.sink(contentResolver.openOutputStream(uri)))
-                .writeUtf8(Exporter(bookmarks).invoke())
-                .flush()
+        Okio.buffer(Okio.sink(contentResolver.openOutputStream(uri))).run {
+            writeUtf8(Exporter(bookmarks).invoke())
+            flush()
+            close()
+        }
     }
 
     override fun onDestroy() {

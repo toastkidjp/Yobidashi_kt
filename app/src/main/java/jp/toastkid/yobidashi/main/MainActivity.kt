@@ -324,14 +324,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                 startActivityWithSlideIn(
                         "nav_fav_search", FavoriteSearchActivity.makeIntent(this))
             }
-            R.id.nav_tweet -> {
-                sendLog("nav_twt")
-                IntentFactory.makeTwitter(
-                        this@MainActivity,
-                        colorPair(),
-                        R.drawable.ic_back
-                ).launchUrl(this@MainActivity, Uri.parse("https://twitter.com/share"))
-            }
             R.id.nav_intent_invoker -> {
                 sendLog("nav_intnt")
                 ImplicitIntentInvoker.showDialog(this)

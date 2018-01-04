@@ -42,12 +42,16 @@ android {
             minifyEnabled true
             useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix ".d"
+            manifestPlaceholders = [app_name: "Xobidashi"]
+            versionNameSuffix = ".d"
         }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            manifestPlaceholders = [app_name: "@string/app_name"]
         }
     }
     dataBinding {

@@ -163,6 +163,9 @@ class TabAdapter(
                                 .insert()
                     }
                 }
+                if (preferenceApplier.useInversion) {
+                    InversionScript(view)
+                }
                 backOrForwardProgress = false
                 tabList.save()
             }

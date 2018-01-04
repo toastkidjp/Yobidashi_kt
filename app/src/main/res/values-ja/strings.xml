@@ -9,6 +9,7 @@
     <string name="search_category_map">地図</string>
     <string name="search_category_apps">アプリ</string>
     <string name="search_category_twitter">Twitter</string>
+    <string name="search_category_facebook">Facebook</string>
     <string name="search_category_instagram">Instagram</string>
     <string name="search_category_youtube">動画</string>
     <string name="search_category_wikipedia">Wikipedia</string>
@@ -97,7 +98,6 @@
     <string name="title_settings_all_apps">アプリ設定</string>
     <string name="title_section_settings_this_app">このアプリの設定</string>
     <string name="title_section_device_settings">端末の設定</string>
-    <string name="title_tweet_action">Tweet する</string>
     <string name="title_settings_locale">言語設定</string>
     <string name="title_ad">広告を見る</string>
     <string name="title_loading_ad">広告のロード中...</string>
@@ -354,4 +354,6 @@
     <string name="ad">広告</string>
     <string name="title_close_header">ヘッダを閉じる</string>
     <string name="title_use_favorite_search">お気に入り検索を使う</string>
+    <string name="invert_content_coloring">コンテンツの色を反転させる</string>
+    <string name="title_clear_coolie">Coolie を削除</string>
 </resources>
