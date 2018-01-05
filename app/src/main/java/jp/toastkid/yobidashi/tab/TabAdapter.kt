@@ -377,19 +377,20 @@ class TabAdapter(
                 }
     }
 
+    /**
+     * Save new thumbnail.
+     */
     private fun saveNewThumbnail() {
         webView.invalidate()
         webView.buildDrawingCache()
 
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
-            val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
-            // TODO clean up code.
-            val drawingCache = webView.drawingCache
-            if (drawingCache != null) {
-                Bitmaps.compress(drawingCache, file)
+            webView.drawingCache?.let {
+                val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+                Bitmaps.compress(it, file)
+                currentTab.thumbnailPath = file.absolutePath
             }
-            currentTab.thumbnailPath = file.absolutePath
         }
     }
 
