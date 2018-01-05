@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
 import android.widget.TextView
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -386,11 +387,14 @@ class TabAdapter(
 
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
-            webView.drawingCache?.let {
-                val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
-                Bitmaps.compress(it, file)
-                currentTab.thumbnailPath = file.absolutePath
-            }
+            Completable.fromAction {
+                webView.drawingCache?.let {
+                    val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+                    Bitmaps.compress(it, file)
+                    currentTab.thumbnailPath = file.absolutePath
+                }
+            }.subscribeOn(Schedulers.io())
+                    .subscribe({}, Timber::e)
         }
     }
 
