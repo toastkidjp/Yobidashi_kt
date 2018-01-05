@@ -382,21 +382,33 @@ class TabAdapter(
      * Save new thumbnail asynchronously.
      */
     private fun saveNewThumbnailAsync() {
-        webView.invalidate()
-        webView.buildDrawingCache()
-
         val currentTab = tabList.currentTab()
-        if (currentTab is WebTab) {
+        makeDrawingCache(currentTab)?.let {
             Completable.fromAction {
-                webView.drawingCache?.let {
-                    val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
-                    Bitmaps.compress(it, file)
-                    currentTab.thumbnailPath = file.absolutePath
-                }
+                val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+                Bitmaps.compress(it, file)
+                currentTab.thumbnailPath = file.absolutePath
             }.subscribeOn(Schedulers.io())
                     .subscribe({}, Timber::e)
+                    .addTo(disposables)
         }
     }
+
+    /**
+     * Make drawing cache.
+     */
+    private fun makeDrawingCache(tab: Tab): Bitmap? =
+            when (tab) {
+                is WebTab -> {
+                    webView.invalidate()
+                    webView.buildDrawingCache()
+                    webView.drawingCache
+                }
+                is EditorTab -> {
+                    editor.makeThumbnail()
+                }
+                else -> null
+            }
 
     private fun deleteThumbnail(thumbnailPath: String) {
         if (thumbnailPath.isEmpty()) {
@@ -535,6 +547,7 @@ class TabAdapter(
                 }
 
                 disableWebView()
+                saveNewThumbnailAsync()
                 tabList.save()
             }
             is PdfTab -> {

@@ -9,11 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.model.PdfTab
-import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.tab.TabAdapter
 
 /**
  * WebTab list adapter.
@@ -57,11 +55,7 @@ internal class Adapter(
             tabAdapter.setIndexByTab(tab)
             closeAction()
         }
-        when (tab) {
-            is WebTab -> holder.setImagePath(tab.thumbnailPath)
-            is PdfTab -> holder.setImagePath(tab.thumbnailPath)
-            else -> holder.setEditorImage(colorPair.bgColor())
-        }
+        holder.setImagePath(tab.thumbnailPath)
         holder.setTitle(tab.title())
         holder.setCloseAction(View.OnClickListener { closeAt(tabAdapter.indexOf(tab)) })
         holder.setColor(colorPair)

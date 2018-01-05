@@ -4,10 +4,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.text.Editable
@@ -396,6 +398,18 @@ class EditorModule(
      */
     fun animate(animation: Animation) {
         view().startAnimation(animation)
+    }
+
+    /**
+     * Make thumbnail.
+     *
+     * @return Bitmap or null
+     */
+    @MainThread
+    fun makeThumbnail(): Bitmap? = binding.root.run {
+        invalidate()
+        buildDrawingCache()
+        return drawingCache
     }
 
     override fun show() {
