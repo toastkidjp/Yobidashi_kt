@@ -145,7 +145,7 @@ class TabAdapter(
                     deleteThumbnail(currentTab.thumbnailPath)
                 }
 
-                saveNewThumbnail()
+                saveNewThumbnailAsync()
 
                 if (!backOrForwardProgress) {
                     addHistory(title, urlstr)
@@ -379,9 +379,9 @@ class TabAdapter(
     }
 
     /**
-     * Save new thumbnail.
+     * Save new thumbnail asynchronously.
      */
-    private fun saveNewThumbnail() {
+    private fun saveNewThumbnailAsync() {
         webView.invalidate()
         webView.buildDrawingCache()
 
