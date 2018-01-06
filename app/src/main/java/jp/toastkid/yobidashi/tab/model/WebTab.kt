@@ -18,7 +18,7 @@ internal class WebTab: Tab {
 
     private val id: String = UUID.randomUUID().toString()
 
-    var thumbnailPath: String = ""
+    override var thumbnailPath: String = ""
 
     @Transient var background = false
 

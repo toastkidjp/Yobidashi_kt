@@ -5,6 +5,8 @@ package jp.toastkid.yobidashi.tab.model
  */
 internal interface Tab {
 
+    var thumbnailPath: String
+
     fun id(): String
 
     fun setScrolled(scrollY: Int)

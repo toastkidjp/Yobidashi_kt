@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
 import android.widget.TextView
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -144,7 +145,7 @@ class TabAdapter(
                     deleteThumbnail(currentTab.thumbnailPath)
                 }
 
-                saveNewThumbnail()
+                saveNewThumbnailAsync()
 
                 if (!backOrForwardProgress) {
                     addHistory(title, urlstr)
@@ -377,21 +378,37 @@ class TabAdapter(
                 }
     }
 
-    private fun saveNewThumbnail() {
-        webView.invalidate()
-        webView.buildDrawingCache()
-
+    /**
+     * Save new thumbnail asynchronously.
+     */
+    private fun saveNewThumbnailAsync() {
         val currentTab = tabList.currentTab()
-        if (currentTab is WebTab) {
-            val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
-            // TODO clean up code.
-            val drawingCache = webView.drawingCache
-            if (drawingCache != null) {
-                Bitmaps.compress(drawingCache, file)
-            }
-            currentTab.thumbnailPath = file.absolutePath
+        makeDrawingCache(currentTab)?.let {
+            Completable.fromAction {
+                val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+                Bitmaps.compress(it, file)
+                currentTab.thumbnailPath = file.absolutePath
+            }.subscribeOn(Schedulers.io())
+                    .subscribe({}, Timber::e)
+                    .addTo(disposables)
         }
     }
+
+    /**
+     * Make drawing cache.
+     */
+    private fun makeDrawingCache(tab: Tab): Bitmap? =
+            when (tab) {
+                is WebTab -> {
+                    webView.invalidate()
+                    webView.buildDrawingCache()
+                    webView.drawingCache
+                }
+                is EditorTab -> {
+                    editor.makeThumbnail()
+                }
+                else -> null
+            }
 
     private fun deleteThumbnail(thumbnailPath: String) {
         if (thumbnailPath.isEmpty()) {
@@ -530,6 +547,7 @@ class TabAdapter(
                 }
 
                 disableWebView()
+                saveNewThumbnailAsync()
                 tabList.save()
             }
             is PdfTab -> {

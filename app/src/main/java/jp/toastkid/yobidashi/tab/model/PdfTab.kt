@@ -16,7 +16,7 @@ class PdfTab: Tab {
 
     private var path: String = ""
 
-    var thumbnailPath: String = ""
+    override var thumbnailPath: String = ""
 
     private val id: String = UUID.randomUUID().toString()
 
