@@ -357,10 +357,10 @@ class TabAdapter(
     }
 
     /**
-     * TODO replace with fromCallable.
+     * Store image to file.
      *
-     * @param url
-     * @param webView
+     * @param url URL string.
+     * @param webView [WebView] instance
      */
     private fun storeImage(url: String, webView: WebView): Maybe<File> {
         return Single.fromCallable {
