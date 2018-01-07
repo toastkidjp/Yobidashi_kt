@@ -325,7 +325,7 @@ class EditorModule(
             it.close()
             return@let readUtf8
         }
-        binding.editorInput.setText(text)
+        setContentText(text)
         snackText(R.string.done_load)
         path = file.absolutePath
         saveTabCallback(file)
