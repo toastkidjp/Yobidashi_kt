@@ -396,6 +396,8 @@ class TabAdapter(
 
     /**
      * Make drawing cache.
+     *
+     * @param tab
      */
     private fun makeDrawingCache(tab: Tab): Bitmap? =
             when (tab) {
@@ -410,6 +412,11 @@ class TabAdapter(
                 else -> null
             }
 
+    /**
+     * Delete thumbnail file.
+     *
+     * @param thumbnailPath file path.
+     */
     private fun deleteThumbnail(thumbnailPath: String) {
         if (thumbnailPath.isEmpty()) {
             return
@@ -431,6 +438,11 @@ class TabAdapter(
         setIndexByTab(editorTab, true)
     }
 
+    /**
+     * Open new PDF tab with [Uri].
+     *
+     * @param uri
+     */
     internal fun openNewPdfTab(uri: Uri) {
         val pdfTab = PdfTab().apply {
             setTitle(uri.path)
@@ -441,10 +453,18 @@ class TabAdapter(
         setIndexByTab(pdfTab, true)
     }
 
+    /**
+     * Open new tab.
+     */
     internal fun openNewTab() {
         openNewTab(preferenceApplier.homeUrl)
     }
 
+    /**
+     * Open new tab with URL string.
+     *
+     * @param url
+     */
     private fun openNewTab(url: String) {
         val newTab = WebTab()
         tabList.add(newTab)
@@ -453,12 +473,23 @@ class TabAdapter(
         loadUrl(url)
     }
 
+    /**
+     * Open background tab with URL string.
+     *
+     * @param url
+     */
     private fun openBackgroundTab(url: String) {
         tabList.add(WebTab.makeBackground(webView.context.getString(R.string.new_tab), url))
         tabList.save()
         setCurrentTabCount()
     }
 
+    /**
+     * Add history.
+     *
+     * @param title
+     * @param url
+     */
     private fun addHistory(title: String, url: String) {
         val currentTab = tabList.currentTab()
         if (currentTab is WebTab) {
