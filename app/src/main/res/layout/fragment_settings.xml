@@ -106,6 +106,7 @@
                         android:layout_width="@dimen/search_category_spinner_width"
                         android:layout_height="@dimen/search_category_spinner_width"
                         android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="8dp"
                         android:spinnerMode="dropdown"
                         android:background="@color/spinner_background"
                         />
