@@ -11,6 +11,7 @@ import android.widget.ImageView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -62,6 +63,11 @@ class ImageDownloadAction(
      * Download preview image.
      */
     private fun downloadPreview(url: String, imageView: ImageView) {
+        val context: Context = imageView.context
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return
+        }
         val client = HttpClientFactory.make()
         client.newCall(Request.Builder().url(url).build()).enqueue(object : Callback {
             override fun onFailure(call: Call?, e: IOException?) {

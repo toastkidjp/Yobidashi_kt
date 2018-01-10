@@ -7,6 +7,9 @@ import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * For production environment AD initializer.
@@ -31,6 +34,11 @@ internal class ProductionAdInitializer(context: Context) : AdInitializer {
     override fun invoke(adView: AdView) {
         if (BuildConfig.DEBUG) {
             throw IllegalStateException()
+        }
+        val context: Context = adView.context
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return
         }
         adView.loadAd(makeRequest())
     }

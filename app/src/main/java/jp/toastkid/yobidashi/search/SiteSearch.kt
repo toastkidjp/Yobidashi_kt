@@ -1,11 +1,15 @@
 package jp.toastkid.yobidashi.search
 
+import android.content.Context
 import android.net.Uri
 import android.support.v7.app.AlertDialog
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.TextInputs
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import java.util.*
 
 /**
@@ -63,6 +67,11 @@ object SiteSearch {
      * @param query
      */
     private inline fun doAction(webView: WebView, query: String) {
+        val context: Context = webView.context
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return
+        }
         webView.loadUrl(makeUrl(webView.url, query))
     }
 

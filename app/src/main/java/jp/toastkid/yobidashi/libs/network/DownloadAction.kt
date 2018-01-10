@@ -4,6 +4,10 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 
 /**
@@ -16,6 +20,10 @@ class DownloadAction(
         val url: String
 ) {
     fun invoke() {
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return
+        }
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
 

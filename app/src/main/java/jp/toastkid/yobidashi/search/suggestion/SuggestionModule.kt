@@ -10,9 +10,13 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 import java.util.*
 
@@ -84,7 +88,13 @@ class SuggestionModule(
             return
         }
 
-        if (NetworkChecker.isNotAvailable(context())) {
+        val context = context()
+        if (NetworkChecker.isNotAvailable(context)) {
+            return
+        }
+
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
 
