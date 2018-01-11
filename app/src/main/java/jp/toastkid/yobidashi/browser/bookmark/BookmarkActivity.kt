@@ -98,6 +98,7 @@ class BookmarkActivity: BaseActivity() {
                 }).attachToRecyclerView(binding.historiesView)
 
         initToolbar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         binding.toolbar.inflateMenu(R.menu.bookmark)
 
         adapter.showRoot()
