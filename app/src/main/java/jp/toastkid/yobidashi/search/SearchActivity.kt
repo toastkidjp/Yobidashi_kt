@@ -315,8 +315,9 @@ class SearchActivity : BaseActivity() {
      *
      * @param category search category
      * @param query    search query
+     * @param onBackground
      */
-    private fun search(category: String, query: String, onBackground: Boolean = false) {
+    private inline fun search(category: String, query: String, onBackground: Boolean = false) {
         SearchAction(this, category, query, onBackground)
                 .invoke()
                 .addTo(disposables)
