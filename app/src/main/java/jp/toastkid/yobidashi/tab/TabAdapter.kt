@@ -671,6 +671,9 @@ class TabAdapter(
             return
         }
         backOrForwardProgress = !saveHistory
+        if (editor.isVisible) {
+            editor.hide()
+        }
         webView.loadUrl(url)
     }
 

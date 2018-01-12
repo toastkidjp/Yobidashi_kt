@@ -160,7 +160,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
-                loadUri(calledIntent.data)
+                loadUri(calledIntent.data, true)
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {
@@ -208,9 +208,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
      * Load Uri.
      *
      * @param uri
+     * @param shouldLoadInternal for avoiding infinite loop
      */
-    private fun loadUri(uri: Uri) {
-        if (preferenceApplier.useInternalBrowser()) {
+    private fun loadUri(uri: Uri, shouldLoadInternal: Boolean = false) {
+        if (preferenceApplier.useInternalBrowser() || shouldLoadInternal) {
             if (browserFragment.isVisible) {
                 browserFragment.loadWithNewTab(uri)
                 return

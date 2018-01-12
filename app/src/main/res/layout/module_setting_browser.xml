@@ -88,6 +88,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:gravity="center_vertical"
                 android:drawableLeft="@drawable/ic_home_black"
@@ -104,6 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/common_horizontal_margin"
+                    android:layout_marginRight="80dp"
                     >
                     <EditText
                         android:layout_width="match_parent"
@@ -118,6 +120,7 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="8dp"
                     android:text="@string/settings_color_commit"
                     style="?android:attr/buttonBarStyle"
                     android:onClick="@{fragment.commitHomeInput}"
