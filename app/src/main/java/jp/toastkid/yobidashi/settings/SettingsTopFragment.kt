@@ -142,6 +142,7 @@ class SettingsTopFragment : BaseFragment() {
         binding.useHistoryCheck.isChecked = preferenceApplier.isEnableSearchHistory
         binding.useFavoriteCheck.isChecked = preferenceApplier.isEnableFavoriteSearch
         binding.useViewHistoryCheck.isChecked = preferenceApplier.isEnableViewHistory
+        binding.wifiOnlyCheck.isChecked = preferenceApplier.wifiOnly
 
         binding.startUpItems?.startUpSelector?.check(preferenceApplier.startUp.radioButtonId)
 
@@ -341,6 +342,18 @@ class SettingsTopFragment : BaseFragment() {
         val newState = !preferenceApplier.useInversion
         preferenceApplier.useInversion = newState
         binding.moduleBrowser?.useInversionCheck?.isChecked = newState
+    }
+
+    /**
+     * Switch Wi-Fi only mode.
+     *
+     * @param v
+     */
+    fun switchWifiOnly(v: View) {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.wifiOnly
+        preferenceApplier.wifiOnly = newState
+        binding.wifiOnlyCheck.isChecked = newState
     }
 
     /**

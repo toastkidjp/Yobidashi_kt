@@ -36,6 +36,7 @@ import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
@@ -330,6 +331,11 @@ class TabAdapter(
             }
         }
         webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+            val context: Context = webView.context
+            if (preferenceApplier.wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+                Toaster.tShort(context, R.string.message_wifi_not_connecting)
+                return@setDownloadListener
+            }
             val uri = Uri.parse(url)
             val request = DownloadManager.Request(uri)
             request.allowScanningByMediaScanner()
@@ -363,6 +369,11 @@ class TabAdapter(
      * @param webView [WebView] instance
      */
     private fun storeImage(url: String, webView: WebView): Maybe<File> {
+        val context: Context = webView.context
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return Maybe.empty()
+        }
         return Single.fromCallable {
             HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute()
         }
@@ -649,6 +660,11 @@ class TabAdapter(
      * Simple delegation to [WebView].
      */
     fun reload() {
+        val context: Context = webView.context
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return
+        }
         webView.reload()
     }
 
@@ -664,6 +680,11 @@ class TabAdapter(
 
     fun loadUrl(url: String, saveHistory: Boolean = true) {
         if (url.isEmpty()) {
+            return
+        }
+        val context: Context = webView.context
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
         if (TextUtils.equals(webView.url, url)) {
@@ -699,7 +720,7 @@ class TabAdapter(
 
     fun resetUserAgent(userAgentText: String) {
         webView.settings.userAgentString = userAgentText
-        webView.reload()
+        reload()
     }
 
     fun currentUrl(): String? = webView.url

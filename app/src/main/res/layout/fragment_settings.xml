@@ -329,6 +329,33 @@
                     android:text="@string/subhead_others"
                     />
 
+                <FrameLayout
+                    android:id="@+id/wifi_only"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment.switchWifiOnly}"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_wifi_only"
+                        />
+                    <CheckBox
+                        android:id="@+id/wifi_only_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
                 <include
                     android:id="@+id/start_up_items"
                     layout="@layout/fragment_setting_section_startup"

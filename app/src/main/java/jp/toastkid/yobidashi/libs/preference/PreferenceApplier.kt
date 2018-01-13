@@ -32,7 +32,7 @@ class PreferenceApplier(private val context: Context) {
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
-        FULL_SCREEN, SCREEN_MODE, USE_INVERSION
+        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE
     }
 
     private val preferences: SharedPreferences
@@ -258,6 +258,10 @@ class PreferenceApplier(private val context: Context) {
     var useInversion: Boolean
         get () = preferences.getBoolean(Key.USE_INVERSION.name, false)
         set (newValue) = preferences.edit().putBoolean(Key.USE_INVERSION.name, newValue).apply()
+
+    var wifiOnly: Boolean
+        get () = preferences.getBoolean(Key.WIFI_ONLY_MODE.name, true)
+        set (newValue) = preferences.edit().putBoolean(Key.WIFI_ONLY_MODE.name, newValue).apply()
 
     fun clear() {
         preferences.edit().clear().apply()
