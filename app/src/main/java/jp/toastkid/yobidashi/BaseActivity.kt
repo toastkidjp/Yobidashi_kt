@@ -106,9 +106,8 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param bundle
      */
     @JvmOverloads
-    protected fun sendLog(key: String, bundle: Bundle = Bundle.EMPTY) {
-        sender!!.send(key, bundle)
-    }
+    protected fun sendLog(key: String, bundle: Bundle = Bundle.EMPTY) =
+            sender?.send(key, bundle)
 
     /**
      * Return color pair.
