@@ -43,14 +43,17 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Initialize Toolbar.
+     *
      * @param toolbar Toolbar
      */
     protected fun initToolbar(toolbar: Toolbar) {
-        toolbar.setNavigationIcon(R.drawable.ic_back)
-        toolbar.setNavigationOnClickListener { v -> finish() }
-        toolbar.setTitle(titleId())
-        toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-        toolbar.setOnMenuItemClickListener{ this.clickMenu(it) }
+        toolbar.run {
+            setNavigationIcon(R.drawable.ic_back)
+            setNavigationOnClickListener { finish() }
+            setTitle(titleId())
+            inflateMenu(R.menu.settings_toolbar_menu)
+            setOnMenuItemClickListener{ clickMenu(it) }
+        }
     }
 
     protected open fun clickMenu(item: MenuItem): Boolean {
