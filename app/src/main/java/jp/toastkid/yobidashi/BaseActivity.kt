@@ -67,16 +67,21 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Apply color to Toolbar.
+     *
      * @param toolbar Toolbar
      */
     protected fun applyColorToToolbar(toolbar: Toolbar) {
         val pair = preferenceApplier.colorPair()
-        toolbar.setBackgroundColor(pair.bgColor())
-        toolbar.setTitleTextColor(pair.fontColor())
-        toolbar.setSubtitleTextColor(pair.fontColor())
+        toolbar.let {
+            it.setBackgroundColor(pair.bgColor())
 
-        applyTint(toolbar.navigationIcon, pair.fontColor())
-        applyTint(toolbar.overflowIcon, pair.fontColor())
+            val fontColor = pair.fontColor()
+            it.setTitleTextColor(fontColor)
+            it.setSubtitleTextColor(fontColor)
+
+            applyTint(it.navigationIcon, fontColor)
+            applyTint(it.overflowIcon, fontColor)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val color = ColorUtils.setAlphaComponent(pair.bgColor(), 255)
