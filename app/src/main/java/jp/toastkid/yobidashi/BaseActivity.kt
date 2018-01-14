@@ -92,14 +92,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Apply tint to passed drawable.
+     *
      * @param icon Drawable
      * @param fontColor color int
      */
-    private fun applyTint(icon: Drawable?, @ColorInt fontColor: Int) {
-        if (icon != null) {
-            DrawableCompat.setTint(icon, fontColor)
-        }
-    }
+    private fun applyTint(icon: Drawable?, @ColorInt fontColor: Int) =
+            icon?.let { DrawableCompat.setTint(it, fontColor) }
 
     /**
      * Send log.
