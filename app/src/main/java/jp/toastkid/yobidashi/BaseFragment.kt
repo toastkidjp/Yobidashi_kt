@@ -15,10 +15,14 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 abstract class BaseFragment : Fragment() {
 
-    /** Firebase analytics logger.  */
+    /**
+     * Firebase analytics logger.
+     */
     private lateinit var logSender: LogSender
 
-    /** Preferences wrapper.  */
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onAttach(context: Context) {
@@ -43,6 +47,8 @@ abstract class BaseFragment : Fragment() {
 
     /**
      * Event of press long back key.
+     *
+     * @return is event consumed
      */
     open fun pressLongBack(): Boolean = false
 
