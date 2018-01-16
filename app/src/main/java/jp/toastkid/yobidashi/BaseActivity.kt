@@ -56,6 +56,11 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Click menu action.
+     *
+     * @param item [MenuItem]
+     */
     protected open fun clickMenu(item: MenuItem): Boolean {
         val itemId = item.itemId
         if (itemId == R.id.settings_toolbar_menu_exit) {
