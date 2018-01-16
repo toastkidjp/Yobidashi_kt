@@ -9,16 +9,15 @@ import java.io.IOException
 
 /**
  * Bitmap utilities.
-
+ *
  * @author toastkidjp
  */
 object Bitmaps {
 
     /**
      * Save bitmap to PNG file.
-
-     * @param bitmap
      *
+     * @param bitmap
      * @param file
      */
     fun compress(bitmap: Bitmap, file: File) {
@@ -29,16 +28,11 @@ object Bitmaps {
             fos.close()
         } catch (e: IOException) {
             Timber.e(e)
-            if (fos == null) {
-                return
-            }
-
             try {
-                fos.close()
+                fos?.close()
             } catch (e1: IOException) {
                 Timber.e(e1)
             }
-
         }
 
     }
