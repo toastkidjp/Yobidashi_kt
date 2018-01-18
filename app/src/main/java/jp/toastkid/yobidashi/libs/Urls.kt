@@ -5,7 +5,7 @@ import android.webkit.URLUtil
 
 /**
  * URL utilities.
-  TODO Clean up code
+ *
  * @author toastkidjp
  */
 object Urls {
@@ -16,9 +16,8 @@ object Urls {
      *
      * @return
      */
-    fun isInvalidUrl(url: String): Boolean {
-        return TextUtils.isEmpty(url) || !URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url)
-    }
+    fun isInvalidUrl(url: String): Boolean =
+            TextUtils.isEmpty(url) || !URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url)
 
     /**
      * Return passed url is valid.
@@ -26,7 +25,5 @@ object Urls {
      *
      * @return
      */
-    fun isValidUrl(url: String): Boolean {
-        return !isInvalidUrl(url)
-    }
+    fun isValidUrl(url: String): Boolean = !isInvalidUrl(url)
 }
