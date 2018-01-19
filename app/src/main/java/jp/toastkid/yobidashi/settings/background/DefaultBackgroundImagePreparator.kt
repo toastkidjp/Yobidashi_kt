@@ -25,8 +25,8 @@ object DefaultBackgroundImagePreparator {
      */
     operator fun invoke(context: Context): Disposable = Completable.fromAction {
             val filesDir = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
-            val defaultFile = filesDir.assignNewFile("apricot")
-            BitmapFactory.decodeResource(context.resources, R.mipmap.apricot)
+            val defaultFile = filesDir.assignNewFile("sakura")
+            BitmapFactory.decodeResource(context.resources, R.mipmap.sakura)
                     .compress(Bitmap.CompressFormat.PNG, 100,
                             FileOutputStream(defaultFile))
             BitmapFactory.decodeResource(context.resources, R.mipmap.toast)

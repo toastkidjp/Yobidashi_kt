@@ -5,18 +5,23 @@ import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.Build
 
-
 /**
+ * PDF content image factory. This class can use only Android L and upper L.
+ *
  * @author toastkidjp
  */
 object PdfImageFactory {
 
     /**
+     * Invoke action.
+     *
      * <pre>
      * if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
      *     return
      * }
      * </pre>
+     * @param currentPage current PDF page
+     * @return non-null bitmap
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     fun invoke(currentPage: PdfRenderer.Page): Bitmap {

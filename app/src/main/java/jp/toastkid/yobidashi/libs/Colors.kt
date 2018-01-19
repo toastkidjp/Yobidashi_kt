@@ -22,9 +22,11 @@ object Colors {
      * @param fontColor
      */
     fun setEditTextColor(editText: EditText, @ColorInt fontColor: Int) {
-        editText.setTextColor(fontColor)
-        editText.setHintTextColor(fontColor)
-        editText.highlightColor = ColorUtils.setAlphaComponent(fontColor, 128)
+        editText.apply {
+            setTextColor(fontColor)
+            setHintTextColor(fontColor)
+            highlightColor = ColorUtils.setAlphaComponent(fontColor, 128)
+        }
     }
 
     /**

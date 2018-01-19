@@ -43,16 +43,24 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Initialize Toolbar.
+     *
      * @param toolbar Toolbar
      */
     protected fun initToolbar(toolbar: Toolbar) {
-        toolbar.setNavigationIcon(R.drawable.ic_back)
-        toolbar.setNavigationOnClickListener { v -> finish() }
-        toolbar.setTitle(titleId())
-        toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-        toolbar.setOnMenuItemClickListener{ this.clickMenu(it) }
+        toolbar.run {
+            setNavigationIcon(R.drawable.ic_back)
+            setNavigationOnClickListener { finish() }
+            setTitle(titleId())
+            inflateMenu(R.menu.settings_toolbar_menu)
+            setOnMenuItemClickListener{ clickMenu(it) }
+        }
     }
 
+    /**
+     * Click menu action.
+     *
+     * @param item [MenuItem]
+     */
     protected open fun clickMenu(item: MenuItem): Boolean {
         val itemId = item.itemId
         if (itemId == R.id.settings_toolbar_menu_exit) {
@@ -64,16 +72,21 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Apply color to Toolbar.
+     *
      * @param toolbar Toolbar
      */
     protected fun applyColorToToolbar(toolbar: Toolbar) {
         val pair = preferenceApplier.colorPair()
-        toolbar.setBackgroundColor(pair.bgColor())
-        toolbar.setTitleTextColor(pair.fontColor())
-        toolbar.setSubtitleTextColor(pair.fontColor())
+        toolbar.let {
+            it.setBackgroundColor(pair.bgColor())
 
-        applyTint(toolbar.navigationIcon, pair.fontColor())
-        applyTint(toolbar.overflowIcon, pair.fontColor())
+            val fontColor = pair.fontColor()
+            it.setTitleTextColor(fontColor)
+            it.setSubtitleTextColor(fontColor)
+
+            applyTint(it.navigationIcon, fontColor)
+            applyTint(it.overflowIcon, fontColor)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val color = ColorUtils.setAlphaComponent(pair.bgColor(), 255)
@@ -84,14 +97,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Apply tint to passed drawable.
+     *
      * @param icon Drawable
      * @param fontColor color int
      */
-    private fun applyTint(icon: Drawable?, @ColorInt fontColor: Int) {
-        if (icon != null) {
-            DrawableCompat.setTint(icon, fontColor)
-        }
-    }
+    private fun applyTint(icon: Drawable?, @ColorInt fontColor: Int) =
+            icon?.let { DrawableCompat.setTint(it, fontColor) }
 
     /**
      * Send log.
@@ -100,9 +111,8 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param bundle
      */
     @JvmOverloads
-    protected fun sendLog(key: String, bundle: Bundle = Bundle.EMPTY) {
-        sender!!.send(key, bundle)
-    }
+    protected fun sendLog(key: String, bundle: Bundle = Bundle.EMPTY) =
+            sender?.send(key, bundle)
 
     /**
      * Return color pair.
