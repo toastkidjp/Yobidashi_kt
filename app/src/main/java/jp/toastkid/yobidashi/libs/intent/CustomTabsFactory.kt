@@ -2,47 +2,48 @@ package jp.toastkid.yobidashi.libs.intent
 
 import android.content.Context
 import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
 import android.support.customtabs.CustomTabsIntent
-
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
+ * Custom tabs factory.
+ *
  * @author toastkidjp
  */
 object CustomTabsFactory {
 
+    /**
+     * Make [CustomTabsIntent].
+     *
+     * @param context
+     * @param colorPair
+     *
+     * @return [CustomTabsIntent]
+     */
     fun make(
             context: Context,
-            pair: ColorPair,
-            @DrawableRes iconId: Int): CustomTabsIntent.Builder {
-        return make(context, pair.bgColor(), pair.fontColor(), iconId)
-    }
+            colorPair: ColorPair
+    ): CustomTabsIntent.Builder = make(context, colorPair.bgColor(), colorPair.fontColor())
 
     /**
-
+     * Make [CustomTabsIntent].
+     *
      * @param context
-     *
      * @param backgroundColor
-     *
      * @param fontColor
      *
-     * @param iconId
-     *
-     * @return
+     * @return [CustomTabsIntent]
      */
     fun make(
             context: Context,
             @ColorInt backgroundColor: Int,
-            @ColorInt fontColor: Int,
-            @DrawableRes iconId: Int): CustomTabsIntent.Builder {
-        return CustomTabsIntent.Builder()
-                .setToolbarColor(backgroundColor)
-                .setShowTitle(true)
-                .setSecondaryToolbarColor(fontColor)
-                .setStartAnimations(context, 0, 0)
-                .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .addDefaultShareMenuItem()
-    }
+            @ColorInt fontColor: Int
+    ): CustomTabsIntent.Builder = CustomTabsIntent.Builder()
+                    .setToolbarColor(backgroundColor)
+                    .setShowTitle(true)
+                    .setSecondaryToolbarColor(fontColor)
+                    .setStartAnimations(context, 0, 0)
+                    .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    .addDefaultShareMenuItem()
 
 }

@@ -21,6 +21,14 @@ import jp.toastkid.yobidashi.tab.TabAdapter
 /**
  * WebTab list module.
  *
+ * @param binding
+ * @param tabAdapter
+ * @param parent
+ * @param closeAction
+ * @param openEditorAction
+ * @param openPdfAction
+ * @param emptyAction
+ *
  * @author toastkidjp
  */
 class TabListModule(
@@ -33,13 +41,19 @@ class TabListModule(
         private val emptyAction: () -> Unit
 ) : BaseModule(binding.root) {
 
-    /** WebTab list adapter.  */
+    /**
+     * WebTab list adapter.
+     */
     private val adapter: Adapter by lazy { Adapter(context(), tabAdapter, closeAction) }
 
-    /** For showing snackbar.  */
+    /**
+     * For showing [Snackbar].
+     */
     private val colorPair: ColorPair
 
-    /** For showing snackbar.  */
+    /**
+     * For showing [Snackbar].
+     */
     private var firstLaunch: Boolean = true
 
     /**
@@ -90,6 +104,11 @@ class TabListModule(
         }
     }
 
+    /**
+     * Initialize FAB of "clear tabs".
+     *
+     * @param clearTabs
+     */
     private fun initClearTabs(clearTabs: FloatingActionButton) {
         clearTabs.setOnClickListener { v ->
             AlertDialog.Builder(context())
@@ -108,9 +127,8 @@ class TabListModule(
 
     /**
      * Initialize recyclerView.
-
-     * @param recyclerView
      *
+     * @param recyclerView
      * @param tabAdapter
      */
     private fun initRecyclerView(recyclerView: RecyclerView) {
@@ -133,11 +151,8 @@ class TabListModule(
 
     /**
      * Initialize adding tab fab.
+     *
      * @param addTab fab
-     *
-     * @param tabAdapter
-     *
-     * @param menuPos
      */
     private fun initAddTabButton(addTab: FloatingActionButton) {
         addTab.setOnClickListener { v ->

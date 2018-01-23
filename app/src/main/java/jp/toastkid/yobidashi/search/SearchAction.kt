@@ -112,7 +112,7 @@ class SearchAction(
         val colorPair: ColorPair = preferenceApplier.colorPair()
 
         if (validUrl) {
-            CustomTabsFactory.make(activityContext, colorPair, R.drawable.ic_back)
+            CustomTabsFactory.make(activityContext, colorPair)
                     .build()
                     .launchUrl(activityContext, Uri.parse(query))
             return

@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi.calendar
 
 import android.content.Context
 import android.net.Uri
-
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
@@ -36,7 +34,7 @@ class CalendarArticleLinker(
             return
         }
         CustomTabsFactory
-                .make(context, applier.colorPair(), R.drawable.ic_back)
+                .make(context, applier.colorPair())
                 .build()
                 .launchUrl(context, Uri.parse(url))
     }

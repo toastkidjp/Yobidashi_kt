@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -321,12 +322,42 @@ class BrowserFragment : BaseFragment() {
     private fun initFooter() {
         binding?.footer?.let {
             it.back.setOnClickListener { back() }
+            it.back.setOnLongClickListener {
+                launchTabHistory(activity)
+                true
+            }
+
             it.forward.setOnClickListener { forward() }
+            it.forward.setOnLongClickListener {
+                launchTabHistory(activity)
+                true
+            }
+
             it.bookmark.setOnClickListener { bookmark(ActivityOptionsFactory.makeScaleUpBundle(it)) }
+            it.bookmark.setOnLongClickListener {
+                tabs.addBookmark {
+                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
+                }
+                true
+            }
             it.search.setOnClickListener { search(ActivityOptionsFactory.makeScaleUpBundle(it)) }
             it.toTop.setOnClickListener { toTop() }
             it.toBottom.setOnClickListener { toBottom() }
             it.tabList.setOnClickListener { switchTabList() }
+            it.tabList.setOnLongClickListener {
+                AlertDialog.Builder(context)
+                        .setTitle(context.getString(R.string.title_clear_all_tabs))
+                        .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                        .setPositiveButton(R.string.ok) { d, i ->
+                            tabs.clear()
+                            onEmptyTabs()
+                            d.dismiss()
+                        }
+                        .show()
+                true
+            }
         }
     }
 
@@ -494,7 +525,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.OTHER_BROWSER -> {
                 tabs.currentUrl()?.let {
-                    CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
+                    CustomTabsFactory.make(context, colorPair())
                             .build()
                             .launchUrl(context, Uri.parse(it))
                 }

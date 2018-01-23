@@ -10,9 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Spinner
-
-import java.text.MessageFormat
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FavoriteSearchAdditionDialogContentBinding
 import jp.toastkid.yobidashi.libs.Colors
@@ -20,11 +17,13 @@ import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
+import java.text.MessageFormat
 
 /**
  * Show input dialog and call inserting action.
  *
  * @param parent For using extract background color.
+ * @param toasterCallback Callback
  * @author toastkidjp
  */
 class Addition internal constructor(
@@ -32,18 +31,28 @@ class Addition internal constructor(
         private val toasterCallback: (String) -> Unit
 ) {
 
-    /** Context.  */
+    /**
+     * Context.
+     */
     private val context: Context = parent.context
 
+    /**
+     * Binding object.
+     */
     private val binding: FavoriteSearchAdditionDialogContentBinding
 
+    /**
+     * Search category selector.
+     */
     private val categorySelector: Spinner
 
+    /**
+     * Input area.
+     */
     private val input: EditText
 
     init {
-
-        binding = DataBindingUtil.inflate<FavoriteSearchAdditionDialogContentBinding>(
+        binding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 LAYOUT_ID,
                 parent,
@@ -73,8 +82,8 @@ class Addition internal constructor(
 
     /**
      * Initialize spinner.
-     * @param content
      *
+     * @param content
      * @return
      */
     private fun initSpinner(content: View): Spinner {
@@ -85,8 +94,8 @@ class Addition internal constructor(
 
     /**
      * Initialize input field.
-     * @param content
      *
+     * @param content
      * @return
      */
     private fun initInput(content: View): EditText {
@@ -95,12 +104,22 @@ class Addition internal constructor(
         return TextInputs.setEmptyAlert(inputLayout)
     }
 
-    fun cancel(v: View) {
+    /**
+     * Cancel action.
+     *
+     * @param ignored for Data Binding
+     */
+    fun cancel(ignored: View) {
         parent.visibility = View.GONE
         Inputs.hideKeyboard(input)
     }
 
-    fun ok(v: View) {
+    /**
+     * Ok action.
+     *
+     * @param ignored for Data Binding
+     */
+    fun ok(ignored: View) {
         val query = input.text.toString()
 
         if (TextUtils.isEmpty(query)) {
@@ -121,7 +140,10 @@ class Addition internal constructor(
 
     companion object {
 
+        /**
+         * Layout ID.
+         */
         @LayoutRes
-        private val LAYOUT_ID = R.layout.favorite_search_addition_dialog_content
+        private const val LAYOUT_ID: Int = R.layout.favorite_search_addition_dialog_content
     }
 }
