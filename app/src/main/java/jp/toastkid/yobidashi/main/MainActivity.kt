@@ -219,7 +219,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             replaceWithBrowser(uri)
             return
         }
-        CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back).build().launchUrl(this, uri)
+        CustomTabsFactory
+                .make(this, colorPair())
+                .build()
+                .launchUrl(this, uri)
     }
 
     /**
@@ -341,11 +344,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_share_twitter -> {
                 sendLog("nav_shr_twt")
-                IntentFactory.makeTwitter(
-                        this@MainActivity,
-                        colorPair(),
-                        R.drawable.ic_back
-                ).launchUrl(
+                IntentFactory.makeTwitter(this@MainActivity, colorPair())
+                        .launchUrl(
                         this@MainActivity,
                         Uri.parse("https://twitter.com/share?text=" + Uri.encode(makeShareMessage()))
                 )
@@ -373,7 +373,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_privacy_policy -> {
                 sendLog("nav_prvcy_plcy")
-                CustomTabsFactory.make(this, colorPair(), R.drawable.ic_back)
+                CustomTabsFactory.make(this, colorPair())
                         .build()
                         .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
             }

@@ -43,8 +43,8 @@ internal class ChromeTabsSearchIntentLauncher(private val context: Context) : Se
     }
 
     override fun invoke() {
-        val intent = CustomTabsFactory.make(
-                context, backgroundColor, fontColor, R.drawable.ic_back)
+        val intent = CustomTabsFactory
+                .make(context, backgroundColor, fontColor)
                 .addMenuItem(
                         context.getString(R.string.title_search),
                         PendingIntentFactory.makeSearchLauncher(context)

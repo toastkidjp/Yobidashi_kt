@@ -525,7 +525,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.OTHER_BROWSER -> {
                 tabs.currentUrl()?.let {
-                    CustomTabsFactory.make(context, colorPair(), R.drawable.ic_back)
+                    CustomTabsFactory.make(context, colorPair())
                             .build()
                             .launchUrl(context, Uri.parse(it))
                 }

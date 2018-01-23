@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.support.annotation.DrawableRes
 import android.support.customtabs.CustomTabsIntent
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
@@ -39,11 +38,8 @@ object IntentFactory {
      */
     fun makeTwitter(
             context: Context,
-            pair: ColorPair,
-            @DrawableRes iconId: Int
-    ): CustomTabsIntent {
-        return CustomTabsFactory.make(context, pair.bgColor(), pair.fontColor(), iconId).build()
-    }
+            pair: ColorPair
+    ): CustomTabsIntent = CustomTabsFactory.make(context, pair.bgColor(), pair.fontColor()).build()
 
     /**
      * Make pick image intent.
