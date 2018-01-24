@@ -393,7 +393,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_camera -> {
                 sendLog("nav_camera")
-                useCameraPermission { startActivityWithSlideIn("nav_camera", IntentFactory.makeCamera()) }
+                useCameraPermission { startActivityWithSlideIn("nav_camera", IntentFactory.camera()) }
             }
             R.id.nav_bookmark -> {
                 startActivityForResultWithSlideIn(
