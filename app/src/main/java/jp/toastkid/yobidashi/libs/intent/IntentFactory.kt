@@ -86,11 +86,9 @@ object IntentFactory {
      *
      * @return Intent of opening author apps.
      */
-    fun authorsApp(): Intent {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse("market://search?q=pub:toastkidjp")
-        return intent
-    }
+    fun authorsApp(): Intent =
+            Intent(Intent.ACTION_VIEW)
+                    .apply { data = Uri.parse("market://search?q=pub:toastkidjp") }
 
     /**
      * Share image uri.
