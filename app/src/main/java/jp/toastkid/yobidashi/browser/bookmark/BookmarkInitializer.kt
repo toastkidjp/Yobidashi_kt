@@ -19,6 +19,7 @@ object BookmarkInitializer {
             "Recommended" to mapOf(
                     "Google Translate" to "https://translate.google.com/",
                     "YouTube" to "https://www.youtube.com/",
+                    "AccuWeather" to "https://www.accuweather.com/",
                     "Wikipedia" to "https://${Locale.getDefault().language}.wikipedia.org/",
                     "Google Map" to "https://www.google.co.jp/maps/",
                     "Yelp" to "https://www.yelp.com/",
