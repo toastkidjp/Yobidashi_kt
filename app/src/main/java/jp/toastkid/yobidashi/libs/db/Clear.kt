@@ -14,11 +14,16 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Action of clear passed deleter.
-
+ *
+ * @param view View
+ * @param deleter for deletion
  * @author toastkidjp
  */
 class Clear(private val view: View, private val deleter: Deleter<*, *>) {
 
+    /**
+     * Context.
+     */
     private val context: Context = view.context
 
     operator fun invoke(callback: () -> Unit = {}) {
