@@ -14,10 +14,10 @@ import java.util.*
  * @author toastkidjp
  */
 enum class SearchCategory(
-            @StringRes val id: Int,
-            @DrawableRes val iconId: Int,
-            private val mHost: String,
-            val generator: (l: String, h: String, q: String) -> String = {l, h, q ->  h + q }
+        @StringRes val id: Int,
+        @DrawableRes val iconId: Int,
+        private val mHost: String,
+        private val generator: (l: String, h: String, q: String) -> String = { l, h, q ->  h + q }
     ) {
 
     GOOGLE(R.string.google,
