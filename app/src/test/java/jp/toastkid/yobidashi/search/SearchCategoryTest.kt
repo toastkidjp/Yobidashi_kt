@@ -23,10 +23,13 @@ class SearchCategoryTest {
     @Test
     fun test_findByCategory() {
         assertEquals(SearchCategory.GITHUB, SearchCategory.findByCategory("github"))
+        assertEquals(SearchCategory.getDefault(), SearchCategory.findByCategory("none"))
+
     }
 
     @Test
     fun test_findIndex() {
         assertEquals("18", "${SearchCategory.findIndex("github")}")
+        assertEquals("0", "${SearchCategory.findIndex("none")}")
     }
 }

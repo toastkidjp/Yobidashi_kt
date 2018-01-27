@@ -142,14 +142,8 @@ enum class SearchCategory(
                     .let { if (it == null) { GOOGLE } else { it } }
         }
 
-        fun findIndex(category: String): Int = values().find { it.name == category.toUpperCase() }
-                .let {
-                    if (it == null) {
-                        0
-                    } else {
-                        it.ordinal
-                    }
-                }
+        fun findIndex(category: String): Int =
+                values().find { it.name == category.toUpperCase() } ?.ordinal ?: 0
 
         fun getDefault(): SearchCategory = GOOGLE
 
