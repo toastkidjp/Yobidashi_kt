@@ -127,7 +127,7 @@ enum class SearchCategory(
         )
     }
 
-    fun generate(l: String, h: String, q: String): String = generator(l, h, q)
+    private fun generate(l: String, h: String, q: String): String = generator(l, h, q)
 
     companion object {
 
