@@ -546,9 +546,8 @@ class BrowserFragment : BaseFragment() {
                 startActivityForResult(VoiceSearch.makeIntent(context), VoiceSearch.REQUEST_CODE)
             }
             Menu.REPLACE_HOME -> {
-                val currentUrl = tabs.currentUrl()
-                currentUrl?.let {
-                    if (Urls.isInvalidUrl(currentUrl)) {
+                tabs.currentUrl()?.let {
+                    if (Urls.isInvalidUrl(it)) {
                         Toaster.snackShort(
                                 snackbarParent,
                                 R.string.message_cannot_replace_home_url,
@@ -556,10 +555,10 @@ class BrowserFragment : BaseFragment() {
                         )
                         return
                     }
-                    preferenceApplier().homeUrl = currentUrl
+                    preferenceApplier().homeUrl = it
                     Toaster.snackShort(
                             snackbarParent,
-                            getString(R.string.message_replace_home_url, currentUrl) ,
+                            getString(R.string.message_replace_home_url, it) ,
                             colorPair()
                     )
                 }
