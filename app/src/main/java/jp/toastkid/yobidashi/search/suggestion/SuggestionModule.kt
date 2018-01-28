@@ -138,18 +138,17 @@ class SuggestionModule(
      *
      * @param suggestions
      */
-    private fun replace(suggestions: List<String>): Disposable {
-
-        return suggestions.toObservable()
-                .doOnNext { adapter.add(it) }
-                .doOnSubscribe { d -> adapter.clear() }
-                .doOnTerminate {
-                    show()
-                    adapter.notifyDataSetChanged()
-                }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-    }
+    private fun replace(suggestions: Iterable<String>): Disposable =
+            suggestions.toObservable()
+                    .doOnNext { adapter.add(it) }
+                    .doOnSubscribe { d -> adapter.clear() }
+                    .doOnTerminate {
+                        show()
+                        adapter.notifyDataSetChanged()
+                    }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe({}, Timber::e)
+                    .addTo(disposables)
 
     /**
      * Dispose last subscription.
