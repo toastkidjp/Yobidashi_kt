@@ -79,9 +79,7 @@ class SuggestionModule(
      */
     fun request(key: String) {
 
-        if (lastSubscription != null) {
-            lastSubscription!!.dispose()
-        }
+        lastSubscription?.dispose()
 
         if (mCache.containsKey(key)) {
             lastSubscription = replace(mCache[key]!!).addTo(disposables)
