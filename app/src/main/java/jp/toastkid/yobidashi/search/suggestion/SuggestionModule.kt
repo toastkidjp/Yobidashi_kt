@@ -97,15 +97,15 @@ class SuggestionModule(
         }
 
         mFetcher.fetchAsync(key, { suggestions ->
-            if (suggestions == null || suggestions.isEmpty()) {
-                Completable.create { e ->
-                    hide()
-                    e.onComplete()
-                }.subscribeOn(AndroidSchedulers.mainThread()).subscribe().addTo(disposables)
-            } else {
-                mCache.put(key, suggestions)
-                lastSubscription = replace(suggestions).addTo(disposables)
+            if (suggestions.isEmpty()) {
+                Completable.fromAction { hide() }
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe({}, Timber::e)
+                        .addTo(disposables)
+                return@fetchAsync
             }
+            mCache.put(key, suggestions)
+            lastSubscription = replace(suggestions).addTo(disposables)
         })
     }
 
