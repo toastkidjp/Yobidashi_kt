@@ -670,9 +670,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         }
         when (requestCode) {
             ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE -> {
-                if (data.data != null) {
-                    loadUri(data.data)
-                }
+                data.data?.let { loadUri(it) }
             }
             ArchivesActivity.REQUEST_CODE -> {
                 try {
