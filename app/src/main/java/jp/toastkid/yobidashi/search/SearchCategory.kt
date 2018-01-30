@@ -14,10 +14,10 @@ import java.util.*
  * @author toastkidjp
  */
 enum class SearchCategory(
-            @StringRes val id: Int,
-            @DrawableRes val iconId: Int,
-            private val mHost: String,
-            val generator: (l: String, h: String, q: String) -> String = {l, h, q ->  h + q }
+        @StringRes val id: Int,
+        @DrawableRes val iconId: Int,
+        private val mHost: String,
+        private val generator: (l: String, h: String, q: String) -> String = { l, h, q ->  h + q }
     ) {
 
     GOOGLE(R.string.google,
@@ -114,10 +114,6 @@ enum class SearchCategory(
             R.drawable.ic_mvn,
             "https://mvnrepository.com/search?q="
     ),
-    GREP_CODE(R.string.search_category_grep_code,
-            R.drawable.ic_grepcode,
-            "http://grepcode.com/search/?query="
-    ),
     SEARCH_CODE(R.string.search_category_search_code,
             R.drawable.ic_searchcode,
             "https://searchcode.com/?q="
@@ -131,7 +127,7 @@ enum class SearchCategory(
         )
     }
 
-    fun generate(l: String, h: String, q: String): String = generator(l, h, q)
+    private fun generate(l: String, h: String, q: String): String = generator(l, h, q)
 
     companion object {
 
@@ -146,23 +142,11 @@ enum class SearchCategory(
                     .let { if (it == null) { GOOGLE } else { it } }
         }
 
-        fun findIndex(category: String): Int {
-            return values().find { it.name == category.toUpperCase() }
-                    .let {
-                        if (it == null) {
-                            0
-                        } else {
-                            it.ordinal
-                        }
-                    }
-        }
+        fun findIndex(category: String): Int =
+                values().find { it.name == category.toUpperCase() } ?.ordinal ?: 0
 
-        fun getDefault(): SearchCategory {
-            return GOOGLE
-        }
+        fun getDefault(): SearchCategory = GOOGLE
 
-        fun getDefaultCategoryName(): String {
-            return getDefault().name
-        }
+        fun getDefaultCategoryName(): String = getDefault().name
     }
 }

@@ -34,6 +34,9 @@ object IntentFactory {
 
     /**
      * Make intent of sharing with twitter.
+     *
+     * @param context
+     * @param pair
      * @return CustomTabsIntent
      */
     fun makeTwitter(
@@ -54,8 +57,8 @@ object IntentFactory {
 
     /**
      * Make launching calendar intent.
-     * @param eventStartMs
      *
+     * @param eventStartMs
      * @return Intent
      */
     fun makeCalendar(eventStartMs: Long): Intent {
@@ -68,8 +71,8 @@ object IntentFactory {
 
     /**
      * Make launching Google Play intent.
-     * @param packageName
      *
+     * @param packageName
      * @return Google play intent.
      */
     fun googlePlay(packageName: String): Intent {
@@ -78,16 +81,19 @@ object IntentFactory {
         return intent
     }
 
-    fun authorsApp(): Intent {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse("market://search?q=pub:toastkidjp")
-        return intent
-    }
+    /**
+     * Make author app intent.
+     *
+     * @return Intent of opening author apps.
+     */
+    fun authorsApp(): Intent =
+            Intent(Intent.ACTION_VIEW)
+                    .apply { data = Uri.parse("market://search?q=pub:toastkidjp") }
 
     /**
      * Share image uri.
-     * @param uri
      *
+     * @param uri
      * @return
      */
     fun shareImage(uri: Uri): Intent {
@@ -96,19 +102,6 @@ object IntentFactory {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.setDataAndType(uri, "image/*")
         intent.putExtra(Intent.EXTRA_STREAM, uri)
-        return intent
-    }
-
-    /**
-     * Make opening browser intent.
-     * @param uri
-     *
-     * @return
-     */
-    fun openBrowser(uri: Uri): Intent {
-        val intent = Intent()
-        intent.action = Intent.ACTION_VIEW
-        intent.data = uri
         return intent
     }
 
@@ -143,6 +136,7 @@ object IntentFactory {
      * Make create document intent on Storage Access Framework.
      *
      * @param type mime type
+     * @param fileName File name
      * @return [Intent]
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -157,7 +151,7 @@ object IntentFactory {
     /**
      * Make camera launching intent.
      */
-    fun makeCamera(): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    fun camera(): Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
     /**
      * Make dial intent.

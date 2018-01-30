@@ -393,7 +393,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
             R.id.nav_camera -> {
                 sendLog("nav_camera")
-                useCameraPermission { startActivityWithSlideIn("nav_camera", IntentFactory.makeCamera()) }
+                useCameraPermission { startActivityWithSlideIn("nav_camera", IntentFactory.camera()) }
             }
             R.id.nav_bookmark -> {
                 startActivityForResultWithSlideIn(
@@ -670,9 +670,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         }
         when (requestCode) {
             ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE -> {
-                if (data.data != null) {
-                    loadUri(data.data)
-                }
+                data.data?.let { loadUri(it) }
             }
             ArchivesActivity.REQUEST_CODE -> {
                 try {

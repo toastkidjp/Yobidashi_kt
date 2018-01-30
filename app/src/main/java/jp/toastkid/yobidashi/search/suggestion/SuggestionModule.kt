@@ -37,29 +37,39 @@ class SuggestionModule(
         onClick: () -> Unit
 ) : BaseModule(binding.root) {
 
-    /** Suggest ModuleAdapter.  */
-    private val mSuggestionAdapter: Adapter = Adapter(
+    /**
+     * Suggest ModuleAdapter.
+     */
+    private val adapter: Adapter = Adapter(
             LayoutInflater.from(context()),
             searchInput,
             searchCallback,
             searchBackgroundCallback
     )
 
-    /** Fetcher.  */
-    private val mFetcher = SuggestionFetcher()
+    /**
+     * Fetcher.
+     */
+    private val fetcher = SuggestionFetcher()
 
-    /** Cache.  */
-    private val mCache = HashMap<String, List<String>>(SUGGESTION_CACHE_CAPACITY)
+    /**
+     * Cache.
+     */
+    private val cache = HashMap<String, List<String>>(SUGGESTION_CACHE_CAPACITY)
 
-    /** Last subscription's lastSubscription.  */
+    /**
+     * Last subscription's lastSubscription.
+     */
     private var lastSubscription: Disposable? = null
 
-    /** Composite disposables. */
+    /**
+     * Composite disposables.
+     */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
         binding.searchSuggestions.layoutManager = LinearLayoutManager(context())
-        binding.searchSuggestions.adapter = mSuggestionAdapter
+        binding.searchSuggestions.adapter = adapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
             onClick()
             false
@@ -70,7 +80,7 @@ class SuggestionModule(
      * Clear suggestion items.
      */
     fun clear() {
-        mSuggestionAdapter.clear()
+        adapter.clear()
     }
 
     /**
@@ -78,13 +88,10 @@ class SuggestionModule(
      * @param key
      */
     fun request(key: String) {
+        lastSubscription?.dispose()
 
-        if (lastSubscription != null) {
-            lastSubscription!!.dispose()
-        }
-
-        if (mCache.containsKey(key)) {
-            lastSubscription = replace(mCache[key]!!).addTo(disposables)
+        if (cache.containsKey(key)) {
+            lastSubscription = replace(cache[key]!!).addTo(disposables)
             return
         }
 
@@ -98,16 +105,16 @@ class SuggestionModule(
             return
         }
 
-        mFetcher.fetchAsync(key, { suggestions ->
-            if (suggestions == null || suggestions.isEmpty()) {
-                Completable.create { e ->
-                    hide()
-                    e.onComplete()
-                }.subscribeOn(AndroidSchedulers.mainThread()).subscribe().addTo(disposables)
-            } else {
-                mCache.put(key, suggestions)
-                lastSubscription = replace(suggestions).addTo(disposables)
+        fetcher.fetchAsync(key, { suggestions ->
+            if (suggestions.isEmpty()) {
+                Completable.fromAction { hide() }
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe({}, Timber::e)
+                        .addTo(disposables)
+                return@fetchAsync
             }
+            cache.put(key, suggestions)
+            lastSubscription = replace(suggestions).addTo(disposables)
         })
     }
 
@@ -120,9 +127,9 @@ class SuggestionModule(
         words.toObservable()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate { mSuggestionAdapter.notifyDataSetChanged() }
+                .doOnTerminate { adapter.notifyDataSetChanged() }
                 .observeOn(Schedulers.computation())
-                .subscribe({ mSuggestionAdapter.add(it) }, { Timber.e(it) })
+                .subscribe(adapter::add, Timber::e)
                 .addTo(disposables)
     }
 
@@ -131,18 +138,17 @@ class SuggestionModule(
      *
      * @param suggestions
      */
-    private fun replace(suggestions: List<String>): Disposable {
-
-        return suggestions.toObservable()
-                .doOnNext { mSuggestionAdapter.add(it) }
-                .doOnSubscribe { d -> mSuggestionAdapter.clear() }
-                .doOnTerminate {
-                    show()
-                    mSuggestionAdapter.notifyDataSetChanged()
-                }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-    }
+    private fun replace(suggestions: Iterable<String>): Disposable =
+            suggestions.toObservable()
+                    .doOnNext { adapter.add(it) }
+                    .doOnSubscribe { d -> adapter.clear() }
+                    .doOnTerminate {
+                        show()
+                        adapter.notifyDataSetChanged()
+                    }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe({}, Timber::e)
+                    .addTo(disposables)
 
     /**
      * Dispose last subscription.
@@ -154,7 +160,9 @@ class SuggestionModule(
 
     companion object {
 
-        /** Suggest cache capacity.  */
+        /**
+         * Suggest cache capacity.
+         */
         private val SUGGESTION_CACHE_CAPACITY = 30
     }
 }
