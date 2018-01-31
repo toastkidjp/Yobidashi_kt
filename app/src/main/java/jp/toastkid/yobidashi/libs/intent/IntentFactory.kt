@@ -9,8 +9,6 @@ import android.provider.MediaStore
 import android.support.customtabs.CustomTabsIntent
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
-
-
 /**
  * Common [android.content.Intent] factory.
  *
