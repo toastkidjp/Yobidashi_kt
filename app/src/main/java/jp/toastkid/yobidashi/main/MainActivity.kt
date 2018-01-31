@@ -732,43 +732,40 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         /**
          * Make launcher intent.
-         * @param context
          *
-         * @return
+         * @param context
+         * @return [Intent]
          */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
+        fun makeIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
+                .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
         /**
          * Make browser intent.
+         *
          * @param context
          * @param uri
          *
-         * @return
+         * @return [Intent]
          */
-        fun makeBrowserIntent(context: Context, uri: Uri): Intent {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.action = Intent.ACTION_VIEW
-            intent.data = uri
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
+        fun makeBrowserIntent(context: Context, uri: Uri): Intent
+                = Intent(context, MainActivity::class.java).apply {
+                    action = Intent.ACTION_VIEW
+                    data = uri
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
 
         /**
          * Make launcher intent.
-         * @param context
          *
-         * @return
+         * @param context
+         * @param dayOfMonth
+         * @return [Intent]
          */
-        fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent {
-            val intent = makeIntent(context)
-            intent.putExtra(KEY_EXTRA_MONTH, month)
-            intent.putExtra(KEY_EXTRA_DOM, dayOfMonth)
-            return intent
-        }
+        fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent
+                = makeIntent(context).apply {
+                    putExtra(KEY_EXTRA_MONTH, month)
+                    putExtra(KEY_EXTRA_DOM, dayOfMonth)
+                }
 
     }
 
