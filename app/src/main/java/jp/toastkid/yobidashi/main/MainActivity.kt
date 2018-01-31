@@ -731,11 +731,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         private const val KEY_EXTRA_DOM = "dom"
 
         /**
-         * AD displaying count.
-         */
-        private const val AD_DISPLAYING: Int = 3
-
-        /**
          * Make launcher intent.
          * @param context
          *
