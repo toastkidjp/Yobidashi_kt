@@ -712,23 +712,23 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         /**
          * Header hiding duration.
          */
-        private const val HEADER_HIDING_DURATION = 75L
+        private const val HEADER_HIDING_DURATION: Long = 75L
 
         /**
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.activity_main
+        private const val LAYOUT_ID: Int = R.layout.activity_main
 
         /**
          * For using daily alarm.
          */
-        private const val KEY_EXTRA_MONTH = "month"
+        private const val KEY_EXTRA_MONTH: String = "month"
 
         /**
          * For using daily alarm.
          */
-        private const val KEY_EXTRA_DOM = "dom"
+        private const val KEY_EXTRA_DOM: String = "dom"
 
         /**
          * Make launcher intent.
