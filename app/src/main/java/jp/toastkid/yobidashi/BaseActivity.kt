@@ -134,6 +134,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Return title's string resource ID.
+     *
+     * @return title string ID
      */
-    @StringRes protected abstract fun titleId(): Int
+    @StringRes
+    protected abstract fun titleId(): Int
 }
