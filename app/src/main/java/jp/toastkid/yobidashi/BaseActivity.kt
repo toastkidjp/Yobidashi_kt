@@ -64,7 +64,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected open fun clickMenu(item: MenuItem): Boolean {
         val itemId = item.itemId
         if (itemId == R.id.settings_toolbar_menu_exit) {
-            finish()
+            moveTaskToBack(true)
             return true
         }
         return true
