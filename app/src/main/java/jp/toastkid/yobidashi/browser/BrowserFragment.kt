@@ -584,7 +584,7 @@ class BrowserFragment : BaseFragment() {
                 openPdfTabFromStorage()
             }
             Menu.EXIT -> {
-                activity.finish()
+                activity.moveTaskToBack(true)
             }
         }
     }

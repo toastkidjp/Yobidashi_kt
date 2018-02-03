@@ -125,7 +125,7 @@ class HomeFragment : BaseFragment() {
                 startActivity(SettingsIntentFactory.wifi())
             }
             Menu.EXIT -> {
-                activity.finish()
+                activity.moveTaskToBack(true)
             }
         }
     }

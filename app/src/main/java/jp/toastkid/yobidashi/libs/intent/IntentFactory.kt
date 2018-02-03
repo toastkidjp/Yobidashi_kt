@@ -9,8 +9,6 @@ import android.provider.MediaStore
 import android.support.customtabs.CustomTabsIntent
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
-
-
 /**
  * Common [android.content.Intent] factory.
  *
@@ -20,16 +18,14 @@ object IntentFactory {
 
     /**
      * Make sharing message intent.
-     * @param message
      *
+     * @param message
      * @return Intent
      */
-    fun makeShare(message: String): Intent {
-        val intent = Intent()
-        intent.action = Intent.ACTION_SEND
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, message)
-        return intent
+    fun makeShare(message: String): Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
     }
 
     /**
