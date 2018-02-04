@@ -7,6 +7,7 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+-dontwarn jp.toastkid.yobidashi.browser.BrowserFragment**
 -keepclassmembers enum jp.toastkid.yobidashi.** { *; }
 
 ## For OkHttp
