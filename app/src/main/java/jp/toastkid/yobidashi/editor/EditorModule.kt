@@ -262,10 +262,9 @@ class EditorModule(
         if (!file.exists()) {
             file.createNewFile()
         }
-        Okio.buffer(Okio.sink(file)).run {
-            write(contentBytes())
-            flush()
-            close()
+        Okio.buffer(Okio.sink(file)).use {
+            it.write(contentBytes())
+            it.flush()
         }
         val context = binding.root.context
         MediaScannerConnection.scanFile(
