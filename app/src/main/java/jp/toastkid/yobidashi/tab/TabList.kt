@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.tab
 
 import android.content.Context
+import android.support.annotation.Keep
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.reactivex.disposables.CompositeDisposable
@@ -26,6 +27,7 @@ class TabList private constructor() {
 
     @Transient private val disposables = CompositeDisposable()
 
+    @Keep
     private var index: Int = 0
 
     internal fun currentTab(): Tab {
@@ -36,10 +38,12 @@ class TabList private constructor() {
         index = if (newIndex < 0 || tabs.size < newIndex) 0 else newIndex
     }
 
+    @Keep
     fun getIndex(): Int {
         return index
     }
 
+    @Keep
     fun size(): Int {
         return tabs.size
     }
