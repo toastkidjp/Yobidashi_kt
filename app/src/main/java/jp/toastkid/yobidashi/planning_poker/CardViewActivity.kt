@@ -65,10 +65,7 @@ class CardViewActivity : AppCompatActivity() {
         fun makeIntent(
                 context: Context,
                 text: String
-        ): Intent {
-            val intent = Intent(context, CardViewActivity::class.java)
-            intent.putExtra(EXTRA_KEY_CARD_TEXT, text)
-            return intent
-        }
+        ): Intent = Intent(context, CardViewActivity::class.java)
+                .apply { putExtra(EXTRA_KEY_CARD_TEXT, text) }
     }
 }
