@@ -10,12 +10,14 @@ import jp.toastkid.yobidashi.R
 
 /**
  * For using displaying selected card.
-
+ *
  * @author toastkidjp
  */
 class CardViewActivity : AppCompatActivity() {
 
-    /** Card Fragment.  */
+    /**
+     * Card Fragment.
+     */
     private lateinit var cardFragment: CardFragment
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +32,11 @@ class CardViewActivity : AppCompatActivity() {
         addFragment(cardFragment)
     }
 
+    /**
+     * Add fragment to this activity.
+     *
+     * @param fragment [Fragment]
+     */
     private fun addFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.container, fragment)
@@ -38,12 +45,23 @@ class CardViewActivity : AppCompatActivity() {
 
     companion object {
 
-        /** Card extra key.  */
-        val EXTRA_KEY_CARD_TEXT = "card_text"
+        /**
+         * Card extra key.
+         */
+        const val EXTRA_KEY_CARD_TEXT: String = "card_text"
 
-        /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.activity_transparent
+        /**
+         * Layout ID.
+         */
+        private const val LAYOUT_ID: Int = R.layout.activity_transparent
 
+        /**
+         * Make [CardViewActivity]'s intent.
+         *
+         * @param context [Context]
+         * @param text card text.
+         * @return [Intent]
+         */
         fun makeIntent(
                 context: Context,
                 text: String
