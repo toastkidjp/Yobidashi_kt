@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.CardItemBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -41,6 +40,9 @@ class CardFragment : Fragment() {
                     PreferenceApplier(v.context).colorPair()
             )
         })
+        if (arguments.containsKey(CardViewActivity.EXTRA_KEY_CARD_TEXT)) {
+            setText(arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT))
+        }
         return binding.root
     }
 
@@ -49,7 +51,7 @@ class CardFragment : Fragment() {
      *
      * @param text card's text
      */
-    fun setText(text: String) {
+    private fun setText(text: String) {
         binding.cardText.text = text
         if (text.length >= 3) {
             binding.cardText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 120f)
