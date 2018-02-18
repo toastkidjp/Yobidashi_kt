@@ -263,7 +263,7 @@ class EditorModule(
             file.createNewFile()
         }
         Okio.buffer(Okio.sink(file)).use {
-            it.write(contentBytes())
+            it.writeUtf8(content())
             it.flush()
         }
         val context = binding.root.context
@@ -369,13 +369,6 @@ class EditorModule(
      * @return content [String]
      */
     private inline fun content(): String = binding.editorInput.text.toString()
-
-    /**
-     * Return current content byte array.
-     *
-     * @return [ByteArray]
-     */
-    private inline fun contentBytes(): ByteArray = content().toByteArray()
 
     /**
      * Show snackbar with specified id text.
