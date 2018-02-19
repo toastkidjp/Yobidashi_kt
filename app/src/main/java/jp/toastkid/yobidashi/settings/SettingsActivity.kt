@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.support.annotation.StringRes
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,15 +19,19 @@ import jp.toastkid.yobidashi.libs.Toaster
 
 /**
  * Settings activity.
-
+ *
  * @author toastkidjp
  */
 class SettingsActivity : BaseActivity() {
 
-    /** DataBinding object.  */
+    /**
+     * DataBinding object.
+     */
     private lateinit var binding: ActivitySettingsBinding
 
-    /** Settings fragment.  */
+    /**
+     * Settings fragment.
+     */
     private lateinit var fragment: SettingsTopFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,56 +73,59 @@ class SettingsActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun titleId(): Int {
-        return R.string.title_settings
-    }
+    @StringRes override fun titleId(): Int = R.string.title_settings
 
     /**
      * Switch all settings.
-
-     * @param v
+     *
+     * @param ignored
      */
-    fun switchAll(v: View) {
+    fun switchAll(ignored: View) {
         fragment.showAll()
     }
 
     /**
      * Switch displaying menu.
-
-     * @param v
+     *
+     * @param ignored
      */
-    fun switchDisplaying(v: View) {
+    fun switchDisplaying(ignored: View) {
         fragment.showDisplay()
     }
 
-    fun switchSearch(v: View) {
+    /**
+     * Switch search menu.
+     *
+     * @param ignored
+     */
+    fun switchSearch(ignored: View) {
         fragment.showSearch()
     }
 
     /**
      * Switch browser menu.
-
-     * @param v
+     *
+     * @param ignored
      */
-    fun switchBrowser(v: View) {
+    fun switchBrowser(ignored: View) {
         fragment.showBrowser()
     }
 
     /**
      * Switch notification menu.
-
-     * @param v
+     *
+     * @param ignored
      */
-    fun switchNotification(v: View) {
+    fun switchNotification(ignored: View) {
         fragment.showNotifications()
     }
 
     /**
-     * Switch others menu.
-
-     * @param v
+     * Switch other menu.
+     *
+     * @param ignored
      */
-    fun switchOthers(v: View) {
+    fun switchOther(ignored: View) {
         fragment.showOthers()
     }
 
@@ -138,7 +146,9 @@ class SettingsActivity : BaseActivity() {
 
     companion object {
 
-        /** Layout ID.  */
+        /**
+         * Layout ID.
+         */
         private val LAYOUT_ID = R.layout.activity_settings
 
         /**
