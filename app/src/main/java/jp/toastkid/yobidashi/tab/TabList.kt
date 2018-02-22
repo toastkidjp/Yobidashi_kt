@@ -70,7 +70,7 @@ class TabList private constructor() {
         val json = jsonAdapter.toJson(this)
         tabsFile?.let {
             Okio.buffer(Okio.sink(it)).run {
-                write(json.toByteArray(charset))
+                writeUtf8(json)
                 flush()
                 close()
             }
