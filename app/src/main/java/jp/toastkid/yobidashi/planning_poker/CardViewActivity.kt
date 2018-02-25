@@ -10,13 +10,15 @@ import jp.toastkid.yobidashi.R
 
 /**
  * For using displaying selected card.
-
+ *
  * @author toastkidjp
  */
 class CardViewActivity : AppCompatActivity() {
 
-    /** Card Fragment.  */
-    private var cardFragment: CardFragment? = null
+    /**
+     * Card Fragment.
+     */
+    private lateinit var cardFragment: CardFragment
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,14 +26,17 @@ class CardViewActivity : AppCompatActivity() {
         setContentView(LAYOUT_ID)
 
         cardFragment = CardFragment()
-        addFragment(cardFragment!!)
+        cardFragment.arguments = Bundle().apply {
+            putString(EXTRA_KEY_CARD_TEXT, intent.getStringExtra(EXTRA_KEY_CARD_TEXT))
+        }
+        addFragment(cardFragment)
     }
 
-    override fun onResume() {
-        super.onResume()
-        cardFragment!!.setText(intent.getStringExtra(EXTRA_KEY_CARD_TEXT))
-    }
-
+    /**
+     * Add fragment to this activity.
+     *
+     * @param fragment [Fragment]
+     */
     private fun addFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.container, fragment)
@@ -40,19 +45,27 @@ class CardViewActivity : AppCompatActivity() {
 
     companion object {
 
-        /** Card extra key.  */
-        private val EXTRA_KEY_CARD_TEXT = "card_text"
+        /**
+         * Card extra key.
+         */
+        const val EXTRA_KEY_CARD_TEXT: String = "card_text"
 
-        /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.activity_transparent
+        /**
+         * Layout ID.
+         */
+        private const val LAYOUT_ID: Int = R.layout.activity_transparent
 
+        /**
+         * Make [CardViewActivity]'s intent.
+         *
+         * @param context [Context]
+         * @param text card text.
+         * @return [Intent]
+         */
         fun makeIntent(
                 context: Context,
                 text: String
-        ): Intent {
-            val intent = Intent(context, CardViewActivity::class.java)
-            intent.putExtra(EXTRA_KEY_CARD_TEXT, text)
-            return intent
-        }
+        ): Intent = Intent(context, CardViewActivity::class.java)
+                .apply { putExtra(EXTRA_KEY_CARD_TEXT, text) }
     }
 }

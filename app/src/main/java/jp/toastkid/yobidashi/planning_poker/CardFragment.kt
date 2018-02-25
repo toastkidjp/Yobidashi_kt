@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.CardItemBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -15,13 +14,15 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Card Fragment.
-
+ *
  * @author toastkidjp
  */
 class CardFragment : Fragment() {
 
-    /** DataBinding object.  */
-    private var binding: CardItemBinding? = null
+    /**
+     * DataBinding object.
+     */
+    private lateinit var binding: CardItemBinding
 
     override fun onCreateView(
             inflater: LayoutInflater?,
@@ -30,7 +31,7 @@ class CardFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<CardItemBinding>(inflater!!, LAYOUT_ID, container, false)
-        binding?.root?.setOnClickListener({ v ->
+        binding.root?.setOnClickListener({ v ->
             Toaster.snackLong(
                     v,
                     R.string.message_confirm_back,
@@ -39,24 +40,30 @@ class CardFragment : Fragment() {
                     PreferenceApplier(v.context).colorPair()
             )
         })
-        return binding!!.root
+        if (arguments.containsKey(CardViewActivity.EXTRA_KEY_CARD_TEXT)) {
+            setText(arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT))
+        }
+        return binding.root
     }
 
     /**
      * Set card's text.
+     *
      * @param text card's text
      */
-    fun setText(text: String) {
-        binding!!.cardText.text = text
+    private fun setText(text: String) {
+        binding.cardText.text = text
         if (text.length >= 3) {
-            binding!!.cardText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 120f)
+            binding.cardText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 120f)
         }
     }
 
     companion object {
 
-        /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.card_item
+        /**
+         * Layout ID.
+         */
+        private val LAYOUT_ID: Int = R.layout.card_item
     }
 
 }
