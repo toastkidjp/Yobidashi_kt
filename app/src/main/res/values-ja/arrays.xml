@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="image_menu">
+        <item name="set_bg">背景画像に設定</item>
+        <item name="save_bg">背景画像として保存</item>
+        <item name="download">画像をダウンロード</item>
+    </array>
+    <array name="url_menu">
+        <item name="open_article">新規タブで開く</item>
+        <item name="add_schedule">バックグラウンドで開く</item>
+        <item name="open">開く</item>
+        <item name="copy">コピー</item>
+    </array>
+</resources>
