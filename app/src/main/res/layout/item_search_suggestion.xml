@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -15,7 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="40dp"
+            android:paddingStart="40dp"
             android:paddingRight="48dp"
+            android:paddingEnd="48dp"
             android:gravity="center_vertical"
             tools:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajyaaaaaaaaa"
             android:textColor="@color/black"
@@ -26,6 +29,7 @@
             android:layout_width="24dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/search_horizontal_margin"
+            android:layout_marginStart="@dimen/search_horizontal_margin"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_search_black"
             />
@@ -34,12 +38,14 @@
             android:layout_width="40dp"
             android:layout_height="32dp"
             android:layout_marginRight="@dimen/search_horizontal_margin"
+            android:layout_marginEnd="@dimen/search_horizontal_margin"
             android:layout_gravity="right|center_vertical"
             android:gravity="center"
             android:text="+"
             android:textSize="20dp"
             android:textColor="@color/white"
             android:background="@color/search_add_background"
+            tools:ignore="SpUsage"
             />
         <View
             android:id="@+id/divider"
@@ -47,6 +53,7 @@
             android:layout_height="1px"
             android:layout_gravity="bottom"
             android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
             android:background="@color/search_divider"
             />
     </FrameLayout>
