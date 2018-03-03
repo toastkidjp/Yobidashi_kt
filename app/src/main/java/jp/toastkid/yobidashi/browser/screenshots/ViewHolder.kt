@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemScreenshotBinding
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Screenshot's view holder.
@@ -22,7 +23,8 @@ internal class ViewHolder
         private val binding: ItemScreenshotBinding) : RecyclerView.ViewHolder(binding.root) {
 
     private val dateFormatHolder = object : ThreadLocal<DateFormat>() {
-        override fun initialValue(): DateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS")
+        override fun initialValue(): DateFormat =
+                SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS", Locale.getDefault())
     }
 
     /**
