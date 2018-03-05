@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2018 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 package jp.toastkid.yobidashi.search.history
 
 import android.os.Handler
@@ -15,8 +22,8 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
 
 /**
- * Search hisotry module.
-TODO Clean up code.
+ * Search history module.
+ *
  * @param binding Data binding object
  * @param searchCallback
  * @param onTouch
@@ -54,7 +61,7 @@ class HistoryModule(
     /**
      * For executing on UI thread.
      */
-    private val uiThreadhandler = Handler(Looper.getMainLooper())
+    private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     init {
         binding.module = this
@@ -77,7 +84,7 @@ class HistoryModule(
                 return false
             }
         }
-        uiThreadhandler.post {
+        uiThreadHandler.post {
             RightSwipeActionAttacher
                     .invoke(binding.searchHistories, { moduleAdapter.removeAt(it).addTo(disposables) })
         }
@@ -86,7 +93,7 @@ class HistoryModule(
     /**
      * Query table with passed word.
      *
-     * @param s
+     * @param s query string
      */
     fun query(s: CharSequence) {
         disposable?.dispose()
@@ -98,13 +105,12 @@ class HistoryModule(
      *
      * @param ignored for Data Binding
      */
-    fun clearHistory(ignored: View) {
-        Clear(binding.root, relation.deleter())
-                .invoke{
-                    moduleAdapter.clear()
-                    hide()
-                }
-    }
+    fun clearHistory(@SuppressWarnings("UnusedParameters") ignored: View) =
+            Clear(binding.root, relation.deleter())
+                    .invoke{
+                        moduleAdapter.clear()
+                        hide()
+                    }
 
     /**
      * Dispose last subscription.
