@@ -67,7 +67,7 @@ class ColorFilter(private val activity: Activity, private val parent: View) {
     /**
      * Set color.
      *
-     * @param Color value int.
+     * @param color [ColorInt] value.
      */
     fun color(@ColorInt color: Int) {
         ColorFilterService.color(color)

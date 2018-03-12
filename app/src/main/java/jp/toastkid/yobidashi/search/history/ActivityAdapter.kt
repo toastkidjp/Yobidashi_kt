@@ -15,11 +15,10 @@ import timber.log.Timber
 /**
  * ModuleAdapter of search history list.
  *
- * @param context
+ * @param context [Context]
  * @param relation Relation
  * @param onClick On click callback
- * @param onVisibilityChanged On changed visibility callback
- * @param onDelete
+ * @param onDelete On delete callback
  *
  * @author toastkidjp
  */
