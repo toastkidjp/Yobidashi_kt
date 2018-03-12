@@ -47,12 +47,12 @@ class TabListModule(
     private val adapter: Adapter by lazy { Adapter(context(), tabAdapter, closeAction) }
 
     /**
-     * For showing [Snackbar].
+     * For showing [android.support.design.widget.Snackbar].
      */
     private val colorPair: ColorPair
 
     /**
-     * For showing [Snackbar].
+     * For showing [android.support.design.widget.Snackbar].
      */
     private var firstLaunch: Boolean = true
 
@@ -63,8 +63,6 @@ class TabListModule(
 
     /**
      * Initialize with parent.
-     *
-     * @param binding
      */
     init {
         val preferenceApplier = PreferenceApplier(parent.context)
@@ -95,41 +93,38 @@ class TabListModule(
     /**
      * Initialize add-editor-tab button.
      */
-    private fun initAddEditorTabButton() {
-        binding.addEditorTab.setOnClickListener {
-            it.isClickable = false
-            openEditorAction()
-            closeAction()
-            it.isClickable = true
-        }
-    }
+    private fun initAddEditorTabButton() =
+            binding.addEditorTab.setOnClickListener {
+                it.isClickable = false
+                openEditorAction()
+                closeAction()
+                it.isClickable = true
+            }
 
     /**
      * Initialize FAB of "clear tabs".
      *
      * @param clearTabs
      */
-    private fun initClearTabs(clearTabs: FloatingActionButton) {
-        clearTabs.setOnClickListener { v ->
-            AlertDialog.Builder(context())
-                    .setTitle(context().getString(R.string.title_clear_all_tabs))
-                    .setMessage(Html.fromHtml(context().getString(R.string.confirm_clear_all_settings)))
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        tabAdapter.clear()
-                        emptyAction()
-                        d.dismiss()
-                    }
-                    .show()
-        }
-    }
+    private fun initClearTabs(clearTabs: FloatingActionButton) =
+            clearTabs.setOnClickListener { v ->
+                AlertDialog.Builder(context())
+                        .setTitle(context().getString(R.string.title_clear_all_tabs))
+                        .setMessage(Html.fromHtml(context().getString(R.string.confirm_clear_all_settings)))
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                        .setPositiveButton(R.string.ok) { d, i ->
+                            tabAdapter.clear()
+                            emptyAction()
+                            d.dismiss()
+                        }
+                        .show()
+            }
 
     /**
      * Initialize recyclerView.
      *
      * @param recyclerView
-     * @param tabAdapter
      */
     private fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.HORIZONTAL, false)
@@ -154,15 +149,14 @@ class TabListModule(
      *
      * @param addTab fab
      */
-    private fun initAddTabButton(addTab: FloatingActionButton) {
-        addTab.setOnClickListener { v ->
-            addTab.isClickable = false
-            tabAdapter.openNewTab()
-            adapter.notifyItemInserted(adapter.itemCount - 1)
-            closeAction()
-            addTab.isClickable = true
-        }
-    }
+    private fun initAddTabButton(addTab: FloatingActionButton) =
+            addTab.setOnClickListener { v ->
+                addTab.isClickable = false
+                tabAdapter.openNewTab()
+                adapter.notifyItemInserted(adapter.itemCount - 1)
+                closeAction()
+                addTab.isClickable = true
+            }
 
     override fun show() {
         binding.recyclerView.layoutManager.scrollToPosition(tabAdapter.index())
