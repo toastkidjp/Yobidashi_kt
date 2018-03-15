@@ -15,7 +15,9 @@ ic_launcher*web.png
 gradle/
 gradlew
 gradlew.bat
-.idea/
 /app/signing
 app/src/main/res/raw/
 app/release/
+
+.idea/*
+!.idea/icon.png
