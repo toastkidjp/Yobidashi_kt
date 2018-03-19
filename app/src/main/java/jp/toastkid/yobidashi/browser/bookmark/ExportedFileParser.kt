@@ -36,14 +36,10 @@ object ExportedFileParser {
     /**
      * Parse bookmark html file.
      *
-     * @param htmlFile
+     * @param inputStream [InputStream]
      */
     operator fun invoke(inputStream: InputStream): List<Bookmark> =
-            read(Jsoup.parse(Okio.buffer(Okio.source(inputStream)).let {
-                val text = it.readUtf8()
-                it.close()
-                return@let text
-            }, ENCODE))
+            read(Jsoup.parse(Okio.buffer(Okio.source(inputStream)).use { it.readUtf8() }, ENCODE))
 
     private fun read(doc: Document): List<Bookmark> {
         doc.select("dl")
