@@ -363,5 +363,16 @@
     <string name="title_clear_coolie">Clear Coolie</string>
     <string name="title_wifi_only">Wi-Fi Only Mode</string>
     <string name="message_wifi_not_connecting">It isn\'t connecting Wi-Fi.</string>
+    <string name="wikipedia">Wikipedia</string>
+    <string name="add_schedule">Add schedule</string>
+    <string name="web_search">Web search</string>
+    <string name="minus">-</string>
+    <string name="use_view_history">Use view history</string>
+    <string name="sample_long_text">abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc_abc</string>
+    <string name="sample_url">https://www.yahoo.com</string>
+    <string name="plus">+</string>
+    <string name="sample_date_time">2017/12/12 08:08:08</string>
+    <string name="sample_number">20</string>
+    <string name="sample_a">A</string>
 
 </resources>

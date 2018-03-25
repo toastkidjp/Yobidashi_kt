@@ -13,7 +13,7 @@
         android:layout_gravity="bottom"
         android:layout_margin="3dp"
         android:gravity="center"
-        android:text="A"
+        android:text="@string/sample_a"
         />
 
     <ImageView

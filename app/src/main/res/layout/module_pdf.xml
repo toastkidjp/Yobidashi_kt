@@ -49,7 +49,7 @@
                     android:inputType="number"
                     android:imeOptions="actionSearch"
                     android:gravity="center_horizontal"
-                    android:text="20"
+                    android:text="@string/sample_number"
                     android:textSize="11sp"
                     />
             </RelativeLayout>
