@@ -238,7 +238,7 @@
                         android:layout_margin="16dp"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_web_black"
-                        android:text="Use view history"
+                        android:text="@string/use_view_history"
                         />
                     <CheckBox
                         android:id="@+id/use_view_history_check"

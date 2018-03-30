@@ -18,7 +18,7 @@
                 android:layout_marginLeft="8dp"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:text="-"
+                android:text="@string/minus"
                 android:textColor="@color/gray_500_dd"
                 />
             <TextView
