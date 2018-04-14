@@ -95,7 +95,7 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:3.5"
+    testImplementation "org.robolectric:robolectric:3.8"
 }
 
 repositories{
