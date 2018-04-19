@@ -611,7 +611,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Initialize tab list.
      *
-     * @param snackbarParent Snackbar's parent view.
+     * @param ignored Snackbar's parent view.
      */
     private fun initTabListIfNeed(ignored: View) {
         if (binding?.tabListContainer?.childCount == 0) {
