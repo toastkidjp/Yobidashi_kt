@@ -500,7 +500,9 @@ class BrowserFragment : BaseFragment() {
                 startActivity(SettingsIntentFactory.wifi())
             }
             Menu.PAGE_INFORMATION -> {
-                tabs.showPageInformation()
+                PageInformationDialogFragment()
+                        .also { it.arguments = tabs.makeCurrentPageInformation() }
+                        .show(this.fragmentManager, "")
             }
             Menu.TAB_LIST -> {
                 switchTabList()

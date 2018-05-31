@@ -1,43 +1,47 @@
 package jp.toastkid.yobidashi.browser
 
-import android.content.Context
+import android.app.Dialog
 import android.content.DialogInterface
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.webkit.WebView
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Method object of displaying page information dialog.
  *
- * @param webView
  * @author toastkidjp
  */
-internal class PageInformationDialog(private val webView: WebView) {
+internal class PageInformationDialogFragment: DialogFragment() {
 
-    /**
-     * Context.
-     */
-    private val context: Context = webView.context
+    private var favicon: Bitmap? = null
 
-    /**
-     * Show dialog.
-     */
-    fun show() {
+    private var title: String? = null
+
+    private var url: String? = null
+
+    override fun setArguments(args: Bundle?) {
+        super.setArguments(args)
+        favicon = args?.getParcelable<Bitmap?>("favicon")
+        title = args?.getString("title")
+        url = args?.getString("url")
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(context)
                 .setTitle(R.string.title_menu_page_information)
                 .setMessage(makeMessage())
                 .setCancelable(true)
                 .setNeutralButton("Clip URL") { d, _ -> clipUrl(d) }
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
-        if (webView.favicon != null) {
-            builder.setIcon(BitmapDrawable(context.resources, webView.favicon))
+        if (favicon != null) {
+            builder.setIcon(BitmapDrawable(context.resources, favicon))
         }
-        builder.show()
+        return builder.create()
     }
 
     /**
@@ -46,11 +50,12 @@ internal class PageInformationDialog(private val webView: WebView) {
      * @param d
      */
     private fun clipUrl(d: DialogInterface) {
-        Clipboard.clip(context, webView.url)
-        Toaster.snackShort(
-                webView,
-                "It has copied URL to clipboard.${lineSeparator}${webView.url}",
-                PreferenceApplier(context).colorPair()
+        val appContext = context ?: return
+        url?.also { Clipboard.clip(appContext, it) }
+
+        Toaster.tShort(
+                appContext,
+                "It has copied URL to clipboard.$lineSeparator$url"
         )
         d.dismiss()
     }
@@ -59,7 +64,7 @@ internal class PageInformationDialog(private val webView: WebView) {
      * Make message.
      */
     private fun makeMessage(): String =
-            "Title: ${webView.title}${lineSeparator}URL: ${webView.url}${lineSeparator}"
+            "Title: $title${lineSeparator}URL: $url$lineSeparator"
 
     companion object {
 

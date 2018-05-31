@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
@@ -727,10 +728,6 @@ class TabAdapter(
 
     fun currentTitle(): String = webView.title
 
-    fun showPageInformation() {
-        PageInformationDialog(webView).show()
-    }
-
     /**
      * Invoke site search.
      */
@@ -956,6 +953,12 @@ class TabAdapter(
     fun loadBackgroundTabsFromDirIfNeed() {
         tabList.loadBackgroundTabsFromDirIfNeed()
         setCurrentTabCount()
+    }
+
+    fun makeCurrentPageInformation(): Bundle = Bundle().also {
+        it.putParcelable("favicon", webView.favicon)
+        it.putString("title", webView.title)
+        it.putString("url", webView.url)
     }
 
     companion object {
