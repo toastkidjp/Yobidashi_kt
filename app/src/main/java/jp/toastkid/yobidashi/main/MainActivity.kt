@@ -89,7 +89,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     /**
      * Browser fragment.
      */
-    private val browserFragment: BrowserFragment by lazy { BrowserFragment() }
+    private lateinit var browserFragment: BrowserFragment
 
     /**
      * Home fragment.
@@ -138,6 +138,22 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
+        }
+
+        browserFragment = BrowserFragment().also {
+            it.consumer = Consumer {
+                binding.appBarMain?.toolbar?.title    = it.title()
+                binding.appBarMain?.toolbar?.subtitle = it.subtitle()
+            }
+            it.progressConsumer = Consumer {
+                if (70 < it) {
+                    binding.appBarMain?.progress?.visibility = View.GONE
+                    return@Consumer
+                } else {
+                    binding.appBarMain?.progress?.visibility = View.VISIBLE
+                }
+                binding.appBarMain?.progress?.progress = it
+            }
         }
 
         processShortcut(intent)
@@ -234,19 +250,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         replaceFragment(browserFragment)
         if (uri != Uri.EMPTY) {
             uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
-        }
-        browserFragment.consumer = Consumer {
-            binding.appBarMain?.toolbar?.title    = it.title()
-            binding.appBarMain?.toolbar?.subtitle = it.subtitle()
-        }
-        browserFragment.progressConsumer = Consumer {
-            if (70 < it) {
-                binding.appBarMain?.progress?.visibility = View.GONE
-                return@Consumer
-            } else {
-                binding.appBarMain?.progress?.visibility = View.VISIBLE
-            }
-            binding.appBarMain?.progress?.progress = it
         }
     }
 
