@@ -92,7 +92,7 @@ class SearchActivity : BaseActivity() {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
-        binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
+        binding?.searchClear?.setOnClickListener ({ binding?.searchInput?.setText("") })
         SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
 
         initFavoriteModule()
@@ -238,7 +238,7 @@ class SearchActivity : BaseActivity() {
      */
     private fun initSearchInput() {
         binding?.searchInput?.let {
-            it.setOnEditorActionListener({ v, actionId, event ->
+            it.setOnEditorActionListener({ v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
                 }
@@ -296,7 +296,7 @@ class SearchActivity : BaseActivity() {
         binding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener({ view ->
+            it.searchAction.setOnClickListener({
                 if (useVoice) {
                     startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
                     return@setOnClickListener
