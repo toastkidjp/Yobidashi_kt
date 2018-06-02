@@ -293,20 +293,22 @@ class SearchActivity : BaseActivity() {
         @ColorInt val fontColor: Int = colorPair.fontColor()
         Colors.setEditTextColor(binding?.searchInput as EditText, fontColor)
 
-        binding?.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
-        binding?.searchAction?.setColorFilter(fontColor)
-        binding?.searchAction?.setOnClickListener({ view ->
-            if (useVoice) {
-                startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
-                return@setOnClickListener
-            }
-            search(
-                    binding?.searchCategories?.selectedItem.toString(),
-                    binding?.searchInput?.text.toString()
-            )
-        })
-        binding?.searchClear?.setColorFilter(fontColor)
-        binding?.searchInputBorder?.setBackgroundColor(fontColor)
+        binding?.also {
+            it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
+            it.searchAction.setColorFilter(fontColor)
+            it.searchAction.setOnClickListener({ view ->
+                if (useVoice) {
+                    startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
+                    return@setOnClickListener
+                }
+                search(
+                        binding?.searchCategories?.selectedItem.toString(),
+                        binding?.searchInput?.text.toString()
+                )
+            })
+            it.searchClear.setColorFilter(fontColor)
+            it.searchInputBorder.setBackgroundColor(fontColor)
+        }
     }
 
     /**
