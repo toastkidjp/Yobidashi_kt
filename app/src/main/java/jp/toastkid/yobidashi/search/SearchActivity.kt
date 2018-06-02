@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.search
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -116,10 +117,7 @@ class SearchActivity : BaseActivity() {
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) }
         )
 
-        binding?.scroll?.setOnTouchListener({ v, event ->
-            hideKeyboard()
-            false
-        })
+        setListenerForKeyboardHiding()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding?.searchBar?.transitionName = "share"
@@ -148,6 +146,14 @@ class SearchActivity : BaseActivity() {
                 getString(R.string.message_search_on_background),
                 colorPair()
                 )
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setListenerForKeyboardHiding() {
+        binding?.scroll?.setOnTouchListener({ _, _ ->
+            hideKeyboard()
+            false
+        })
     }
 
     override fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
