@@ -318,6 +318,7 @@ class SearchActivity : BaseActivity() {
      * @param query    search query
      * @param onBackground
      */
+    @Suppress("NOTHING_TO_INLINE")
     private inline fun search(category: String, query: String, onBackground: Boolean = false) {
         SearchAction(this, category, query, onBackground)
                 .invoke()
