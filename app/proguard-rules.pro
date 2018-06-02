@@ -11,6 +11,12 @@
 -keep class jp.toastkid.yobidashi.tab.model.** { *; }
 -keepclassmembers enum jp.toastkid.yobidashi.** { *; }
 
+# For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
 ## For OkHttp
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
