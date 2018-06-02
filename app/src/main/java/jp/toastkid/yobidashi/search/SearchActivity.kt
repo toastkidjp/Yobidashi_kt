@@ -125,7 +125,7 @@ class SearchActivity : BaseActivity() {
 
         binding?.toolbar?.let {
             initToolbar(it)
-            it.setNavigationIcon(null)
+            it.navigationIcon = null
             it.setPadding(0,0,0,0)
             it.setContentInsetsAbsolute(0,0)
 
