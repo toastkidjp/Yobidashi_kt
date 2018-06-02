@@ -334,7 +334,7 @@ class SearchActivity : BaseActivity() {
     /**
      * Hide software keyboard.
      */
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         binding?.searchInput?.let { Inputs.hideKeyboard(it) }
     }
 
