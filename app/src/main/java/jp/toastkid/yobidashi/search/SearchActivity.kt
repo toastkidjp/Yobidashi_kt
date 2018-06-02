@@ -276,17 +276,12 @@ class SearchActivity : BaseActivity() {
     /**
      * Set action button state.
      *
-     * TODO refactor
-     *
      * @param useVoiceSearch
      */
     private fun setActionButtonState(useVoiceSearch: Boolean) {
         this.useVoice = useVoiceSearch
-        if (useVoiceSearch) {
-            binding?.searchAction?.setImageResource(R.drawable.ic_mic)
-        } else {
-            binding?.searchAction?.setImageResource(R.drawable.ic_search_white)
-        }
+        (if (useVoiceSearch) R.drawable.ic_mic else R.drawable.ic_search_white)
+                .also { binding?.searchAction?.setImageResource(it) }
     }
 
     /**
