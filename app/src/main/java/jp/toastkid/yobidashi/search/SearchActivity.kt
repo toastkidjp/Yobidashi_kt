@@ -150,29 +150,26 @@ class SearchActivity : BaseActivity() {
                 )
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        return when (itemId) {
-            R.id.suggestion_check -> {
-                preferenceApplier.switchEnableSuggestion()
-                item.isChecked = preferenceApplier.isEnableSuggestion
-                true
-            }
-            R.id.history_check -> {
-                preferenceApplier.switchEnableSearchHistory()
-                item.isChecked = preferenceApplier.isEnableSearchHistory
-                true
-            }
-            R.id.open_favorite_search -> {
-                startActivity(FavoriteSearchActivity.makeIntent(this))
-                true
-            }
-            R.id.open_search_history -> {
-                startActivity(SearchHistoryActivity.makeIntent(this))
-                true
-            }
-            else -> super.clickMenu(item)
+    override fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.suggestion_check -> {
+            preferenceApplier.switchEnableSuggestion()
+            item.isChecked = preferenceApplier.isEnableSuggestion
+            true
         }
+        R.id.history_check -> {
+            preferenceApplier.switchEnableSearchHistory()
+            item.isChecked = preferenceApplier.isEnableSearchHistory
+            true
+        }
+        R.id.open_favorite_search -> {
+            startActivity(FavoriteSearchActivity.makeIntent(this))
+            true
+        }
+        R.id.open_search_history -> {
+            startActivity(SearchHistoryActivity.makeIntent(this))
+            true
+        }
+        else -> super.clickMenu(item)
     }
 
     private fun initFavoriteModule() {
