@@ -18,7 +18,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Spinner
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
@@ -28,7 +27,6 @@ import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -92,6 +90,7 @@ class SearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
+        binding?.activity = this
         binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
         SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
 
@@ -223,8 +222,6 @@ class SearchActivity : BaseActivity() {
 
         applyColorToToolbar(binding?.toolbar as Toolbar)
 
-        ImageLoader.setImageToImageView(binding?.background as ImageView, backgroundImagePath)
-
         suggestionModule.enable = preferenceApplier.isEnableSuggestion
         historyModule.enable = preferenceApplier.isEnableSearchHistory
         favoriteModule.enable = preferenceApplier.isEnableFavoriteSearch
@@ -273,6 +270,8 @@ class SearchActivity : BaseActivity() {
 
     /**
      * Set action button state.
+     *
+     * TODO refactor
      *
      * @param useVoiceSearch
      */

@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable name="activity" type="jp.toastkid.yobidashi.search.SearchActivity" />
+    </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/filter_white"
+        android:onClick="@{view -> activity.finish()}"
         >
-
-        <ImageView
-            android:id="@+id/background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            />
 
         <ScrollView
             android:id="@+id/scroll"
