@@ -59,22 +59,22 @@ class SearchActivity : BaseActivity() {
     /**
      * Favorite search module.
      */
-    private lateinit var favoriteModule: FavoriteSearchModule
+    private var favoriteModule: FavoriteSearchModule? = null
 
     /**
      * History module.
      */
-    private lateinit var historyModule: HistoryModule
+    private var historyModule: HistoryModule? = null
 
     /**
      * Suggestion module.
      */
-    private lateinit var suggestionModule: SuggestionModule
+    private var suggestionModule: SuggestionModule? = null
 
     /**
      * Suggestion module.
      */
-    private lateinit var urlSuggestionModule: UrlSuggestionModule
+    private var urlSuggestionModule: UrlSuggestionModule? = null
 
     /**
      * Does use voice search?
@@ -189,7 +189,7 @@ class SearchActivity : BaseActivity() {
             )
         }
                 .subscribeOn(Schedulers.newThread())
-                .subscribe( { favoriteModule.query("") }, { Timber.e(it) })
+                .subscribe( { favoriteModule?.query("") }, { Timber.e(it) })
                 .addTo(disposables)
     }
 
@@ -210,7 +210,7 @@ class SearchActivity : BaseActivity() {
             )
         }.subscribeOn(Schedulers.newThread())
                 .subscribe(
-                        { if (preferenceApplier.isEnableSearchHistory) { historyModule.query("") } },
+                        { if (preferenceApplier.isEnableSearchHistory) { historyModule?.query("") } },
                         { Timber.e(it) }
                 )
                 .addTo(disposables)
@@ -222,10 +222,10 @@ class SearchActivity : BaseActivity() {
 
         applyColorToToolbar(binding?.toolbar as Toolbar)
 
-        suggestionModule.enable = preferenceApplier.isEnableSuggestion
-        historyModule.enable = preferenceApplier.isEnableSearchHistory
-        favoriteModule.enable = preferenceApplier.isEnableFavoriteSearch
-        urlSuggestionModule.enable = preferenceApplier.isEnableViewHistory
+        suggestionModule?.enable = preferenceApplier.isEnableSuggestion
+        historyModule?.enable = preferenceApplier.isEnableSearchHistory
+        favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
+        urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
     }
 
     /**
@@ -250,17 +250,17 @@ class SearchActivity : BaseActivity() {
                     setActionButtonState(key.isEmpty())
 
                     if (preferenceApplier.isEnableSearchHistory) {
-                        historyModule.query(s)
+                        historyModule?.query(s)
                     }
-                    favoriteModule.query(s)
-                    urlSuggestionModule.query(s)
+                    favoriteModule?.query(s)
+                    urlSuggestionModule?.query(s)
 
                     if (preferenceApplier.isDisableSuggestion) {
-                        suggestionModule.clear()
+                        suggestionModule?.clear()
                         return
                     }
 
-                    suggestionModule.request(key)
+                    suggestionModule?.request(key)
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
@@ -345,7 +345,7 @@ class SearchActivity : BaseActivity() {
 
         when (requestCode) {
             VoiceSearch.REQUEST_CODE -> {
-                suggestionModule.run {
+                suggestionModule?.run {
                     show()
                     val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (result?.size == 0) {
@@ -366,10 +366,10 @@ class SearchActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
-        favoriteModule.dispose()
-        historyModule.dispose()
-        suggestionModule.dispose()
-        urlSuggestionModule.dispose()
+        favoriteModule?.dispose()
+        historyModule?.dispose()
+        suggestionModule?.dispose()
+        urlSuggestionModule?.dispose()
     }
 
     override fun finish() {
