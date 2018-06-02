@@ -178,6 +178,7 @@ class SearchActivity : BaseActivity() {
         else -> super.clickMenu(item)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initFavoriteModule() {
         Completable.fromAction {
             favoriteModule = FavoriteSearchModule(
@@ -199,6 +200,7 @@ class SearchActivity : BaseActivity() {
     /**
      * Initialize history module asynchronously.
      */
+    @SuppressLint("SetTextI18n")
     private fun initHistoryModule() {
         Completable.fromAction {
             historyModule = HistoryModule(
