@@ -32,7 +32,7 @@ class PreferenceApplier(private val context: Context) {
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
-        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE
+        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE
     }
 
     private val preferences: SharedPreferences
@@ -262,6 +262,10 @@ class PreferenceApplier(private val context: Context) {
     var wifiOnly: Boolean
         get () = preferences.getBoolean(Key.WIFI_ONLY_MODE.name, true)
         set (newValue) = preferences.edit().putBoolean(Key.WIFI_ONLY_MODE.name, newValue).apply()
+
+    var adRemove: Boolean
+        get () = preferences.getBoolean(Key.AD_REMOVE.name, true)
+        set (newValue) = preferences.edit().putBoolean(Key.AD_REMOVE.name, newValue).apply()
 
     fun clear() {
         preferences.edit().clear().apply()

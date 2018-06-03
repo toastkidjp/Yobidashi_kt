@@ -133,6 +133,7 @@ class SettingsTopFragment : BaseFragment() {
             it.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
             it.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
             it.useInversionCheck.isChecked = preferenceApplier.useInversion
+            it.adRemoveCheck.isChecked = preferenceApplier.adRemove
         }
 
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
@@ -249,6 +250,13 @@ class SettingsTopFragment : BaseFragment() {
                 binding.root,
                 { userAgent -> binding.moduleBrowser?.userAgentValue?.text = userAgent.title() }
         )
+    }
+
+    fun switchAdRemove() {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.adRemove
+        preferenceApplier.adRemove = newState
+        binding.moduleBrowser?.adRemoveCheck?.isChecked = newState
     }
 
     /**

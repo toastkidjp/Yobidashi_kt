@@ -198,12 +198,20 @@ class TabAdapter(
 
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
-                    adRemover(request.url.toString())
+                    if (preferenceApplier.adRemove) {
+                        adRemover(request.url.toString())
+                    } else {
+                        super.shouldInterceptRequest(view, request)
+                    }
 
             @Suppress("OverridingDeprecatedMember")
             @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
             override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
-                    adRemover( url)
+                    if (preferenceApplier.adRemove) {
+                        adRemover(url)
+                    } else {
+                        super.shouldInterceptRequest(view, url)
+                    }
 
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
