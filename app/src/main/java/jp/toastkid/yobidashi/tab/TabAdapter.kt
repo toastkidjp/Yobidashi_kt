@@ -27,6 +27,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.Archive
+import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
@@ -91,6 +92,9 @@ class TabAdapter(
     private val faviconApplier: FaviconApplier = FaviconApplier(webViewContainer.context)
 
     private val preferenceApplier: PreferenceApplier
+
+    private val adRemover: AdRemover =
+            AdRemover(webViewContainer.context.assets.open("ad_hosts.txt"))
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
@@ -191,6 +195,15 @@ class TabAdapter(
                         .setPositiveButton(R.string.ok, {d, i -> d.dismiss()})
                         .show()
             }
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
+                    adRemover(request.url.toString())
+
+            @Suppress("OverridingDeprecatedMember")
+            @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+            override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
+                    adRemover( url)
 
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
