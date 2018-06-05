@@ -708,10 +708,8 @@ class BrowserFragment : BaseFragment() {
 
         consumer?.let { titleSubject.subscribe(it).addTo(disposables) }
 
-        disposables.addAll(
-                tabs.reloadWebViewSettings(),
-                progressSubject.subscribe(progressConsumer)
-        )
+        tabs.reloadWebViewSettings().addTo(disposables)
+        progressConsumer?.also { progressSubject.subscribe(it).addTo(disposables) }
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
