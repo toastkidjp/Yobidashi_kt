@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.search
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -18,7 +19,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Spinner
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
@@ -28,7 +28,6 @@ import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -61,22 +60,22 @@ class SearchActivity : BaseActivity() {
     /**
      * Favorite search module.
      */
-    private lateinit var favoriteModule: FavoriteSearchModule
+    private var favoriteModule: FavoriteSearchModule? = null
 
     /**
      * History module.
      */
-    private lateinit var historyModule: HistoryModule
+    private var historyModule: HistoryModule? = null
 
     /**
      * Suggestion module.
      */
-    private lateinit var suggestionModule: SuggestionModule
+    private var suggestionModule: SuggestionModule? = null
 
     /**
      * Suggestion module.
      */
-    private lateinit var urlSuggestionModule: UrlSuggestionModule
+    private var urlSuggestionModule: UrlSuggestionModule? = null
 
     /**
      * Does use voice search?
@@ -92,7 +91,8 @@ class SearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        binding?.searchClear?.setOnClickListener ({ v -> binding?.searchInput?.setText("") })
+        binding?.activity = this
+        binding?.searchClear?.setOnClickListener ({ binding?.searchInput?.setText("") })
         SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
 
         initFavoriteModule()
@@ -117,10 +117,7 @@ class SearchActivity : BaseActivity() {
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) }
         )
 
-        binding?.scroll?.setOnTouchListener({ v, event ->
-            hideKeyboard()
-            false
-        })
+        setListenerForKeyboardHiding()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding?.searchBar?.transitionName = "share"
@@ -128,7 +125,7 @@ class SearchActivity : BaseActivity() {
 
         binding?.toolbar?.let {
             initToolbar(it)
-            it.setNavigationIcon(null)
+            it.navigationIcon = null
             it.setPadding(0,0,0,0)
             it.setContentInsetsAbsolute(0,0)
 
@@ -151,31 +148,37 @@ class SearchActivity : BaseActivity() {
                 )
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        return when (itemId) {
-            R.id.suggestion_check -> {
-                preferenceApplier.switchEnableSuggestion()
-                item.isChecked = preferenceApplier.isEnableSuggestion
-                true
-            }
-            R.id.history_check -> {
-                preferenceApplier.switchEnableSearchHistory()
-                item.isChecked = preferenceApplier.isEnableSearchHistory
-                true
-            }
-            R.id.open_favorite_search -> {
-                startActivity(FavoriteSearchActivity.makeIntent(this))
-                true
-            }
-            R.id.open_search_history -> {
-                startActivity(SearchHistoryActivity.makeIntent(this))
-                true
-            }
-            else -> super.clickMenu(item)
-        }
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setListenerForKeyboardHiding() {
+        binding?.scroll?.setOnTouchListener({ _, _ ->
+            hideKeyboard()
+            false
+        })
     }
 
+    override fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.suggestion_check -> {
+            preferenceApplier.switchEnableSuggestion()
+            item.isChecked = preferenceApplier.isEnableSuggestion
+            true
+        }
+        R.id.history_check -> {
+            preferenceApplier.switchEnableSearchHistory()
+            item.isChecked = preferenceApplier.isEnableSearchHistory
+            true
+        }
+        R.id.open_favorite_search -> {
+            startActivity(FavoriteSearchActivity.makeIntent(this))
+            true
+        }
+        R.id.open_search_history -> {
+            startActivity(SearchHistoryActivity.makeIntent(this))
+            true
+        }
+        else -> super.clickMenu(item)
+    }
+
+    @SuppressLint("SetTextI18n")
     private fun initFavoriteModule() {
         Completable.fromAction {
             favoriteModule = FavoriteSearchModule(
@@ -190,13 +193,14 @@ class SearchActivity : BaseActivity() {
             )
         }
                 .subscribeOn(Schedulers.newThread())
-                .subscribe( { favoriteModule.query("") }, { Timber.e(it) })
+                .subscribe( { favoriteModule?.query("") }, { Timber.e(it) })
                 .addTo(disposables)
     }
 
     /**
      * Initialize history module asynchronously.
      */
+    @SuppressLint("SetTextI18n")
     private fun initHistoryModule() {
         Completable.fromAction {
             historyModule = HistoryModule(
@@ -211,7 +215,7 @@ class SearchActivity : BaseActivity() {
             )
         }.subscribeOn(Schedulers.newThread())
                 .subscribe(
-                        { if (preferenceApplier.isEnableSearchHistory) { historyModule.query("") } },
+                        { if (preferenceApplier.isEnableSearchHistory) { historyModule?.query("") } },
                         { Timber.e(it) }
                 )
                 .addTo(disposables)
@@ -223,12 +227,10 @@ class SearchActivity : BaseActivity() {
 
         applyColorToToolbar(binding?.toolbar as Toolbar)
 
-        ImageLoader.setImageToImageView(binding?.background as ImageView, backgroundImagePath)
-
-        suggestionModule.enable = preferenceApplier.isEnableSuggestion
-        historyModule.enable = preferenceApplier.isEnableSearchHistory
-        favoriteModule.enable = preferenceApplier.isEnableFavoriteSearch
-        urlSuggestionModule.enable = preferenceApplier.isEnableViewHistory
+        suggestionModule?.enable = preferenceApplier.isEnableSuggestion
+        historyModule?.enable = preferenceApplier.isEnableSearchHistory
+        favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
+        urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
     }
 
     /**
@@ -236,7 +238,7 @@ class SearchActivity : BaseActivity() {
      */
     private fun initSearchInput() {
         binding?.searchInput?.let {
-            it.setOnEditorActionListener({ v, actionId, event ->
+            it.setOnEditorActionListener({ v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
                 }
@@ -253,17 +255,17 @@ class SearchActivity : BaseActivity() {
                     setActionButtonState(key.isEmpty())
 
                     if (preferenceApplier.isEnableSearchHistory) {
-                        historyModule.query(s)
+                        historyModule?.query(s)
                     }
-                    favoriteModule.query(s)
-                    urlSuggestionModule.query(s)
+                    favoriteModule?.query(s)
+                    urlSuggestionModule?.query(s)
 
                     if (preferenceApplier.isDisableSuggestion) {
-                        suggestionModule.clear()
+                        suggestionModule?.clear()
                         return
                     }
 
-                    suggestionModule.request(key)
+                    suggestionModule?.request(key)
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
@@ -278,11 +280,8 @@ class SearchActivity : BaseActivity() {
      */
     private fun setActionButtonState(useVoiceSearch: Boolean) {
         this.useVoice = useVoiceSearch
-        if (useVoiceSearch) {
-            binding?.searchAction?.setImageResource(R.drawable.ic_mic)
-        } else {
-            binding?.searchAction?.setImageResource(R.drawable.ic_search_white)
-        }
+        (if (useVoiceSearch) R.drawable.ic_mic else R.drawable.ic_search_white)
+                .also { binding?.searchAction?.setImageResource(it) }
     }
 
     /**
@@ -294,20 +293,22 @@ class SearchActivity : BaseActivity() {
         @ColorInt val fontColor: Int = colorPair.fontColor()
         Colors.setEditTextColor(binding?.searchInput as EditText, fontColor)
 
-        binding?.searchActionBackground?.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
-        binding?.searchAction?.setColorFilter(fontColor)
-        binding?.searchAction?.setOnClickListener({ view ->
-            if (useVoice) {
-                startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
-                return@setOnClickListener
-            }
-            search(
-                    binding?.searchCategories?.selectedItem.toString(),
-                    binding?.searchInput?.text.toString()
-            )
-        })
-        binding?.searchClear?.setColorFilter(fontColor)
-        binding?.searchInputBorder?.setBackgroundColor(fontColor)
+        binding?.also {
+            it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
+            it.searchAction.setColorFilter(fontColor)
+            it.searchAction.setOnClickListener({
+                if (useVoice) {
+                    startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
+                    return@setOnClickListener
+                }
+                search(
+                        binding?.searchCategories?.selectedItem.toString(),
+                        binding?.searchInput?.text.toString()
+                )
+            })
+            it.searchClear.setColorFilter(fontColor)
+            it.searchInputBorder.setBackgroundColor(fontColor)
+        }
     }
 
     /**
@@ -317,6 +318,7 @@ class SearchActivity : BaseActivity() {
      * @param query    search query
      * @param onBackground
      */
+    @Suppress("NOTHING_TO_INLINE")
     private inline fun search(category: String, query: String, onBackground: Boolean = false) {
         SearchAction(this, category, query, onBackground)
                 .invoke()
@@ -333,7 +335,7 @@ class SearchActivity : BaseActivity() {
     /**
      * Hide software keyboard.
      */
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         binding?.searchInput?.let { Inputs.hideKeyboard(it) }
     }
 
@@ -346,7 +348,7 @@ class SearchActivity : BaseActivity() {
 
         when (requestCode) {
             VoiceSearch.REQUEST_CODE -> {
-                suggestionModule.run {
+                suggestionModule?.run {
                     show()
                     val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (result?.size == 0) {
@@ -367,10 +369,10 @@ class SearchActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
-        favoriteModule.dispose()
-        historyModule.dispose()
-        suggestionModule.dispose()
-        urlSuggestionModule.dispose()
+        favoriteModule?.dispose()
+        historyModule?.dispose()
+        suggestionModule?.dispose()
+        urlSuggestionModule?.dispose()
     }
 
     override fun finish() {
