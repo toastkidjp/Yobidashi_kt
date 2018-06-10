@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi
 
 import android.app.Application
-import com.squareup.leakcanary.LeakCanary
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
