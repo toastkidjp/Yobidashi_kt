@@ -39,23 +39,23 @@ class Adapter(
      */
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val holder = ViewHolder(DataBindingUtil.inflate(
                 layoutInflater, R.layout.item_bookmark, parent, false
         ))
         return holder;
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item: ViewHistory = suggestions.get(position)
-        holder?.setTitle(item.title)
-        holder?.setUrl(item.url)
-        holder?.setOnClick(View.OnClickListener { browseCallback(item.url) })
-        holder?.setOnLongClick(View.OnLongClickListener {
+        holder.setTitle(item.title)
+        holder.setUrl(item.url)
+        holder.setOnClick(View.OnClickListener { browseCallback(item.url) })
+        holder.setOnLongClick(View.OnLongClickListener {
             browseBackgroundCallback(item.url)
             true
         })
-        holder?.setDelete(View.OnClickListener { removeAt(position) })
+        holder.setDelete(View.OnClickListener { removeAt(position) })
     }
 
     override fun getItemCount(): Int = suggestions.size
