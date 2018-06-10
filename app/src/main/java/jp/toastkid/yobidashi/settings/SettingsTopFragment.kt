@@ -61,16 +61,17 @@ class SettingsTopFragment : BaseFragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        activity?.let {
-            colorFilter = ColorFilter(it, binding.root)
-        }
-
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
         binding.moduleBrowser?.let {
             it.fragment = this
             TextInputs.setEmptyAlert(it.homeInputLayout)
         }
+
+        activity?.let {
+            colorFilter = ColorFilter(it, binding.root)
+        }
+
         initMenuPos()
         initBrowserExpandable()
 
