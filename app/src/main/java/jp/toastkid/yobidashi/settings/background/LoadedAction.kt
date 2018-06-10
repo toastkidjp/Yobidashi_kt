@@ -3,8 +3,8 @@ package jp.toastkid.yobidashi.settings.background
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.support.v4.app.FragmentActivity
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -59,7 +59,7 @@ internal class LoadedAction (
 
             onLoadedAction()
 
-            informDone(context, image)
+            informDone(image)
         } catch (e: IOException) {
             Timber.e(e)
         }
@@ -90,14 +90,24 @@ internal class LoadedAction (
 
     /**
      * Inform done with action.
-     * @param context
      *
      * @param image
      */
-    private fun informDone(context: Context, image: Bitmap) {
+    private fun informDone(image: Bitmap) {
         Toaster.snackLong(
-                parent, R.string.message_done_set_image, R.string.display,
-                View.OnClickListener{ v -> ImageDialog.show(context, uri, BitmapDrawable(context.resources, image)) },
+                parent,
+                R.string.message_done_set_image,
+                R.string.display,
+                View.OnClickListener{ v ->
+                    val viewContext = v.context
+                    if (viewContext is FragmentActivity) {
+                        ImageDialogFragment.withBitmap(image)
+                                .show(
+                                        viewContext.supportFragmentManager,
+                                        ImageDialogFragment::class.java.simpleName
+                                )
+                    }
+                },
                 colorPair
         )
     }
