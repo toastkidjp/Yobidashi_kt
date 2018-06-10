@@ -145,15 +145,17 @@ class BrowserFragment : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
-        rxPermissions = RxPermissions(activity)
+        activity?.let {
+            rxPermissions = RxPermissions(it)
+        }
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater!!, R.layout.fragment_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
         binding?.webViewContainer?.let {
@@ -166,7 +168,8 @@ class BrowserFragment : BaseFragment() {
 
         val colorPair = colorPair()
 
-        val cm = context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val activityContext = context ?: return null
+        val cm = activityContext.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
                 binding?.root as View,
@@ -199,7 +202,7 @@ class BrowserFragment : BaseFragment() {
         )
 
         pdf = PdfModule(
-                context,
+                activityContext,
                 binding?.moduleContainer as ViewGroup,
                 { if (it) { hideFooter() } else { if (tabs.currentTab() is WebTab) { showFooter() } } }
         )
@@ -242,7 +245,7 @@ class BrowserFragment : BaseFragment() {
      */
     private fun onEmptyTabs() {
         tabListModule.hide()
-        fragmentManager.popBackStack()
+        fragmentManager?.popBackStack()
     }
 
     /**
@@ -321,15 +324,17 @@ class BrowserFragment : BaseFragment() {
      */
     private fun initFooter() {
         binding?.footer?.let {
+            val fragmentActivity = activity ?: return@let
+
             it.back.setOnClickListener { back() }
             it.back.setOnLongClickListener {
-                launchTabHistory(activity)
+                launchTabHistory(fragmentActivity)
                 true
             }
 
             it.forward.setOnClickListener { forward() }
             it.forward.setOnLongClickListener {
-                launchTabHistory(activity)
+                launchTabHistory(fragmentActivity)
                 true
             }
 
@@ -345,9 +350,9 @@ class BrowserFragment : BaseFragment() {
             it.toBottom.setOnClickListener { toBottom() }
             it.tabList.setOnClickListener { switchTabList() }
             it.tabList.setOnLongClickListener {
-                AlertDialog.Builder(context)
-                        .setTitle(context.getString(R.string.title_clear_all_tabs))
-                        .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
+                AlertDialog.Builder(fragmentActivity)
+                        .setTitle(fragmentActivity.getString(R.string.title_clear_all_tabs))
+                        .setMessage(Html.fromHtml(fragmentActivity.getString(R.string.confirm_clear_all_settings)))
                         .setCancelable(true)
                         .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                         .setPositiveButton(R.string.ok) { d, i ->
@@ -365,8 +370,9 @@ class BrowserFragment : BaseFragment() {
      * Initialize menus view.
      */
     private fun initMenus() {
-        binding?.menusView?.adapter = Adapter(activity, Consumer<Menu> { this.onMenuClick(it) })
-        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        val fragmentActivity = activity ?: return
+        binding?.menusView?.adapter = Adapter(fragmentActivity, Consumer<Menu> { this.onMenuClick(it) })
+        val layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false)
         binding?.menusView?.layoutManager = layoutManager
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
@@ -417,8 +423,10 @@ class BrowserFragment : BaseFragment() {
                 true
             }
 
+            val activityContext = context ?: return@let
+
             it.findItem(R.id.setting)?.setOnMenuItemClickListener {
-                startActivity(SettingsActivity.makeIntent(context))
+                startActivity(SettingsActivity.makeIntent(activityContext))
                 true
             }
 
@@ -448,7 +456,7 @@ class BrowserFragment : BaseFragment() {
      * @param menu
      */
     private fun onMenuClick(menu: Menu) {
-        val context = activity
+        val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
         when (menu) {
             Menu.RELOAD -> {
@@ -471,7 +479,7 @@ class BrowserFragment : BaseFragment() {
                     pageSearcherModule?.hide()
                     return
                 }
-                pageSearcherModule?.show(activity)
+                pageSearcherModule?.show(fragmentActivity)
                 hideMenu()
             }
             Menu.SCREENSHOT -> {
@@ -485,10 +493,10 @@ class BrowserFragment : BaseFragment() {
                 )
             }
             Menu.SETTING -> {
-                startActivity(SettingsActivity.makeIntent(context))
+                startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
             Menu.TAB_HISTORY -> {
-                launchTabHistory(context)
+                launchTabHistory(fragmentActivity)
             }
             Menu.USER_AGENT -> {
                 UserAgent.showSelectionDialog(
@@ -509,9 +517,9 @@ class BrowserFragment : BaseFragment() {
                 stopCurrentLoading()
             }
             Menu.OPEN -> {
-                val inputLayout = TextInputs.make(context)
+                val inputLayout = TextInputs.make(fragmentActivity)
                 inputLayout.editText?.setText(tabs.currentUrl())
-                AlertDialog.Builder(context)
+                AlertDialog.Builder(fragmentActivity)
                         .setTitle(R.string.title_open_url)
                         .setView(inputLayout)
                         .setCancelable(true)
@@ -525,13 +533,13 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.OTHER_BROWSER -> {
                 tabs.currentUrl()?.let {
-                    CustomTabsFactory.make(context, colorPair())
+                    CustomTabsFactory.make(fragmentActivity, colorPair())
                             .build()
-                            .launchUrl(context, Uri.parse(it))
+                            .launchUrl(fragmentActivity, Uri.parse(it))
                 }
             }
             Menu.SHARE_BARCODE -> {
-                SharingUrlByBarcode.invoke(context, tabs.currentUrl() ?: "")
+                SharingUrlByBarcode.invoke(fragmentActivity, tabs.currentUrl() ?: "")
             }
             Menu.ARCHIVE -> {
                 tabs.saveArchive()
@@ -543,7 +551,7 @@ class BrowserFragment : BaseFragment() {
                 tabs.siteSearch()
             }
             Menu.VOICE_SEARCH -> {
-                startActivityForResult(VoiceSearch.makeIntent(context), VoiceSearch.REQUEST_CODE)
+                startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
             }
             Menu.REPLACE_HOME -> {
                 tabs.currentUrl()?.let {
@@ -568,7 +576,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.VIEW_HISTORY -> {
                 startActivityForResult(
-                        ViewHistoryActivity.makeIntent(context),
+                        ViewHistoryActivity.makeIntent(fragmentActivity),
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
@@ -584,7 +592,7 @@ class BrowserFragment : BaseFragment() {
                 openPdfTabFromStorage()
             }
             Menu.EXIT -> {
-                activity.moveTaskToBack(true)
+                fragmentActivity.moveTaskToBack(true)
             }
         }
     }
@@ -667,8 +675,9 @@ class BrowserFragment : BaseFragment() {
      * @param option [ActivityOptions]
      */
     private fun bookmark(option: ActivityOptions) {
+        val fragmentActivity = activity ?: return
         startActivityForResult(
-                BookmarkActivity.makeIntent(activity),
+                BookmarkActivity.makeIntent(fragmentActivity),
                 BookmarkActivity.REQUEST_CODE,
                 option.toBundle()
         )
@@ -680,7 +689,9 @@ class BrowserFragment : BaseFragment() {
      * @param option [ActivityOptions]
      */
     private fun search(option: ActivityOptions) {
-        startActivity(SearchActivity.makeIntent(context), option.toBundle())
+        context?.let {
+            startActivity(SearchActivity.makeIntent(it), option.toBundle())
+        }
     }
 
     /**
@@ -775,14 +786,18 @@ class BrowserFragment : BaseFragment() {
     }
 
     override fun pressLongBack(): Boolean {
-        launchTabHistory(activity)
+        activity?.let { launchTabHistory(it) }
         return true
     }
 
     override fun pressBack(): Boolean = hideOption() || back()
 
     override fun tapHeader() {
-        startActivity(SearchActivity.makeIntentWithQuery(context, tabs.currentUrl() ?: ""))
+        val activityContext = context
+        if (activityContext == null) {
+            return
+        }
+        startActivity(SearchActivity.makeIntentWithQuery(activityContext, tabs.currentUrl() ?: ""))
     }
 
     /**
@@ -833,12 +848,14 @@ class BrowserFragment : BaseFragment() {
                 loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
             }
             VoiceSearch.REQUEST_CODE -> {
-                VoiceSearch.processResult(activity, intent).addTo(disposables)
+                activity?.let {
+                    VoiceSearch.processResult(it, intent).addTo(disposables)
+                }
             }
             REQUEST_CODE_OPEN_PDF -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val takeFlags: Int = intent.getFlags() and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    context.contentResolver.takePersistableUriPermission(intent.data, takeFlags)
+                    val takeFlags: Int = intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    context?.contentResolver?.takePersistableUriPermission(intent.data, takeFlags)
                 }
                 tabs.openNewPdfTab(intent.data)
             }
@@ -885,7 +902,8 @@ class BrowserFragment : BaseFragment() {
                 ?.subscribe(
                         { granted ->
                             if (!granted) {
-                                Toaster.tShort(activity, R.string.message_requires_permission_storage)
+                                val context = activity ?: return@subscribe
+                                Toaster.tShort(context, R.string.message_requires_permission_storage)
                                 return@subscribe
                             }
                             tabs.openNewEditorTab()
