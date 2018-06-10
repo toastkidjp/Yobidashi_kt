@@ -88,12 +88,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
 
-    kapt 'com.android.databinding:compiler:3.0.1'
+    kapt 'com.android.databinding:compiler:3.1.0'
     kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
-
-    def leakcanaryVersion = '1.5.4'
-    debugImplementation   "com.squareup.leakcanary:leakcanary-android:${leakcanaryVersion}"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.5"
