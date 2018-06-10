@@ -70,12 +70,12 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater!!, LAYOUT_ID, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
 
         initMenus()
@@ -87,9 +87,10 @@ class HomeFragment : BaseFragment() {
      * Initialize RecyclerView menu.
      */
     private fun initMenus() {
-        adapter = Adapter(activity, Consumer<Menu> { this.processMenu(it) })
+        val fragmentActivity = activity ?: return
+        adapter = Adapter(fragmentActivity, Consumer<Menu> { this.processMenu(it) })
         binding.menusView.adapter = adapter
-        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        val layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false)
         binding.menusView.layoutManager = layoutManager
         layoutManager.scrollToPosition(Adapter.mediumPosition())
     }
@@ -99,33 +100,34 @@ class HomeFragment : BaseFragment() {
      * @param menu
      */
     private fun processMenu(menu: Menu) {
+        val fragmentActivity = activity ?: return
         when (menu) {
             Menu.CODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(activity))
+                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
             }
             Menu.LAUNCHER -> {
-                startActivity(LauncherActivity.makeIntent(activity))
+                startActivity(LauncherActivity.makeIntent(fragmentActivity))
             }
             Menu.BROWSER -> {
                 action?.action(Command.OPEN_BROWSER)
             }
             Menu.PLANNING_POKER -> {
-                startActivity(PlanningPokerActivity.makeIntent(activity))
+                startActivity(PlanningPokerActivity.makeIntent(fragmentActivity))
             }
             Menu.SETTING -> {
-                startActivity(SettingsActivity.makeIntent(activity))
+                startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
             Menu.COLOR_SETTING -> {
-                startActivity(ColorSettingActivity.makeIntent(activity))
+                startActivity(ColorSettingActivity.makeIntent(fragmentActivity))
             }
             Menu.BACKGROUND_SETTING -> {
-                startActivity(BackgroundSettingActivity.makeIntent(activity))
+                startActivity(BackgroundSettingActivity.makeIntent(fragmentActivity))
             }
             Menu.WIFI_SETTING -> {
                 startActivity(SettingsIntentFactory.wifi())
             }
             Menu.EXIT -> {
-                activity.moveTaskToBack(true)
+                fragmentActivity.moveTaskToBack(true)
             }
         }
     }
@@ -137,7 +139,7 @@ class HomeFragment : BaseFragment() {
                 if (preferenceApplier().hasBackgroundImagePath())
                     Color.TRANSPARENT
                 else
-                    ContextCompat.getColor(activity, R.color.darkgray_scale)
+                    activity?.let { ContextCompat.getColor(it, R.color.darkgray_scale) } ?: Color.TRANSPARENT
         )
 
         val colorPair = colorPair()
@@ -176,7 +178,9 @@ class HomeFragment : BaseFragment() {
      * @param ignored
      */
     fun voiceSearch(ignored: View) {
-        startActivityForResult(VoiceSearch.makeIntent(activity), VoiceSearch.REQUEST_CODE)
+        activity?.let {
+            startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -186,7 +190,9 @@ class HomeFragment : BaseFragment() {
 
         when (requestCode) {
             VoiceSearch.REQUEST_CODE -> {
-                VoiceSearch.processResult(activity, data).addTo(disposables)
+                activity?.let {
+                    VoiceSearch.processResult(it, data).addTo(disposables)
+                }
             }
         }
     }
