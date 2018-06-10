@@ -28,10 +28,6 @@ class ExtendedApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Completable.fromAction { LeakCanary.install(this) }
-                .subscribeOn(Schedulers.computation())
-                .subscribe({}, {Timber.e(it)})
-                .addTo(disposables)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
