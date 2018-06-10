@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi
 
 import android.app.Application
-import com.squareup.leakcanary.LeakCanary
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -28,10 +27,6 @@ class ExtendedApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Completable.fromAction { LeakCanary.install(this) }
-                .subscribeOn(Schedulers.computation())
-                .subscribe({}, {Timber.e(it)})
-                .addTo(disposables)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

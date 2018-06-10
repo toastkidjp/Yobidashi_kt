@@ -35,13 +35,13 @@ class CalendarFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<FragmentCalendarBinding>(
-                inflater!!, R.layout.fragment_calendar, container, false)
+                inflater, R.layout.fragment_calendar, container, false)
         initCalendarView()
         return binding?.root
     }
@@ -52,7 +52,8 @@ class CalendarFragment : BaseFragment() {
     private fun initCalendarView() {
         binding?.calendar?.date = System.currentTimeMillis()
         binding?.calendar?.setOnDateChangeListener{ view, year, month, dayOfMonth ->
-            startActivity(DateDetailActivity.makeIntent(activity, year, month, dayOfMonth))
+            val fragmentActivity = activity ?: return@setOnDateChangeListener
+            startActivity(DateDetailActivity.makeIntent(fragmentActivity, year, month, dayOfMonth))
         }
     }
 
