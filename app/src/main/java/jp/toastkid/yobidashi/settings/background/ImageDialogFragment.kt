@@ -60,11 +60,13 @@ internal class ImageDialogFragment: DialogFragment() {
         private const val KEY_IMAGE_URL = "imageUrl"
 
         fun withUrl(imageUrl: String): ImageDialogFragment =
-                ImageDialogFragment()
-                        .also { it.arguments?.putString(KEY_IMAGE_URL, imageUrl) }
+                ImageDialogFragment().also {
+                    it.arguments = Bundle().also { it.putString(KEY_IMAGE_URL, imageUrl) }
+                }
 
         fun withBitmap(image: Bitmap): ImageDialogFragment =
-                ImageDialogFragment()
-                        .also { it.arguments?.putParcelable(KEY_IMAGE, image) }
+                ImageDialogFragment().also {
+                    it.arguments = Bundle().also { it.putParcelable(KEY_IMAGE, image) }
+                }
     }
 }
