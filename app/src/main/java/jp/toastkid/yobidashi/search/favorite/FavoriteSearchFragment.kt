@@ -34,13 +34,13 @@ class FavoriteSearchFragment : BaseFragment() {
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<FragmentFavoriteSearchBinding>(
-                inflater!!, LAYOUT_ID, container, false)
+                inflater, LAYOUT_ID, container, false)
         binding!!.activity = this
 
         initFavSearchsView()
@@ -51,14 +51,15 @@ class FavoriteSearchFragment : BaseFragment() {
     }
 
     private fun initFavSearchsView() {
+        val fragmentActivity = activity ?: return
         adapter = ActivityAdapter(
-                activity,
-                DbInitter.init(activity).relationOfFavoriteSearch(),
+                fragmentActivity,
+                DbInitter.init(fragmentActivity).relationOfFavoriteSearch(),
                 { category, query -> this.startSearch(category, query) },
                 { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
         )
         binding!!.favoriteSearchView.adapter = adapter
-        binding!!.favoriteSearchView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        binding!!.favoriteSearchView.layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.VERTICAL, false)
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
                     override fun onMove(
@@ -91,7 +92,9 @@ class FavoriteSearchFragment : BaseFragment() {
      * @param query    Search query
      */
     private fun startSearch(category: SearchCategory, query: String) {
-        SearchAction(activity, category.name, query).invoke().addTo(disposables)
+        activity?.let {
+            SearchAction(it, category.name, query).invoke().addTo(disposables)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

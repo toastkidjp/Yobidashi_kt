@@ -1,8 +1,10 @@
 package jp.toastkid.yobidashi.settings
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
+import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.text.Html
@@ -50,21 +52,26 @@ class SettingsTopFragment : BaseFragment() {
     /**
      * Color filter.
      */
-    private val colorFilter: ColorFilter by lazy { ColorFilter(activity, binding.root) }
+    private lateinit var colorFilter: ColorFilter
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil
-                .inflate<FragmentSettingsBinding>(inflater!!, LAYOUT_ID, container, false)
+
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
         binding.moduleBrowser?.let {
             it.fragment = this
             TextInputs.setEmptyAlert(it.homeInputLayout)
         }
+
+        activity?.let {
+            colorFilter = ColorFilter(it, binding.root)
+        }
+
         initMenuPos()
         initBrowserExpandable()
 
@@ -158,7 +165,9 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun colorSettings(view: View) {
         sendLog("nav_color")
-        startActivity(ColorSettingActivity.makeIntent(activity))
+        activity?.let {
+            startActivity(ColorSettingActivity.makeIntent(it))
+        }
     }
 
     /**
@@ -168,7 +177,9 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun backgroundSettings(view: View) {
         sendLog("nav_bg_set")
-        startActivity(BackgroundSettingActivity.makeIntent(activity))
+        activity?.let {
+            startActivity(BackgroundSettingActivity.makeIntent(it))
+        }
     }
 
     /**
@@ -262,11 +273,13 @@ class SettingsTopFragment : BaseFragment() {
         preferenceApplier.setUseNotificationWidget(newState)
         binding.useNotificationWidgetCheck.isChecked = newState
 
+        val activityContext: Context = context ?: return
+
         @StringRes var messageId: Int = R.string.message_done_showing_notification_widget
         if (newState) {
-            NotificationWidget.show(context)
+            NotificationWidget.show(activityContext)
         } else {
-            NotificationWidget.hide(context)
+            NotificationWidget.hide(activityContext)
             messageId = R.string.message_remove_notification_widget
         }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
@@ -571,7 +584,9 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun switchColorFilter(v: View) {
-        binding.useColorFilterCheck.isChecked = colorFilter.switchState(activity)
+        activity?.let {
+            binding.useColorFilterCheck.isChecked = colorFilter.switchState(it)
+        }
     }
 
     /**
@@ -582,7 +597,8 @@ class SettingsTopFragment : BaseFragment() {
     fun clearSettings(v: View) {
         sendLog("nav_clr_set")
         val preferenceApplier = preferenceApplier()
-        AlertDialog.Builder(activity)
+        val fragmentActivity = activity ?: return
+        AlertDialog.Builder(fragmentActivity)
                 .setTitle(R.string.title_clear_settings)
                 .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
                 .setCancelable(true)
@@ -591,7 +607,7 @@ class SettingsTopFragment : BaseFragment() {
                     preferenceApplier.clear()
                     colorFilter?.stop()
                     setCurrentValues()
-                    Updater.update(activity)
+                    Updater.update(fragmentActivity)
                     Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())
                 }
                 .show()
@@ -602,6 +618,7 @@ class SettingsTopFragment : BaseFragment() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_settings
     }
 }
