@@ -25,21 +25,22 @@ class CardFragment : Fragment() {
     private lateinit var binding: CardItemBinding
 
     override fun onCreateView(
-            inflater: LayoutInflater?,
+            inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<CardItemBinding>(inflater!!, LAYOUT_ID, container, false)
-        binding.root?.setOnClickListener({ v ->
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        binding.root.setOnClickListener({ v ->
             Toaster.snackLong(
                     v,
                     R.string.message_confirm_back,
                     R.string.back,
-                    View.OnClickListener{ view -> activity.finish() },
+                    View.OnClickListener{ activity?.finish() },
                     PreferenceApplier(v.context).colorPair()
             )
         })
+        val arguments = arguments ?: Bundle()
         if (arguments.containsKey(CardViewActivity.EXTRA_KEY_CARD_TEXT)) {
             setText(arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT))
         }

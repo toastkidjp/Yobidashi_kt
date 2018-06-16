@@ -6,8 +6,8 @@ apply plugin: 'com.google.gms.oss.licenses.plugin'
 apply from: 'signing/config.gradle', to: android
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.0'
     byte verMajor  = 1
     byte verMiddle = 0
     byte verMinor  = 22
@@ -27,7 +27,7 @@ android {
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         if (verMiddle >= 100 || verMinor >= 10_000) {
             throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
         }
@@ -61,7 +61,7 @@ android {
 
 dependencies {
 
-    def supportLibVersion = '26.1.0'
+    def supportLibVersion = '27.1.0'
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
     implementation "com.android.support:design:${supportLibVersion}"
     implementation "com.android.support:customtabs:${supportLibVersion}"
@@ -73,6 +73,7 @@ dependencies {
     implementation "com.google.firebase:firebase-crash:${firebaseVersion}"
     implementation "com.google.android.gms:play-services-oss-licenses:${firebaseVersion}"
 
+    implementation 'androidx.core:core-ktx:0.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation 'com.larswerkman:HoloColorPicker:1.5'
@@ -87,12 +88,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
 
-    kapt 'com.android.databinding:compiler:3.0.1'
+    kapt 'com.android.databinding:compiler:3.1.0'
     kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
-
-    def leakcanaryVersion = '1.5.4'
-    debugImplementation   "com.squareup.leakcanary:leakcanary-android:${leakcanaryVersion}"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.5"

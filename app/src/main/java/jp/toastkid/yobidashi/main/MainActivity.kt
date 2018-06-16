@@ -26,6 +26,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -37,6 +39,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
+import jp.toastkid.yobidashi.barcode.LinearBarcodeReader
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -53,6 +56,7 @@ import jp.toastkid.yobidashi.home.HomeFragment
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.ImplicitIntentInvoker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -89,7 +93,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
     /**
      * Browser fragment.
      */
-    private val browserFragment: BrowserFragment by lazy { BrowserFragment() }
+    private lateinit var browserFragment: BrowserFragment
 
     /**
      * Home fragment.
@@ -138,6 +142,22 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
+        }
+
+        browserFragment = BrowserFragment().also {
+            it.consumer = Consumer {
+                binding.appBarMain?.toolbar?.title    = it.title()
+                binding.appBarMain?.toolbar?.subtitle = it.subtitle()
+            }
+            it.progressConsumer = Consumer {
+                if (70 < it) {
+                    binding.appBarMain?.progress?.visibility = View.GONE
+                    return@Consumer
+                } else {
+                    binding.appBarMain?.progress?.visibility = View.VISIBLE
+                }
+                binding.appBarMain?.progress?.progress = it
+            }
         }
 
         processShortcut(intent)
@@ -234,19 +254,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
         replaceFragment(browserFragment)
         if (uri != Uri.EMPTY) {
             uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
-        }
-        browserFragment.consumer = Consumer {
-            binding.appBarMain?.toolbar?.title    = it.title()
-            binding.appBarMain?.toolbar?.subtitle = it.subtitle()
-        }
-        browserFragment.progressConsumer = Consumer {
-            if (70 < it) {
-                binding.appBarMain?.progress?.visibility = View.GONE
-                return@Consumer
-            } else {
-                binding.appBarMain?.progress?.visibility = View.VISIBLE
-            }
-            binding.appBarMain?.progress?.progress = it
         }
     }
 
@@ -420,6 +427,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             R.id.nav_instant_barcode -> {
                 sendLog("nav_instant_barcode")
                 InstantBarcodeGenerator(this).invoke()
+            }
+            R.id.nav_linear_barcode -> {
+                LinearBarcodeReader(this)
             }
             R.id.nav_home -> {
                 sendLog("nav_home")
@@ -697,6 +707,21 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
                     return
                 }
                 ColorFilter(this, binding.root).switchState(this)
+            }
+            IntentIntegrator.REQUEST_CODE -> {
+                val result: IntentResult? =
+                        IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+                if (result?.contents == null) {
+                    Toaster.snackShort(binding.root, "Cancelled", colorPair())
+                    return
+                }
+                Toaster.snackLong(
+                        binding.root,
+                        "Scanned: ${result.contents}",
+                        R.string.clip,
+                        View.OnClickListener { Clipboard.clip(this, result.contents) },
+                        colorPair()
+                )
             }
         }
     }
