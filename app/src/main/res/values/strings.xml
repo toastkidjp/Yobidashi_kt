@@ -375,6 +375,7 @@
     <string name="sample_date_time">2017/12/12 08:08:08</string>
     <string name="sample_number">20</string>
     <string name="sample_a">A</string>
+    <string name="title_remove_ad">Experimental: Remove AD</string>
     <string name="prompt_linear_barcode">Scan linear barcode</string>
     <string name="message_linear_barcode_reader_failed">Read failed, your device maybe cannot use this function.</string>
 
