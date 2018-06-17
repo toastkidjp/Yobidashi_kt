@@ -30,7 +30,6 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
@@ -41,6 +40,8 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
 import jp.toastkid.yobidashi.barcode.LinearBarcodeReader
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.ProgressBarCallback
+import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
@@ -78,7 +79,7 @@ import java.text.MessageFormat
  *
  * @author toastkidjp
  */
-class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
+class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, ProgressBarCallback {
 
     /**
      * Navigation's background.
@@ -140,24 +141,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
 
         initNavigation()
 
+        browserFragment = BrowserFragment()
+
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root as View).start()
-        }
-
-        browserFragment = BrowserFragment().also {
-            it.consumer = Consumer {
-                binding.appBarMain?.toolbar?.title    = it.title()
-                binding.appBarMain?.toolbar?.subtitle = it.subtitle()
-            }
-            it.progressConsumer = Consumer {
-                if (70 < it) {
-                    binding.appBarMain?.progress?.visibility = View.GONE
-                    return@Consumer
-                } else {
-                    binding.appBarMain?.progress?.visibility = View.VISIBLE
-                }
-                binding.appBarMain?.progress?.progress = it
-            }
         }
 
         processShortcut(intent)
@@ -222,6 +209,24 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction {
             }
         }
 
+    }
+
+    override fun onProgressChanged(newProgress: Int) {
+        if (70 < newProgress) {
+            binding.appBarMain?.progress?.visibility = View.GONE
+            return
+        }
+        binding.appBarMain?.progress?.let {
+            it.visibility = View.VISIBLE
+            it.progress = newProgress
+        }
+    }
+
+    override fun onTitleChanged(titlePair: TitlePair) {
+        binding.appBarMain?.toolbar?.let {
+            it.title    = titlePair.title()
+            it.subtitle = titlePair.subtitle()
+        }
     }
 
     /**
