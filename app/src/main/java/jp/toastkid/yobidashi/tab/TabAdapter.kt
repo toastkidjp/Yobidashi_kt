@@ -2,7 +2,9 @@ package jp.toastkid.yobidashi.tab
 
 import android.annotation.TargetApi
 import android.app.DownloadManager
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -217,23 +219,37 @@ class TabAdapter(
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
                     shouldOverrideUrlLoading(view, request?.url?.toString())
 
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                url?.let {
-                    val context: Context? = view?.context
-                    val uri: Uri = Uri.parse(url)
-                    if (it.startsWith("tel:")) {
-                        context?.startActivity(IntentFactory.dial(uri))
-                        view?.reload()
-                        return true
-                    }
-                    if (it.startsWith("mailto:")) {
-                        context?.startActivity(IntentFactory.mailTo(uri))
-                        view?.reload()
-                        return true
-                    }
-                }
-                return super.shouldOverrideUrlLoading(view, url)
-            }
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean =
+                    url?.let {
+                        val context: Context? = view?.context
+                        val uri: Uri = Uri.parse(url)
+                        when (uri.scheme) {
+                            "market", "intent" -> {
+                                try {
+                                    context?.startActivity(Intent.parseUri(url, Intent.URI_INTENT_SCHEME))
+                                } catch (e: ActivityNotFoundException) {
+                                    Timber.w(e)
+                                    view?.let {
+                                        Toaster.snackShort(it, R.string.message_cannot_launch_app, colorPair)
+                                    }
+                                }
+                                true
+                            }
+                            "tel" -> {
+                                context?.startActivity(IntentFactory.dial(uri))
+                                view?.reload()
+                                true
+                            }
+                            "mailto" -> {
+                                context?.startActivity(IntentFactory.mailTo(uri))
+                                view?.reload()
+                                true
+                            }
+                            else -> {
+                                super.shouldOverrideUrlLoading(view, url)
+                            }
+                        }
+                    } ?: super.shouldOverrideUrlLoading(view, url)
         }
 
         val webChromeClient = object : WebChromeClient() {
