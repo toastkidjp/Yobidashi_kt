@@ -68,7 +68,6 @@ class TabAdapter(
         private val webViewContainer: ViewGroup,
         private val editor: EditorModule,
         private val pdf: PdfModule,
-        private val tabCount: TextView,
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
         touchCallback: () -> Boolean,
@@ -102,7 +101,7 @@ class TabAdapter(
      * Animation of slide up bottom.
      */
     private val slideUpFromBottom
-            = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
+            = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_up)
 
     init {
         webView = makeWebView(titleCallback, touchCallback)
@@ -262,7 +261,7 @@ class TabAdapter(
             }
         }
 
-        val webView = WebViewFactory.make(tabCount.context)
+        val webView = WebViewFactory.make(webViewContainer.context)
         webView.setWebViewClient(webViewClient)
         webView.setWebChromeClient(webChromeClient)
         webView.setOnTouchListener { _, _ ->
@@ -311,7 +310,7 @@ class TabAdapter(
                     if (url.isEmpty()) {
                         return@setOnLongClickListener false
                     }
-                    AlertDialog.Builder(tabCount.context)
+                    AlertDialog.Builder(webViewContainer.context)
                             .setTitle("URL: " + url)
                             .setItems(R.array.url_menu, { _, which ->
                                 when (which) {
@@ -928,7 +927,6 @@ class TabAdapter(
 
     private fun setCurrentTabCount() {
         val size = size()
-        tabCount.text = if (size < 100) "$size" else "^^"
     }
 
     fun moveTo(i: Int) {

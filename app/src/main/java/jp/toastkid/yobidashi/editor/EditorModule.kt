@@ -52,7 +52,6 @@ class EditorModule(
         private val switchTabAction: () -> Unit,
         private val closeTabAction: () -> Unit,
         private val saveTabCallback: (File) -> Unit,
-        private val toolbarCallback: (Boolean) -> Unit,
         hideOption: () -> Boolean
 ): BaseModule(binding.root) {
 
@@ -400,17 +399,11 @@ class EditorModule(
         return drawingCache
     }
 
-    override fun show() {
-        super.show()
-        toolbarCallback(true)
-    }
-
     override fun hide() {
         super.hide()
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
-        toolbarCallback(false)
     }
 
     companion object {
