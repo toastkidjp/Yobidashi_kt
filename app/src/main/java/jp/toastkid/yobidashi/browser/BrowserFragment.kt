@@ -124,12 +124,6 @@ class BrowserFragment : BaseFragment() {
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
-     * TODO remove
-     * For disabling busy show & hide animation.
-     */
-    private var lastAnimated: Long = 0L
-
-    /**
      * This value is assigned by OnStateChangeListener.
      */
     private var menuOpen: Boolean = false
@@ -788,16 +782,6 @@ class BrowserFragment : BaseFragment() {
          * Request code of opening PDF.
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 3
-
-        /**
-         * Animation's dutarion.
-         */
-        private const val ANIMATION_DURATION: Long = 75L
-
-        /**
-         * Allowable interval milliseconds.
-         */
-        private const val ALLOWABLE_INTERVAL_MS: Long = 500L
 
     }
 
