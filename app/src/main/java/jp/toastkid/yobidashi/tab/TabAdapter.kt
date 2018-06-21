@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
-import android.widget.TextView
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -71,7 +70,6 @@ class TabAdapter(
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
         touchCallback: () -> Boolean,
-        private val scrollCallback: (Boolean) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
 
@@ -368,12 +366,6 @@ class TabAdapter(
 
             val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(request)
-        }
-        webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
-            val scrolled = vertical - oldVertical
-            if (Math.abs(scrolled) > MINIMUM_SCROLLED && currentTab() is WebTab) {
-                scrollCallback(0 > scrolled)
-            }
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
