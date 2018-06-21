@@ -190,8 +190,7 @@ class BrowserFragment : BaseFragment() {
 
         pdf = PdfModule(
                 activityContext,
-                binding?.moduleContainer as ViewGroup,
-                { /* TODO remove */ }
+                binding?.moduleContainer as ViewGroup
         )
 
         tabs = TabAdapter(
