@@ -313,7 +313,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Menu action.
      *
-     * @param menu
+     * @param id
      */
     private fun onMenuClick(id: Int) {
         val fragmentActivity = activity ?: return
@@ -335,7 +335,7 @@ class BrowserFragment : BaseFragment() {
                 toBottom()
             }
             R.id.find_in_page -> {
-                if (pageSearcherModule?.isVisible ?: false) {
+                if (pageSearcherModule?.isVisible == true) {
                     pageSearcherModule?.hide()
                     return
                 }
@@ -382,7 +382,7 @@ class BrowserFragment : BaseFragment() {
                         .setTitle(R.string.title_open_url)
                         .setView(inputLayout)
                         .setCancelable(true)
-                        .setPositiveButton(R.string.open) { d, i ->
+                        .setPositiveButton(R.string.open) { _, _ ->
                             val url = inputLayout.editText?.text.toString()
                             if (Urls.isValidUrl(url)) {
                                 tabs.loadWithNewTab(Uri.parse(url))
@@ -477,10 +477,8 @@ class BrowserFragment : BaseFragment() {
 
     /**
      * Initialize tab list.
-     *
-     * @param ignored Snackbar's parent view.
      */
-    private fun initTabListIfNeed(ignored: View) {
+    private fun initTabListIfNeed() {
         if (binding?.tabListContainer?.childCount == 0) {
             binding?.tabListContainer?.addView(tabListModule.moduleView)
         }
@@ -490,8 +488,8 @@ class BrowserFragment : BaseFragment() {
      * Switch tab list visibility.
      */
     private fun switchTabList() {
-        initTabListIfNeed(binding?.root as View)
-        if (tabListModule.isVisible ?: false) {
+        initTabListIfNeed()
+        if (tabListModule.isVisible) {
             hideTabList()
         } else {
             tabs.updateCurrentTab()
@@ -502,7 +500,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Close tab list module.
      */
-    private inline fun closeTabList() {
+    private fun closeTabList() {
         tabListModule.let { if (it.isVisible) { it.hide() } }
     }
 
@@ -614,10 +612,7 @@ class BrowserFragment : BaseFragment() {
     override fun pressBack(): Boolean = hideOption() || back()
 
     override fun tapHeader() {
-        val activityContext = context
-        if (activityContext == null) {
-            return
-        }
+        val activityContext = context ?: return
         startActivity(SearchActivity.makeIntentWithQuery(activityContext, tabs.currentUrl() ?: ""))
     }
 
@@ -626,7 +621,7 @@ class BrowserFragment : BaseFragment() {
      */
     private fun hideOption(): Boolean {
 
-        if (tabListModule != null && tabListModule.isVisible as Boolean) {
+        if (tabListModule.isVisible) {
             hideTabList()
             return true
         }
