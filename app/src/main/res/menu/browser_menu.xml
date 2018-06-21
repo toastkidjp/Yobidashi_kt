@@ -36,11 +36,6 @@
         android:icon="@drawable/ic_forward"
         />
     <item
-        android:id="@+id/close"
-        android:title="@string/close"
-        android:icon="@drawable/ic_close"
-        />
-    <item
         android:id="@+id/reload"
         android:title="@string/title_menu_reload"
         android:icon="@drawable/ic_reload"
@@ -74,11 +69,6 @@
         android:id="@+id/find_in_page"
         android:title="@string/title_find_in_page"
         android:icon="@drawable/ic_find_in_page"
-        />
-    <item
-        android:id="@+id/exit"
-        android:title="@string/exit"
-        android:icon="@drawable/ic_exit"
         />
     <item
         android:id="@+id/screenshot"
@@ -149,5 +139,10 @@
         android:id="@+id/setting"
         android:title="@string/title_settings"
         android:icon="@drawable/ic_settings"
+        />
+    <item
+        android:id="@+id/exit"
+        android:title="@string/exit"
+        android:icon="@drawable/ic_exit"
         />
 </menu>

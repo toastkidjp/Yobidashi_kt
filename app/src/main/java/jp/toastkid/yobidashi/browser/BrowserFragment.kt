@@ -16,7 +16,9 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
+import com.cleveroad.cyclemenuwidget.OnStateChangedListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -122,9 +124,15 @@ class BrowserFragment : BaseFragment() {
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
+     * TODO remove
      * For disabling busy show & hide animation.
      */
     private var lastAnimated: Long = 0L
+
+    /**
+     * This value is assigned by OnStateChangeListener.
+     */
+    private var menuOpen: Boolean = false
 
     /**
      * Set consumer to titleSubject.
@@ -189,7 +197,7 @@ class BrowserFragment : BaseFragment() {
         pdf = PdfModule(
                 activityContext,
                 binding?.moduleContainer as ViewGroup,
-                {  }
+                { /* TODO remove */ }
         )
 
         tabs = TabAdapter(
@@ -235,14 +243,29 @@ class BrowserFragment : BaseFragment() {
      * Initialize menus view.
      */
     private fun initMenus() {
-        binding?.cycleMenu?.setMenuRes(R.menu.browser_menu)
-        binding?.cycleMenu?.setOnMenuItemClickListener(object : OnMenuItemClickListener {
-            override fun onMenuItemLongClick(view: View?, itemPosition: Int) = Unit
+        binding?.cycleMenu?.also {
+            it.setMenuRes(R.menu.browser_menu)
+            it.setOnMenuItemClickListener(object : OnMenuItemClickListener {
+                override fun onMenuItemLongClick(view: View?, itemPosition: Int) = Unit
 
-            override fun onMenuItemClick(view: View?, itemPosition: Int) {
-                onMenuClick(view?.id ?: 0)
-            }
-        })
+                override fun onMenuItemClick(view: View?, itemPosition: Int) {
+                    onMenuClick(view?.id ?: 0)
+                }
+            })
+            it.setStateChangeListener(object : OnStateChangedListener {
+                override fun onCloseComplete() = Unit
+
+                override fun onOpenComplete() = Unit
+
+                override fun onStateChanged(state: CycleMenuWidget.STATE?) {
+                    when (state) {
+                        CycleMenuWidget.STATE.OPEN -> menuOpen = true
+                        CycleMenuWidget.STATE.CLOSED -> menuOpen = false
+                        else -> Unit
+                    }
+                }
+            })
+        }
     }
 
     /**
@@ -612,6 +635,11 @@ class BrowserFragment : BaseFragment() {
 
         if (tabListModule != null && tabListModule.isVisible as Boolean) {
             hideTabList()
+            return true
+        }
+
+        if (menuOpen) {
+            binding?.cycleMenu?.close(true)
             return true
         }
 
