@@ -137,7 +137,6 @@ class PdfModule(
     /**
      * Assign new thumbnail image.
      *
-     * @param id Tab's ID
      * @param tab [PdfTab]
      */
     internal fun assignNewThumbnail(tab: PdfTab): Disposable =
