@@ -7,10 +7,13 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.MenuInflater
@@ -592,6 +595,16 @@ class BrowserFragment : BaseFragment() {
         }
 
         val preferenceApplier = preferenceApplier()
+
+        binding?.cycleMenu?.also {
+            it.setCorner(preferenceApplier.menuPos())
+            val color = preferenceApplier.colorPair().bgColor()
+            it.setItemsBackgroundTint(ColorStateList.valueOf(color))
+            context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
+                    ?.also { DrawableCompat.setTint(it, color) }
+                    ?.let { drawable -> it.setCornerImageDrawable(drawable) }
+        }
+
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
                 || editor.isVisible
                 || pdf.isVisible
@@ -603,7 +616,6 @@ class BrowserFragment : BaseFragment() {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }
-
     }
 
     override fun pressLongBack(): Boolean {

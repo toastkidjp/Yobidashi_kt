@@ -9,7 +9,6 @@ import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
@@ -83,11 +82,6 @@ class TabListModule(
         binding.addSearchTab.setOnClickListener {
             context.startActivity(SearchActivity.makeIntent(context))
         }
-
-        val menuPos = preferenceApplier.menuPos()
-        val resources = context.resources
-        val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
-        MenuPos.place(binding.fabs, 0, fabMarginHorizontal, menuPos)
     }
 
     /**
