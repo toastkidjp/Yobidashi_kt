@@ -237,9 +237,11 @@ class BrowserFragment : BaseFragment() {
      */
     private fun initMenus() {
         binding?.cycleMenu?.also {
-            it.setMenuRes(R.menu.browser_menu)
+            it.setMenuItems(Menu.items(context))
             it.setOnMenuItemClickListener(object : OnMenuItemClickListener {
-                override fun onMenuItemLongClick(view: View?, itemPosition: Int) = Unit
+                override fun onMenuItemLongClick(view: View?, itemPosition: Int) {
+                    Menu.showInformation(view)
+                }
 
                 override fun onMenuItemClick(view: View?, itemPosition: Int) {
                     onMenuClick(view?.id ?: 0)
@@ -319,63 +321,63 @@ class BrowserFragment : BaseFragment() {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
         when (id) {
-            R.id.reload -> {
+            Menu.RELOAD.ordinal -> {
                 tabs.reload()
             }
-            R.id.back -> {
+            Menu.BACK.ordinal -> {
                 back()
             }
-            R.id.forward -> {
+            Menu.FORWARD.ordinal -> {
                 forward()
             }
-            R.id.to_top -> {
+            Menu.TOP.ordinal -> {
                 toTop()
             }
-            R.id.to_bottom -> {
+            Menu.BOTTOM.ordinal -> {
                 toBottom()
             }
-            R.id.find_in_page -> {
+            Menu.FIND_IN_PAGE.ordinal -> {
                 if (pageSearcherModule?.isVisible == true) {
                     pageSearcherModule?.hide()
                     return
                 }
                 pageSearcherModule?.show(fragmentActivity)
             }
-            R.id.screenshot -> {
+            Menu.SCREENSHOT.ordinal -> {
                 tabs.currentSnap()
                 Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
             }
-            R.id.share -> {
+            Menu.SHARE.ordinal -> {
                 startActivity(
                         IntentFactory.makeShare(tabs.currentTitle()
                                 + System.getProperty("line.separator") + tabs.currentUrl())
                 )
             }
-            R.id.setting -> {
+            Menu.SETTING.ordinal -> {
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
-            R.id.tab_history -> {
+            Menu.TAB_HISTORY.ordinal -> {
                 launchTabHistory(fragmentActivity)
             }
-            R.id.user_agent -> {
+            Menu.USER_AGENT.ordinal -> {
                 UserAgent.showSelectionDialog(
                         snackbarParent,
                         { tabs.resetUserAgent(it.text()) }
                 )
             }
-            R.id.wifi -> {
+            Menu.WIFI_SETTING.ordinal -> {
                 startActivity(SettingsIntentFactory.wifi())
             }
-            R.id.page_information -> {
+            Menu.PAGE_INFORMATION.ordinal -> {
                 tabs.showPageInformation()
             }
-            R.id.tab_list -> {
+            Menu.TAB_LIST.ordinal -> {
                 switchTabList()
             }
-            R.id.stop_loading -> {
+            Menu.STOP_LOADING.ordinal -> {
                 stopCurrentLoading()
             }
-            R.id.open -> {
+            Menu.OPEN.ordinal -> {
                 val inputLayout = TextInputs.make(fragmentActivity)
                 inputLayout.editText?.setText(tabs.currentUrl())
                 AlertDialog.Builder(fragmentActivity)
@@ -390,29 +392,29 @@ class BrowserFragment : BaseFragment() {
                         }
                         .show()
             }
-            R.id.open_other -> {
+            Menu.OTHER_BROWSER.ordinal -> {
                 tabs.currentUrl()?.let {
                     CustomTabsFactory.make(fragmentActivity, colorPair())
                             .build()
                             .launchUrl(fragmentActivity, Uri.parse(it))
                 }
             }
-            R.id.share_by_code -> {
+            Menu.SHARE_BARCODE.ordinal -> {
                 SharingUrlByBarcode.invoke(fragmentActivity, tabs.currentUrl() ?: "")
             }
-            R.id.archive -> {
+            Menu.ARCHIVE.ordinal -> {
                 tabs.saveArchive()
             }
-            R.id.search -> {
+            Menu.SEARCH.ordinal -> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
             }
-            R.id.site_search -> {
+            Menu.SITE_SEARCH.ordinal -> {
                 tabs.siteSearch()
             }
-            R.id.voice_search -> {
+            Menu.VOICE_SEARCH.ordinal -> {
                 startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
             }
-            R.id.replace_home -> {
+            Menu.REPLACE_HOME.ordinal -> {
                 tabs.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
                         Toaster.snackShort(
@@ -430,27 +432,27 @@ class BrowserFragment : BaseFragment() {
                     )
                 }
             }
-            R.id.load_home -> {
+            Menu.LOAD_HOME.ordinal -> {
                 tabs.loadHome()
             }
-            R.id.view_history -> {
+            Menu.VIEW_HISTORY.ordinal -> {
                 startActivityForResult(
                         ViewHistoryActivity.makeIntent(fragmentActivity),
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
-            R.id.add_bookmark -> {
+            Menu.ADD_BOOKMARK.ordinal -> {
                 tabs.addBookmark {
                     bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
                 }
             }
-            R.id.editor -> {
+            Menu.EDITOR.ordinal -> {
                 openEditorTab()
             }
-            R.id.pdf -> {
+            Menu.PDF.ordinal -> {
                 fragmentActivity.moveTaskToBack(true)
             }
-            R.id.exit -> {
+            Menu.EXIT.ordinal -> {
                 activity?.moveTaskToBack(true)
             }
         }
