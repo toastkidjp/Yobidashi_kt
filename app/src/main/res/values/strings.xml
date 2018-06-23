@@ -378,5 +378,6 @@
     <string name="title_remove_ad">Experimental: Remove AD</string>
     <string name="prompt_linear_barcode">Scan linear barcode</string>
     <string name="message_linear_barcode_reader_failed">Read failed, your device maybe cannot use this function.</string>
+    <string name="message_cannot_launch_app">It has cannot open App.</string>
 
 </resources>
