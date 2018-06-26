@@ -10,7 +10,7 @@
 
         <intent
             android:action="android.intent.action.ACTION_WEB_SEARCH"
-            android:targetPackage="jp.toastkid.yobidashi"
+            android:targetPackage="jp.toastkid.yobidashi.d"
             android:targetClass="jp.toastkid.yobidashi.search.SearchActivity"
             />
 
@@ -27,8 +27,8 @@
         >
 
         <intent
-            android:action="jp.toastkid.yobidashi.launcher"
-            android:targetPackage="jp.toastkid.yobidashi"
+            android:action="jp.toastkid.yobidashi.d.launcher"
+            android:targetPackage="jp.toastkid.yobidashi.d"
             android:targetClass="jp.toastkid.yobidashi.launcher.LauncherActivity"
             />
 
@@ -46,7 +46,7 @@
 
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="jp.toastkid.yobidashi"
+            android:targetPackage="jp.toastkid.yobidashi.d"
             android:targetClass="jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity"
             />
 
