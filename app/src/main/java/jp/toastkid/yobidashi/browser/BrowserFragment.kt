@@ -131,21 +131,18 @@ class BrowserFragment : BaseFragment() {
      */
     private var menuOpen: Boolean = false
 
-    /**
-     * Set consumer to titleSubject.
-     */
-    var consumer: Consumer<TitlePair>? = null
-
-    /**
-     * Set consumer to titleSubject.
-     */
-    var progressConsumer: Consumer<Int>? = null
+    lateinit var progressBarCallback: ProgressBarCallback
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
         activity?.let {
             rxPermissions = RxPermissions(it)
+        }
+        activity?.let {
+            if (it is ProgressBarCallback) {
+                progressBarCallback = it
+            }
         }
     }
 
@@ -576,10 +573,10 @@ class BrowserFragment : BaseFragment() {
         val colorPair = colorPair()
         editor.applyColor()
 
-        consumer?.let { titleSubject.subscribe(it).addTo(disposables) }
-
         tabs.reloadWebViewSettings().addTo(disposables)
-        progressConsumer?.also { progressSubject.subscribe(it).addTo(disposables) }
+
+        titleSubject.subscribe({ progressBarCallback.onTitleChanged(it) }).addTo(disposables)
+        progressSubject.subscribe({ progressBarCallback.onProgressChanged(it) }).addTo(disposables)
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
