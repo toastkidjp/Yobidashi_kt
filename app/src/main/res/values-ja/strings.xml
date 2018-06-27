@@ -373,5 +373,6 @@
     <string name="title_remove_ad">実験的な機能: 広告を消す</string>
     <string name="prompt_linear_barcode">1次元バーコードをスキャン</string>
     <string name="message_linear_barcode_reader_failed">読み込みに失敗しました。お使いの機種が対応していない可能性があります。</string>
+    <string name="run">実行</string>
     <string name="message_cannot_launch_app">アプリを起動できませんでした。</string>
 </resources>

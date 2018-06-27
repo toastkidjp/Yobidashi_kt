@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
+import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -156,8 +157,12 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putString(Key.MENU_POS.name, newState.name).apply()
     }
 
-    fun menuPos(): MenuPos {
-        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name))
+    fun menuPosId(): Int {
+        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
+    }
+
+    fun menuPos(): CycleMenuWidget.CORNER {
+        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).corner
     }
 
     fun setLoadImage(newState: Boolean) {

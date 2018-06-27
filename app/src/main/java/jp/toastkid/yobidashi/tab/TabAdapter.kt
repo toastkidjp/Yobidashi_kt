@@ -17,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.*
-import android.widget.TextView
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -70,11 +69,9 @@ class TabAdapter(
         private val webViewContainer: ViewGroup,
         private val editor: EditorModule,
         private val pdf: PdfModule,
-        private val tabCount: TextView,
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
         touchCallback: () -> Boolean,
-        private val scrollCallback: (Boolean) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
 
@@ -104,7 +101,7 @@ class TabAdapter(
      * Animation of slide up bottom.
      */
     private val slideUpFromBottom
-            = AnimationUtils.loadAnimation(tabCount.context, R.anim.slide_up)
+            = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_up)
 
     init {
         webView = makeWebView(titleCallback, touchCallback)
@@ -278,7 +275,7 @@ class TabAdapter(
             }
         }
 
-        val webView = WebViewFactory.make(tabCount.context)
+        val webView = WebViewFactory.make(webViewContainer.context)
         webView.setWebViewClient(webViewClient)
         webView.setWebChromeClient(webChromeClient)
         webView.setOnTouchListener { _, _ ->
@@ -327,7 +324,7 @@ class TabAdapter(
                     if (url.isEmpty()) {
                         return@setOnLongClickListener false
                     }
-                    AlertDialog.Builder(tabCount.context)
+                    AlertDialog.Builder(webViewContainer.context)
                             .setTitle("URL: " + url)
                             .setItems(R.array.url_menu, { _, which ->
                                 when (which) {
@@ -385,12 +382,6 @@ class TabAdapter(
 
             val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(request)
-        }
-        webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
-            val scrolled = vertical - oldVertical
-            if (Math.abs(scrolled) > MINIMUM_SCROLLED && currentTab() is WebTab) {
-                scrollCallback(0 > scrolled)
-            }
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
@@ -944,7 +935,6 @@ class TabAdapter(
 
     private fun setCurrentTabCount() {
         val size = size()
-        tabCount.text = if (size < 100) "$size" else "^^"
     }
 
     fun moveTo(i: Int) {

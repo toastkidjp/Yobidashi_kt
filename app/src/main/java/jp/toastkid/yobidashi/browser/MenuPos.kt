@@ -1,46 +1,19 @@
 package jp.toastkid.yobidashi.browser
 
 import android.support.annotation.IdRes
-import android.support.design.widget.CoordinatorLayout
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
+import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import jp.toastkid.yobidashi.R
 
 /**
  * @author toastkidjp
  */
-enum class MenuPos constructor(@param:IdRes internal val id: Int) {
-    LEFT(R.id.menu_pos_left),
-    RIGHT(R.id.menu_pos_right);
+enum class MenuPos(
+        @param:IdRes internal val id: Int,
+        val corner: CycleMenuWidget.CORNER
+        ) {
+    LEFT(R.id.menu_pos_left, CycleMenuWidget.CORNER.LEFT_BOTTOM),
+    RIGHT(R.id.menu_pos_right, CycleMenuWidget.CORNER.RIGHT_BOTTOM);
 
     @IdRes fun id(): Int = id
-
-    companion object {
-
-        fun place(
-                fab: View,
-                fabMarginBottom: Int,
-                fabMarginHorizontal: Int,
-                menuPos: MenuPos
-        ) {
-            val layoutParams = fab.layoutParams as ViewGroup.MarginLayoutParams
-            val gravityParams = fab.layoutParams as CoordinatorLayout.LayoutParams
-            when (menuPos) {
-                LEFT -> {
-                    gravityParams.gravity = Gravity.LEFT or Gravity.BOTTOM
-                    layoutParams.setMargins(fabMarginHorizontal, 0, 0, fabMarginBottom)
-                    fab.requestLayout()
-                    return
-                }
-                RIGHT -> {
-                    gravityParams.gravity = Gravity.RIGHT or Gravity.BOTTOM
-                    layoutParams.setMargins(0, 0, fabMarginHorizontal, fabMarginBottom)
-                    fab.requestLayout()
-                    return
-                }
-            }
-        }
-    }
 
 }

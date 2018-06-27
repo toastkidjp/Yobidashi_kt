@@ -7,18 +7,21 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import com.cleveroad.cyclemenuwidget.CycleMenuWidget
+import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
+import com.cleveroad.cyclemenuwidget.OnStateChangedListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -29,8 +32,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.browser.menu.Adapter
-import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
@@ -43,8 +44,6 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
-import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
@@ -128,9 +127,9 @@ class BrowserFragment : BaseFragment() {
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
-     * For disabling busy show & hide animation.
+     * This value is assigned by OnStateChangeListener.
      */
-    private var lastAnimated: Long = 0L
+    private var menuOpen: Boolean = false
 
     lateinit var progressBarCallback: ProgressBarCallback
 
@@ -161,7 +160,6 @@ class BrowserFragment : BaseFragment() {
         }
 
         initMenus()
-        initFooter()
 
         val colorPair = colorPair()
 
@@ -187,35 +185,24 @@ class BrowserFragment : BaseFragment() {
                         tabs.saveTabList()
                     }
                 },
-                {
-                    if (it) {
-                        hideFooter()
-                        binding?.fab?.hide()
-                    } else {
-                        if (tabs.currentTab() is WebTab) { showFooter() }
-                    }
-                },
                 this::hideOption
         )
 
         pdf = PdfModule(
                 activityContext,
-                binding?.moduleContainer as ViewGroup,
-                { if (it) { hideFooter() } else { if (tabs.currentTab() is WebTab) { showFooter() } } }
+                binding?.moduleContainer as ViewGroup
         )
 
         tabs = TabAdapter(
                 binding?.webViewContainer as ViewGroup,
                 editor,
                 pdf,
-                binding?.footer?.tabCount as TextView,
                 titleSubject::onNext,
                 { progress, loading ->
                     if (!loading) { binding?.webViewContainer?.isRefreshing = false}
                     progressSubject.onNext(progress)
                 },
                 this::hideOption,
-                this::onScroll,
                 this::onEmptyTabs
         )
 
@@ -246,132 +233,34 @@ class BrowserFragment : BaseFragment() {
     }
 
     /**
-     * On scroll action.
-     *
-     * @param upward is scroll on upward
-     */
-    private fun onScroll(upward: Boolean) {
-
-        val browserScreenMode = preferenceApplier().browserScreenMode()
-
-        if (browserScreenMode == ScreenMode.FIXED) {
-            return
-        }
-
-        if (upward) {
-            binding?.fab?.show()
-            if (browserScreenMode == ScreenMode.EXPANDABLE) {
-                showFooter()
-            }
-        } else {
-            binding?.fab?.hide()
-            if (browserScreenMode == ScreenMode.EXPANDABLE) {
-                hideFooter()
-            }
-        }
-    }
-
-    /**
-     * Show footer with animation.
-     */
-    private fun showFooter() {
-        if (disallowAnimation()) {
-            return
-        }
-        lastAnimated = System.currentTimeMillis()
-
-        binding?.footer?.root?.animate()?.let {
-            it.cancel()
-            it.translationY(0f)
-                    ?.setDuration(ANIMATION_DURATION)
-                    ?.withStartAction { binding?.footer?.root?.visibility = View.VISIBLE }
-                    ?.withEndAction { toolbarAction?.showToolbar() }
-                    ?.start()
-        }
-    }
-
-    /**
-     * Hide footer with animation.
-     */
-    private fun hideFooter() {
-        if (disallowAnimation()) {
-            return
-        }
-        lastAnimated = System.currentTimeMillis()
-        binding?.footer?.root?.animate()?.let {
-            it.cancel()
-            it.translationY(resources.getDimension(R.dimen.browser_footer_height))
-                    ?.setDuration(ANIMATION_DURATION)
-                    ?.withEndAction {
-                        toolbarAction?.hideToolbar()
-                        binding?.footer?.root?.visibility = View.GONE
-                    }
-                    ?.start()
-        }
-    }
-
-    /**
-     * Check disallow header & footer's animation.
-     */
-    private fun disallowAnimation(): Boolean
-            = (System.currentTimeMillis() - lastAnimated) < ALLOWABLE_INTERVAL_MS
-
-    /**
-     * Initialize footer.
-     */
-    private fun initFooter() {
-        binding?.footer?.let {
-            val fragmentActivity = activity ?: return@let
-
-            it.back.setOnClickListener { back() }
-            it.back.setOnLongClickListener {
-                launchTabHistory(fragmentActivity)
-                true
-            }
-
-            it.forward.setOnClickListener { forward() }
-            it.forward.setOnLongClickListener {
-                launchTabHistory(fragmentActivity)
-                true
-            }
-
-            it.bookmark.setOnClickListener { bookmark(ActivityOptionsFactory.makeScaleUpBundle(it)) }
-            it.bookmark.setOnLongClickListener {
-                tabs.addBookmark {
-                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
-                }
-                true
-            }
-            it.search.setOnClickListener { search(ActivityOptionsFactory.makeScaleUpBundle(it)) }
-            it.toTop.setOnClickListener { toTop() }
-            it.toBottom.setOnClickListener { toBottom() }
-            it.tabList.setOnClickListener { switchTabList() }
-            it.tabList.setOnLongClickListener {
-                AlertDialog.Builder(fragmentActivity)
-                        .setTitle(fragmentActivity.getString(R.string.title_clear_all_tabs))
-                        .setMessage(Html.fromHtml(fragmentActivity.getString(R.string.confirm_clear_all_settings)))
-                        .setCancelable(true)
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            tabs.clear()
-                            onEmptyTabs()
-                            d.dismiss()
-                        }
-                        .show()
-                true
-            }
-        }
-    }
-
-    /**
      * Initialize menus view.
      */
     private fun initMenus() {
-        val fragmentActivity = activity ?: return
-        binding?.menusView?.adapter = Adapter(fragmentActivity, Consumer<Menu> { this.onMenuClick(it) })
-        val layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false)
-        binding?.menusView?.layoutManager = layoutManager
-        layoutManager.scrollToPosition(Adapter.mediumPosition())
+        binding?.cycleMenu?.also {
+            it.setMenuItems(Menu.items(context))
+            it.setOnMenuItemClickListener(object : OnMenuItemClickListener {
+                override fun onMenuItemLongClick(view: View?, itemPosition: Int) {
+                    Menu.showInformation(view)
+                }
+
+                override fun onMenuItemClick(view: View?, itemPosition: Int) {
+                    onMenuClick(view?.id ?: 0)
+                }
+            })
+            it.setStateChangeListener(object : OnStateChangedListener {
+                override fun onCloseComplete() = Unit
+
+                override fun onOpenComplete() = Unit
+
+                override fun onStateChanged(state: CycleMenuWidget.STATE?) {
+                    when (state) {
+                        CycleMenuWidget.STATE.OPEN -> menuOpen = true
+                        CycleMenuWidget.STATE.CLOSED -> menuOpen = false
+                        else -> Unit
+                    }
+                }
+            })
+        }
     }
 
     /**
@@ -379,29 +268,6 @@ class BrowserFragment : BaseFragment() {
      */
     private fun switchMenu() {
         hideTabList()
-        if (binding?.menusView?.visibility == View.GONE) {
-            showMenu(binding?.root ?: View(context))
-        } else {
-            hideMenu()
-        }
-    }
-
-    /**
-     * Show quick control menu.
-     *
-     * @param ignored defined for Data-Binding
-     */
-    fun showMenu(ignored: View) {
-        binding?.fab?.hide()
-        binding?.menusView?.visibility = View.VISIBLE
-    }
-
-    /**
-     * Hide quick control menu.
-     */
-    private fun hideMenu() {
-        binding?.fab?.show()
-        binding?.menusView?.visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
@@ -433,7 +299,6 @@ class BrowserFragment : BaseFragment() {
             }
 
             it.findItem(R.id.close_header)?.setOnMenuItemClickListener {
-                hideFooter()
                 true
             }
         }
@@ -450,77 +315,76 @@ class BrowserFragment : BaseFragment() {
     /**
      * Menu action.
      *
-     * @param menu
+     * @param id
      */
-    private fun onMenuClick(menu: Menu) {
+    private fun onMenuClick(id: Int) {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
-        when (menu) {
-            Menu.RELOAD -> {
+        when (id) {
+            Menu.RELOAD.ordinal -> {
                 tabs.reload()
             }
-            Menu.BACK -> {
+            Menu.BACK.ordinal -> {
                 back()
             }
-            Menu.FORWARD -> {
+            Menu.FORWARD.ordinal -> {
                 forward()
             }
-            Menu.TOP -> {
+            Menu.TOP.ordinal -> {
                 toTop()
             }
-            Menu.BOTTOM -> {
+            Menu.BOTTOM.ordinal -> {
                 toBottom()
             }
-            Menu.FIND_IN_PAGE -> {
-                if (pageSearcherModule?.isVisible ?: false) {
+            Menu.FIND_IN_PAGE.ordinal -> {
+                if (pageSearcherModule?.isVisible == true) {
                     pageSearcherModule?.hide()
                     return
                 }
                 pageSearcherModule?.show(fragmentActivity)
-                hideMenu()
             }
-            Menu.SCREENSHOT -> {
+            Menu.SCREENSHOT.ordinal -> {
                 tabs.currentSnap()
                 Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
             }
-            Menu.SHARE -> {
+            Menu.SHARE.ordinal -> {
                 startActivity(
                         IntentFactory.makeShare(tabs.currentTitle()
                                 + System.getProperty("line.separator") + tabs.currentUrl())
                 )
             }
-            Menu.SETTING -> {
+            Menu.SETTING.ordinal -> {
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
-            Menu.TAB_HISTORY -> {
+            Menu.TAB_HISTORY.ordinal -> {
                 launchTabHistory(fragmentActivity)
             }
-            Menu.USER_AGENT -> {
+            Menu.USER_AGENT.ordinal -> {
                 UserAgent.showSelectionDialog(
                         snackbarParent,
                         { tabs.resetUserAgent(it.text()) }
                 )
             }
-            Menu.WIFI_SETTING -> {
+            Menu.WIFI_SETTING.ordinal -> {
                 startActivity(SettingsIntentFactory.wifi())
             }
-            Menu.PAGE_INFORMATION -> {
+            Menu.PAGE_INFORMATION.ordinal -> {
                 tabs.showPageInformation()
             }
-            Menu.TAB_LIST -> {
+            Menu.TAB_LIST.ordinal -> {
                 switchTabList()
             }
-            Menu.STOP_LOADING -> {
+            Menu.STOP_LOADING.ordinal -> {
                 stopCurrentLoading()
             }
-            Menu.OPEN -> {
+            Menu.OPEN.ordinal -> {
                 val inputLayout = TextInputs.make(fragmentActivity)
                 inputLayout.editText?.setText(tabs.currentUrl())
                 AlertDialog.Builder(fragmentActivity)
                         .setTitle(R.string.title_open_url)
                         .setView(inputLayout)
                         .setCancelable(true)
-                        .setPositiveButton(R.string.open) { d, i ->
+                        .setPositiveButton(R.string.open) { _, _ ->
                             val url = inputLayout.editText?.text.toString()
                             if (Urls.isValidUrl(url)) {
                                 tabs.loadWithNewTab(Uri.parse(url))
@@ -528,29 +392,29 @@ class BrowserFragment : BaseFragment() {
                         }
                         .show()
             }
-            Menu.OTHER_BROWSER -> {
+            Menu.OTHER_BROWSER.ordinal -> {
                 tabs.currentUrl()?.let {
                     CustomTabsFactory.make(fragmentActivity, colorPair())
                             .build()
                             .launchUrl(fragmentActivity, Uri.parse(it))
                 }
             }
-            Menu.SHARE_BARCODE -> {
+            Menu.SHARE_BARCODE.ordinal -> {
                 SharingUrlByBarcode.invoke(fragmentActivity, tabs.currentUrl() ?: "")
             }
-            Menu.ARCHIVE -> {
+            Menu.ARCHIVE.ordinal -> {
                 tabs.saveArchive()
             }
-            Menu.SEARCH -> {
-                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
+            Menu.SEARCH.ordinal -> {
+                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
             }
-            Menu.SITE_SEARCH -> {
+            Menu.SITE_SEARCH.ordinal -> {
                 tabs.siteSearch()
             }
-            Menu.VOICE_SEARCH -> {
+            Menu.VOICE_SEARCH.ordinal -> {
                 startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
             }
-            Menu.REPLACE_HOME -> {
+            Menu.REPLACE_HOME.ordinal -> {
                 tabs.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
                         Toaster.snackShort(
@@ -568,28 +432,28 @@ class BrowserFragment : BaseFragment() {
                     )
                 }
             }
-            Menu.LOAD_HOME -> {
+            Menu.LOAD_HOME.ordinal -> {
                 tabs.loadHome()
             }
-            Menu.VIEW_HISTORY -> {
+            Menu.VIEW_HISTORY.ordinal -> {
                 startActivityForResult(
                         ViewHistoryActivity.makeIntent(fragmentActivity),
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
-            Menu.ADD_BOOKMARK -> {
+            Menu.ADD_BOOKMARK.ordinal -> {
                 tabs.addBookmark {
-                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
+                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
                 }
             }
-            Menu.EDITOR -> {
+            Menu.EDITOR.ordinal -> {
                 openEditorTab()
             }
-            Menu.PDF -> {
-                openPdfTabFromStorage()
-            }
-            Menu.EXIT -> {
+            Menu.PDF.ordinal -> {
                 fragmentActivity.moveTaskToBack(true)
+            }
+            Menu.EXIT.ordinal -> {
+                activity?.moveTaskToBack(true)
             }
         }
     }
@@ -601,8 +465,8 @@ class BrowserFragment : BaseFragment() {
      */
     private fun launchTabHistory(context: Context) {
         val scaleUpAnimation = ActivityOptions.makeScaleUpAnimation(
-                binding?.menusView, 0, 0,
-                binding?.menusView?.width ?: 0, binding?.menusView?.height ?: 0)
+                binding?.cycleMenu, 0, 0,
+                binding?.cycleMenu?.width ?: 0, binding?.cycleMenu?.height ?: 0)
         val currentTab = tabs.currentTab()
         if (currentTab is WebTab) {
             startActivityForResult(
@@ -615,10 +479,8 @@ class BrowserFragment : BaseFragment() {
 
     /**
      * Initialize tab list.
-     *
-     * @param ignored Snackbar's parent view.
      */
-    private fun initTabListIfNeed(ignored: View) {
+    private fun initTabListIfNeed() {
         if (binding?.tabListContainer?.childCount == 0) {
             binding?.tabListContainer?.addView(tabListModule.moduleView)
         }
@@ -628,8 +490,8 @@ class BrowserFragment : BaseFragment() {
      * Switch tab list visibility.
      */
     private fun switchTabList() {
-        initTabListIfNeed(binding?.root as View)
-        if (tabListModule.isVisible ?: false) {
+        initTabListIfNeed()
+        if (tabListModule.isVisible) {
             hideTabList()
         } else {
             tabs.updateCurrentTab()
@@ -640,7 +502,7 @@ class BrowserFragment : BaseFragment() {
     /**
      * Close tab list module.
      */
-    private inline fun closeTabList() {
+    private fun closeTabList() {
         tabListModule.let { if (it.isVisible) { it.hide() } }
     }
 
@@ -708,10 +570,7 @@ class BrowserFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
 
-        refreshFab()
-
         val colorPair = colorPair()
-        applyFooterColor(colorPair)
         editor.applyColor()
 
         tabs.reloadWebViewSettings().addTo(disposables)
@@ -733,11 +592,20 @@ class BrowserFragment : BaseFragment() {
         }
 
         val preferenceApplier = preferenceApplier()
+
+        binding?.cycleMenu?.also {
+            it.setCorner(preferenceApplier.menuPos())
+            val color = preferenceApplier.colorPair().bgColor()
+            it.setItemsBackgroundTint(ColorStateList.valueOf(color))
+            context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
+                    ?.also { DrawableCompat.setTint(it, color) }
+                    ?.let { drawable -> it.setCornerImageDrawable(drawable) }
+        }
+
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
                 || editor.isVisible
                 || pdf.isVisible
                 ) {
-            hideFooter()
             return
         }
 
@@ -745,41 +613,6 @@ class BrowserFragment : BaseFragment() {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }
-
-        showFooter()
-    }
-
-    /**
-     * Apply footer color with [ColorPair].
-     *
-     * @param colorPair [ColorPair]
-     */
-    private fun applyFooterColor(colorPair: ColorPair) {
-        binding?.footer?.let {
-            val fontColor = colorPair.fontColor()
-            it.root?.setBackgroundColor(colorPair.bgColor())
-            it.back.setColorFilter(fontColor)
-            it.forward.setColorFilter(fontColor)
-            it.bookmark.setColorFilter(fontColor)
-            it.search.setColorFilter(fontColor)
-            it.toTop.setColorFilter(fontColor)
-            it.toBottom.setColorFilter(fontColor)
-            it.tabIcon.setColorFilter(fontColor)
-            it.tabCount.setTextColor(fontColor)
-        }
-    }
-
-    /**
-     * Refresh fab.
-     */
-    private fun refreshFab() {
-        val preferenceApplier = preferenceApplier() as PreferenceApplier
-        binding?.fab?.setBackgroundColor(preferenceApplier.colorPair().bgColor())
-
-        val resources = resources
-        val fabMarginBottom = resources.getDimensionPixelSize(R.dimen.fab_margin)
-        val fabMarginHorizontal = resources.getDimensionPixelSize(R.dimen.fab_margin_horizontal)
-        MenuPos.place(binding?.fab as View, fabMarginBottom, fabMarginHorizontal, preferenceApplier.menuPos())
     }
 
     override fun pressLongBack(): Boolean {
@@ -790,10 +623,7 @@ class BrowserFragment : BaseFragment() {
     override fun pressBack(): Boolean = hideOption() || back()
 
     override fun tapHeader() {
-        val activityContext = context
-        if (activityContext == null) {
-            return
-        }
+        val activityContext = context ?: return
         startActivity(SearchActivity.makeIntentWithQuery(activityContext, tabs.currentUrl() ?: ""))
     }
 
@@ -802,15 +632,16 @@ class BrowserFragment : BaseFragment() {
      */
     private fun hideOption(): Boolean {
 
-        if (tabListModule != null && tabListModule.isVisible as Boolean) {
+        if (tabListModule.isVisible) {
             hideTabList()
             return true
         }
 
-        if (binding?.menusView?.visibility == View.VISIBLE) {
-            hideMenu()
+        if (menuOpen) {
+            binding?.cycleMenu?.close(true)
             return true
         }
+
         return false
     }
 
@@ -819,18 +650,12 @@ class BrowserFragment : BaseFragment() {
      */
     private fun hideTabList() {
         tabListModule.hide()
-        if (tabs.currentTab() is EditorTab) {
-            return
-        }
-        binding?.fab?.show()
     }
 
     /**
      * Show tab list.
      */
     private fun showTabList() {
-        hideMenu()
-        binding?.fab?.hide()
         tabListModule.show()
     }
 
@@ -905,7 +730,6 @@ class BrowserFragment : BaseFragment() {
                             }
                             tabs.openNewEditorTab()
                             tabs.replaceToCurrentTab()
-                            hideMenu()
                         },
                         Timber::e
                 )
@@ -951,7 +775,6 @@ class BrowserFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        (binding?.menusView?.adapter as Adapter).dispose()
         tabs.dispose()
         disposables.clear()
         searchWithClip.dispose()
@@ -964,16 +787,6 @@ class BrowserFragment : BaseFragment() {
          * Request code of opening PDF.
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 3
-
-        /**
-         * Animation's dutarion.
-         */
-        private const val ANIMATION_DURATION: Long = 75L
-
-        /**
-         * Allowable interval milliseconds.
-         */
-        private const val ALLOWABLE_INTERVAL_MS: Long = 500L
 
     }
 

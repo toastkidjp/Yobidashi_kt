@@ -104,7 +104,7 @@ class SettingsTopFragment : BaseFragment() {
                     R.id.menu_pos_right -> preferenceApplier().setMenuPos(MenuPos.RIGHT)
                 }
             })
-            it.check(preferenceApplier().menuPos().id())
+            it.check(preferenceApplier().menuPosId())
         }
 
     }
