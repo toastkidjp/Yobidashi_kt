@@ -59,7 +59,7 @@ class AboutThisAppActivity : BaseActivity() {
      */
     fun licenses(view: View) {
         val intent = Intent(this, OssLicensesMenuActivity::class.java)
-        intent.putExtra("title", view.context.getString(R.string.title_licenses))
+        OssLicensesMenuActivity.setActivityTitle(view.context.getString(R.string.title_licenses))
         startActivity(intent)
     }
 
