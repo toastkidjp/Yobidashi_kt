@@ -130,12 +130,6 @@ class TabAdapter(
                 isLoadFinished = true
                 loadingCallback(100, false)
 
-                val currentTab = currentTab()
-                val lastScrolled = currentTab.getScrolled()
-                if (lastScrolled != 0) {
-                    webView.scrollTo(0, lastScrolled)
-                }
-
                 val title  = view.title ?: ""
                 val urlstr = url ?: ""
 
@@ -145,11 +139,18 @@ class TabAdapter(
                     Timber.e(e)
                 }
 
-                if (currentTab is WebTab) {
-                    deleteThumbnail(currentTab.thumbnailPath)
-                }
+                currentTab()?.let {
+                    val lastScrolled = it.getScrolled()
+                    if (lastScrolled != 0) {
+                        webView.scrollTo(0, lastScrolled)
+                    }
 
-                saveNewThumbnailAsync()
+                    if (it is WebTab) {
+                        deleteThumbnail(it.thumbnailPath)
+                    }
+
+                    saveNewThumbnailAsync(it)
+                }
 
                 if (!backOrForwardProgress) {
                     addHistory(title, urlstr)
@@ -420,8 +421,7 @@ class TabAdapter(
     /**
      * Save new thumbnail asynchronously.
      */
-    private fun saveNewThumbnailAsync() {
-        val currentTab = tabList.currentTab()
+    private fun saveNewThumbnailAsync(currentTab: Tab) {
         makeDrawingCache(currentTab)?.let {
             Completable.fromAction {
                 val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
@@ -550,7 +550,7 @@ class TabAdapter(
         if (size() <= 0) {
             return
         }
-        setIndexByTab(currentTab())
+        currentTab()?.let { setIndexByTab(it) }
     }
 
     /**
@@ -617,7 +617,7 @@ class TabAdapter(
                 }
 
                 disableWebView()
-                saveNewThumbnailAsync()
+                saveNewThumbnailAsync(currentTab)
                 tabList.save()
             }
             is PdfTab -> {
@@ -716,7 +716,7 @@ class TabAdapter(
             return
         }
         if (TextUtils.equals(webView.url, url)) {
-            webView.scrollTo(0, currentTab().getScrolled())
+            webView.scrollTo(0, currentTab()?.getScrolled() ?: 0)
             return
         }
         backOrForwardProgress = !saveHistory
@@ -921,12 +921,12 @@ class TabAdapter(
         )
     }
 
-    internal fun currentTab(): Tab = tabList.get(index())
+    internal fun currentTab(): Tab? = tabList.get(index())
 
-    internal fun currentTabId(): String = currentTab().id()
+    internal fun currentTabId(): String = currentTab()?.id() ?: "-1"
 
     private fun updateScrolled() {
-        val currentTab = currentTab()
+        val currentTab = currentTab() ?: return
         if (currentTab is WebTab) {
             currentTab.setScrolled(webView.scrollY)
         }
