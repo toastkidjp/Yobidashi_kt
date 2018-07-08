@@ -72,7 +72,8 @@ class TabAdapter(
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
         touchCallback: () -> Boolean,
-        private val tabEmptyCallback: () -> Unit
+        private val tabEmptyCallback: () -> Unit,
+        private val switchHeader: (Boolean) -> Unit
 ) {
 
     private val tabList: TabList = TabList.loadOrInit(webViewContainer.context)
@@ -384,6 +385,13 @@ class TabAdapter(
             val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(request)
         }
+        webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
+            val scrolled = vertical - oldVertical
+            if (Math.abs(scrolled) > MINIMUM_SCROLLED && currentTab() is WebTab) {
+                val scrolled = vertical - oldVertical
+                switchHeader(0 > scrolled)
+            }
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
                     .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path)
@@ -588,6 +596,7 @@ class TabAdapter(
         val currentTab = tabList.currentTab()
         when (currentTab) {
             is WebTab -> {
+                switchHeader(true)
                 if (editor.isVisible) {
                     editor.hide()
                     enableWebView()
@@ -602,6 +611,7 @@ class TabAdapter(
                 }
             }
             is EditorTab -> {
+                switchHeader(false)
                 if (currentTab.path.isNotBlank()) {
                     editor.readFromFile(File(currentTab.path))
                 } else {
@@ -621,6 +631,7 @@ class TabAdapter(
                 tabList.save()
             }
             is PdfTab -> {
+                switchHeader(false)
                 if (editor.isVisible) {
                     editor.hide()
                 }
