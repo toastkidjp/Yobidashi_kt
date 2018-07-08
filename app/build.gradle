@@ -41,18 +41,12 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled false
-            applicationIdSuffix ".d"
-            manifestPlaceholders = [app_name: "Dobidashi"]
-            versionNameSuffix = ".d"
-        }
-        verification {
             minifyEnabled true
             useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationIdSuffix ".v"
-            manifestPlaceholders = [app_name: "Vobidashi"]
-            versionNameSuffix = ".v"
+            applicationIdSuffix ".d"
+            manifestPlaceholders = [app_name: "Xobidashi"]
+            versionNameSuffix = ".d"
         }
         release {
             minifyEnabled true
