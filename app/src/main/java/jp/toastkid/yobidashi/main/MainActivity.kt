@@ -130,7 +130,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         binding.appBarMain?.toolbar?.let {
             initToolbar(it)
@@ -144,7 +144,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         browserFragment = BrowserFragment()
 
         if (preferenceApplier.useColorFilter()) {
-            ColorFilter(this, binding.root as View).start()
+            ColorFilter(this, binding.root).start()
         }
 
         processShortcut(intent)
@@ -273,7 +273,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
             snackSuppressOpenFragment()
             return
         }
-        fragment
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
@@ -544,11 +543,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         AlertDialog.Builder(this)
                 .setTitle(R.string.confirmation)
                 .setMessage(R.string.message_confirm_exit)
-                .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
-                .setPositiveButton(R.string.ok, { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
                     d.dismiss()
                     finish()
-                })
+                }
                 .show()
     }
 
