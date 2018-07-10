@@ -369,7 +369,12 @@ class BrowserFragment : BaseFragment() {
                 startActivity(SettingsIntentFactory.wifi())
             }
             Menu.PAGE_INFORMATION.ordinal -> {
-                tabs.showPageInformation()
+                PageInformationDialogFragment()
+                        .also { it.arguments = tabs.makeCurrentPageInformation() }
+                        .show(
+                                fragmentManager,
+                                PageInformationDialogFragment::class.java.simpleName
+                        )
             }
             Menu.TAB_LIST.ordinal -> {
                 switchTabList()
