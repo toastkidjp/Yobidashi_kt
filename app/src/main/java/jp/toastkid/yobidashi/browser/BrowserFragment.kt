@@ -24,7 +24,6 @@ import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
 import com.cleveroad.cyclemenuwidget.OnStateChangedListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
@@ -403,9 +402,6 @@ class BrowserFragment : BaseFragment() {
                             .build()
                             .launchUrl(fragmentActivity, Uri.parse(it))
                 }
-            }
-            Menu.SHARE_BARCODE.ordinal -> {
-                SharingUrlByBarcode.invoke(fragmentActivity, tabs.currentUrl() ?: "")
             }
             Menu.ARCHIVE.ordinal -> {
                 tabs.saveArchive()

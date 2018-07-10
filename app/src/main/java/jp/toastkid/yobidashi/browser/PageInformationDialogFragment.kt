@@ -1,15 +1,31 @@
 package jp.toastkid.yobidashi.browser
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import com.google.zxing.BarcodeFormat
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import timber.log.Timber
 
 /**
  * Method object of displaying page information dialog.
@@ -31,17 +47,53 @@ internal class PageInformationDialogFragment: DialogFragment() {
         url = args?.getString("url")
     }
 
+    @SuppressLint("InflateParams", "SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(context)
+        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+
+        val contentView = LayoutInflater.from(activityContext)
+                .inflate(R.layout.content_dialog_share_barcode, null)
+
+        contentView.findViewById<TextView>(R.id.title).text = "Title: $title"
+        contentView.findViewById<TextView>(R.id.url).text = "URL: $url"
+
+        val imageView = contentView.findViewById<ImageView>(R.id.barcode)
+
+        Single.fromCallable { encodeBitmap() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ setBitmap(it, imageView, contentView) }, Timber::e)
+
+        val builder = AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_menu_page_information)
-                .setMessage(makeMessage())
-                .setCancelable(true)
+                .setView(contentView)
                 .setNeutralButton("Clip URL") { d, _ -> clipUrl(d) }
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
         if (favicon != null) {
-            builder.setIcon(BitmapDrawable(context.resources, favicon))
+            builder.setIcon(BitmapDrawable(activityContext.resources, favicon))
         }
         return builder.create()
+    }
+
+    private fun encodeBitmap() = BarcodeEncoder()
+            .encodeBitmap(url, BarcodeFormat.QR_CODE, BARCODE_SIZE, BARCODE_SIZE)
+
+    private fun setBitmap(bitmap: Bitmap, imageView: ImageView, contentView: View) {
+        val context = imageView.context ?: return
+        imageView.setImageBitmap(bitmap)
+        imageView.visibility = View.VISIBLE
+        contentView.findViewById<View>(R.id.share).setOnClickListener {
+            val uri = FileProvider.getUriForFile(
+                    context,
+                     "${BuildConfig.APPLICATION_ID}.fileprovider",
+                    ImageCache.saveBitmap(context, bitmap).absoluteFile
+            )
+            try {
+                context.startActivity(IntentFactory.shareImage(uri))
+            } catch (e: ActivityNotFoundException) {
+                Timber.e(e)
+            }
+        }
     }
 
     /**
@@ -60,18 +112,17 @@ internal class PageInformationDialogFragment: DialogFragment() {
         d.dismiss()
     }
 
-    /**
-     * Make message.
-     */
-    private fun makeMessage(): String =
-            "Title: $title${lineSeparator}URL: $url$lineSeparator"
-
     companion object {
 
         /**
          * Line separator.
          */
         private val lineSeparator = System.getProperty("line.separator")
+
+        /**
+         * Barcode size.
+         */
+        private const val BARCODE_SIZE = 400
 
     }
 }

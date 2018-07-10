@@ -57,8 +57,6 @@ internal enum class Menu(
 
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
-    SHARE_BARCODE(R.string.title_share_by_code, R.drawable.ic_barcode),
-
     REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
 
     LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
