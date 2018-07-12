@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.BackgroundSeachAction
@@ -27,7 +28,7 @@ internal class ActivityAdapter(
         private val relation: SearchHistory_Relation,
         private val onClick: (SearchHistory) -> Unit,
         private val onDelete: (SearchHistory) -> Unit
-) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation) {
+) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation), Removable {
 
     /** Layout inflater.  */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -48,10 +49,9 @@ internal class ActivityAdapter(
                     Timber.e(e)
                 }
             }
-            holder.setOnClickAdd(it) {history ->
-                removeAt(position)
-                onDelete.invoke(history)
-            }
+
+            holder.setOnClickDelete { removeAt(position) }
+
             holder.setFavorite(it.category as String, it.query as String)
             holder.setImageRes(SearchCategory.findByCategory(it.category as String).iconId)
             holder.itemView.setOnLongClickListener { v ->
@@ -60,7 +60,7 @@ internal class ActivityAdapter(
             }
         }
 
-        holder.setAddIcon(R.drawable.ic_remove_search)
+        holder.hideAddButton()
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
@@ -68,9 +68,9 @@ internal class ActivityAdapter(
      * Remove item with position.
      * @param position
      */
-    fun removeAt(position: Int) {
+    override fun removeAt(position: Int): Disposable {
         val item = getItem(position)
-        removeItemAsMaybe(item)
+        return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { i ->
