@@ -24,7 +24,6 @@ import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
 import com.cleveroad.cyclemenuwidget.OnStateChangedListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
@@ -203,7 +202,8 @@ class BrowserFragment : BaseFragment() {
                     progressSubject.onNext(progress)
                 },
                 this::hideOption,
-                this::onEmptyTabs
+                this::onEmptyTabs,
+                this::switchHeader
         )
 
         tabListModule = TabListModule(
@@ -299,9 +299,30 @@ class BrowserFragment : BaseFragment() {
             }
 
             it.findItem(R.id.close_header)?.setOnMenuItemClickListener {
+                hideHeader()
                 true
             }
         }
+    }
+
+    private fun switchHeader(open: Boolean) = when (preferenceApplier().browserScreenMode()) {
+        ScreenMode.FULL_SCREEN -> hideHeader()
+        ScreenMode.EXPANDABLE -> if (open) showHeader() else hideHeader()
+        ScreenMode.FIXED -> showHeader()
+    }
+
+    /**
+     * Show footer with animation.
+     */
+    private fun showHeader() {
+        toolbarAction?.showToolbar()
+    }
+
+    /**
+     * Hide footer with animation.
+     */
+    private fun hideHeader() {
+        toolbarAction?.hideToolbar()
     }
 
     /**
@@ -602,16 +623,17 @@ class BrowserFragment : BaseFragment() {
                     ?.let { drawable -> it.setCornerImageDrawable(drawable) }
         }
 
+        binding?.webViewContainer?.let {
+            it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
+            it.setColorSchemeColors(preferenceApplier.fontColor)
+        }
+
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
                 || editor.isVisible
                 || pdf.isVisible
                 ) {
+            hideHeader()
             return
-        }
-
-        binding?.webViewContainer?.let {
-            it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
-            it.setColorSchemeColors(preferenceApplier.fontColor)
         }
     }
 
