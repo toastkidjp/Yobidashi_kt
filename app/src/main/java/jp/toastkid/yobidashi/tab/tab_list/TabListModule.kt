@@ -135,6 +135,9 @@ class TabListModule(
                             direction: Int
                     ) = (viewHolder as ViewHolder).close()
                 }).attachToRecyclerView(recyclerView)
+        DragAttachment(recyclerView, ItemTouchHelper.RIGHT)
+        DragAttachment(recyclerView, ItemTouchHelper.LEFT)
+
         recyclerView.adapter = adapter
     }
 

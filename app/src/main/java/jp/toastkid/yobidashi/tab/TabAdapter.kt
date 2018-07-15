@@ -988,6 +988,8 @@ class TabAdapter(
 
     override fun toString(): String = tabList.toString()
 
+    fun swap(from: Int, to: Int) = tabList.swap(from, to)
+
     /**
      * It's simple delegation.
      */
