@@ -390,7 +390,12 @@ class BrowserFragment : BaseFragment() {
                 startActivity(SettingsIntentFactory.wifi())
             }
             Menu.PAGE_INFORMATION.ordinal -> {
-                tabs.showPageInformation()
+                PageInformationDialogFragment()
+                        .also { it.arguments = tabs.makeCurrentPageInformation() }
+                        .show(
+                                fragmentManager,
+                                PageInformationDialogFragment::class.java.simpleName
+                        )
             }
             Menu.TAB_LIST.ordinal -> {
                 switchTabList()
@@ -419,9 +424,6 @@ class BrowserFragment : BaseFragment() {
                             .build()
                             .launchUrl(fragmentActivity, Uri.parse(it))
                 }
-            }
-            Menu.SHARE_BARCODE.ordinal -> {
-                SharingUrlByBarcode.invoke(fragmentActivity, tabs.currentUrl() ?: "")
             }
             Menu.ARCHIVE.ordinal -> {
                 tabs.saveArchive()
