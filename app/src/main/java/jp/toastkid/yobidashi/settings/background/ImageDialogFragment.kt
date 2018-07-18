@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.settings.background
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
@@ -22,6 +24,7 @@ import jp.toastkid.yobidashi.settings.background.ImageDialogFragment.Companion.w
  */
 internal class ImageDialogFragment: DialogFragment() {
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext: Context = context
                 ?: return super.onCreateDialog(savedInstanceState)
@@ -39,16 +42,14 @@ internal class ImageDialogFragment: DialogFragment() {
             else -> null
         } ?: return super.onCreateDialog(savedInstanceState)
 
-        val imageView = ImageView(activityContext)
-                .also {
-                    it.scaleType = ImageView.ScaleType.CENTER_CROP
-                    it.adjustViewBounds = true
-                    it.setImageDrawable(drawable)
-                }
+        val contentView = LayoutInflater.from(activityContext)
+                .inflate(R.layout.content_dialog_image, null)
+
+        contentView.findViewById<ImageView>(R.id.image)?.setImageDrawable(drawable)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.image)
-                .setView(imageView)
+                .setView(contentView)
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
                 .create()
     }

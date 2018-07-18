@@ -1,13 +1,16 @@
 package jp.toastkid.yobidashi.browser
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AlertDialog
+import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebView
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -53,10 +56,17 @@ class ImageDownloadAction(
             return
         }
 
-        val imageView = ImageView(context)
+        @SuppressLint("InflateParams")
+        val contentView = LayoutInflater.from(context)
+                .inflate(R.layout.content_dialog_image, null)
+        val imageView = contentView.findViewById<ImageView>(R.id.image)
         downloadPreview(url, imageView)
 
-        showConfirmDialog(context, imageView, url)
+        contentView.setOnClickListener {
+            imageView.visibility = if (imageView.isVisible) View.GONE else View.VISIBLE
+        }
+
+        showConfirmDialog(context, contentView, url)
     }
 
     /**
@@ -85,16 +95,18 @@ class ImageDownloadAction(
     /**
      * Show confirm dialog.
      */
-    private fun showConfirmDialog(context: Context, imageView: ImageView, url: String) {
+    private fun showConfirmDialog(context: Context, view: View, url: String) {
         AlertDialog.Builder(context)
                 .setTitle(R.string.title_download_image)
                 .setMessage(R.string.message_confirm_downloading_image)
-                .setView(imageView)
-                .setCancelable(true)
-                .setNegativeButton(R.string.cancel, { d, i -> d.cancel() })
+                .setView(view)
+                .setNegativeButton(R.string.cancel, { d, _ -> d.cancel() })
                 .setPositiveButton(
                         R.string.ok,
-                        { d, i -> DownloadAction(context, url).invoke() }
+                        { d, _ ->
+                            DownloadAction(context, url).invoke()
+                            d.dismiss()
+                        }
                 )
                 .show()
     }
