@@ -63,7 +63,9 @@ internal enum class Menu(
 
     VIEW_HISTORY(R.string.title_view_history, R.drawable.ic_history),
 
-    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_bookmark),
+    BOOKMARK(R.string.title_bookmark, R.drawable.ic_bookmark),
+
+    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_add_bookmark),
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 

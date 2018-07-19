@@ -464,6 +464,14 @@ class BrowserFragment : BaseFragment() {
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
+            Menu.BOOKMARK.ordinal -> {
+                context?.let {
+                    startActivityForResult(
+                        BookmarkActivity.makeIntent(it),
+                        BookmarkActivity.REQUEST_CODE
+                    )
+                }
+            }
             Menu.ADD_BOOKMARK.ordinal -> {
                 tabs.addBookmark {
                     bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
