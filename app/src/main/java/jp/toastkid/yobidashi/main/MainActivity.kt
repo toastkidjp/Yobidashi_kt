@@ -277,7 +277,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.replace(R.id.content, fragment)
-        transaction.addToBackStack("${fragment.hashCode()}")
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
         binding.appBarMain?.toolbar?.let {
@@ -499,7 +498,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
             return findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
         }
         return super.onKeyLongPress(keyCode, event)
-    }
+     }
 
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -517,12 +516,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
             return
         }
 
-        if (supportFragmentManager.backStackEntryCount == 1) {
-            confirmExit()
-            return
-        }
-
-        supportFragmentManager.popBackStack()
+        confirmExit()
     }
 
     /**
