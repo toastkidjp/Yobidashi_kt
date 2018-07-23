@@ -38,6 +38,7 @@ import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
+import jp.toastkid.yobidashi.settings.SettingsActivity
 import timber.log.Timber
 
 /**
@@ -173,6 +174,10 @@ class SearchActivity : BaseActivity() {
         }
         R.id.open_search_history -> {
             startActivity(SearchHistoryActivity.makeIntent(this))
+            true
+        }
+        R.id.setting -> {
+            startActivity(SettingsActivity.makeIntent(this))
             true
         }
         else -> super.clickMenu(item)
