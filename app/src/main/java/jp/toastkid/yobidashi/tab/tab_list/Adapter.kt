@@ -52,7 +52,7 @@ internal class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tab = tabAdapter.getTabByIndex(position)
         holder.itemView.setOnClickListener {
-            tabAdapter.setIndexByTab(tab)
+            tabAdapter.replace(tab)
             closeAction()
         }
         holder.setImagePath(tab.thumbnailPath)

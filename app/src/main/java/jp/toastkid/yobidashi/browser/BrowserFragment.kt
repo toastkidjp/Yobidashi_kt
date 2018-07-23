@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
 import com.cleveroad.cyclemenuwidget.OnStateChangedListener
@@ -96,6 +97,11 @@ class BrowserFragment : BaseFragment() {
     private lateinit var pdf: PdfModule
 
     /**
+     * Browser module.
+     */
+    private lateinit var browserModule: BrowserModule
+
+    /**
      * Data binding object.
      */
     private var binding: FragmentBrowserBinding? = null
@@ -153,9 +159,9 @@ class BrowserFragment : BaseFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_browser, container, false)
         binding?.fragment = this
 
-        binding?.webViewContainer?.let {
+        binding?.swipeRefresher?.let {
             it.setOnRefreshListener { tabs.reload() }
-            it.setOnChildScrollUpCallback { _, _ -> tabs.disablePullToRefresh() }
+            it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
         }
 
         initMenus()
@@ -168,7 +174,7 @@ class BrowserFragment : BaseFragment() {
                 cm,
                 binding?.root as View,
                 colorPair,
-                { tabs.loadWithNewTab(Uri.parse(it)) }
+                { tabs.loadWithNewTab() }
         )
         searchWithClip.invoke()
 
@@ -192,18 +198,30 @@ class BrowserFragment : BaseFragment() {
                 binding?.moduleContainer as ViewGroup
         )
 
+        browserModule = BrowserModule(
+                context as Context,
+                titleCallback = titleSubject::onNext,
+                loadingCallback = { progress, loading ->
+                    if (!loading) {
+                        binding?.swipeRefresher?.isRefreshing = false
+                        tabs.saveTabList()
+                        val currentTab = tabs.currentTab()
+                        tabs.deleteThumbnail(currentTab?.thumbnailPath)
+                        tabs.saveNewThumbnailAsync()
+                    }
+                    progressSubject.onNext(progress)
+                },
+                touchCallback = this::hideOption,
+                historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
+        )
+
         tabs = TabAdapter(
-                binding?.webViewContainer as ViewGroup,
+                binding?.webViewContainer as FrameLayout,
+                browserModule,
                 editor,
                 pdf,
                 titleSubject::onNext,
-                { progress, loading ->
-                    if (!loading) { binding?.webViewContainer?.isRefreshing = false}
-                    progressSubject.onNext(progress)
-                },
-                this::hideOption,
-                this::onEmptyTabs,
-                this::switchHeader
+                this::onEmptyTabs
         )
 
         tabListModule = TabListModule(
@@ -305,19 +323,6 @@ class BrowserFragment : BaseFragment() {
         }
     }
 
-    private fun switchHeader(open: Boolean) = when (preferenceApplier().browserScreenMode()) {
-        ScreenMode.FULL_SCREEN -> hideHeader()
-        ScreenMode.EXPANDABLE -> if (open) showHeader() else hideHeader()
-        ScreenMode.FIXED -> showHeader()
-    }
-
-    /**
-     * Show footer with animation.
-     */
-    private fun showHeader() {
-        toolbarAction?.showToolbar()
-    }
-
     /**
      * Hide footer with animation.
      */
@@ -329,7 +334,7 @@ class BrowserFragment : BaseFragment() {
      * Stop current tab's loading.
      */
     private fun stopCurrentLoading() {
-        tabs.stopLoading()
+        browserModule.stopLoading()
         Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
     }
 
@@ -365,13 +370,13 @@ class BrowserFragment : BaseFragment() {
                 pageSearcherModule?.show(fragmentActivity)
             }
             Menu.SCREENSHOT.ordinal -> {
-                tabs.currentSnap()
+                browserModule.currentSnap()
                 Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
             }
             Menu.SHARE.ordinal -> {
                 startActivity(
-                        IntentFactory.makeShare(tabs.currentTitle()
-                                + System.getProperty("line.separator") + tabs.currentUrl())
+                        IntentFactory.makeShare(browserModule.currentTitle()
+                                + System.getProperty("line.separator") + browserModule.currentUrl())
                 )
             }
             Menu.SETTING.ordinal -> {
@@ -383,7 +388,7 @@ class BrowserFragment : BaseFragment() {
             Menu.USER_AGENT.ordinal -> {
                 UserAgent.showSelectionDialog(
                         snackbarParent,
-                        { tabs.resetUserAgent(it.text()) }
+                        { browserModule.resetUserAgent(it.text()) }
                 )
             }
             Menu.WIFI_SETTING.ordinal -> {
@@ -405,7 +410,7 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.OPEN.ordinal -> {
                 val inputLayout = TextInputs.make(fragmentActivity)
-                inputLayout.editText?.setText(tabs.currentUrl())
+                inputLayout.editText?.setText(browserModule.currentUrl())
                 AlertDialog.Builder(fragmentActivity)
                         .setTitle(R.string.title_open_url)
                         .setView(inputLayout)
@@ -413,20 +418,20 @@ class BrowserFragment : BaseFragment() {
                         .setPositiveButton(R.string.open) { _, _ ->
                             val url = inputLayout.editText?.text.toString()
                             if (Urls.isValidUrl(url)) {
-                                tabs.loadWithNewTab(Uri.parse(url))
+                                tabs.loadWithNewTab()
                             }
                         }
                         .show()
             }
             Menu.OTHER_BROWSER.ordinal -> {
-                tabs.currentUrl()?.let {
+                browserModule.currentUrl()?.let {
                     CustomTabsFactory.make(fragmentActivity, colorPair())
                             .build()
                             .launchUrl(fragmentActivity, Uri.parse(it))
                 }
             }
             Menu.ARCHIVE.ordinal -> {
-                tabs.saveArchive()
+                browserModule.saveArchive()
             }
             Menu.SEARCH.ordinal -> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
@@ -438,7 +443,7 @@ class BrowserFragment : BaseFragment() {
                 startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
             }
             Menu.REPLACE_HOME.ordinal -> {
-                tabs.currentUrl()?.let {
+                browserModule.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
                         Toaster.snackShort(
                                 snackbarParent,
@@ -540,24 +545,12 @@ class BrowserFragment : BaseFragment() {
     /**
      * Do browser back action.
      */
-    private fun back(): Boolean {
-        val back = tabs.back()
-        if (back.isNotEmpty()) {
-            tabs.loadUrl(back, false)
-            return true
-        }
-        return false
-    }
+    private fun back(): Boolean = tabs.back()
 
     /**
      * Do browser forward action.
      */
-    private fun forward() {
-        val forward = tabs.forward()
-        if (forward.isNotEmpty()) {
-            tabs.loadUrl(forward, false)
-        }
-    }
+    private fun forward() = tabs.forward()
 
     /**
      * Show bookmark activity.
@@ -604,8 +597,6 @@ class BrowserFragment : BaseFragment() {
         val colorPair = colorPair()
         editor.applyColor()
 
-        tabs.reloadWebViewSettings().addTo(disposables)
-
         titleSubject.subscribe({ progressBarCallback.onTitleChanged(it) }).addTo(disposables)
         progressSubject.subscribe({ progressBarCallback.onProgressChanged(it) }).addTo(disposables)
 
@@ -616,10 +607,9 @@ class BrowserFragment : BaseFragment() {
         }
 
         if (tabs.isNotEmpty()) {
-            tabs.setCurrentTab()
             tabs.replaceToCurrentTab(false)
         } else {
-            tabs.loadWithNewTab(Uri.parse(preferenceApplier().homeUrl))
+            tabs.loadWithNewTab()
         }
 
         val preferenceApplier = preferenceApplier()
@@ -633,17 +623,17 @@ class BrowserFragment : BaseFragment() {
                     ?.let { drawable -> it.setCornerImageDrawable(drawable) }
         }
 
-        binding?.webViewContainer?.let {
-            it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
-            it.setColorSchemeColors(preferenceApplier.fontColor)
-        }
-
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
                 || editor.isVisible
                 || pdf.isVisible
                 ) {
             hideHeader()
             return
+        }
+
+        binding?.swipeRefresher?.let {
+            it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
+            it.setColorSchemeColors(preferenceApplier.fontColor)
         }
     }
 
@@ -656,7 +646,7 @@ class BrowserFragment : BaseFragment() {
 
     override fun tapHeader() {
         val activityContext = context ?: return
-        startActivity(SearchActivity.makeIntentWithQuery(activityContext, tabs.currentUrl() ?: ""))
+        startActivity(SearchActivity.makeIntentWithQuery(activityContext, browserModule.currentUrl() ?: ""))
     }
 
     /**
@@ -714,7 +704,8 @@ class BrowserFragment : BaseFragment() {
                 tabs.openNewPdfTab(intent.data)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
-                if (intent.data != null) { tabs.loadWithNewTab(intent.data) }
+                if (intent.data != null) { tabs.loadWithNewTab()
+                }
             }
             TabHistoryActivity.REQUEST_CODE -> {
                 if (intent.hasExtra(TabHistoryActivity.EXTRA_KEY_INDEX)) {
@@ -790,7 +781,7 @@ class BrowserFragment : BaseFragment() {
      * @param uri [Uri]
      */
     fun loadWithNewTab(uri: Uri) {
-        tabs.loadWithNewTab(uri)
+        tabs.loadWithNewTab()
     }
 
     override fun onPause() {
@@ -798,6 +789,16 @@ class BrowserFragment : BaseFragment() {
         editor.saveIfNeed()
         binding?.tabListContainer?.removeAllViews()
         hideOption()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        browserModule.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        browserModule.onViewStateRestored(savedInstanceState)
     }
 
     override fun onStop() {

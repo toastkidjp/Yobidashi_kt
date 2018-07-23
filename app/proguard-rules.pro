@@ -41,11 +41,15 @@
 
 ## For use AdMob
 -keep public class com.google.android.gms.ads.** {
-   public *;
+    public *;
 }
 
 -keep public class com.google.ads.** {
-   public *;
+    public *;
+}
+
+-keep public class com.cleveroad.cyclemenuwidget.CycleMenuWidget {
+    *;
 }
 
 -keep public class com.google.android.gms.internal.** {

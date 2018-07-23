@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Html
-import android.text.TextUtils
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
@@ -146,7 +145,7 @@ class TabListModule(
     private fun initAddTabButton(addTab: FloatingActionButton) =
             addTab.setOnClickListener { v ->
                 addTab.isClickable = false
-                tabAdapter.openNewTab()
+                tabAdapter.openNewWebTab()
                 adapter.notifyItemInserted(adapter.itemCount - 1)
                 closeAction()
                 addTab.isClickable = true
@@ -163,18 +162,6 @@ class TabListModule(
             firstLaunch = false
         }
         lastTabId = tabAdapter.currentTabId()
-    }
-
-    override fun hide() {
-        super.hide()
-
-        if (tabAdapter.isEmpty()) {
-            return
-        }
-
-        if (!TextUtils.equals(lastTabId, tabAdapter.currentTabId())) {
-            tabAdapter.reloadUrlIfNeed()
-        }
     }
 
 }
