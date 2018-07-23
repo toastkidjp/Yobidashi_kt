@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
@@ -72,7 +73,8 @@ class TabAdapter(
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
         touchCallback: () -> Boolean,
-        private val tabEmptyCallback: () -> Unit
+        private val tabEmptyCallback: () -> Unit,
+        private val switchHeader: (Boolean) -> Unit
 ) {
 
     private val tabList: TabList = TabList.loadOrInit(webViewContainer.context)
@@ -130,12 +132,6 @@ class TabAdapter(
                 isLoadFinished = true
                 loadingCallback(100, false)
 
-                val currentTab = currentTab()
-                val lastScrolled = currentTab.getScrolled()
-                if (lastScrolled != 0) {
-                    webView.scrollTo(0, lastScrolled)
-                }
-
                 val title  = view.title ?: ""
                 val urlstr = url ?: ""
 
@@ -145,11 +141,18 @@ class TabAdapter(
                     Timber.e(e)
                 }
 
-                if (currentTab is WebTab) {
-                    deleteThumbnail(currentTab.thumbnailPath)
-                }
+                currentTab()?.let {
+                    val lastScrolled = it.getScrolled()
+                    if (lastScrolled != 0) {
+                        webView.scrollTo(0, lastScrolled)
+                    }
 
-                saveNewThumbnailAsync()
+                    if (it is WebTab) {
+                        deleteThumbnail(it.thumbnailPath)
+                    }
+
+                    saveNewThumbnailAsync(it)
+                }
 
                 if (!backOrForwardProgress) {
                     addHistory(title, urlstr)
@@ -383,6 +386,13 @@ class TabAdapter(
             val dm = webView.context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm.enqueue(request)
         }
+        webView.scrollListener = { horizontal, vertical, oldHorizontal, oldVertical ->
+            val scrolled = vertical - oldVertical
+            if (Math.abs(scrolled) > MINIMUM_SCROLLED && currentTab() is WebTab) {
+                val scrolled = vertical - oldVertical
+                switchHeader(0 > scrolled)
+            }
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             WebIconDatabase.getInstance()
                     .open(webView.context.getDir("faviconApplier", Context.MODE_PRIVATE).path)
@@ -420,8 +430,7 @@ class TabAdapter(
     /**
      * Save new thumbnail asynchronously.
      */
-    private fun saveNewThumbnailAsync() {
-        val currentTab = tabList.currentTab()
+    private fun saveNewThumbnailAsync(currentTab: Tab) {
         makeDrawingCache(currentTab)?.let {
             Completable.fromAction {
                 val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
@@ -550,7 +559,7 @@ class TabAdapter(
         if (size() <= 0) {
             return
         }
-        setIndexByTab(currentTab())
+        currentTab()?.let { setIndexByTab(it) }
     }
 
     /**
@@ -588,6 +597,7 @@ class TabAdapter(
         val currentTab = tabList.currentTab()
         when (currentTab) {
             is WebTab -> {
+                switchHeader(true)
                 if (editor.isVisible) {
                     editor.hide()
                     enableWebView()
@@ -602,6 +612,7 @@ class TabAdapter(
                 }
             }
             is EditorTab -> {
+                switchHeader(false)
                 if (currentTab.path.isNotBlank()) {
                     editor.readFromFile(File(currentTab.path))
                 } else {
@@ -617,10 +628,11 @@ class TabAdapter(
                 }
 
                 disableWebView()
-                saveNewThumbnailAsync()
+                saveNewThumbnailAsync(currentTab)
                 tabList.save()
             }
             is PdfTab -> {
+                switchHeader(false)
                 if (editor.isVisible) {
                     editor.hide()
                 }
@@ -716,7 +728,7 @@ class TabAdapter(
             return
         }
         if (TextUtils.equals(webView.url, url)) {
-            webView.scrollTo(0, currentTab().getScrolled())
+            webView.scrollTo(0, currentTab()?.getScrolled() ?: 0)
             return
         }
         backOrForwardProgress = !saveHistory
@@ -754,10 +766,6 @@ class TabAdapter(
     fun currentUrl(): String? = webView.url
 
     fun currentTitle(): String = webView.title
-
-    fun showPageInformation() {
-        PageInformationDialog(webView).show()
-    }
 
     /**
      * Invoke site search.
@@ -921,12 +929,12 @@ class TabAdapter(
         )
     }
 
-    internal fun currentTab(): Tab = tabList.get(index())
+    internal fun currentTab(): Tab? = tabList.get(index())
 
-    internal fun currentTabId(): String = currentTab().id()
+    internal fun currentTabId(): String = currentTab()?.id() ?: "-1"
 
     private fun updateScrolled() {
-        val currentTab = currentTab()
+        val currentTab = currentTab() ?: return
         if (currentTab is WebTab) {
             currentTab.setScrolled(webView.scrollY)
         }
@@ -983,6 +991,12 @@ class TabAdapter(
     fun loadBackgroundTabsFromDirIfNeed() {
         tabList.loadBackgroundTabsFromDirIfNeed()
         setCurrentTabCount()
+    }
+
+    fun makeCurrentPageInformation(): Bundle = Bundle().also {
+        it.putParcelable("favicon", webView.favicon)
+        it.putString("title", webView.title)
+        it.putString("url", webView.url)
     }
 
     companion object {

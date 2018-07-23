@@ -3,11 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.google.gms.oss.licenses.plugin'
+apply plugin: 'io.fabric'
+
 apply from: 'signing/config.gradle', to: android
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.3'
     byte verMajor  = 1
     byte verMiddle = 0
     byte verMinor  = 22
@@ -70,7 +72,6 @@ dependencies {
     def firebaseVersion = '11.6.2'
     implementation "com.google.firebase:firebase-core:${firebaseVersion}"
     implementation "com.google.firebase:firebase-ads:${firebaseVersion}"
-    implementation "com.google.firebase:firebase-crash:${firebaseVersion}"
     implementation "com.google.android.gms:play-services-oss-licenses:${firebaseVersion}"
 
     implementation 'androidx.core:core-ktx:0.3'
@@ -87,9 +88,11 @@ dependencies {
     implementation 'com.squareup.moshi:moshi:1.5.0'
     implementation 'com.cleveroad:cycle-menu:1.0.1'
     implementation 'org.jsoup:jsoup:1.10.3'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
 
-    kapt 'com.android.databinding:compiler:3.1.0'
+    kapt 'com.android.databinding:compiler:3.1.3'
     kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
 
     testImplementation 'junit:junit:4.12'

@@ -57,15 +57,15 @@ internal enum class Menu(
 
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
-    SHARE_BARCODE(R.string.title_share_by_code, R.drawable.ic_barcode),
-
     REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
 
     LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
 
     VIEW_HISTORY(R.string.title_view_history, R.drawable.ic_history),
 
-    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_bookmark),
+    BOOKMARK(R.string.title_bookmark, R.drawable.ic_bookmark),
+
+    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_add_bookmark),
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 

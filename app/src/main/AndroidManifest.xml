@@ -177,7 +177,9 @@
             </intent-filter>
         </service>
 
-        <service android:name=".color_filter.ColorFilterService"/>
+        <service android:name=".color_filter.ColorFilterService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            />
 
         <receiver android:name=".appwidget.search.Provider" >
             <intent-filter>
