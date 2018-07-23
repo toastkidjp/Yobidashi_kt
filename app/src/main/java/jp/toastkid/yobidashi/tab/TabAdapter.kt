@@ -129,19 +129,23 @@ class TabAdapter(
     /**
      * Open new tab with URL string.
      */
-    fun openNewWebTab() {
+    fun openNewWebTab(url: String = "") {
         val newTab = WebTab()
+        if (Urls.isValidUrl(url)) {
+            newTab.histories.add(0, History("", url))
+        }
         tabList.add(newTab)
         setIndexByTab(newTab)
         replaceWebView()
+        callLoadUrl(url)
     }
 
     /**
      * Open background tab with URL string.
-     * TODO
+     *
      * @param url
      */
-    private fun openBackgroundTab(url: String) {
+    fun openBackgroundTab(url: String) {
         tabList.add(WebTab.makeBackground(webViewContainer.context.getString(R.string.new_tab), url))
         tabList.save()
     }

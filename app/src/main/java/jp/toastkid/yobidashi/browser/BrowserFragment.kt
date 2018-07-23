@@ -174,7 +174,7 @@ class BrowserFragment : BaseFragment() {
                 cm,
                 binding?.root as View,
                 colorPair,
-                { tabs.loadWithNewTab() }
+                { tabs.openNewWebTab() }
         )
         searchWithClip.invoke()
 
@@ -211,8 +211,14 @@ class BrowserFragment : BaseFragment() {
                     }
                     progressSubject.onNext(progress)
                 },
-                touchCallback = this::hideOption,
-                historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
+                historyAddingCallback = { title, url -> tabs.addHistory(title, url) },
+                loader = { url, onBackground ->
+                    if (onBackground) {
+                        tabs.openBackgroundTab(url)
+                    } else {
+                        tabs.openNewWebTab(url)
+                    }
+                }
         )
 
         tabs = TabAdapter(
@@ -418,7 +424,7 @@ class BrowserFragment : BaseFragment() {
                         .setPositiveButton(R.string.open) { _, _ ->
                             val url = inputLayout.editText?.text.toString()
                             if (Urls.isValidUrl(url)) {
-                                tabs.loadWithNewTab()
+                                tabs.openNewWebTab(url)
                             }
                         }
                         .show()
@@ -609,7 +615,7 @@ class BrowserFragment : BaseFragment() {
         if (tabs.isNotEmpty()) {
             tabs.replaceToCurrentTab(false)
         } else {
-            tabs.loadWithNewTab()
+            tabs.openNewWebTab()
         }
 
         val preferenceApplier = preferenceApplier()
@@ -704,7 +710,7 @@ class BrowserFragment : BaseFragment() {
                 tabs.openNewPdfTab(intent.data)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
-                if (intent.data != null) { tabs.loadWithNewTab()
+                if (intent.data != null) { tabs.openNewWebTab()
                 }
             }
             TabHistoryActivity.REQUEST_CODE -> {
@@ -781,7 +787,7 @@ class BrowserFragment : BaseFragment() {
      * @param uri [Uri]
      */
     fun loadWithNewTab(uri: Uri) {
-        tabs.loadWithNewTab()
+        tabs.openNewWebTab(uri.toString())
     }
 
     override fun onPause() {

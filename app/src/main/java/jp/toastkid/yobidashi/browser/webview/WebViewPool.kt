@@ -12,7 +12,8 @@ import android.webkit.WebViewClient
 internal class WebViewPool(
         private val context: Context,
         private val webViewClientSupplier: () -> WebViewClient,
-        private val webChromeClientSupplier: () -> WebChromeClient
+        private val webChromeClientSupplier: () -> WebChromeClient,
+        private val loader: (String, Boolean) -> Unit
 ) {
 
     private val pool: LruCache<String, WebView>
@@ -35,7 +36,7 @@ internal class WebViewPool(
             return extract
         }
 
-        val webView = WebViewFactory.make(context)
+        val webView = WebViewFactory.make(context, loader)
         webView.webViewClient = webViewClientSupplier()
         webView.webChromeClient = webChromeClientSupplier()
         pool.put(tabId, webView)

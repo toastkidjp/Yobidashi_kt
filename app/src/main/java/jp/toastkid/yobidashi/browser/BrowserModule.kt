@@ -38,9 +38,9 @@ class BrowserModule(
         private val context: Context,
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
-        touchCallback: () -> Boolean,
-        private val historyAddingCallback: (String, String) -> Unit
-        ) {
+        private val historyAddingCallback: (String, String) -> Unit,
+        private val loader: (String, Boolean) -> Unit
+) {
 
     private val webViewPool: WebViewPool
 
@@ -62,7 +62,8 @@ class BrowserModule(
         webViewPool = WebViewPool(
                 context,
                 { makeWebViewClient() },
-                { makeWebChromeClient() }
+                { makeWebChromeClient() },
+                { url, onBackground -> loader(url, onBackground) }
         )
     }
 
@@ -123,6 +124,7 @@ class BrowserModule(
 
             handler?.cancel()
 
+            // TODO Divide to DialogFragment
             AlertDialog.Builder(context)
                     .setTitle(R.string.title_ssl_connection_error)
                     .setMessage(SslErrorMessageGenerator.generate(context, error))
@@ -196,8 +198,7 @@ class BrowserModule(
             if (!isLoadFinished) {
                 try {
                     titleCallback(
-                            TitlePair.make(view.context.getString(R.string.prefix_loading) + newProgress + "%", view.url
-                                    ?: "")
+                            TitlePair.make(view.context.getString(R.string.prefix_loading) + newProgress + "%", view.url ?: "")
                     )
                 } catch (e: Exception) {
                     Timber.e(e)
@@ -337,12 +338,6 @@ class BrowserModule(
     fun currentUrl(): String? = currentView()?.url
 
     fun currentTitle(): String = currentView()?.title ?: ""
-
-    fun currentScrolling(): Int = currentView()?.scrollY ?: 0
-
-    fun setScrolled(lastScrolled: Int) {
-        currentView()?.scrollTo(0, lastScrolled)
-    }
 
     /**
      * Stop loading in current tab.
