@@ -32,10 +32,15 @@ class TabList private constructor() {
     @Keep
     private var index: Int = 0
 
-    internal fun currentTab(): Tab = tabs[index]
+    internal fun currentTab(): Tab {
+        if (invalidIndex(index)) {
+            return tabs[0]
+        }
+        return tabs[index]
+    }
 
     internal fun setIndex(newIndex: Int) {
-        index = if (newIndex < 0 || tabs.size < newIndex) 0 else newIndex
+        index = if (invalidIndex(newIndex)) 0 else newIndex
     }
 
     @Keep
@@ -52,9 +57,11 @@ class TabList private constructor() {
             }
 
     internal fun set(index: Int, currentTab: Tab) {
-        val target = if (index < 0 || tabs.size < index) { 0 } else { index }
+        val target = if (invalidIndex(index)) { 0 } else { index }
         tabs[target] = currentTab
     }
+
+    private fun invalidIndex(newIndex: Int) = newIndex < 0 || tabs.size < newIndex
 
     /**
      * Save current state to file.
@@ -99,7 +106,7 @@ class TabList private constructor() {
     }
 
     internal fun closeTab(index: Int) {
-        if (index <= this.index) {
+        if (index <= this.index && index != 0) {
             this.index--
         }
         val tab: Tab = tabs[index]
