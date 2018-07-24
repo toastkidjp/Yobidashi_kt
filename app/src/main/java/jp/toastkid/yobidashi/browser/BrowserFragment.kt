@@ -615,7 +615,7 @@ class BrowserFragment : BaseFragment() {
         if (tabs.isNotEmpty()) {
             tabs.replaceToCurrentTab(false)
         } else {
-            tabs.openNewWebTab()
+            tabs.openNewWebTab(preferenceApplier().homeUrl)
         }
 
         val preferenceApplier = preferenceApplier()
@@ -710,7 +710,8 @@ class BrowserFragment : BaseFragment() {
                 tabs.openNewPdfTab(intent.data)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
-                if (intent.data != null) { tabs.openNewWebTab()
+                intent.data?.let {
+                    tabs.openNewWebTab(it.toString())
                 }
             }
             TabHistoryActivity.REQUEST_CODE -> {
