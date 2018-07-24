@@ -6,6 +6,8 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
+
+
 /**
  * @author toastkidjp
  */
@@ -44,6 +46,10 @@ internal class WebViewPool(
     }
 
     fun getLatest(): WebView? = latestTabId?.let { pool.get(it) }
+
+    fun dispose() {
+        pool.snapshot().values.forEach { it.destroy() }
+    }
 
     companion object {
 

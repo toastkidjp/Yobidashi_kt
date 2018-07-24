@@ -819,6 +819,7 @@ class BrowserFragment : BaseFragment() {
         disposables.clear()
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
+        browserModule.dispose()
     }
 
     companion object {

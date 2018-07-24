@@ -347,7 +347,7 @@ class BrowserModule(
     }
 
     fun dispose() {
-        currentView()?.destroy()
+        webViewPool.dispose()
     }
 
     /**
