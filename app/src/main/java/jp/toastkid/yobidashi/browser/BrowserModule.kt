@@ -75,33 +75,33 @@ class BrowserModule(
             isLoadFinished = false
         }
 
-        override fun onPageFinished(view: WebView, url: String) {
+        override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
             isLoadFinished = true
             loadingCallback(100, false)
 
             val title = view.title ?: ""
-            val urlstr = url ?: ""
+            val urlStr = url ?: ""
 
             try {
-                titleCallback(TitlePair.make(title, urlstr))
+                titleCallback(TitlePair.make(title, urlStr))
             } catch (e: Exception) {
                 Timber.e(e)
             }
 
             if (!backOrForwardProgress) {
-                historyAddingCallback(title, urlstr)
+                historyAddingCallback(title, urlStr)
 
                 if (preferenceApplier.saveViewHistory
                         && title.isNotEmpty()
-                        && urlstr.isNotEmpty()
+                        && urlStr.isNotEmpty()
                 ) {
                     ViewHistoryInsertion
                             .make(
                                     view.context,
                                     title,
-                                    urlstr,
-                                    faviconApplier.makePath(urlstr)
+                                    urlStr,
+                                    faviconApplier.makePath(urlStr)
                             )
                             .insert()
                 }
