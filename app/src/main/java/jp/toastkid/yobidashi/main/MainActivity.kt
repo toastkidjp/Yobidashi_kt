@@ -167,7 +167,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
 
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
-                loadUri(calledIntent.data, true)
+                calledIntent.data?.let { loadUri(it, true) }
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {

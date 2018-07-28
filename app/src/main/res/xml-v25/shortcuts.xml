@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="shortcut1"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/search"
+        android:shortcutLongLabel="@string/search"
+        >
+
+        <intent
+            android:action="android.intent.action.ACTION_WEB_SEARCH"
+            android:targetPackage="jp.toastkid.yobidashi"
+            android:targetClass="jp.toastkid.yobidashi.search.SearchActivity"
+            />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="shortcut2"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/title_apps_launcher"
+        android:shortcutLongLabel="@string/title_apps_launcher"
+        >
+
+        <intent
+            android:action="jp.toastkid.yobidashi.launcher"
+            android:targetPackage="jp.toastkid.yobidashi"
+            android:targetClass="jp.toastkid.yobidashi.launcher.LauncherActivity"
+            />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="shortcut3"
+        android:enabled="true"
+        android:icon="@drawable/ic_card_black"
+        android:shortcutShortLabel="@string/title_planning_poker"
+        android:shortcutLongLabel="@string/title_planning_poker"
+        >
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="jp.toastkid.yobidashi"
+            android:targetClass="jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity"
+            />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+
+</shortcuts>
