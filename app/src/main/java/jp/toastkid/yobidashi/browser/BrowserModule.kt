@@ -146,13 +146,16 @@ class BrowserModule(
                 if (preferenceApplier.adRemove) {
                     adRemover(url)
                 } else {
+                    @Suppress("DEPRECATION")
                     super.shouldInterceptRequest(view, url)
                 }
 
+        @Suppress("DEPRECATION")
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
                 shouldOverrideUrlLoading(view, request?.url?.toString())
 
+        @Suppress("OverridingDeprecatedMember", "DEPRECATION")
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean =
                 url?.let {
                     val context: Context? = view?.context
@@ -312,6 +315,7 @@ class BrowserModule(
         val settings = currentView()?.settings
         settings?.javaScriptEnabled = preferenceApplier.useJavaScript()
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            @Suppress("DEPRECATION")
             settings?.saveFormData = preferenceApplier.doesSaveForm()
         }
         settings?.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
