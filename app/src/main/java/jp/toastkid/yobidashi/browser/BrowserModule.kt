@@ -270,6 +270,22 @@ class BrowserModule(
         currentView()?.pageDown(true)
     }
 
+    fun back(): Boolean {
+        return currentView()?.let {
+            if (it.canGoBack()) {
+                it.goBack()
+                return true
+            }
+            return false
+        } ?: false
+    }
+
+    fun forward() = currentView()?.let {
+        if (it.canGoForward()) {
+            it.goForward()
+        }
+    }
+
     /**
      * Save archive file.
      */
@@ -378,7 +394,7 @@ class BrowserModule(
 
     private fun currentView(): WebView? = webViewPool.getLatest()
 
-    fun currentView(tabId: String?): WebView? = webViewPool.get(tabId)
+    fun getWebView(tabId: String?): WebView? = webViewPool.get(tabId)
 
     fun onSaveInstanceState(outState: Bundle) {
         currentView()?.saveState(outState)

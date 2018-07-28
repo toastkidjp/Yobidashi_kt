@@ -175,21 +175,9 @@ class TabAdapter(
         setIndexByTab(pdfTab)
     }
 
-    fun back(): Boolean {
-        return currentWebView()?.let {
-            if (it.canGoBack()) {
-                it.goBack()
-                return true
-            }
-            return false
-        } ?: false
-    }
+    fun back() = browserModule.back()
 
-    fun forward() = currentWebView()?.let {
-        if (it.canGoForward()) {
-            it.goForward()
-        }
-    }
+    fun forward() = browserModule.forward()
 
     /**
      *
@@ -359,7 +347,8 @@ class TabAdapter(
      */
     fun siteSearch() {
         if (currentTab() is WebTab) {
-            currentWebView()?.let { SiteSearch.invoke(it) }
+            currentWebView()
+                    ?.let { SiteSearch.invoke(it) }
             return
         }
         Toaster.snackShort(webViewContainer, "This menu can be used on only web page.", colorPair)
@@ -376,8 +365,6 @@ class TabAdapter(
     fun loadArchive(archiveFile: File) {
         currentWebView()?.let { Archive.loadArchive(it, archiveFile) }
     }
-
-    private fun currentWebView() = browserModule.currentView(currentTabId())
 
     /**
      * Return specified index tab.
@@ -539,6 +526,8 @@ class TabAdapter(
     }
 
     fun makeCurrentPageInformation(): Bundle = browserModule.makeCurrentPageInformation()
+
+    private fun currentWebView() = browserModule.getWebView(currentTabId())
 
     companion object {
 
