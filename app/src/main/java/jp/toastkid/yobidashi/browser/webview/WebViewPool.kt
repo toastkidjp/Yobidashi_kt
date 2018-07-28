@@ -6,8 +6,6 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-
-
 /**
  * @author toastkidjp
  */
