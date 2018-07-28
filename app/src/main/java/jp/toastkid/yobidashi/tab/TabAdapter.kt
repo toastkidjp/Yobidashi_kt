@@ -309,7 +309,6 @@ class TabAdapter(
         Timber.e(e)
         Toaster.snackShort(webViewContainer, R.string.message_failed_tab_read, colorPair)
         closeTab(index())
-        return
     }
 
     private fun invalidIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
