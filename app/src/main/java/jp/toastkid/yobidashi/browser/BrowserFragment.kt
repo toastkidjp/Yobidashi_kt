@@ -136,7 +136,7 @@ class BrowserFragment : BaseFragment() {
      */
     private var menuOpen: Boolean = false
 
-    lateinit var progressBarCallback: ProgressBarCallback
+    private lateinit var progressBarCallback: ProgressBarCallback
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
