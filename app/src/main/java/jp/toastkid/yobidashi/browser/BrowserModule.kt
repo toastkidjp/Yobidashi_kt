@@ -9,7 +9,7 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import android.support.v4.app.FragmentActivity
 import android.view.animation.Animation
 import android.webkit.*
 import androidx.core.os.bundleOf
@@ -124,12 +124,16 @@ class BrowserModule(
 
             handler?.cancel()
 
-            // TODO Divide to DialogFragment
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.title_ssl_connection_error)
-                    .setMessage(SslErrorMessageGenerator.generate(context, error))
-                    .setPositiveButton(R.string.ok, { d, _ -> d.dismiss() })
-                    .show()
+            if (!(context is FragmentActivity)) {
+                return
+            }
+
+            TlsErrorDialogFragment
+                    .make(SslErrorMessageGenerator.generate(context, error))
+                    .show(
+                            context.supportFragmentManager,
+                            TlsErrorDialogFragment::class.java.simpleName
+                    )
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
