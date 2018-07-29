@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
+import android.os.Build
 import android.util.LruCache
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -13,7 +14,8 @@ internal class WebViewPool(
         private val context: Context,
         private val webViewClientSupplier: () -> WebViewClient,
         private val webChromeClientSupplier: () -> WebChromeClient,
-        private val loader: (String, Boolean) -> Unit
+        private val loader: (String, Boolean) -> Unit,
+        poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE
 ) {
 
     private val pool: LruCache<String, WebView>
@@ -21,7 +23,7 @@ internal class WebViewPool(
     private var latestTabId: String? = null
 
     init {
-        pool = LruCache(MAXIMUM_POOL_SIZE)
+        pool = LruCache(if (0 < poolSize) poolSize else DEFAULT_MAXIMUM_POOL_SIZE)
     }
 
     fun get(tabId: String?): WebView? {
@@ -45,13 +47,23 @@ internal class WebViewPool(
 
     fun getLatest(): WebView? = latestTabId?.let { pool.get(it) }
 
+    fun resize(newSize: Int) {
+        if (newSize == pool.maxSize()) {
+            return
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+            && 0 < newSize) {
+            pool.resize(newSize)
+        }
+    }
+
     fun dispose() {
         pool.snapshot().values.forEach { it.destroy() }
     }
 
     companion object {
 
-        private const val MAXIMUM_POOL_SIZE = 3
+        private const val DEFAULT_MAXIMUM_POOL_SIZE = 6
     }
 
 }

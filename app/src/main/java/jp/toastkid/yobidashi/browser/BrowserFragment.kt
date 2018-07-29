@@ -629,6 +629,8 @@ class BrowserFragment : BaseFragment() {
                     ?.let { drawable -> it.setCornerImageDrawable(drawable) }
         }
 
+        browserModule.resizePool(preferenceApplier.poolSize)
+
         if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
                 || editor.isVisible
                 || pdf.isVisible

@@ -375,4 +375,5 @@
     <string name="message_linear_barcode_reader_failed">読み込みに失敗しました。お使いの機種が対応していない可能性があります。</string>
     <string name="run">実行</string>
     <string name="message_cannot_launch_app">アプリを起動できませんでした。</string>
+    <string name="title_tab_retaining_size">タブを保持する枚数</string>
 </resources>

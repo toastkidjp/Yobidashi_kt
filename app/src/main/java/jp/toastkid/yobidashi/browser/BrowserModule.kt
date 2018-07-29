@@ -63,7 +63,8 @@ class BrowserModule(
                 context,
                 { makeWebViewClient() },
                 { makeWebChromeClient() },
-                { url, onBackground -> loader(url, onBackground) }
+                { url, onBackground -> loader(url, onBackground) },
+                preferenceApplier.poolSize
         )
     }
 
@@ -420,6 +421,10 @@ class BrowserModule(
             bundle.putString("url", it.url)
             bundle
         } ?: bundleOf()
+    }
+
+    fun resizePool(poolSize: Int) {
+        webViewPool.resize(poolSize)
     }
 
 }
