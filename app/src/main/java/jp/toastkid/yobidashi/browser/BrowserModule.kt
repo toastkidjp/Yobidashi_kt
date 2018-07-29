@@ -312,18 +312,19 @@ class BrowserModule(
     /**
      * Reload [WebSettings].
      *
-     * TODO clean up code.
      * @return subscription
      */
     fun reloadWebViewSettings(): Disposable {
-        val settings = currentView()?.settings
-        settings?.javaScriptEnabled = preferenceApplier.useJavaScript()
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            @Suppress("DEPRECATION")
-            settings?.saveFormData = preferenceApplier.doesSaveForm()
+        val settings = currentView()?.settings?.also {
+            it.javaScriptEnabled = preferenceApplier.useJavaScript()
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                @Suppress("DEPRECATION")
+                it.saveFormData = preferenceApplier.doesSaveForm()
+            }
+            it.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
         }
-        settings?.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
-        return Single.create<String> { e -> e.onSuccess(preferenceApplier.userAgent()) }
+
+        return Single.fromCallable { preferenceApplier.userAgent() }
                 .map { uaName ->
                     val text = UserAgent.valueOf(uaName).text()
 
