@@ -1,7 +1,8 @@
 package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
-import android.util.LongSparseArray
+import android.os.Build
+import android.util.LruCache
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -9,33 +10,60 @@ import android.webkit.WebViewClient
 /**
  * @author toastkidjp
  */
-internal class WebViewPool(private val context: Context, private val webViewClient: WebViewClient, private val webChromeClient: WebChromeClient) {
+internal class WebViewPool(
+        private val context: Context,
+        private val webViewClientSupplier: () -> WebViewClient,
+        private val webChromeClientSupplier: () -> WebChromeClient,
+        private val loader: (String, Boolean) -> Unit,
+        poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE
+) {
 
-    private val pool: LongSparseArray<WebView>
+    private val pool: LruCache<String, WebView>
+
+    private var latestTabId: String? = null
 
     init {
-        pool = LongSparseArray<WebView>(MAXIMUM_POOL_SIZE)
+        pool = LruCache(if (0 < poolSize) poolSize else DEFAULT_MAXIMUM_POOL_SIZE)
     }
 
-    fun get(): WebView {
-        if (pool.size() < MAXIMUM_POOL_SIZE) {
-            val webView = WebViewFactory.make(context)
-            webView.setWebViewClient(webViewClient)
-            webView.setWebChromeClient(webChromeClient)
-            pool.append(System.nanoTime(), webView)
-            return webView
+    fun get(tabId: String?): WebView? {
+        if (tabId == null) {
+            return null
         }
 
-        val webView = WebViewFactory.make(context)
-        webView.setWebViewClient(webViewClient)
-        webView.setWebChromeClient(webChromeClient)
-        pool.append(System.nanoTime(), webView)
+        latestTabId = tabId
+
+        val extract = pool[tabId]
+        if (extract != null) {
+            return extract
+        }
+
+        val webView = WebViewFactory.make(context, loader)
+        webView.webViewClient = webViewClientSupplier()
+        webView.webChromeClient = webChromeClientSupplier()
+        pool.put(tabId, webView)
         return webView
+    }
+
+    fun getLatest(): WebView? = latestTabId?.let { pool.get(it) }
+
+    fun resize(newSize: Int) {
+        if (newSize == pool.maxSize()) {
+            return
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+            && 0 < newSize) {
+            pool.resize(newSize)
+        }
+    }
+
+    fun dispose() {
+        pool.snapshot().values.forEach { it.destroy() }
     }
 
     companion object {
 
-        private val MAXIMUM_POOL_SIZE = 10
+        private const val DEFAULT_MAXIMUM_POOL_SIZE = 6
     }
 
 }

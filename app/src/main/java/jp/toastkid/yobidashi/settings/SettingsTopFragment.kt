@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.AdapterView
+import android.widget.SeekBar
 import android.widget.Spinner
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -141,6 +142,18 @@ class SettingsTopFragment : BaseFragment() {
             it.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
             it.useInversionCheck.isChecked = preferenceApplier.useInversion
             it.adRemoveCheck.isChecked = preferenceApplier.adRemove
+            it.poolSizeValue.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
+                    preferenceApplier.poolSize = bar?.progress ?: preferenceApplier.poolSize
+                    it.poolSizeText.setText(preferenceApplier.poolSize.toString())
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) = Unit
+
+                override fun onStopTrackingTouch(p0: SeekBar?) = Unit
+
+            })
+            it.poolSizeValue.progress = preferenceApplier.poolSize
         }
 
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
