@@ -138,6 +138,11 @@ class TabAdapter(
         setIndexByTab(newTab)
         replaceWebView()
         callLoadUrl(url)
+        Toaster.snackShort(
+                webViewContainer,
+                webViewContainer.context.getString(R.string.message_tab_open_new, url),
+                preferenceApplier.colorPair()
+        )
     }
 
     /**
@@ -148,6 +153,11 @@ class TabAdapter(
     fun openBackgroundTab(url: String) {
         tabList.add(WebTab.makeBackground(webViewContainer.context.getString(R.string.new_tab), url))
         tabList.save()
+        Toaster.snackShort(
+                webViewContainer,
+                webViewContainer.context.getString(R.string.message_tab_open_background, url),
+                preferenceApplier.colorPair()
+        )
     }
 
     /**
