@@ -29,6 +29,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
         </activity>
 
         <activity-alias
@@ -44,6 +45,14 @@
                 <data android:scheme="http"/>
                 <data android:scheme="https"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data
+                android:name="com.android.systemui.action_assist_icon"
+                android:resource="@mipmap/ic_launcher"
+                />
         </activity-alias>
 
         <activity
@@ -169,7 +178,9 @@
             </intent-filter>
         </service>
 
-        <service android:name=".color_filter.ColorFilterService"/>
+        <service android:name=".color_filter.ColorFilterService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            />
 
         <receiver android:name=".appwidget.search.Provider" >
             <intent-filter>

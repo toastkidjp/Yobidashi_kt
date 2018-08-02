@@ -10,8 +10,9 @@ package jp.toastkid.yobidashi.search.history
 import android.os.Handler
 import android.os.Looper
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -19,7 +20,6 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
-import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
 
 /**
  * Search history module.
@@ -78,16 +78,11 @@ class HistoryModule(
                 { history -> onClickAdd(history) }
         )
         binding.searchHistories.adapter = moduleAdapter
-        binding.searchHistories.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                onTouch()
-                return false
-            }
-        }
-        uiThreadHandler.post {
-            RightSwipeActionAttacher
-                    .invoke(binding.searchHistories, { moduleAdapter.removeAt(it).addTo(disposables) })
-        }
+
+        Completable.fromAction { SwipeActionAttachment.invoke(binding.searchHistories) }
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+                .addTo(disposables)
     }
 
     /**

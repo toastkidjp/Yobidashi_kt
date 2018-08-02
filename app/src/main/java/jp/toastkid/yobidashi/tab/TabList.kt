@@ -18,50 +18,50 @@ import kotlin.concurrent.withLock
 
 /**
  * First collection of [Tab].
- * TODO clean up code.
+ *
  * @author toastkidjp
  */
 class TabList private constructor() {
 
-    @Transient private val tabs: MutableList<Tab> = mutableListOf<Tab>()
+    @Transient
+    private val tabs: MutableList<Tab> = mutableListOf()
 
-    @Transient private val disposables = CompositeDisposable()
+    @Transient
+    private val disposables = CompositeDisposable()
 
     @Keep
     private var index: Int = 0
 
     internal fun currentTab(): Tab {
-        return tabs.get(index)
+        if (invalidIndex(index)) {
+            return tabs[0]
+        }
+        return tabs[index]
     }
 
     internal fun setIndex(newIndex: Int) {
-        index = if (newIndex < 0 || tabs.size < newIndex) 0 else newIndex
+        index = if (invalidIndex(newIndex)) 0 else newIndex
     }
 
     @Keep
-    fun getIndex(): Int {
-        return index
-    }
+    fun getIndex(): Int = index
 
     @Keep
-    fun size(): Int {
-        return tabs.size
-    }
+    fun size(): Int = tabs.size
 
-    internal fun get(position: Int): Tab {
-        if (position < 0 || tabs.size <= position) {
-            return tabs[0]
-        }
-        return tabs[position]
-    }
+    internal fun get(position: Int): Tab =
+            if (position < 0 || tabs.size <= position) {
+                tabs[0]
+            } else {
+                tabs[position]
+            }
 
     internal fun set(index: Int, currentTab: Tab) {
-        if (index < 0 || tabs.size < index) {
-            tabs.set(0, currentTab)
-            return
-        }
-        tabs.set(index, currentTab)
+        val target = if (invalidIndex(index)) { 0 } else { index }
+        tabs[target] = currentTab
     }
+
+    private fun invalidIndex(newIndex: Int) = newIndex < 0 || tabs.size < newIndex
 
     /**
      * Save current state to file.
@@ -81,17 +81,17 @@ class TabList private constructor() {
                 it.mkdirs()
             }
             tabs.forEach { tab ->
-                val source: ByteArray? = when {
-                    tab is WebTab -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    tab is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    tab is PdfTab -> pdfTabJsonAdapter.toJson(tab)?.toByteArray(charset)
-                    else             -> ByteArray(0)
+                val source: ByteArray? = when (tab) {
+                    is WebTab -> webTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    is PdfTab -> pdfTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    else -> ByteArray(0)
                 }
                 source?.let {
-                    Okio.buffer(Okio.sink(File(itemsDir, "${tab.id()}.json"))).run {
-                        write(source)
-                        flush()
-                        close()
+                    Okio.buffer(Okio.sink(File(itemsDir, "${tab.id()}.json"))).use {
+                        it.write(source)
+                        it.flush()
+                        it.close()
                     }
                 }
             }
@@ -106,10 +106,10 @@ class TabList private constructor() {
     }
 
     internal fun closeTab(index: Int) {
-        if (index <= this.index) {
+        if (index <= this.index && index != 0) {
             this.index--
         }
-        val tab: Tab = tabs.get(index)
+        val tab: Tab = tabs[index]
         remove(tab)
     }
 
@@ -133,7 +133,7 @@ class TabList private constructor() {
 
         private const val TABS_DIR = "tabs"
 
-        private const val TABS_ITEM_DIR = TABS_DIR + "/items"
+        private const val TABS_ITEM_DIR = "$TABS_DIR/items"
 
         private val savingLock = ReentrantLock()
 
@@ -185,7 +185,7 @@ class TabList private constructor() {
             return TabList()
         }
 
-        internal fun loadTabsFromDir(): List<Tab?>? {
+        private fun loadTabsFromDir(): List<Tab?>? {
             return itemsDir?.list()
                     ?.map {
                         val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).let {
@@ -193,12 +193,10 @@ class TabList private constructor() {
                             it.close()
                             return@let readUtf8
                         }
-                        if (json.contains("editorTab")) {
-                            editorTabJsonAdapter.fromJson(json)
-                        } else if (json.contains("pdfTab")) {
-                            pdfTabJsonAdapter.fromJson(json)
-                        } else {
-                            webTabJsonAdapter.fromJson(json)
+                        when {
+                            json.contains("editorTab") -> editorTabJsonAdapter.fromJson(json)
+                            json.contains("pdfTab") -> pdfTabJsonAdapter.fromJson(json)
+                            else -> webTabJsonAdapter.fromJson(json)
                         }
                     }
         }
@@ -217,9 +215,7 @@ class TabList private constructor() {
         }
     }
 
-    internal fun indexOf(tab: Tab): Int {
-        return tabs.indexOf(tab)
-    }
+    internal fun indexOf(tab: Tab): Int = tabs.indexOf(tab)
 
     fun dispose() {
         disposables.clear()

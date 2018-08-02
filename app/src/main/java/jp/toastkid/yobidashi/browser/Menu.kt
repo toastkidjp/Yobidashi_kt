@@ -1,10 +1,17 @@
-package jp.toastkid.yobidashi.browser.menu
+package jp.toastkid.yobidashi.browser
 
+import android.content.Context
 import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
+import android.support.v4.content.ContextCompat
+import android.view.View
+import com.cleveroad.cyclemenuwidget.CycleMenuItem
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import java.util.*
 
 /**
  * In App Browser's circular menu.
@@ -50,15 +57,15 @@ internal enum class Menu(
 
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
-    SHARE_BARCODE(R.string.title_share_by_code, R.drawable.ic_barcode),
-
     REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
 
     LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
 
     VIEW_HISTORY(R.string.title_view_history, R.drawable.ic_history),
 
-    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_bookmark),
+    BOOKMARK(R.string.title_bookmark, R.drawable.ic_bookmark),
+
+    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_add_bookmark),
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 
@@ -76,12 +83,38 @@ internal enum class Menu(
     ;
 
     companion object {
-        val list: List<Menu> =
-                if (Archive.canUseArchive()) { values().toList() }
-                else { values().filter { filter(it) } }
+        fun items(context: Context?): List<CycleMenuItem> {
+            if (context == null) {
+                return Collections.emptyList()
+            }
+            return if (Archive.canUseArchive()) {
+                values()
+                        .map { convertMenuItem(context, it) }
+            } else {
+                values()
+                        .filter { filter(it) }
+                        .map { convertMenuItem(context, it) }
+            }
+        }
 
-        private fun filter(it: Menu): Boolean {
-            return it != ARCHIVE && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || it != PDF)
+        private fun convertMenuItem(context: Context, menu: Menu) =
+                CycleMenuItem(menu.ordinal, ContextCompat.getDrawable(context, menu.iconId))
+
+        private fun filter(it: Menu): Boolean =
+                it != ARCHIVE && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || it != PDF)
+
+        fun showInformation(view: View?) {
+            if (view == null) {
+                return
+            }
+            val activityContext = view.context
+            Toaster.snackLong(
+                    view,
+                    values().find { it.ordinal == view.id }?.titleId ?: 0,
+                    R.string.run,
+                    View.OnClickListener { view.performClick() },
+                    PreferenceApplier(activityContext).colorPair()
+            )
         }
     }
 }

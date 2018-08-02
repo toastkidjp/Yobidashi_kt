@@ -323,6 +323,69 @@
 
             <include layout="@layout/primary_dark_divider"/>
 
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_item_height"
+                android:layout_marginLeft="16dp"
+                >
+                <TextView
+                    android:id="@+id/title_pool_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_tab_retaining_size"
+                    />
+                <TextView
+                    android:id="@+id/pool_size_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_toRightOf="@id/title_pool_size"
+                    android:layout_toEndOf="@id/title_pool_size"
+                    />
+                <SeekBar
+                    android:id="@+id/pool_size_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title_pool_size"
+                    android:layout_marginTop="8dp"
+                    style="@style/OneLineTextMenu"
+                    android:max="20"
+                    />
+            </RelativeLayout>
+
+            <include layout="@layout/primary_dark_divider"/>
+
+            <FrameLayout
+                android:id="@+id/ad_remove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchAdRemove()}"
+                >
+                <TextView
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_block_black"
+                    android:text="@string/title_remove_ad"
+                    />
+                <CheckBox
+                    android:id="@+id/ad_remove_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/common_horizontal_margin"
+                    android:layout_gravity="right"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
+
+            <include layout="@layout/primary_dark_divider"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

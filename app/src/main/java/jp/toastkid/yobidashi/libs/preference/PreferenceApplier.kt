@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
+import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -32,7 +33,7 @@ class PreferenceApplier(private val context: Context) {
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
-        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE
+        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE
     }
 
     private val preferences: SharedPreferences
@@ -156,8 +157,12 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putString(Key.MENU_POS.name, newState.name).apply()
     }
 
-    fun menuPos(): MenuPos {
-        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name))
+    fun menuPosId(): Int {
+        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
+    }
+
+    fun menuPos(): CycleMenuWidget.CORNER {
+        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).corner
     }
 
     fun setLoadImage(newState: Boolean) {
@@ -262,6 +267,14 @@ class PreferenceApplier(private val context: Context) {
     var wifiOnly: Boolean
         get () = preferences.getBoolean(Key.WIFI_ONLY_MODE.name, true)
         set (newValue) = preferences.edit().putBoolean(Key.WIFI_ONLY_MODE.name, newValue).apply()
+
+    var adRemove: Boolean
+        get () = preferences.getBoolean(Key.AD_REMOVE.name, true)
+        set (newValue) = preferences.edit().putBoolean(Key.AD_REMOVE.name, newValue).apply()
+
+    var poolSize: Int
+        get () = preferences.getInt(Key.WEB_VIEW_POOL_SIZE.name, 6)
+        set (newValue) = preferences.edit().putInt(Key.WEB_VIEW_POOL_SIZE.name, newValue).apply()
 
     fun clear() {
         preferences.edit().clear().apply()

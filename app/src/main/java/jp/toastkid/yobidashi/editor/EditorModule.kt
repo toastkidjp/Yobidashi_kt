@@ -5,6 +5,8 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -17,14 +19,15 @@ import android.text.Html
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
+import android.widget.TextView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchActivity
 import okio.Okio
@@ -52,7 +55,6 @@ class EditorModule(
         private val switchTabAction: () -> Unit,
         private val closeTabAction: () -> Unit,
         private val saveTabCallback: (File) -> Unit,
-        private val toolbarCallback: (Boolean) -> Unit,
         hideOption: () -> Boolean
 ): BaseModule(binding.root) {
 
@@ -124,19 +126,34 @@ class EditorModule(
 
     fun applyColor() {
         val colorPair = preferenceApplier.colorPair()
-        Colors.setColors(binding.save, colorPair)
-        Colors.setColors(binding.load, colorPair)
-        Colors.setColors(binding.search, colorPair)
-        Colors.setColors(binding.clip, colorPair)
-        Colors.setColors(binding.tabList, colorPair)
-        Colors.setColors(binding.backup, colorPair)
-        Colors.setColors(binding.toTop, colorPair)
-        Colors.setColors(binding.toBottom, colorPair)
-        Colors.setColors(binding.clear, colorPair)
+        applyButtonColor(
+                colorPair,
+                binding.save,
+                binding.load,
+                binding.search,
+                binding.clip,
+                binding.tabList,
+                binding.backup,
+                binding.toTop,
+                binding.toBottom,
+                binding.clear
+                )
 
+        binding.header.setBackgroundColor(colorPair.bgColor())
         binding.footer.setBackgroundColor(colorPair.bgColor())
         binding.counter.setTextColor(colorPair.fontColor())
         binding.lastSaved.setTextColor(colorPair.fontColor())
+    }
+
+    private fun applyButtonColor(colorPair: ColorPair, vararg textViews: TextView) {
+        val fontColor = colorPair.fontColor()
+        textViews.forEach { textView ->
+            textView.setTextColor(fontColor)
+            textView.compoundDrawables?.forEach {
+                it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
+            }
+        }
+
     }
 
     /**
@@ -400,17 +417,11 @@ class EditorModule(
         return drawingCache
     }
 
-    override fun show() {
-        super.show()
-        toolbarCallback(true)
-    }
-
     override fun hide() {
         super.hide()
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
-        toolbarCallback(false)
     }
 
     companion object {

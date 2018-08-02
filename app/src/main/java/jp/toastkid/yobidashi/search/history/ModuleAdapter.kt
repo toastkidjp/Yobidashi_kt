@@ -32,7 +32,7 @@ internal class ModuleAdapter(
         private val onClick: (SearchHistory) -> Unit,
         private val onVisibilityChanged: (Boolean) -> Unit,
         private val onClickAdd: (SearchHistory) -> Unit
-) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation) {
+) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation), Removable {
 
     /** Layout inflater.  */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -56,6 +56,8 @@ internal class ModuleAdapter(
             }
         }
         holder.setOnClickAdd(searchHistory, onClickAdd)
+
+        holder.setOnClickDelete { removeAt(position) }
 
         holder.setAddIcon(R.drawable.ic_add_circle_search)
 
@@ -99,7 +101,7 @@ internal class ModuleAdapter(
      * Remove item with position.
      * @param position
      */
-    fun removeAt(position: Int): Disposable {
+    override fun removeAt(position: Int): Disposable {
         val item = selected[position]
         return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())

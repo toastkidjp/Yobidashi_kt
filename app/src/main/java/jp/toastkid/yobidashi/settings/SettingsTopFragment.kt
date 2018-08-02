@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.AdapterView
+import android.widget.SeekBar
 import android.widget.Spinner
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -104,7 +105,7 @@ class SettingsTopFragment : BaseFragment() {
                     R.id.menu_pos_right -> preferenceApplier().setMenuPos(MenuPos.RIGHT)
                 }
             })
-            it.check(preferenceApplier().menuPos().id())
+            it.check(preferenceApplier().menuPosId())
         }
 
     }
@@ -140,6 +141,19 @@ class SettingsTopFragment : BaseFragment() {
             it.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
             it.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
             it.useInversionCheck.isChecked = preferenceApplier.useInversion
+            it.adRemoveCheck.isChecked = preferenceApplier.adRemove
+            it.poolSizeValue.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
+                    preferenceApplier.poolSize = bar?.progress ?: preferenceApplier.poolSize
+                    it.poolSizeText.setText(preferenceApplier.poolSize.toString())
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) = Unit
+
+                override fun onStopTrackingTouch(p0: SeekBar?) = Unit
+
+            })
+            it.poolSizeValue.progress = preferenceApplier.poolSize
         }
 
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
@@ -260,6 +274,13 @@ class SettingsTopFragment : BaseFragment() {
                 binding.root,
                 { userAgent -> binding.moduleBrowser?.userAgentValue?.text = userAgent.title() }
         )
+    }
+
+    fun switchAdRemove() {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.adRemove
+        preferenceApplier.adRemove = newState
+        binding.moduleBrowser?.adRemoveCheck?.isChecked = newState
     }
 
     /**

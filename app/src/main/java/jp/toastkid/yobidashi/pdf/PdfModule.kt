@@ -37,8 +37,7 @@ import timber.log.Timber
  */
 class PdfModule(
         private val context: Context,
-        private val parent: ViewGroup,
-        private val toolbarCallback: (Boolean) -> Unit
+        private val parent: ViewGroup
 ): BaseModule(parent) {
 
     /**
@@ -138,7 +137,6 @@ class PdfModule(
     /**
      * Assign new thumbnail image.
      *
-     * @param id Tab's ID
      * @param tab [PdfTab]
      */
     internal fun assignNewThumbnail(tab: PdfTab): Disposable =
@@ -186,16 +184,6 @@ class PdfModule(
      */
     fun animate(animation: Animation) {
         binding.root.startAnimation(animation)
-    }
-
-    override fun show() {
-        super.show()
-        toolbarCallback(true)
-    }
-
-    override fun hide() {
-        super.hide()
-        toolbarCallback(false)
     }
 
     /**

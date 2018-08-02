@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Html
 import android.view.MenuItem
 import jp.toastkid.yobidashi.BaseActivity
@@ -44,34 +42,8 @@ class SearchHistoryActivity : BaseActivity() {
                 { history -> Toaster.snackShort(binding.root, history.query as String, colorPair()) }
         )
         binding.historiesView.adapter = adapter
-        binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                return false
-            }
-        }
-        ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
-                    override fun onMove(
-                            rv: RecyclerView,
-                            viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder
-                    ): Boolean {
-                        val fromPos = viewHolder.adapterPosition
-                        val toPos = target.adapterPosition
-                        adapter.notifyItemMoved(fromPos, toPos)
-                        return true
-                    }
 
-                    override fun onSwiped(
-                            viewHolder: RecyclerView.ViewHolder,
-                            direction: Int
-                    ) {
-                        if (direction != ItemTouchHelper.RIGHT) {
-                            return
-                        }
-                        adapter.removeAt(viewHolder.adapterPosition)
-                    }
-                }).attachToRecyclerView(binding.historiesView)
+        SwipeActionAttachment.invoke(binding.historiesView)
 
         initToolbar(binding.toolbar)
         binding.toolbar.inflateMenu(R.menu.search_history)

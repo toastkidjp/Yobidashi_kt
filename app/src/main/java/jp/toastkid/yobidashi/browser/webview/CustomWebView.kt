@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.webview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.MotionEvent
 import android.webkit.WebView
@@ -17,6 +18,7 @@ internal class CustomWebView(context: Context) : WebView(context) {
 
     var scrolling: Int = 0
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_UP) {
             scrolling = 0

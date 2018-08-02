@@ -9,10 +9,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.databinding.ItemTabHistoryBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.tab.model.WebTab
 
 /**
  * WebTab history adapter.
@@ -20,7 +20,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @param context
  * @param tab WebTab list model
- * @param closeAction Closing action
+ * @param clickCallback Click action
  *
  * @author toastkidjp
  */
