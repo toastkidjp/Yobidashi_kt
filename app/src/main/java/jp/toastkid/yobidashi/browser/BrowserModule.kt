@@ -406,6 +406,8 @@ class BrowserModule(
 
     fun getWebView(tabId: String?): WebView? = webViewPool.get(tabId)
 
+    fun detachWebView(tabId: String?) = webViewPool.remove(tabId)
+
     fun onSaveInstanceState(outState: Bundle) {
         currentView()?.saveState(outState)
     }

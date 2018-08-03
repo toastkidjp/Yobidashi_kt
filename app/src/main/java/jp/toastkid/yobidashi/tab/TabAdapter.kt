@@ -385,6 +385,7 @@ class TabAdapter(
         val tab = tabList.get(index)
         if (tab is WebTab) {
             deleteThumbnail(tab.thumbnailPath)
+            browserModule.detachWebView(tab.id())
         }
 
         tabList.closeTab(index)

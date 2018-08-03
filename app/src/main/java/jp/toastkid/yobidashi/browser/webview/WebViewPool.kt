@@ -47,6 +47,13 @@ internal class WebViewPool(
 
     fun getLatest(): WebView? = latestTabId?.let { pool.get(it) }
 
+    fun remove(tabId: String?) {
+        if (tabId == null) {
+            return
+        }
+        pool.remove(tabId)
+    }
+
     fun resize(newSize: Int) {
         if (newSize == pool.maxSize()) {
             return
