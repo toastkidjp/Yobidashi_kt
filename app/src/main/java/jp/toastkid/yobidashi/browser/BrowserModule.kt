@@ -56,8 +56,6 @@ class BrowserModule(
     private val adRemover: AdRemover =
             AdRemover(context.assets.open("ad_hosts.txt"))
 
-    var backOrForwardProgress: Boolean = false
-
     init {
         webViewPool = WebViewPool(
                 context,
@@ -90,33 +88,30 @@ class BrowserModule(
                 Timber.e(e)
             }
 
-            if (!backOrForwardProgress) {
-                historyAddingCallback(title, urlStr)
+            historyAddingCallback(title, urlStr)
 
-                if (preferenceApplier.saveViewHistory
-                        && title.isNotEmpty()
-                        && urlStr.isNotEmpty()
-                ) {
-                    ViewHistoryInsertion
-                            .make(
-                                    view.context,
-                                    title,
-                                    urlStr,
-                                    faviconApplier.makePath(urlStr)
-                            )
-                            .insert()
-                }
+            if (preferenceApplier.saveViewHistory
+                    && title.isNotEmpty()
+                    && urlStr.isNotEmpty()
+            ) {
+                ViewHistoryInsertion
+                        .make(
+                                view.context,
+                                title,
+                                urlStr,
+                                faviconApplier.makePath(urlStr)
+                        )
+                        .insert()
             }
+
             if (preferenceApplier.useInversion) {
                 InversionScript(view)
             }
-            backOrForwardProgress = false
         }
 
         override fun onReceivedError(
                 view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
-            backOrForwardProgress = false
             loadingCallback(100, false)
         }
 
@@ -223,7 +218,8 @@ class BrowserModule(
         }
     }
 
-    fun loadUrl(url: String, saveHistory: Boolean = true) {
+    fun loadUrl(url: String) {
+        Timber.i("url = $url")
         if (url.isEmpty()) {
             return
         }
@@ -232,7 +228,6 @@ class BrowserModule(
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
-        backOrForwardProgress = !saveHistory
 
         currentView()?.loadUrl(url)
     }
