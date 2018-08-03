@@ -129,7 +129,7 @@ class TabAdapter(
     /**
      * Open new tab with URL string.
      */
-    fun openNewWebTab(url: String = "") {
+    fun openNewWebTab(url: String = preferenceApplier.homeUrl) {
         val newTab = WebTab()
         if (Urls.isValidUrl(url)) {
             newTab.histories.add(0, History("", url))
