@@ -376,4 +376,8 @@
     <string name="run">実行</string>
     <string name="message_cannot_launch_app">アプリを起動できませんでした。</string>
     <string name="title_tab_retaining_size">タブを保持する枚数</string>
+
+    <string name="message_tab_open_new">新しいタブで開きました: \n%s</string>
+    <string name="message_tab_open_background">バックグラウンドタブで開きました: \n%s</string>
+
 </resources>

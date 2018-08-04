@@ -382,4 +382,7 @@
     <string name="message_cannot_launch_app">It has cannot open App.</string>
     <string name="title_tab_retaining_size">Tab retaining size</string>
 
+    <string name="message_tab_open_new">Open new tab: \n%s</string>
+    <string name="message_tab_open_background">Open new background tab: \n%s</string>
+
 </resources>
