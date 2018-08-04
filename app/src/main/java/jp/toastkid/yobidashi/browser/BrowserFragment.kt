@@ -253,7 +253,7 @@ class BrowserFragment : BaseFragment() {
      */
     private fun onEmptyTabs() {
         tabListModule.hide()
-        fragmentManager?.popBackStack()
+        tabs.openNewWebTab()
     }
 
     /**
