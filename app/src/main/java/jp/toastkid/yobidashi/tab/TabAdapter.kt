@@ -218,9 +218,15 @@ class TabAdapter(
         browserModule.enableWebView()
 
         currentTab()?.getUrl()?.let {
-            if (TextUtils.isEmpty(currentWebView?.url) && Urls.isValidUrl(it)) {
-                callLoadUrl(it)
+
+        }
+
+        currentTab()?.let {
+            if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
+                callLoadUrl(it.getUrl())
+                return@let
             }
+            titleCallback(TitlePair.make(it.title(), it.getUrl()))
         }
     }
 
