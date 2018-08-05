@@ -16,7 +16,7 @@ object Urls {
      *
      * @return
      */
-    fun isInvalidUrl(url: String): Boolean =
+    fun isInvalidUrl(url: String?): Boolean =
             TextUtils.isEmpty(url) || !URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url)
 
     /**
@@ -25,5 +25,5 @@ object Urls {
      *
      * @return
      */
-    fun isValidUrl(url: String): Boolean = !isInvalidUrl(url)
+    fun isValidUrl(url: String?): Boolean = !isInvalidUrl(url)
 }

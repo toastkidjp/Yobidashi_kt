@@ -13,6 +13,7 @@ class TitlePair private constructor(private val title: String, private val subti
 
     companion object {
 
-        fun make(title: String, subtitle: String): TitlePair = TitlePair(title, subtitle)
+        fun make(title: String?, subtitle: String?): TitlePair =
+                TitlePair(title ?: "", subtitle ?: "")
     }
 }

@@ -16,8 +16,8 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
  */
 internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun setTitle(title: String) {
-        binding.title.text = title
+    fun setTitle(title: String?) {
+        binding.title.text = title ?: ""
     }
 
     fun setImagePath(thumbnailPath: String) {
