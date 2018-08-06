@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
 import android.graphics.Color
-import android.support.annotation.ColorInt
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import jp.toastkid.yobidashi.R
@@ -27,11 +26,6 @@ internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerVie
             return
         }
         ImageLoader.setImageToImageView(binding.image, thumbnailPath)
-    }
-
-    fun setEditorImage(@ColorInt color: Int) {
-        binding.image.setImageResource(R.drawable.ic_edit)
-        binding.image.setColorFilter(color)
     }
 
     fun setCloseAction(listener: View.OnClickListener) {
