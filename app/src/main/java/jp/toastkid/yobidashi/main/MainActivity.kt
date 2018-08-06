@@ -19,7 +19,6 @@ import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.view.Menu
@@ -534,15 +533,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
      * Show confirm exit.
      */
     private fun confirmExit() {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.confirmation)
-                .setMessage(R.string.message_confirm_exit)
-                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, _ ->
-                    d.dismiss()
-                    finish()
-                }
-                .show()
+        CloseDialogFragment()
+                .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
