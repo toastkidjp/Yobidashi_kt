@@ -2,7 +2,7 @@
 <resources>
     <array name="image_menu">
         <item name="set_bg">Set to background.</item>
-        <item name="save_bg">Save for app's background</item>
+        <item name="save_bg">Save for app\'s background</item>
         <item name="download">Download this image file</item>
     </array>
     <array name="url_menu">

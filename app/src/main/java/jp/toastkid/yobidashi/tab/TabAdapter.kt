@@ -129,7 +129,7 @@ class TabAdapter(
     /**
      * Open new tab with URL string.
      */
-    fun openNewWebTab(url: String = "") {
+    fun openNewWebTab(url: String = preferenceApplier.homeUrl) {
         val newTab = WebTab()
         if (Urls.isValidUrl(url)) {
             newTab.histories.add(0, History("", url))
@@ -228,9 +228,15 @@ class TabAdapter(
         browserModule.enableWebView()
 
         currentTab()?.getUrl()?.let {
-            if (TextUtils.isEmpty(currentWebView?.url) && Urls.isValidUrl(it)) {
-                callLoadUrl(it)
+
+        }
+
+        currentTab()?.let {
+            if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
+                callLoadUrl(it.getUrl())
+                return@let
             }
+            titleCallback(TitlePair.make(it.title(), it.getUrl()))
         }
     }
 
@@ -309,7 +315,7 @@ class TabAdapter(
     }
 
     private fun callLoadUrl(url: String, saveHistory: Boolean = true) {
-        browserModule.loadUrl(url, saveHistory)
+        browserModule.loadUrl(url)
         if (editor.isVisible) {
             editor.hide()
         }
@@ -395,6 +401,7 @@ class TabAdapter(
         val tab = tabList.get(index)
         if (tab is WebTab) {
             deleteThumbnail(tab.thumbnailPath)
+            browserModule.detachWebView(tab.id())
         }
 
         tabList.closeTab(index)
