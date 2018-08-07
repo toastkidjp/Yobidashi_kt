@@ -53,7 +53,6 @@ internal class Adapter(
         val tab = tabAdapter.getTabByIndex(position)
         holder.itemView.setOnClickListener {
             tabAdapter.replace(tab)
-            closeAction()
         }
         holder.setImagePath(tab.thumbnailPath)
         holder.setTitle(tab.title())

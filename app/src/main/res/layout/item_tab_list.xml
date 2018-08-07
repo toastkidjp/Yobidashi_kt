@@ -6,8 +6,8 @@
         android:layout_height="@dimen/tab_list_item_height"
         >
         <android.support.v7.widget.CardView
-            android:layout_width="152dp"
-            android:layout_height="200dp"
+            android:layout_width="112dp"
+            android:layout_height="152dp"
             android:layout_margin="4dp"
             android:layout_gravity="bottom"
             android:foreground="@drawable/ripple_transparent"
@@ -18,9 +18,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
                 android:layout_gravity="top|center_horizontal"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:src="@mipmap/ic_launcher_round"
+                android:contentDescription="@string/thumbnail"
                 />
             <TextView
                 android:id="@+id/title"
@@ -41,7 +42,8 @@
                 android:layout_height="@dimen/close_icon_size"
                 android:layout_gravity="top|right"
                 android:src="@drawable/ic_remove_circle"
-                android:background="@drawable/ripple_soft"
+                android:background="@drawable/ripple_transparent"
+                android:contentDescription="@string/close"
                 />
         </android.support.v7.widget.CardView>
 
