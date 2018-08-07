@@ -37,7 +37,10 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class BookmarkActivity: BaseActivity(), BookmarkClearDialogFragment.OnClickBookmarkClearCallback {
+class BookmarkActivity: BaseActivity(),
+        BookmarkClearDialogFragment.OnClickBookmarkClearCallback,
+        DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback
+{
 
     /**
      * Data binding object.
@@ -136,18 +139,11 @@ class BookmarkActivity: BaseActivity(), BookmarkClearDialogFragment.OnClickBookm
                 return true
             }
             R.id.add_default -> {
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.title_add_default_bookmark)
-                        .setMessage(R.string.message_add_default_bookmark)
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            BookmarkInitializer.invoke(this)
-                            adapter.showRoot()
-                            Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
-                            d.dismiss()
-                        }
-                        .setCancelable(true)
-                        .show()
+                DefaultBookmarkDialogFragment()
+                        .show(
+                                supportFragmentManager,
+                                DefaultBookmarkDialogFragment::class.java.simpleName
+                        )
                 return true
             }
             R.id.add_folder -> {
@@ -243,6 +239,12 @@ class BookmarkActivity: BaseActivity(), BookmarkClearDialogFragment.OnClickBookm
 
     override fun onClickBookmarkClear() {
         adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
+    }
+
+    override fun onClickAddDefaultBookmark() {
+        BookmarkInitializer.invoke(this)
+        adapter.showRoot()
+        Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
     }
 
     override fun titleId(): Int = R.string.title_bookmark
