@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -30,7 +31,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.pdf.PdfModule
-import jp.toastkid.yobidashi.search.SiteSearch
+import jp.toastkid.yobidashi.search.SiteSearchDialogFragment
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -362,8 +363,14 @@ class TabAdapter(
      */
     fun siteSearch() {
         if (currentTab() is WebTab) {
-            currentWebView()
-                    ?.let { SiteSearch.invoke(it) }
+            val activityContext = webViewContainer.context
+            if (activityContext is FragmentActivity) {
+                SiteSearchDialogFragment.makeWithUrl(currentWebView()?.url)
+                        .show(
+                                activityContext.supportFragmentManager,
+                                SiteSearchDialogFragment::class.java.simpleName
+                        )
+            }
             return
         }
         Toaster.snackShort(webViewContainer, "This menu can be used on only web page.", colorPair)
