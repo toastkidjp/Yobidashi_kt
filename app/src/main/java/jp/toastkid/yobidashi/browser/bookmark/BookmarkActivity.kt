@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.text.Html
 import android.view.MenuItem
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
@@ -38,7 +37,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class BookmarkActivity: BaseActivity() {
+class BookmarkActivity: BaseActivity(), BookmarkClearDialogFragment.OnClickBookmarkClearCallback {
 
     /**
      * Data binding object.
@@ -129,16 +128,11 @@ class BookmarkActivity: BaseActivity() {
     override fun clickMenu(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.clear -> {
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.title_clear_bookmark)
-                        .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
-                            d.dismiss()
-                        }
-                        .setCancelable(true)
-                        .show()
+                BookmarkClearDialogFragment()
+                        .show(
+                                supportFragmentManager,
+                                BookmarkClearDialogFragment::class.java.simpleName
+                        )
                 return true
             }
             R.id.add_default -> {
@@ -245,6 +239,10 @@ class BookmarkActivity: BaseActivity() {
             return
         }
         super.onBackPressed()
+    }
+
+    override fun onClickBookmarkClear() {
+        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
     }
 
     override fun titleId(): Int = R.string.title_bookmark
