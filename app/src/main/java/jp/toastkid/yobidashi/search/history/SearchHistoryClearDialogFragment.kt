@@ -31,7 +31,7 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
             onClick = activityContext
         }
         return AlertDialog.Builder(activityContext)
-                .setTitle(R.string.title_clear_cache)
+                .setTitle(R.string.title_clear_search_history)
                 .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
