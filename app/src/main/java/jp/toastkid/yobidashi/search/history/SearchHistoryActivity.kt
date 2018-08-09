@@ -64,19 +64,14 @@ class SearchHistoryActivity : BaseActivity(),
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.close) {
-            finish()
-            return true
-        }
-        if (itemId == R.id.clear) {
-            SearchHistoryClearDialogFragment().show(
+        when (item.itemId) {
+            R.id.close -> finish()
+            R.id.clear -> SearchHistoryClearDialogFragment().show(
                     supportFragmentManager,
                     SearchHistoryClearDialogFragment::class.java.simpleName
             )
-            return true
         }
-        return super.clickMenu(item)
+        return true
     }
 
     override fun onClickSearchHistoryClear() {
