@@ -14,7 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -38,7 +37,6 @@ import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
-import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
@@ -413,21 +411,6 @@ class BrowserFragment : BaseFragment() {
             }
             Menu.STOP_LOADING.ordinal -> {
                 stopCurrentLoading()
-            }
-            Menu.OPEN.ordinal -> {
-                val inputLayout = TextInputs.make(fragmentActivity)
-                inputLayout.editText?.setText(browserModule.currentUrl())
-                AlertDialog.Builder(fragmentActivity)
-                        .setTitle(R.string.title_open_url)
-                        .setView(inputLayout)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.open) { _, _ ->
-                            val url = inputLayout.editText?.text.toString()
-                            if (Urls.isValidUrl(url)) {
-                                tabs.openNewWebTab(url)
-                            }
-                        }
-                        .show()
             }
             Menu.OTHER_BROWSER.ordinal -> {
                 browserModule.currentUrl()?.let {

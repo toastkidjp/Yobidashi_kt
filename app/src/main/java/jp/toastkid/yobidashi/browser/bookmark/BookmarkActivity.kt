@@ -9,11 +9,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.LayoutRes
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.text.Html
+import android.text.TextUtils
 import android.view.MenuItem
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
@@ -25,7 +24,6 @@ import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
-import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -38,7 +36,11 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class BookmarkActivity: BaseActivity() {
+class BookmarkActivity: BaseActivity(),
+        BookmarkClearDialogFragment.OnClickBookmarkClearCallback,
+        DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
+        AddingFolderDialogFragment.OnClickAddingFolder
+{
 
     /**
      * Data binding object.
@@ -129,55 +131,26 @@ class BookmarkActivity: BaseActivity() {
     override fun clickMenu(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.clear -> {
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.title_clear_bookmark)
-                        .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
-                            d.dismiss()
-                        }
-                        .setCancelable(true)
-                        .show()
+                BookmarkClearDialogFragment()
+                        .show(
+                                supportFragmentManager,
+                                BookmarkClearDialogFragment::class.java.simpleName
+                        )
                 return true
             }
             R.id.add_default -> {
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.title_add_default_bookmark)
-                        .setMessage(R.string.message_add_default_bookmark)
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            BookmarkInitializer.invoke(this)
-                            adapter.showRoot()
-                            Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
-                            d.dismiss()
-                        }
-                        .setCancelable(true)
-                        .show()
+                DefaultBookmarkDialogFragment()
+                        .show(
+                                supportFragmentManager,
+                                DefaultBookmarkDialogFragment::class.java.simpleName
+                        )
                 return true
             }
             R.id.add_folder -> {
-                val inputLayout = TextInputs.make(this)
-                AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.title_dialog_input_file_name))
-                        .setView(inputLayout)
-                        .setCancelable(true)
-                        .setPositiveButton(R.string.save) { d, i ->
-                            inputLayout.editText?.text?.toString()?.let {
-                                Completable.fromAction {
-                                    BookmarkInsertion(
-                                            this,
-                                            it,
-                                            parent = adapter.currentFolderName(),
-                                            folder = true
-                                    ).insert() }
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe { adapter.reload() }
-                            }
-                        }
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .show()
+                AddingFolderDialogFragment().show(
+                        supportFragmentManager,
+                        AddingFolderDialogFragment::class.java.simpleName
+                )
             }
             R.id.import_bookmark -> {
                 RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -245,6 +218,33 @@ class BookmarkActivity: BaseActivity() {
             return
         }
         super.onBackPressed()
+    }
+
+    override fun onClickBookmarkClear() {
+        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
+    }
+
+    override fun onClickAddDefaultBookmark() {
+        BookmarkInitializer.invoke(this)
+        adapter.showRoot()
+        Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
+    }
+
+    override fun onClickAddFolder(title: String?) {
+        if (TextUtils.isEmpty(title)) {
+            return
+        }
+        Completable.fromAction {
+            BookmarkInsertion(
+                    this,
+                    title as String, // This value is always non-null, because it has checked at above statement.
+                    parent = adapter.currentFolderName(),
+                    folder = true
+            ).insert() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { adapter.reload() }
+                .addTo(disposables)
     }
 
     override fun titleId(): Int = R.string.title_bookmark

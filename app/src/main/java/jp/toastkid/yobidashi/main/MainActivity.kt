@@ -58,7 +58,7 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
-import jp.toastkid.yobidashi.libs.intent.ImplicitIntentInvoker
+import jp.toastkid.yobidashi.libs.intent.ImplicitIntentInvokerDialogFragment
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
@@ -339,7 +339,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
             }
             R.id.nav_intent_invoker -> {
                 sendLog("nav_intnt")
-                ImplicitIntentInvoker.showDialog(this)
+                ImplicitIntentInvokerDialogFragment().show(
+                        supportFragmentManager,
+                        ImplicitIntentInvokerDialogFragment::class.java.simpleName
+                )
             }
             R.id.nav_color_filter -> {
                 ColorFilter(this, binding.root).switchState(this)
