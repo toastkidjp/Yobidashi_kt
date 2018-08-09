@@ -11,8 +11,8 @@ android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     byte verMajor  = 1
-    byte verMiddle = 0
-    byte verMinor  = 22
+    byte verMiddle = 1
+    byte verMinor  = 0
 
     playAccountConfigs {
         defaultAccountConfig {
