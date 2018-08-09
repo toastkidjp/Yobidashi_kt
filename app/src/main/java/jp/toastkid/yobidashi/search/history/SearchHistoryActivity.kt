@@ -30,10 +30,11 @@ class SearchHistoryActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivitySearchHistoryBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         val relation = DbInitter.init(this).relationOfSearchHistory()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.historiesView.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
                 relation,
@@ -82,7 +83,9 @@ class SearchHistoryActivity : BaseActivity(),
     override fun titleId(): Int = R.string.title_search_history
 
     companion object {
-        @LayoutRes const val LAYOUT_ID: Int = R.layout.activity_search_history
+
+        @LayoutRes
+        private const val LAYOUT_ID: Int = R.layout.activity_search_history
 
         fun makeIntent(context: Context): Intent {
             val intent = Intent(context, SearchHistoryActivity::class.java)
