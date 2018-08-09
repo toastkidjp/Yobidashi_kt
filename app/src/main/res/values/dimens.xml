@@ -23,8 +23,8 @@
 
     <dimen name="toolbar_activity_content_top_margin">52dp</dimen>
     <dimen name="close_icon_size">32dp</dimen>
-    <dimen name="tab_list_item_width">160dp</dimen>
-    <dimen name="tab_list_item_height">208dp</dimen>
+    <dimen name="tab_list_item_width">120dp</dimen>
+    <dimen name="tab_list_item_height">160dp</dimen>
 
     <dimen name="button_margin">64dp</dimen>
 </resources>

@@ -379,5 +379,6 @@
 
     <string name="message_tab_open_new">新しいタブで開きました: \n%s</string>
     <string name="message_tab_open_background">バックグラウンドタブで開きました: \n%s</string>
+    <string name="thumbnail">thumbnail</string>
 
 </resources>

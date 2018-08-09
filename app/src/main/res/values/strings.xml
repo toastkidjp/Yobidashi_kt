@@ -384,5 +384,6 @@
 
     <string name="message_tab_open_new">Open new tab: \n%s</string>
     <string name="message_tab_open_background">Open new background tab: \n%s</string>
+    <string name="thumbnail">thumbnail</string>
 
 </resources>
