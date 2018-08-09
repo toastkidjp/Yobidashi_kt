@@ -15,14 +15,22 @@ import android.text.Html
 import jp.toastkid.yobidashi.R
 
 /**
+ * [DialogFragment] for comfirmation clear search history.
+ *
  * @author toastkidjp
  */
 class SearchHistoryClearDialogFragment : DialogFragment() {
 
+    /**
+     * Callback.
+     */
     interface OnClickSearchHistoryClearCallback {
         fun onClickSearchHistoryClear()
     }
 
+    /**
+     * Received callback.
+     */
     private var onClick: OnClickSearchHistoryClearCallback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
