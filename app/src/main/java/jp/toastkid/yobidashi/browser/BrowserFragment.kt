@@ -45,6 +45,7 @@ import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
+import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -637,7 +638,9 @@ class BrowserFragment : BaseFragment() {
 
     override fun tapHeader() {
         val activityContext = context ?: return
-        startActivity(SearchActivity.makeIntentWithQuery(activityContext, browserModule.currentUrl() ?: ""))
+        val currentUrl = browserModule.currentUrl()
+        val inputText = SearchQueryExtractor(currentUrl) ?: currentUrl
+        startActivity(SearchActivity.makeIntentWithQuery(activityContext, inputText ?: ""))
     }
 
     /**
