@@ -8,6 +8,8 @@ import androidx.core.net.toUri
  */
 object SearchQueryExtractor {
 
+    private val commonQueryParameterNames = setOf("q", "query", "text", "word")
+
     operator fun invoke(url: String?) = invoke(url?.toUri())
 
     operator fun invoke(uri: Uri?): String? {
@@ -33,7 +35,12 @@ object SearchQueryExtractor {
                 uri.getQueryParameter("query")
             host.endsWith(".wikipedia.org") ->
                 uri.getQueryParameter("search")
-            else -> null
+            host.endsWith("search.yahoo.co.jp") ->
+                uri.getQueryParameter("p")
+            else -> uri.getQueryParameter(
+                    commonQueryParameterNames
+                            .find { uri.queryParameterNames.contains(it) } ?: ""
+            )
         }
     }
 }

@@ -23,5 +23,9 @@ class SearchQueryExtractorTest {
                 "かもめ",
                 SearchQueryExtractor("https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=%E3%81%8B%E3%82%82%E3%82%81")
         )
+        assertEquals(
+                "programmer",
+                SearchQueryExtractor("https://www.job.com/search?query=programmer")
+        )
     }
 }
