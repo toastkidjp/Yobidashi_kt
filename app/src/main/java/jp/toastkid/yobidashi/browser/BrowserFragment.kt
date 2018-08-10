@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser
 import android.Manifest
 import android.app.Activity
 import android.app.ActivityOptions
+import android.content.ActivityNotFoundException
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
@@ -430,7 +431,14 @@ class BrowserFragment : BaseFragment() {
                 tabs.siteSearch()
             }
             Menu.VOICE_SEARCH.ordinal -> {
-                startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
+                try {
+                    startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
+                } catch (e: ActivityNotFoundException) {
+                    Timber.e(e)
+                    binding?.root?.let {
+                        Toaster.snackShort(it, R.string.message_unabled_voice_search, colorPair())
+                    }
+                }
             }
             Menu.REPLACE_HOME.ordinal -> {
                 browserModule.currentUrl()?.let {

@@ -381,5 +381,6 @@
     <string name="message_tab_open_background">バックグラウンドタブで開きました: \n%s</string>
     <string name="thumbnail">thumbnail</string>
     <string name="title_use_search_query_extractor">検索キーワードを抜き出す</string>
+    <string name="message_unabled_voice_search">音声検索を利用できません。設定を見直してください。</string>
 
 </resources>
