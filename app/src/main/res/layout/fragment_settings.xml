@@ -115,6 +115,34 @@
                 <include layout="@layout/primary_dark_divider"/>
 
                 <FrameLayout
+                    android:id="@+id/enable_search_query_extract"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{view -> fragment.switchSearchQueryExtract()}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_use_search_query_extractor"
+                        />
+                    <CheckBox
+                        android:id="@+id/enable_search_query_extract_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
                     android:id="@+id/enable_search_with_clip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -32,7 +32,7 @@ class PreferenceApplier(private val context: Context) {
         ENABLE_FAVORITE_SEARCH,BG_IMAGE, LAST_AD_DATE,
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
-        DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
+        DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE
     }
 
@@ -233,10 +233,16 @@ class PreferenceApplier(private val context: Context) {
         )
     }
 
-    var enableSearchWithClip: Boolean
+    var enableSearchQueryExtract: Boolean
         get () = preferences.getBoolean(Key.ENABLE_SEARCH_WITH_CLIP.name, true)
         set (newState) {
             preferences.edit().putBoolean(Key.ENABLE_SEARCH_WITH_CLIP.name, newState).apply()
+        }
+
+    var enableSearchWithClip: Boolean
+        get () = preferences.getBoolean(Key.ENABLE_SEARCH_QUERY_EXTRACT.name, true)
+        set (newState) {
+            preferences.edit().putBoolean(Key.ENABLE_SEARCH_QUERY_EXTRACT.name, newState).apply()
         }
 
     var startUp: StartUp

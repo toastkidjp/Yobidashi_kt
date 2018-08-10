@@ -639,7 +639,11 @@ class BrowserFragment : BaseFragment() {
     override fun tapHeader() {
         val activityContext = context ?: return
         val currentUrl = browserModule.currentUrl()
-        val inputText = SearchQueryExtractor(currentUrl) ?: currentUrl
+        val inputText = if (preferenceApplier().enableSearchQueryExtract) {
+            SearchQueryExtractor(currentUrl) ?: currentUrl
+        } else {
+            currentUrl
+        }
         startActivity(SearchActivity.makeIntentWithQuery(activityContext, inputText ?: ""))
     }
 
