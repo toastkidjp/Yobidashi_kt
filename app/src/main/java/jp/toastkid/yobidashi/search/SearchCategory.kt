@@ -16,7 +16,7 @@ import java.util.*
 enum class SearchCategory(
         @StringRes val id: Int,
         @DrawableRes val iconId: Int,
-        private val mHost: String,
+        private val host: String,
         private val generator: (l: String, h: String, q: String) -> String = { l, h, q ->  h + q }
     ) {
 
@@ -122,7 +122,7 @@ enum class SearchCategory(
     fun make(context: Context, query: String): String {
         return generate(
                 LocaleWrapper.getLocale(context.resources.configuration),
-                mHost,
+                host,
                 query
         )
     }
