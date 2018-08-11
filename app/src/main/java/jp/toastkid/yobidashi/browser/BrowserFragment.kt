@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser
 import android.Manifest
 import android.app.Activity
 import android.app.ActivityOptions
+import android.content.ActivityNotFoundException
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
@@ -45,6 +46,7 @@ import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
+import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -429,7 +431,14 @@ class BrowserFragment : BaseFragment() {
                 tabs.siteSearch()
             }
             Menu.VOICE_SEARCH.ordinal -> {
-                startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
+                try {
+                    startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
+                } catch (e: ActivityNotFoundException) {
+                    Timber.e(e)
+                    binding?.root?.let {
+                        Toaster.snackShort(it, R.string.message_unabled_voice_search, colorPair())
+                    }
+                }
             }
             Menu.REPLACE_HOME.ordinal -> {
                 browserModule.currentUrl()?.let {
@@ -637,7 +646,13 @@ class BrowserFragment : BaseFragment() {
 
     override fun tapHeader() {
         val activityContext = context ?: return
-        startActivity(SearchActivity.makeIntentWithQuery(activityContext, browserModule.currentUrl() ?: ""))
+        val currentUrl = browserModule.currentUrl()
+        val inputText = if (preferenceApplier().enableSearchQueryExtract) {
+            SearchQueryExtractor(currentUrl) ?: currentUrl
+        } else {
+            currentUrl
+        }
+        startActivity(SearchActivity.makeIntentWithQuery(activityContext, inputText ?: ""))
     }
 
     /**

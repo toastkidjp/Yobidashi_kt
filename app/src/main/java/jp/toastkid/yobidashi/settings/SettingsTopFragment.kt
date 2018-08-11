@@ -158,6 +158,7 @@ class SettingsTopFragment : BaseFragment() {
 
         binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
 
+        binding.enableSearchQueryExtractCheck.isChecked = preferenceApplier.enableSearchQueryExtract
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
         binding.useSuggestionCheck.isChecked = preferenceApplier.isEnableSuggestion
         binding.useHistoryCheck.isChecked = preferenceApplier.isEnableSearchHistory
@@ -218,6 +219,16 @@ class SettingsTopFragment : BaseFragment() {
      */
     fun openSearchCategory(v: View) {
         binding.searchCategories.performClick()
+    }
+
+    /**
+     * Switch search query extraction.
+     */
+    fun switchSearchQueryExtract() {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.enableSearchQueryExtract
+        preferenceApplier.enableSearchQueryExtract = newState
+        binding.enableSearchQueryExtractCheck.isChecked = newState
     }
 
     /**
