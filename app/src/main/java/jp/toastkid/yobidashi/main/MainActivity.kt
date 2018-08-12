@@ -198,16 +198,22 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
             }
             StartUp.APPS_LAUNCHER -> {
                 startActivity(LauncherActivity.makeIntent(this))
-                finish()
+                finishWithoutTransition()
             }
             StartUp.BROWSER -> {
                 replaceWithBrowser(Uri.EMPTY)
             }
             StartUp.SEARCH -> {
                 startActivity(SearchActivity.makeIntent(this))
+                finishWithoutTransition()
             }
         }
 
+    }
+
+    private fun finishWithoutTransition() {
+        overridePendingTransition(0, 0)
+        finish()
     }
 
     override fun onProgressChanged(newProgress: Int) {
