@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.webview
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.webkit.WebView
@@ -20,7 +21,6 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
-import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import okhttp3.Request
 import java.io.File
@@ -112,23 +112,15 @@ internal object WebViewFactory {
                     if (extra == null || extra.isEmpty()) {
                         return@setOnLongClickListener false
                     }
-                    AlertDialog.Builder(v.context)
-                            .setTitle("Text: $extra")
-                            .setItems(R.array.url_menu, { dialog, which ->
-                                when (which) {
-                                    0 -> Clipboard.clip(v.context, extra)
-                                    1 -> {
-                                        SearchAction(
-                                                v.context,
-                                                preferenceApplier.getDefaultSearchEngine(),
-                                                extra
-                                        ).invoke()
-                                    }
-                                }
-                            })
-                            .setCancelable(true)
-                            .setNegativeButton(R.string.cancel, { d, i -> d.cancel() })
-                            .show()
+
+                    if (context is FragmentActivity) {
+                        ElseCaseLongTapDialogFragment
+                                .make(preferenceApplier.getDefaultSearchEngine(), extra)
+                                .show(
+                                        context.supportFragmentManager,
+                                        ElseCaseLongTapDialogFragment::class.java.simpleName
+                                )
+                    }
                     false
                 }
             }
