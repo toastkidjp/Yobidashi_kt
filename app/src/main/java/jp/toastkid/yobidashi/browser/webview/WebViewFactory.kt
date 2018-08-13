@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.webview
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Handler
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
@@ -40,6 +41,19 @@ internal object WebViewFactory {
      */
     private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
 
+    /**
+     * Use for only extract anchor URL.
+     */
+    private val handler = Handler(Handler.Callback { message ->
+        message?.data?.get("url")?.toString()?.let { anchor = it }
+        true
+    })
+
+    /**
+     * Extracted anchor URL.
+     */
+    private var anchor: String = ""
+
     fun make(context: Context, loader: (String, Boolean) -> Unit): CustomWebView {
         val webView = CustomWebView(context)
         webView.setOnTouchListener { _, motionEvent ->
@@ -54,7 +68,47 @@ internal object WebViewFactory {
         webView.setOnLongClickListener { v ->
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
-                WebView.HitTestResult.IMAGE_TYPE, WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
+                WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
+                    val url = hitResult.extra
+                    if (url.isEmpty()) {
+                        return@setOnLongClickListener false
+                    }
+                    webView.requestFocusNodeHref(handler.obtainMessage())
+                    AlertDialog.Builder(webView.context)
+                            .setTitle("Image: " + url)
+                            .setItems(R.array.image_anchor_menu, { dialog, which ->
+                                when (which) {
+                                    0 -> loader(anchor, false)//openNewTab(url)
+                                    1 -> loader(anchor, true)//openBackgroundTab(url)
+                                    2 -> webView.loadUrl(anchor)
+                                    3 -> {
+                                        storeImage(url, webView).subscribe { file ->
+                                            preferenceApplier.backgroundImagePath = file.absolutePath
+                                            Toaster.snackShort(
+                                                    webView,
+                                                    R.string.message_change_background_image,
+                                                    preferenceApplier.colorPair()
+                                            )
+                                        }.addTo(disposables)
+                                    }
+                                    4 -> storeImage(url, webView).subscribe({
+                                        Toaster.snackShort(
+                                                webView,
+                                                R.string.message_done_save,
+                                                preferenceApplier.colorPair()
+                                        )
+                                    }).addTo(disposables)
+                                    5 -> ImageDownloadAction(webView, hitResult).invoke()
+                                    6 -> Clipboard.clip(v.context, anchor)
+                                }
+                                anchor = ""
+                            })
+                            .setCancelable(true)
+                            .setNegativeButton(R.string.cancel, { d, i -> d.cancel() })
+                            .show()
+                    false
+                }
+                WebView.HitTestResult.IMAGE_TYPE -> {
                     val url = hitResult.extra
                     if (url.isEmpty()) {
                         return@setOnLongClickListener false
