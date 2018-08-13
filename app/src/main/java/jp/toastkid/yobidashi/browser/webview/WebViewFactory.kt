@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import okhttp3.Request
+import timber.log.Timber
 import java.io.File
 import java.net.HttpURLConnection
 
@@ -75,8 +76,8 @@ internal object WebViewFactory {
                     }
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     AlertDialog.Builder(webView.context)
-                            .setTitle("Image: " + url)
-                            .setItems(R.array.image_anchor_menu, { dialog, which ->
+                            .setTitle("Image: $url")
+                            .setItems(R.array.image_anchor_menu, { _, which ->
                                 when (which) {
                                     0 -> loader(anchor, false)//openNewTab(url)
                                     1 -> loader(anchor, true)//openBackgroundTab(url)
@@ -97,14 +98,14 @@ internal object WebViewFactory {
                                                 R.string.message_done_save,
                                                 preferenceApplier.colorPair()
                                         )
-                                    }).addTo(disposables)
+                                    }, Timber::e).addTo(disposables)
                                     5 -> ImageDownloadAction(webView, hitResult).invoke()
                                     6 -> Clipboard.clip(v.context, anchor)
                                 }
                                 anchor = ""
                             })
                             .setCancelable(true)
-                            .setNegativeButton(R.string.cancel, { d, i -> d.cancel() })
+                            .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                             .show()
                     false
                 }
@@ -114,8 +115,8 @@ internal object WebViewFactory {
                         return@setOnLongClickListener false
                     }
                     AlertDialog.Builder(webView.context)
-                            .setTitle("Image: " + url)
-                            .setItems(R.array.image_menu, { dialog, which ->
+                            .setTitle("Image: $url")
+                            .setItems(R.array.image_menu, { _, which ->
                                 when (which) {
                                     0 -> {
                                         storeImage(url, webView).subscribe { file ->
@@ -138,7 +139,7 @@ internal object WebViewFactory {
                                 }
                             })
                             .setCancelable(true)
-                            .setNegativeButton(R.string.cancel, { d, i -> d.cancel() })
+                            .setNegativeButton(R.string.cancel, { d, _ -> d.cancel() })
                             .show()
                     false
                 }
@@ -157,7 +158,7 @@ internal object WebViewFactory {
                                     3 -> Clipboard.clip(v.context, url)
                                 }
                             })
-                            .setNegativeButton(R.string.cancel, { d, i -> d.cancel() })
+                            .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                             .show()
                     false
                 }
