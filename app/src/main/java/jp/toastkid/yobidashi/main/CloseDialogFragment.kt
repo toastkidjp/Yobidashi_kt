@@ -28,7 +28,7 @@ class CloseDialogFragment : DialogFragment() {
                 .setPositiveButton(R.string.ok) { d, _ ->
                     d.dismiss()
                     if (activityContext is Activity) {
-                        activityContext.finish()
+                        activityContext.moveTaskToBack(true)
                     }
                 }
                 .create()
