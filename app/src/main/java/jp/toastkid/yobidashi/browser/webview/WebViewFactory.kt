@@ -14,6 +14,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ImageDownloadAction
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
@@ -83,7 +84,7 @@ internal object WebViewFactory {
                                     1 -> loader(anchor, true)//openBackgroundTab(url)
                                     2 -> webView.loadUrl(anchor)
                                     3 -> {
-                                        storeImage(url, webView).subscribe { file ->
+                                        storeImage(url, context).subscribe { file ->
                                             preferenceApplier.backgroundImagePath = file.absolutePath
                                             Toaster.snackShort(
                                                     webView,
@@ -92,14 +93,14 @@ internal object WebViewFactory {
                                             )
                                         }.addTo(disposables)
                                     }
-                                    4 -> storeImage(url, webView).subscribe({
+                                    4 -> storeImage(url, context).subscribe({
                                         Toaster.snackShort(
                                                 webView,
                                                 R.string.message_done_save,
                                                 preferenceApplier.colorPair()
                                         )
                                     }, Timber::e).addTo(disposables)
-                                    5 -> ImageDownloadAction(webView, hitResult).invoke()
+                                    5 -> ImageDownloadAction(webView, hitResult.extra).invoke()
                                     6 -> Clipboard.clip(v.context, anchor)
                                 }
                                 anchor = ""
@@ -114,34 +115,20 @@ internal object WebViewFactory {
                     if (url.isEmpty()) {
                         return@setOnLongClickListener false
                     }
-                    AlertDialog.Builder(webView.context)
-                            .setTitle("Image: $url")
-                            .setItems(R.array.image_menu, { _, which ->
-                                when (which) {
-                                    0 -> {
-                                        storeImage(url, webView).subscribe { file ->
-                                            preferenceApplier.backgroundImagePath = file.absolutePath
-                                            Toaster.snackShort(
-                                                    webView,
-                                                    R.string.message_change_background_image,
-                                                    preferenceApplier.colorPair()
-                                            )
-                                        }.addTo(disposables)
-                                    }
-                                    1 -> storeImage(url, webView).subscribe({
-                                        Toaster.snackShort(
-                                                webView,
-                                                R.string.message_done_save,
-                                                preferenceApplier.colorPair()
-                                        )
-                                    }).addTo(disposables)
-                                    2 -> ImageDownloadAction(webView, hitResult).invoke()
-                                }
-                            })
-                            .setCancelable(true)
-                            .setNegativeButton(R.string.cancel, { d, _ -> d.cancel() })
-                            .show()
-                    false
+                    if (context is FragmentActivity) {
+                        val dialogFragment = ImageTypeLongTapDialogFragment.make(url)
+                        val supportFragmentManager = context.supportFragmentManager
+                        dialogFragment.setTargetFragment(
+                                supportFragmentManager
+                                        .findFragmentByTag(BrowserFragment::class.java.simpleName),
+                                1
+                        )
+                        dialogFragment.show(
+                                supportFragmentManager,
+                                dialogFragment::class.java.simpleName
+                        )
+                    }
+                    true
                 }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                     val url = hitResult.extra
@@ -187,27 +174,25 @@ internal object WebViewFactory {
         return webView
     }
 
+
     /**
      * Store image to file.
      *
      * @param url URL string.
-     * @param webView [WebView] instance
+     * @param context [Context]
      */
-    private fun storeImage(url: String, webView: WebView): Maybe<File> {
-        val context: Context = webView.context
+    private fun storeImage(url: String, context: Context): Maybe<File> {
         if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return Maybe.empty()
         }
-        return Single.fromCallable {
-            HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute()
-        }
+        return Single.fromCallable { HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
                 .filter { it.code() == HttpURLConnection.HTTP_OK }
                 .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
                 .map {
-                    val storeroom = FilesDir(webView.context, BackgroundSettingActivity.BACKGROUND_DIR)
+                    val storeroom = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
                     val file = storeroom.assignNewFile(Uri.parse(url))
                     Bitmaps.compress(it, file)
                     file

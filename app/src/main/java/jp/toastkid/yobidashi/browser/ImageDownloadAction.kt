@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.webkit.WebView
 import android.widget.ImageView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
@@ -29,7 +28,7 @@ import java.io.IOException
  */
 class ImageDownloadAction(
         val view: View,
-        val hitResult: WebView.HitTestResult
+        val url: String
 ) {
 
     /**
@@ -43,7 +42,6 @@ class ImageDownloadAction(
     fun invoke() {
         val context: Context = view.context
 
-        val url = hitResult.extra
         if (Urls.isInvalidUrl(url)) {
             Toaster.snackShort(
                     view,
