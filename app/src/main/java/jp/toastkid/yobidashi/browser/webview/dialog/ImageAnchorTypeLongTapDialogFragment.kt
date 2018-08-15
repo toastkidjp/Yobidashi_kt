@@ -30,6 +30,9 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
         val url = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
+        val anchor = arguments?.getString(KEY_ANCHOR)
+                ?: return super.onCreateDialog(savedInstanceState)
+
         val target = targetFragment
         if (target is ImageDialogCallback) {
             onClickImage = target
@@ -42,13 +45,13 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
                 .setTitle("URL: $url")
                 .setItems(R.array.image_anchor_menu) { _, which ->
                     when (which) {
-                        0 -> onClickAnchor?.openNewTab(url)
-                        1 -> onClickAnchor?.openBackgroundTab(url)
-                        2 -> onClickAnchor?.openCurrent(url)
+                        0 -> onClickAnchor?.openNewTab(anchor)
+                        1 -> onClickAnchor?.openBackgroundTab(anchor)
+                        2 -> onClickAnchor?.openCurrent(anchor)
                         3 -> onClickImage?.onClickSetBackground(url)
                         4 -> onClickImage?.onClickSaveForBackground(url)
                         5 -> onClickImage?.onClickDownloadImage(url)
-                        6 -> Clipboard.clip(activityContext, url)
+                        6 -> Clipboard.clip(activityContext, anchor)
                     }
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
@@ -57,10 +60,17 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
 
     companion object {
 
+        private const val KEY_ANCHOR = "anchor"
+
         private const val KEY_EXTRA = "extra"
 
-        fun make(extra: String) =
+        fun make(extra: String, anchor: String) =
                 ImageAnchorTypeLongTapDialogFragment()
-                        .also { it.arguments = bundleOf(KEY_EXTRA to extra) }
+                        .also {
+                            it.arguments = bundleOf(
+                                    KEY_EXTRA to extra,
+                                    KEY_ANCHOR to anchor
+                            )
+                        }
     }
 }

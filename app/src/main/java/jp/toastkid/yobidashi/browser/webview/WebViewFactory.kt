@@ -5,6 +5,7 @@ import android.os.Handler
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
+import android.text.TextUtils
 import android.view.MotionEvent
 import android.webkit.WebView
 import io.reactivex.disposables.CompositeDisposable
@@ -58,10 +59,11 @@ internal object WebViewFactory {
                     }
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (context is FragmentActivity) {
-                        showDialogFragment(
-                                ImageAnchorTypeLongTapDialogFragment.make(url),
-                                context.supportFragmentManager
-                        )
+                        if (TextUtils.isEmpty(anchor)) {
+                            handler.postDelayed({ showImageAnchorDialog(url, context) }, 300L)
+                            return@setOnLongClickListener true
+                        }
+                        showImageAnchorDialog(url, context)
                     }
                     false
                 }
@@ -114,6 +116,14 @@ internal object WebViewFactory {
         settings.displayZoomControls = false
         settings.javaScriptCanOpenWindowsAutomatically = false
         return webView
+    }
+
+    private fun showImageAnchorDialog(url: String, fragmentActivity: FragmentActivity) {
+        val dialogFragment = ImageAnchorTypeLongTapDialogFragment.make(url, anchor)
+        showDialogFragment(
+                dialogFragment,
+                fragmentActivity.supportFragmentManager
+        )
     }
 
     private fun showDialogFragment(
