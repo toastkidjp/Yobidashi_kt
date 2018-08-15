@@ -1,34 +1,19 @@
 package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Handler
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.view.MotionEvent
 import android.webkit.WebView
-import io.reactivex.Maybe
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
-import jp.toastkid.yobidashi.libs.Bitmaps
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.FilesDir
-import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
-import okhttp3.Request
-import java.io.File
-import java.net.HttpURLConnection
 
 /**
  * [WebView] factory.
@@ -38,11 +23,6 @@ import java.net.HttpURLConnection
 internal object WebViewFactory {
 
     private val disposables = CompositeDisposable()
-
-    /**
-     * HTTP Client.
-     */
-    private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
 
     /**
      * Use for only extract anchor URL.
@@ -148,31 +128,6 @@ internal object WebViewFactory {
                 supportFragmentManager,
                 dialogFragment::class.java.simpleName
         )
-    }
-
-
-    /**
-     * Store image to file.
-     *
-     * @param url URL string.
-     * @param context [Context]
-     */
-    private fun storeImage(url: String, context: Context): Maybe<File> {
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
-            Toaster.tShort(context, R.string.message_wifi_not_connecting)
-            return Maybe.empty()
-        }
-        return Single.fromCallable { HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .filter { it.code() == HttpURLConnection.HTTP_OK }
-                .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
-                .map {
-                    val storeroom = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
-                    val file = storeroom.assignNewFile(Uri.parse(url))
-                    Bitmaps.compress(it, file)
-                    file
-                }
     }
 
     fun dispose() {
