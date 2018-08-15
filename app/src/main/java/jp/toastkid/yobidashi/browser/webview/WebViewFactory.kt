@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Handler
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.webkit.WebView
@@ -16,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ImageDownloadAction
+import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.libs.Bitmaps
@@ -118,16 +121,9 @@ internal object WebViewFactory {
                         return@setOnLongClickListener false
                     }
                     if (context is FragmentActivity) {
-                        val dialogFragment = ImageTypeLongTapDialogFragment.make(url)
-                        val supportFragmentManager = context.supportFragmentManager
-                        dialogFragment.setTargetFragment(
-                                supportFragmentManager
-                                        .findFragmentByTag(BrowserFragment::class.java.simpleName),
-                                1
-                        )
-                        dialogFragment.show(
-                                supportFragmentManager,
-                                dialogFragment::class.java.simpleName
+                        showDialogFragment(
+                                ImageTypeLongTapDialogFragment.make(url),
+                                context.supportFragmentManager
                         )
                     }
                     true
@@ -137,18 +133,12 @@ internal object WebViewFactory {
                     if (url.isEmpty()) {
                         return@setOnLongClickListener false
                     }
-                    AlertDialog.Builder(context)
-                            .setTitle("URL: $url")
-                            .setItems(R.array.url_menu, { _, which ->
-                                when (which) {
-                                    0 -> loader(url, false)//openNewTab(url)
-                                    1 -> loader(url, true)//openBackgroundTab(url)
-                                    2 -> webView.loadUrl(url)
-                                    3 -> Clipboard.clip(v.context, url)
-                                }
-                            })
-                            .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
-                            .show()
+                    if (context is FragmentActivity) {
+                        showDialogFragment(
+                                AnchorTypeLongTapDialogFragment.make(url),
+                                context.supportFragmentManager
+                        )
+                    }
                     false
                 }
                 else -> {
@@ -174,6 +164,20 @@ internal object WebViewFactory {
         settings.displayZoomControls = false
         settings.javaScriptCanOpenWindowsAutomatically = false
         return webView
+    }
+
+    private fun showDialogFragment(
+            dialogFragment: DialogFragment,
+            supportFragmentManager: FragmentManager?
+    ) {
+        dialogFragment.setTargetFragment(
+                supportFragmentManager?.findFragmentByTag(BrowserFragment::class.java.simpleName),
+                1
+        )
+        dialogFragment.show(
+                supportFragmentManager,
+                dialogFragment::class.java.simpleName
+        )
     }
 
 

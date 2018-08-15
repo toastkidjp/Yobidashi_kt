@@ -36,6 +36,7 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
@@ -71,7 +72,10 @@ import java.net.HttpURLConnection
  *
  * @author toastkidjp
  */
-class BrowserFragment : BaseFragment(), ImageDialogCallback {
+class BrowserFragment : BaseFragment(),
+        ImageDialogCallback,
+        AnchorDialogCallback
+{
 
     /**
      * RxPermissions.
@@ -784,6 +788,18 @@ class BrowserFragment : BaseFragment(), ImageDialogCallback {
      */
     fun loadWithNewTab(uri: Uri) {
         tabs.openNewWebTab(uri.toString())
+    }
+
+    override fun openNewTab(url: String) {
+        tabs.openNewWebTab(url)
+    }
+
+    override fun openBackgroundTab(url: String) {
+        tabs.openBackgroundTab(url)
+    }
+
+    override fun openCurrent(url: String) {
+        tabs.callLoadUrl(url)
     }
 
     override fun onClickSetBackground(url: String) {
