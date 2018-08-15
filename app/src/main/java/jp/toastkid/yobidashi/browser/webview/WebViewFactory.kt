@@ -7,30 +7,26 @@ import android.os.Handler
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
-import android.support.v7.app.AlertDialog
 import android.view.MotionEvent
 import android.webkit.WebView
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.ImageDownloadAction
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
+import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import okhttp3.Request
-import timber.log.Timber
 import java.io.File
 import java.net.HttpURLConnection
 
@@ -81,38 +77,12 @@ internal object WebViewFactory {
                         return@setOnLongClickListener false
                     }
                     webView.requestFocusNodeHref(handler.obtainMessage())
-                    AlertDialog.Builder(webView.context)
-                            .setTitle("Image: $url")
-                            .setItems(R.array.image_anchor_menu, { _, which ->
-                                when (which) {
-                                    0 -> loader(anchor, false)//openNewTab(url)
-                                    1 -> loader(anchor, true)//openBackgroundTab(url)
-                                    2 -> webView.loadUrl(anchor)
-                                    3 -> {
-                                        storeImage(url, context).subscribe { file ->
-                                            preferenceApplier.backgroundImagePath = file.absolutePath
-                                            Toaster.snackShort(
-                                                    webView,
-                                                    R.string.message_change_background_image,
-                                                    preferenceApplier.colorPair()
-                                            )
-                                        }.addTo(disposables)
-                                    }
-                                    4 -> storeImage(url, context).subscribe({
-                                        Toaster.snackShort(
-                                                webView,
-                                                R.string.message_done_save,
-                                                preferenceApplier.colorPair()
-                                        )
-                                    }, Timber::e).addTo(disposables)
-                                    5 -> ImageDownloadAction(webView, hitResult.extra).invoke()
-                                    6 -> Clipboard.clip(v.context, anchor)
-                                }
-                                anchor = ""
-                            })
-                            .setCancelable(true)
-                            .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
-                            .show()
+                    if (context is FragmentActivity) {
+                        showDialogFragment(
+                                ImageAnchorTypeLongTapDialogFragment.make(url),
+                                context.supportFragmentManager
+                        )
+                    }
                     false
                 }
                 WebView.HitTestResult.IMAGE_TYPE -> {
