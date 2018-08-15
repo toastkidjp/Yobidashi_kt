@@ -46,7 +46,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
                         1 -> onClickAnchor?.openBackgroundTab(url)
                         2 -> onClickAnchor?.openCurrent(url)
                         3 -> onClickImage?.onClickSetBackground(url)
-                        4 -> onClickImage?.onClickSetBackground(url)
+                        4 -> onClickImage?.onClickSaveForBackground(url)
                         5 -> onClickImage?.onClickDownloadImage(url)
                         6 -> Clipboard.clip(activityContext, url)
                     }
