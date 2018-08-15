@@ -16,6 +16,8 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ImageDownloadAction
+import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
+import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker

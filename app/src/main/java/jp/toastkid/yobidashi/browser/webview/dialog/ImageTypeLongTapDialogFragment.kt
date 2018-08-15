@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.browser.webview
+package jp.toastkid.yobidashi.browser.webview.dialog
 
 import android.app.Dialog
 import android.os.Bundle
@@ -13,7 +13,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import androidx.core.os.bundleOf
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 
 /**
  * @author toastkidjp
