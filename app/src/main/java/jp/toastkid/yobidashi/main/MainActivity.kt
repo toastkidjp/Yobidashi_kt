@@ -280,8 +280,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         }
 
         val transaction = supportFragmentManager.beginTransaction()
+        val fragments = supportFragmentManager?.fragments
+        if (fragments?.size != 0) {
+            fragments?.get(0)?.let { transaction.remove(it) }
+        }
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-        transaction.replace(R.id.content, fragment)
+        transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
         binding.appBarMain?.toolbar?.let {

@@ -10,6 +10,7 @@ import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,8 +25,11 @@ import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
 import com.cleveroad.cyclemenuwidget.OnStateChangedListener
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Maybe
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -33,16 +37,19 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
+import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorModule
-import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.libs.network.HttpClientFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
@@ -50,21 +57,27 @@ import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.history.TabHistoryActivity
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListModule
+import okhttp3.Request
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.net.HttpURLConnection
 
 /**
  * Internal browser fragment.
  *
  * @author toastkidjp
  */
-class BrowserFragment : BaseFragment() {
+class BrowserFragment : BaseFragment(),
+        ImageDialogCallback,
+        AnchorDialogCallback
+{
 
     /**
      * RxPermissions.
@@ -792,6 +805,69 @@ class BrowserFragment : BaseFragment() {
         tabs.openNewWebTab(uri.toString())
     }
 
+    override fun openNewTab(url: String) {
+        tabs.openNewWebTab(url)
+    }
+
+    override fun openBackgroundTab(url: String) {
+        tabs.openBackgroundTab(url)
+    }
+
+    override fun openCurrent(url: String) {
+        tabs.callLoadUrl(url)
+    }
+
+    override fun onClickSetBackground(url: String) {
+        val activityContext = context ?: return
+        storeImage(url, activityContext).subscribe { file ->
+            preferenceApplier().backgroundImagePath = file.absolutePath
+            Toaster.snackShort(
+                    binding?.root as View,
+                    R.string.message_change_background_image,
+                    preferenceApplier().colorPair()
+            )
+        }.addTo(disposables)
+    }
+
+    override fun onClickSaveForBackground(url: String) {
+        val activityContext = context ?: return
+        storeImage(url, activityContext).subscribe({
+            Toaster.snackShort(
+                    binding?.root as View,
+                    R.string.message_done_save,
+                    preferenceApplier().colorPair()
+            )
+        }).addTo(disposables)
+    }
+
+    override fun onClickDownloadImage(url: String) {
+        ImageDownloadAction(binding?.root as View, url).invoke()
+    }
+
+    /**
+     * Store image to file.
+     *
+     * @param url URL string.
+     * @param context [Context]
+     */
+    private fun storeImage(url: String, context: Context): Maybe<File> {
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return Maybe.empty()
+        }
+        return Single.fromCallable { HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .filter { it.code() == HttpURLConnection.HTTP_OK }
+                .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
+                .map {
+                    val storeroom = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
+                    val file = storeroom.assignNewFile(Uri.parse(url))
+                    Bitmaps.compress(it, file)
+                    file
+                }
+    }
+
     override fun onPause() {
         super.onPause()
         editor.saveIfNeed()
@@ -829,6 +905,11 @@ class BrowserFragment : BaseFragment() {
          * Request code of opening PDF.
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 3
+
+        /**
+         * HTTP Client.
+         */
+        private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
 
     }
 
