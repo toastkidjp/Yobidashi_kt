@@ -210,18 +210,20 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
     override fun titleId(): Int = R.string.title_settings_color
 
     override fun clickMenu(item: MenuItem): Boolean {
-        if (item.itemId == R.id.color_settings_toolbar_menu_add_recommend) {
-            RecommendColorDialogFragment().show(
-                    supportFragmentManager,
-                    RecommendColorDialogFragment::class.java.simpleName
-            )
-            return true
-        }
-        if (item.itemId == R.id.color_settings_toolbar_menu_add_random) {
-            SavedColors.insertRandomColors(this).addTo(disposables)
-            Toaster.snackShort(
-                    binding!!.settingsColorToolbar, R.string.done_addition, colorPair())
-            return true
+        when (item.itemId) {
+            R.id.color_settings_toolbar_menu_add_recommend -> {
+                RecommendColorDialogFragment().show(
+                        supportFragmentManager,
+                        RecommendColorDialogFragment::class.java.simpleName
+                )
+                return true
+            }
+            R.id.color_settings_toolbar_menu_add_random -> {
+                SavedColors.insertRandomColors(this).addTo(disposables)
+                Toaster.snackShort(
+                        binding!!.settingsColorToolbar, R.string.done_addition, colorPair())
+                return true
+            }
         }
         return super.clickMenu(item)
     }
