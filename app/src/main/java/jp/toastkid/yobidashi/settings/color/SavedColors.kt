@@ -41,12 +41,9 @@ object SavedColors {
     internal fun makeSavedColor(
             @ColorInt bgColor: Int,
             @ColorInt fontColor: Int
-    ): SavedColor {
-        var color = SavedColor()
-        color.bgColor = bgColor
-        color.fontColor = fontColor
-
-        return color
+    ) = SavedColor().also {
+        it.bgColor = bgColor
+        it.fontColor = fontColor
     }
 
     /**
