@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.settings.background
 
-import android.net.Uri
 import android.support.annotation.StringRes
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.SavedImageBinding
@@ -44,10 +44,15 @@ internal class ViewHolder(
             )
         })
         this.binding.root.setOnLongClickListener ({ v ->
-            val uri = Uri.parse(f.toURI().toString())
             try {
-                ImageDialog.show(
-                        v.context, uri, ImageLoader.readBitmapDrawable(v.context, uri)!!)
+                val context = v.context
+                if (context is FragmentActivity) {
+                    ImageDialogFragment.withUrl(f.toURI().toString())
+                            .show(
+                                    context.supportFragmentManager,
+                                    ImageDialogFragment::class.java.simpleName
+                            )
+                }
             } catch (e: IOException) {
                 Timber.e(e)
             }
