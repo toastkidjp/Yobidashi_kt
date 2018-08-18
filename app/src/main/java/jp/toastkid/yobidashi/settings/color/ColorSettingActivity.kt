@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.disposables.CompositeDisposable
@@ -171,10 +172,10 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
 
         sendLog(
                 "color_set",
-                Bundle().apply {
-                    putString("bg", Integer.toHexString(bgColor))
-                    putString("font", Integer.toHexString(fontColor))
-                }
+                bundleOf(
+                        "bg" to Integer.toHexString(bgColor),
+                        "font" to Integer.toHexString(fontColor)
+                )
         )
 
         adapter?.addItemAsSingle(SavedColors.makeSavedColor(bgColor, fontColor))
