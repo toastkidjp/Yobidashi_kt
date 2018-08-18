@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
 import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AlertDialog
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.text.Html
 import android.view.View
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
@@ -25,7 +25,6 @@ import jp.toastkid.yobidashi.tab.TabAdapter
  * @param closeAction
  * @param openEditorAction
  * @param openPdfAction
- * @param emptyAction
  *
  * @author toastkidjp
  */
@@ -35,8 +34,7 @@ class TabListModule(
         private val parent: View,
         private val closeAction: () -> Unit,
         private val openEditorAction: () -> Unit,
-        private val openPdfAction: () -> Unit,
-        private val emptyAction: () -> Unit
+        private val openPdfAction: () -> Unit
 ) : BaseModule(binding.root) {
 
     /**
@@ -101,17 +99,18 @@ class TabListModule(
      */
     private fun initClearTabs(clearTabs: FloatingActionButton) =
             clearTabs.setOnClickListener { v ->
-                AlertDialog.Builder(context())
-                        .setTitle(context().getString(R.string.title_clear_all_tabs))
-                        .setMessage(Html.fromHtml(context().getString(R.string.confirm_clear_all_settings)))
-                        .setCancelable(true)
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            tabAdapter.clear()
-                            emptyAction()
-                            d.dismiss()
-                        }
-                        .show()
+                val context = v.context
+                if (context is FragmentActivity) {
+                    val fragmentManager = context.supportFragmentManager
+                    val targetFragment =
+                            fragmentManager.findFragmentByTag(BrowserFragment::class.java.simpleName)
+                    val dialogFragment = TabListClearDialogFragment()
+                    dialogFragment.setTargetFragment(targetFragment, 1)
+                    dialogFragment.show(
+                            fragmentManager,
+                            TabListClearDialogFragment::class.java.simpleName
+                    )
+                }
             }
 
     /**

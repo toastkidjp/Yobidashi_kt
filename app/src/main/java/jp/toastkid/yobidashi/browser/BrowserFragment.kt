@@ -60,6 +60,7 @@ import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListModule
 import okhttp3.Request
 import timber.log.Timber
@@ -74,7 +75,8 @@ import java.net.HttpURLConnection
  */
 class BrowserFragment : BaseFragment(),
         ImageDialogCallback,
-        AnchorDialogCallback
+        AnchorDialogCallback,
+        TabListClearDialogFragment.Callback
 {
 
     /**
@@ -248,8 +250,7 @@ class BrowserFragment : BaseFragment(),
                 binding?.root as View,
                 this::hideTabList,
                 this::openEditorTab,
-                this::openPdfTabFromStorage,
-                this::onEmptyTabs
+                this::openPdfTabFromStorage
         )
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
@@ -842,6 +843,11 @@ class BrowserFragment : BaseFragment(),
                     Bitmaps.compress(it, file)
                     file
                 }
+    }
+
+    override fun onClickClear() {
+        tabs.clear()
+        onEmptyTabs()
     }
 
     override fun onPause() {
