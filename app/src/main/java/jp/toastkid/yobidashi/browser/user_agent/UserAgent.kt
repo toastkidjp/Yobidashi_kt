@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.user_agent
 
 import android.support.v7.app.AlertDialog
 import android.view.View
@@ -56,7 +56,7 @@ enum class UserAgent constructor(private val title: String, private val text: St
             AlertDialog.Builder(context)
                     .setTitle(R.string.title_user_agent)
                     .setSingleChoiceItems(
-                            UserAgent.titles(),
+                            titles(),
                             findCurrentIndex(preferenceApplier.userAgent())
                     ) { d, i ->
                         val userAgent = UserAgent.values()[i]

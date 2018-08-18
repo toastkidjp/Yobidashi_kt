@@ -37,6 +37,7 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding

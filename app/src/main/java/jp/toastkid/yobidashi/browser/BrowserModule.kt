@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
+import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
 import jp.toastkid.yobidashi.libs.Bitmaps

@@ -22,7 +22,7 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.browser.UserAgent
+import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBinding
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
