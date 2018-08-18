@@ -15,6 +15,8 @@ import android.widget.TextView
 
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
@@ -30,7 +32,7 @@ import jp.toastkid.yobidashi.libs.db.DbInitter
  *
  * @author toastkidjp
  */
-class ColorSettingActivity : BaseActivity() {
+class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback {
 
     /**
      * Initial background color.
@@ -51,6 +53,11 @@ class ColorSettingActivity : BaseActivity() {
      * Saved color's adapter.
      */
     private var adapter: OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>? = null
+
+    /**
+     * Subscribed disposables.
+     */
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,13 +108,19 @@ class ColorSettingActivity : BaseActivity() {
         adapter = SavedColorAdapter(this, DbInitter.init(this).relationOfSavedColor())
         binding?.savedColors?.adapter = adapter
         binding?.savedColors?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding?.clearSavedColor?.setOnClickListener{ _ ->
-            SavedColors.showClearColorsDialog(
-                    this,
-                    binding?.settingsColorToolbar as Toolbar,
-                    adapter?.relation as SavedColor_Relation
+        binding?.clearSavedColor?.setOnClickListener{
+            ClearColorsDialogFragment().show(
+                    supportFragmentManager,
+                    ClearColorsDialogFragment::class.java.simpleName
             )
         }
+    }
+
+    override fun onClickClearColor() {
+        SavedColors.deleteAllAsync(
+                binding?.settingsColorToolbar,
+                adapter?.relation?.deleter() as? SavedColor_Deleter
+        ).addTo(disposables)
     }
 
     /**
@@ -243,6 +256,11 @@ class ColorSettingActivity : BaseActivity() {
         }
 
         override fun getItemCount(): Int = relation.count()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 
     companion object {
