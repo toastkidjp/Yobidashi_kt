@@ -3,7 +3,9 @@ package jp.toastkid.yobidashi.settings.color
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
@@ -59,19 +61,23 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_color)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings_color)
-        binding!!.activity = this
+        binding?.activity = this
 
         val colorPair = colorPair()
 
         initialBgColor = colorPair.bgColor()
-        binding!!.settingsColorPrev.setBackgroundColor(initialBgColor)
+        binding?.settingsColorPrev?.setBackgroundColor(initialBgColor)
 
         initialFontColor = colorPair.fontColor()
-        binding!!.settingsColorPrev.setTextColor(initialFontColor)
+        binding?.settingsColorPrev?.setTextColor(initialFontColor)
 
         initPalettes()
-        initToolbar(binding!!.settingsColorToolbar)
-        binding!!.settingsColorToolbar.inflateMenu(R.menu.color_setting_toolbar_menu)
+
+        binding?.settingsColorToolbar?.also {
+            initToolbar(it)
+            it.inflateMenu(R.menu.color_setting_toolbar_menu)
+        }
+
         initSavedColors()
     }
 
@@ -79,15 +85,15 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
      * Initialize background and font palettes.
      */
     private fun initPalettes() {
-        binding?.backgroundPalette?.addSVBar(binding!!.backgroundSvbar)
-        binding?.backgroundPalette?.addOpacityBar(binding!!.backgroundOpacitybar)
+        binding?.backgroundPalette?.addSVBar(binding?.backgroundSvbar)
+        binding?.backgroundPalette?.addOpacityBar(binding?.backgroundOpacitybar)
         binding?.backgroundPalette?.setOnColorChangedListener ({ c ->
             binding?.settingsColorToolbar?.setBackgroundColor(c)
             binding?.settingsColorOk?.setBackgroundColor(c)
         })
 
-        binding?.fontPalette?.addSVBar(binding!!.fontSvbar)
-        binding?.fontPalette?.addOpacityBar(binding!!.fontOpacitybar)
+        binding?.fontPalette?.addSVBar(binding?.fontSvbar)
+        binding?.fontPalette?.addOpacityBar(binding?.fontOpacitybar)
         binding?.fontPalette?.setOnColorChangedListener({ c ->
             binding?.settingsColorToolbar?.setTitleTextColor(c)
             binding?.settingsColorOk?.setTextColor(c)
@@ -133,7 +139,7 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
                     ?.subscribeOn(Schedulers.io())
                     ?.subscribe()
                     ?.addTo(disposables)
-            Toaster.snackShort(binding!!.settingsColorToolbar, R.string.settings_color_delete, colorPair())
+            snackShort(R.string.settings_color_delete)
         }
     }
 
@@ -154,8 +160,8 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
      * OK button's action.
      */
     fun ok() {
-        val bgColor = binding!!.backgroundPalette.color
-        val fontColor = binding!!.fontPalette.color
+        val bgColor = binding?.backgroundPalette?.color ?: Color.BLACK
+        val fontColor = binding?.fontPalette?.color ?: Color.WHITE
 
         commitNewColor(bgColor, fontColor)
 
@@ -189,7 +195,7 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
         binding?.fontPalette?.color = fontColor
         Updater.update(this)
 
-        Toaster.snackShort(binding!!.settingsColorToolbar, R.string.settings_color_done_commit, colorPair())
+        snackShort(R.string.settings_color_done_commit)
     }
 
     /**
@@ -202,7 +208,7 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
 
         refresh()
         Updater.update(this)
-        Toaster.snackShort(binding!!.settingsColorToolbar, R.string.settings_color_done_reset, colorPair())
+        snackShort(R.string.settings_color_done_reset)
     }
 
     override fun titleId(): Int = R.string.title_settings_color
@@ -218,12 +224,17 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
             }
             R.id.color_settings_toolbar_menu_add_random -> {
                 SavedColors.insertRandomColors(this).addTo(disposables)
-                Toaster.snackShort(
-                        binding!!.settingsColorToolbar, R.string.done_addition, colorPair())
+                snackShort(R.string.done_addition)
                 return true
             }
         }
         return super.clickMenu(item)
+    }
+
+    private fun snackShort(@StringRes messageId: Int) {
+        binding?.root?.let {
+            Toaster.snackShort(it, messageId, colorPair())
+        }
     }
 
     /**
