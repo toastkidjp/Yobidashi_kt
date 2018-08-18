@@ -129,9 +129,10 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
         SavedColors.setSaved(holder.textView, color)
         holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
         holder.remove.setOnClickListener {
-            adapter!!.removeItemAsMaybe(color)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe()
+            adapter?.removeItemAsMaybe(color)
+                    ?.subscribeOn(Schedulers.io())
+                    ?.subscribe()
+                    ?.addTo(disposables)
             Toaster.snackShort(binding!!.settingsColorToolbar, R.string.settings_color_delete, colorPair())
         }
     }
@@ -166,8 +167,10 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
                 }
         )
 
-        adapter!!.addItemAsSingle(SavedColors.makeSavedColor(bgColor, fontColor))
-                .subscribeOn(Schedulers.io()).subscribe()
+        adapter?.addItemAsSingle(SavedColors.makeSavedColor(bgColor, fontColor))
+                ?.subscribeOn(Schedulers.io())
+                ?.subscribe()
+                ?.addTo(disposables)
     }
 
     /**
