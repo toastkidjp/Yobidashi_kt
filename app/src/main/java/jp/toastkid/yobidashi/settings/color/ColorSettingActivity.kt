@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
@@ -12,12 +11,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
 import com.github.gfx.android.orma.Relation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
@@ -214,18 +211,10 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
 
     override fun clickMenu(item: MenuItem): Boolean {
         if (item.itemId == R.id.color_settings_toolbar_menu_add_recommend) {
-            AlertDialog.Builder(this)
-                    .setTitle(R.string.title_add_recommended_colors)
-                    .setMessage(R.string.message_add_recommended_colors)
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        SavedColors.insertDefaultColors(this)
-                        Toaster.snackShort(
-                                binding!!.settingsColorToolbar, R.string.done_addition, colorPair())
-                        d.dismiss()
-                    }
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .show()
+            RecommendColorDialogFragment().show(
+                    supportFragmentManager,
+                    RecommendColorDialogFragment::class.java.simpleName
+            )
             return true
         }
         if (item.itemId == R.id.color_settings_toolbar_menu_add_random) {
