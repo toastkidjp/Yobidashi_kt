@@ -229,7 +229,7 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
             return true
         }
         if (item.itemId == R.id.color_settings_toolbar_menu_add_random) {
-            SavedColors.insertRandomColors(this)
+            SavedColors.insertRandomColors(this).addTo(disposables)
             Toaster.snackShort(
                     binding!!.settingsColorToolbar, R.string.done_addition, colorPair())
             return true

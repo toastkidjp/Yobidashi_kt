@@ -90,7 +90,7 @@ object SavedColors {
      *
      * @param context
      */
-    fun insertRandomColors(context: Context) {
+    fun insertRandomColors(context: Context): Disposable {
 
         val random = Random()
 
@@ -108,12 +108,14 @@ object SavedColors {
                 random.nextInt(255)
         )
 
-        Completable.fromAction {
+        return Completable.fromAction {
             DbInitter.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAsSingle(makeSavedColor(bg, font))
                     .subscribe()
-        }.subscribeOn(Schedulers.io()).subscribe()
+        }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
 }
