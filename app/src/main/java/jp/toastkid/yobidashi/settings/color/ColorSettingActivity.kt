@@ -85,19 +85,23 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
      * Initialize background and font palettes.
      */
     private fun initPalettes() {
-        binding?.backgroundPalette?.addSVBar(binding?.backgroundSvbar)
-        binding?.backgroundPalette?.addOpacityBar(binding?.backgroundOpacitybar)
-        binding?.backgroundPalette?.setOnColorChangedListener ({ c ->
-            binding?.settingsColorToolbar?.setBackgroundColor(c)
-            binding?.settingsColorOk?.setBackgroundColor(c)
-        })
+        binding?.backgroundPalette?.also {
+            it.addSVBar(binding?.backgroundSvbar)
+            it.addOpacityBar(binding?.backgroundOpacitybar)
+            it.setOnColorChangedListener { color ->
+                binding?.settingsColorToolbar?.setBackgroundColor(color)
+                binding?.settingsColorOk?.setBackgroundColor(color)
+            }
+        }
 
-        binding?.fontPalette?.addSVBar(binding?.fontSvbar)
-        binding?.fontPalette?.addOpacityBar(binding?.fontOpacitybar)
-        binding?.fontPalette?.setOnColorChangedListener({ c ->
-            binding?.settingsColorToolbar?.setTitleTextColor(c)
-            binding?.settingsColorOk?.setTextColor(c)
-        })
+        binding?.fontPalette?.also {
+            it.addSVBar(binding?.fontSvbar)
+            it.addOpacityBar(binding?.fontOpacitybar)
+            it.setOnColorChangedListener { color ->
+                binding?.settingsColorToolbar?.setTitleTextColor(color)
+                binding?.settingsColorOk?.setTextColor(color)
+            }
+        }
 
         refresh()
     }
