@@ -117,7 +117,7 @@
                                 android:text="@string/settings_color_commit"
                                 android:textSize="16sp"
                                 style="?android:attr/buttonBarStyle"
-                                android:onClick="@{activity.ok}"
+                                android:onClick="@{view -> activity.ok()}"
                                 />
 
                             <Button
@@ -132,7 +132,7 @@
                                 android:text="@string/settings_color_reset"
                                 android:textSize="16sp"
                                 style="?android:attr/buttonBarStyle"
-                                android:onClick="@{activity.reset}"
+                                android:onClick="@{view -> activity.reset()}"
                                 />
                         </LinearLayout>
                     </RelativeLayout>

@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.gfx.android.orma.Relation
@@ -59,7 +58,7 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_color)
-        binding = DataBindingUtil.setContentView<ActivitySettingsColorBinding>(this, R.layout.activity_settings_color)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_settings_color)
         binding!!.activity = this
 
         val colorPair = colorPair()
@@ -128,8 +127,8 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
      */
     private fun bindView(holder: SavedColorHolder, color: SavedColor) {
         SavedColors.setSaved(holder.textView, color)
-        holder.textView.setOnClickListener { v -> commitNewColor(color.bgColor, color.fontColor) }
-        holder.remove.setOnClickListener { v ->
+        holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
+        holder.remove.setOnClickListener {
             adapter!!.removeItemAsMaybe(color)
                     .subscribeOn(Schedulers.io())
                     .subscribe()
@@ -152,10 +151,8 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
 
     /**
      * OK button's action.
-     *
-     * @param ignored defined for Data-Binding
      */
-    fun ok(ignored: View) {
+    fun ok() {
         val bgColor = binding!!.backgroundPalette.color
         val fontColor = binding!!.fontPalette.color
 
@@ -194,10 +191,8 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
 
     /**
      * Reset button's action.
-     *
-     * @param ignored defined for Data-Binding
      */
-    fun reset(ignored: View) {
+    fun reset() {
         preferenceApplier.color = initialBgColor
 
         preferenceApplier.fontColor = initialFontColor
