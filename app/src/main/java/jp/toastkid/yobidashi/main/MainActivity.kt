@@ -36,7 +36,6 @@ import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
-import jp.toastkid.yobidashi.barcode.InstantBarcodeGenerator
 import jp.toastkid.yobidashi.barcode.LinearBarcodeReader
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ProgressBarCallback
@@ -438,10 +437,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
             R.id.nav_barcode -> {
                 sendLog("nav_barcode")
                 startActivity(BarcodeReaderActivity.makeIntent(this))
-            }
-            R.id.nav_instant_barcode -> {
-                sendLog("nav_instant_barcode")
-                InstantBarcodeGenerator(this).invoke()
             }
             R.id.nav_linear_barcode -> {
                 LinearBarcodeReader(this)
