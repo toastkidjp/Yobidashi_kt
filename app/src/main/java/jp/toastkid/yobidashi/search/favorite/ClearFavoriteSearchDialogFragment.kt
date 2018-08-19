@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi.R
 /**
  * @author toastkidjp
  */
-class DeleteAllFavoriteSearchDialogFragment : DialogFragment() {
+class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
     interface Callback {
         fun onClickDeleteAllFavoriteSearch()
@@ -54,12 +54,12 @@ class DeleteAllFavoriteSearchDialogFragment : DialogFragment() {
     companion object {
 
         fun show(fragmentManager: FragmentManager, targetClass: Class<out Fragment>) {
-            val dialogFragment = DeleteAllFavoriteSearchDialogFragment()
+            val dialogFragment = ClearFavoriteSearchDialogFragment()
             val target = fragmentManager.findFragmentByTag(targetClass.simpleName) ?: return
             dialogFragment.setTargetFragment(target, 1)
             dialogFragment.show(
                     fragmentManager,
-                    DeleteAllFavoriteSearchDialogFragment::class.java.simpleName
+                    ClearFavoriteSearchDialogFragment::class.java.simpleName
             )
         }
     }

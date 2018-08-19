@@ -33,7 +33,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.favorite.DeleteAllFavoriteSearchDialogFragment
+import jp.toastkid.yobidashi.search.favorite.ClearFavoriteSearchDialogFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
@@ -49,7 +49,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class SearchActivity : BaseActivity(), DeleteAllFavoriteSearchDialogFragment.Callback {
+class SearchActivity : BaseActivity(), ClearFavoriteSearchDialogFragment.Callback {
 
     /**
      * Disposables.

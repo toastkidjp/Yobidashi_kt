@@ -96,9 +96,9 @@ class FavoriteSearchModule(
     fun confirmClear() {
         val activityContext = context()
         if (activityContext is FragmentActivity) {
-            DeleteAllFavoriteSearchDialogFragment().show(
+            ClearFavoriteSearchDialogFragment().show(
                     activityContext.supportFragmentManager,
-                    DeleteAllFavoriteSearchDialogFragment::class.java.simpleName
+                    ClearFavoriteSearchDialogFragment::class.java.simpleName
                     )
         }
     }

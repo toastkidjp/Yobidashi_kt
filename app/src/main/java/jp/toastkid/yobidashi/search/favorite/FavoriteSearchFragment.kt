@@ -24,7 +24,7 @@ import jp.toastkid.yobidashi.search.SearchCategory
  *
  * @author toastkidjp
  */
-class FavoriteSearchFragment : BaseFragment(), DeleteAllFavoriteSearchDialogFragment.Callback {
+class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment.Callback {
 
     /** RecyclerView's adapter  */
     private var adapter: ActivityAdapter? = null
@@ -105,7 +105,7 @@ class FavoriteSearchFragment : BaseFragment(), DeleteAllFavoriteSearchDialogFrag
 
         menu!!.findItem(R.id.favorite_toolbar_menu_clear).setOnMenuItemClickListener { v ->
             val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
-            DeleteAllFavoriteSearchDialogFragment.show(
+            ClearFavoriteSearchDialogFragment.show(
                     fragmentManager,
                     this::class.java
             )
