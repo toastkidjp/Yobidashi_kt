@@ -30,7 +30,10 @@ import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.favorite.DeleteAllFavoriteSearchDialogFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
@@ -46,7 +49,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class SearchActivity : BaseActivity() {
+class SearchActivity : BaseActivity(), DeleteAllFavoriteSearchDialogFragment.Callback {
 
     /**
      * Disposables.
@@ -342,6 +345,19 @@ class SearchActivity : BaseActivity() {
      */
     private fun hideKeyboard() {
         binding?.searchInput?.let { Inputs.hideKeyboard(it) }
+    }
+
+    override fun onClickDeleteAllFavoriteSearch() {
+        DbInitter.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
+                .subscribeOn(Schedulers.io())
+                .subscribe { v ->
+                    favoriteModule?.clear()
+                    Toaster.snackShort(
+                            binding?.root as View,
+                            R.string.settings_color_delete,
+                            PreferenceApplier(this).colorPair()
+                    )
+                }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
