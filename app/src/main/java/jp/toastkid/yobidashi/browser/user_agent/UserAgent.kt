@@ -1,11 +1,5 @@
 package jp.toastkid.yobidashi.browser.user_agent
 
-import android.support.v7.app.AlertDialog
-import android.view.View
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-
 /**
  * Browser's user agent.
  *
@@ -24,7 +18,7 @@ enum class UserAgent constructor(private val title: String, private val text: St
 
     companion object {
 
-        private fun titles(): Array<String> {
+        fun titles(): Array<String> {
             val titles = ArrayList<String>(values().size)
             for (i in 0..values().size - 1) {
                 titles.add(values()[i].title)
@@ -32,45 +26,13 @@ enum class UserAgent constructor(private val title: String, private val text: St
             return titles.toArray(arrayOf<String>())
         }
 
-        private fun findCurrentIndex(name: String): Int {
+        fun findCurrentIndex(name: String): Int {
             for (i in 0 until values().size) {
                 if (values()[i].name == name) {
                     return i
                 }
             }
             return 0
-        }
-
-        /**
-         * Show selection dialog.
-         * @param snackbarParent
-         *
-         * @param callback
-         */
-        fun showSelectionDialog(
-                snackbarParent: View,
-                callback: (UserAgent) -> Unit
-        ) {
-            val context = snackbarParent.context
-            val preferenceApplier = PreferenceApplier(context)
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.title_user_agent)
-                    .setSingleChoiceItems(
-                            titles(),
-                            findCurrentIndex(preferenceApplier.userAgent())
-                    ) { d, i ->
-                        val userAgent = UserAgent.values()[i]
-                        preferenceApplier.setUserAgent(userAgent.name)
-                        callback(userAgent)
-                        Toaster.snackShort(
-                                snackbarParent,
-                                context.getString(R.string.format_result_user_agent, userAgent.title()),
-                                preferenceApplier.colorPair()
-                        )
-                    }
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.close) { d, i -> d.cancel() }
-                    .show()
         }
     }
 }

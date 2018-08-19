@@ -38,6 +38,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
+import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
@@ -77,7 +78,8 @@ import java.net.HttpURLConnection
 class BrowserFragment : BaseFragment(),
         ImageDialogCallback,
         AnchorDialogCallback,
-        TabListClearDialogFragment.Callback
+        TabListClearDialogFragment.Callback,
+        UserAgentDialogFragment.Callback
 {
 
     /**
@@ -402,9 +404,11 @@ class BrowserFragment : BaseFragment(),
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
             Menu.USER_AGENT.ordinal -> {
-                UserAgent.showSelectionDialog(
-                        snackbarParent,
-                        { browserModule.resetUserAgent(it.text()) }
+                val dialogFragment = UserAgentDialogFragment()
+                dialogFragment.setTargetFragment(this, 1)
+                dialogFragment.show(
+                        fragmentManager,
+                        UserAgentDialogFragment::class.java.simpleName
                 )
             }
             Menu.WIFI_SETTING.ordinal -> {
@@ -849,6 +853,15 @@ class BrowserFragment : BaseFragment(),
     override fun onClickClear() {
         tabs.clear()
         onEmptyTabs()
+    }
+
+    override fun onClickUserAgent(userAgent: UserAgent) {
+        browserModule.resetUserAgent(userAgent.text())
+        Toaster.snackShort(
+                binding?.root as View,
+                getString(R.string.format_result_user_agent, userAgent.title()),
+                preferenceApplier().colorPair()
+        )
     }
 
     override fun onPause() {
