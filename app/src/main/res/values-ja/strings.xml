@@ -236,6 +236,7 @@
     <string name="title_clear_form_data">フォームデータを削除</string>
     <string name="title_voice_search">音声検索</string>
     <string name="delete">削除</string>
+    <string name="title_clear_favorite_search">お気に入り検索を削除</string>
     <string name="title_clear_search_history">検索履歴をすべて削除</string>
     <string name="title_search_history">検索履歴</string>
     <string name="title_use_search_history">検索履歴を使う</string>
