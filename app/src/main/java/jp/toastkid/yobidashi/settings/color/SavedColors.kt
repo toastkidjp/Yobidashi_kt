@@ -1,14 +1,13 @@
 package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.support.annotation.ColorInt
-import android.support.v7.app.AlertDialog
-import android.text.Html
 import android.view.View
 import android.widget.TextView
 import io.reactivex.Completable
+import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
@@ -42,33 +41,9 @@ object SavedColors {
     internal fun makeSavedColor(
             @ColorInt bgColor: Int,
             @ColorInt fontColor: Int
-    ): SavedColor {
-        var color = SavedColor()
-        color.bgColor = bgColor
-        color.fontColor = fontColor
-
-        return color
-    }
-
-    /**
-     * Show clear colors dialog.
-     *
-     * @param context
-     * @param view
-     * @param relation
-     */
-    internal fun showClearColorsDialog(
-            context: Context,
-            view: View,
-            relation: SavedColor_Relation
-    ) {
-        AlertDialog.Builder(context)
-                .setTitle(R.string.title_clear_saved_color)
-                .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                .setCancelable(true)
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, i -> deleteAllAsync(view, relation.deleter(), d) }
-                .show()
+    ) = SavedColor().also {
+        it.bgColor = bgColor
+        it.fontColor = fontColor
     }
 
     /**
@@ -78,12 +53,14 @@ object SavedColors {
      * @param deleter
      * @param d
      */
-    private fun deleteAllAsync(
-            view: View,
-            deleter: SavedColor_Deleter,
-            d: DialogInterface
-    ) {
-        deleter.executeAsSingle()
+    fun deleteAllAsync(
+            view: View?,
+            deleter: SavedColor_Deleter?
+    ): Disposable {
+        if (view == null || deleter == null) {
+            return Disposables.empty()
+        }
+        return deleter.executeAsSingle()
                 .subscribeOn(Schedulers.io())
                 .subscribe { _, _ ->
                     Toaster.snackShort(
@@ -91,7 +68,6 @@ object SavedColors {
                             R.string.settings_color_delete,
                             PreferenceApplier(view.context).colorPair()
                     )
-                    d.dismiss()
                 }
     }
 
@@ -114,7 +90,7 @@ object SavedColors {
      *
      * @param context
      */
-    fun insertRandomColors(context: Context) {
+    fun insertRandomColors(context: Context): Disposable {
 
         val random = Random()
 
@@ -132,12 +108,14 @@ object SavedColors {
                 random.nextInt(255)
         )
 
-        Completable.fromAction {
+        return Completable.fromAction {
             DbInitter.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAsSingle(makeSavedColor(bg, font))
                     .subscribe()
-        }.subscribeOn(Schedulers.io()).subscribe()
+        }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
 }

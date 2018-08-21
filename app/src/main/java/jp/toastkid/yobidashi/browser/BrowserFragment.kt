@@ -37,6 +37,8 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.user_agent.UserAgent
+import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
@@ -59,9 +61,8 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.history.TabHistoryActivity
 import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListModule
 import okhttp3.Request
 import timber.log.Timber
@@ -76,7 +77,9 @@ import java.net.HttpURLConnection
  */
 class BrowserFragment : BaseFragment(),
         ImageDialogCallback,
-        AnchorDialogCallback
+        AnchorDialogCallback,
+        TabListClearDialogFragment.Callback,
+        UserAgentDialogFragment.Callback
 {
 
     /**
@@ -250,8 +253,7 @@ class BrowserFragment : BaseFragment(),
                 binding?.root as View,
                 this::hideTabList,
                 this::openEditorTab,
-                this::openPdfTabFromStorage,
-                this::onEmptyTabs
+                this::openPdfTabFromStorage
         )
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
@@ -401,13 +403,12 @@ class BrowserFragment : BaseFragment(),
             Menu.SETTING.ordinal -> {
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
-            Menu.TAB_HISTORY.ordinal -> {
-                launchTabHistory(fragmentActivity)
-            }
             Menu.USER_AGENT.ordinal -> {
-                UserAgent.showSelectionDialog(
-                        snackbarParent,
-                        { browserModule.resetUserAgent(it.text()) }
+                val dialogFragment = UserAgentDialogFragment()
+                dialogFragment.setTargetFragment(this, 1)
+                dialogFragment.show(
+                        fragmentManager,
+                        UserAgentDialogFragment::class.java.simpleName
                 )
             }
             Menu.WIFI_SETTING.ordinal -> {
@@ -502,25 +503,6 @@ class BrowserFragment : BaseFragment(),
             Menu.EXIT.ordinal -> {
                 activity?.moveTaskToBack(true)
             }
-        }
-    }
-
-    /**
-     * Launch current tab's history activity.
-     *
-     * @param context
-     */
-    private fun launchTabHistory(context: Context) {
-        val scaleUpAnimation = ActivityOptions.makeScaleUpAnimation(
-                binding?.cycleMenu, 0, 0,
-                binding?.cycleMenu?.width ?: 0, binding?.cycleMenu?.height ?: 0)
-        val currentTab = tabs.currentTab()
-        if (currentTab is WebTab) {
-            startActivityForResult(
-                    TabHistoryActivity.makeIntent(context, currentTab),
-                    TabHistoryActivity.REQUEST_CODE,
-                    scaleUpAnimation.toBundle()
-            )
         }
     }
 
@@ -651,7 +633,12 @@ class BrowserFragment : BaseFragment(),
     }
 
     override fun pressLongBack(): Boolean {
-        activity?.let { launchTabHistory(it) }
+        activity?.let {
+            startActivityForResult(
+                ViewHistoryActivity.makeIntent(it),
+                ViewHistoryActivity.REQUEST_CODE
+            )
+        }
         return true
     }
 
@@ -726,11 +713,6 @@ class BrowserFragment : BaseFragment(),
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 intent.data?.let {
                     tabs.openNewWebTab(it.toString())
-                }
-            }
-            TabHistoryActivity.REQUEST_CODE -> {
-                if (intent.hasExtra(TabHistoryActivity.EXTRA_KEY_INDEX)) {
-                    tabs.moveTo(intent.getIntExtra(TabHistoryActivity.EXTRA_KEY_INDEX, 0))
                 }
             }
             EditorModule.REQUEST_CODE_LOAD -> {
@@ -866,6 +848,20 @@ class BrowserFragment : BaseFragment(),
                     Bitmaps.compress(it, file)
                     file
                 }
+    }
+
+    override fun onClickClear() {
+        tabs.clear()
+        onEmptyTabs()
+    }
+
+    override fun onClickUserAgent(userAgent: UserAgent) {
+        browserModule.resetUserAgent(userAgent.text())
+        Toaster.snackShort(
+                binding?.root as View,
+                getString(R.string.format_result_user_agent, userAgent.title()),
+                preferenceApplier().colorPair()
+        )
     }
 
     override fun onPause() {

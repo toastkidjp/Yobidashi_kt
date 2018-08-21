@@ -25,8 +25,6 @@ internal enum class Menu(
 
     TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
 
-    TAB_HISTORY(R.string.title_tab_histories, R.drawable.ic_history),
-
     TOP(R.string.title_menu_to_top, R.drawable.ic_top),
 
     BOTTOM(R.string.title_menu_to_bottom, R.drawable.ic_bottom),

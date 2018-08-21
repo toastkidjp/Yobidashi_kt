@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
  *
  * @author toastkidjp
  */
-class BackgroundSettingActivity : BaseActivity() {
+class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Callback {
 
     /**
      * Data Binding object.
@@ -113,16 +113,21 @@ class BackgroundSettingActivity : BaseActivity() {
      * Clear all images.
      */
     private fun clearImages() {
-        ClearImages(this, {
-            sendLog("clear_bg_img")
-            filesDir.clean()
-            Toaster.snackShort(
-                    binding?.fabParent as View,
-                    getString(R.string.message_success_image_removal),
-                    colorPair()
-            )
-            adapter?.notifyDataSetChanged()
-        }).invoke()
+        ClearImagesDialogFragment().show(
+                supportFragmentManager,
+                ClearImagesDialogFragment::class.java.simpleName
+        )
+    }
+
+    override fun onClickClearImages() {
+        sendLog("clear_bg_img")
+        filesDir.clean()
+        Toaster.snackShort(
+                binding?.fabParent as View,
+                getString(R.string.message_success_image_removal),
+                colorPair()
+        )
+        adapter?.notifyDataSetChanged()
     }
 
     override fun onActivityResult(

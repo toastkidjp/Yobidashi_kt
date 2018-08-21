@@ -236,6 +236,7 @@
     <string name="title_clear_form_data">フォームデータを削除</string>
     <string name="title_voice_search">音声検索</string>
     <string name="delete">削除</string>
+    <string name="title_clear_favorite_search">お気に入り検索を削除</string>
     <string name="title_clear_search_history">検索履歴をすべて削除</string>
     <string name="title_search_history">検索履歴</string>
     <string name="title_use_search_history">検索履歴を使う</string>
@@ -282,7 +283,6 @@
     <string name="message_add_default_bookmark">デフォルトのブックマークを追加します。</string>
     <string name="message_add_bookmark">ブックマークを追加しますか？</string>
     <string name="hint_find_in_page">ページ内検索のキーワードを入力</string>
-    <string name="hint_generate_barcode">バーコードにしたい文字を入力してください。</string>
     <string name="title_tab_histories">タブの履歴一覧</string>
     <string name="confirmation">確認</string>
     <string name="message_confirm_exit">アプリを終了しますか？</string>

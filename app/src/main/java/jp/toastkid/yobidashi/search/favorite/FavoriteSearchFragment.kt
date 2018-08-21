@@ -9,12 +9,13 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 
@@ -23,7 +24,7 @@ import jp.toastkid.yobidashi.search.SearchCategory
  *
  * @author toastkidjp
  */
-class FavoriteSearchFragment : BaseFragment() {
+class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment.Callback {
 
     /** RecyclerView's adapter  */
     private var adapter: ActivityAdapter? = null
@@ -103,7 +104,11 @@ class FavoriteSearchFragment : BaseFragment() {
         inflater!!.inflate(R.menu.favorite_toolbar_menu, menu)
 
         menu!!.findItem(R.id.favorite_toolbar_menu_clear).setOnMenuItemClickListener { v ->
-            Clear(binding!!.favoriteSearchView, adapter!!.relation.deleter()).invoke()
+            val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
+            ClearFavoriteSearchDialogFragment.show(
+                    fragmentManager,
+                    this::class.java
+            )
             true
         }
 
@@ -111,6 +116,21 @@ class FavoriteSearchFragment : BaseFragment() {
             invokeAddition()
             true
         }
+    }
+
+    override fun onClickDeleteAllFavoriteSearch() {
+        val activityContext = context ?: return
+
+        adapter?.relation?.deleter()?.executeAsSingle()
+                ?.subscribeOn(Schedulers.io())
+                ?.subscribe { _ ->
+                    Toaster.snackShort(
+                            binding?.root as View,
+                            R.string.settings_color_delete,
+                            PreferenceApplier(activityContext).colorPair()
+                    )
+                }
+                ?.addTo(disposables)
     }
 
     fun add(v: View) {

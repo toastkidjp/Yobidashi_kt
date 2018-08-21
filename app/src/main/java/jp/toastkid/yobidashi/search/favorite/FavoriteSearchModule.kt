@@ -2,14 +2,13 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
-import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
@@ -92,15 +91,21 @@ class FavoriteSearchModule(
     }
 
     /**
-     * Clear search history.
-     * @param ignored for Data Binding
+     * Confirm clear search history.
      */
-    fun clearHistory(ignored: View) {
-        Clear(binding.root, relation.deleter())
-                .invoke {
-                    moduleAdapter.clear()
-                    hide()
-                }
+    fun confirmClear() {
+        val activityContext = context()
+        if (activityContext is FragmentActivity) {
+            ClearFavoriteSearchDialogFragment().show(
+                    activityContext.supportFragmentManager,
+                    ClearFavoriteSearchDialogFragment::class.java.simpleName
+                    )
+        }
+    }
+
+    fun clear() {
+        moduleAdapter.clear()
+        hide()
     }
 
     /**

@@ -237,6 +237,7 @@
     <string name="title_clear_form_data">Clear form data</string>
     <string name="title_voice_search">Voice Search</string>
     <string name="delete">Delete</string>
+    <string name="title_clear_favorite_search">Clear all favorite search</string>
     <string name="title_clear_search_history">Clear all search history</string>
     <string name="title_search_history">Search history</string>
     <string name="title_use_search_history">Use search history</string>
@@ -286,7 +287,6 @@
     <string name="message_add_default_bookmark">Would you like to add default bookmarks?</string>
     <string name="message_add_bookmark">Would you like to add bookmark?</string>
     <string name="hint_find_in_page">Input keyword of find-in-page.</string>
-    <string name="hint_generate_barcode">Please could you input any text...</string>
     <string name="title_tab_histories">Tab histories</string>
     <string name="confirmation">Confirmation</string>
     <string name="message_confirm_exit">Would you like to exit this app?</string>

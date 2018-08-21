@@ -9,15 +9,14 @@ package jp.toastkid.yobidashi.search.history
 
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
-import jp.toastkid.yobidashi.libs.db.Clear
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 
@@ -100,12 +99,20 @@ class HistoryModule(
      *
      * @param ignored for Data Binding
      */
-    fun clearHistory(@SuppressWarnings("UnusedParameters") ignored: View) =
-            Clear(binding.root, relation.deleter())
-                    .invoke{
-                        moduleAdapter.clear()
-                        hide()
-                    }
+    fun confirmClear() {
+        val activityContext = context()
+        if (activityContext is FragmentActivity) {
+            ClearSearchHistoryDialogFragment().show(
+                    activityContext.supportFragmentManager,
+                    ClearSearchHistoryDialogFragment::class.java.simpleName
+            )
+        }
+    }
+
+    fun clear() {
+        moduleAdapter.clear()
+        hide()
+    }
 
     /**
      * Dispose last subscription.

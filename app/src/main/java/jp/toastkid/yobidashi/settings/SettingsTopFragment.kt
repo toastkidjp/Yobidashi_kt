@@ -22,7 +22,8 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.browser.UserAgent
+import jp.toastkid.yobidashi.browser.user_agent.UserAgent
+import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBinding
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
@@ -43,7 +44,7 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
  *
  * @author toastkidjp
  */
-class SettingsTopFragment : BaseFragment() {
+class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
 
     /**
      * Data binding object.
@@ -281,10 +282,16 @@ class SettingsTopFragment : BaseFragment() {
      * @param v
      */
     fun userAgent(v: View) {
-        UserAgent.showSelectionDialog(
-                binding.root,
-                { userAgent -> binding.moduleBrowser?.userAgentValue?.text = userAgent.title() }
-        )
+        val dialogFragment = UserAgentDialogFragment()
+        dialogFragment.setTargetFragment(this, 1)
+        dialogFragment.show(
+                fragmentManager,
+                UserAgentDialogFragment::class.java.simpleName
+                )
+    }
+
+    override fun onClickUserAgent(userAgent: UserAgent) {
+        binding.moduleBrowser.userAgentValue?.text = userAgent.title()
     }
 
     fun switchAdRemove() {

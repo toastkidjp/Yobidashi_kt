@@ -7,11 +7,9 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.LayoutRes
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.text.Html
 import android.view.MenuItem
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
@@ -24,7 +22,7 @@ import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 /**
  * @author toastkidjp
  */
-class ViewHistoryActivity: BaseActivity() {
+class ViewHistoryActivity: BaseActivity(), ClearDialogFragment.Callback {
 
     private lateinit var binding: ActivityViewHistoryBinding
 
@@ -100,17 +98,10 @@ class ViewHistoryActivity: BaseActivity() {
         val itemId = item.itemId
         when (itemId) {
             R.id.clear -> {
-                AlertDialog.Builder(this)
-                        .setTitle(R.string.title_clear_cache)
-                        .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                        .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                        .setPositiveButton(R.string.ok) { d, i ->
-                            adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
-                            d.dismiss()
-                            finish()
-                        }
-                        .setCancelable(true)
-                        .show()
+                ClearDialogFragment().show(
+                        supportFragmentManager,
+                        ClearDialogFragment::class.java.simpleName
+                )
                 return true
             }
             R.id.to_top -> {
@@ -123,6 +114,11 @@ class ViewHistoryActivity: BaseActivity() {
             }
         }
         return super.clickMenu(item)
+    }
+
+    override fun onClickClear() {
+        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
+        finish()
     }
 
     override fun titleId(): Int = R.string.title_view_history
