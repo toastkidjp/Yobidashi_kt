@@ -5,9 +5,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.LayoutRes
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Html
 import android.view.MenuItem
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
@@ -22,7 +20,8 @@ import jp.toastkid.yobidashi.search.SearchAction
  *
  * @author toastkidjp
  */
-class SearchHistoryActivity : BaseActivity() {
+class SearchHistoryActivity : BaseActivity(),
+        SearchHistoryClearDialogFragment.OnClickSearchHistoryClearCallback {
 
     private lateinit var binding: ActivitySearchHistoryBinding
 
@@ -31,10 +30,11 @@ class SearchHistoryActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivitySearchHistoryBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         val relation = DbInitter.init(this).relationOfSearchHistory()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.historiesView.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
                 relation,
@@ -65,32 +65,27 @@ class SearchHistoryActivity : BaseActivity() {
     }
 
     override fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.close) {
-            finish()
-            return true
+        when (item.itemId) {
+            R.id.close -> finish()
+            R.id.clear -> SearchHistoryClearDialogFragment().show(
+                    supportFragmentManager,
+                    SearchHistoryClearDialogFragment::class.java.simpleName
+            )
         }
-        if (itemId == R.id.clear) {
-            AlertDialog.Builder(this)
-                    .setTitle(R.string.title_clear_cache)
-                    .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                    .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                    .setPositiveButton(R.string.ok) { d, i ->
-                        adapter.clearAll{Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
-                        d.dismiss()
-                        finish()
-                    }
-                    .setCancelable(true)
-                    .show()
-            return true
-        }
-        return super.clickMenu(item)
+        return true
+    }
+
+    override fun onClickSearchHistoryClear() {
+        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair()) }
+        finish()
     }
 
     override fun titleId(): Int = R.string.title_search_history
 
     companion object {
-        @LayoutRes const val LAYOUT_ID: Int = R.layout.activity_search_history
+
+        @LayoutRes
+        private const val LAYOUT_ID: Int = R.layout.activity_search_history
 
         fun makeIntent(context: Context): Intent {
             val intent = Intent(context, SearchHistoryActivity::class.java)
