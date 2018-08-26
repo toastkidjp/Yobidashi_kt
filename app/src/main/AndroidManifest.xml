@@ -23,7 +23,7 @@
             android:theme="@style/AppTheme.Splash"
             android:configChanges="orientation|screenSize|locale"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
