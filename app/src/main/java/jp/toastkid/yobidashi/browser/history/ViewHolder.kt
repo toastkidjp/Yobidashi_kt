@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.support.v7.app.AlertDialog
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.reactivex.Single
@@ -12,8 +12,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
-import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import java.io.File
@@ -53,22 +51,12 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
     fun setOnClickBookmark(history: ViewHistory) {
         binding.bookmark.setOnClickListener ({ _ ->
             val context = binding.root.context
-            AlertDialog.Builder(context)
-                    .setTitle(R.string.title_add_bookmark)
-                    .setMessage(R.string.message_add_bookmark)
-                    .setPositiveButton(R.string.ok, {d, i -> BookmarkInsertion(
-                            context,
-                            history.title,
-                            history.url,
-                            Bookmarks.makeFaviconUrl(context, history.url),
-                            Bookmarks.ROOT_FOLDER_NAME,
-                            false
-                        ).insert()
-                        d.dismiss()
-                    })
-                    .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
-                    .setCancelable(true)
-                    .show()
+            if (context is FragmentActivity) {
+                AddBookmarkDialogFragment.make(history.title, history.url).show(
+                        context.supportFragmentManager,
+                        AddBookmarkDialogFragment::class.java.simpleName
+                )
+            }
         })
     }
 
