@@ -1,24 +1,27 @@
 package jp.toastkid.yobidashi.browser
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
@@ -29,33 +32,20 @@ import java.io.IOException
  *
  * @author toastkidjp
  */
-class ImageDownloadAction(
-        val view: View,
-        val url: String
-) {
+class ImageDownloadActionDialogFragment : DialogFragment() {
 
     /**
      * Use for setting image file.
      */
     private val uiThreadHandler = Handler(Looper.getMainLooper())
 
-    /**
-     * Invoke methods.
-     */
-    fun invoke() {
-        val context: Context = view.context
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        if (Urls.isInvalidUrl(url)) {
-            Toaster.snackShort(
-                    view,
-                    context.getString(R.string.message_cannot_downloading_image),
-                    PreferenceApplier(context).colorPair()
-            )
-            return
-        }
+        val url = arguments?.getString(KEY_URL) ?: return super.onCreateDialog(savedInstanceState)
 
         @SuppressLint("InflateParams")
-        val contentView = LayoutInflater.from(context)
+        val contentView = LayoutInflater.from(activityContext)
                 .inflate(R.layout.content_dialog_image, null)
         val imageView = contentView.findViewById<ImageView>(R.id.image)
         downloadPreview(url, imageView)
@@ -64,7 +54,16 @@ class ImageDownloadAction(
             imageView.visibility = if (imageView.isVisible) View.GONE else View.VISIBLE
         }
 
-        showConfirmDialog(context, contentView, url)
+        return AlertDialog.Builder(activityContext)
+                .setTitle(R.string.title_download_image)
+                .setMessage(R.string.message_confirm_downloading_image)
+                .setView(contentView)
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
+                    DownloadAction(activityContext, url)()
+                    d.dismiss()
+                }
+                .create()
     }
 
     /**
@@ -77,7 +76,7 @@ class ImageDownloadAction(
             return
         }
         val client = HttpClientFactory.make()
-        client.newCall(Request.Builder().url(url).build()).enqueue(object : Callback {
+        client.newCall(Request.Builder().url(url).build()).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: Call?, e: IOException?) {
                 Timber.e(e)
             }
@@ -90,22 +89,20 @@ class ImageDownloadAction(
         })
     }
 
-    /**
-     * Show confirm dialog.
-     */
-    private fun showConfirmDialog(context: Context, view: View, url: String) {
-        AlertDialog.Builder(context)
-                .setTitle(R.string.title_download_image)
-                .setMessage(R.string.message_confirm_downloading_image)
-                .setView(view)
-                .setNegativeButton(R.string.cancel, { d, _ -> d.cancel() })
-                .setPositiveButton(
-                        R.string.ok,
-                        { d, _ ->
-                            DownloadAction(context, url).invoke()
-                            d.dismiss()
-                        }
+    companion object {
+
+        private const val KEY_URL = "url"
+
+        fun show(context: Context, url: String) {
+            val dialogFragment = ImageDownloadActionDialogFragment()
+
+            if (context is FragmentActivity) {
+                dialogFragment.arguments = bundleOf(KEY_URL to url)
+                dialogFragment.show(
+                        context.supportFragmentManager,
+                        ImageDownloadActionDialogFragment::class.java.simpleName
                 )
-                .show()
+            }
+        }
     }
 }

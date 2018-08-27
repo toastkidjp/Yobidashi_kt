@@ -827,7 +827,17 @@ class BrowserFragment : BaseFragment(),
     }
 
     override fun onClickDownloadImage(url: String) {
-        ImageDownloadAction(binding?.root as View, url).invoke()
+        val activityContext = context ?: return
+        if (Urls.isInvalidUrl(url)) {
+            Toaster.snackShort(
+                    binding?.root as View,
+                    activityContext.getString(R.string.message_cannot_downloading_image),
+                    PreferenceApplier(activityContext).colorPair()
+            )
+            return
+        }
+
+        ImageDownloadActionDialogFragment.show(activityContext, url)
     }
 
     /**
