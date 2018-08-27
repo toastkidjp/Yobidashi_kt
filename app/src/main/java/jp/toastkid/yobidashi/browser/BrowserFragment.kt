@@ -46,6 +46,7 @@ import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.ClearTextDialogFragment
 import jp.toastkid.yobidashi.editor.EditorModule
+import jp.toastkid.yobidashi.editor.InputNameDialogFragment
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -81,7 +82,8 @@ class BrowserFragment : BaseFragment(),
         AnchorDialogCallback,
         TabListClearDialogFragment.Callback,
         UserAgentDialogFragment.Callback,
-        ClearTextDialogFragment.Callback
+        ClearTextDialogFragment.Callback,
+        InputNameDialogFragment.Callback
 {
 
     /**
@@ -868,6 +870,10 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickClearInput() {
         editor.clearInput()
+    }
+
+    override fun onClickInputName(fileName: String) {
+        editor.assignNewFile(fileName)
     }
 
     override fun onPause() {
