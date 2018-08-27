@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
+import jp.toastkid.yobidashi.editor.ClearTextDialogFragment
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
@@ -79,7 +80,8 @@ class BrowserFragment : BaseFragment(),
         ImageDialogCallback,
         AnchorDialogCallback,
         TabListClearDialogFragment.Callback,
-        UserAgentDialogFragment.Callback
+        UserAgentDialogFragment.Callback,
+        ClearTextDialogFragment.Callback
 {
 
     /**
@@ -862,6 +864,10 @@ class BrowserFragment : BaseFragment(),
                 getString(R.string.format_result_user_agent, userAgent.title()),
                 preferenceApplier().colorPair()
         )
+    }
+
+    override fun onClickClearInput() {
+        editor.clearInput()
     }
 
     override fun onPause() {

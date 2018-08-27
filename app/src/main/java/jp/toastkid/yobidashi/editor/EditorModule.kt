@@ -15,7 +15,6 @@ import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
@@ -97,15 +96,7 @@ class EditorModule(
         binding.toTop.setOnClickListener { top() }
         binding.toBottom.setOnClickListener { bottom() }
         binding.clear.setOnClickListener {
-            AlertDialog.Builder(context)
-                    .setTitle(context.getString(R.string.title_clear_text))
-                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
-                    .setPositiveButton(R.string.ok, {d, i ->
-                        clearInput()
-                        d.dismiss()
-                    })
-                    .show()
+            ClearTextDialogFragment.show(context)
         }
 
         binding.editorInput.addTextChangedListener(object: TextWatcher {
@@ -368,7 +359,7 @@ class EditorModule(
     /**
      * Clear input text.
      */
-    private inline fun clearInput() {
+    fun clearInput() {
         setContentText("")
     }
 
