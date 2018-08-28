@@ -201,8 +201,6 @@ class BrowserFragment : BaseFragment(),
         editor = EditorModule(
                 binding?.editor as ModuleEditorBinding,
                 { intent, requestCode -> startActivityForResult(intent, requestCode) },
-                this::switchTabList,
-                this::closeTabList,
                 { file ->
                     val currentTab = tabs.currentTab()
                     if (currentTab is EditorTab) {

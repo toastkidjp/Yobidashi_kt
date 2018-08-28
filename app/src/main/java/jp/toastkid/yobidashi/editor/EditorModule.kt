@@ -26,7 +26,6 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchActivity
 import okio.Okio
 import java.io.File
 import java.text.DateFormat
@@ -38,10 +37,7 @@ import java.util.*
  *
  * @param binding
  * @param intentLauncher
- * @param switchTabAction
- * @param closeTabAction
  * @param saveTabCallback
- * @param toolbarCallback
  * @param hideOption
  *
  * @author toastkidjp
@@ -49,8 +45,6 @@ import java.util.*
 class EditorModule(
         private val binding: ModuleEditorBinding,
         private val intentLauncher: (Intent, Int) -> Unit,
-        private val switchTabAction: () -> Unit,
-        private val closeTabAction: () -> Unit,
         private val saveTabCallback: (File) -> Unit,
         hideOption: () -> Boolean
 ): BaseModule(binding.root) {
@@ -88,11 +82,7 @@ class EditorModule(
         binding.save.setOnClickListener { save() }
         binding.load.setOnClickListener { load() }
         binding.clip.setOnClickListener { clip() }
-        binding.search.setOnClickListener { context.startActivity(SearchActivity.makeIntent(context)) }
-        binding.tabList.setOnClickListener { switchTabAction() }
         binding.backup.setOnClickListener { backup() }
-        binding.toTop.setOnClickListener { top() }
-        binding.toBottom.setOnClickListener { bottom() }
         binding.clear.setOnClickListener {
             ClearTextDialogFragment.show(context)
         }
@@ -119,19 +109,14 @@ class EditorModule(
                 colorPair,
                 binding.save,
                 binding.load,
-                binding.search,
                 binding.clip,
-                binding.tabList,
+                binding.lastSaved,
+                binding.counter,
                 binding.backup,
-                binding.toTop,
-                binding.toBottom,
                 binding.clear
                 )
 
         binding.header.setBackgroundColor(colorPair.bgColor())
-        binding.footer.setBackgroundColor(colorPair.bgColor())
-        binding.counter.setTextColor(colorPair.fontColor())
-        binding.lastSaved.setTextColor(colorPair.fontColor())
     }
 
     private fun applyButtonColor(colorPair: ColorPair, vararg textViews: TextView) {
@@ -317,7 +302,7 @@ class EditorModule(
     private fun setLastSaved(ms: Long) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = ms
-        binding.lastSaved.setText("Last saved: " + dateFormatHolder.get().format(calendar.time))
+        binding.lastSaved.setText("Last saved:\n" + dateFormatHolder.get().format(calendar.time))
     }
 
     /**

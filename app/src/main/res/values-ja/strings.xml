@@ -319,7 +319,7 @@
     <string name="save_backup">バックアップ</string>
     <string name="title_torch">ライト</string>
     <string name="title_count">文字数</string>
-    <string name="message_character_count">文字数: %d</string>
+    <string name="message_character_count">文字数:\n%d</string>
     <string name="title_add_folder">フォルダを追加</string>
     <string name="title_import_bookmark">ブックマークをインポート</string>
     <string name="title_export_bookmark">ブックマークをエクスポート</string>
