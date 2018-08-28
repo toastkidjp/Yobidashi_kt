@@ -348,6 +348,7 @@ class TabAdapter(
         when (currentTab()) {
             is WebTab -> browserModule.pageUp()
             is PdfTab -> pdf.pageUp()
+            is EditorTab -> editor.pageUp()
         }
     }
 
@@ -355,6 +356,7 @@ class TabAdapter(
         when (currentTab()) {
             is WebTab -> browserModule.pageDown()
             is PdfTab -> pdf.pageDown()
+            is EditorTab -> editor.pageDown()
         }
     }
 
