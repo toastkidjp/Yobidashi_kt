@@ -161,12 +161,10 @@ class EditorModule(
 
     fun pageUp() {
         binding.editorInput.setSelection(0)
-        //binding.editorScroll.smoothScrollTo(0, 0)
     }
 
     fun pageDown() {
         binding.editorInput.setSelection(binding.editorInput.length())
-        //binding.editorScroll.smoothScrollTo(0, binding.editorScroll.maxScrollAmount)
     }
 
     /**
