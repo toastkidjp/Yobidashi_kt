@@ -774,7 +774,7 @@ class BrowserFragment : BaseFragment(),
             tabs.loadArchive(file)
         } catch (e: IOException) {
             Timber.e(e)
-        } catch (error: OutOfMemoryError) {
+        } catch (error: Throwable) {
             Timber.e(error)
             System.gc()
         }
