@@ -18,6 +18,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
 import android.widget.TextView
+import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
@@ -165,6 +166,18 @@ class EditorModule(
 
     fun pageDown() {
         binding.editorInput.setSelection(binding.editorInput.length())
+    }
+
+    fun setSpace(menuPos: CycleMenuWidget.CORNER) = when (menuPos) {
+        CycleMenuWidget.CORNER.LEFT_BOTTOM -> {
+            binding.leftSpace.visibility = View.VISIBLE
+            binding.rightSpace.visibility = View.GONE
+        }
+        CycleMenuWidget.CORNER.RIGHT_BOTTOM -> {
+            binding.leftSpace.visibility = View.GONE
+            binding.rightSpace.visibility = View.VISIBLE
+        }
+        else -> Unit
     }
 
     /**
