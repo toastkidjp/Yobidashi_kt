@@ -13,9 +13,7 @@ import android.os.Build
 import android.os.Environment
 import android.support.annotation.MainThread
 import android.support.annotation.StringRes
-import android.support.v7.app.AlertDialog
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
@@ -23,7 +21,6 @@ import android.widget.TextView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
-import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -97,15 +94,7 @@ class EditorModule(
         binding.toTop.setOnClickListener { top() }
         binding.toBottom.setOnClickListener { bottom() }
         binding.clear.setOnClickListener {
-            AlertDialog.Builder(context)
-                    .setTitle(context.getString(R.string.title_clear_text))
-                    .setMessage(Html.fromHtml(context.getString(R.string.confirm_clear_all_settings)))
-                    .setNegativeButton(R.string.cancel, {d, i -> d.cancel()})
-                    .setPositiveButton(R.string.ok, {d, i ->
-                        clearInput()
-                        d.dismiss()
-                    })
-                    .show()
+            ClearTextDialogFragment.show(context)
         }
 
         binding.editorInput.addTextChangedListener(object: TextWatcher {
@@ -201,32 +190,7 @@ class EditorModule(
             return
         }
 
-        val context = binding.root.context
-        val inputLayout = TextInputs.make(context)
-        inputLayout.editText?.setText(DEFAULT_FILE_NAME)
-
-        AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.title_dialog_input_file_name))
-                .setView(inputLayout)
-                .setCancelable(true)
-                .setPositiveButton(R.string.save) { d, i ->
-                    if (inputLayout.editText?.text?.isEmpty() as Boolean) {
-                        return@setPositiveButton
-                    }
-
-                    var newFile = assignFile(context, "${inputLayout.editText?.text.toString()}.txt")
-                    while (newFile.exists()) {
-                        newFile = assignFile(
-                                context,
-                                "${removeExtension(newFile.name)}_.txt"
-                        )
-                    }
-                    path = newFile.absolutePath
-                    saveTabCallback(newFile)
-                    saveToFile(path)
-                }
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .show()
+        InputNameDialogFragment.show(context())
     }
 
     /**
@@ -368,7 +332,7 @@ class EditorModule(
     /**
      * Clear input text.
      */
-    private inline fun clearInput() {
+    fun clearInput() {
         setContentText("")
     }
 
@@ -432,6 +396,20 @@ class EditorModule(
         }
     }
 
+    fun assignNewFile(fileName: String) {
+        val context = context()
+        var newFile = assignFile(context, fileName)
+        while (newFile.exists()) {
+            newFile = assignFile(
+                    context,
+                    "${removeExtension(newFile.name)}_.txt"
+            )
+        }
+        path = newFile.absolutePath
+        saveTabCallback(newFile)
+        saveToFile(path)
+    }
+
     companion object {
 
         /**
@@ -439,10 +417,6 @@ class EditorModule(
          */
         const val REQUEST_CODE_LOAD: Int = 10111
 
-        /**
-         * Default file name.
-         */
-        private const val DEFAULT_FILE_NAME: String = "memo"
     }
 
 }

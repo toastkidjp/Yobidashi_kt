@@ -44,7 +44,9 @@ import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
+import jp.toastkid.yobidashi.editor.ClearTextDialogFragment
 import jp.toastkid.yobidashi.editor.EditorModule
+import jp.toastkid.yobidashi.editor.InputNameDialogFragment
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -79,7 +81,9 @@ class BrowserFragment : BaseFragment(),
         ImageDialogCallback,
         AnchorDialogCallback,
         TabListClearDialogFragment.Callback,
-        UserAgentDialogFragment.Callback
+        UserAgentDialogFragment.Callback,
+        ClearTextDialogFragment.Callback,
+        InputNameDialogFragment.Callback
 {
 
     /**
@@ -823,7 +827,17 @@ class BrowserFragment : BaseFragment(),
     }
 
     override fun onClickDownloadImage(url: String) {
-        ImageDownloadAction(binding?.root as View, url).invoke()
+        val activityContext = context ?: return
+        if (Urls.isInvalidUrl(url)) {
+            Toaster.snackShort(
+                    binding?.root as View,
+                    activityContext.getString(R.string.message_cannot_downloading_image),
+                    PreferenceApplier(activityContext).colorPair()
+            )
+            return
+        }
+
+        ImageDownloadActionDialogFragment.show(activityContext, url)
     }
 
     /**
@@ -862,6 +876,14 @@ class BrowserFragment : BaseFragment(),
                 getString(R.string.format_result_user_agent, userAgent.title()),
                 preferenceApplier().colorPair()
         )
+    }
+
+    override fun onClickClearInput() {
+        editor.clearInput()
+    }
+
+    override fun onClickInputName(fileName: String) {
+        editor.assignNewFile(fileName)
     }
 
     override fun onPause() {
