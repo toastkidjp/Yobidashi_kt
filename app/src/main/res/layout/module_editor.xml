@@ -28,7 +28,7 @@
         </ScrollView>
 
         <HorizontalScrollView
-            android:id="@+id/header"
+            android:id="@+id/editor_menu"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_gravity="bottom"

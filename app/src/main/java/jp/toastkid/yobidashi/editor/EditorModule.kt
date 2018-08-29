@@ -117,7 +117,7 @@ class EditorModule(
                 binding.clear
                 )
 
-        binding.header.setBackgroundColor(colorPair.bgColor())
+        binding.editorMenu.setBackgroundColor(colorPair.bgColor())
     }
 
     private fun applyButtonColor(colorPair: ColorPair, vararg textViews: TextView) {
