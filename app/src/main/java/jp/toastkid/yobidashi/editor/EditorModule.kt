@@ -246,7 +246,7 @@ class EditorModule(
                 arrayOf(filePath),
                 null,
                 { _, _ ->  })
-        Toaster.tShort(context, "${context().getString(R.string.done_save)}: $filePath")
+        snackText("${context().getString(R.string.done_save)}: $filePath")
         setLastSaved(file.lastModified())
     }
 
@@ -351,6 +351,14 @@ class EditorModule(
      */
     private inline fun snackText(@StringRes id: Int) {
         Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
+    }
+
+    private fun snackText(message: String) {
+        Toaster.snackShort(
+                binding.root,
+                message,
+                preferenceApplier.colorPair()
+        )
     }
 
     /**
