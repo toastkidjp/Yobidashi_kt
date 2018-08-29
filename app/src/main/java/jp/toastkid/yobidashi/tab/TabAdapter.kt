@@ -514,17 +514,6 @@ class TabAdapter(
      */
     private fun setCurrentTabCount() = Unit
 
-    fun moveTo(i: Int) {
-        val currentTab = currentTab()
-        if (currentTab is WebTab) {
-            val url = currentTab.moveAndGet(i)
-            if (url.isEmpty()) {
-                return
-            }
-            callLoadUrl(url, false)
-        }
-    }
-
     /**
      * Update current tab state.
      */
