@@ -682,7 +682,7 @@ class BrowserFragment : BaseFragment(),
      */
     private fun hideTabList() {
         tabListModule.hide()
-        tabs.replaceToCurrentTab(true)
+        tabs.replaceToCurrentTab(false)
     }
 
     /**
