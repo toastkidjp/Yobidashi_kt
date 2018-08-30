@@ -36,11 +36,8 @@ class PreferenceApplier(private val context: Context) {
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE
     }
 
-    private val preferences: SharedPreferences
-
-    init {
-        preferences = context.getSharedPreferences(javaClass.canonicalName, Context.MODE_PRIVATE)
-    }
+    private val preferences: SharedPreferences =
+            context.getSharedPreferences(javaClass.canonicalName, Context.MODE_PRIVATE)
 
     var color: Int
         get() = preferences.getInt(Key.BG_COLOR.name, ContextCompat.getColor(context, R.color.colorPrimaryDark))
@@ -50,9 +47,7 @@ class PreferenceApplier(private val context: Context) {
         get() = preferences.getInt(Key.FONT_COLOR.name, ContextCompat.getColor(context, R.color.textPrimary))
         set(color) = preferences.edit().putInt(Key.FONT_COLOR.name, color).apply()
 
-    fun colorPair(): ColorPair {
-        return ColorPair(color, fontColor)
-    }
+    fun colorPair(): ColorPair = ColorPair(color, fontColor)
 
     val isEnableSuggestion: Boolean
         get() = preferences.getBoolean(Key.ENABLE_SUGGESTION.name, true)
@@ -92,9 +87,7 @@ class PreferenceApplier(private val context: Context) {
         get() = preferences.getString(Key.BG_IMAGE.name, "")
         set(path) = preferences.edit().putString(Key.BG_IMAGE.name, path).apply()
 
-    fun hasBackgroundImagePath(): Boolean {
-        return backgroundImagePath.isNotEmpty()
-    }
+    fun hasBackgroundImagePath(): Boolean = backgroundImagePath.isNotEmpty()
 
     fun removeBackgroundImagePath() {
         preferences.edit().remove(Key.BG_IMAGE.name).apply()
@@ -125,69 +118,54 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putBoolean(Key.USE_NOTIFICATION_WIDGET.name, newState).apply()
     }
 
-    fun useNotificationWidget(): Boolean {
-        return preferences.getBoolean(Key.USE_NOTIFICATION_WIDGET.name, false)
-    }
+    fun useNotificationWidget(): Boolean =
+            preferences.getBoolean(Key.USE_NOTIFICATION_WIDGET.name, false)
 
     fun setUseInternalBrowser(newState: Boolean) {
         preferences.edit().putBoolean(Key.USE_INTERNAL_BROWSER.name, newState).apply()
     }
 
-    fun useInternalBrowser(): Boolean {
-        return preferences.getBoolean(Key.USE_INTERNAL_BROWSER.name, true)
-    }
+    fun useInternalBrowser(): Boolean = preferences.getBoolean(Key.USE_INTERNAL_BROWSER.name, true)
 
     fun setRetainTabs(newState: Boolean) {
         preferences.edit().putBoolean(Key.RETAIN_TABS.name, newState).apply()
     }
 
-    fun doesRetainTabs(): Boolean {
-        return preferences.getBoolean(Key.RETAIN_TABS.name, true)
-    }
+    fun doesRetainTabs(): Boolean = preferences.getBoolean(Key.RETAIN_TABS.name, true)
 
     fun setUseJavaScript(newState: Boolean) {
         preferences.edit().putBoolean(Key.USE_JS.name, newState).apply()
     }
 
-    fun useJavaScript(): Boolean {
-        return preferences.getBoolean(Key.USE_JS.name, true)
-    }
+    fun useJavaScript(): Boolean = preferences.getBoolean(Key.USE_JS.name, true)
 
     fun setMenuPos(newState: MenuPos) {
         preferences.edit().putString(Key.MENU_POS.name, newState.name).apply()
     }
 
-    fun menuPosId(): Int {
-        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
-    }
+    fun menuPosId(): Int =
+            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
 
-    fun menuPos(): CycleMenuWidget.CORNER {
-        return MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).corner
-    }
+    fun menuPos(): CycleMenuWidget.CORNER =
+            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).corner
 
     fun setLoadImage(newState: Boolean) {
         preferences.edit().putBoolean(Key.LOAD_IMAGE.name, newState).apply()
     }
 
-    fun doesLoadImage(): Boolean {
-        return preferences.getBoolean(Key.LOAD_IMAGE.name, true)
-    }
+    fun doesLoadImage(): Boolean = preferences.getBoolean(Key.LOAD_IMAGE.name, true)
 
     fun setSaveForm(newState: Boolean) {
         preferences.edit().putBoolean(Key.SAVE_FORM.name, newState).apply()
     }
 
-    fun doesSaveForm(): Boolean {
-        return preferences.getBoolean(Key.SAVE_FORM.name, false)
-    }
+    fun doesSaveForm(): Boolean = preferences.getBoolean(Key.SAVE_FORM.name, false)
 
     fun setUserAgent(path: String) {
         preferences.edit().putString(Key.USER_AGENT.name, path).apply()
     }
 
-    fun userAgent(): String {
-        return preferences.getString(Key.USER_AGENT.name, "DEFAULT")
-    }
+    fun userAgent(): String = preferences.getString(Key.USER_AGENT.name, "DEFAULT")
 
     var homeUrl: String
         get() = preferences.getString(Key.HOME_URL.name,
@@ -208,9 +186,7 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putBoolean(Key.USE_COLOR_FILTER.name, newState).apply()
     }
 
-    fun useColorFilter(): Boolean {
-        return preferences.getBoolean(Key.USE_COLOR_FILTER.name, false)
-    }
+    fun useColorFilter(): Boolean = preferences.getBoolean(Key.USE_COLOR_FILTER.name, false)
 
     fun setFilterColor(@ColorInt newState: Int) {
         preferences.edit().putInt(Key.FILTER_COLOR.name, newState).apply()

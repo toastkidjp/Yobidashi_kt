@@ -201,8 +201,6 @@ class BrowserFragment : BaseFragment(),
         editor = EditorModule(
                 binding?.editor as ModuleEditorBinding,
                 { intent, requestCode -> startActivityForResult(intent, requestCode) },
-                this::switchTabList,
-                this::closeTabList,
                 { file ->
                     val currentTab = tabs.currentTab()
                     if (currentTab is EditorTab) {
@@ -612,7 +610,9 @@ class BrowserFragment : BaseFragment(),
         val preferenceApplier = preferenceApplier()
 
         binding?.cycleMenu?.also {
-            it.setCorner(preferenceApplier.menuPos())
+            val menuPos = preferenceApplier.menuPos()
+            it.setCorner(menuPos)
+            editor.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
             it.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
@@ -682,7 +682,7 @@ class BrowserFragment : BaseFragment(),
      */
     private fun hideTabList() {
         tabListModule.hide()
-        tabs.replaceToCurrentTab(true)
+        tabs.replaceToCurrentTab(false)
     }
 
     /**
@@ -776,7 +776,7 @@ class BrowserFragment : BaseFragment(),
             tabs.loadArchive(file)
         } catch (e: IOException) {
             Timber.e(e)
-        } catch (error: OutOfMemoryError) {
+        } catch (error: Throwable) {
             Timber.e(error)
             System.gc()
         }

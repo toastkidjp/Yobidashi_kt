@@ -315,7 +315,7 @@ class TabAdapter(
         }
     }
 
-    fun callLoadUrl(url: String, saveHistory: Boolean = true) {
+    fun callLoadUrl(url: String) {
         browserModule.loadUrl(url)
         if (editor.isVisible) {
             editor.hide()
@@ -348,6 +348,7 @@ class TabAdapter(
         when (currentTab()) {
             is WebTab -> browserModule.pageUp()
             is PdfTab -> pdf.pageUp()
+            is EditorTab -> editor.pageUp()
         }
     }
 
@@ -355,6 +356,7 @@ class TabAdapter(
         when (currentTab()) {
             is WebTab -> browserModule.pageDown()
             is PdfTab -> pdf.pageDown()
+            is EditorTab -> editor.pageDown()
         }
     }
 
@@ -511,17 +513,6 @@ class TabAdapter(
      * TODO remove.
      */
     private fun setCurrentTabCount() = Unit
-
-    fun moveTo(i: Int) {
-        val currentTab = currentTab()
-        if (currentTab is WebTab) {
-            val url = currentTab.moveAndGet(i)
-            if (url.isEmpty()) {
-                return
-            }
-            callLoadUrl(url, false)
-        }
-    }
 
     /**
      * Update current tab state.
