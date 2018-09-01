@@ -4,8 +4,8 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.text.Html
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * @author toastkidjp
@@ -25,7 +25,7 @@ internal class ClearImagesDialogFragment : DialogFragment() {
         }
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.clear_all)
-                .setMessage(Html.fromHtml(activityContext.getString(R.string.confirm_clear_all_settings)))
+                .setMessage(HtmlCompat.fromHtml(activityContext.getString(R.string.confirm_clear_all_settings)))
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok) { d, _ ->
                     onClick?.onClickClearImages()
