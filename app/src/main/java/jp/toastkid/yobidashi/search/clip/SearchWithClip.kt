@@ -49,7 +49,7 @@ class SearchWithClip(
             firstItem ?: return@OnPrimaryClipChangedListener
 
             val text = firstItem.text
-            if (text == null || text.isEmpty()) {
+            if (text == null || text.isEmpty() || LENGTH_LIMIT <= text.length) {
                 return@OnPrimaryClipChangedListener
             }
 
@@ -116,5 +116,10 @@ class SearchWithClip(
          * Disallow interval ms.
          */
         private const val DISALLOW_INTERVAL_MS: Long = 500L
+
+        /**
+         * Limit of text length.
+         */
+        private const val LENGTH_LIMIT = 40
     }
 }
