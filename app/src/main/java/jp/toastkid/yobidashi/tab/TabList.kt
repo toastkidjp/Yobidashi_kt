@@ -13,6 +13,7 @@ import okio.Okio
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.util.*
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -127,6 +128,19 @@ class TabList private constructor() {
         tabsFile?.delete()
         itemsDir?.delete()
         save()
+    }
+
+    fun swap(from: Int, to: Int) {
+        if (inRange(from, to)) {
+            val currentTab = currentTab()
+            Collections.swap(tabs, from, to)
+            setIndex(tabs.indexOf(currentTab))
+        }
+    }
+
+    private fun inRange(vararg indexes: Int): Boolean {
+        val size = tabs.size
+        return indexes.none { it < 0 || size <= it }
     }
 
     companion object {

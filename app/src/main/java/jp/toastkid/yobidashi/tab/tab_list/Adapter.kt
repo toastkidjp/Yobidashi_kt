@@ -85,4 +85,8 @@ internal class Adapter(
         index = newIndex
     }
 
+    fun swap(from: Int, to: Int) {
+        tabAdapter.swap(from, to)
+        notifyItemMoved(from, to)
+    }
 }
