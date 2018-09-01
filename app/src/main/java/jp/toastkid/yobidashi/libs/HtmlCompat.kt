@@ -5,10 +5,17 @@ import android.text.Html
 import android.text.Spanned
 
 /**
+ * For using Html.fromHtml without lint warnings.
+ *
  * @author toastkidjp
  */
 object HtmlCompat {
 
+    /**
+     * Implements for only avoiding lint warning.
+     *
+     * @param html string of html.
+     */
     fun fromHtml(html: String?): Spanned? {
         return when {
             html == null -> null
