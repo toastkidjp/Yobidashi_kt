@@ -16,17 +16,15 @@ object HtmlCompat {
      *
      * @param html string of html.
      */
-    fun fromHtml(html: String?): Spanned? {
-        return when {
-            html == null -> null
-            Build.VERSION.SDK_INT <= Build.VERSION_CODES.M -> {
-                @Suppress("DEPRECATION")
-                Html.fromHtml(html)
-            }
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.M -> {
-                Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-            }
-            else -> null
+    fun fromHtml(html: String?): Spanned? = when {
+        html == null -> null
+        Build.VERSION.SDK_INT <= Build.VERSION_CODES.M -> {
+            @Suppress("DEPRECATION")
+            Html.fromHtml(html)
         }
+        Build.VERSION.SDK_INT > Build.VERSION_CODES.M -> {
+            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+        }
+        else -> null
     }
 }
