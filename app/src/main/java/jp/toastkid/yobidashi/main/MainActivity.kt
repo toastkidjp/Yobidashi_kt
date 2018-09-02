@@ -160,6 +160,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
      */
     private fun processShortcut(calledIntent: Intent) {
         if (calledIntent.action == null) {
+            // Add for re-creating activity.
+            replaceFragment(browserFragment)
             return
         }
 
