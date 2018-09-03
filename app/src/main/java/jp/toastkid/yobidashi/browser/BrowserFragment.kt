@@ -530,13 +530,6 @@ class BrowserFragment : BaseFragment(),
     }
 
     /**
-     * Close tab list module.
-     */
-    private fun closeTabList() {
-        tabListModule.let { if (it.isVisible) { it.hide() } }
-    }
-
-    /**
      * Do browser back action.
      */
     private fun back(): Boolean = tabs.back()
