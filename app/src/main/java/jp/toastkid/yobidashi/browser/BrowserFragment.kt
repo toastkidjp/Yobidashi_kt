@@ -207,8 +207,7 @@ class BrowserFragment : BaseFragment(),
                         currentTab.setFileInformation(file)
                         tabs.saveTabList()
                     }
-                },
-                this::hideOption
+                }
         )
 
         pdf = PdfModule(
