@@ -314,6 +314,7 @@
     <string name="done_load">It has loaded.</string>
     <string name="done_save">It has saved to file.</string>
     <string name="save">Save</string>
+    <string name="save_as">Save as</string>
     <string name="title_dialog_input_file_name">Input file name</string>
     <string name="message_requires_permission_storage" >
         If you want to use this function, you should permit using storage to this app.</string>
@@ -387,5 +388,6 @@
     <string name="thumbnail">thumbnail</string>
     <string name="title_use_search_query_extractor">Use search query extractor</string>
     <string name="message_unabled_voice_search">This function cannot use, Please check voice recording setting.</string>
+    <string name="hint_editor_input">Please input your text anything...</string>
 
 </resources>

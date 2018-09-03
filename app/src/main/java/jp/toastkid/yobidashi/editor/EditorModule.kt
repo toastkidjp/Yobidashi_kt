@@ -79,6 +79,7 @@ class EditorModule(
         val context = binding.root.context
 
         binding.save.setOnClickListener { save() }
+        binding.saveAs.setOnClickListener { saveAs() }
         binding.load.setOnClickListener { load() }
         binding.clip.setOnClickListener { clip() }
         binding.backup.setOnClickListener { backup() }
@@ -103,6 +104,7 @@ class EditorModule(
         applyButtonColor(
                 colorPair,
                 binding.save,
+                binding.saveAs,
                 binding.load,
                 binding.clip,
                 binding.lastSaved,
@@ -190,6 +192,10 @@ class EditorModule(
             return
         }
 
+        InputNameDialogFragment.show(context())
+    }
+
+    private fun saveAs() {
         InputNameDialogFragment.show(context())
     }
 
