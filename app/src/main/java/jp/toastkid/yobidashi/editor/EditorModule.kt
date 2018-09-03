@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi.editor
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -49,13 +47,6 @@ class EditorModule(
 ): BaseModule(binding.root) {
 
     /**
-     * Use for clipping text.
-     */
-    private val cm: ClipboardManager
-            = binding.root.context.applicationContext
-                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-    /**
      * Preferences wrapper.
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(binding.root.context)
@@ -81,7 +72,6 @@ class EditorModule(
         binding.save.setOnClickListener { save() }
         binding.saveAs.setOnClickListener { saveAs() }
         binding.load.setOnClickListener { load() }
-        binding.clip.setOnClickListener { clip() }
         binding.backup.setOnClickListener { backup() }
         binding.clear.setOnClickListener {
             ClearTextDialogFragment.show(context)
@@ -106,7 +96,6 @@ class EditorModule(
                 binding.save,
                 binding.saveAs,
                 binding.load,
-                binding.clip,
                 binding.lastSaved,
                 binding.counter,
                 binding.backup,
@@ -147,13 +136,6 @@ class EditorModule(
         }
         val fileName = removeExtension(File(path).name) + "_backup.txt"
         saveToFile(assignFile(binding.root.context, fileName).absolutePath)
-    }
-
-    /**
-     * Copy to clipboard current content.
-     */
-    private inline fun clip() {
-        cm.primaryClip = ClipData.newPlainText("text", content())
     }
 
     fun pageUp() {
