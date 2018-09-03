@@ -39,15 +39,13 @@ import java.util.*
  * @param binding
  * @param intentLauncher
  * @param saveTabCallback
- * @param hideOption
  *
  * @author toastkidjp
  */
 class EditorModule(
         private val binding: ModuleEditorBinding,
         private val intentLauncher: (Intent, Int) -> Unit,
-        private val saveTabCallback: (File) -> Unit,
-        hideOption: () -> Boolean
+        private val saveTabCallback: (File) -> Unit
 ): BaseModule(binding.root) {
 
     /**
@@ -98,10 +96,6 @@ class EditorModule(
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         })
-
-        binding.editorInput.setOnTouchListener { _, _ ->
-            hideOption()
-        }
     }
 
     fun applyColor() {

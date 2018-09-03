@@ -207,8 +207,7 @@ class BrowserFragment : BaseFragment(),
                         currentTab.setFileInformation(file)
                         tabs.saveTabList()
                     }
-                },
-                this::hideOption
+                }
         )
 
         pdf = PdfModule(
@@ -528,13 +527,6 @@ class BrowserFragment : BaseFragment(),
             tabs.updateCurrentTab()
             showTabList()
         }
-    }
-
-    /**
-     * Close tab list module.
-     */
-    private fun closeTabList() {
-        tabListModule.let { if (it.isVisible) { it.hide() } }
     }
 
     /**
