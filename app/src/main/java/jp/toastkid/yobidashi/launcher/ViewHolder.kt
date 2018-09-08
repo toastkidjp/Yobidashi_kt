@@ -2,11 +2,10 @@ package jp.toastkid.yobidashi.launcher
 
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
-import android.text.Html
 import android.text.format.DateFormat
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
+import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * View holder.
@@ -45,7 +44,7 @@ internal class ViewHolder(private val binding: AppLauncherItemBinding)
      * @param targetSdkVersion
      */
     fun setTargetSdk(targetSdkVersion: Int) {
-        binding.appTargetSdk.text = Html.fromHtml("<b>Target SDK</b>: " + targetSdkVersion)
+        binding.appTargetSdk.text = HtmlCompat.fromHtml("<b>Target SDK</b>: " + targetSdkVersion)
     }
 
     /**
@@ -54,7 +53,7 @@ internal class ViewHolder(private val binding: AppLauncherItemBinding)
      * @param packageName
      */
     fun setPackageName(packageName: String) {
-        binding.appPackageName.text = Html.fromHtml("<b>Package Name</b>: " + packageName)
+        binding.appPackageName.text = HtmlCompat.fromHtml("<b>Package Name</b>: " + packageName)
     }
 
     /**
@@ -63,7 +62,7 @@ internal class ViewHolder(private val binding: AppLauncherItemBinding)
      * @param firstInstallTime
      */
     fun setInstalledMs(firstInstallTime: Long) {
-        binding.appInstalled.text= Html.fromHtml(
+        binding.appInstalled.text= HtmlCompat.fromHtml(
                 "<b>Installed</b>: " + DateFormat.format(format, firstInstallTime))
     }
 
@@ -73,6 +72,6 @@ internal class ViewHolder(private val binding: AppLauncherItemBinding)
      * @param versionText
      */
     fun setVersionInformation(versionText: String) {
-        binding.appVersion.text = Html.fromHtml("<b>Version</b>: " + versionText)
+        binding.appVersion.text = HtmlCompat.fromHtml("<b>Version</b>: " + versionText)
     }
 }

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
-import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -27,10 +26,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBinding
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
-import jp.toastkid.yobidashi.libs.Colors
-import jp.toastkid.yobidashi.libs.TextInputs
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
@@ -639,7 +635,7 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         val fragmentActivity = activity ?: return
         AlertDialog.Builder(fragmentActivity)
                 .setTitle(R.string.title_clear_settings)
-                .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, i ->

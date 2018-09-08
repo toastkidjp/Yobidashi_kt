@@ -11,8 +11,8 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.text.Html
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * @author toastkidjp
@@ -39,7 +39,7 @@ class ClearSearchHistoryDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_delete_all)
-                .setMessage(Html.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
