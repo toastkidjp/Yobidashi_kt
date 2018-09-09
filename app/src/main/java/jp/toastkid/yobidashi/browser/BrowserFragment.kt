@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -560,7 +561,13 @@ class BrowserFragment : BaseFragment(),
      */
     private fun search(option: ActivityOptions) {
         context?.let {
-            startActivity(SearchActivity.makeIntent(it), option.toBundle())
+            val query = SearchQueryExtractor.invoke(browserModule.currentUrl())
+            val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
+                SearchActivity.makeIntent(it)
+            } else {
+                SearchActivity.makeIntentWithQuery(it, query ?: "")
+            }
+            startActivity(makeIntent, option.toBundle())
         }
     }
 
