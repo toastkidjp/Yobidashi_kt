@@ -143,7 +143,10 @@ class SearchActivity : BaseActivity(),
 
             // Set query.
             intent?.getStringExtra(EXTRA_KEY_QUERY)?.let {
-                binding?.searchInput?.setText(it)
+                binding?.searchInput?.let { input ->
+                    input.setText(it)
+                    input.selectAll()
+                }
                 overridePendingTransition(0, 0)
                 withoutExitAnimation = true
             }
