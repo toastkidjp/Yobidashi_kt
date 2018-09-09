@@ -499,7 +499,7 @@ class BrowserFragment : BaseFragment(),
                 openEditorTab()
             }
             Menu.PDF.ordinal -> {
-                fragmentActivity.moveTaskToBack(true)
+                openPdfTabFromStorage()
             }
             Menu.EXIT.ordinal -> {
                 activity?.moveTaskToBack(true)
