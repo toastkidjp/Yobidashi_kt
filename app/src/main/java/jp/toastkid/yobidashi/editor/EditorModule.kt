@@ -258,20 +258,6 @@ class EditorModule(
     }
 
     /**
-     * Go to top.
-     */
-    private inline fun top() {
-        binding.editorInput.setSelection(0)
-    }
-
-    /**
-     * Go to bottom.
-     */
-    private inline fun bottom() {
-        binding.editorInput.setSelection(binding.editorInput.text.length)
-    }
-
-    /**
      * Load content from file with Storage Access Framework.
      */
     private inline fun load() {
