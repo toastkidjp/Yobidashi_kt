@@ -412,7 +412,7 @@ class EditorModule(
     }
 
     /**
-     * Show message by [Snackbar].
+     * Show message by [android.support.design.widget.Snackbar].
      *
      * @param message
      */
