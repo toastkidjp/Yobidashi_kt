@@ -12,6 +12,7 @@ import android.os.Environment
 import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
@@ -21,6 +22,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -73,6 +75,7 @@ class EditorModule(
         binding.saveAs.setOnClickListener { saveAs() }
         binding.load.setOnClickListener { load() }
         binding.backup.setOnClickListener { backup() }
+        binding.pasteAsQuotation.setOnClickListener { pasteAsQuotation() }
         binding.clear.setOnClickListener {
             ClearTextDialogFragment.show(context)
         }
@@ -99,6 +102,7 @@ class EditorModule(
                 binding.lastSaved,
                 binding.counter,
                 binding.backup,
+                binding.pasteAsQuotation,
                 binding.clear
                 )
 
@@ -136,6 +140,14 @@ class EditorModule(
         }
         val fileName = removeExtension(File(path).name) + "_backup.txt"
         saveToFile(assignFile(binding.root.context, fileName).absolutePath)
+    }
+
+    private fun pasteAsQuotation() {
+        val primary = Clipboard.getPrimary(context())
+        if (TextUtils.isEmpty(primary)) {
+            return
+        }
+        binding.editorInput.text.insert(binding.editorInput.selectionStart, Quotation(primary))
     }
 
     fun pageUp() {

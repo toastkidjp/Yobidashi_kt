@@ -82,6 +82,15 @@
                     android:drawableTop="@drawable/ic_save_as"
                     android:foreground="@drawable/ripple_transparent"
                     />
+                <Button
+                    android:id="@+id/paste_as_quotation"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    style="?android:attr/buttonBarStyle"
+                    android:text="@string/paste_as_quotation"
+                    android:drawableTop="@drawable/ic_quote"
+                    android:foreground="@drawable/ripple_transparent"
+                    />
                 <TextView
                     android:id="@+id/counter"
                     android:layout_width="wrap_content"

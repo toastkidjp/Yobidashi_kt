@@ -11,7 +11,7 @@ object Quotation {
 
     private val lineSeparator = System.getProperty("line.separator")
 
-    operator fun invoke(str: String?): String? {
+    operator fun invoke(str: CharSequence?): CharSequence? {
         if (TextUtils.isEmpty(str)) {
             return str
         }
