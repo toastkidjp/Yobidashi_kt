@@ -12,6 +12,7 @@ import android.os.Environment
 import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
@@ -21,6 +22,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -73,6 +75,7 @@ class EditorModule(
         binding.saveAs.setOnClickListener { saveAs() }
         binding.load.setOnClickListener { load() }
         binding.backup.setOnClickListener { backup() }
+        binding.pasteAsQuotation.setOnClickListener { pasteAsQuotation() }
         binding.clear.setOnClickListener {
             ClearTextDialogFragment.show(context)
         }
@@ -89,6 +92,9 @@ class EditorModule(
         })
     }
 
+    /**
+     * Apply color setting.
+     */
     fun applyColor() {
         val colorPair = preferenceApplier.colorPair()
         applyButtonColor(
@@ -99,12 +105,19 @@ class EditorModule(
                 binding.lastSaved,
                 binding.counter,
                 binding.backup,
+                binding.pasteAsQuotation,
                 binding.clear
                 )
 
         binding.editorMenu.setBackgroundColor(colorPair.bgColor())
     }
 
+    /**
+     * Apply button color to multiple [TextView].
+     *
+     * @param colorPair [ColorPair]
+     * @param textViews multiple [TextView]
+     */
     private fun applyButtonColor(colorPair: ColorPair, vararg textViews: TextView) {
         val fontColor = colorPair.fontColor()
         textViews.forEach { textView ->
@@ -113,7 +126,6 @@ class EditorModule(
                 it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
             }
         }
-
     }
 
     /**
@@ -138,14 +150,36 @@ class EditorModule(
         saveToFile(assignFile(binding.root.context, fileName).absolutePath)
     }
 
+    /**
+     * Paste clipped text as Markdown's quotation style.
+     */
+    private fun pasteAsQuotation() {
+        val primary = Clipboard.getPrimary(context())
+        if (TextUtils.isEmpty(primary)) {
+            return
+        }
+        binding.editorInput.text.insert(binding.editorInput.selectionStart, Quotation(primary))
+    }
+
+    /**
+     * Go to top.
+     */
     fun pageUp() {
         binding.editorInput.setSelection(0)
     }
 
+    /**
+     * Go to bottom.
+     */
     fun pageDown() {
         binding.editorInput.setSelection(binding.editorInput.length())
     }
 
+    /**
+     * Set space for showing [CycleMenuWidget].
+     *
+     * @param menuPos [CycleMenuWidget.CORNER]
+     */
     fun setSpace(menuPos: CycleMenuWidget.CORNER) = when (menuPos) {
         CycleMenuWidget.CORNER.LEFT_BOTTOM -> {
             binding.leftSpace.visibility = View.VISIBLE
@@ -177,6 +211,9 @@ class EditorModule(
         InputNameDialogFragment.show(context())
     }
 
+    /**
+     * Save current text as other file.
+     */
     private fun saveAs() {
         InputNameDialogFragment.show(context())
     }
@@ -243,20 +280,6 @@ class EditorModule(
                 { _, _ ->  })
         snackText("${context().getString(R.string.done_save)}: $filePath")
         setLastSaved(file.lastModified())
-    }
-
-    /**
-     * Go to top.
-     */
-    private inline fun top() {
-        binding.editorInput.setSelection(0)
-    }
-
-    /**
-     * Go to bottom.
-     */
-    private inline fun bottom() {
-        binding.editorInput.setSelection(binding.editorInput.text.length)
     }
 
     /**
@@ -348,14 +371,6 @@ class EditorModule(
         Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
     }
 
-    private fun snackText(message: String) {
-        Toaster.snackShort(
-                binding.root,
-                message,
-                preferenceApplier.colorPair()
-        )
-    }
-
     /**
      * Animate root view with specified [Animation].
      *
@@ -377,13 +392,11 @@ class EditorModule(
         return drawingCache
     }
 
-    override fun hide() {
-        super.hide()
-        if (path.isNotEmpty()) {
-            saveToFile(path)
-        }
-    }
-
+    /**
+     * Assign new file object.
+     *
+     * @param fileName
+     */
     fun assignNewFile(fileName: String) {
         val context = context()
         var newFile = assignFile(context, fileName)
@@ -396,6 +409,26 @@ class EditorModule(
         path = newFile.absolutePath
         saveTabCallback(newFile)
         saveToFile(path)
+    }
+
+    /**
+     * Show message by [android.support.design.widget.Snackbar].
+     *
+     * @param message
+     */
+    private fun snackText(message: String) {
+        Toaster.snackShort(
+                binding.root,
+                message,
+                preferenceApplier.colorPair()
+        )
+    }
+
+    override fun hide() {
+        super.hide()
+        if (path.isNotEmpty()) {
+            saveToFile(path)
+        }
     }
 
     companion object {
