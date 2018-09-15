@@ -78,9 +78,7 @@ class EditorModule(
         binding.load.setOnClickListener { load() }
         binding.backup.setOnClickListener { backup() }
         binding.pasteAsQuotation.setOnClickListener { pasteAsQuotation() }
-        binding.clear.setOnClickListener {
-            ClearTextDialogFragment.show(context)
-        }
+        binding.clear.setOnClickListener { clear() }
 
         binding.editorInput.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(contentEditable: Editable?) {
@@ -153,6 +151,10 @@ class EditorModule(
         }
         val fileName = removeExtension(File(path).name) + "_backup.txt"
         saveToFile(assignFile(binding.root.context, fileName).absolutePath)
+    }
+
+    fun clear() {
+        ClearTextDialogFragment.show(binding.root.context)
     }
 
     /**
