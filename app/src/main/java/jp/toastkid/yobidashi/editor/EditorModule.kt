@@ -431,7 +431,13 @@ class EditorModule(
 
     fun showName(view: View): Boolean {
         if (view is TextView) {
-            snackText(view.text.toString())
+            Toaster.withAction(
+                    binding.root,
+                    view.text.toString(),
+                    R.string.run,
+                    View.OnClickListener { view.performClick() },
+                    preferenceApplier.colorPair()
+            )
         }
         return true
     }
