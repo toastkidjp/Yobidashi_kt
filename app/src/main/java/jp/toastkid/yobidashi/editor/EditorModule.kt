@@ -110,6 +110,9 @@ class EditorModule(
                 )
 
         binding.editorMenu.setBackgroundColor(colorPair.bgColor())
+
+        binding.background.setBackgroundColor(preferenceApplier.editorBackgroundColor())
+        binding.editorInput.setTextColor(preferenceApplier.editorFontColor())
     }
 
     /**
