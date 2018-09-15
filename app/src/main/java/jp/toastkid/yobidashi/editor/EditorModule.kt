@@ -73,13 +73,6 @@ class EditorModule(
 
         binding.editorModule = this
 
-        binding.save.setOnClickListener { save() }
-        binding.saveAs.setOnClickListener { saveAs() }
-        binding.load.setOnClickListener { load() }
-        binding.backup.setOnClickListener { backup() }
-        binding.pasteAsQuotation.setOnClickListener { pasteAsQuotation() }
-        binding.clear.setOnClickListener { clear() }
-
         binding.editorInput.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(contentEditable: Editable?) {
                 setContentTextLengthCount(context)
@@ -144,7 +137,7 @@ class EditorModule(
     /**
      * Backup current file.
      */
-    private inline fun backup() {
+    fun backup() {
         if (path.isEmpty()) {
             save()
             return
@@ -160,7 +153,7 @@ class EditorModule(
     /**
      * Paste clipped text as Markdown's quotation style.
      */
-    private fun pasteAsQuotation() {
+    fun pasteAsQuotation() {
         val primary = Clipboard.getPrimary(context())
         if (TextUtils.isEmpty(primary)) {
             return
@@ -221,7 +214,7 @@ class EditorModule(
     /**
      * Save current text as other file.
      */
-    private fun saveAs() {
+    fun saveAs() {
         InputNameDialogFragment.show(context())
     }
 
@@ -292,7 +285,7 @@ class EditorModule(
     /**
      * Load content from file with Storage Access Framework.
      */
-    private inline fun load() {
+    fun load() {
         intentLauncher(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD)
     }
 
