@@ -15,6 +15,7 @@ import android.webkit.WebView
 import android.widget.AdapterView
 import android.widget.SeekBar
 import android.widget.Spinner
+import android.widget.TextView
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -28,6 +29,7 @@ import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBindin
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -52,6 +54,17 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
      */
     private lateinit var colorFilter: ColorFilter
 
+
+    /**
+     * Initial background color.
+     */
+    private var initialBgColor: Int = 0
+
+    /**
+     * Initial font color.
+     */
+    private var initialFontColor: Int = 0
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -64,6 +77,38 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.moduleBrowser?.let {
             it.fragment = this
             TextInputs.setEmptyAlert(it.homeInputLayout)
+        }
+
+        binding.moduleSettingEditor.also { editorModule ->
+            val preferenceApplier = preferenceApplier()
+            val backgroundColor = preferenceApplier.editorBackgroundColor()
+            val fontColor = preferenceApplier.editorFontColor()
+
+            initialBgColor = backgroundColor
+            initialFontColor = fontColor
+
+            editorModule.backgroundPalette?.also {
+                it.addSVBar(editorModule.backgroundSvbar)
+                it.addOpacityBar(editorModule.backgroundOpacitybar)
+                it.setOnColorChangedListener { editorModule.ok?.setBackgroundColor(it) }
+                it.color = backgroundColor
+            }
+
+            editorModule.fontPalette?.also {
+                it.addSVBar(editorModule.fontSvbar)
+                it.addOpacityBar(editorModule.fontOpacitybar)
+                it.setOnColorChangedListener { editorModule.ok?.setTextColor(it) }
+                it.color = fontColor
+            }
+            editorModule.fragment = this
+            Colors.setColors(
+                    binding.moduleSettingEditor.ok as TextView,
+                    ColorPair(backgroundColor, fontColor)
+            )
+            Colors.setColors(
+                    binding.moduleSettingEditor.prev as TextView,
+                    ColorPair(initialBgColor, initialFontColor)
+            )
         }
 
         activity?.let {
@@ -554,6 +599,7 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.displayingModule.visibility = View.VISIBLE
         binding.searchModule.visibility = View.VISIBLE
         binding.moduleBrowser?.root?.visibility = View.VISIBLE
+        binding.moduleSettingEditor?.root?.visibility = View.VISIBLE
         binding.notificationsModule.visibility = View.VISIBLE
         binding.others.visibility = View.VISIBLE
     }
@@ -565,6 +611,7 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.displayingModule.visibility = View.VISIBLE
         binding.searchModule.visibility = View.GONE
         binding.moduleBrowser?.root?.visibility = View.GONE
+        binding.moduleSettingEditor?.root?.visibility = View.GONE
         binding.notificationsModule.visibility = View.GONE
         binding.others.visibility = View.GONE
     }
@@ -576,6 +623,7 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.displayingModule.visibility = View.GONE
         binding.searchModule.visibility = View.VISIBLE
         binding.moduleBrowser?.root?.visibility = View.GONE
+        binding.moduleSettingEditor?.root?.visibility = View.GONE
         binding.notificationsModule.visibility = View.GONE
         binding.others.visibility = View.GONE
     }
@@ -587,6 +635,19 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.displayingModule.visibility = View.GONE
         binding.searchModule.visibility = View.GONE
         binding.moduleBrowser?.root?.visibility = View.VISIBLE
+        binding.moduleSettingEditor?.root?.visibility = View.GONE
+        binding.notificationsModule.visibility = View.GONE
+        binding.others.visibility = View.GONE
+    }
+
+    /**
+     * Show editor menu module.
+     */
+    fun showEditor() {
+        binding.displayingModule.visibility = View.GONE
+        binding.searchModule.visibility = View.GONE
+        binding.moduleBrowser?.root?.visibility = View.GONE
+        binding.moduleSettingEditor?.root?.visibility = View.VISIBLE
         binding.notificationsModule.visibility = View.GONE
         binding.others.visibility = View.GONE
     }
@@ -598,6 +659,7 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.displayingModule.visibility = View.GONE
         binding.searchModule.visibility = View.GONE
         binding.moduleBrowser?.root?.visibility = View.GONE
+        binding.moduleSettingEditor?.root?.visibility = View.GONE
         binding.notificationsModule.visibility = View.VISIBLE
         binding.others.visibility = View.GONE
     }
@@ -609,6 +671,7 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.displayingModule.visibility = View.GONE
         binding.searchModule.visibility = View.GONE
         binding.moduleBrowser?.root?.visibility = View.GONE
+        binding.moduleSettingEditor?.root?.visibility = View.GONE
         binding.notificationsModule.visibility = View.GONE
         binding.others.visibility = View.VISIBLE
     }
@@ -646,6 +709,38 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
                     Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())
                 }
                 .show()
+    }
+
+    /**
+     * OK button's action.
+     */
+    fun ok() {
+        val backgroundColor = binding.moduleSettingEditor.backgroundPalette?.color ?: Color.BLACK
+        val fontColor = binding.moduleSettingEditor.fontPalette?.color ?: Color.WHITE
+
+        val preferenceApplier = preferenceApplier()
+        preferenceApplier.setEditorBackgroundColor(backgroundColor)
+        preferenceApplier.setEditorFontColor(fontColor)
+
+        binding.moduleSettingEditor.backgroundPalette?.color = backgroundColor
+        binding.moduleSettingEditor.fontPalette?.color = fontColor
+
+        val colorPair = ColorPair(backgroundColor, fontColor)
+        Colors.setColors(binding.moduleSettingEditor.ok as TextView, colorPair)
+        Toaster.snackShort(binding.root, R.string.settings_color_done_commit, colorPair)
+    }
+
+    /**
+     * Reset button's action.
+     */
+    fun reset() {
+        val preferenceApplier = preferenceApplier()
+        preferenceApplier.setEditorBackgroundColor(initialBgColor)
+        preferenceApplier.setEditorFontColor(initialFontColor)
+
+        Colors.setColors(binding.moduleSettingEditor.ok as TextView, ColorPair(initialBgColor, initialFontColor))
+
+        Toaster.snackShort(binding.root, R.string.settings_color_done_reset, colorPair())
     }
 
     companion object {

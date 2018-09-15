@@ -111,6 +111,10 @@ class SettingsActivity : BaseActivity() {
         fragment.showBrowser()
     }
 
+    fun switchEditor() {
+        fragment.showEditor()
+    }
+
     /**
      * Switch notification menu.
      *
