@@ -71,6 +71,8 @@ class EditorModule(
     init {
         val context = binding.root.context
 
+        binding.editorModule = this
+
         binding.save.setOnClickListener { save() }
         binding.saveAs.setOnClickListener { saveAs() }
         binding.load.setOnClickListener { load() }
@@ -425,6 +427,13 @@ class EditorModule(
                 message,
                 preferenceApplier.colorPair()
         )
+    }
+
+    fun showName(view: View): Boolean {
+        if (view is TextView) {
+            snackText(view.text.toString())
+        }
+        return true
     }
 
     override fun hide() {
