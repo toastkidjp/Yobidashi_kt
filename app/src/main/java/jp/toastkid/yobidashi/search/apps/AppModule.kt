@@ -18,6 +18,9 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 import timber.log.Timber
 
 /**
+ * App search module in [SearchActivity].
+ *
+ * @param binding [ModuleSearchAppsBinding]
  * @author toastkidjp
  */
 class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
@@ -25,10 +28,7 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
     /**
      * Suggest ModuleAdapter.
      */
-    private val adapter: Adapter = Adapter(
-            context(),
-            binding.root
-    )
+    private val adapter: Adapter = Adapter(context(), binding.root)
 
     init {
         binding.searchApps.layoutManager = LinearLayoutManager(context())
@@ -36,8 +36,9 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
     }
 
     /**
-     * Request web API.
-     * @param key
+     * Request app search.
+     *
+     * @param key search keyword.
      */
     fun request(key: String) {
         if (TextUtils.isEmpty(key)) {
@@ -53,6 +54,9 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
                 )
     }
 
+    /**
+     * Result action.
+     */
     private fun onResult() {
         if (adapter.itemCount == 0) {
             hide()
