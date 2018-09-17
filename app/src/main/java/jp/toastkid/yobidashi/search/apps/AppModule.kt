@@ -65,11 +65,4 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
         show()
     }
 
-    companion object {
-
-        /**
-         * Suggest cache capacity.
-         */
-        private const val SUGGESTION_CACHE_CAPACITY = 30
-    }
 }
