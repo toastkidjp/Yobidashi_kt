@@ -257,6 +257,7 @@ class SearchActivity : BaseActivity(),
         historyModule?.enable = preferenceApplier.isEnableSearchHistory
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
+        appModule?.enable = preferenceApplier.isEnableAppSearch()
     }
 
     /**
@@ -286,7 +287,11 @@ class SearchActivity : BaseActivity(),
                     favoriteModule?.query(s)
                     urlSuggestionModule?.query(s)
 
-                    appModule?.request(key)
+                    if (preferenceApplier.isEnableAppSearch()) {
+                        appModule?.request(key)
+                    } else {
+                        appModule?.hide()
+                    }
 
                     if (preferenceApplier.isDisableSuggestion) {
                         suggestionModule?.clear()
