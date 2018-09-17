@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.launcher.Adapter
@@ -30,6 +31,11 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
      */
     private val adapter: Adapter = Adapter(context(), binding.root)
 
+    /**
+     * Disposable of last query.
+     */
+    private var disposable: Disposable? = null
+
     init {
         binding.searchApps.layoutManager = LinearLayoutManager(context())
         binding.searchApps.adapter = adapter
@@ -45,7 +51,8 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
             return
         }
 
-        Completable.fromAction { adapter.filter(key, 5, { onResult() }) }
+        disposable?.dispose()
+        disposable = Completable.fromAction { adapter.filter(key, 5, { onResult() }) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -63,6 +70,13 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
             return
         }
         show()
+    }
+
+    /**
+     * Dispose last query's disposable.
+     */
+    fun dispose() {
+        disposable?.dispose()
     }
 
 }

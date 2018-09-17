@@ -429,6 +429,7 @@ class SearchActivity : BaseActivity(),
         historyModule?.dispose()
         suggestionModule?.dispose()
         urlSuggestionModule?.dispose()
+        appModule?.dispose()
     }
 
     override fun finish() {
