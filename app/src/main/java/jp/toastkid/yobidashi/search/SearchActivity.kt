@@ -131,10 +131,7 @@ class SearchActivity : BaseActivity(),
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) }
         )
 
-        appModule = AppModule(
-                binding?.appModule as ModuleSearchAppsBinding,
-                {}
-        )
+        appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding)
 
         setListenerForKeyboardHiding()
 

@@ -20,10 +20,7 @@ import timber.log.Timber
 /**
  * @author toastkidjp
  */
-class AppModule(
-        binding: ModuleSearchAppsBinding,
-        onClick: () -> Unit
-) : BaseModule(binding.root) {
+class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
 
     /**
      * Suggest ModuleAdapter.
@@ -36,10 +33,6 @@ class AppModule(
     init {
         binding.searchApps.layoutManager = LinearLayoutManager(context())
         binding.searchApps.adapter = adapter
-        binding.searchApps.setOnTouchListener { _, _ ->
-            onClick()
-            false
-        }
     }
 
     /**
