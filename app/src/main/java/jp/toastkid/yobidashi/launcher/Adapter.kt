@@ -126,7 +126,7 @@ internal class Adapter(private val context: Context, private val parent: View)
      *
      * @param str filter query
      */
-    fun filter(str: String) {
+    fun filter(str: String, limit: Long = -1L, onResult: () -> Unit = {}) {
         installedApps.clear()
         if (TextUtils.isEmpty(str)) {
             installedApps.addAll(master)
@@ -137,8 +137,15 @@ internal class Adapter(private val context: Context, private val parent: View)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
                 .filter { appInfo -> appInfo.packageName.contains(str) }
+                .take(if (limit == -1L) Long.MAX_VALUE else limit)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete { this.notifyDataSetChanged() }
+                .doOnComplete {
+                    onResult()
+                    this.notifyDataSetChanged()
+                }
+                .doOnError {
+                    onResult()
+                }
                 .subscribe { installedApps.add(it) }
                 .addTo(disposables)
     }

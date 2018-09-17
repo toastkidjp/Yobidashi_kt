@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.favorite.ClearFavoriteSearchDialogFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
@@ -86,6 +87,11 @@ class SearchActivity : BaseActivity(),
     private var urlSuggestionModule: UrlSuggestionModule? = null
 
     /**
+     * App module.
+     */
+    private var appModule: AppModule? = null
+
+    /**
      * Does use voice search?
      */
     private var useVoice: Boolean = true
@@ -123,6 +129,11 @@ class SearchActivity : BaseActivity(),
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
                 { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) }
+        )
+
+        appModule = AppModule(
+                binding?.appModule as ModuleSearchAppsBinding,
+                {}
         )
 
         setListenerForKeyboardHiding()
@@ -274,6 +285,8 @@ class SearchActivity : BaseActivity(),
                     }
                     favoriteModule?.query(s)
                     urlSuggestionModule?.query(s)
+
+                    appModule?.request(key)
 
                     if (preferenceApplier.isDisableSuggestion) {
                         suggestionModule?.clear()
