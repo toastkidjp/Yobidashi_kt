@@ -58,6 +58,12 @@
                     android:onClick="@{activity.switchBrowser}"
                     />
                 <RadioButton
+                    android:id="@+id/category_editor"
+                    android:text="@string/subhead_editor"
+                    style="@style/FakeTabStyle"
+                    android:onClick="@{view -> activity.switchEditor()}"
+                    />
+                <RadioButton
                     android:id="@+id/category_notification"
                     android:text="@string/subhead_notification"
                     style="@style/FakeTabStyle"

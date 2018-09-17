@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.libs.preference
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.support.annotation.ColorInt
 import android.support.v4.content.ContextCompat
 import com.cleveroad.cyclemenuwidget.CycleMenuWidget
@@ -33,7 +34,8 @@ class PreferenceApplier(private val context: Context) {
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
-        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE
+        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
+        EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_FONT_SIZE
     }
 
     private val preferences: SharedPreferences =
@@ -257,6 +259,30 @@ class PreferenceApplier(private val context: Context) {
     var poolSize: Int
         get () = preferences.getInt(Key.WEB_VIEW_POOL_SIZE.name, 6)
         set (newValue) = preferences.edit().putInt(Key.WEB_VIEW_POOL_SIZE.name, newValue).apply()
+
+    fun setEditorBackgroundColor(@ColorInt newValue: Int) {
+        preferences.edit().putInt(Key.EDITOR_BACKGROUND_COLOR.name, newValue).apply()
+    }
+
+    fun editorBackgroundColor(): Int {
+        return preferences.getInt(Key.EDITOR_BACKGROUND_COLOR.name, Color.WHITE)
+    }
+
+    fun setEditorFontColor(@ColorInt newValue: Int) {
+        preferences.edit().putInt(Key.EDITOR_FONT_COLOR.name, newValue).apply()
+    }
+
+    fun editorFontColor(): Int {
+        return preferences.getInt(Key.EDITOR_FONT_COLOR.name, Color.WHITE)
+    }
+
+    fun setEditorFontSize(newSize: Int) {
+        preferences.getInt(Key.EDITOR_FONT_SIZE.name, newSize)
+    }
+
+    fun editorFontSize(): Int {
+        return preferences.getInt(Key.EDITOR_FONT_SIZE.name, Color.BLACK)
+    }
 
     fun clear() {
         preferences.edit().clear().apply()

@@ -385,5 +385,7 @@
     <string name="message_unabled_voice_search">音声検索を利用できません。設定を見直してください。</string>
     <string name="hint_editor_input">ここにテキストを入力します。</string>
     <string name="paste_as_quotation">引用貼付</string>
+    <string name="title_font_size">文字の大きさ</string>
+    <string name="subhead_editor">エディタ</string>
 
 </resources>

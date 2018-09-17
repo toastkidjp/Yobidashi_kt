@@ -283,6 +283,8 @@
 
         <include android:id="@+id/module_browser" layout="@layout/module_setting_browser" />
 
+        <include android:id="@+id/module_setting_editor" layout="@layout/fragment_setting_section_editor" />
+
         <android.support.v7.widget.CardView
             android:id="@+id/notifications_module"
             android:layout_width="match_parent"

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable name="editorModule"
+            type="jp.toastkid.yobidashi.editor.EditorModule" />
+    </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/soft_background"
@@ -54,6 +59,8 @@
                     android:text="@string/load"
                     android:drawableTop="@drawable/ic_load"
                     android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.load()}"
+                    android:onLongClick="@{editorModule.showName}"
                     />
                 <Button
                     android:id="@+id/save"
@@ -63,6 +70,8 @@
                     android:text="@string/save"
                     android:drawableTop="@drawable/ic_save"
                     android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.save()}"
+                    android:onLongClick="@{editorModule.showName}"
                     />
                 <Button
                     android:id="@+id/backup"
@@ -72,6 +81,8 @@
                     android:text="@string/save_backup"
                     android:drawableTop="@drawable/ic_backup"
                     android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.backup()}"
+                    android:onLongClick="@{editorModule.showName}"
                     />
                 <Button
                     android:id="@+id/save_as"
@@ -81,6 +92,8 @@
                     android:text="@string/save_as"
                     android:drawableTop="@drawable/ic_save_as"
                     android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.saveAs()}"
+                    android:onLongClick="@{editorModule.showName}"
                     />
                 <Button
                     android:id="@+id/paste_as_quotation"
@@ -90,6 +103,8 @@
                     android:text="@string/paste_as_quotation"
                     android:drawableTop="@drawable/ic_quote"
                     android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.pasteAsQuotation()}"
+                    android:onLongClick="@{editorModule.showName}"
                     />
                 <TextView
                     android:id="@+id/counter"
@@ -121,6 +136,8 @@
                     android:text="@string/clear_all"
                     android:drawableTop="@drawable/ic_clear_form"
                     android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.clear()}"
+                    android:onLongClick="@{editorModule.showName}"
                     />
                 <Space
                     android:id="@+id/right_space"

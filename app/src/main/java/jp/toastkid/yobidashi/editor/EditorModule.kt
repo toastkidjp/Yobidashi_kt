@@ -71,14 +71,7 @@ class EditorModule(
     init {
         val context = binding.root.context
 
-        binding.save.setOnClickListener { save() }
-        binding.saveAs.setOnClickListener { saveAs() }
-        binding.load.setOnClickListener { load() }
-        binding.backup.setOnClickListener { backup() }
-        binding.pasteAsQuotation.setOnClickListener { pasteAsQuotation() }
-        binding.clear.setOnClickListener {
-            ClearTextDialogFragment.show(context)
-        }
+        binding.editorModule = this
 
         binding.editorInput.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(contentEditable: Editable?) {
@@ -110,6 +103,9 @@ class EditorModule(
                 )
 
         binding.editorMenu.setBackgroundColor(colorPair.bgColor())
+
+        binding.background.setBackgroundColor(preferenceApplier.editorBackgroundColor())
+        binding.editorInput.setTextColor(preferenceApplier.editorFontColor())
     }
 
     /**
@@ -141,7 +137,7 @@ class EditorModule(
     /**
      * Backup current file.
      */
-    private inline fun backup() {
+    fun backup() {
         if (path.isEmpty()) {
             save()
             return
@@ -150,10 +146,14 @@ class EditorModule(
         saveToFile(assignFile(binding.root.context, fileName).absolutePath)
     }
 
+    fun clear() {
+        ClearTextDialogFragment.show(binding.root.context)
+    }
+
     /**
      * Paste clipped text as Markdown's quotation style.
      */
-    private fun pasteAsQuotation() {
+    fun pasteAsQuotation() {
         val primary = Clipboard.getPrimary(context())
         if (TextUtils.isEmpty(primary)) {
             return
@@ -214,7 +214,7 @@ class EditorModule(
     /**
      * Save current text as other file.
      */
-    private fun saveAs() {
+    fun saveAs() {
         InputNameDialogFragment.show(context())
     }
 
@@ -285,7 +285,7 @@ class EditorModule(
     /**
      * Load content from file with Storage Access Framework.
      */
-    private inline fun load() {
+    fun load() {
         intentLauncher(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD)
     }
 
@@ -422,6 +422,19 @@ class EditorModule(
                 message,
                 preferenceApplier.colorPair()
         )
+    }
+
+    fun showName(view: View): Boolean {
+        if (view is TextView) {
+            Toaster.withAction(
+                    binding.root,
+                    view.text.toString(),
+                    R.string.run,
+                    View.OnClickListener { view.performClick() },
+                    preferenceApplier.colorPair()
+            )
+        }
+        return true
     }
 
     override fun hide() {
