@@ -136,12 +136,14 @@
             android:id="@+id/default_search_engine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/OneLineTextMenu"
+            android:background="@color/filter_white_bb"
             android:onClick="@{fragment.openSearchCategory}"
             >
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/OneLineTextMenu"
+                android:layout_height="@dimen/search_category_spinner_width"
+                android:gravity="center_vertical"
                 android:drawableLeft="@drawable/ic_search_black"
                 android:text="@string/title_font_size"
                 />

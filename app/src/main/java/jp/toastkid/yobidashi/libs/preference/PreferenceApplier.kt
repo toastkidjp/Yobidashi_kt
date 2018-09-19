@@ -277,11 +277,11 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun setEditorFontSize(newSize: Int) {
-        preferences.getInt(Key.EDITOR_FONT_SIZE.name, newSize)
+        preferences.edit().putInt(Key.EDITOR_FONT_SIZE.name, newSize).apply()
     }
 
     fun editorFontSize(): Int {
-        return preferences.getInt(Key.EDITOR_FONT_SIZE.name, Color.BLACK)
+        return preferences.getInt(Key.EDITOR_FONT_SIZE.name, 12)
     }
 
     fun clear() {
