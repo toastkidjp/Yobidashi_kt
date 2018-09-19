@@ -24,6 +24,6 @@ enum class EditorFontSize(val size: Int) {
     FONT_28(28);
 
     companion object {
-        fun findIndex(size: Int) = values().find { it.size == size }?.ordinal ?: 4
+        fun findIndex(size: Int) = values().find { it.size == size }?.ordinal ?: 6
     }
 }
