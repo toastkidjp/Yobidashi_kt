@@ -87,11 +87,9 @@ class EditorModule(
     }
 
     /**
-     * Apply color setting.
-     *
-     * TODO rename
+     * Apply color and font setting.
      */
-    fun applyColor() {
+    fun applySettings() {
         val colorPair = preferenceApplier.colorPair()
         applyButtonColor(
                 colorPair,
