@@ -29,8 +29,10 @@ class PreferenceApplier(private val context: Context) {
     }
 
     private enum class Key {
-        BG_COLOR, FONT_COLOR, ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY,
-        ENABLE_FAVORITE_SEARCH,BG_IMAGE, LAST_AD_DATE,
+        BG_COLOR, FONT_COLOR,
+        ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY,
+        ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH,
+        BG_IMAGE, LAST_AD_DATE,
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
@@ -83,6 +85,14 @@ class PreferenceApplier(private val context: Context) {
     fun switchEnableViewHistory() {
         preferences.edit().putBoolean(Key.ENABLE_VIEW_HISTORY.name, !isEnableViewHistory)
                 .apply()
+    }
+
+    fun isEnableAppSearch(): Boolean {
+        return preferences.getBoolean(Key.ENABLE_APP_SEARCH.name, true)
+    }
+
+    fun switchEnableAppSearch() {
+        preferences.edit().putBoolean(Key.ENABLE_APP_SEARCH.name, !isEnableAppSearch()).apply()
     }
 
     var backgroundImagePath: String

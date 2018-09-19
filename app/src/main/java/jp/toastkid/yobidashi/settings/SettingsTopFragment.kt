@@ -206,6 +206,7 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         binding.useHistoryCheck.isChecked = preferenceApplier.isEnableSearchHistory
         binding.useFavoriteCheck.isChecked = preferenceApplier.isEnableFavoriteSearch
         binding.useViewHistoryCheck.isChecked = preferenceApplier.isEnableViewHistory
+        binding.useAppSearchCheck.isChecked = preferenceApplier.isEnableAppSearch()
         binding.wifiOnlyCheck.isChecked = preferenceApplier.wifiOnly
 
         binding.startUpItems?.startUpSelector?.check(preferenceApplier.startUp.radioButtonId)
@@ -315,6 +316,13 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
         val newState = !preferenceApplier.isEnableViewHistory
         preferenceApplier.switchEnableViewHistory()
         binding.useViewHistoryCheck.isChecked = newState
+    }
+
+    fun switchUseAppSearch() {
+        val preferenceApplier = preferenceApplier()
+        val newState = !preferenceApplier.isEnableAppSearch()
+        preferenceApplier.switchEnableAppSearch()
+        binding.useAppSearchCheck.isChecked = newState
     }
 
     /**

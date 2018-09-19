@@ -365,6 +365,7 @@
     <string name="web_search">Web 検索</string>
     <string name="minus">-</string>
     <string name="use_view_history">閲覧履歴を使う</string>
+    <string name="use_app_search">アプリ検索を使う</string>
     <string name="sample_long_text">あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほやゆよらりるれろわをん</string>
     <string name="sample_url">https://www.yahoo.com</string>
     <string name="plus">+</string>
