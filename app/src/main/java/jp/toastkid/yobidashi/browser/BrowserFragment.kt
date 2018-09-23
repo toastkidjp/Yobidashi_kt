@@ -589,7 +589,7 @@ class BrowserFragment : BaseFragment(),
         super.onResume()
 
         val colorPair = colorPair()
-        editor.applyColor()
+        editor.applySettings()
 
         titleSubject.subscribe({ progressBarCallback.onTitleChanged(it) }).addTo(disposables)
         progressSubject.subscribe({ progressBarCallback.onProgressChanged(it) }).addTo(disposables)

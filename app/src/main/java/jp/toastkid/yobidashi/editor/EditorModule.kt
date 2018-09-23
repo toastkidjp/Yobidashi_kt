@@ -9,6 +9,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.support.annotation.Dimension
 import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.text.Editable
@@ -86,9 +87,9 @@ class EditorModule(
     }
 
     /**
-     * Apply color setting.
+     * Apply color and font setting.
      */
-    fun applyColor() {
+    fun applySettings() {
         val colorPair = preferenceApplier.colorPair()
         applyButtonColor(
                 colorPair,
@@ -106,6 +107,7 @@ class EditorModule(
 
         binding.background.setBackgroundColor(preferenceApplier.editorBackgroundColor())
         binding.editorInput.setTextColor(preferenceApplier.editorFontColor())
+        binding.editorInput.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
     }
 
     /**

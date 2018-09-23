@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.settings
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Color
@@ -12,10 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.AdapterView
-import android.widget.SeekBar
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -27,6 +25,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBinding
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
+import jp.toastkid.yobidashi.editor.EditorFontSize
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -109,6 +108,35 @@ class SettingsTopFragment : BaseFragment(), UserAgentDialogFragment.Callback {
                     binding.moduleSettingEditor.prev as TextView,
                     ColorPair(initialBgColor, initialFontColor)
             )
+
+            binding.moduleSettingEditor.fontSize.adapter = object : BaseAdapter() {
+                override fun getCount(): Int = EditorFontSize.values().size
+
+                override fun getItem(position: Int): EditorFontSize
+                        = EditorFontSize.values()[position]
+
+                override fun getItemId(position: Int): Long
+                        = EditorFontSize.values()[position].ordinal.toLong()
+
+                @SuppressLint("ViewHolder")
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val item = EditorFontSize.values()[position]
+                    val view = inflater.inflate(android.R.layout.simple_spinner_item, parent, false)
+                    val textView = view.findViewById<TextView>(android.R.id.text1)
+                    textView.text = item.size.toString()
+                    return view
+                }
+            }
+            binding.moduleSettingEditor.fontSize.setSelection(
+                    EditorFontSize.findIndex(preferenceApplier.editorFontSize())
+            )
+            binding.moduleSettingEditor.fontSize.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    preferenceApplier.setEditorFontSize(EditorFontSize.values()[position].size)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+            }
         }
 
         activity?.let {
