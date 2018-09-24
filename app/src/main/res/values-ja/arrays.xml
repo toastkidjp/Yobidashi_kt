@@ -9,6 +9,7 @@
         <item name="open_article">新規タブで開く</item>
         <item name="add_schedule">バックグラウンドで開く</item>
         <item name="open">開く</item>
+        <item name="preview">ちょっと見る</item>
         <item name="copy">コピー</item>
     </array>
 </resources>

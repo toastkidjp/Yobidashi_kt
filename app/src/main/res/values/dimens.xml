@@ -27,4 +27,6 @@
     <dimen name="tab_list_item_height">160dp</dimen>
 
     <dimen name="button_margin">64dp</dimen>
+
+    <dimen name="floating_preview_height">300dp</dimen>
 </resources>

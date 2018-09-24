@@ -18,6 +18,7 @@
         <item name="open_article">Open new tab</item>
         <item name="add_schedule">Open background tab</item>
         <item name="open">Open this tab</item>
+        <item name="preview">Preview</item>
         <item name="copy">Copy URL</item>
     </array>
 </resources>
