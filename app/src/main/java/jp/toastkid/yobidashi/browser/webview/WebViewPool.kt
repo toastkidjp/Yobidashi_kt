@@ -14,7 +14,6 @@ internal class WebViewPool(
         private val context: Context,
         private val webViewClientSupplier: () -> WebViewClient,
         private val webChromeClientSupplier: () -> WebChromeClient,
-        private val loader: (String, Boolean) -> Unit,
         poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE
 ) {
 
@@ -38,7 +37,7 @@ internal class WebViewPool(
             return extract
         }
 
-        val webView = WebViewFactory.make(context, loader)
+        val webView = WebViewFactory.make(context)
         webView.webViewClient = webViewClientSupplier()
         webView.webChromeClient = webChromeClientSupplier()
         pool.put(tabId, webView)

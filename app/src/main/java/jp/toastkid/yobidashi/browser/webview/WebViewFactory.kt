@@ -38,7 +38,7 @@ internal object WebViewFactory {
      */
     private var anchor: String = ""
 
-    fun make(context: Context, loader: (String, Boolean) -> Unit): CustomWebView {
+    fun make(context: Context): CustomWebView {
         val webView = CustomWebView(context)
         webView.setOnTouchListener { _, motionEvent ->
             when (motionEvent.getAction()) {
