@@ -39,8 +39,7 @@ class BrowserModule(
         private val context: Context,
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
-        private val historyAddingCallback: (String, String) -> Unit,
-        private val loader: (String, Boolean) -> Unit
+        private val historyAddingCallback: (String, String) -> Unit
 ) {
 
     private val webViewPool: WebViewPool
@@ -62,7 +61,6 @@ class BrowserModule(
                 context,
                 { makeWebViewClient() },
                 { makeWebChromeClient() },
-                { url, onBackground -> loader(url, onBackground) },
                 preferenceApplier.poolSize
         )
     }

@@ -229,14 +229,7 @@ class BrowserFragment : BaseFragment(),
                     }
                     progressSubject.onNext(progress)
                 },
-                historyAddingCallback = { title, url -> tabs.addHistory(title, url) },
-                loader = { url, onBackground ->
-                    if (onBackground) {
-                        tabs.openBackgroundTab(url)
-                    } else {
-                        tabs.openNewWebTab(url)
-                    }
-                }
+                historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
         )
 
         tabs = TabAdapter(
