@@ -28,18 +28,31 @@ class FloatingPreview(private val parent: ViewGroup) {
             parent.removeAllViews()
         }
         parent.visibility = View.VISIBLE
-        val layoutParams = FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                )
-        layoutParams.height =
-                parent.context.resources.getDimensionPixelSize(R.dimen.floating_preview_height)
-        layoutParams.gravity = Gravity.BOTTOM
-        webView.layoutParams = layoutParams
+
+        setLayoutParams(webView)
 
         webView.isEnabled = true
         webView.onResume()
 
+        setWebViewClient(webView, url)
+
+        parent.addView(webView)
+
+        webView.loadUrl(url)
+    }
+
+    private fun setLayoutParams(webView: WebView) {
+        val layoutParams = FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        layoutParams.height =
+                parent.context.resources.getDimensionPixelSize(R.dimen.floating_preview_height)
+        layoutParams.gravity = Gravity.BOTTOM
+        webView.layoutParams = layoutParams
+    }
+
+    private fun setWebViewClient(webView: WebView, url: String) {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 parent.context?.let {
@@ -50,9 +63,6 @@ class FloatingPreview(private val parent: ViewGroup) {
                 return false
             }
         }
-
-        parent.addView(webView)
-        webView.loadUrl(url)
     }
 
     fun hide(webView: WebView?) {
