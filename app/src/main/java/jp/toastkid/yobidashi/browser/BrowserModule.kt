@@ -10,6 +10,7 @@ import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
+import android.view.View
 import android.view.animation.Animation
 import android.webkit.*
 import androidx.core.os.bundleOf
@@ -376,7 +377,10 @@ class BrowserModule(
      * Enable [WebView].
      */
     fun enableWebView() {
-        currentView()?.isEnabled = true
+        currentView()?.let {
+            it.isEnabled = true
+            it.visibility = View.VISIBLE
+        }
 
         val mainActivity = context
         if (mainActivity is MainActivity
@@ -389,7 +393,10 @@ class BrowserModule(
      * Disble [WebView].
      */
     fun disableWebView() {
-        currentView()?.isEnabled = false
+        currentView()?.let {
+            it.isEnabled = false
+            it.visibility = View.GONE
+        }
         stopLoading()
 
         val mainActivity = context
