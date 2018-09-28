@@ -393,5 +393,7 @@
     <string name="paste_as_quotation">Paste as Quotation</string>
     <string name="title_font_size">Font size</string>
     <string name="subhead_editor">Editor</string>
+    <string name="retry">Retry</string>
+    <string name="message_preview_failed">It has occurred error, please would you attempt to retry?</string>
 
 </resources>

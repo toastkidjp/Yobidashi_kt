@@ -388,5 +388,7 @@
     <string name="paste_as_quotation">引用貼付</string>
     <string name="title_font_size">文字の大きさ</string>
     <string name="subhead_editor">エディタ</string>
+    <string name="retry">やり直す</string>
+    <string name="message_preview_failed">エラーが発生しました。やり直してください</string>
 
 </resources>

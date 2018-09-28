@@ -36,6 +36,7 @@ import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
+import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
@@ -793,6 +794,30 @@ class BrowserFragment : BaseFragment(),
 
     override fun openCurrent(url: String) {
         tabs.callLoadUrl(url)
+    }
+
+    private lateinit var floatingPreview: FloatingPreview
+
+    override fun preview(url: String) {
+        val webView = browserModule.getWebView("preview")
+        if (webView == null) {
+            Toaster.snackLong(
+                    binding?.root as View,
+                    R.string.message_preview_failed,
+                    R.string.retry,
+                    View.OnClickListener { preview(url) },
+                    colorPair()
+                    )
+            return
+        }
+
+        floatingPreview = FloatingPreview(
+                binding?.previewContainer as ViewGroup
+        )
+        binding?.previewContainer?.setOnClickListener {
+            floatingPreview.hide(webView)
+        }
+        floatingPreview.invoke(webView, url)
     }
 
     override fun onClickSetBackground(url: String) {
