@@ -17,7 +17,7 @@ class QuotationTest {
     operator fun invoke() {
         assertEquals("> tomato", Quotation("tomato"))
         assertEquals(
-                "> 1. tomato${lineSeparator}> 2. orange${lineSeparator}> 3. apple",
+                "> 1. tomato$lineSeparator> 2. orange$lineSeparator> 3. apple",
                 Quotation("1. tomato${lineSeparator}2. orange${lineSeparator}3. apple")
         )
     }
