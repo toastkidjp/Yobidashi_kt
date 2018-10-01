@@ -30,6 +30,8 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
         binding.previewBackground.setOnClickListener { hide(webView) }
 
+        binding.header.setOnClickListener { openNewTabWithUrl(url) }
+
         binding.icon.setImageBitmap(null)
 
         webView.isEnabled = true
@@ -47,11 +49,7 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                binding.root.context?.let {
-                    it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
-                    binding.previewBackground.visibility = View.GONE
-                    binding.previewContainer.removeAllViews()
-                }
+                openNewTabWithUrl(url)
                 return false
             }
         }
@@ -65,6 +63,14 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
                 super.onReceivedIcon(view, icon)
                 icon?.let { binding.icon.setImageBitmap(icon) }
             }
+        }
+    }
+
+    private fun openNewTabWithUrl(url: String) {
+        binding.root.context?.let {
+            it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
+            binding.previewBackground.visibility = View.GONE
+            binding.previewContainer.removeAllViews()
         }
     }
 
