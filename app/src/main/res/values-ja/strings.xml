@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">呼出\nYobidashi</string>
 
+    <string name="leak_canary_display_activity_label">Yobidashi_Leak</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
