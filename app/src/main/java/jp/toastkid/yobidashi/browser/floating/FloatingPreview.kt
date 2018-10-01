@@ -18,10 +18,18 @@ import jp.toastkid.yobidashi.databinding.ContentFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
 
 /**
+ * Floating preview.
+ *
  * @author toastkidjp
  */
 class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
+    /**
+     * Invoke floating preview.
+     *
+     * @param webView [WebView]
+     * @param url URL string
+     */
     operator fun invoke(webView: WebView, url: String) {
         if (binding.previewContainer.childCount != 0) {
             binding.previewContainer.removeAllViews()
@@ -72,6 +80,11 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         }
     }
 
+    /**
+     * Open passed url by new tab.
+     *
+     * @param url URL string
+     */
     private fun openNewTabWithUrl(url: String) {
         binding.root.context?.let {
             it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
@@ -80,6 +93,11 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         }
     }
 
+    /**
+     * Hide this preview.
+     *
+     * @param webView [WebView]
+     */
     fun hide(webView: WebView?) {
         binding.previewBackground.visibility = View.GONE
         webView?.isEnabled = false
