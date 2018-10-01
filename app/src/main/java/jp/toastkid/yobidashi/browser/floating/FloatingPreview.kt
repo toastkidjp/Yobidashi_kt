@@ -7,66 +7,69 @@
  */
 package jp.toastkid.yobidashi.browser.floating
 
-import android.view.Gravity
+import android.graphics.Bitmap
 import android.view.View
-import android.view.ViewGroup
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.FrameLayout
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ContentFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
 
 /**
  * @author toastkidjp
  */
-class FloatingPreview(private val parent: ViewGroup) {
+class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
     operator fun invoke(webView: WebView, url: String) {
-        if (parent.childCount != 0) {
-            parent.removeAllViews()
+        if (binding.previewContainer.childCount != 0) {
+            binding.previewContainer.removeAllViews()
         }
-        parent.visibility = View.VISIBLE
+        binding.previewBackground.visibility = View.VISIBLE
 
-        setLayoutParams(webView)
+        binding.previewBackground.setOnClickListener { hide(webView) }
+
+        binding.icon.setImageBitmap(null)
 
         webView.isEnabled = true
         webView.onResume()
 
         setWebViewClient(webView, url)
 
-        parent.addView(webView)
+        binding.previewContainer.addView(webView)
 
         webView.loadUrl(url)
     }
 
-    private fun setLayoutParams(webView: WebView) {
-        val layoutParams = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        layoutParams.height =
-                parent.context.resources.getDimensionPixelSize(R.dimen.floating_preview_height)
-        layoutParams.gravity = Gravity.BOTTOM
-        webView.layoutParams = layoutParams
-    }
-
     private fun setWebViewClient(webView: WebView, url: String) {
+        binding.url.text = url
+
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                parent.context?.let {
+                binding.root.context?.let {
                     it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
+                    binding.previewBackground.visibility = View.GONE
+                    binding.previewContainer.removeAllViews()
                 }
-                parent.visibility = View.GONE
-                parent.removeAllViews()
                 return false
+            }
+        }
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onReceivedTitle(view: WebView?, title: String?) {
+                super.onReceivedTitle(view, title)
+                title?.let { binding.title.text = it }
+            }
+
+            override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+                super.onReceivedIcon(view, icon)
+                icon?.let { binding.icon.setImageBitmap(icon) }
             }
         }
     }
 
     fun hide(webView: WebView?) {
-        parent.visibility = View.GONE
+        binding.previewBackground.visibility = View.GONE
         webView?.isEnabled = false
         webView?.onPause()
     }
