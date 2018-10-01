@@ -37,14 +37,20 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         webView.isEnabled = true
         webView.onResume()
 
-        setWebViewClient(webView, url)
+        initializeWebView(webView, url)
 
         binding.previewContainer.addView(webView)
 
         webView.loadUrl(url)
     }
 
-    private fun setWebViewClient(webView: WebView, url: String) {
+    /**
+     * Initialize WebView.
+     *
+     * @param webView [WebView]
+     * @param url URL string
+     */
+    private fun initializeWebView(webView: WebView, url: String) {
         binding.url.text = url
 
         webView.webViewClient = object : WebViewClient() {
