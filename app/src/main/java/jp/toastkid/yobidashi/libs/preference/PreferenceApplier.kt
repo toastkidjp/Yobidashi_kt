@@ -283,7 +283,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun editorFontColor(): Int {
-        return preferences.getInt(Key.EDITOR_FONT_COLOR.name, Color.WHITE)
+        return preferences.getInt(Key.EDITOR_FONT_COLOR.name, Color.BLACK)
     }
 
     fun setEditorFontSize(newSize: Int) {
