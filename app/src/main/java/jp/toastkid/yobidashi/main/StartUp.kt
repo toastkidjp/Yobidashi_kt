@@ -19,6 +19,12 @@ enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
     APPS_LAUNCHER(R.string.title_apps_launcher, R.id.start_up_launcher);
 
     companion object {
+
+        /**
+         * Find value by name.
+         *
+         * @param name [String]
+         */
         fun find(name: String): StartUp {
             if (name.isEmpty()) {
                 return getDefault()
@@ -26,8 +32,16 @@ enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
             return valueOf(name)
         }
 
+        /**
+         * Return default value.
+         */
         private fun getDefault(): StartUp = BROWSER
 
+        /**
+         * Find value by ID.
+         *
+         * @param checkedRadioButtonId [Int]
+         */
         fun findById(@IdRes checkedRadioButtonId: Int): StartUp =
                 values().find { it.radioButtonId == checkedRadioButtonId } ?: getDefault()
     }
