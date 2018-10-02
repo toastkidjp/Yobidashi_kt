@@ -234,7 +234,7 @@ class PreferenceApplier(private val context: Context) {
         }
 
     var startUp: StartUp
-        get () = StartUp.find(preferences.getString(Key.START_UP.name, ""))
+        get () = StartUp.findByName(preferences.getString(Key.START_UP.name, ""))
         set (newValue) = preferences.edit().putString(Key.START_UP.name, newValue.name).apply()
 
     var saveViewHistory: Boolean
