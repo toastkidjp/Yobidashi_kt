@@ -33,16 +33,16 @@ enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
         }
 
         /**
-         * Return default value.
-         */
-        private fun getDefault(): StartUp = BROWSER
-
-        /**
          * Find value by ID.
          *
          * @param checkedRadioButtonId [Int]
          */
         fun findById(@IdRes checkedRadioButtonId: Int): StartUp =
                 values().find { it.radioButtonId == checkedRadioButtonId } ?: getDefault()
+
+        /**
+         * Return default value.
+         */
+        private fun getDefault(): StartUp = BROWSER
     }
 }
