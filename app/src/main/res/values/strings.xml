@@ -151,6 +151,7 @@
     <string name="title_apps_launcher">Apps Launcher</string>
     <string name="message_failed_launching">It cannot launch this app.</string>
     <string name="date_format">E, MM/dd/yyyy HH:mm:ss</string>
+    <string name="last_saved">"Last saved:\n"</string>
     <string name="editor_date_format">HH:mm:ss</string>
     <string name="title_package_name_filter">Package name filter</string>
 

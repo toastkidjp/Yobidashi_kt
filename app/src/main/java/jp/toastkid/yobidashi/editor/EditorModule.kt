@@ -64,6 +64,8 @@ class EditorModule(
         }
     }
 
+    private lateinit var lastSavedTitle: String
+
     /**
      * File path.
      */
@@ -84,6 +86,7 @@ class EditorModule(
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         })
+        lastSavedTitle = context().getString(R.string.last_saved)
     }
 
     /**
@@ -330,7 +333,7 @@ class EditorModule(
     private fun setLastSaved(ms: Long) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = ms
-        binding.lastSaved.setText("Last saved:\n" + dateFormatHolder.get().format(calendar.time))
+        binding.lastSaved.setText(lastSavedTitle + dateFormatHolder.get().format(calendar.time))
     }
 
     /**
