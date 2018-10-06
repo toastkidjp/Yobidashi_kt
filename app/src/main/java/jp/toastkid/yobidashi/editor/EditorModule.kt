@@ -12,6 +12,7 @@ import android.os.Environment
 import android.support.annotation.Dimension
 import android.support.annotation.MainThread
 import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -436,7 +437,8 @@ class EditorModule(
                     view.text.toString(),
                     R.string.run,
                     View.OnClickListener { view.performClick() },
-                    preferenceApplier.colorPair()
+                    preferenceApplier.colorPair(),
+                    Snackbar.LENGTH_LONG
             )
         }
         return true
