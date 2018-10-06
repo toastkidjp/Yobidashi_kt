@@ -64,7 +64,7 @@ class EditorModule(
         }
     }
 
-    private lateinit var lastSavedTitle: String
+    private var lastSavedTitle: String
 
     /**
      * File path.
