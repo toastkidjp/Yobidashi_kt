@@ -36,11 +36,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Editor activity.
+ * Editor module.
  *
- * @param binding
- * @param intentLauncher
- * @param saveTabCallback
+ * @param binding [ModuleEditorBinding]
+ * @param intentLauncher Intent launcher for using load function
+ * @param saveTabCallback Callback of tab saving
  *
  * @author toastkidjp
  */
