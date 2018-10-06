@@ -430,6 +430,11 @@ class EditorModule(
         )
     }
 
+    /**
+     * Show menu's name.
+     *
+     * @param view [View] (TextView)
+     */
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
