@@ -60,7 +60,7 @@ class EditorModule(
     private val dateFormatHolder: ThreadLocal<DateFormat> by lazy {
         object: ThreadLocal<DateFormat>() {
             override fun initialValue(): DateFormat =
-                    SimpleDateFormat(binding.root.context.getString(R.string.date_format), Locale.getDefault())
+                    SimpleDateFormat(binding.root.context.getString(R.string.editor_date_format), Locale.getDefault())
         }
     }
 
