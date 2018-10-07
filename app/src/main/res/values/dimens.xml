@@ -29,4 +29,5 @@
     <dimen name="button_margin">64dp</dimen>
 
     <dimen name="floating_preview_height">300dp</dimen>
+    <dimen name="floating_preview_header_height">44dp</dimen>
 </resources>

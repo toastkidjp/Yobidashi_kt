@@ -26,15 +26,11 @@
             android:id="@+id/module_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             />
 
-        <FrameLayout
-            android:id="@+id/preview_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/darkgray_scale"
-            android:visibility="gone"
+        <include
+            android:id="@+id/floating_preview"
+            layout="@layout/content_floating_preview"
             />
 
         <com.cleveroad.cyclemenuwidget.CycleMenuWidget
