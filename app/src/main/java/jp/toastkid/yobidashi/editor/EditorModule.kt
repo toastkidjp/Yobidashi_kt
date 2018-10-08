@@ -12,6 +12,7 @@ import android.os.Environment
 import android.support.annotation.Dimension
 import android.support.annotation.MainThread
 import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -35,11 +36,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * Editor activity.
+ * Editor module.
  *
- * @param binding
- * @param intentLauncher
- * @param saveTabCallback
+ * @param binding [ModuleEditorBinding]
+ * @param intentLauncher Intent launcher for using load function
+ * @param saveTabCallback Callback of tab saving
  *
  * @author toastkidjp
  */
@@ -60,9 +61,11 @@ class EditorModule(
     private val dateFormatHolder: ThreadLocal<DateFormat> by lazy {
         object: ThreadLocal<DateFormat>() {
             override fun initialValue(): DateFormat =
-                    SimpleDateFormat(binding.root.context.getString(R.string.date_format), Locale.getDefault())
+                    SimpleDateFormat(binding.root.context.getString(R.string.editor_date_format), Locale.getDefault())
         }
     }
+
+    private var lastSavedTitle: String
 
     /**
      * File path.
@@ -84,6 +87,7 @@ class EditorModule(
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         })
+        lastSavedTitle = context().getString(R.string.last_saved)
     }
 
     /**
@@ -330,7 +334,7 @@ class EditorModule(
     private fun setLastSaved(ms: Long) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = ms
-        binding.lastSaved.setText("Last saved:\n" + dateFormatHolder.get().format(calendar.time))
+        binding.lastSaved.setText(lastSavedTitle + dateFormatHolder.get().format(calendar.time))
     }
 
     /**
@@ -426,6 +430,11 @@ class EditorModule(
         )
     }
 
+    /**
+     * Show menu's name.
+     *
+     * @param view [View] (TextView)
+     */
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
@@ -433,7 +442,8 @@ class EditorModule(
                     view.text.toString(),
                     R.string.run,
                     View.OnClickListener { view.performClick() },
-                    preferenceApplier.colorPair()
+                    preferenceApplier.colorPair(),
+                    Snackbar.LENGTH_LONG
             )
         }
         return true

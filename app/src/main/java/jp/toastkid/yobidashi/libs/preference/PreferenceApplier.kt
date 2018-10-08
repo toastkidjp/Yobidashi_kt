@@ -234,7 +234,7 @@ class PreferenceApplier(private val context: Context) {
         }
 
     var startUp: StartUp
-        get () = StartUp.find(preferences.getString(Key.START_UP.name, ""))
+        get () = StartUp.findByName(preferences.getString(Key.START_UP.name, ""))
         set (newValue) = preferences.edit().putString(Key.START_UP.name, newValue.name).apply()
 
     var saveViewHistory: Boolean
@@ -283,7 +283,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun editorFontColor(): Int {
-        return preferences.getInt(Key.EDITOR_FONT_COLOR.name, Color.WHITE)
+        return preferences.getInt(Key.EDITOR_FONT_COLOR.name, Color.BLACK)
     }
 
     fun setEditorFontSize(newSize: Int) {
@@ -291,7 +291,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun editorFontSize(): Int {
-        return preferences.getInt(Key.EDITOR_FONT_SIZE.name, 12)
+        return preferences.getInt(Key.EDITOR_FONT_SIZE.name, 16)
     }
 
     fun clear() {
