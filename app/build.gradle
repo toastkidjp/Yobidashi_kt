@@ -95,7 +95,7 @@ dependencies {
     kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:3.5"
+    testImplementation "org.robolectric:robolectric:3.8"
 }
 
 repositories{

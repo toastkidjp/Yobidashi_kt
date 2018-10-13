@@ -811,13 +811,10 @@ class BrowserFragment : BaseFragment(),
             return
         }
 
-        floatingPreview = FloatingPreview(
-                binding?.previewContainer as ViewGroup
-        )
-        binding?.previewContainer?.setOnClickListener {
-            floatingPreview.hide(webView)
+        binding?.floatingPreview?.let {
+            floatingPreview = FloatingPreview(it)
+            floatingPreview.invoke(webView, url)
         }
-        floatingPreview.invoke(webView, url)
     }
 
     override fun onClickSetBackground(url: String) {

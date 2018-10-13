@@ -7,66 +7,99 @@
  */
 package jp.toastkid.yobidashi.browser.floating
 
-import android.view.Gravity
+import android.graphics.Bitmap
 import android.view.View
-import android.view.ViewGroup
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.FrameLayout
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ContentFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
 
 /**
+ * Floating preview.
+ *
  * @author toastkidjp
  */
-class FloatingPreview(private val parent: ViewGroup) {
+class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
+    /**
+     * Invoke floating preview.
+     *
+     * @param webView [WebView]
+     * @param url URL string
+     */
     operator fun invoke(webView: WebView, url: String) {
-        if (parent.childCount != 0) {
-            parent.removeAllViews()
+        if (binding.previewContainer.childCount != 0) {
+            binding.previewContainer.removeAllViews()
         }
-        parent.visibility = View.VISIBLE
+        binding.previewBackground.visibility = View.VISIBLE
 
-        setLayoutParams(webView)
+        binding.previewBackground.setOnClickListener { hide(webView) }
+
+        binding.header.setOnClickListener { openNewTabWithUrl(url) }
+
+        binding.icon.setImageBitmap(null)
 
         webView.isEnabled = true
         webView.onResume()
 
-        setWebViewClient(webView, url)
+        initializeWebView(webView, url)
 
-        parent.addView(webView)
+        binding.previewContainer.addView(webView)
 
         webView.loadUrl(url)
     }
 
-    private fun setLayoutParams(webView: WebView) {
-        val layoutParams = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        layoutParams.height =
-                parent.context.resources.getDimensionPixelSize(R.dimen.floating_preview_height)
-        layoutParams.gravity = Gravity.BOTTOM
-        webView.layoutParams = layoutParams
-    }
+    /**
+     * Initialize WebView.
+     *
+     * @param webView [WebView]
+     * @param url URL string
+     */
+    private fun initializeWebView(webView: WebView, url: String) {
+        binding.url.text = url
 
-    private fun setWebViewClient(webView: WebView, url: String) {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                parent.context?.let {
-                    it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
-                }
-                parent.visibility = View.GONE
-                parent.removeAllViews()
+                openNewTabWithUrl(url)
                 return false
+            }
+        }
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onReceivedTitle(view: WebView?, title: String?) {
+                super.onReceivedTitle(view, title)
+                title?.let { binding.title.text = it }
+            }
+
+            override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
+                super.onReceivedIcon(view, icon)
+                icon?.let { binding.icon.setImageBitmap(icon) }
             }
         }
     }
 
+    /**
+     * Open passed url by new tab.
+     *
+     * @param url URL string
+     */
+    private fun openNewTabWithUrl(url: String) {
+        binding.root.context?.let {
+            it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
+            binding.previewBackground.visibility = View.GONE
+            binding.previewContainer.removeAllViews()
+        }
+    }
+
+    /**
+     * Hide this preview.
+     *
+     * @param webView [WebView]
+     */
     fun hide(webView: WebView?) {
-        parent.visibility = View.GONE
+        binding.previewBackground.visibility = View.GONE
         webView?.isEnabled = false
         webView?.onPause()
     }
