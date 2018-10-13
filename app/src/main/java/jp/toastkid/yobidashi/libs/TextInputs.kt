@@ -68,4 +68,12 @@ object TextInputs  {
                     )
                 }
 
+    fun withDefaultInput(context: Context, defaultInput: CharSequence): TextInputLayout {
+        val inputLayout = make(context)
+        inputLayout.editText?.also {
+            it.setText(defaultInput)
+            it.setSelection(defaultInput.length)
+        }
+        return inputLayout
+    }
 }
