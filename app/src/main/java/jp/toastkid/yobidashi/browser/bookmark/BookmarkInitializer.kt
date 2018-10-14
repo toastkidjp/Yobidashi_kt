@@ -47,7 +47,7 @@ object BookmarkInitializer {
      *
      * @param context
      */
-    fun invoke(context: Context) {
+    operator fun invoke(context: Context) {
         val favicons = FilesDir(context, "favicons")
 
         DEFAULT_BOOKMARKS.forEach {

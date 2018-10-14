@@ -225,7 +225,7 @@ class BookmarkActivity: BaseActivity(),
     }
 
     override fun onClickAddDefaultBookmark() {
-        BookmarkInitializer.invoke(this)
+        BookmarkInitializer(this)
         adapter.showRoot()
         Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
     }
