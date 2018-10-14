@@ -88,8 +88,9 @@ enum class SearchCategory(
             { l, h, q ->
                 if (Locale.JAPANESE.language == l) {
                     h + Uri.encode(q)
+                } else {
+                    "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Uri.encode(q)
                 }
-                "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Uri.encode(q)
             }
     ),
     TECHNICAL_QA(R.string.search_category_technical_qa,
