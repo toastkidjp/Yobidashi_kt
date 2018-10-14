@@ -24,7 +24,8 @@ object BookmarkInitializer {
                     "Google Map" to "https://www.google.co.jp/maps/",
                     "Yelp" to "https://www.yelp.com/",
                     "Amazon" to "https://www.amazon.com/",
-                    "Project Gutenberg" to "http://www.gutenberg.org/"
+                    "Project Gutenberg" to "http://www.gutenberg.org/",
+                    "Expedia" to "https://www.expedia.com"
                     ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
