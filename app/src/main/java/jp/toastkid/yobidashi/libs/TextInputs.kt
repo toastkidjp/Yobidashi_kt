@@ -29,7 +29,7 @@ object TextInputs  {
     /**
      * Set empty alert.
      *
-     * @param inputLayout
+     * @param inputLayout [TextInputLayout]
      */
     fun setEmptyAlert(inputLayout: TextInputLayout): EditText {
         val input: EditText? = inputLayout.editText
@@ -53,6 +53,8 @@ object TextInputs  {
 
     /**
      * Make [TextInputLayout] instance.
+     *
+     * @param context [Context] Use for make instance.
      */
     fun make(context: Context): TextInputLayout =
             TextInputLayout(context)
@@ -68,4 +70,18 @@ object TextInputs  {
                     )
                 }
 
+    /**
+     * Make [TextInputLayout] instance with default input text.
+     *
+     * @param context [Context] Use for make instance.
+     * @param defaultInput Default input text
+     */
+    fun withDefaultInput(context: Context, defaultInput: CharSequence): TextInputLayout {
+        val inputLayout = make(context)
+        inputLayout.editText?.also {
+            it.setText(defaultInput)
+            it.setSelection(defaultInput.length)
+        }
+        return inputLayout
+    }
 }

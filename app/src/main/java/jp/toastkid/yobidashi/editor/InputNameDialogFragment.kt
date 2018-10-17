@@ -36,8 +36,7 @@ class InputNameDialogFragment : DialogFragment() {
             callback = targetFragment
         }
 
-        val inputLayout = TextInputs.make(activityContext)
-        inputLayout.editText?.setText(DEFAULT_FILE_NAME)
+        val inputLayout = TextInputs.withDefaultInput(activityContext, DEFAULT_FILE_NAME)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.title_dialog_input_file_name))
