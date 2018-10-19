@@ -58,7 +58,7 @@ class ExtendedApplication : Application() {
 
         SavedColors.insertDefaultColors(this)
         preferenceApplier.updateLastAd()
-        BookmarkInitializer.invoke(this)
+        BookmarkInitializer(this)
         DefaultBackgroundImagePreparator(this).addTo(disposables)
     }
 
