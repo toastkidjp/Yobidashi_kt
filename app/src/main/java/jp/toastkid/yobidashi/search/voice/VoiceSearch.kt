@@ -57,6 +57,12 @@ object VoiceSearch {
                 .invoke()
     }
 
+    /**
+     * Show Google App install suggestion by [Snackbar].
+     *
+     * @param parent Snackbar's parent
+     * @param colorPair [ColorPair]
+     */
     fun suggestInstallGoogleApp(parent: View, colorPair: ColorPair) {
         Toaster.withAction(
                 parent,
@@ -67,10 +73,18 @@ object VoiceSearch {
         )
     }
 
+    /**
+     * Launch Google Play App.
+     *
+     * @param parent Snackbar's parent
+     */
     private fun launchGooglePlay(parent: View) {
         parent.context.startActivity(makeGoogleAppInstallIntent())
     }
 
+    /**
+     * Make Google App [Intent].
+     */
     private fun makeGoogleAppInstallIntent() =
             IntentFactory.googlePlay("com.google.android.googlequicksearchbox")
 }
