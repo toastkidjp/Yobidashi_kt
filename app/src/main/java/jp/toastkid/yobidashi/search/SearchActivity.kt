@@ -327,7 +327,7 @@ class SearchActivity : BaseActivity(),
         binding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener({
+            it.searchAction.setOnClickListener { _ ->
                 if (useVoice) {
                     try {
                         startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
@@ -341,7 +341,7 @@ class SearchActivity : BaseActivity(),
                         binding?.searchCategories?.selectedItem.toString(),
                         binding?.searchInput?.text.toString()
                 )
-            })
+            }
             it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
