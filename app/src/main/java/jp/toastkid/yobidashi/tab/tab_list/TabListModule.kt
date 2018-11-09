@@ -13,7 +13,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 
 /**
@@ -74,10 +73,8 @@ class TabListModule(
 
         binding.addPdfTab.setOnClickListener { openPdfAction() }
 
-        val context = context()
-
-        binding.addSearchTab.setOnClickListener {
-            context.startActivity(SearchActivity.makeIntent(context))
+        binding.root.setOnClickListener {
+            closeAction()
         }
     }
 
