@@ -43,42 +43,41 @@ internal class CustomWebView(context: Context) : WebView(context) {
         scrollListener(horizontal, vertical, oldHorizontal, oldVertical)
     }
 
-    override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode {
-        return super.startActionMode(
-                object : ActionMode.Callback {
-                    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                        if (TextUtils.equals("Web search", item?.title)) {
-                            SelectedTextExtractor.withAction(this@CustomWebView) { word ->
-                                context?.let {
-                                    val url = UrlFactory.make(
-                                            it,
-                                            PreferenceApplier(it).getDefaultSearchEngine(),
-                                            word
-                                    ).toString()
+    override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode =
+            super.startActionMode(
+                    object : ActionMode.Callback {
+                        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                            if (TextUtils.equals("Web search", item?.title)) {
+                                SelectedTextExtractor.withAction(this@CustomWebView) { word ->
+                                    context?.let {
+                                        val url = UrlFactory.make(
+                                                it,
+                                                PreferenceApplier(it).getDefaultSearchEngine(),
+                                                word
+                                        ).toString()
 
-                                    loadUrl(url)
+                                        loadUrl(url)
+                                    }
+                                    val activityContext = context ?: return@withAction
+
                                 }
-                                val activityContext = context ?: return@withAction
-
+                                return true
                             }
-                            return true
+                            return callback?.onActionItemClicked(mode, item) ?: false
                         }
-                        return callback?.onActionItemClicked(mode, item) ?: false
-                    }
 
-                    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                        return callback?.onCreateActionMode(mode, menu) ?: false
-                    }
+                        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                            return callback?.onCreateActionMode(mode, menu) ?: false
+                        }
 
-                    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                        return callback?.onPrepareActionMode(mode, menu) ?: false
-                    }
+                        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                            return callback?.onPrepareActionMode(mode, menu) ?: false
+                        }
 
-                    override fun onDestroyActionMode(mode: ActionMode?) {
-                        callback?.onDestroyActionMode(mode)
-                    }
-                },
-                type
-        )
-    }
+                        override fun onDestroyActionMode(mode: ActionMode?) {
+                            callback?.onDestroyActionMode(mode)
+                        }
+                    },
+                    type
+            )
 }
