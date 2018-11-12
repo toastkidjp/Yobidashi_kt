@@ -443,6 +443,10 @@ class EditorModule(
         return true
     }
 
+    /**
+     * Insert text to [EditText].
+     * @param text insert text
+     */
     fun insert(text: CharSequence?) {
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
     }
