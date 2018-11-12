@@ -14,7 +14,6 @@ import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
@@ -24,7 +23,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -160,11 +158,7 @@ class EditorModule(
      * Paste clipped text as Markdown's quotation style.
      */
     fun pasteAsQuotation() {
-        val primary = Clipboard.getPrimary(context())
-        if (TextUtils.isEmpty(primary)) {
-            return
-        }
-        binding.editorInput.text.insert(binding.editorInput.selectionStart, Quotation(primary))
+        PasteAsConfirmationDialog.show(binding.root.context)
     }
 
     /**
@@ -447,6 +441,10 @@ class EditorModule(
             )
         }
         return true
+    }
+
+    fun insert(text: CharSequence?) {
+        binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
     }
 
     override fun hide() {

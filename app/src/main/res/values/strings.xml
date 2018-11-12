@@ -399,5 +399,6 @@
     <string name="subhead_editor">Editor</string>
     <string name="retry">Retry</string>
     <string name="message_preview_failed">It has occurred error, please would you attempt to retry?</string>
+    <string name="message_paste_as_dialog">Would you paste current clipboard text?</string>
 
 </resources>

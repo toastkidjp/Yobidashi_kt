@@ -394,5 +394,6 @@
     <string name="subhead_editor">エディタ</string>
     <string name="retry">やり直す</string>
     <string name="message_preview_failed">エラーが発生しました。やり直してください</string>
+    <string name="message_paste_as_dialog">クリップボードに保持している内容を貼り付けますか？</string>
 
 </resources>
