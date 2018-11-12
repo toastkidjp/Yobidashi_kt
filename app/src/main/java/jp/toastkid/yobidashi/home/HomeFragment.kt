@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.home
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -30,6 +31,7 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
+import timber.log.Timber
 
 /**
  * Home fragment.
@@ -179,7 +181,12 @@ class HomeFragment : BaseFragment() {
      */
     fun voiceSearch(ignored: View) {
         activity?.let {
-            startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
+            try {
+                startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
+            } catch (e: ActivityNotFoundException) {
+                Timber.e(e)
+                VoiceSearch.suggestInstallGoogleApp(binding.root, colorPair())
+            }
         }
     }
 

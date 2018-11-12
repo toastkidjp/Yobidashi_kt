@@ -445,9 +445,7 @@ class BrowserFragment : BaseFragment(),
                     startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
                 } catch (e: ActivityNotFoundException) {
                     Timber.e(e)
-                    binding?.root?.let {
-                        Toaster.snackShort(it, R.string.message_unabled_voice_search, colorPair())
-                    }
+                    binding?.root?.let { VoiceSearch.suggestInstallGoogleApp(it, colorPair()) }
                 }
             }
             Menu.REPLACE_HOME.ordinal -> {
