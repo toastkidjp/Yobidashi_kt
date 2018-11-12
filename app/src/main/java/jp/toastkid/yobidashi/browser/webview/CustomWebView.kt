@@ -2,8 +2,14 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.TextUtils
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.webkit.WebView
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.UrlFactory
 
 /**
  * Extend for disabling pull-to-refresh on Google map.
@@ -35,5 +41,41 @@ internal class CustomWebView(context: Context) : WebView(context) {
         super.onScrollChanged(horizontal, vertical, oldHorizontal, oldVertical)
         scrolling += vertical
         scrollListener(horizontal, vertical, oldHorizontal, oldVertical)
+    }
+
+    override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode {
+        return super.startActionMode(
+                object : ActionMode.Callback {
+                    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                        if (TextUtils.equals("Web search", item?.title)) {
+                            SelectedTextExtractor.withAction(this@CustomWebView) {
+                                val activityContext = context ?: return@withAction
+                                loadUrl(
+                                        UrlFactory.make(
+                                                activityContext,
+                                                PreferenceApplier(activityContext).getDefaultSearchEngine(),
+                                                it
+                                        ).toString()
+                                )
+                            }
+                            return true
+                        }
+                        return callback?.onActionItemClicked(mode, item) ?: false
+                    }
+
+                    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                        return callback?.onCreateActionMode(mode, menu) ?: false
+                    }
+
+                    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                        return callback?.onPrepareActionMode(mode, menu) ?: false
+                    }
+
+                    override fun onDestroyActionMode(mode: ActionMode?) {
+                        callback?.onDestroyActionMode(mode)
+                    }
+                },
+                type
+        )
     }
 }
