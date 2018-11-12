@@ -394,5 +394,7 @@
     <string name="subhead_editor">エディタ</string>
     <string name="retry">やり直す</string>
     <string name="message_preview_failed">エラーが発生しました。やり直してください</string>
+    <string name="install">インストール</string>
+    <string name="message_install_suggestion_google_app">Google 検索アプリをインストールしてください。</string>
 
 </resources>

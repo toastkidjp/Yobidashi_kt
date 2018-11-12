@@ -399,5 +399,7 @@
     <string name="subhead_editor">Editor</string>
     <string name="retry">Retry</string>
     <string name="message_preview_failed">It has occurred error, please would you attempt to retry?</string>
+    <string name="install">Install</string>
+    <string name="message_install_suggestion_google_app">Google 検索アプリをインストールしてください。</string>
 
 </resources>
