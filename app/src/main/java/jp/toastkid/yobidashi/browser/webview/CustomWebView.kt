@@ -48,15 +48,18 @@ internal class CustomWebView(context: Context) : WebView(context) {
                 object : ActionMode.Callback {
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                         if (TextUtils.equals("Web search", item?.title)) {
-                            SelectedTextExtractor.withAction(this@CustomWebView) {
+                            SelectedTextExtractor.withAction(this@CustomWebView) { word ->
+                                context?.let {
+                                    val url = UrlFactory.make(
+                                            it,
+                                            PreferenceApplier(it).getDefaultSearchEngine(),
+                                            word
+                                    ).toString()
+
+                                    loadUrl(url)
+                                }
                                 val activityContext = context ?: return@withAction
-                                loadUrl(
-                                        UrlFactory.make(
-                                                activityContext,
-                                                PreferenceApplier(activityContext).getDefaultSearchEngine(),
-                                                it
-                                        ).toString()
-                                )
+
                             }
                             return true
                         }
