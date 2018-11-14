@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.editor
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -16,16 +15,14 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.yobidashi.libs.TextInputs
 
 /**
  * @author toastkidjp
  */
-class InputNameDialogFragment : DialogFragment() {
+class PasteAsConfirmationDialog : DialogFragment() {
 
     interface Callback {
-        fun onClickInputName(fileName: String)
+        fun onClickPasteAs()
     }
 
     private var callback: Callback? = null
@@ -37,42 +34,20 @@ class InputNameDialogFragment : DialogFragment() {
         if (targetFragment is Callback) {
             callback = targetFragment
         }
-
-        val inputLayout = TextInputs.withDefaultInput(activityContext, DEFAULT_FILE_NAME)
-
-        val dialog = AlertDialog.Builder(activityContext)
+        return AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.title_dialog_input_file_name))
-                .setView(inputLayout)
+                .setMessage(R.string.message_paste_as_dialog)
                 .setPositiveButton(R.string.save) { d, _ ->
-                    if (inputLayout.editText?.text?.isEmpty() as Boolean) {
-                        d.dismiss()
-                        return@setPositiveButton
-                    }
-
-                    callback?.onClickInputName("${inputLayout.editText?.text.toString()}.txt")
+                    callback?.onClickPasteAs()
                     d.dismiss()
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .create()
-        dialog.setOnShowListener {
-            (activity as? Activity)?.let { activity ->
-                inputLayout.editText?.let { editText ->
-                    Inputs.showKeyboard(activity, editText)
-                }
-            }
-        }
-        return dialog
     }
 
     companion object {
-
-        /**
-         * Default file name.
-         */
-        private const val DEFAULT_FILE_NAME: String = "memo"
-
         fun show(context: Context) {
-            val dialogFragment = InputNameDialogFragment()
+            val dialogFragment = PasteAsConfirmationDialog()
 
             if (context is FragmentActivity) {
                 val supportFragmentManager = context.supportFragmentManager
@@ -81,7 +56,7 @@ class InputNameDialogFragment : DialogFragment() {
                 dialogFragment.setTargetFragment(target, 1)
                 dialogFragment.show(
                         supportFragmentManager,
-                        InputNameDialogFragment::class.java.simpleName
+                        dialogFragment::class.java.simpleName
                 )
             }
         }

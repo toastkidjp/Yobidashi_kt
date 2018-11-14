@@ -46,10 +46,9 @@ import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
-import jp.toastkid.yobidashi.editor.ClearTextDialogFragment
-import jp.toastkid.yobidashi.editor.EditorModule
-import jp.toastkid.yobidashi.editor.InputNameDialogFragment
+import jp.toastkid.yobidashi.editor.*
 import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
@@ -85,7 +84,8 @@ class BrowserFragment : BaseFragment(),
         TabListClearDialogFragment.Callback,
         UserAgentDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
-        InputNameDialogFragment.Callback
+        InputNameDialogFragment.Callback,
+        PasteAsConfirmationDialog.Callback
 {
 
     /**
@@ -896,6 +896,15 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickInputName(fileName: String) {
         editor.assignNewFile(fileName)
+    }
+
+    override fun onClickPasteAs() {
+        val activityContext = context ?: return
+        val primary = Clipboard.getPrimary(activityContext)
+        if (TextUtils.isEmpty(primary)) {
+            return
+        }
+        editor.insert(Quotation(primary))
     }
 
     override fun onPause() {
