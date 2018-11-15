@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 /**
  * @author toastkidjp
  */
-class PasteAsConfirmationDialog : DialogFragment() {
+class PasteAsConfirmationDialogFragment : DialogFragment() {
 
     interface Callback {
         fun onClickPasteAs()
@@ -47,7 +47,7 @@ class PasteAsConfirmationDialog : DialogFragment() {
 
     companion object {
         fun show(context: Context) {
-            val dialogFragment = PasteAsConfirmationDialog()
+            val dialogFragment = PasteAsConfirmationDialogFragment()
 
             if (context is FragmentActivity) {
                 val supportFragmentManager = context.supportFragmentManager

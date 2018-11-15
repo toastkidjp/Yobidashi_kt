@@ -158,7 +158,7 @@ class EditorModule(
      * Paste clipped text as Markdown's quotation style.
      */
     fun pasteAsQuotation() {
-        PasteAsConfirmationDialog.show(binding.root.context)
+        PasteAsConfirmationDialogFragment.show(binding.root.context)
     }
 
     /**

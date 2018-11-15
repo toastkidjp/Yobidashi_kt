@@ -85,7 +85,7 @@ class BrowserFragment : BaseFragment(),
         UserAgentDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
-        PasteAsConfirmationDialog.Callback
+        PasteAsConfirmationDialogFragment.Callback
 {
 
     /**
