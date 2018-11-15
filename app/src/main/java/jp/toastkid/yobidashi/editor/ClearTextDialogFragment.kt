@@ -69,7 +69,7 @@ class ClearTextDialogFragment : DialogFragment() {
                 dialogFragment.setTargetFragment(target, 1)
                 dialogFragment.show(
                         supportFragmentManager,
-                        ClearTextDialogFragment::class.java.simpleName
+                        dialogFragment::class.java.simpleName
                 )
             }
         }
