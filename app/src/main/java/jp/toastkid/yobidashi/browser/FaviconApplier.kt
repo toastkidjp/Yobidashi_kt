@@ -12,13 +12,26 @@ import java.io.File
  */
 class FaviconApplier(context: Context) {
 
+    /**
+     * Favicon file directory.
+     */
     private val favicons: FilesDir = FilesDir(context, "favicons")
 
-    fun assignFile(urlstr: String): File {
-        return favicons.assignNewFile(Uri.parse(urlstr).host + ".png")
+    /**
+     * Assign file.
+     *
+     * @param urlStr URL string
+     */
+    fun assignFile(urlStr: String): File {
+        return favicons.assignNewFile(Uri.parse(urlStr).host + ".png")
     }
 
-    fun makePath(urlstr: String): String {
-        return assignFile(urlstr).absolutePath
+    /**
+     * Make file path.
+     *
+     * @param urlStr URL string
+     */
+    fun makePath(urlStr: String): String {
+        return assignFile(urlStr).absolutePath
     }
 }
