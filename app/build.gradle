@@ -63,7 +63,7 @@ android {
 
 dependencies {
 
-    def supportLibVersion = '27.1.0'
+    def supportLibVersion = '27.1.1'
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
     implementation "com.android.support:design:${supportLibVersion}"
     implementation "com.android.support:customtabs:${supportLibVersion}"
@@ -79,8 +79,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation 'com.larswerkman:HoloColorPicker:1.5'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.squareup.moshi:moshi:1.5.0'
     implementation 'com.cleveroad:cycle-menu:1.0.1'
     implementation 'org.jsoup:jsoup:1.10.3'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
     implementation 'com.github.gfx.android.orma:orma:4.2.5'
 
