@@ -22,16 +22,12 @@ class FaviconApplier(context: Context) {
      *
      * @param urlStr URL string
      */
-    fun assignFile(urlStr: String): File {
-        return favicons.assignNewFile("${urlStr.toUri().host}.png")
-    }
+    fun assignFile(urlStr: String): File = favicons.assignNewFile("${urlStr.toUri().host}.png")
 
     /**
      * Make file path.
      *
      * @param urlStr URL string
      */
-    fun makePath(urlStr: String): String {
-        return assignFile(urlStr).absolutePath
-    }
+    fun makePath(urlStr: String): String = assignFile(urlStr).absolutePath
 }
