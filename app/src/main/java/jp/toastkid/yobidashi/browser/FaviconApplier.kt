@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
 import android.content.Context
-import android.net.Uri
+import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import java.io.File
 
@@ -23,7 +23,7 @@ class FaviconApplier(context: Context) {
      * @param urlStr URL string
      */
     fun assignFile(urlStr: String): File {
-        return favicons.assignNewFile(Uri.parse(urlStr).host + ".png")
+        return favicons.assignNewFile("${urlStr.toUri().host}.png")
     }
 
     /**
