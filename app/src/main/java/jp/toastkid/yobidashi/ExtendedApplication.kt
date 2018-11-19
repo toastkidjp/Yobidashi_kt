@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi
 
 import android.app.Application
+import android.os.Build
+import android.webkit.WebView
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -30,6 +32,10 @@ class ExtendedApplication : Application() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                WebView.setWebContentsDebuggingEnabled(true);
+            }
         }
 
         val preferenceApplier = PreferenceApplier(this)
