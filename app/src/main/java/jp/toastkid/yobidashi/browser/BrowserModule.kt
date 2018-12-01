@@ -221,7 +221,6 @@ class BrowserModule(
     }
 
     fun loadUrl(url: String) {
-        Timber.i("url = $url")
         if (url.isEmpty()) {
             return
         }
