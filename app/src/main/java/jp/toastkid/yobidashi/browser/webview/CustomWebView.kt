@@ -67,8 +67,6 @@ internal class CustomWebView(context: Context) : WebView(context) {
 
                                         loadUrl(url)
                                     }
-                                    val activityContext = context ?: return@withAction
-
                                 }
                                 return true
                             }
