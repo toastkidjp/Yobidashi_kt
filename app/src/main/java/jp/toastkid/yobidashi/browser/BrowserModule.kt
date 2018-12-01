@@ -274,15 +274,12 @@ class BrowserModule(
         currentView()?.pageDown(true)
     }
 
-    fun back(): Boolean {
-        return currentView()?.let {
-            if (it.canGoBack()) {
-                it.goBack()
-                return true
-            }
-            return false
-        } ?: false
-    }
+    fun back() = currentView()?.let {
+        return if (it.canGoBack()) {
+            it.goBack()
+            true
+        } else false
+    } ?: false
 
     fun forward() = currentView()?.let {
         if (it.canGoForward()) {
