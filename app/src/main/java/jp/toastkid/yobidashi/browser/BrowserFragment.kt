@@ -843,13 +843,13 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickSaveForBackground(url: String) {
         val activityContext = context ?: return
-        storeImage(url, activityContext).subscribe({
+        storeImage(url, activityContext).subscribe {
             Toaster.snackShort(
                     binding?.root as View,
                     R.string.message_done_save,
                     preferenceApplier().colorPair()
             )
-        }).addTo(disposables)
+        }.addTo(disposables)
     }
 
     override fun onClickDownloadImage(url: String) {
