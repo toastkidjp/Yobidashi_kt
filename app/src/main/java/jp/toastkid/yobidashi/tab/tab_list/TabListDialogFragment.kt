@@ -1,50 +1,48 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
+import android.app.Dialog
+import android.databinding.DataBindingUtil
+import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.View
+import android.view.LayoutInflater
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.databinding.ModuleTabListBinding
+import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.model.Tab
 
 /**
- * WebTab list module.
+ * Tab list dialog fragment.
  *
- * @param binding
- * @param tabAdapter
- * @param parent
- * @param closeAction
- * @param openEditorAction
- * @param openPdfAction
+ *
+private val tabAdapter: TabAdapter,
  *
  * @author toastkidjp
  */
-class TabListModule(
-        private val binding: ModuleTabListBinding,
-        private val tabAdapter: TabAdapter,
-        private val parent: View,
-        private val closeAction: () -> Unit,
-        private val openEditorAction: () -> Unit,
-        private val openPdfAction: () -> Unit
-) : BaseModule(binding.root) {
+class TabListDialogFragment : DialogFragment() {
+
+    private lateinit var binding: DialogFragmentTabListBinding
 
     /**
      * WebTab list adapter.
      */
-    private val adapter: Adapter by lazy { Adapter(context(), tabAdapter, closeAction) }
+    private lateinit var adapter: Adapter
 
     /**
      * For showing [android.support.design.widget.Snackbar].
      */
-    private val colorPair: ColorPair
+    private lateinit var colorPair: ColorPair
+
+    private var callback: TabListDialogFragment.Callback? = null
 
     /**
      * For showing [android.support.design.widget.Snackbar].
@@ -56,12 +54,49 @@ class TabListModule(
      */
     private var lastTabId: String = ""
 
-    /**
-     * Initialize with parent.
-     */
-    init {
-        val preferenceApplier = PreferenceApplier(parent.context)
+    interface Callback {
+        fun onCloseTabListDialogFragment()
+        fun onOpenEditor()
+        fun onOpenPdf()
+        fun openNewTabFromTabList()
+        fun tabIndexFromTabList(): Int
+        fun currentTabIdFromTabList(): String
+        fun replaceTabFromTabList(tab: Tab)
+        fun getTabByIndexFromTabList(position: Int): Tab
+        fun closeTabFromTabList(position: Int)
+        fun getTabAdapterSizeFromTabList(): Int
+        fun swapTabsFromTabList(from: Int, to: Int)
+        fun tabIndexOfFromTabList(tab: Tab): Int
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val activityContext = context
+                ?: return super.onCreateDialog(savedInstanceState)
+
+        binding = DataBindingUtil.inflate(
+                LayoutInflater.from(activityContext),
+                R.layout.dialog_fragment_tab_list, null, false)
+
+        val preferenceApplier = PreferenceApplier(activityContext)
         colorPair = preferenceApplier.colorPair()
+
+        val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
+        if (target is TabListDialogFragment.Callback) {
+            callback = target
+        } else {
+            return super.onCreateDialog(savedInstanceState)
+        }
+
+        val index = callback?.tabIndexFromTabList() ?: 0
+
+        adapter = Adapter(activityContext, callback as Callback)
+        adapter.setCurrentIndex(index)
+        adapter.notifyDataSetChanged()
 
         initRecyclerView(binding.recyclerView)
 
@@ -71,11 +106,22 @@ class TabListModule(
 
         initClearTabs(binding.clearTabs)
 
-        binding.addPdfTab.setOnClickListener { openPdfAction() }
+        binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
 
-        binding.root.setOnClickListener {
-            closeAction()
+        binding.recyclerView.layoutManager.scrollToPosition(index)
+        binding.recyclerView.scheduleLayoutAnimation()
+        if (firstLaunch) {
+            Toaster.snackShort(
+                    binding.recyclerView,
+                    R.string.message_tutorial_remove_tab,
+                    colorPair
+            )
+            firstLaunch = false
         }
+        lastTabId = callback?.currentTabIdFromTabList() ?: ""
+        return AlertDialog.Builder(activityContext)
+                .setView(binding.root)
+                .create()
     }
 
     /**
@@ -84,8 +130,8 @@ class TabListModule(
     private fun initAddEditorTabButton() =
             binding.addEditorTab.setOnClickListener {
                 it.isClickable = false
-                openEditorAction()
-                closeAction()
+                callback?.onOpenEditor()
+                callback?.onCloseTabListDialogFragment()
                 it.isClickable = true
             }
 
@@ -116,7 +162,8 @@ class TabListModule(
      * @param recyclerView
      */
     private fun initRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
                     override fun onMove(
@@ -144,23 +191,17 @@ class TabListModule(
     private fun initAddTabButton(addTab: FloatingActionButton) =
             addTab.setOnClickListener { v ->
                 addTab.isClickable = false
-                tabAdapter.openNewWebTab()
+                callback?.openNewTabFromTabList()
                 adapter.notifyItemInserted(adapter.itemCount - 1)
-                closeAction()
+                callback?.onCloseTabListDialogFragment()
                 addTab.isClickable = true
             }
 
-    override fun show() {
-        binding.recyclerView.layoutManager.scrollToPosition(tabAdapter.index())
-        adapter.setCurrentIndex(tabAdapter.index())
-        adapter.notifyDataSetChanged()
-        binding.recyclerView.scheduleLayoutAnimation()
-        super.show()
-        if (firstLaunch) {
-            Toaster.snackShort(parent, R.string.message_tutorial_remove_tab, colorPair)
-            firstLaunch = false
+    companion object {
+        fun make(target: Fragment): TabListDialogFragment {
+            val tabListDialogFragment = TabListDialogFragment()
+            tabListDialogFragment.setTargetFragment(target, 1)
+            return tabListDialogFragment
         }
-        lastTabId = tabAdapter.currentTabId()
     }
-
 }

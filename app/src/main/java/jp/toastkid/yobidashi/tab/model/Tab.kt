@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.tab.model
 /**
  * @author toastkidjp
  */
-internal interface Tab {
+interface Tab {
 
     var thumbnailPath: String
 

@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.TextUtils
@@ -65,8 +66,9 @@ import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
-import jp.toastkid.yobidashi.tab.tab_list.TabListModule
+import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import okhttp3.Request
 import timber.log.Timber
 import java.io.File
@@ -86,7 +88,8 @@ class BrowserFragment : BaseFragment(),
         UserAgentDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
-        PasteAsConfirmationDialog.Callback
+        PasteAsConfirmationDialog.Callback,
+        TabListDialogFragment.Callback
 {
 
     /**
@@ -102,7 +105,7 @@ class BrowserFragment : BaseFragment(),
     /**
      * WebTab list module.
      */
-    private lateinit var tabListModule: TabListModule
+    private var tabListDialogFragment: DialogFragment? = null
 
     /**
      * Search-with-clip object.
@@ -250,16 +253,6 @@ class BrowserFragment : BaseFragment(),
                 this::onEmptyTabs
         )
 
-        tabListModule = TabListModule(
-                DataBindingUtil.inflate(
-                        LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
-                tabs,
-                binding?.root as View,
-                this::hideTabList,
-                this::openEditorTab,
-                this::openPdfTabFromStorage
-        )
-
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
         setHasOptionsMenu(true)
@@ -271,7 +264,7 @@ class BrowserFragment : BaseFragment(),
      * Action on empty tabs.
      */
     private fun onEmptyTabs() {
-        tabListModule.hide()
+        tabListDialogFragment?.dismiss()
         tabs.openNewWebTab()
     }
 
@@ -512,9 +505,7 @@ class BrowserFragment : BaseFragment(),
      * Initialize tab list.
      */
     private fun initTabListIfNeed() {
-        if (binding?.tabListContainer?.childCount == 0) {
-            binding?.tabListContainer?.addView(tabListModule.moduleView)
-        }
+        tabListDialogFragment = TabListDialogFragment.make(this)
     }
 
     /**
@@ -522,7 +513,7 @@ class BrowserFragment : BaseFragment(),
      */
     private fun switchTabList() {
         initTabListIfNeed()
-        if (tabListModule.isVisible) {
+        if (tabListDialogFragment?.isVisible == true) {
             hideTabList()
         } else {
             tabs.updateCurrentTab()
@@ -669,7 +660,7 @@ class BrowserFragment : BaseFragment(),
      */
     private fun hideOption(): Boolean {
 
-        if (tabListModule.isVisible) {
+        if (tabListDialogFragment?.isVisible == true) {
             hideTabList()
             return true
         }
@@ -686,7 +677,7 @@ class BrowserFragment : BaseFragment(),
      * Hide tab list.
      */
     private fun hideTabList() {
-        tabListModule.hide()
+        tabListDialogFragment?.dismiss()
         tabs.replaceToCurrentTab(false)
     }
 
@@ -694,7 +685,7 @@ class BrowserFragment : BaseFragment(),
      * Show tab list.
      */
     private fun showTabList() {
-        tabListModule.show()
+        tabListDialogFragment?.show(fragmentManager, "")
     }
 
     override fun titleId(): Int = R.string.title_browser
@@ -921,10 +912,33 @@ class BrowserFragment : BaseFragment(),
         editor.insert(Quotation(primary))
     }
 
+    override fun onCloseTabListDialogFragment() = hideTabList()
+
+    override fun onOpenEditor() = openEditorTab()
+
+    override fun onOpenPdf() = openPdfTabFromStorage()
+
+    override fun openNewTabFromTabList() = tabs.openNewWebTab()
+
+    override fun tabIndexFromTabList() = tabs.index()
+
+    override fun currentTabIdFromTabList() = tabs.currentTabId()
+
+    override fun replaceTabFromTabList(tab: Tab) = tabs.replace(tab)
+
+    override fun getTabByIndexFromTabList(position: Int): Tab = tabs.getTabByIndex(position)
+
+    override fun closeTabFromTabList(position: Int) = tabs.closeTab(position)
+
+    override fun getTabAdapterSizeFromTabList(): Int = tabs.size()
+
+    override fun swapTabsFromTabList(from: Int, to: Int) = tabs.swap(from, to)
+
+    override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
+
     override fun onPause() {
         super.onPause()
         editor.saveIfNeed()
-        binding?.tabListContainer?.removeAllViews()
         hideOption()
     }
 
