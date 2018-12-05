@@ -634,10 +634,9 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
 
     override fun hideToolbar() {
         when (preferenceApplier.browserScreenMode()) {
-            ScreenMode.FIXED -> return
+            ScreenMode.FIXED -> Unit
             ScreenMode.FULL_SCREEN -> {
                 binding.appBarMain?.toolbar?.visibility = View.GONE
-                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             }
             ScreenMode.EXPANDABLE -> {
                 binding.appBarMain?.toolbar?.animate()?.let {
@@ -646,7 +645,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
                             .setDuration(HEADER_HIDING_DURATION)
                             .withStartAction { binding.appBarMain?.content?.requestLayout() }
                             .withEndAction   {
-                                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                                 binding.appBarMain?.toolbar?.visibility = View.GONE
                             }
                             .start()
@@ -660,9 +658,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
             ScreenMode.FIXED -> {
                 binding.appBarMain?.toolbar?.visibility = View.VISIBLE
             }
-            ScreenMode.FULL_SCREEN -> {
-                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            }
+            ScreenMode.FULL_SCREEN -> Unit
             ScreenMode.EXPANDABLE -> {
                 binding.appBarMain?.toolbar?.animate()?.let {
                     it.cancel()
@@ -670,7 +666,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
                             .setDuration(HEADER_HIDING_DURATION)
                             .withStartAction {
                                 binding.appBarMain?.toolbar?.visibility = View.VISIBLE
-                                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                             }
                             .withEndAction   { binding.appBarMain?.content?.requestLayout() }
                             .start()
