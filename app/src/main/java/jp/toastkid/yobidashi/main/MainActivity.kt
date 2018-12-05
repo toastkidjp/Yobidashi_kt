@@ -762,7 +762,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
          * @return [Intent]
          */
         fun makeIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
-                .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
+                .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
         /**
          * Make browser intent.
@@ -772,11 +772,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
          *
          * @return [Intent]
          */
-        fun makeBrowserIntent(context: Context, uri: Uri): Intent
-                = Intent(context, MainActivity::class.java).apply {
-                    action = Intent.ACTION_VIEW
-                    data = uri
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        fun makeBrowserIntent(context: Context, uri: Uri): Intent = Intent(context, MainActivity::class.java)
+                .also {
+                    it.action = Intent.ACTION_VIEW
+                    it.data = uri
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
 
         /**
@@ -786,10 +786,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
          * @param dayOfMonth
          * @return [Intent]
          */
-        fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent
-                = makeIntent(context).apply {
-                    putExtra(KEY_EXTRA_MONTH, month)
-                    putExtra(KEY_EXTRA_DOM, dayOfMonth)
+        fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent = makeIntent(context)
+                .also {
+                    it.putExtra(KEY_EXTRA_MONTH, month)
+                    it.putExtra(KEY_EXTRA_DOM, dayOfMonth)
                 }
 
     }
