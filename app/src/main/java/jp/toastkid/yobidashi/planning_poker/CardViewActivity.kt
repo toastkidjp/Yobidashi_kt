@@ -26,8 +26,8 @@ class CardViewActivity : AppCompatActivity() {
         setContentView(LAYOUT_ID)
 
         cardFragment = CardFragment()
-        cardFragment.arguments = Bundle().apply {
-            putString(EXTRA_KEY_CARD_TEXT, intent.getStringExtra(EXTRA_KEY_CARD_TEXT))
+        cardFragment.arguments = Bundle().also {
+            it.putString(EXTRA_KEY_CARD_TEXT, intent.getStringExtra(EXTRA_KEY_CARD_TEXT))
         }
         addFragment(cardFragment)
     }
@@ -66,6 +66,6 @@ class CardViewActivity : AppCompatActivity() {
                 context: Context,
                 text: String
         ): Intent = Intent(context, CardViewActivity::class.java)
-                .apply { putExtra(EXTRA_KEY_CARD_TEXT, text) }
+                .also { it.putExtra(EXTRA_KEY_CARD_TEXT, text) }
     }
 }
