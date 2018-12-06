@@ -199,9 +199,8 @@ class BrowserFragment : BaseFragment(),
         searchWithClip = SearchWithClip(
                 cm,
                 binding?.root as View,
-                colorPair,
-                { tabs.openNewWebTab() }
-        )
+                colorPair
+        ) { tabs.openNewWebTab() }
         searchWithClip.invoke()
 
         editor = EditorModule(
