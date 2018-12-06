@@ -614,7 +614,7 @@ class BrowserFragment : BaseFragment(),
             cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
                     ?.also { DrawableCompat.setTint(it, color) }
-                    ?.let { drawable -> it.setCornerImageDrawable(drawable) }
+                    ?.let { drawable -> cycleMenu.setCornerImageDrawable(drawable) }
         }
 
         browserModule.resizePool(preferenceApplier.poolSize)
