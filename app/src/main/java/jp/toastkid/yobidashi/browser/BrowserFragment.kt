@@ -606,12 +606,12 @@ class BrowserFragment : BaseFragment(),
 
         val preferenceApplier = preferenceApplier()
 
-        binding?.cycleMenu?.also {
+        binding?.cycleMenu?.also { cycleMenu ->
             val menuPos = preferenceApplier.menuPos()
-            it.setCorner(menuPos)
+            cycleMenu.setCorner(menuPos)
             editor.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
-            it.setItemsBackgroundTint(ColorStateList.valueOf(color))
+            cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
                     ?.also { DrawableCompat.setTint(it, color) }
                     ?.let { drawable -> it.setCornerImageDrawable(drawable) }
