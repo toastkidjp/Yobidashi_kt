@@ -103,7 +103,7 @@ class BrowserFragment : BaseFragment(),
     private lateinit var tabs: TabAdapter
 
     /**
-     * WebTab list module.
+     * Tab list dialog fragment.
      */
     private var tabListDialogFragment: DialogFragment? = null
 
