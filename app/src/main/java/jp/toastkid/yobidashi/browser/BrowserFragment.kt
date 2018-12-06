@@ -582,8 +582,15 @@ class BrowserFragment : BaseFragment(),
         val colorPair = colorPair()
         editor.applySettings()
 
-        titleSubject.subscribe({ progressBarCallback.onTitleChanged(it) }).addTo(disposables)
-        progressSubject.subscribe({ progressBarCallback.onProgressChanged(it) }).addTo(disposables)
+        titleSubject.subscribe(
+                { progressBarCallback.onTitleChanged(it) },
+                Timber::e
+        ).addTo(disposables)
+
+        progressSubject.subscribe(
+                { progressBarCallback.onProgressChanged(it) },
+                Timber::e
+        ).addTo(disposables)
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
