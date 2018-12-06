@@ -742,7 +742,7 @@ class BrowserFragment : BaseFragment(),
                             IntentFactory.makeOpenDocument("application/pdf"),
                             REQUEST_CODE_OPEN_PDF
                     )
-                }
+                }?.addTo(disposables)
     }
 
     /**
