@@ -734,15 +734,18 @@ class BrowserFragment : BaseFragment(),
     private fun openPdfTabFromStorage() {
         rxPermissions
                 ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                ?.subscribe { granted ->
-                    if (!granted) {
-                        return@subscribe
-                    }
-                    startActivityForResult(
-                            IntentFactory.makeOpenDocument("application/pdf"),
-                            REQUEST_CODE_OPEN_PDF
-                    )
-                }?.addTo(disposables)
+                ?.subscribe(
+                        { granted ->
+                            if (!granted) {
+                                return@subscribe
+                            }
+                            startActivityForResult(
+                                    IntentFactory.makeOpenDocument("application/pdf"),
+                                    REQUEST_CODE_OPEN_PDF
+                            )
+                        },
+                        Timber::e
+                )?.addTo(disposables)
     }
 
     /**
