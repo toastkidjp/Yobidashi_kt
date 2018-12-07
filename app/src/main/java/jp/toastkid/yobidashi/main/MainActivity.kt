@@ -20,10 +20,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -39,6 +36,7 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.LinearBarcodeReader
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ProgressBarCallback
+import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -635,24 +633,44 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
     }
 
     override fun hideToolbar() {
-        binding.appBarMain?.toolbar?.animate()?.let {
-            it.cancel()
-            it.translationY(-resources.getDimension(R.dimen.toolbar_height))
-                    .setDuration(HEADER_HIDING_DURATION)
-                    .withStartAction { binding.appBarMain?.content?.requestLayout() }
-                    .withEndAction   { binding.appBarMain?.toolbar?.visibility = View.GONE }
-                    .start()
+        when (preferenceApplier.browserScreenMode()) {
+            ScreenMode.FIXED -> Unit
+            ScreenMode.FULL_SCREEN -> {
+                binding.appBarMain?.toolbar?.visibility = View.GONE
+            }
+            ScreenMode.EXPANDABLE -> {
+                binding.appBarMain?.toolbar?.animate()?.let {
+                    it.cancel()
+                    it.translationY(-resources.getDimension(R.dimen.toolbar_height))
+                            .setDuration(HEADER_HIDING_DURATION)
+                            .withStartAction { binding.appBarMain?.content?.requestLayout() }
+                            .withEndAction   {
+                                binding.appBarMain?.toolbar?.visibility = View.GONE
+                            }
+                            .start()
+                }
+            }
         }
     }
 
     override fun showToolbar() {
-        binding.appBarMain?.toolbar?.animate()?.let {
-            it.cancel()
-            it.translationY(0f)
-                    .setDuration(HEADER_HIDING_DURATION)
-                    .withStartAction { binding.appBarMain?.toolbar?.visibility = View.VISIBLE }
-                    .withEndAction   { binding.appBarMain?.content?.requestLayout() }
-                    .start()
+        when (preferenceApplier.browserScreenMode()) {
+            ScreenMode.FIXED -> {
+                binding.appBarMain?.toolbar?.visibility = View.VISIBLE
+            }
+            ScreenMode.FULL_SCREEN -> Unit
+            ScreenMode.EXPANDABLE -> {
+                binding.appBarMain?.toolbar?.animate()?.let {
+                    it.cancel()
+                    it.translationY(0f)
+                            .setDuration(HEADER_HIDING_DURATION)
+                            .withStartAction {
+                                binding.appBarMain?.toolbar?.visibility = View.VISIBLE
+                            }
+                            .withEndAction   { binding.appBarMain?.content?.requestLayout() }
+                            .start()
+                }
+            }
         }
     }
 

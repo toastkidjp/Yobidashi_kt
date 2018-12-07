@@ -40,7 +40,8 @@ class BrowserModule(
         private val context: Context,
         private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
-        private val historyAddingCallback: (String, String) -> Unit
+        private val historyAddingCallback: (String, String) -> Unit,
+        scrollCallback: (Int, Int, Int, Int) -> Unit
 ) {
 
     private val webViewPool: WebViewPool
@@ -62,6 +63,7 @@ class BrowserModule(
                 context,
                 { makeWebViewClient() },
                 { makeWebChromeClient() },
+                scrollCallback,
                 preferenceApplier.poolSize
         )
     }
@@ -219,7 +221,6 @@ class BrowserModule(
     }
 
     fun loadUrl(url: String) {
-        Timber.i("url = $url")
         if (url.isEmpty()) {
             return
         }
@@ -273,15 +274,12 @@ class BrowserModule(
         currentView()?.pageDown(true)
     }
 
-    fun back(): Boolean {
-        return currentView()?.let {
-            if (it.canGoBack()) {
-                it.goBack()
-                return true
-            }
-            return false
-        } ?: false
-    }
+    fun back() = currentView()?.let {
+        return if (it.canGoBack()) {
+            it.goBack()
+            true
+        } else false
+    } ?: false
 
     fun forward() = currentView()?.let {
         if (it.canGoForward()) {
@@ -355,10 +353,6 @@ class BrowserModule(
      */
     fun disablePullToRefresh(): Boolean =
             currentView()?.let { !(it as CustomWebView).enablePullToRefresh || it.scrollY != 0 } ?: false
-    
-    fun currentUrl(): String? = currentView()?.url
-
-    fun currentTitle(): String = currentView()?.title ?: ""
 
     /**
      * Stop loading in current tab.
@@ -367,6 +361,9 @@ class BrowserModule(
         currentView()?.stopLoading()
     }
 
+    /**
+     * Dispose [WebViewPool].
+     */
     fun dispose() {
         webViewPool.dispose()
     }
@@ -403,10 +400,40 @@ class BrowserModule(
         }
     }
 
+    /**
+     * Return current [WebView].
+     *
+     * @return [WebView]
+     */
     private fun currentView(): WebView? = webViewPool.getLatest()
 
+    /**
+     * Return current [WebView]'s URL.
+     *
+     * @return URL string (Nullable)
+     */
+    fun currentUrl(): String? = currentView()?.url
+
+    /**
+     * Return current [WebView]'s title.
+     *
+     * @return title (NonNull)
+     */
+    fun currentTitle(): String = currentView()?.title ?: ""
+
+    /**
+     * Get [WebView] with tab ID.
+     *
+     * @param tabId Tab's ID.
+     * @return [WebView]
+     */
     fun getWebView(tabId: String?): WebView? = webViewPool.get(tabId)
 
+    /**
+     * Detach [WebView] with tab ID.
+     *
+     * @param tabId Tab's ID.
+     */
     fun detachWebView(tabId: String?) = webViewPool.remove(tabId)
 
     fun onSaveInstanceState(outState: Bundle) {
@@ -426,6 +453,11 @@ class BrowserModule(
         } ?: bundleOf()
     }
 
+    /**
+     * Resize [WebViewPool].
+     *
+     * @param poolSize
+     */
     fun resizePool(poolSize: Int) {
         webViewPool.resize(poolSize)
     }

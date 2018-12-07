@@ -18,10 +18,19 @@ import jp.toastkid.yobidashi.search.UrlFactory
  */
 internal class CustomWebView(context: Context) : WebView(context) {
 
+    /**
+     * Pull-to-Refresh enability.
+     */
     var enablePullToRefresh = false
 
+    /**
+     * Scroll listener.
+     */
     var scrollListener: (Int, Int, Int, Int) -> Unit = { _, _, _, _  -> }
 
+    /**
+     * Scrolling value.
+     */
     var scrolling: Int = 0
 
     @SuppressLint("ClickableViewAccessibility")
@@ -58,8 +67,6 @@ internal class CustomWebView(context: Context) : WebView(context) {
 
                                         loadUrl(url)
                                     }
-                                    val activityContext = context ?: return@withAction
-
                                 }
                                 return true
                             }

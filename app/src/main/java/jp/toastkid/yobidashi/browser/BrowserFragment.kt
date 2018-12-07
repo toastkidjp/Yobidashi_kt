@@ -72,6 +72,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import kotlin.math.abs
 
 /**
  * Internal browser fragment.
@@ -230,7 +231,14 @@ class BrowserFragment : BaseFragment(),
                     }
                     progressSubject.onNext(progress)
                 },
-                historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
+                historyAddingCallback = { title, url -> tabs.addHistory(title, url) },
+                scrollCallback = { _, vertical, _, old ->
+                    val difference = vertical - old
+                    if (abs(difference) < 15) {
+                        return@BrowserModule
+                    }
+                    if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
+                }
         )
 
         tabs = TabAdapter(
@@ -613,17 +621,23 @@ class BrowserFragment : BaseFragment(),
 
         browserModule.resizePool(preferenceApplier.poolSize)
 
-        if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
-                || editor.isVisible
-                || pdf.isVisible
-                ) {
-            hideHeader()
-            return
-        }
-
         binding?.swipeRefresher?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
+        }
+
+        val browserScreenMode = preferenceApplier.browserScreenMode()
+        if (browserScreenMode == ScreenMode.FULL_SCREEN
+                || editor.isVisible
+                || pdf.isVisible
+        ) {
+            hideHeader()
+            return
+        }
+        if (browserScreenMode == ScreenMode.EXPANDABLE
+            || browserScreenMode == ScreenMode.FIXED) {
+            toolbarAction?.showToolbar()
+            return
         }
     }
 
@@ -829,13 +843,13 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickSaveForBackground(url: String) {
         val activityContext = context ?: return
-        storeImage(url, activityContext).subscribe({
+        storeImage(url, activityContext).subscribe {
             Toaster.snackShort(
                     binding?.root as View,
                     R.string.message_done_save,
                     preferenceApplier().colorPair()
             )
-        }).addTo(disposables)
+        }.addTo(disposables)
     }
 
     override fun onClickDownloadImage(url: String) {
