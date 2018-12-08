@@ -27,13 +27,13 @@ import jp.toastkid.yobidashi.tab.model.Tab
 /**
  * Tab list dialog fragment.
  *
- *
-private val tabAdapter: TabAdapter,
- *
  * @author toastkidjp
  */
 class TabListDialogFragment : DialogFragment() {
 
+    /**
+     * DataBinding object.
+     */
     private lateinit var binding: DialogFragmentTabListBinding
 
     /**
@@ -46,6 +46,9 @@ class TabListDialogFragment : DialogFragment() {
      */
     private lateinit var colorPair: ColorPair
 
+    /**
+     * Callback of tab-list adapter and BrowserFragment.
+     */
     private var callback: TabListDialogFragment.Callback? = null
 
     /**
@@ -104,6 +107,11 @@ class TabListDialogFragment : DialogFragment() {
                 }
     }
 
+    /**
+     * Initialize views.
+     *
+     * @param activityContext [Context]
+     */
     private fun initializeContentView(activityContext: Context) {
         val index = callback?.tabIndexFromTabList() ?: 0
 
@@ -212,6 +220,12 @@ class TabListDialogFragment : DialogFragment() {
             }
 
     companion object {
+
+        /**
+         * Make this DialogFragment instance.
+         *
+         * @param target target [Fragment]
+         */
         fun make(target: Fragment): TabListDialogFragment {
             val tabListDialogFragment = TabListDialogFragment()
             tabListDialogFragment.setTargetFragment(target, 1)
