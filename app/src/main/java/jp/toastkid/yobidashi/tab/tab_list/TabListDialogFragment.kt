@@ -72,11 +72,6 @@ class TabListDialogFragment : DialogFragment() {
         fun tabIndexOfFromTabList(tab: Tab): Int
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context
                 ?: return super.onCreateDialog(savedInstanceState)
@@ -122,6 +117,8 @@ class TabListDialogFragment : DialogFragment() {
             firstLaunch = false
         }
         lastTabId = callback?.currentTabIdFromTabList() ?: ""
+
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
 
         return AlertDialog.Builder(activityContext)
                 .setView(binding.root)
