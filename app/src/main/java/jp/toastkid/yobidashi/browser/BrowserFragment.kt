@@ -162,6 +162,9 @@ class BrowserFragment : BaseFragment(),
      */
     private var menuOpen: Boolean = false
 
+    /**
+     * Progress bar callback.
+     */
     private lateinit var progressBarCallback: ProgressBarCallback
 
     override fun onAttach(context: Context) {
