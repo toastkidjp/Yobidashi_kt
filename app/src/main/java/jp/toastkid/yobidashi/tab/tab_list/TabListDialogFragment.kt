@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi.tab.tab_list
 
 import android.app.Dialog
 import android.databinding.DataBindingUtil
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.DialogFragment
@@ -12,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
@@ -119,9 +122,17 @@ class TabListDialogFragment : DialogFragment() {
             firstLaunch = false
         }
         lastTabId = callback?.currentTabIdFromTabList() ?: ""
+
         return AlertDialog.Builder(activityContext)
                 .setView(binding.root)
                 .create()
+                .also {
+                    it.window?.also { window ->
+                        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT)
+                    }
+                }
     }
 
     /**
