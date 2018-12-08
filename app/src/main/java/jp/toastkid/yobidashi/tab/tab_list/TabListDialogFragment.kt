@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
 import android.app.Dialog
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -76,9 +77,6 @@ class TabListDialogFragment : DialogFragment() {
         val activityContext = context
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        binding = DataBindingUtil.inflate(
-                LayoutInflater.from(activityContext),
-                R.layout.dialog_fragment_tab_list, null, false)
 
         val preferenceApplier = PreferenceApplier(activityContext)
         colorPair = preferenceApplier.colorPair()
@@ -90,11 +88,32 @@ class TabListDialogFragment : DialogFragment() {
             return super.onCreateDialog(savedInstanceState)
         }
 
+        initializeContentView(activityContext)
+
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
+
+        return AlertDialog.Builder(activityContext)
+                .setView(binding.root)
+                .create()
+                .also {
+                    it.window?.also { window ->
+                        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT)
+                    }
+                }
+    }
+
+    private fun initializeContentView(activityContext: Context) {
         val index = callback?.tabIndexFromTabList() ?: 0
 
         adapter = Adapter(activityContext, callback as Callback)
         adapter.setCurrentIndex(index)
         adapter.notifyDataSetChanged()
+
+        binding = DataBindingUtil.inflate(
+                LayoutInflater.from(activityContext),
+                R.layout.dialog_fragment_tab_list, null, false)
 
         initRecyclerView(binding.recyclerView)
 
@@ -117,19 +136,6 @@ class TabListDialogFragment : DialogFragment() {
             firstLaunch = false
         }
         lastTabId = callback?.currentTabIdFromTabList() ?: ""
-
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
-
-        return AlertDialog.Builder(activityContext)
-                .setView(binding.root)
-                .create()
-                .also {
-                    it.window?.also { window ->
-                        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT)
-                    }
-                }
     }
 
     /**
