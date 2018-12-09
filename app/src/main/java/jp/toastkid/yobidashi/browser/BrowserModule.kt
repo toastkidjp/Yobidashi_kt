@@ -120,7 +120,7 @@ class BrowserModule(
 
             handler?.cancel()
 
-            if (context !is FragmentActivity) {
+            if (context !is FragmentActivity || context.isFinishing) {
                 return
             }
 
