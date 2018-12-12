@@ -18,6 +18,8 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
+ * Clear text confirmation dialog.
+ *
  * @author toastkidjp
  */
 class ClearTextDialogFragment : DialogFragment() {
@@ -26,6 +28,9 @@ class ClearTextDialogFragment : DialogFragment() {
         fun onClickClearInput()
     }
 
+    /**
+     * Callback of clicked positive button.
+     */
     private var callback: Callback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,6 +54,11 @@ class ClearTextDialogFragment : DialogFragment() {
 
     companion object {
 
+        /**
+         * Show this dialog.
+         *
+         * @param context [Context]
+         */
         fun show(context: Context) {
             val dialogFragment = ClearTextDialogFragment()
 
@@ -59,7 +69,7 @@ class ClearTextDialogFragment : DialogFragment() {
                 dialogFragment.setTargetFragment(target, 1)
                 dialogFragment.show(
                         supportFragmentManager,
-                        ClearTextDialogFragment::class.java.simpleName
+                        dialogFragment::class.java.simpleName
                 )
             }
         }

@@ -17,14 +17,19 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 
 /**
+ * Show confirmation of "Paste as".
+ *
  * @author toastkidjp
  */
-class PasteAsConfirmationDialog : DialogFragment() {
+class PasteAsConfirmationDialogFragment : DialogFragment() {
 
     interface Callback {
         fun onClickPasteAs()
     }
 
+    /**
+     * Callback on click positive button.
+     */
     private var callback: Callback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -46,8 +51,14 @@ class PasteAsConfirmationDialog : DialogFragment() {
     }
 
     companion object {
+
+        /**
+         * Show this dialog.
+         *
+         * @param context [Context]
+         */
         fun show(context: Context) {
-            val dialogFragment = PasteAsConfirmationDialog()
+            val dialogFragment = PasteAsConfirmationDialogFragment()
 
             if (context is FragmentActivity) {
                 val supportFragmentManager = context.supportFragmentManager
