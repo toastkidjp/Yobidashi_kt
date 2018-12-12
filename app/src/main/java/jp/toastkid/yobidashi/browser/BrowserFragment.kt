@@ -318,30 +318,30 @@ class BrowserFragment : BaseFragment(),
 
         inflater?.inflate(R.menu.browser, menu)
 
-        menu?.let {
-            it.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
+        menu?.let { menuNonNull ->
+            menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
                 switchMenu()
                 true
             }
 
-            it.findItem(R.id.open_tabs)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.open_tabs)?.setOnMenuItemClickListener {
                 switchTabList()
                 true
             }
 
             val activityContext = context ?: return@let
 
-            it.findItem(R.id.setting)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.setting)?.setOnMenuItemClickListener {
                 startActivity(SettingsActivity.makeIntent(activityContext))
                 true
             }
 
-            it.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
                 stopCurrentLoading()
                 true
             }
 
-            it.findItem(R.id.close_header)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.close_header)?.setOnMenuItemClickListener {
                 hideHeader()
                 true
             }
