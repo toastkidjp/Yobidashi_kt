@@ -34,6 +34,14 @@
                 />
         </ScrollView>
 
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/snackbar_container"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="44dp"
+            />
+
         <HorizontalScrollView
             android:id="@+id/editor_menu"
             android:layout_width="match_parent"
