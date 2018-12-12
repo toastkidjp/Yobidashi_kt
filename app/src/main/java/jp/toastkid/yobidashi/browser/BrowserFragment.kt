@@ -167,6 +167,11 @@ class BrowserFragment : BaseFragment(),
      */
     private lateinit var progressBarCallback: ProgressBarCallback
 
+    /**
+     * Floating preview object.
+     */
+    private lateinit var floatingPreview: FloatingPreview
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
@@ -810,8 +815,6 @@ class BrowserFragment : BaseFragment(),
     override fun openCurrent(url: String) {
         tabs.callLoadUrl(url)
     }
-
-    private lateinit var floatingPreview: FloatingPreview
 
     override fun preview(url: String) {
         val webView = browserModule.getWebView("preview")
