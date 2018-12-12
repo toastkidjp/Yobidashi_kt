@@ -115,12 +115,12 @@ class BrowserFragment : BaseFragment(),
     /**
      * Editor module.
      */
-    private lateinit var editor: EditorModule
+    private lateinit var editorModule: EditorModule
 
     /**
      * PDF module.
      */
-    private lateinit var pdf: PdfModule
+    private lateinit var pdfModule: PdfModule
 
     /**
      * Browser module.
@@ -211,7 +211,7 @@ class BrowserFragment : BaseFragment(),
         ) { tabs.openNewWebTab() }
         searchWithClip.invoke()
 
-        editor = EditorModule(
+        editorModule = EditorModule(
                 binding?.editor as ModuleEditorBinding,
                 { intent, requestCode -> startActivityForResult(intent, requestCode) },
                 { file ->
@@ -223,7 +223,7 @@ class BrowserFragment : BaseFragment(),
                 }
         )
 
-        pdf = PdfModule(
+        pdfModule = PdfModule(
                 activityContext,
                 binding?.moduleContainer as ViewGroup
         )
@@ -254,8 +254,8 @@ class BrowserFragment : BaseFragment(),
         tabs = TabAdapter(
                 binding?.webViewContainer as FrameLayout,
                 browserModule,
-                editor,
-                pdf,
+                editorModule,
+                pdfModule,
                 titleSubject::onNext,
                 this::onEmptyTabs
         )
@@ -587,7 +587,7 @@ class BrowserFragment : BaseFragment(),
         super.onResume()
 
         val colorPair = colorPair()
-        editor.applySettings()
+        editorModule.applySettings()
 
         titleSubject.subscribe(
                 { progressBarCallback.onTitleChanged(it) },
@@ -601,8 +601,8 @@ class BrowserFragment : BaseFragment(),
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
-        if (pdf.isVisible) {
-            pdf.applyColor(colorPair)
+        if (pdfModule.isVisible) {
+            pdfModule.applyColor(colorPair)
         }
 
         if (tabs.isNotEmpty()) {
@@ -616,7 +616,7 @@ class BrowserFragment : BaseFragment(),
         binding?.cycleMenu?.also { cycleMenu ->
             val menuPos = preferenceApplier.menuPos()
             cycleMenu.setCorner(menuPos)
-            editor.setSpace(menuPos)
+            editorModule.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
             cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
@@ -633,8 +633,8 @@ class BrowserFragment : BaseFragment(),
 
         val browserScreenMode = preferenceApplier.browserScreenMode()
         if (browserScreenMode == ScreenMode.FULL_SCREEN
-                || editor.isVisible
-                || pdf.isVisible
+                || editorModule.isVisible
+                || pdfModule.isVisible
         ) {
             hideHeader()
             return
@@ -730,7 +730,7 @@ class BrowserFragment : BaseFragment(),
                 }
             }
             EditorModule.REQUEST_CODE_LOAD -> {
-                editor.readFromFileUri(intent.data)
+                editorModule.readFromFileUri(intent.data)
             }
         }
     }
@@ -911,11 +911,11 @@ class BrowserFragment : BaseFragment(),
     }
 
     override fun onClickClearInput() {
-        editor.clearInput()
+        editorModule.clearInput()
     }
 
     override fun onClickInputName(fileName: String) {
-        editor.assignNewFile(fileName)
+        editorModule.assignNewFile(fileName)
     }
 
     override fun onClickPasteAs() {
@@ -924,7 +924,7 @@ class BrowserFragment : BaseFragment(),
         if (TextUtils.isEmpty(primary)) {
             return
         }
-        editor.insert(Quotation(primary))
+        editorModule.insert(Quotation(primary))
     }
 
     override fun onCloseTabListDialogFragment() = hideTabList()
@@ -953,7 +953,7 @@ class BrowserFragment : BaseFragment(),
 
     override fun onPause() {
         super.onPause()
-        editor.saveIfNeed()
+        editorModule.saveIfNeed()
         hideOption()
     }
 
