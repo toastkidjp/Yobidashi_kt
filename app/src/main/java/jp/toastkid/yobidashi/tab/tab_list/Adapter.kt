@@ -11,22 +11,19 @@ import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.tab.TabAdapter
 
 /**
  * WebTab list adapter.
  * Initialize with context and so on...
  *
  * @param context
- * @param tabAdapter WebTab list model
- * @param closeAction Closing action
+ * @param callback WebTab list model
  *
  * @author toastkidjp
  */
 internal class Adapter(
         private val context: Context,
-        private val tabAdapter: TabAdapter,
-        private val closeAction: () -> Unit
+        private val callback: TabListDialogFragment.Callback
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /**
@@ -50,14 +47,14 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val tab = tabAdapter.getTabByIndex(position)
+        val tab = callback.getTabByIndexFromTabList(position)
         holder.itemView.setOnClickListener {
-            tabAdapter.replace(tab)
-            closeAction()
+            callback.replaceTabFromTabList(tab)
+            callback?.onCloseTabListDialogFragment()
         }
         holder.setImagePath(tab.thumbnailPath)
         holder.setTitle(tab.title())
-        holder.setCloseAction(View.OnClickListener { closeAt(tabAdapter.indexOf(tab)) })
+        holder.setCloseAction(View.OnClickListener { closeAt(callback.tabIndexOfFromTabList(tab)) })
         holder.setColor(colorPair)
         holder.setBackgroundColor(
                 if (index == position) {
@@ -73,11 +70,11 @@ internal class Adapter(
      * @param position
      */
     private fun closeAt(position: Int) {
-        tabAdapter.closeTab(position)
+        callback.closeTabFromTabList(position)
         notifyItemRemoved(position)
     }
 
-    override fun getItemCount(): Int = tabAdapter.size()
+    override fun getItemCount(): Int = callback.getTabAdapterSizeFromTabList()
 
     /**
      * Set current index.
@@ -87,7 +84,7 @@ internal class Adapter(
     }
 
     fun swap(from: Int, to: Int) {
-        tabAdapter.swap(from, to)
+        callback.swapTabsFromTabList(from, to)
         notifyItemMoved(from, to)
     }
 }

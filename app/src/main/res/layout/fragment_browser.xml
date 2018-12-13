@@ -45,13 +45,7 @@
             app:cm_item_background_tint="@color/colorPrimary"
             app:cm_radius_scale_type="auto"
             app:cm_ripple_color="@color/filter_white_aa"
-            app:cm_scroll_type="endless" />
-
-        <FrameLayout
-            android:id="@+id/tab_list_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
+            app:cm_scroll_type="endless"
             />
 
         <include android:id="@+id/sip" layout="@layout/module_searcher" />

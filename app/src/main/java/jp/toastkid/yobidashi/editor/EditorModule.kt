@@ -363,15 +363,6 @@ class EditorModule(
     private inline fun content(): String = binding.editorInput.text.toString()
 
     /**
-     * Show snackbar with specified id text.
-     *
-     * @param id
-     */
-    private inline fun snackText(@StringRes id: Int) {
-        Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
-    }
-
-    /**
      * Animate root view with specified [Animation].
      *
      * @param animation
@@ -412,19 +403,6 @@ class EditorModule(
     }
 
     /**
-     * Show message by [android.support.design.widget.Snackbar].
-     *
-     * @param message
-     */
-    private fun snackText(message: String) {
-        Toaster.snackShort(
-                binding.root,
-                message,
-                preferenceApplier.colorPair()
-        )
-    }
-
-    /**
      * Show menu's name.
      *
      * @param view [View] (TextView)
@@ -432,7 +410,7 @@ class EditorModule(
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
-                    binding.root,
+                    binding.snackbarContainer,
                     view.text.toString(),
                     R.string.run,
                     View.OnClickListener { view.performClick() },
@@ -441,6 +419,28 @@ class EditorModule(
             )
         }
         return true
+    }
+
+    /**
+     * Show snackbar with specified id text.
+     *
+     * @param id
+     */
+    private inline fun snackText(@StringRes id: Int) {
+        Toaster.snackShort(binding.snackbarContainer, id, preferenceApplier.colorPair())
+    }
+
+    /**
+     * Show message by [android.support.design.widget.Snackbar].
+     *
+     * @param message
+     */
+    private fun snackText(message: String) {
+        Toaster.snackShort(
+                binding.snackbarContainer,
+                message,
+                preferenceApplier.colorPair()
+        )
     }
 
     /**
