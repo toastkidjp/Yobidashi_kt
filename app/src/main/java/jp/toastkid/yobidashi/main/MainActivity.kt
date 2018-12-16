@@ -503,12 +503,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
     }
 
-    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
-        if (event?.keyCode == KeyEvent.KEYCODE_BACK) {
-            return findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
-        }
-        return super.onKeyLongPress(keyCode, event)
-     }
+    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
+        KeyEvent.KEYCODE_BACK ->
+            findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
+        else ->
+            super.onKeyLongPress(keyCode, event)
+    }
 
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
