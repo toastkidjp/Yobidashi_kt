@@ -20,7 +20,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -550,15 +553,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.settings_toolbar_menu_exit) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.settings_toolbar_menu_exit -> {
             finish()
-            return true
+            true
         }
-
-        return super.onOptionsItemSelected(item)
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
