@@ -78,7 +78,12 @@ import java.text.MessageFormat
  *
  * @author toastkidjp
  */
-class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, ProgressBarCallback {
+class MainActivity :
+        BaseActivity(),
+        FragmentReplaceAction,
+        ToolbarAction,
+        ProgressBarCallback
+{
 
     /**
      * Navigation's background.
