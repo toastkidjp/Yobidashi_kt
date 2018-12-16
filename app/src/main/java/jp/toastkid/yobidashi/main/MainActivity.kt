@@ -131,11 +131,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.appBarMain.toolbar?.let {
-            initToolbar(it)
-            setSupportActionBar(it)
-            initDrawer(it)
-            it.setOnClickListener { findCurrentFragment()?.tapHeader() }
+        binding.appBarMain.toolbar?.let { toolbar ->
+            initToolbar(toolbar)
+            setSupportActionBar(toolbar)
+            initDrawer(toolbar)
+            toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
 
         initNavigation()
