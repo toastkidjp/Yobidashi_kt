@@ -970,7 +970,7 @@ class BrowserFragment : BaseFragment(),
     override fun onStop() {
         super.onStop()
         tabs.saveTabList()
-        binding?.cycleMenu?.close(true)
+        binding?.cycleMenu?.close(false)
     }
 
     override fun onDestroy() {
