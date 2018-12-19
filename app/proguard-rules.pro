@@ -20,9 +20,12 @@
 ## For OkHttp
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
-
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
 -dontwarn javax.annotation.**
 -keep class javax.annotation.** { *; }
+
+### A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 ## For Moshi
 -dontwarn okio.**
