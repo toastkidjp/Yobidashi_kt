@@ -12,7 +12,7 @@ android {
     buildToolsVersion '27.0.3'
     byte verMajor  = 1
     byte verMiddle = 1
-    byte verMinor  = 3
+    byte verMinor  = 4
 
     playAccountConfigs {
         defaultAccountConfig {
