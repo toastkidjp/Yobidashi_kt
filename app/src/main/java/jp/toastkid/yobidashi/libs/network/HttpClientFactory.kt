@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit
 object HttpClientFactory {
     fun make(): OkHttpClient {
         return OkHttpClient.Builder()
+                .cookieJar(WebViewCookieHandler)
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)
                 .writeTimeout(5, TimeUnit.SECONDS)
