@@ -9,7 +9,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.advertisement.AdInitializers
+import jp.toastkid.yobidashi.advertisement.AdInitializerFactory
 import jp.toastkid.yobidashi.advertisement.BannerAdFactory
 import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
 
@@ -40,7 +40,7 @@ class AboutThisAppActivity : BaseActivity() {
 
         binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
 
-        val adInitializer = AdInitializers.find(this)
+        val adInitializer = AdInitializerFactory.find(this)
         binding?.adContainer?.ad?.addView(bannerAd)
         adInitializer.invoke(bannerAd)
     }

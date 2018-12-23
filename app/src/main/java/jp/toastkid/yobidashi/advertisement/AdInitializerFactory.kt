@@ -7,7 +7,7 @@ import jp.toastkid.yobidashi.BuildConfig
 /**
  * @author toastkidjp
  */
-object AdInitializers {
+object AdInitializerFactory {
 
     fun find(context: Context): AdInitializer {
         if (BuildConfig.DEBUG) {
