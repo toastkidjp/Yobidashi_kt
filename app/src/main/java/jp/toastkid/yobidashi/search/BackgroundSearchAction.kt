@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * @param saveHistory
  * @author toastkidjp
  */
-class BackgroundSeachAction(
+class BackgroundSearchAction(
         private val snackbarParent: View,
         private val category: String?,
         private val query: String?,
