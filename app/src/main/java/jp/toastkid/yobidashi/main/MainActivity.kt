@@ -215,7 +215,6 @@ class MainActivity :
                 finishWithoutTransition()
             }
         }
-
     }
 
     private fun finishWithoutTransition() {
@@ -280,7 +279,6 @@ class MainActivity :
      * @param fragment {@link BaseFragment} instance
      */
     private fun replaceFragment(fragment: BaseFragment) {
-
         if (fragment.isVisible) {
             snackSuppressOpenFragment()
             return
@@ -289,7 +287,12 @@ class MainActivity :
         val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager?.fragments
         if (fragments?.size != 0) {
-            fragments?.get(0)?.let { transaction.remove(it) }
+            fragments?.get(0)?.let {
+                if (it == fragment) {
+                    return
+                }
+                transaction.remove(it)
+            }
         }
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
