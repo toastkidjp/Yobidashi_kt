@@ -24,6 +24,7 @@ object Quotation {
             return str
         }
         return str?.split(lineSeparator)
+                ?.asSequence()
                 ?.map { "> $it" }
                 ?.reduce { str1, str2 -> str1 + lineSeparator + str2 }
     }
