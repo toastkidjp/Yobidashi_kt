@@ -9,8 +9,16 @@ import android.text.TextUtils
  */
 object Quotation {
 
+    /**
+     * Line separator.
+     */
     private val lineSeparator = System.getProperty("line.separator")
 
+    /**
+     * Invoke quotation function.
+     *
+     * @param str Nullable [CharSequence]
+     */
     operator fun invoke(str: CharSequence?): CharSequence? {
         if (TextUtils.isEmpty(str)) {
             return str
