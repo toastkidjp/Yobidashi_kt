@@ -40,7 +40,7 @@ class AboutThisAppActivity : BaseActivity() {
 
         binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
 
-        val adInitializer = AdInitializerFactory.find(this)
+        val adInitializer = AdInitializerFactory(this)
         binding?.adContainer?.ad?.addView(bannerAd)
         adInitializer.invoke(bannerAd)
     }

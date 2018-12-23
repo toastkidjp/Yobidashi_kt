@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi.BuildConfig
  */
 object AdInitializerFactory {
 
-    fun find(context: Context): AdInitializer {
+    operator fun invoke(context: Context): AdInitializer {
         if (BuildConfig.DEBUG) {
             return TestAdInitializer(context)
         }
