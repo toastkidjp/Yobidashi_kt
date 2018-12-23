@@ -26,7 +26,8 @@ class LogSender(context: Context) {
      * @param key log's key
      * @param bundle default: EMPTY
      */
-    @JvmOverloads fun send(key: String, bundle: Bundle = Bundle.EMPTY) {
+    @JvmOverloads
+    fun send(key: String, bundle: Bundle = Bundle.EMPTY) {
         if (BuildConfig.DEBUG) {
             return
         }
