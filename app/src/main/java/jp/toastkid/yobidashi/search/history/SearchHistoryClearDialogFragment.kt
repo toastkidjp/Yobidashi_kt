@@ -11,12 +11,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.text.Html
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
- * [DialogFragment] for comfirmation clear search history.
+ * [DialogFragment] for confirmation clear search history.
  *
  * @author toastkidjp
  */

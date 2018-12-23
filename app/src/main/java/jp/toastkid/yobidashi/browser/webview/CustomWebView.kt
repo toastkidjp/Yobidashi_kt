@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi.search.UrlFactory
 internal class CustomWebView(context: Context) : WebView(context) {
 
     /**
-     * Pull-to-Refresh enability.
+     * Pull-to-Refresh availability.
      */
     var enablePullToRefresh = false
 

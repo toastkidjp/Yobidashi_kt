@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
- * Cookie cleaner for backword compatible.
+ * Cookie cleaner for backward compatible.
  *
  * @author toastkidjp
  */

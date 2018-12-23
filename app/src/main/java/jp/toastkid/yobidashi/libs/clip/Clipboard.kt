@@ -36,7 +36,7 @@ object Clipboard {
     }
 
     /**
-     * Get primary cliped item.
+     * Get primary clipped item.
      *
      * @param context
      */
