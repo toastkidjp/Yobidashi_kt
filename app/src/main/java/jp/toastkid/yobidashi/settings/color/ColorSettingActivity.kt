@@ -68,9 +68,11 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
 
         initialBgColor = colorPair.bgColor()
         binding?.settingsColorPrev?.setBackgroundColor(initialBgColor)
+        binding?.backgroundPalette?.color = initialBgColor
 
         initialFontColor = colorPair.fontColor()
         binding?.settingsColorPrev?.setTextColor(initialFontColor)
+        binding?.fontPalette?.color = initialFontColor
 
         initPalettes()
 
