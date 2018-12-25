@@ -760,23 +760,23 @@ class MainActivity :
         /**
          * Header hiding duration.
          */
-        private const val HEADER_HIDING_DURATION: Long = 75L
+        private const val HEADER_HIDING_DURATION = 75L
 
         /**
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.activity_main
+        private const val LAYOUT_ID = R.layout.activity_main
 
         /**
          * For using daily alarm.
          */
-        private const val KEY_EXTRA_MONTH: String = "month"
+        private const val KEY_EXTRA_MONTH = "month"
 
         /**
          * For using daily alarm.
          */
-        private const val KEY_EXTRA_DOM: String = "dom"
+        private const val KEY_EXTRA_DOM = "dom"
 
         /**
          * Make launcher intent.
@@ -784,8 +784,8 @@ class MainActivity :
          * @param context
          * @return [Intent]
          */
-        fun makeIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
-                .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
+        fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
+                .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
         /**
          * Make browser intent.
@@ -795,11 +795,11 @@ class MainActivity :
          *
          * @return [Intent]
          */
-        fun makeBrowserIntent(context: Context, uri: Uri): Intent
-                = Intent(context, MainActivity::class.java).apply {
-                    action = Intent.ACTION_VIEW
-                    data = uri
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        fun makeBrowserIntent(context: Context, uri: Uri) = Intent(context, MainActivity::class.java)
+                .also {
+                    it.action = Intent.ACTION_VIEW
+                    it.data = uri
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
 
         /**
@@ -809,10 +809,10 @@ class MainActivity :
          * @param dayOfMonth
          * @return [Intent]
          */
-        fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent
-                = makeIntent(context).apply {
-                    putExtra(KEY_EXTRA_MONTH, month)
-                    putExtra(KEY_EXTRA_DOM, dayOfMonth)
+        fun makeIntent(context: Context, month: Int, dayOfMonth: Int) = makeIntent(context)
+                .also {
+                    it.putExtra(KEY_EXTRA_MONTH, month)
+                    it.putExtra(KEY_EXTRA_DOM, dayOfMonth)
                 }
 
     }

@@ -26,8 +26,8 @@ class CardViewActivity : AppCompatActivity() {
         setContentView(LAYOUT_ID)
 
         cardFragment = CardFragment()
-        cardFragment.arguments = Bundle().apply {
-            putString(EXTRA_KEY_CARD_TEXT, intent.getStringExtra(EXTRA_KEY_CARD_TEXT))
+        cardFragment.arguments = Bundle().also {
+            it.putString(EXTRA_KEY_CARD_TEXT, intent.getStringExtra(EXTRA_KEY_CARD_TEXT))
         }
         addFragment(cardFragment)
     }
@@ -48,12 +48,12 @@ class CardViewActivity : AppCompatActivity() {
         /**
          * Card extra key.
          */
-        const val EXTRA_KEY_CARD_TEXT: String = "card_text"
+        const val EXTRA_KEY_CARD_TEXT = "card_text"
 
         /**
          * Layout ID.
          */
-        private const val LAYOUT_ID: Int = R.layout.activity_transparent
+        private const val LAYOUT_ID = R.layout.activity_transparent
 
         /**
          * Make [CardViewActivity]'s intent.
@@ -65,7 +65,7 @@ class CardViewActivity : AppCompatActivity() {
         fun makeIntent(
                 context: Context,
                 text: String
-        ): Intent = Intent(context, CardViewActivity::class.java)
-                .apply { putExtra(EXTRA_KEY_CARD_TEXT, text) }
+        ) = Intent(context, CardViewActivity::class.java)
+                .also { it.putExtra(EXTRA_KEY_CARD_TEXT, text) }
     }
 }
