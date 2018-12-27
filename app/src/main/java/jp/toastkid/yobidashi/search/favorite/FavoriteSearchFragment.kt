@@ -44,14 +44,14 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
                 inflater, LAYOUT_ID, container, false)
         binding!!.activity = this
 
-        initFavSearchsView()
+        initFavSearchView()
 
         setHasOptionsMenu(true)
 
         return binding!!.root
     }
 
-    private fun initFavSearchsView() {
+    private fun initFavSearchView() {
         val fragmentActivity = activity ?: return
         adapter = ActivityAdapter(
                 fragmentActivity,
