@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -55,7 +55,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
         val fragmentActivity = activity ?: return
         adapter = ActivityAdapter(
                 fragmentActivity,
-                DbInitter.init(fragmentActivity).relationOfFavoriteSearch(),
+                DbInitializer.init(fragmentActivity).relationOfFavoriteSearch(),
                 { category, query -> this.startSearch(category, query) },
                 { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
         )

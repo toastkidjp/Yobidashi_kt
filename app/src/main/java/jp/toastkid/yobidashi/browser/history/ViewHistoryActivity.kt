@@ -16,7 +16,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityViewHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 
 /**
@@ -32,7 +32,7 @@ class ViewHistoryActivity: BaseActivity(), ClearDialogFragment.Callback {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityViewHistoryBinding>(this, LAYOUT_ID)
-        val relation = DbInitter.init(this).relationOfViewHistory()
+        val relation = DbInitializer.init(this).relationOfViewHistory()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = ActivityAdapter(

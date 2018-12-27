@@ -8,7 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
@@ -40,7 +40,7 @@ class ExtendedApplication : Application() {
 
         val preferenceApplier = PreferenceApplier(this)
 
-        Completable.fromAction { DbInitter.init(this) }
+        Completable.fromAction { DbInitializer.init(this) }
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         { processForFirstLaunch(preferenceApplier) },

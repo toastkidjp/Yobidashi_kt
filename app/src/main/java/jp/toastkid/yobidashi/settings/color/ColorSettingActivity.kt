@@ -24,7 +24,7 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.ActivitySettingsColorBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 
 /**
  * Color setting activity.
@@ -114,7 +114,7 @@ class ColorSettingActivity : BaseActivity(), ClearColorsDialogFragment.Callback 
      */
     private fun initSavedColors() {
 
-        adapter = SavedColorAdapter(this, DbInitter.init(this).relationOfSavedColor())
+        adapter = SavedColorAdapter(this, DbInitializer.init(this).relationOfSavedColor())
         binding?.savedColors?.adapter = adapter
         binding?.savedColors?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding?.clearSavedColor?.setOnClickListener{

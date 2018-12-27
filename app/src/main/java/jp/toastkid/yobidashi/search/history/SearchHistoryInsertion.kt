@@ -7,7 +7,7 @@ import com.github.gfx.android.orma.annotation.OnConflict
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 
 /**
  * @author toastkidjp
@@ -27,7 +27,7 @@ class SearchHistoryInsertion private constructor(
 
     private fun insert(searchHistory: SearchHistory): Disposable {
         return Completable.create { e ->
-            DbInitter.init(context)
+            DbInitializer.init(context)
                     .relationOfSearchHistory()
                     .inserter(OnConflict.REPLACE)
                     .execute(searchHistory)

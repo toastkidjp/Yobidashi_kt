@@ -31,7 +31,7 @@ import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.apps.AppModule
@@ -376,7 +376,7 @@ class SearchActivity : BaseActivity(),
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        DbInitter.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
+        DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
                 .subscribe { v ->
                     favoriteModule?.clear()
@@ -389,7 +389,7 @@ class SearchActivity : BaseActivity(),
     }
 
     override fun onClickClearSearchHistory() {
-        DbInitter.init(this).relationOfSearchHistory().deleter().executeAsSingle()
+        DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
                 .subscribe { v ->
                     historyModule?.clear()

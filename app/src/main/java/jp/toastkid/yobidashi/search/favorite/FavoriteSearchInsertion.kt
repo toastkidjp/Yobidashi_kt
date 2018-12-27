@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 
 /**
  * @author toastkidjp
@@ -36,7 +36,7 @@ class FavoriteSearchInsertion(
      * Insert record.
      */
     private fun insert() {
-        DbInitter.init(context).insertIntoFavoriteSearch(makeFavoriteSearch(category, query))
+        DbInitializer.init(context).insertIntoFavoriteSearch(makeFavoriteSearch(category, query))
     }
 
     /**
