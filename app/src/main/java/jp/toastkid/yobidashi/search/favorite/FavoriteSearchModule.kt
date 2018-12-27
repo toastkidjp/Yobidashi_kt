@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
 
 /**
- * Search hisotry module.
+ * Search history module.
  *
  * @param binding Data binding object
  * @param searchCallback

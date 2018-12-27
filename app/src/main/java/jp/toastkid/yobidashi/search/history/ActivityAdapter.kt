@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.search.BackgroundSeachAction
+import jp.toastkid.yobidashi.search.BackgroundSearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 
@@ -55,7 +55,7 @@ internal class ActivityAdapter(
             holder.setFavorite(it.category as String, it.query as String)
             holder.setImageRes(SearchCategory.findByCategory(it.category as String).iconId)
             holder.itemView.setOnLongClickListener { v ->
-                BackgroundSeachAction(v, it.category, it.query, false).invoke()
+                BackgroundSearchAction(v, it.category, it.query, false).invoke()
                 true
             }
         }

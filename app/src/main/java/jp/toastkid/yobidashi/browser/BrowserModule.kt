@@ -385,7 +385,7 @@ class BrowserModule(
     }
 
     /**
-     * Disble [WebView].
+     * Disable [WebView].
      */
     fun disableWebView() {
         currentView()?.let {
