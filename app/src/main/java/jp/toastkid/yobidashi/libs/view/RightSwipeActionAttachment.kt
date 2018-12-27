@@ -21,7 +21,7 @@ object RightSwipeActionAttachment {
      * @param recyclerView [RecyclerView]
      * @param onSwipedAction action.
      */
-    fun invoke(recyclerView: RecyclerView, onSwipedAction: (Int) -> Unit) {
+    operator fun invoke(recyclerView: RecyclerView, onSwipedAction: (Int) -> Unit) {
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(RIGHT, RIGHT) {
                     override fun onMove(
