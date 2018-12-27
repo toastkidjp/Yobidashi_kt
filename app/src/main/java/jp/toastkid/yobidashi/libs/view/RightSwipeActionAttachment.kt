@@ -6,7 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 /**
  * @author toastkidjp
  */
-object RightSwipeActionAttacher {
+object RightSwipeActionAttachment {
 
     /**
      * For minimize usage.

@@ -11,7 +11,7 @@ import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
-import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
+import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
 
 /**
  * Search history module.
@@ -76,7 +76,7 @@ class FavoriteSearchModule(
             }
         }
         uiThreadHandler.post {
-            RightSwipeActionAttacher
+            RightSwipeActionAttachment
                     .invoke(binding.searchFavorites, { moduleAdapter.removeAt(it).addTo(disposables) })
         }
     }

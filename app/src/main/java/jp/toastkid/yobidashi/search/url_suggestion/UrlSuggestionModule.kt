@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistory_Relation
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DbInitter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
-import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
+import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
 import timber.log.Timber
 
 /**
@@ -47,7 +47,7 @@ class UrlSuggestionModule(
         binding.urlSuggestions.adapter = adapter
         binding.urlSuggestions.layoutManager =
                 LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
-        RightSwipeActionAttacher.invoke(
+        RightSwipeActionAttachment.invoke(
                 binding.urlSuggestions,
                 this::removeAt
         )
