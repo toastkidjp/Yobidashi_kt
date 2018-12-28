@@ -14,6 +14,7 @@ import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
@@ -311,6 +312,11 @@ class EditorModule(
             clearPath()
             return
         }
+
+        if (TextUtils.equals(file.absolutePath, path)) {
+            return
+        }
+
         val text = Okio.buffer(Okio.source(file)).use { it.readUtf8() }
         setContentText(text)
         snackText(R.string.done_load)
