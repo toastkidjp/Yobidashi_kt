@@ -37,25 +37,25 @@
                     android:id="@+id/category_all"
                     android:text="@string/all"
                     style="@style/FakeTabStyle"
-                    android:onClick="@{activity.switchAll}"
+                    android:onClick="@{activity::switchAll}"
                     />
                 <RadioButton
                     android:id="@+id/category_displaying"
                     android:text="@string/subhead_displaying"
                     style="@style/FakeTabStyle"
-                    android:onClick="@{activity.switchDisplaying}"
+                    android:onClick="@{activity::switchDisplaying}"
                     />
                 <RadioButton
                     android:id="@+id/category_search"
                     android:text="@string/subhead_search"
                     style="@style/FakeTabStyle"
-                    android:onClick="@{activity.switchSearch}"
+                    android:onClick="@{activity::switchSearch}"
                     />
                 <RadioButton
                     android:id="@+id/category_browser"
                     android:text="@string/subhead_browser"
                     style="@style/FakeTabStyle"
-                    android:onClick="@{activity.switchBrowser}"
+                    android:onClick="@{activity::switchBrowser}"
                     />
                 <RadioButton
                     android:id="@+id/category_editor"
@@ -67,13 +67,13 @@
                     android:id="@+id/category_notification"
                     android:text="@string/subhead_notification"
                     style="@style/FakeTabStyle"
-                    android:onClick="@{activity.switchNotification}"
+                    android:onClick="@{activity::switchNotification}"
                     />
                 <RadioButton
                     android:id="@+id/category_other"
                     android:text="@string/subhead_others"
                     style="@style/FakeTabStyle"
-                    android:onClick="@{activity.switchOther}"
+                    android:onClick="@{activity::switchOther}"
                     />
             </RadioGroup>
         </HorizontalScrollView>
