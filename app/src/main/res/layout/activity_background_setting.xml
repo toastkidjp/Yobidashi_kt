@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="activity"
             type="jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity" />
@@ -42,6 +42,7 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="@dimen/fab_margin_bottom"
                 android:layout_marginRight="@dimen/fab_margin"
+                android:layout_marginEnd="@dimen/fab_margin"
                 android:background="@color/colorPrimaryDark"
                 android:foreground="@drawable/ripple_transparent"
                 android:src="@drawable/ic_add_white"
