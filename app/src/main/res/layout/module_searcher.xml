@@ -37,7 +37,7 @@
             android:adjustViewBounds="true"
             android:src="@drawable/ic_close"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{module.hide}"
+            android:onClick="@{module::hide}"
             />
         <ImageView
             android:id="@+id/sip_clear"
@@ -49,7 +49,7 @@
             android:adjustViewBounds="true"
             android:src="@drawable/ic_clear_form"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{module.clearInput}"
+            android:onClick="@{module::clearInput}"
             />
 
         <ImageView
@@ -62,7 +62,7 @@
             android:scaleType="center"
             android:src="@drawable/ic_up"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{module.findUp}"
+            android:onClick="@{module::findUp}"
             />
 
         <ImageView
@@ -75,7 +75,7 @@
             android:adjustViewBounds="true"
             android:src="@drawable/ic_down"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{module.findDown}"
+            android:onClick="@{module::findDown}"
             />
 
     </android.support.v7.widget.CardView>
