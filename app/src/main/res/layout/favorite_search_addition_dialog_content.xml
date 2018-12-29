@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_margin="5dp"
-                    android:onClick="@{action.cancel}"
+                    android:onClick="@{action::cancel}"
                     android:text="@string/close" />
 
                 <Button
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:text="@string/title_add"
-                    android:onClick="@{action.ok}"
+                    android:onClick="@{action::ok}"
                     />
             </LinearLayout>
         </LinearLayout>
