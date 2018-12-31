@@ -184,6 +184,11 @@ class EditorModule(
         moveToIndex(binding.editorInput.length())
     }
 
+    /**
+     * Move cursor to specified index.
+     *
+     * @param index index of editor.
+     */
     private fun moveToIndex(index: Int) {
         requestFocusInputArea()
         binding.editorInput.setSelection(index)
