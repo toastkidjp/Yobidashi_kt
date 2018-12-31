@@ -64,6 +64,9 @@ class EditorModule(
         }
     }
 
+    /**
+     * Last saved text.
+     */
     private var lastSavedTitle: String
 
     /**
@@ -71,6 +74,9 @@ class EditorModule(
      */
     private var path: String = ""
 
+    /**
+     * Last index of find-text.
+     */
     private var lastIndex = 0
 
     init {
