@@ -174,6 +174,7 @@ class EditorModule(
      * Go to top.
      */
     fun pageUp() {
+        requestFocusInputArea()
         binding.editorInput.setSelection(0)
     }
 
@@ -181,6 +182,7 @@ class EditorModule(
      * Go to bottom.
      */
     fun pageDown() {
+        requestFocusInputArea()
         binding.editorInput.setSelection(binding.editorInput.length())
     }
 
@@ -508,12 +510,17 @@ class EditorModule(
             lastIndex = 0
             return
         }
+        requestFocusInputArea()
         lastIndex = index + text.length
         binding.editorInput.setSelection(index, lastIndex)
     }
 
     private fun findNextForwardIndex(text: String) =
             binding.editorInput.text.indexOf(text, lastIndex)
+
+    private fun requestFocusInputArea() {
+        binding.editorInput.requestFocus()
+    }
 
     companion object {
 
