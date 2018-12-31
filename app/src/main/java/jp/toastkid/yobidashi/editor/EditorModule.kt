@@ -174,16 +174,19 @@ class EditorModule(
      * Go to top.
      */
     fun pageUp() {
-        requestFocusInputArea()
-        binding.editorInput.setSelection(0)
+        moveToIndex(0)
     }
 
     /**
      * Go to bottom.
      */
     fun pageDown() {
+        moveToIndex(binding.editorInput.length())
+    }
+
+    private fun moveToIndex(index: Int) {
         requestFocusInputArea()
-        binding.editorInput.setSelection(binding.editorInput.length())
+        binding.editorInput.setSelection(index)
     }
 
     /**
