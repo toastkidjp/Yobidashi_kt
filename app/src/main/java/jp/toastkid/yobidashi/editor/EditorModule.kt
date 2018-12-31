@@ -71,6 +71,8 @@ class EditorModule(
      */
     private var path: String = ""
 
+    private var lastIndex = 0
+
     init {
         val context = binding.root.context
 
@@ -463,6 +465,49 @@ class EditorModule(
             saveToFile(path)
         }
     }
+
+    fun find(text: String) {
+        binding.editorInput.text.indexOf(text, lastIndex)
+    }
+
+    fun findUp(text: String) {
+        if (lastIndex >= 0) {
+            selectTextByIndex(findBackwardIndex(text), text);
+        }
+        val nextBackwardIndex = findBackwardIndex(text)
+        if (nextBackwardIndex == -1) {
+            lastIndex = binding.editorInput.text.length
+        }
+    }
+
+    private fun findBackwardIndex(text: String): Int {
+        val index = lastIndex - text.length - 1
+        if (index < 0) {
+            return -1
+        }
+        val haystack = binding.editorInput.text.toString()
+        return haystack.lastIndexOf(text, index)
+    }
+
+    fun findDown(text: String) {
+        selectTextByIndex(findNextForwardIndex(text), text)
+        val nextForwardIndex = findNextForwardIndex(text)
+        if (nextForwardIndex == -1) {
+            lastIndex = 0
+        }
+    }
+
+    private fun selectTextByIndex(index: Int, text: String) {
+        if (index < 0) {
+            lastIndex = 0
+            return
+        }
+        lastIndex = index + text.length
+        binding.editorInput.setSelection(index, lastIndex)
+    }
+
+    private fun findNextForwardIndex(text: String) =
+            binding.editorInput.text.indexOf(text, lastIndex)
 
     companion object {
 
