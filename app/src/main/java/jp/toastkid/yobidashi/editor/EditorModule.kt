@@ -74,6 +74,9 @@ class EditorModule(
      */
     private var path: String = ""
 
+    /**
+     * Text finder for [EditText].
+     */
     private var finder: EditTextFinder
 
     init {
