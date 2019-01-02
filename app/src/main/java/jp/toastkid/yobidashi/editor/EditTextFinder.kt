@@ -28,9 +28,12 @@ class EditTextFinder(private val editText: EditText) {
      * @param text finding text
      */
     fun findUp(text: String) {
-        if (lastIndex >= 0) {
-            selectTextByIndex(findBackwardIndex(text), text);
+        if (lastIndex <= 0) {
+            lastIndex = editText.text.length
         }
+
+        selectTextByIndex(findBackwardIndex(text), text);
+
         val nextBackwardIndex = findBackwardIndex(text)
         if (nextBackwardIndex == -1) {
             lastIndex = editText.text.length
