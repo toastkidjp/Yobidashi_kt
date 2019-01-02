@@ -10,6 +10,9 @@ package jp.toastkid.yobidashi.editor
 import android.widget.EditText
 
 /**
+ * Text finder for [EditText].
+ *
+ * @param editText NonNull [EditText]
  * @author toastkidjp
  */
 class EditTextFinder(private val editText: EditText) {
@@ -19,6 +22,11 @@ class EditTextFinder(private val editText: EditText) {
      */
     private var lastIndex = 0
 
+    /**
+     * Find text in bound to upward.
+     *
+     * @param text finding text
+     */
     fun findUp(text: String) {
         if (lastIndex >= 0) {
             selectTextByIndex(findBackwardIndex(text), text);
@@ -29,6 +37,12 @@ class EditTextFinder(private val editText: EditText) {
         }
     }
 
+    /**
+     * Find text index in bound to upward.
+     *
+     * @param text finding text
+     * @param index or -1
+     */
     private fun findBackwardIndex(text: String): Int {
         val index = lastIndex - text.length - 1
         if (index < 0) {
@@ -38,6 +52,11 @@ class EditTextFinder(private val editText: EditText) {
         return haystack.lastIndexOf(text, index)
     }
 
+    /**
+     * Find text in bound to downward.
+     *
+     * @param text finding text
+     */
     fun findDown(text: String) {
         selectTextByIndex(findNextForwardIndex(text), text)
         val nextForwardIndex = findNextForwardIndex(text)
@@ -46,6 +65,12 @@ class EditTextFinder(private val editText: EditText) {
         }
     }
 
+    /**
+     * Select text.
+     *
+     * @param index First index
+     * @param text finding text
+     */
     private fun selectTextByIndex(index: Int, text: String) {
         if (index < 0) {
             lastIndex = 0
@@ -56,9 +81,18 @@ class EditTextFinder(private val editText: EditText) {
         editText.setSelection(index, lastIndex)
     }
 
+    /**
+     * Find next index in bound to forward.
+     *
+     * @param text Finding text
+     * @return index of text in [EditText]
+     */
     private fun findNextForwardIndex(text: String) =
             editText.text.indexOf(text, lastIndex)
 
+    /**
+     * Request focus for operating [EditText].
+     */
     private fun requestFocusInputArea() {
         editText.requestFocus()
     }
