@@ -481,8 +481,18 @@ class EditorModule(
         }
     }
 
+    /**
+     * Find text in bound to upward.
+     *
+     * @param text Finding text
+     */
     fun findUp(text: String) = finder.findUp(text)
 
+    /**
+     * Find text in bound to downward.
+     *
+     * @param text Finding text
+     */
     fun findDown(text: String) = finder.findDown(text)
 
     companion object {
