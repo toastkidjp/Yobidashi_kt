@@ -19,10 +19,6 @@ class EditTextFinder(private val editText: EditText) {
      */
     private var lastIndex = 0
 
-    fun find(text: String) {
-        editText.text.indexOf(text, lastIndex)
-    }
-
     fun findUp(text: String) {
         if (lastIndex >= 0) {
             selectTextByIndex(findBackwardIndex(text), text);
