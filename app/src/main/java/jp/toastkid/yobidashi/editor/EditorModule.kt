@@ -481,13 +481,9 @@ class EditorModule(
         }
     }
 
-    fun findUp(text: String) {
-        finder.findUp(text)
-    }
+    fun findUp(text: String) = finder.findUp(text)
 
-    fun findDown(text: String) {
-        finder.findDown(text)
-    }
+    fun findDown(text: String) = finder.findDown(text)
 
     companion object {
 
