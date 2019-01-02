@@ -9,15 +9,26 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 /**
+ * [EditTextFinder]'s test cases.
+ *
  * @author toastkidjp
  */
 @RunWith(RobolectricTestRunner::class)
 class EditTextFinderTest {
 
+    /**
+     * [EditText]
+     */
     private lateinit var editText: EditText
 
+    /**
+     * [EditTextFinder]
+     */
     private lateinit var finder: EditTextFinder
 
+    /**
+     * Initialize test target instances.
+     */
     @Before
     fun setUp() {
         editText = EditText(RuntimeEnvironment.application)
@@ -26,6 +37,9 @@ class EditTextFinderTest {
         editText.setText("abc is abc, you don't find abcd.")
     }
 
+    /**
+     * Test [EditTextFinder.findUp] behavior.
+     */
     @Test
     fun findUp() {
         finder.findUp("abc")
@@ -37,6 +51,9 @@ class EditTextFinderTest {
         assertEquals(10, editText.selectionEnd)
     }
 
+    /**
+     * Test [EditTextFinder.findDown] behavior.
+     */
     @Test
     fun findDown() {
         finder.findDown("abc")
