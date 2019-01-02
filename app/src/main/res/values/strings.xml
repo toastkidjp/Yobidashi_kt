@@ -402,5 +402,6 @@
     <string name="message_paste_as_dialog">Would you paste current clipboard text?</string>
     <string name="install">Install</string>
     <string name="message_install_suggestion_google_app">Please would you install Google App?</string>
+    <string name="content_description_background">Background image</string>
 
 </resources>

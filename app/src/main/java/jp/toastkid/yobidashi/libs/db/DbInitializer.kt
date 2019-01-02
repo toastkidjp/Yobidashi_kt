@@ -6,7 +6,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.OrmaDatabase
 /**
  * @author toastkidjp
  */
-object DbInitter {
+object DbInitializer {
 
     private var orma: OrmaDatabase? = null
 

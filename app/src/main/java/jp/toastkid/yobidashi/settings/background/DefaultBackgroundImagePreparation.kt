@@ -16,7 +16,7 @@ import java.io.FileOutputStream
  *
  * @author toastkidjp
  */
-object DefaultBackgroundImagePreparator {
+object DefaultBackgroundImagePreparation {
 
     /**
      * Invoke this class action.

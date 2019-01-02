@@ -5,12 +5,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
-import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.tab.TabAdapter
 
 /**
  * Module for find in page.
@@ -58,7 +58,7 @@ class PageSearcherModule(
      * Implement for Data Binding.
      */
     fun findUp(v: View) {
-        tabs.findUp()
+        tabs.findUp(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
 
@@ -66,7 +66,7 @@ class PageSearcherModule(
      * Implement for Data Binding.
      */
     fun findDown(v: View) {
-        tabs.findDown()
+        tabs.findDown(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
 

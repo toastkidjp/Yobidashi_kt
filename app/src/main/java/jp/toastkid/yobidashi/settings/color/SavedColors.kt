@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 import java.util.*
@@ -78,7 +78,7 @@ object SavedColors {
      */
     fun insertDefaultColors(context: Context) {
         Completable.fromAction {
-            DbInitter.init(context).relationOfSavedColor()
+            DbInitializer.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAllAsObservable(DefaultColors.make(context))
                     .subscribe()
@@ -109,7 +109,7 @@ object SavedColors {
         )
 
         return Completable.fromAction {
-            DbInitter.init(context).relationOfSavedColor()
+            DbInitializer.init(context).relationOfSavedColor()
                     .inserter()
                     .executeAsSingle(makeSavedColor(bg, font))
                     .subscribe()

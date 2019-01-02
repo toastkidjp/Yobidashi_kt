@@ -12,7 +12,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySearchHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.search.SearchAction
 
 /**
@@ -31,7 +31,7 @@ class SearchHistoryActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        val relation = DbInitter.init(this).relationOfSearchHistory()
+        val relation = DbInitializer.init(this).relationOfSearchHistory()
 
         binding.historiesView.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

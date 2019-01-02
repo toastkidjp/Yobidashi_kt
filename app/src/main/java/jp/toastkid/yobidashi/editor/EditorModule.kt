@@ -14,6 +14,7 @@ import android.support.annotation.MainThread
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
@@ -63,12 +64,20 @@ class EditorModule(
         }
     }
 
+    /**
+     * Last saved text.
+     */
     private var lastSavedTitle: String
 
     /**
      * File path.
      */
     private var path: String = ""
+
+    /**
+     * Last index of find-text.
+     */
+    private var lastIndex = 0
 
     init {
         val context = binding.root.context
@@ -165,14 +174,24 @@ class EditorModule(
      * Go to top.
      */
     fun pageUp() {
-        binding.editorInput.setSelection(0)
+        moveToIndex(0)
     }
 
     /**
      * Go to bottom.
      */
     fun pageDown() {
-        binding.editorInput.setSelection(binding.editorInput.length())
+        moveToIndex(binding.editorInput.length())
+    }
+
+    /**
+     * Move cursor to specified index.
+     *
+     * @param index index of editor.
+     */
+    private fun moveToIndex(index: Int) {
+        requestFocusInputArea()
+        binding.editorInput.setSelection(index)
     }
 
     /**
@@ -311,6 +330,11 @@ class EditorModule(
             clearPath()
             return
         }
+
+        if (TextUtils.equals(file.absolutePath, path)) {
+            return
+        }
+
         val text = Okio.buffer(Okio.source(file)).use { it.readUtf8() }
         setContentText(text)
         snackText(R.string.done_load)
@@ -456,6 +480,54 @@ class EditorModule(
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
+    }
+
+    fun find(text: String) {
+        binding.editorInput.text.indexOf(text, lastIndex)
+    }
+
+    fun findUp(text: String) {
+        if (lastIndex >= 0) {
+            selectTextByIndex(findBackwardIndex(text), text);
+        }
+        val nextBackwardIndex = findBackwardIndex(text)
+        if (nextBackwardIndex == -1) {
+            lastIndex = binding.editorInput.text.length
+        }
+    }
+
+    private fun findBackwardIndex(text: String): Int {
+        val index = lastIndex - text.length - 1
+        if (index < 0) {
+            return -1
+        }
+        val haystack = binding.editorInput.text.toString()
+        return haystack.lastIndexOf(text, index)
+    }
+
+    fun findDown(text: String) {
+        selectTextByIndex(findNextForwardIndex(text), text)
+        val nextForwardIndex = findNextForwardIndex(text)
+        if (nextForwardIndex == -1) {
+            lastIndex = 0
+        }
+    }
+
+    private fun selectTextByIndex(index: Int, text: String) {
+        if (index < 0) {
+            lastIndex = 0
+            return
+        }
+        requestFocusInputArea()
+        lastIndex = index + text.length
+        binding.editorInput.setSelection(index, lastIndex)
+    }
+
+    private fun findNextForwardIndex(text: String) =
+            binding.editorInput.text.indexOf(text, lastIndex)
+
+    private fun requestFocusInputArea() {
+        binding.editorInput.requestFocus()
     }
 
     companion object {

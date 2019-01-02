@@ -280,7 +280,6 @@ class MainActivity :
      */
     private fun replaceFragment(fragment: BaseFragment) {
         if (fragment.isVisible) {
-            snackSuppressOpenFragment()
             return
         }
 
@@ -680,13 +679,6 @@ class MainActivity :
                 }
             }
         }
-    }
-
-    /**
-     * Show snackbar with confirm message of suppressed replacing fragment.
-     */
-    private fun snackSuppressOpenFragment() {
-        Toaster.snackShort(binding.root, R.string.message_has_opened_fragment, colorPair())
     }
 
     /**
