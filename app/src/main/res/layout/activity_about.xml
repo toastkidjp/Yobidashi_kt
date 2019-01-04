@@ -67,7 +67,7 @@
                     android:text="@string/title_licenses"
                     android:textSize="16sp"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{activity.licenses}"
+                    android:onClick="@{activity::licenses}"
                     />
 
                 <include layout="@layout/primary_dark_divider" />
