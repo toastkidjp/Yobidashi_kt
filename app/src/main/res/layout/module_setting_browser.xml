@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchInternalBrowser}"
+                android:onClick="@{fragment::switchInternalBrowser}"
                 >
                 <TextView
                     android:orientation="horizontal"
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchRetainTabs}"
+                android:onClick="@{fragment::switchRetainTabs}"
                 >
                 <TextView
                     android:orientation="horizontal"
@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchInternalBrowser}"
+                android:onClick="@{fragment::switchInternalBrowser}"
                 >
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/home_input_layout"
@@ -123,7 +123,7 @@
                     android:layout_marginRight="8dp"
                     android:text="@string/settings_color_commit"
                     style="?android:attr/buttonBarStyle"
-                    android:onClick="@{fragment.commitHomeInput}"
+                    android:onClick="@{fragment::commitHomeInput}"
                     />
             </FrameLayout>
 
@@ -134,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchUseInversion}"
+                android:onClick="@{fragment::switchUseInversion}"
                 >
                 <TextView
                     android:layout_width="match_parent"
@@ -161,7 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchJsEnabled}"
+                android:onClick="@{fragment::switchJsEnabled}"
                 >
                 <TextView
                     android:orientation="horizontal"
@@ -189,7 +189,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchLoadingImage}"
+                android:onClick="@{fragment::switchLoadingImage}"
                 >
                 <TextView
                     android:orientation="horizontal"
@@ -217,7 +217,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchSaveFormData}"
+                android:onClick="@{fragment::switchSaveFormData}"
                 >
                 <TextView
                     android:orientation="horizontal"
@@ -245,7 +245,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment.switchViewHistory}"
+                android:onClick="@{fragment::switchViewHistory}"
                 >
                 <TextView
                     android:orientation="horizontal"
@@ -303,7 +303,7 @@
                 android:id="@+id/user_agent"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_item_height"
-                android:onClick="@{fragment.userAgent}"
+                android:onClick="@{fragment::userAgent}"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -391,7 +391,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_clear_cache"
-                android:onClick="@{fragment.clearCache}"
+                android:onClick="@{fragment::clearCache}"
                 />
 
             <include layout="@layout/primary_dark_divider"/>
@@ -401,7 +401,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/clear_form_data"
-                android:onClick="@{fragment.clearFormData}"
+                android:onClick="@{fragment::clearFormData}"
                 />
 
             <include layout="@layout/primary_dark_divider"/>
@@ -411,7 +411,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_clear_coolie"
-                android:onClick="@{fragment.clearCookie}"
+                android:onClick="@{fragment::clearCookie}"
                 />
         </LinearLayout>
 
