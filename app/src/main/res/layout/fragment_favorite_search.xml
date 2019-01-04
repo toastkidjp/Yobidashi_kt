@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/settings_item_left_margin"
-                    android:onClick="@{activity.add}"
+                    android:onClick="@{activity::add}"
                     android:background="@drawable/ripple_soft"
                     >
                     <TextView
