@@ -39,7 +39,7 @@
                     style="@style/OneLineTextMenu"
                     android:drawableLeft="@drawable/ic_palette_black"
                     android:text="@string/title_settings_color"
-                    android:onClick="@{fragment.colorSettings}"
+                    android:onClick="@{fragment::colorSettings}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -51,7 +51,7 @@
                     style="@style/OneLineTextMenu"
                     android:drawableLeft="@drawable/ic_photo_black"
                     android:text="@string/title_set_bg"
-                    android:onClick="@{fragment.backgroundSettings}"
+                    android:onClick="@{fragment::backgroundSettings}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -63,7 +63,7 @@
                     style="@style/OneLineTextMenu"
                     android:drawableLeft="@drawable/ic_close_black"
                     android:text="@string/title_bg_reset"
-                    android:onClick="@{fragment.clearBackgroundSettings}"
+                    android:onClick="@{fragment::clearBackgroundSettings}"
                     />
 
             </LinearLayout>
@@ -92,7 +92,7 @@
                     android:id="@+id/default_search_engine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{fragment.openSearchCategory}"
+                    android:onClick="@{fragment::openSearchCategory}"
                     >
                     <TextView
                         android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchSearchWithClip}"
+                    android:onClick="@{fragment::switchSearchWithClip}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -176,7 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchUseSuggestion}"
+                    android:onClick="@{fragment::switchUseSuggestion}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -203,7 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchUseSearchHistory}"
+                    android:onClick="@{fragment::switchUseSearchHistory}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -230,7 +230,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchUseFavoriteSearch}"
+                    android:onClick="@{fragment::switchUseFavoriteSearch}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -257,7 +257,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchUseViewHistory}"
+                    android:onClick="@{fragment::switchUseViewHistory}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -334,7 +334,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="72dp"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchNotificationWidget}"
+                    android:onClick="@{fragment::switchNotificationWidget}"
                     xmlns:android="http://schemas.android.com/apk/res/android">
                     <TextView
                         android:orientation="horizontal"
@@ -392,7 +392,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchWifiOnly}"
+                    android:onClick="@{fragment::switchWifiOnly}"
                     >
                     <TextView
                         android:layout_width="match_parent"
@@ -426,7 +426,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment.switchColorFilter}"
+                    android:onClick="@{fragment::switchColorFilter}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -459,7 +459,7 @@
                     style="@style/OneLineTextMenu"
                     android:drawableLeft="@drawable/ic_settings_cell_black"
                     android:text="@string/title_settings_device"
-                    android:onClick="@{fragment.deviceSetting}"
+                    android:onClick="@{fragment::deviceSetting}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -471,7 +471,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_wifi"
                     android:drawableLeft="@drawable/ic_wifi_black"
-                    android:onClick="@{fragment.wifi}"
+                    android:onClick="@{fragment::wifi}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -483,7 +483,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_wireless"
                     android:drawableLeft="@drawable/ic_network_black"
-                    android:onClick="@{fragment.wireless}"
+                    android:onClick="@{fragment::wireless}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -495,7 +495,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_date_and_time"
                     android:drawableLeft="@drawable/ic_time"
-                    android:onClick="@{fragment.dateAndTime}"
+                    android:onClick="@{fragment::dateAndTime}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -507,7 +507,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_display"
                     android:drawableLeft="@drawable/ic_phone_android_black"
-                    android:onClick="@{fragment.display}"
+                    android:onClick="@{fragment::display}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -519,7 +519,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_all_apps"
                     android:drawableLeft="@drawable/ic_android_app"
-                    android:onClick="@{fragment.allApps}"
+                    android:onClick="@{fragment::allApps}"
                     />
 
             </LinearLayout>
@@ -538,7 +538,7 @@
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_clear_settings"
                 android:drawableLeft="@drawable/ic_close_black"
-                android:onClick="@{fragment.clearSettings}"
+                android:onClick="@{fragment::clearSettings}"
                 />
         </android.support.v7.widget.CardView>
     </LinearLayout>
