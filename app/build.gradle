@@ -12,19 +12,7 @@ android {
     buildToolsVersion '27.0.3'
     byte verMajor  = 1
     byte verMiddle = 1
-    byte verMinor  = 4
-
-    playAccountConfigs {
-        defaultAccountConfig {
-            serviceAccountEmail = 'tk-bot@api-6327630184664180575-715630.iam.gserviceaccount.com'
-            jsonFile = file('signing/Google Play Android Developer-cbf2176b721a.json')
-        }
-    }
-
-    play {
-        track = 'beta'
-        untrackOld = true
-    }
+    byte verMinor  = 5
 
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
@@ -36,8 +24,6 @@ android {
         versionCode ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
         versionName "${verMajor}.${verMiddle}.${verMinor}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        playAccountConfig = playAccountConfigs.defaultAccountConfig
     }
     buildTypes {
         debug {
@@ -59,6 +45,12 @@ android {
     dataBinding {
         enabled = true
     }
+}
+
+play {
+    track = 'beta'
+    serviceAccountEmail = 'tk-bot@api-6327630184664180575-715630.iam.gserviceaccount.com'
+    serviceAccountCredentials = file('signing/api-6327630184664180575-715630-73af1e35d196.p12')
 }
 
 dependencies {
