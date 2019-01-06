@@ -161,7 +161,7 @@ class BarcodeReaderActivity : BaseActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_barcode_reader
+        private const val LAYOUT_ID = R.layout.activity_barcode_reader
 
         /**
          * Make this activity's intent.
