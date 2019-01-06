@@ -42,7 +42,7 @@ internal class Adapter(
     private var binding: ItemArchiveBinding? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding = DataBindingUtil.inflate<ItemArchiveBinding>(
+        binding = DataBindingUtil.inflate(
                 layoutInflater, R.layout.item_archive, parent, false)
         return ViewHolder(binding as ItemArchiveBinding)
     }
