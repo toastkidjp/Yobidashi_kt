@@ -19,6 +19,7 @@ import java.util.*
 
 /**
  * Initialize with Context.
+ *
  * @param context
  * @param callback Return read content
  *
@@ -29,16 +30,24 @@ internal class Adapter(
         private val callback: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
-    /** Archive folder wrapper.  */
+    /**
+     * Archive folder wrapper.
+     */
     private val archiveDir: FilesDir = Archive.makeNew(context)
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
-    /** Preference's wrapper. */
+    /**
+     * Preference's wrapper.
+     */
     private val preferenceApplier = PreferenceApplier(context)
 
-    /** Data binding object.  */
+    /**
+     * Data binding object.
+     */
     private var binding: ItemArchiveBinding? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -66,9 +75,19 @@ internal class Adapter(
         holder.setIconColor(preferenceApplier.color)
     }
 
+    /**
+     * Convert milliseconds to text.
+     *
+     * @param lastModifiedMs milliseconds
+     */
     private fun convertLastModified(lastModifiedMs: Long): String
             = DATE_FORMAT_HOLDER.get().format(Date(lastModifiedMs))
 
+    /**
+     * Convert file byte length to KB text.
+     *
+     * @param length file byte length
+     */
     private fun convertKb(length: Long): String
             = NumberFormat.getIntegerInstance(Locale.getDefault()).format(length / 1024)
 
