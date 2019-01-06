@@ -90,14 +90,14 @@ class BarcodeReaderActivity : BaseActivity() {
     /**
      * Share result text.
      */
-    fun share(ignored: View) {
+    fun share() {
         getResultText()?.let { startActivity(IntentFactory.makeShare(it)) }
     }
 
     /**
      * Open result text with browser.
      */
-    fun open(ignored: View) {
+    fun open() {
         getResultText()?.let {
             SearchAction(this, preferenceApplier.getDefaultSearchEngine(), it).invoke()
         }
