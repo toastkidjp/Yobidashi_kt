@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package jp.toastkid.yobidashi.browser
 
 import android.os.Build
