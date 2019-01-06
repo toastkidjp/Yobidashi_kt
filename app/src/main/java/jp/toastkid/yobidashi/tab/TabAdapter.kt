@@ -428,7 +428,7 @@ class TabAdapter(
         when (currentTab()) {
             is WebTab -> browserModule.findAllAsync(text)
             is PdfTab -> Unit
-            is EditorTab -> editor.find(text)
+            is EditorTab -> Unit
         }
     }
 

@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             style="@style/OneLineTextMenu"
             android:background="@color/filter_white_bb"
-            android:onClick="@{fragment.openSearchCategory}"
+            android:onClick="@{fragment::openSearchCategory}"
             >
             <TextView
                 android:layout_width="match_parent"

@@ -42,19 +42,19 @@
                     android:id="@+id/clip"
                     style="@style/BarcodeReaderSubMenuStyle"
                     android:text="@string/clip"
-                    android:onClick="@{activity.clip}"
+                    android:onClick="@{activity::clip}"
                     />
                 <TextView
                     android:id="@+id/share"
                     style="@style/BarcodeReaderSubMenuStyle"
                     android:text="@string/share"
-                    android:onClick="@{activity.share}"
+                    android:onClick="@{activity::share}"
                     />
                 <TextView
                     android:id="@+id/open"
                     style="@style/BarcodeReaderSubMenuStyle"
                     android:text="@string/open"
-                    android:onClick="@{activity.open}"
+                    android:onClick="@{activity::open}"
                     />
             </LinearLayout>
             <TextView

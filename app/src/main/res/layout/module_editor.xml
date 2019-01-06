@@ -68,7 +68,7 @@
                     android:drawableTop="@drawable/ic_load"
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.load()}"
-                    android:onLongClick="@{editorModule.showName}"
+                    android:onLongClick="@{editorModule::showName}"
                     />
                 <Button
                     android:id="@+id/save"
@@ -79,7 +79,7 @@
                     android:drawableTop="@drawable/ic_save"
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.save()}"
-                    android:onLongClick="@{editorModule.showName}"
+                    android:onLongClick="@{editorModule::showName}"
                     />
                 <Button
                     android:id="@+id/backup"
@@ -90,7 +90,7 @@
                     android:drawableTop="@drawable/ic_backup"
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.backup()}"
-                    android:onLongClick="@{editorModule.showName}"
+                    android:onLongClick="@{editorModule::showName}"
                     />
                 <Button
                     android:id="@+id/save_as"
@@ -101,7 +101,7 @@
                     android:drawableTop="@drawable/ic_save_as"
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.saveAs()}"
-                    android:onLongClick="@{editorModule.showName}"
+                    android:onLongClick="@{editorModule::showName}"
                     />
                 <Button
                     android:id="@+id/paste_as_quotation"
@@ -112,7 +112,7 @@
                     android:drawableTop="@drawable/ic_quote"
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.pasteAsQuotation()}"
-                    android:onLongClick="@{editorModule.showName}"
+                    android:onLongClick="@{editorModule::showName}"
                     />
                 <TextView
                     android:id="@+id/counter"
@@ -145,7 +145,7 @@
                     android:drawableTop="@drawable/ic_clear_form"
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.clear()}"
-                    android:onLongClick="@{editorModule.showName}"
+                    android:onLongClick="@{editorModule::showName}"
                     />
                 <Space
                     android:id="@+id/right_space"

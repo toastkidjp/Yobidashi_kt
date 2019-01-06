@@ -75,14 +75,16 @@ class EditorModule(
     private var path: String = ""
 
     /**
-     * Last index of find-text.
+     * Text finder for [EditText].
      */
-    private var lastIndex = 0
+    private var finder: EditTextFinder
 
     init {
         val context = binding.root.context
 
         binding.editorModule = this
+
+        finder = EditTextFinder(binding.editorInput)
 
         binding.editorInput.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(contentEditable: Editable?) {
@@ -185,12 +187,26 @@ class EditorModule(
     }
 
     /**
+     * Find text in bound to upward.
+     *
+     * @param text Finding text
+     */
+    fun findUp(text: String) = finder.findUp(text)
+
+    /**
+     * Find text in bound to downward.
+     *
+     * @param text Finding text
+     */
+    fun findDown(text: String) = finder.findDown(text)
+
+    /**
      * Move cursor to specified index.
      *
      * @param index index of editor.
      */
     private fun moveToIndex(index: Int) {
-        requestFocusInputArea()
+        binding.editorInput.requestFocus()
         binding.editorInput.setSelection(index)
     }
 
@@ -480,54 +496,6 @@ class EditorModule(
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
-    }
-
-    fun find(text: String) {
-        binding.editorInput.text.indexOf(text, lastIndex)
-    }
-
-    fun findUp(text: String) {
-        if (lastIndex >= 0) {
-            selectTextByIndex(findBackwardIndex(text), text);
-        }
-        val nextBackwardIndex = findBackwardIndex(text)
-        if (nextBackwardIndex == -1) {
-            lastIndex = binding.editorInput.text.length
-        }
-    }
-
-    private fun findBackwardIndex(text: String): Int {
-        val index = lastIndex - text.length - 1
-        if (index < 0) {
-            return -1
-        }
-        val haystack = binding.editorInput.text.toString()
-        return haystack.lastIndexOf(text, index)
-    }
-
-    fun findDown(text: String) {
-        selectTextByIndex(findNextForwardIndex(text), text)
-        val nextForwardIndex = findNextForwardIndex(text)
-        if (nextForwardIndex == -1) {
-            lastIndex = 0
-        }
-    }
-
-    private fun selectTextByIndex(index: Int, text: String) {
-        if (index < 0) {
-            lastIndex = 0
-            return
-        }
-        requestFocusInputArea()
-        lastIndex = index + text.length
-        binding.editorInput.setSelection(index, lastIndex)
-    }
-
-    private fun findNextForwardIndex(text: String) =
-            binding.editorInput.text.indexOf(text, lastIndex)
-
-    private fun requestFocusInputArea() {
-        binding.editorInput.requestFocus()
     }
 
     companion object {
