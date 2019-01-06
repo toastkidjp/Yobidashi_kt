@@ -52,14 +52,14 @@ internal class Adapter(
         holder.setText(file.name)
         holder.setSubText(
                 "${convertLastModified(file.lastModified())} / ${convertKb(file.length())}[KB]")
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             try {
                 callback(file.absolutePath)
             } catch (e: IOException) {
                 Timber.e(e)
             }
         }
-        holder.setDelete(View.OnClickListener{ view ->
+        holder.setDelete(View.OnClickListener{
             file.delete()
             notifyItemRemoved(position)
         })
