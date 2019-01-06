@@ -71,7 +71,7 @@ class BarcodeReaderActivity : BaseActivity() {
                 }
                 @Suppress("UsePropertyAccessSyntax")
                 binding?.result?.setText(text)
-                showResult(text)
+                showResult()
             }
 
             override fun possibleResultPoints(list: List<ResultPoint>) = Unit
@@ -111,10 +111,8 @@ class BarcodeReaderActivity : BaseActivity() {
 
     /**
      * Show result with snackbar.
-     *
-     * @param text
      */
-    private fun showResult(text: String) {
+    private fun showResult() {
         binding?.resultArea?.let {
             if (it.visibility != View.VISIBLE) {
                 it.visibility = View.VISIBLE
