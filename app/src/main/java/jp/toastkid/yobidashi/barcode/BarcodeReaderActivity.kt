@@ -69,6 +69,7 @@ class BarcodeReaderActivity : BaseActivity() {
                 if (TextUtils.equals(text, getResultText())) {
                     return
                 }
+                @Suppress("UsePropertyAccessSyntax")
                 binding?.result?.setText(text)
                 showResult(text)
             }
@@ -106,7 +107,7 @@ class BarcodeReaderActivity : BaseActivity() {
     /**
      * Get result text.
      */
-    private fun getResultText(): String? = binding?.result?.getText()?.toString()
+    private fun getResultText(): String? = binding?.result?.text?.toString()
 
     /**
      * Show result with snackbar.
