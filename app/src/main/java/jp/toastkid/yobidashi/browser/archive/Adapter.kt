@@ -60,7 +60,7 @@ internal class Adapter(
         val file = archiveDir.get(position) ?: return
         holder.setText(file.name)
         holder.setSubText(
-                "${convertLastModified(file.lastModified())} / ${convertKb(file.length())}[KB]")
+                "${toLastModifiedText(file.lastModified())} / ${toKiloBytes(file.length())}[KB]")
         holder.itemView.setOnClickListener {
             try {
                 callback(file.absolutePath)
@@ -80,7 +80,7 @@ internal class Adapter(
      *
      * @param lastModifiedMs milliseconds
      */
-    private fun convertLastModified(lastModifiedMs: Long): String
+    private fun toLastModifiedText(lastModifiedMs: Long): String
             = DATE_FORMAT_HOLDER.get().format(Date(lastModifiedMs))
 
     /**
@@ -88,7 +88,7 @@ internal class Adapter(
      *
      * @param length file byte length
      */
-    private fun convertKb(length: Long): String
+    private fun toKiloBytes(length: Long): String
             = NumberFormat.getIntegerInstance(Locale.getDefault()).format(length / 1024)
 
     override fun getItemCount(): Int = archiveDir.count
