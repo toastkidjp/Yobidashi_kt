@@ -137,10 +137,10 @@ internal class ActivityAdapter(
                         { items.add(it) },
                         Timber::e,
                         {
-                            mainThreadHandler.post({
+                            mainThreadHandler.post {
                                 notifyDataSetChanged()
                                 onRefresh()
-                            })
+                            }
                         }
                 )
                 .addTo(disposables)
