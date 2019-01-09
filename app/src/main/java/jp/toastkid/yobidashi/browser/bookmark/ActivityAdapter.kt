@@ -65,7 +65,7 @@ internal class ActivityAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark: Bookmark = items.get(position)
         holder.setText(bookmark.title, bookmark.url)
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             if (bookmark.folder) {
                 folderHistory.push(bookmark.parent)
                 query(bookmark.title)
@@ -171,7 +171,7 @@ internal class ActivityAdapter(
         relation.deleteAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
+                .subscribe {
                     items.remove(item)
                     notifyItemRemoved(position)
                 }
