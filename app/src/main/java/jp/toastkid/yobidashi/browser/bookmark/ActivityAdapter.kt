@@ -63,7 +63,7 @@ internal class ActivityAdapter(
             ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_bookmark, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bookmark: Bookmark = items.get(position)
+        val bookmark: Bookmark = items[position]
         holder.setText(bookmark.title, bookmark.url)
         holder.itemView.setOnClickListener {
             if (bookmark.folder) {
@@ -101,7 +101,7 @@ internal class ActivityAdapter(
     fun currentFolderName(): String =
             if (items.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
             else if (items.isEmpty()) Bookmarks.ROOT_FOLDER_NAME
-            else items.get(0).parent
+            else items[0].parent
 
     /**
      * Back to previous folder.
@@ -158,7 +158,7 @@ internal class ActivityAdapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        remove(items.get(position), position)
+        remove(items[position], position)
     }
 
     /**
