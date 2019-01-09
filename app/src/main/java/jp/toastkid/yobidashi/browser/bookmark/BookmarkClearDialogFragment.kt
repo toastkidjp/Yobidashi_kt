@@ -35,8 +35,8 @@ class BookmarkClearDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_bookmark)
                 .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
                     onClickBookmarkClear?.onClickBookmarkClear()
                     d.dismiss()
                 }
