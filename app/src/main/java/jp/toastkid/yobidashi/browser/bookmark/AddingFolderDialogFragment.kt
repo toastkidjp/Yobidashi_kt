@@ -37,8 +37,8 @@ class AddingFolderDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activityContext)
                 .setTitle(getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
                     onClick?.onClickAddFolder(inputLayout.editText?.text?.toString())
                     d.dismiss()
                 }
