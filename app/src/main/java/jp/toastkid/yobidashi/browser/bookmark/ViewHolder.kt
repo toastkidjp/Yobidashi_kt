@@ -13,6 +13,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -42,7 +43,10 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { binding.icon.setImageBitmap(it) },
-                        { e -> setDefaultIcon() }
+                        { e ->
+                            Timber.e(e)
+                            setDefaultIcon()
+                        }
                 )
     }
 
