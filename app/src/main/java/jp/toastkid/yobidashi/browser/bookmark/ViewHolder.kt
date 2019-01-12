@@ -57,7 +57,7 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
     }
 
     fun setOnClickAdd(history: Bookmark, onClickAdd: (Bookmark) -> Unit) {
-        binding.delete.setOnClickListener { _ -> onClickAdd(history) }
+        binding.delete.setOnClickListener { onClickAdd(history) }
     }
 
 }
