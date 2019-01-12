@@ -15,14 +15,22 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
+ * Dialog fragment of confirming clear bookmark.
+ *
  * @author toastkidjp
  */
 class BookmarkClearDialogFragment : DialogFragment() {
 
+    /**
+     * Callback interface.
+     */
     interface OnClickBookmarkClearCallback {
         fun onClickBookmarkClear()
     }
 
+    /**
+     * Callback instance, this is initialized with context.
+     */
     private var onClickBookmarkClear: OnClickBookmarkClearCallback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
