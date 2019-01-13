@@ -64,7 +64,7 @@ internal class ActivityAdapter(
                 viewHistory.url,
                 dateFormat.get().format(viewHistory.last_viewed)
         )
-        holder.itemView.setOnClickListener { v -> onClick(viewHistory) }
+        holder.itemView.setOnClickListener { onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->
             removeAt(position)
             onDelete.invoke(history)
@@ -97,7 +97,7 @@ internal class ActivityAdapter(
         relation.deleteAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i -> notifyItemRemoved(position) }
+                .subscribe { notifyItemRemoved(position) }
                 .addTo(disposables)
     }
 
