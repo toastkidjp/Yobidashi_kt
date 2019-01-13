@@ -57,7 +57,7 @@ internal class ActivityAdapter(
             ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_view_history, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val viewHistory: ViewHistory = relation.reversed().get(position)
+        val viewHistory: ViewHistory = relation.reversed()[position]
 
         holder.setText(
                 viewHistory.title,
@@ -93,7 +93,7 @@ internal class ActivityAdapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        val item = relation.reversed().get(position)
+        val item = relation.reversed()[position]
         relation.deleteAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
