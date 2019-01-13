@@ -2,418 +2,423 @@
 <layout>
     <data>
         <variable name="fragment"
-            type="jp.toastkid.yobidashi.settings.SettingsTopFragment" />
+            type="jp.toastkid.yobidashi.settings.fragment.BrowserSettingFragment" />
     </data>
-    <android.support.v7.widget.CardView
+    <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/SettingCardStyle"
         >
-        <LinearLayout
-            android:orientation="vertical"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/SettingCardStyle"
             >
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/SettingSubhead"
-                android:text="@string/subhead_setting_browesr"
-                />
-            <FrameLayout
-                android:id="@+id/use_internal_browser"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchInternalBrowser}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_open_in_browser_black"
-                    android:text="@string/title_use_internal_browser"
-                    />
-                <CheckBox
-                    android:id="@+id/use_internal_browser_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <include android:id="@+id/browser_expand"
-                layout="@layout/fragment_setting_section_browser_expand_mode"/>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <FrameLayout
-                android:id="@+id/retain_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchRetainTabs}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_tab_black"
-                    android:text="@string/title_retain_tabs"
-                    />
-                <CheckBox
-                    android:id="@+id/retain_tabs_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <TextView
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_home_black"
-                android:text="@string/title_home"
-                />
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchInternalBrowser}"
-                >
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/home_input_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/common_horizontal_margin"
-                    android:layout_marginRight="80dp"
-                    >
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:maxLines="1"
-                        android:inputType="text"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-                <Button
-                    android:id="@+id/home_button"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="8dp"
-                    android:text="@string/settings_color_commit"
-                    style="?android:attr/buttonBarStyle"
-                    android:onClick="@{fragment::commitHomeInput}"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <FrameLayout
-                android:id="@+id/use_inversion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchUseInversion}"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/settings_item_left_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/invert_content_coloring"
-                    />
-                <CheckBox
-                    android:id="@+id/use_inversion_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <FrameLayout
-                android:id="@+id/browser_js"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchJsEnabled}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/settings_item_left_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_enable_javascript"
-                    />
-                <CheckBox
-                    android:id="@+id/browser_js_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <FrameLayout
-                android:id="@+id/use_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchLoadingImage}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/settings_item_left_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_load_image"
-                    />
-                <CheckBox
-                    android:id="@+id/use_image_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <FrameLayout
-                android:id="@+id/save_form"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchSaveFormData}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/settings_item_left_margin"
-                    android:gravity="center_vertical"
-                    android:text="@string/title_save_form_data"
-                    />
-                <CheckBox
-                    android:id="@+id/save_form_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <FrameLayout
-                android:id="@+id/save_view_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchViewHistory}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_open_in_browser_black"
-                    android:text="@string/title_save_view_history"
-                    />
-                <CheckBox
-                    android:id="@+id/save_view_history_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/OneLineTextMenu"
-                android:text="@string/title_menu_position"
-                />
-            <RadioGroup
-                android:id="@+id/menu_pos_radio"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                >
-                <RadioButton
-                    android:id="@+id/menu_pos_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/left"
-                    />
-                <RadioButton
-                    android:id="@+id/menu_pos_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/settings_item_left_margin"
-                    android:text="@string/right"
-                    />
-            </RadioGroup>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <FrameLayout
-                android:id="@+id/user_agent"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_item_height"
-                android:onClick="@{fragment::userAgent}"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/OneLineTextMenu"
-                    android:layout_gravity="left"
-                    android:text="@string/title_user_agent"
-                    />
-                <TextView
-                    android:id="@+id/user_agent_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/OneLineTextMenu"
-                    android:layout_gravity="right"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/primary_dark_divider"/>
-
-            <RelativeLayout
+            <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_item_height"
-                android:layout_marginLeft="16dp"
+                android:layout_height="wrap_content"
                 >
                 <TextView
-                    android:id="@+id/title_pool_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_tab_retaining_size"
-                    />
-                <TextView
-                    android:id="@+id/pool_size_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_toRightOf="@id/title_pool_size"
-                    android:layout_toEndOf="@id/title_pool_size"
-                    />
-                <SeekBar
-                    android:id="@+id/pool_size_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/title_pool_size"
-                    android:layout_marginTop="8dp"
-                    style="@style/OneLineTextMenu"
-                    android:max="20"
+                    style="@style/SettingSubhead"
+                    android:text="@string/subhead_setting_browesr"
                     />
-            </RelativeLayout>
+                <FrameLayout
+                    android:id="@+id/use_internal_browser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchInternalBrowser}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_open_in_browser_black"
+                        android:text="@string/title_use_internal_browser"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_internal_browser_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
 
-            <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/primary_dark_divider"/>
 
-            <FrameLayout
-                android:id="@+id/ad_remove"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> fragment.switchAdRemove()}"
-                >
+                <include android:id="@+id/browser_expand"
+                    layout="@layout/fragment_setting_section_browser_expand_mode"/>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
+                    android:id="@+id/retain_tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchRetainTabs}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_tab_black"
+                        android:text="@string/title_retain_tabs"
+                        />
+                    <CheckBox
+                        android:id="@+id/retain_tabs_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
                 <TextView
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_block_black"
-                    android:text="@string/title_remove_ad"
+                    android:drawableLeft="@drawable/ic_home_black"
+                    android:text="@string/title_home"
                     />
-                <CheckBox
-                    android:id="@+id/ad_remove_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_gravity="right"
-                    android:clickable="false"
-                    style="@style/Border"
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchInternalBrowser}"
+                    >
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/home_input_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/common_horizontal_margin"
+                        android:layout_marginRight="80dp"
+                        >
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:maxLines="1"
+                            android:inputType="text"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/home_button"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/settings_color_commit"
+                        style="?android:attr/buttonBarStyle"
+                        android:onClick="@{fragment::commitHomeInput}"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
+                    android:id="@+id/use_inversion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchUseInversion}"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/invert_content_coloring"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_inversion_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
+                    android:id="@+id/browser_js"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchJsEnabled}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_enable_javascript"
+                        />
+                    <CheckBox
+                        android:id="@+id/browser_js_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
+                    android:id="@+id/use_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchLoadingImage}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_load_image"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_image_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
+                    android:id="@+id/save_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchSaveFormData}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_save_form_data"
+                        />
+                    <CheckBox
+                        android:id="@+id/save_form_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
+                    android:id="@+id/save_view_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchViewHistory}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_open_in_browser_black"
+                        android:text="@string/title_save_view_history"
+                        />
+                    <CheckBox
+                        android:id="@+id/save_view_history_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_menu_position"
                     />
-            </FrameLayout>
+                <RadioGroup
+                    android:id="@+id/menu_pos_radio"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_item_left_margin"
+                    >
+                    <RadioButton
+                        android:id="@+id/menu_pos_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/left"
+                        />
+                    <RadioButton
+                        android:id="@+id/menu_pos_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/settings_item_left_margin"
+                        android:text="@string/right"
+                        />
+                </RadioGroup>
 
-            <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/primary_dark_divider"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/OneLineTextMenu"
-                android:text="@string/title_clear_cache"
-                android:onClick="@{fragment::clearCache}"
-                />
+                <FrameLayout
+                    android:id="@+id/user_agent"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:onClick="@{fragment::userAgent}"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/OneLineTextMenu"
+                        android:layout_gravity="left"
+                        android:text="@string/title_user_agent"
+                        />
+                    <TextView
+                        android:id="@+id/user_agent_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/OneLineTextMenu"
+                        android:layout_gravity="right"
+                        />
+                </FrameLayout>
 
-            <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/primary_dark_divider"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/OneLineTextMenu"
-                android:text="@string/clear_form_data"
-                android:onClick="@{fragment::clearFormData}"
-                />
+                <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:layout_marginLeft="16dp"
+                    >
+                    <TextView
+                        android:id="@+id/title_pool_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_tab_retaining_size"
+                        />
+                    <TextView
+                        android:id="@+id/pool_size_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@id/title_pool_size"
+                        android:layout_toEndOf="@id/title_pool_size"
+                        />
+                    <SeekBar
+                        android:id="@+id/pool_size_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title_pool_size"
+                        android:layout_marginTop="8dp"
+                        style="@style/OneLineTextMenu"
+                        android:max="20"
+                        />
+                </RelativeLayout>
 
-            <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/primary_dark_divider"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/OneLineTextMenu"
-                android:text="@string/title_clear_coolie"
-                android:onClick="@{fragment::clearCookie}"
-                />
-        </LinearLayout>
+                <FrameLayout
+                    android:id="@+id/ad_remove"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{view -> fragment.switchAdRemove()}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_block_black"
+                        android:text="@string/title_remove_ad"
+                        />
+                    <CheckBox
+                        android:id="@+id/ad_remove_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
 
-    </android.support.v7.widget.CardView>
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_clear_cache"
+                    android:onClick="@{fragment::clearCache}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/clear_form_data"
+                    android:onClick="@{fragment::clearFormData}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_clear_coolie"
+                    android:onClick="@{fragment::clearCookie}"
+                    />
+            </LinearLayout>
+
+        </FrameLayout>
+    </ScrollView>
 </layout>

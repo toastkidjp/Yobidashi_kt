@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable name="activity" type="jp.toastkid.yobidashi.settings.SettingsActivity" />
@@ -23,60 +23,6 @@
                 android:minHeight="?android:actionBarSize"
                 />
         </android.support.design.widget.AppBarLayout>
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            >
-            <RadioGroup
-                android:id="@+id/category_group"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                >
-                <RadioButton
-                    android:id="@+id/category_all"
-                    android:text="@string/all"
-                    style="@style/FakeTabStyle"
-                    android:onClick="@{activity::switchAll}"
-                    />
-                <RadioButton
-                    android:id="@+id/category_displaying"
-                    android:text="@string/subhead_displaying"
-                    style="@style/FakeTabStyle"
-                    android:onClick="@{activity::switchDisplaying}"
-                    />
-                <RadioButton
-                    android:id="@+id/category_search"
-                    android:text="@string/subhead_search"
-                    style="@style/FakeTabStyle"
-                    android:onClick="@{activity::switchSearch}"
-                    />
-                <RadioButton
-                    android:id="@+id/category_browser"
-                    android:text="@string/subhead_browser"
-                    style="@style/FakeTabStyle"
-                    android:onClick="@{activity::switchBrowser}"
-                    />
-                <RadioButton
-                    android:id="@+id/category_editor"
-                    android:text="@string/subhead_editor"
-                    style="@style/FakeTabStyle"
-                    android:onClick="@{view -> activity.switchEditor()}"
-                    />
-                <RadioButton
-                    android:id="@+id/category_notification"
-                    android:text="@string/subhead_notification"
-                    style="@style/FakeTabStyle"
-                    android:onClick="@{activity::switchNotification}"
-                    />
-                <RadioButton
-                    android:id="@+id/category_other"
-                    android:text="@string/subhead_others"
-                    style="@style/FakeTabStyle"
-                    android:onClick="@{activity::switchOther}"
-                    />
-            </RadioGroup>
-        </HorizontalScrollView>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -94,18 +40,12 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/content_description_background"
                 />
-            <ScrollView
-                android:id="@+id/scroll"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
-
-                <FrameLayout
-                    android:id="@+id/container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </ScrollView>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                />
         </FrameLayout>
     </LinearLayout>
 

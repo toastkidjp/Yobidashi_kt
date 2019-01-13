@@ -1,0 +1,77 @@
+/*
+ * Copyright (c) 2019 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+package jp.toastkid.yobidashi.settings.fragment
+
+import android.databinding.DataBindingUtil
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
+import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
+
+/**
+ * @author toastkidjp
+ */
+class DisplayingSettingFragment : Fragment() {
+
+    private lateinit var binding: FragmentSettingDisplayBinding
+
+    private lateinit var preferenceApplier: PreferenceApplier
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_display, container, false)
+        val activityContext = context
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
+        preferenceApplier = PreferenceApplier(activityContext)
+        binding.fragment = this
+        return binding.root
+    }
+
+    /**
+     * Call color setting.
+     *
+     * @param view
+     */
+    fun colorSettings(view: View) {
+        activity?.let {
+            startActivity(ColorSettingActivity.makeIntent(it))
+        }
+    }
+
+    /**
+     * Call background setting.
+     *
+     * @param view
+     */
+    fun backgroundSettings(view: View) {
+        activity?.let {
+            startActivity(BackgroundSettingActivity.makeIntent(it))
+        }
+    }
+
+    /**
+     * Clear background setting.
+     *
+     * @param view
+     */
+    fun clearBackgroundSettings(view: View) {
+        preferenceApplier.removeBackgroundImagePath()
+        Toaster.snackShort(
+                binding.root,
+                R.string.message_reset_bg_image,
+                preferenceApplier.colorPair()
+        )
+    }
+
+}

@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable name="fragment"
+            type="jp.toastkid.yobidashi.settings.fragment.ColorFilterSettingFragment" />
+    </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
+
+        <FrameLayout
+            android:id="@+id/use_color_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_transparent"
+            android:onClick="@{fragment::switchColorFilter}"
+            >
+            <TextView
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/title_color_filter"
+                />
+            <CheckBox
+                android:id="@+id/use_color_filter_check"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/common_horizontal_margin"
+                android:layout_gravity="right"
+                android:clickable="false"
+                style="@style/Border"
+                />
+        </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
