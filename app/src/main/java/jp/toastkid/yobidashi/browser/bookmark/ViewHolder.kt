@@ -17,20 +17,39 @@ import timber.log.Timber
 import java.io.File
 
 /**
+ * Bookmark item [ViewHolder].
+ *
+ * @param binding Data Binding object
  * @author toastkidjp
  */
 internal class ViewHolder(private val binding: ItemBookmarkBinding)
     : RecyclerView.ViewHolder(binding.root) {
 
+    /**
+     * Set text and URL.
+     *
+     * @param text text
+     * @param url URL string
+     */
     fun setText(text: String, url: String) {
         binding.title.text = text
         binding.url.text = url
     }
 
+    /**
+     * Set image with drawable ID.
+     *
+     * @param iconId Icon's drawable resource ID.
+     */
     fun setImageId(@DrawableRes iconId: Int) {
         binding.icon.setImageResource(iconId)
     }
 
+    /**
+     * Set image with favicon path.
+     *
+     * @param faviconPath favicon path
+     */
     fun setImage(faviconPath: String): Disposable {
         if (faviconPath.isEmpty()) {
             setDefaultIcon()
@@ -50,12 +69,21 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
                 )
     }
 
+    /**
+     * Set default icon.
+     */
     private fun setDefaultIcon() {
         binding.icon.setImageResource(
                 R.drawable.ic_bookmark_black
         )
     }
 
+    /**
+     * Set action when click add-button.
+     *
+     * @param history [Bookmark] item
+     * @param onClickAdd click action
+     */
     fun setOnClickAdd(history: Bookmark, onClickAdd: (Bookmark) -> Unit) {
         binding.delete.setOnClickListener { onClickAdd(history) }
     }
