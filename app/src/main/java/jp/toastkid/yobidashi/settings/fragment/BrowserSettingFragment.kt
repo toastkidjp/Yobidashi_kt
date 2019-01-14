@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
-import jp.toastkid.yobidashi.databinding.ModuleSettingBrowserBinding
+import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -35,12 +35,12 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, TitleIdSupplier {
 
-    private lateinit var binding: ModuleSettingBrowserBinding
+    private lateinit var binding: FragmentSettingBrowserBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.module_setting_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_browser, container, false)
         val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         return binding.root

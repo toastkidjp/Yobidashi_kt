@@ -6,7 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
 import android.widget.SeekBar
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBinding
+import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * @author toastkidjp
  */
 internal class ColorFilterSettingInitializer(
-        private val binding: FragmentSettingSectionColorFilterBinding,
+        private val binding: FragmentSettingColorFilterBinding,
         private val callback: (Int) -> Unit
 ) {
 

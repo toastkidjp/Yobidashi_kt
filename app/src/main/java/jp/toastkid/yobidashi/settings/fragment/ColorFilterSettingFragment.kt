@@ -16,7 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.color_filter.ColorFilter
-import jp.toastkid.yobidashi.databinding.FragmentSettingSectionColorFilterBinding
+import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.ColorFilterSettingInitializer
 
@@ -25,7 +25,7 @@ import jp.toastkid.yobidashi.settings.ColorFilterSettingInitializer
  */
 class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
 
-    private lateinit var binding: FragmentSettingSectionColorFilterBinding
+    private lateinit var binding: FragmentSettingColorFilterBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -35,7 +35,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
     private lateinit var colorFilter: ColorFilter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_section_color_filter, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_color_filter, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)

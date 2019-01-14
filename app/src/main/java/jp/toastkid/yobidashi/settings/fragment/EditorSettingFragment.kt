@@ -19,7 +19,7 @@ import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.TextView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSettingSectionEditorBinding
+import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
@@ -31,7 +31,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 class EditorSettingFragment : Fragment(), TitleIdSupplier {
 
-    private lateinit var binding: FragmentSettingSectionEditorBinding
+    private lateinit var binding: FragmentSettingEditorBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -46,7 +46,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
     private var initialFontColor: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_section_editor, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_editor, container, false)
         val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         binding.also { editorModule ->
