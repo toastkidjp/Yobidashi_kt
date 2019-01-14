@@ -53,7 +53,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
     }
 
     fun setOnClickBookmark(history: ViewHistory) {
-        binding.bookmark.setOnClickListener ({ _ ->
+        binding.bookmark.setOnClickListener ({
             val context = binding.root.context
             if (context is FragmentActivity) {
                 AddBookmarkDialogFragment.make(history.title, history.url).show(
@@ -65,7 +65,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
     }
 
     fun setOnClickAdd(history: ViewHistory, onClickAdd: (ViewHistory) -> Unit) {
-        binding.delete.setOnClickListener ({ _ -> onClickAdd(history) })
+        binding.delete.setOnClickListener ({ onClickAdd(history) })
     }
 
     fun switchDividerVisibility(visible: Boolean) {
