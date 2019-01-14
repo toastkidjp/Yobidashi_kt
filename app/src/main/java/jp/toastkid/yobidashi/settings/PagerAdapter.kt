@@ -13,6 +13,10 @@ import android.support.v4.app.FragmentPagerAdapter
 import jp.toastkid.yobidashi.settings.fragment.*
 
 /**
+ * Setting fragments pager adapter.
+ *
+ * @param fragmentManager [FragmentManager]
+ * @param titleResolver Title string resource resolve consumer.
  * @author toastkidjp
  */
 class PagerAdapter(
