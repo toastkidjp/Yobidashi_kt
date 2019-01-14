@@ -16,9 +16,9 @@ import jp.toastkid.yobidashi.settings.fragment.*
  * @author toastkidjp
  */
 class PagerAdapter(
-        fm: FragmentManager,
+        fragmentManager: FragmentManager,
         private val titleResolver: (Int) -> String
-) : FragmentPagerAdapter(fm) {
+) : FragmentPagerAdapter(fragmentManager) {
 
     private val browserSettingFragment by lazy { BrowserSettingFragment() }
 
