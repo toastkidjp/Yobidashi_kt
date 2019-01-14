@@ -13,7 +13,6 @@ import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivitySettingsBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 
 /**
@@ -45,8 +44,6 @@ class SettingsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         applyColorToToolbar(binding.toolbar)
-
-        ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -23,41 +23,23 @@
                 android:minHeight="?android:actionBarSize"
                 />
         </android.support.design.widget.AppBarLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/cardview_shadow_start_color"
-            />
-        <FrameLayout
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
-            <ImageView
-                android:id="@+id/background"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/content_description_background"
+            <android.support.v4.view.PagerTabStrip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/textPrimary"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 />
-            <android.support.v4.view.ViewPager
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                >
-                <android.support.v4.view.PagerTabStrip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:background="@color/colorPrimary"
-                    android:textColor="@color/textPrimary"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    />
-            </android.support.v4.view.ViewPager>
-        </FrameLayout>
+        </android.support.v4.view.ViewPager>
     </LinearLayout>
-
 
 </layout>
