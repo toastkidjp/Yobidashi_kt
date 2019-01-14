@@ -48,8 +48,14 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     override fun onResume() {
         super.onResume()
-        binding.startUpItems?.startUpSelector?.check(preferenceApplier.startUp.radioButtonId)
-        binding.wifiOnlyCheck.isChecked = preferenceApplier.wifiOnly
+        binding.startUpItems.startUpSelector.let {
+            it.check(preferenceApplier.startUp.radioButtonId)
+            it.jumpDrawablesToCurrentState()
+        }
+        binding.wifiOnlyCheck.let {
+            it.isChecked = preferenceApplier.wifiOnly
+            it.jumpDrawablesToCurrentState()
+        }
     }
 
     /**

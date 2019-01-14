@@ -54,6 +54,10 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         }
         initBrowserExpandable()
         initMenuPos()
+    }
+
+    override fun onResume() {
+        super.onResume()
         setCurrentValues()
     }
 
@@ -61,15 +65,33 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         binding.let {
             Colors.setColors(it.homeButton, preferenceApplier.colorPair())
             it.homeInputLayout.editText?.setText(preferenceApplier.homeUrl)
+
             it.useInternalBrowserCheck.isChecked = preferenceApplier.useInternalBrowser()
+            it.useInternalBrowserCheck.jumpDrawablesToCurrentState()
+
             it.retainTabsCheck.isChecked = preferenceApplier.doesRetainTabs()
+            it.retainTabsCheck.jumpDrawablesToCurrentState()
+
             it.browserJsCheck.isChecked = preferenceApplier.useJavaScript()
+            it.browserJsCheck.jumpDrawablesToCurrentState()
+
             it.useImageCheck.isChecked = preferenceApplier.doesLoadImage()
+            it.useImageCheck.jumpDrawablesToCurrentState()
+
             it.saveFormCheck.isChecked = preferenceApplier.doesSaveForm()
+            it.saveFormCheck.jumpDrawablesToCurrentState()
+
             it.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
+
             it.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
+            it.saveViewHistoryCheck.jumpDrawablesToCurrentState()
+
             it.useInversionCheck.isChecked = preferenceApplier.useInversion
+            it.useInversionCheck.jumpDrawablesToCurrentState()
+
             it.adRemoveCheck.isChecked = preferenceApplier.adRemove
+            it.adRemoveCheck.jumpDrawablesToCurrentState()
+
             it.poolSizeValue.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
                     preferenceApplier.poolSize = bar?.progress ?: preferenceApplier.poolSize
@@ -83,6 +105,16 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             })
             it.poolSizeValue.progress = preferenceApplier.poolSize
         }
+
+        binding.browserExpand.screenMode?.let {
+            it.check(preferenceApplier.browserScreenMode().id())
+            it.jumpDrawablesToCurrentState()
+        }
+
+        binding.menuPosRadio.let {
+            it.check(preferenceApplier.menuPosId())
+            it.jumpDrawablesToCurrentState()
+        }
     }
 
     private fun initBrowserExpandable() {
@@ -93,7 +125,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 R.id.fixed        -> preferenceApplier.setBrowserScreenMode(ScreenMode.FIXED)
             }
         })
-        binding.browserExpand.screenMode?.check(preferenceApplier.browserScreenMode().id())
     }
     
     private fun initMenuPos() {
@@ -104,9 +135,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                     R.id.menu_pos_right -> preferenceApplier.setMenuPos(MenuPos.RIGHT)
                 }
             })
-            it.check(preferenceApplier.menuPosId())
         }
-
     }
 
     /**

@@ -56,12 +56,19 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         super.onResume()
 
         binding.enableSearchQueryExtractCheck.isChecked = preferenceApplier.enableSearchQueryExtract
+        binding.enableSearchQueryExtractCheck.jumpDrawablesToCurrentState()
         binding.enableSearchWithClipCheck.isChecked = preferenceApplier.enableSearchWithClip
+        binding.enableSearchWithClipCheck.jumpDrawablesToCurrentState()
         binding.useSuggestionCheck.isChecked = preferenceApplier.isEnableSuggestion
+        binding.useSuggestionCheck.jumpDrawablesToCurrentState()
         binding.useHistoryCheck.isChecked = preferenceApplier.isEnableSearchHistory
+        binding.useHistoryCheck.jumpDrawablesToCurrentState()
         binding.useFavoriteCheck.isChecked = preferenceApplier.isEnableFavoriteSearch
+        binding.useFavoriteCheck.jumpDrawablesToCurrentState()
         binding.useViewHistoryCheck.isChecked = preferenceApplier.isEnableViewHistory
+        binding.useViewHistoryCheck.jumpDrawablesToCurrentState()
         binding.useAppSearchCheck.isChecked = preferenceApplier.isEnableAppSearch()
+        binding.useAppSearchCheck.jumpDrawablesToCurrentState()
     }
 
     /**

@@ -57,7 +57,10 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         val filterColor = preferenceApplier.filterColor()
         binding.sample.setBackgroundColor(filterColor)
         binding.alpha.setProgress(Color.alpha(filterColor))
-        binding.useColorFilterCheck.isChecked = preferenceApplier.useColorFilter()
+        binding.useColorFilterCheck.let {
+            it.isChecked = preferenceApplier.useColorFilter()
+            it.jumpDrawablesToCurrentState()
+        }
     }
 
     /**

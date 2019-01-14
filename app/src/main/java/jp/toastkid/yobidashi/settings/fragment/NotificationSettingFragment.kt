@@ -41,6 +41,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
     override fun onResume() {
         super.onResume()
         binding.useNotificationWidgetCheck.isChecked = preferenceApplier.useNotificationWidget()
+        binding.useNotificationWidgetCheck.jumpDrawablesToCurrentState()
     }
 
     /**
