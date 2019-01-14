@@ -33,7 +33,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 /**
  * @author toastkidjp
  */
-class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
+class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, TitleIdSupplier {
 
     private lateinit var binding: ModuleSettingBrowserBinding
 
@@ -282,4 +282,5 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
         binding.userAgentValue?.text = userAgent.title()
     }
 
+    override fun titleId() = R.string.subhead_setting_browesr
 }

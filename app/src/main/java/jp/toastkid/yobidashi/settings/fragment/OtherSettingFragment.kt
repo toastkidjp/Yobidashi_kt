@@ -26,7 +26,7 @@ import jp.toastkid.yobidashi.main.StartUp
 /**
  * @author toastkidjp
  */
-class OtherSettingFragment : Fragment() {
+class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var binding: FragmentSettingOtherBinding
 
@@ -139,4 +139,7 @@ class OtherSettingFragment : Fragment() {
     fun allApps(v: View) {
         startActivity(SettingsIntentFactory.allApps())
     }
+
+    override fun titleId() = R.string.subhead_others
+
 }

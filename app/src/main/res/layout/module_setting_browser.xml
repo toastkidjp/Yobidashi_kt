@@ -19,12 +19,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/SettingSubhead"
-                    android:text="@string/subhead_setting_browesr"
-                    />
                 <FrameLayout
                     android:id="@+id/use_internal_browser"
                     android:layout_width="match_parent"

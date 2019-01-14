@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi.settings.ColorFilterSettingInitializer
 /**
  * @author toastkidjp
  */
-class ColorFilterSettingFragment : Fragment() {
+class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var binding: FragmentSettingSectionColorFilterBinding
 
@@ -71,4 +71,5 @@ class ColorFilterSettingFragment : Fragment() {
         }
     }
 
+    override fun titleId() = R.string.title_color_filter
 }

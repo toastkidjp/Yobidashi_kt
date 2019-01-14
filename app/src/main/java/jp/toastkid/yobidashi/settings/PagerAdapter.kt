@@ -15,7 +15,10 @@ import jp.toastkid.yobidashi.settings.fragment.*
 /**
  * @author toastkidjp
  */
-class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class PagerAdapter(
+        fm: FragmentManager,
+        private val titleResolver: (Int) -> String
+) : FragmentPagerAdapter(fm) {
 
     private val browserSettingFragment by lazy { BrowserSettingFragment() }
 
@@ -44,5 +47,10 @@ class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
             6 -> otherSettingFragment
             else -> otherSettingFragment
         }
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        val item = getItem(position)
+        return if (item is TitleIdSupplier) titleResolver(item.titleId()) else ""
     }
 }

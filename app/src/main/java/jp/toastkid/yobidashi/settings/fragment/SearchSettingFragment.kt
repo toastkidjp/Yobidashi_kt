@@ -26,7 +26,7 @@ import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
 /**
  * @author toastkidjp
  */
-class SearchSettingFragment : Fragment() {
+class SearchSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var binding: FragmentSettingSearchBinding
 
@@ -126,5 +126,7 @@ class SearchSettingFragment : Fragment() {
         preferenceApplier.switchEnableAppSearch()
         binding.useAppSearchCheck.isChecked = newState
     }
+
+    override fun titleId() = R.string.subhead_search
 
 }

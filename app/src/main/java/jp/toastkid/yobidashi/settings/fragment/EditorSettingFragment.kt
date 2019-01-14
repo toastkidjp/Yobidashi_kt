@@ -29,7 +29,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 /**
  * @author toastkidjp
  */
-class EditorSettingFragment : Fragment() {
+class EditorSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var binding: FragmentSettingSectionEditorBinding
 
@@ -141,5 +141,7 @@ class EditorSettingFragment : Fragment() {
 
         Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
     }
+
+    override fun titleId() = R.string.subhead_editor
 
 }

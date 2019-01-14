@@ -37,7 +37,7 @@ class SettingsActivity : BaseActivity() {
         initToolbar(binding.toolbar)
 
         supportFragmentManager?.let {
-            binding.container.adapter = PagerAdapter(it)
+            binding.container.adapter = PagerAdapter(it, { getString(it) })
             binding.container.offscreenPageLimit = 3
         }
     }

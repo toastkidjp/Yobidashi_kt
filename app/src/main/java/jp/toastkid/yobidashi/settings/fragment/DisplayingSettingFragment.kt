@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
 /**
  * @author toastkidjp
  */
-class DisplayingSettingFragment : Fragment() {
+class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var binding: FragmentSettingDisplayBinding
 
@@ -74,4 +74,5 @@ class DisplayingSettingFragment : Fragment() {
         )
     }
 
+    override fun titleId() = R.string.title_settings_display
 }

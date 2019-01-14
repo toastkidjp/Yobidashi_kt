@@ -24,7 +24,7 @@ import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 /**
  * @author toastkidjp
  */
-class NotificationSettingFragment : Fragment() {
+class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var binding: FragmentSettingNotificationBinding
 
@@ -64,5 +64,7 @@ class NotificationSettingFragment : Fragment() {
         }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
+
+    override fun titleId() = R.string.subhead_notification
 
 }
