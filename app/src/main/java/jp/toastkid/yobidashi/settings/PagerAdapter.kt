@@ -40,17 +40,15 @@ class PagerAdapter(
 
     override fun getCount(): Int = 7
 
-    override fun getItem(position: Int): Fragment {
-        return when (position) {
-            0 -> browserSettingFragment
-            1 -> searchSettingFragment
-            2 -> colorFilterSettingFragment
-            3 -> displayingSettingFragment
-            4 -> editorSettingFragment
-            5 -> notificationSettingFragment
-            6 -> otherSettingFragment
-            else -> otherSettingFragment
-        }
+    override fun getItem(position: Int): Fragment = when (position) {
+        0 -> browserSettingFragment
+        1 -> searchSettingFragment
+        2 -> colorFilterSettingFragment
+        3 -> displayingSettingFragment
+        4 -> editorSettingFragment
+        5 -> notificationSettingFragment
+        6 -> otherSettingFragment
+        else -> otherSettingFragment
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
