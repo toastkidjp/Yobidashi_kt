@@ -41,11 +41,11 @@ class PagerAdapter(
     override fun getCount(): Int = 7
 
     override fun getItem(position: Int): Fragment = when (position) {
-        0 -> browserSettingFragment
+        0 -> displayingSettingFragment
         1 -> searchSettingFragment
-        2 -> colorFilterSettingFragment
-        3 -> displayingSettingFragment
-        4 -> editorSettingFragment
+        2 -> browserSettingFragment
+        3 -> editorSettingFragment
+        4 -> colorFilterSettingFragment
         5 -> notificationSettingFragment
         6 -> otherSettingFragment
         else -> otherSettingFragment
