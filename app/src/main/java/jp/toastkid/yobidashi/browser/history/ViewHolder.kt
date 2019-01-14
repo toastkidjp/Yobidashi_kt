@@ -34,7 +34,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
             setDefaultIcon()
             return Disposables.empty()
         }
-        return Single.create<File>{ e -> e.onSuccess(File(faviconPath))}
+        return Single.fromCallable{ File(faviconPath) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map { ImageLoader.loadBitmap(binding.root.context, Uri.fromFile(it)) as Bitmap }
