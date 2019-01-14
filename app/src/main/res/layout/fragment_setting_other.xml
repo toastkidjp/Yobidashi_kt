@@ -20,12 +20,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/SettingSubhead"
-                    android:text="@string/subhead_others"
-                    />
 
                 <FrameLayout
                     android:id="@+id/wifi_only"

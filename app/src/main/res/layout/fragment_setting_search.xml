@@ -21,14 +21,6 @@
                 android:layout_height="wrap_content"
                 style="@style/SettingCardStyle"
                 >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/SettingSubhead"
-                    android:text="@string/title_search_action"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    />
                 <FrameLayout
                     android:id="@+id/default_search_engine"
                     android:layout_width="match_parent"

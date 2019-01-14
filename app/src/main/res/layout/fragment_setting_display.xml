@@ -17,24 +17,16 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/SettingSubhead"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:text="@string/subhead_displaying">
-
-                <requestFocus />
-            </TextView>
-
-            <TextView
                 android:id="@+id/color_settings"
                 style="@style/OneLineTextMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_palette_black"
                 android:onClick="@{fragment::colorSettings}"
-                android:text="@string/title_settings_color" />
+                android:text="@string/title_settings_color"
+                >
+                <requestFocus />
+            </TextView>
 
             <include layout="@layout/primary_dark_divider" />
 
