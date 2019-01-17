@@ -5,12 +5,12 @@
     >
     <data>
         <variable name="fragment"
-            type="jp.toastkid.yobidashi.settings.SettingsTopFragment" />
+            type="jp.toastkid.yobidashi.settings.fragment.EditorSettingFragment" />
     </data>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -131,14 +131,12 @@
                 </LinearLayout>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
-
         <FrameLayout
             android:id="@+id/default_search_engine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/OneLineTextMenu"
             android:background="@color/filter_white_bb"
-            android:onClick="@{fragment::openSearchCategory}"
             >
             <TextView
                 android:layout_width="match_parent"

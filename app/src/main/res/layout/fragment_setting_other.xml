@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="fragment"
+            type="jp.toastkid.yobidashi.settings.fragment.OtherSettingFragment" />
+    </data>
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <FrameLayout
+            android:id="@+id/others"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/SettingCardStyle"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <FrameLayout
+                    android:id="@+id/wifi_only"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{fragment::switchWifiOnly}"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_wifi_only"
+                        />
+                    <CheckBox
+                        android:id="@+id/wifi_only_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <include
+                    android:id="@+id/start_up_items"
+                    layout="@layout/fragment_setting_section_startup"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:id="@+id/settings_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:drawableLeft="@drawable/ic_settings_cell_black"
+                    android:text="@string/title_settings_device"
+                    android:onClick="@{fragment::deviceSetting}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:id="@+id/settings_wifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_settings_wifi"
+                    android:drawableLeft="@drawable/ic_wifi_black"
+                    android:onClick="@{fragment::wifi}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:id="@+id/settings_wireless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_settings_wireless"
+                    android:drawableLeft="@drawable/ic_network_black"
+                    android:onClick="@{fragment::wireless}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:id="@+id/settings_date_and_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_settings_date_and_time"
+                    android:drawableLeft="@drawable/ic_time"
+                    android:onClick="@{fragment::dateAndTime}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:id="@+id/settings_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_settings_display"
+                    android:drawableLeft="@drawable/ic_phone_android_black"
+                    android:onClick="@{fragment::display}"
+                    />
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <TextView
+                    android:id="@+id/settings_all_apps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/OneLineTextMenu"
+                    android:text="@string/title_settings_all_apps"
+                    android:drawableLeft="@drawable/ic_android_app"
+                    android:onClick="@{fragment::allApps}"
+                    />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/SettingCardStyle"
+                    >
+                    <TextView
+                        android:id="@+id/clear_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/OneLineTextMenu"
+                        android:text="@string/title_clear_settings"
+                        android:drawableLeft="@drawable/ic_close_black"
+                        android:onClick="@{fragment::clearSettings}"
+                        />
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </FrameLayout>
+    </ScrollView>
+
+</layout>
