@@ -17,6 +17,8 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.search.SearchAction
 
 /**
+ * Else case dialog showing on long-tap.
+ *
  * @author toastkidjp
  */
 class ElseCaseLongTapDialogFragment : DialogFragment() {
@@ -44,10 +46,23 @@ class ElseCaseLongTapDialogFragment : DialogFragment() {
     }
 
     companion object {
+
+        /**
+         * Extra key for search-engine.
+         */
         private const val KEY_SEARCH_ENGINE = "searchEngine"
 
+        /**
+         * Extra key for extra.
+         */
         private const val KEY_EXTRA = "extra"
 
+        /**
+         * Make [DialogFragment].
+         *
+         * @param searchEngine Search engine name
+         * @param extra extra parameter
+         */
         fun make(searchEngine: String, extra: String) =
                 ElseCaseLongTapDialogFragment().also {
                     it.arguments = bundleOf(
