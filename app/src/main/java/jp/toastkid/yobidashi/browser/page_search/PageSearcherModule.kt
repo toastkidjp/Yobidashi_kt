@@ -14,7 +14,8 @@ import jp.toastkid.yobidashi.tab.TabAdapter
 /**
  * Module for find in page.
  *
- * @param binding
+ * @param binding [ModuleSearcherBinding]
+ * @param tabs [TabAdapter]
  * @author toastkidjp
  */
 class PageSearcherModule(
@@ -22,7 +23,9 @@ class PageSearcherModule(
         val tabs: TabAdapter
 ) : BaseModule(binding.root) {
 
-    /** Use for open software keyboard.  */
+    /**
+     * Use for open software keyboard.
+     */
     private val editText: EditText
 
     init {
@@ -78,7 +81,8 @@ class PageSearcherModule(
 
     /**
      * Show module with opening software keyboard.
-     * @param activity
+     *
+     * @param activity [Activity]
      */
     fun show(activity: Activity) {
         show()
