@@ -31,7 +31,7 @@ class PageSearcherModule(
     init {
         TextInputs.setEmptyAlert(binding.inputLayout)
 
-        binding.setModule(this)
+        binding.module = this
 
         val colorPair = PreferenceApplier(binding.inputLayout.context).colorPair()
         val bgColor = colorPair.bgColor()
