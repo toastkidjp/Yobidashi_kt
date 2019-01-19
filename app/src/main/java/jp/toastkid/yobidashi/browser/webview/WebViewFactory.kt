@@ -23,6 +23,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 internal object WebViewFactory {
 
+    /**
+     * [CompositeDisposable].
+     */
     private val disposables = CompositeDisposable()
 
     /**
@@ -38,6 +41,11 @@ internal object WebViewFactory {
      */
     private var anchor: String = ""
 
+    /**
+     * Make new [WebView].
+     *
+     * @param context [Context]
+     */
     fun make(context: Context): CustomWebView {
         val webView = CustomWebView(context)
         webView.setOnTouchListener { _, motionEvent ->
@@ -118,6 +126,12 @@ internal object WebViewFactory {
         return webView
     }
 
+    /**
+     * Show image anchor type dialog.
+     *
+     * @param url URL string
+     * @param fragmentActivity [FragmentActivity]
+     */
     private fun showImageAnchorDialog(url: String, fragmentActivity: FragmentActivity) {
         val dialogFragment = ImageAnchorTypeLongTapDialogFragment.make(url, anchor)
         showDialogFragment(
@@ -126,6 +140,12 @@ internal object WebViewFactory {
         )
     }
 
+    /**
+     * Show dialog fragment.
+     *
+     * @param dialogFragment [DialogFragment]
+     * @param supportFragmentManager [FragmentManager]
+     */
     private fun showDialogFragment(
             dialogFragment: DialogFragment,
             supportFragmentManager: FragmentManager?
@@ -140,6 +160,9 @@ internal object WebViewFactory {
         )
     }
 
+    /**
+     * Dispose subscriptions.
+     */
     fun dispose() {
         disposables.clear()
     }
