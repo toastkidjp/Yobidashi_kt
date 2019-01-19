@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser.page_search
 import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.EditText
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
@@ -57,7 +56,7 @@ class PageSearcherModule(
     /**
      * Implement for Data Binding.
      */
-    fun findUp(v: View) {
+    fun findUp() {
         tabs.findUp(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
@@ -65,7 +64,7 @@ class PageSearcherModule(
     /**
      * Implement for Data Binding.
      */
-    fun findDown(v: View) {
+    fun findDown() {
         tabs.findDown(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
@@ -73,15 +72,8 @@ class PageSearcherModule(
     /**
      * Implement for Data Binding.
      */
-    fun clearInput(v: View) {
+    fun clearInput() {
         editText.setText("")
-    }
-
-    /**
-     * Implement for Data Binding.
-     */
-    fun hide(v: View) {
-        hide()
     }
 
     /**
