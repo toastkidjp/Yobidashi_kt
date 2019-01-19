@@ -49,7 +49,7 @@ internal object WebViewFactory {
 
         val preferenceApplier = PreferenceApplier(context)
 
-        webView.setOnLongClickListener { v ->
+        webView.setOnLongClickListener {
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
                 WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
