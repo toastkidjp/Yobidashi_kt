@@ -32,14 +32,14 @@ class ElseCaseLongTapDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(activityContext)
                 .setTitle("Text: $extra")
-                .setItems(R.array.url_menu) { dialog, which ->
+                .setItems(R.array.url_menu) { _, which ->
                     when (which) {
                         0 -> Clipboard.clip(activityContext, extra)
                         1 -> SearchAction(activityContext, category, extra).invoke()
                     }
                 }
                 .setCancelable(true)
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .create()
     }
 
