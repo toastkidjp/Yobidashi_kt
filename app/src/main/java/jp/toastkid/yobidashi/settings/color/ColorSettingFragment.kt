@@ -77,6 +77,9 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
 
         val colorPair = colorPair()
 
+        initPalettes()
+        initSavedColors()
+
         initialBgColor = colorPair.bgColor()
         binding?.settingsColorPrev?.setBackgroundColor(initialBgColor)
         binding?.backgroundPalette?.color = initialBgColor
@@ -84,9 +87,6 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
         initialFontColor = colorPair.fontColor()
         binding?.settingsColorPrev?.setTextColor(initialFontColor)
         binding?.fontPalette?.color = initialFontColor
-
-        initPalettes()
-        initSavedColors()
     }
 
     /**
