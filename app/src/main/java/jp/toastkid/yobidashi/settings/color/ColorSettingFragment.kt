@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
-import jp.toastkid.yobidashi.databinding.ActivitySettingsColorBinding
+import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitializer
@@ -46,7 +46,7 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
     /**
      * Data-Binding object.
      */
-    private var binding: ActivitySettingsColorBinding? = null
+    private var binding: FragmentSettingsColorBinding? = null
 
     /**
      * Saved color's adapter.
@@ -61,11 +61,11 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.activity_settings_color,
+                R.layout.fragment_settings_color,
                 container,
                 false
         )
-        binding?.activity = this
+        binding?.fragment = this
 
         setHasOptionsMenu(true)
 
