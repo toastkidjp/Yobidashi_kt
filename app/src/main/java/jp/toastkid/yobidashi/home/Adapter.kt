@@ -85,7 +85,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.item_home_menu
+        private const val LAYOUT_ID = R.layout.item_home_menu
 
         /**
          * Maximum length of menus.
