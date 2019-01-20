@@ -56,6 +56,7 @@ class ColorFilterService : JobIntentService() {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun getWindowType(): Int =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             else WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
