@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.analytics.LogSender
@@ -38,9 +37,7 @@ class DateDetailActivity : BaseActivity() {
 
         logSender = LogSender(this)
 
-        if (binding.toolbar != null) {
-            initToolbar(binding.toolbar as Toolbar)
-        }
+        initToolbar(binding.toolbar)
 
         initButtons()
 
