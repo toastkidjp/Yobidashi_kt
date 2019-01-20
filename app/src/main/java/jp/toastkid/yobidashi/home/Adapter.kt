@@ -69,7 +69,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
         holder.setColorPair(colorPair)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
-        holder.setOnClick(View.OnClickListener { v -> menuSubject.onNext(menu) })
+        holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })
     }
 
     override fun getItemCount(): Int = MAXIMUM
