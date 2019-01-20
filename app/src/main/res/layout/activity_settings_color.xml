@@ -1,198 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
     <data>
-        <variable name="activity" type="jp.toastkid.yobidashi.settings.color.ColorSettingActivity" />
+        <variable name="activity" type="jp.toastkid.yobidashi.settings.color.ColorSettingFragment" />
     </data>
-    <FrameLayout
+    <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/setting_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <ScrollView
-            android:id="@+id/setting_scroll"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/toolbar_height"
+            android:layout_height="wrap_content"
             >
-            <LinearLayout
-                android:orientation="vertical"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="3dp"
                 >
-                <android.support.v7.widget.CardView
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardElevation="3dp"
+                    android:layout_height="match_parent"
                     >
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        >
-                        <LinearLayout
-                            android:id="@+id/paletts"
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            >
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="left"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/settings_item_left_margin"
-                                    android:text="@string/settings_color_background_title"
-                                    android:textSize="16sp" />
-
-                                <com.larswerkman.holocolorpicker.ColorPicker
-                                    android:id="@+id/background_palette"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
-
-                                <com.larswerkman.holocolorpicker.SVBar
-                                    android:id="@+id/background_svbar"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="48dp" />
-
-                                <com.larswerkman.holocolorpicker.OpacityBar
-                                    android:id="@+id/background_opacitybar"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="48dp" />
-
-                            </LinearLayout>
-                            <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_gravity="right"
-                                >
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/settings_item_left_margin"
-                                    android:text="@string/settings_color_font_title"
-                                    android:textSize="16sp"
-                                    />
-                                <com.larswerkman.holocolorpicker.ColorPicker
-                                    android:id="@+id/font_palette"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    />
-
-                                <com.larswerkman.holocolorpicker.SVBar
-                                    android:id="@+id/font_svbar"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="48dp"
-                                    />
-
-                                <com.larswerkman.holocolorpicker.OpacityBar
-                                    android:id="@+id/font_opacitybar"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="48dp"
-                                    />
-                            </LinearLayout>
-                        </LinearLayout>
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="44dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_below="@id/paletts"
-                            >
-                            <Button
-                                android:id="@+id/settings_color_ok"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                                android:layout_marginRight="@dimen/settings_item_left_margin"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginBottom="4dp"
-                                android:text="@string/settings_color_commit"
-                                android:textSize="16sp"
-                                style="?android:attr/buttonBarStyle"
-                                android:onClick="@{view -> activity.ok()}"
-                                />
-
-                            <Button
-                                android:id="@+id/settings_color_prev"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                                android:layout_marginRight="@dimen/settings_item_left_margin"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginBottom="4dp"
-                                android:text="@string/settings_color_reset"
-                                android:textSize="16sp"
-                                style="?android:attr/buttonBarStyle"
-                                android:onClick="@{view -> activity.reset()}"
-                                />
-                        </LinearLayout>
-                    </RelativeLayout>
-                </android.support.v7.widget.CardView>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    >
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="32dp"
-                        app:cardBackgroundColor="@color/soft_background"
-                        app:cardElevation="2dp"
-                        >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/settings_item_left_margin"
-                            android:gravity="center_vertical"
-                            android:text="@string/settings_color_saved_title"
-                            android:textSize="18sp"
-                            />
-
-                        <Button
-                            android:id="@+id/clear_saved_color"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:background="@color/ripple"
-                            style="?android:attr/buttonBarStyle"
-                            android:text="@string/title_clear_saved_color"
-                            />
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/saved_colors"
+                    <LinearLayout
+                        android:id="@+id/paletts"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        />
-                </FrameLayout>
-            </LinearLayout>
-        </ScrollView>
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:background="@color/transparent"
-            >
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/settings_color_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:minHeight="?android:actionBarSize"
-                />
-        </android.support.design.widget.AppBarLayout>
+                        >
 
-    </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/settings_item_left_margin"
+                                android:text="@string/settings_color_background_title"
+                                android:textSize="16sp" />
+
+                            <com.larswerkman.holocolorpicker.ColorPicker
+                                android:id="@+id/background_palette"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <com.larswerkman.holocolorpicker.SVBar
+                                android:id="@+id/background_svbar"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp" />
+
+                            <com.larswerkman.holocolorpicker.OpacityBar
+                                android:id="@+id/background_opacitybar"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="right"
+                            >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/settings_item_left_margin"
+                                android:text="@string/settings_color_font_title"
+                                android:textSize="16sp"
+                                />
+                            <com.larswerkman.holocolorpicker.ColorPicker
+                                android:id="@+id/font_palette"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                />
+
+                            <com.larswerkman.holocolorpicker.SVBar
+                                android:id="@+id/font_svbar"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                />
+
+                            <com.larswerkman.holocolorpicker.OpacityBar
+                                android:id="@+id/font_opacitybar"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_below="@id/paletts"
+                        >
+                        <Button
+                            android:id="@+id/settings_color_ok"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/settings_item_left_margin"
+                            android:layout_marginRight="@dimen/settings_item_left_margin"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/settings_color_commit"
+                            android:textSize="16sp"
+                            style="?android:attr/buttonBarStyle"
+                            android:onClick="@{view -> activity.ok()}"
+                            />
+
+                        <Button
+                            android:id="@+id/settings_color_prev"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/settings_item_left_margin"
+                            android:layout_marginRight="@dimen/settings_item_left_margin"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/settings_color_reset"
+                            android:textSize="16sp"
+                            style="?android:attr/buttonBarStyle"
+                            android:onClick="@{view -> activity.reset()}"
+                            />
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    app:cardBackgroundColor="@color/soft_background"
+                    app:cardElevation="2dp"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/settings_color_saved_title"
+                        android:textSize="18sp"
+                        />
+
+                    <Button
+                        android:id="@+id/clear_saved_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:background="@color/ripple"
+                        style="?android:attr/buttonBarStyle"
+                        android:text="@string/title_clear_saved_color"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/saved_colors"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
 </layout>

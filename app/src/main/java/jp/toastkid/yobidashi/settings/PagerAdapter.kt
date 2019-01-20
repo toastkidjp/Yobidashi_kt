@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.*
 
 /**
@@ -32,22 +33,25 @@ class PagerAdapter(
 
     private val displayingSettingFragment by lazy { DisplayingSettingFragment() }
 
+    private val colorSettingFragment by lazy { ColorSettingFragment() }
+
     private val editorSettingFragment by lazy { EditorSettingFragment() }
 
     private val notificationSettingFragment by lazy { NotificationSettingFragment() }
 
     private val otherSettingFragment by lazy { OtherSettingFragment() }
 
-    override fun getCount(): Int = 7
+    override fun getCount(): Int = 8
 
     override fun getItem(position: Int): Fragment = when (position) {
         0 -> displayingSettingFragment
-        1 -> searchSettingFragment
-        2 -> browserSettingFragment
-        3 -> editorSettingFragment
-        4 -> colorFilterSettingFragment
-        5 -> notificationSettingFragment
-        6 -> otherSettingFragment
+        1 -> colorSettingFragment
+        2 -> searchSettingFragment
+        3 -> browserSettingFragment
+        4 -> editorSettingFragment
+        5 -> colorFilterSettingFragment
+        6 -> notificationSettingFragment
+        7 -> otherSettingFragment
         else -> otherSettingFragment
     }
 

@@ -74,7 +74,7 @@
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".settings.color.ColorSettingActivity"
+            android:name=".settings.color.ColorSettingFragment"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"
             />

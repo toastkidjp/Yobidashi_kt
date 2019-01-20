@@ -18,7 +18,7 @@ import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
-import jp.toastkid.yobidashi.settings.color.ColorSettingActivity
+import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
 
 /**
  * @author toastkidjp
@@ -45,7 +45,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
      */
     fun colorSettings(view: View) {
         activity?.let {
-            startActivity(ColorSettingActivity.makeIntent(it))
+            startActivity(ColorSettingFragment.makeIntent(it))
         }
     }
 
