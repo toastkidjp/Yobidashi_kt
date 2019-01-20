@@ -222,7 +222,7 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
     override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater?.inflate(R.menu.browser, menu)
+        inflater?.inflate(R.menu.color_setting_toolbar_menu, menu)
 
         menu?.let { menuNonNull ->
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_recommend)
