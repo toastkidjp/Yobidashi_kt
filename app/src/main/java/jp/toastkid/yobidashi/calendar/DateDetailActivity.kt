@@ -111,14 +111,14 @@ class DateDetailActivity : BaseActivity() {
          *
          * @return [Intent]
          */
-        fun makeIntent(context: Context, year: Int, month: Int, dayOfMonth: Int): Intent {
-            val intent = Intent(context, DateDetailActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.putExtra(KEY_YEAR, year)
-            intent.putExtra(KEY_MONTH, month)
-            intent.putExtra(KEY_DAY_OF_MONTH, dayOfMonth)
-            return intent
-        }
+        fun makeIntent(context: Context, year: Int, month: Int, dayOfMonth: Int) =
+                Intent(context, DateDetailActivity::class.java)
+                    .also {
+                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        it.putExtra(KEY_YEAR, year)
+                        it.putExtra(KEY_MONTH, month)
+                        it.putExtra(KEY_DAY_OF_MONTH, dayOfMonth)
+                    }
     }
 
 }
