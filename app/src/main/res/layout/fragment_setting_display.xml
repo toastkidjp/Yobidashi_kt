@@ -9,7 +9,8 @@
         android:id="@+id/displaying_module"
         style="@style/SettingCardStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,9 +25,7 @@
                 android:drawableLeft="@drawable/ic_palette_black"
                 android:onClick="@{fragment::colorSettings}"
                 android:text="@string/title_settings_color"
-                >
-                <requestFocus />
-            </TextView>
+                />
 
             <include layout="@layout/primary_dark_divider" />
 
