@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorInt
+import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
@@ -218,6 +219,7 @@ class HomeFragment : BaseFragment() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_home
 
     }
