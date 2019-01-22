@@ -14,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -33,14 +34,17 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
             setDefaultIcon()
             return Disposables.empty()
         }
-        return Single.create<File>{ e -> e.onSuccess(File(faviconPath))}
+        return Single.fromCallable{ File(faviconPath) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map { ImageLoader.loadBitmap(binding.root.context, Uri.fromFile(it)) as Bitmap }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { binding.icon.setImageBitmap(it) },
-                        { e -> setDefaultIcon() }
+                        { e ->
+                            Timber.e(e)
+                            setDefaultIcon()
+                        }
                 )
     }
 
@@ -49,7 +53,7 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
     }
 
     fun setOnClickBookmark(history: ViewHistory) {
-        binding.bookmark.setOnClickListener ({ _ ->
+        binding.bookmark.setOnClickListener {
             val context = binding.root.context
             if (context is FragmentActivity) {
                 AddBookmarkDialogFragment.make(history.title, history.url).show(
@@ -57,11 +61,11 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
                         AddBookmarkDialogFragment::class.java.simpleName
                 )
             }
-        })
+        }
     }
 
     fun setOnClickAdd(history: ViewHistory, onClickAdd: (ViewHistory) -> Unit) {
-        binding.delete.setOnClickListener ({ _ -> onClickAdd(history) })
+        binding.delete.setOnClickListener { onClickAdd(history) }
     }
 
     fun switchDividerVisibility(visible: Boolean) {
