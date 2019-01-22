@@ -11,10 +11,6 @@ object LocaleWrapper {
 
     private val JAPANESE = Locale.JAPAN.language
 
-    fun checkJa(): Boolean {
-        return Locale.getDefault().language.equals(Locale.JAPANESE.language)
-    }
-
     fun isJa(configuration: Configuration): Boolean {
         return getLocale(configuration) == JAPANESE
     }
@@ -30,9 +26,4 @@ object LocaleWrapper {
         return configuration.locale.language
     }
 
-    fun setLocale(configuration: Configuration, newLocale: Locale) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLocale(newLocale)
-        }
-    }
 }
