@@ -165,9 +165,8 @@ class HomeFragment : BaseFragment() {
 
     /**
      * Open search.
-     * @param ignored
      */
-    fun search(ignored: View) {
+    fun search() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.searchBar.transitionName = "share"
@@ -178,9 +177,8 @@ class HomeFragment : BaseFragment() {
 
     /**
      * Open voice search.
-     * @param ignored
      */
-    fun voiceSearch(ignored: View) {
+    fun voiceSearch() {
         activity?.let {
             try {
                 startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
