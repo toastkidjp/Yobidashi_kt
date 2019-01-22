@@ -32,8 +32,8 @@ class ImplicitIntentInvokerDialogFragment : DialogFragment() {
                 .setTitle(R.string.title_invoker_dialog)
                 .setMessage(R.string.message_invoker_dialog)
                 .setView(textInputLayout)
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.invoke) { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.invoke) { d, _ ->
                     textInputLayout.editText?.text?.let { invoke(activityContext, it.toString()) }
                     d.dismiss()
                 }
