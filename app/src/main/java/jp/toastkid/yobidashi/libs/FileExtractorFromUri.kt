@@ -62,8 +62,7 @@ object FileExtractorFromUri {
             "com.android.providers.media.documents" == uri.authority -> {// MediaProvider
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                var contentUri: Uri? = null
-                contentUri = MediaStore.Files.getContentUri("external")
+                val contentUri: Uri? = MediaStore.Files.getContentUri("external")
                 val selection = "_id=?"
                 val selectionArgs = arrayOf(split[1])
                 return getDataColumn(context, contentUri, selection, selectionArgs)
