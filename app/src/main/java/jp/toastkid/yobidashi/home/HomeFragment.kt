@@ -91,7 +91,7 @@ class HomeFragment : BaseFragment() {
      */
     private fun initMenus() {
         val fragmentActivity = activity ?: return
-        adapter = Adapter(fragmentActivity, Consumer<Menu> { this.processMenu(it) })
+        adapter = Adapter(fragmentActivity, Consumer { this.processMenu(it) })
         binding.menusView.adapter = adapter
         val layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false)
         binding.menusView.layoutManager = layoutManager
