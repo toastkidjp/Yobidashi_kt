@@ -4,9 +4,7 @@ import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.CardItemBinding
 
 /**
  * RecyclerView's adapter.
@@ -17,7 +15,7 @@ internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         return CardViewHolder(
-                DataBindingUtil.inflate<CardItemBinding>(
+                DataBindingUtil.inflate(
                         LayoutInflater.from(parent.context),
                         R.layout.card_item,
                         parent,
