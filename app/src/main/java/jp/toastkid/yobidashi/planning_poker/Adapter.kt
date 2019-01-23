@@ -29,7 +29,7 @@ internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val text = Suite.values()[position % Suite.values().size].text()
         holder.setText(text)
-        holder.itemView.setOnClickListener { v -> holder.open() }
+        holder.itemView.setOnClickListener { holder.open() }
     }
 
     override fun getItemCount(): Int = MAXIMUM_SIZE
