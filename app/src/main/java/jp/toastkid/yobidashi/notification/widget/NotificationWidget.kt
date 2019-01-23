@@ -17,7 +17,7 @@ object NotificationWidget {
     /**
      * Notification ID.
      */
-    private val ID = 1
+    private const val ID = 1
 
     /**
      * Notification channel ID.
