@@ -211,7 +211,7 @@ class TabListDialogFragment : DialogFragment() {
      * @param addTab fab
      */
     private fun initAddTabButton(addTab: FloatingActionButton) =
-            addTab.setOnClickListener { v ->
+            addTab.setOnClickListener {
                 addTab.isClickable = false
                 callback?.openNewTabFromTabList()
                 adapter.notifyItemInserted(adapter.itemCount - 1)
