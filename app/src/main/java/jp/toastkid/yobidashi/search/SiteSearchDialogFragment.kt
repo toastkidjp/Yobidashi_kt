@@ -34,7 +34,7 @@ class SiteSearchDialogFragment : DialogFragment() {
         val dialog = AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_site_search_by_google)
                 .setView(textInputLayout)
-                .setPositiveButton(R.string.title_search_action) { d, i ->
+                .setPositiveButton(R.string.title_search_action) { d, _ ->
                     textInputLayout.editText?.text?.let { doAction(it.toString()) }
                     d.dismiss()
                 }
