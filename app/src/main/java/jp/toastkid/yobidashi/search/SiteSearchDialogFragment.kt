@@ -94,8 +94,16 @@ class SiteSearchDialogFragment : DialogFragment() {
          */
         private const val FORMAT = "https://www.google.com/search?as_dt=i&as_sitesearch=%s&as_q=%s"
 
+        /**
+         * Extra key for URL string.
+         */
         private const val KEY_URL = "url"
 
+        /**
+         * Make this fragment instance with URL string.
+         *
+         * @param url URL string.
+         */
         fun makeWithUrl(url: String?) = SiteSearchDialogFragment()
                 .also { it.arguments = bundleOf(KEY_URL to url) }
     }
