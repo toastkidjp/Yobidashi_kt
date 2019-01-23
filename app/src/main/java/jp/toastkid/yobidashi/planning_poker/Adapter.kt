@@ -13,16 +13,15 @@ import jp.toastkid.yobidashi.R
  */
 internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        return CardViewHolder(
-                DataBindingUtil.inflate(
-                        LayoutInflater.from(parent.context),
-                        R.layout.card_item,
-                        parent,
-                        false
-                )
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            CardViewHolder(
+                    DataBindingUtil.inflate(
+                            LayoutInflater.from(parent.context),
+                            R.layout.card_item,
+                            parent,
+                            false
+                    )
+            )
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val text = Suite.values()[position % Suite.values().size].text()
