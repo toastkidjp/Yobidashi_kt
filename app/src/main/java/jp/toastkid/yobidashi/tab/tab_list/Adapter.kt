@@ -50,7 +50,7 @@ internal class Adapter(
         val tab = callback.getTabByIndexFromTabList(position)
         holder.itemView.setOnClickListener {
             callback.replaceTabFromTabList(tab)
-            callback?.onCloseTabListDialogFragment()
+            callback.onCloseTabListDialogFragment()
         }
         holder.setImagePath(tab.thumbnailPath)
         holder.setTitle(tab.title())
