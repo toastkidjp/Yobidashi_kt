@@ -20,6 +20,11 @@ object NotificationWidget {
     private val ID = 1
 
     /**
+     * Notification channel ID.
+     */
+    private const val CHANNEL_ID = "notification_widget"
+
+    /**
      * Show notification widget.
      * @param context
      */
@@ -35,7 +40,7 @@ object NotificationWidget {
      * @param context
      */
     private fun makeNotification(context: Context): Notification {
-        return NotificationCompat.Builder(context)
+        return NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_search_white)
                 .setCustomContentView(RemoteViewsFactory.make(context))
                 .setOngoing(true)
