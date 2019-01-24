@@ -71,11 +71,7 @@
             android:name=".settings.SettingsActivity"
             android:label="@string/title_settings"
             android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            />
-        <activity
-            android:name=".settings.color.ColorSettingActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="orientation|screenSize"
             />
         <activity
