@@ -107,7 +107,7 @@ class SearchActivity : BaseActivity(),
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
-        binding?.searchClear?.setOnClickListener ({ binding?.searchInput?.setText("") })
+        binding?.searchClear?.setOnClickListener { binding?.searchInput?.setText("") }
         SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
 
         initFavoriteModule()
@@ -170,10 +170,10 @@ class SearchActivity : BaseActivity(),
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setListenerForKeyboardHiding() {
-        binding?.scroll?.setOnTouchListener({ _, _ ->
+        binding?.scroll?.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
-        })
+        }
     }
 
     override fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
@@ -263,12 +263,12 @@ class SearchActivity : BaseActivity(),
      */
     private fun initSearchInput() {
         binding?.searchInput?.let {
-            it.setOnEditorActionListener({ v, actionId, _ ->
+            it.setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
                 }
                 true
-            })
+            }
             it.addTextChangedListener(object : TextWatcher {
 
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
