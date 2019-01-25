@@ -457,19 +457,19 @@ class SearchActivity : BaseActivity(),
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.activity_search
+        private const val LAYOUT_ID = R.layout.activity_search
 
         /**
          * Extra key.
          */
-        private const val EXTRA_KEY_QUERY: String = "query"
+        private const val EXTRA_KEY_QUERY = "query"
 
         /**
          * Make launch [Intent].
          *
          * @param context [Context]
          */
-        fun makeIntent(context: Context): Intent =
+        fun makeIntent(context: Context) =
                 Intent(context, SearchActivity::class.java)
                         .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
