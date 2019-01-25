@@ -106,20 +106,16 @@ class Addition internal constructor(
 
     /**
      * Cancel action.
-     *
-     * @param ignored for Data Binding
      */
-    fun cancel(ignored: View) {
+    fun cancel() {
         parent.visibility = View.GONE
         Inputs.hideKeyboard(input)
     }
 
     /**
      * Ok action.
-     *
-     * @param ignored for Data Binding
      */
-    fun ok(ignored: View) {
+    fun ok() {
         val query = input.text.toString()
 
         if (TextUtils.isEmpty(query)) {
