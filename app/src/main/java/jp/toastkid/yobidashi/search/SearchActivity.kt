@@ -151,9 +151,9 @@ class SearchActivity : BaseActivity(),
             it.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
 
             // Set query.
-            intent?.getStringExtra(EXTRA_KEY_QUERY)?.let {
+            intent?.getStringExtra(EXTRA_KEY_QUERY)?.let { query ->
                 binding?.searchInput?.let { input ->
-                    input.setText(it)
+                    input.setText(query)
                     input.selectAll()
                 }
                 overridePendingTransition(0, 0)
