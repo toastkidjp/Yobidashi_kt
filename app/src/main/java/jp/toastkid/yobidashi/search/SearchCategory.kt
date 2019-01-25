@@ -17,7 +17,7 @@ enum class SearchCategory(
         @StringRes val id: Int,
         @DrawableRes val iconId: Int,
         private val host: String,
-        private val generator: (l: String, h: String, q: String) -> String = { l, h, q ->  h + q }
+        private val generator: (l: String, h: String, q: String) -> String = { _, h, q ->  h + q }
     ) {
 
     GOOGLE(R.string.google,
@@ -31,7 +31,7 @@ enum class SearchCategory(
     DUCKDUCKGO(R.string.search_category_web,
             R.drawable.ic_duckduckgo,
             "https://duckduckgo.com/%s?ia=web",
-            {l, h, q -> String.format(h, q)}
+            { _, h, q -> String.format(h, q)}
     ),
     YANDEX(R.string.search_category_yandex,
             R.drawable.ic_yandex,
