@@ -120,6 +120,14 @@ enum class SearchCategory(
             "https://searchcode.com/?q="
     );
 
+    /**
+     * Make search URL with query.
+     *
+     * @param context [Context]
+     * @param query Query string
+     *
+     * @return Search result URL
+     */
     fun make(context: Context, query: String): String {
         return generate(
                 LocaleWrapper.getLocale(context.resources.configuration),
@@ -128,10 +136,25 @@ enum class SearchCategory(
         )
     }
 
+    /**
+     * Generate URL.
+     *
+     * @param l Locale string
+     * @param h Host of search result
+     * @param q Search query
+     *
+     * @return Search result URL
+     */
     private fun generate(l: String, h: String, q: String): String = generator(l, h, q)
 
     companion object {
 
+        /**
+         * Find [SearchCategory] by search category.
+         *
+         * @param category Search category
+         * @return [SearchCategory]
+         */
         fun findByCategory(category: String): SearchCategory {
             for (f in SearchCategory.values()) {
                 if (f.name == category.toUpperCase()) {
@@ -143,11 +166,28 @@ enum class SearchCategory(
                     .let { if (it == null) { GOOGLE } else { it } }
         }
 
+        /**
+         * Find index in values by search category string form.
+         *
+         * @param category Search category string form
+         *
+         * @return index
+         */
         fun findIndex(category: String): Int =
                 values().find { it.name == category.toUpperCase() } ?.ordinal ?: 0
 
+        /**
+         * Get default object.
+         *
+         * @return GOOGLE
+         */
         fun getDefault(): SearchCategory = GOOGLE
 
+        /**
+         * Get default category name.
+         *
+         * @return "GOOGLE"
+         */
         fun getDefaultCategoryName(): String = getDefault().name
     }
 }
