@@ -378,7 +378,7 @@ class SearchActivity : BaseActivity(),
     override fun onClickDeleteAllFavoriteSearch() {
         DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { v ->
+                .subscribe {
                     favoriteModule?.clear()
                     Toaster.snackShort(
                             binding?.root as View,
@@ -391,7 +391,7 @@ class SearchActivity : BaseActivity(),
     override fun onClickClearSearchHistory() {
         DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { v ->
+                .subscribe {
                     historyModule?.clear()
                     Toaster.snackShort(
                             binding?.root as View,
