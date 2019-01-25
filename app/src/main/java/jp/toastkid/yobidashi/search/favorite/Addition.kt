@@ -140,6 +140,6 @@ class Addition internal constructor(
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.favorite_search_addition_dialog_content
+        private const val LAYOUT_ID = R.layout.favorite_search_addition_dialog_content
     }
 }
