@@ -150,15 +150,7 @@ class SearchActivity : BaseActivity(),
             it.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
             it.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
 
-            // Set query.
-            intent?.getStringExtra(EXTRA_KEY_QUERY)?.let { query ->
-                binding?.searchInput?.let { input ->
-                    input.setText(query)
-                    input.selectAll()
-                }
-                overridePendingTransition(0, 0)
-                withoutExitAnimation = true
-            }
+            setQuery()
         }
 
         Toaster.snackShort(
@@ -166,6 +158,17 @@ class SearchActivity : BaseActivity(),
                 getString(R.string.message_search_on_background),
                 colorPair()
                 )
+    }
+
+    private fun setQuery() {
+        intent?.getStringExtra(EXTRA_KEY_QUERY)?.let { query ->
+            binding?.searchInput?.let { input ->
+                input.setText(query)
+                input.selectAll()
+            }
+            overridePendingTransition(0, 0)
+            withoutExitAnimation = true
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
