@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser.page_search
 import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.EditText
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
@@ -15,7 +14,8 @@ import jp.toastkid.yobidashi.tab.TabAdapter
 /**
  * Module for find in page.
  *
- * @param binding
+ * @param binding [ModuleSearcherBinding]
+ * @param tabs [TabAdapter]
  * @author toastkidjp
  */
 class PageSearcherModule(
@@ -23,13 +23,15 @@ class PageSearcherModule(
         val tabs: TabAdapter
 ) : BaseModule(binding.root) {
 
-    /** Use for open software keyboard.  */
+    /**
+     * Use for open software keyboard.
+     */
     private val editText: EditText
 
     init {
         TextInputs.setEmptyAlert(binding.inputLayout)
 
-        binding.setModule(this)
+        binding.module = this
 
         val colorPair = PreferenceApplier(binding.inputLayout.context).colorPair()
         val bgColor = colorPair.bgColor()
@@ -39,17 +41,13 @@ class PageSearcherModule(
         binding.sipDownward.setColorFilter(bgColor)
 
         binding.inputLayout.editText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // NOP.
-            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 tabs.find(s.toString())
             }
 
-            override fun afterTextChanged(s: Editable) {
-                // NOP.
-            }
+            override fun afterTextChanged(s: Editable) = Unit
         })
         editText = binding.inputLayout.editText as EditText
     }
@@ -57,7 +55,7 @@ class PageSearcherModule(
     /**
      * Implement for Data Binding.
      */
-    fun findUp(v: View) {
+    fun findUp() {
         tabs.findUp(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
@@ -65,7 +63,7 @@ class PageSearcherModule(
     /**
      * Implement for Data Binding.
      */
-    fun findDown(v: View) {
+    fun findDown() {
         tabs.findDown(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
@@ -73,20 +71,14 @@ class PageSearcherModule(
     /**
      * Implement for Data Binding.
      */
-    fun clearInput(v: View) {
+    fun clearInput() {
         editText.setText("")
     }
 
     /**
-     * Implement for Data Binding.
-     */
-    fun hide(v: View) {
-        hide()
-    }
-
-    /**
      * Show module with opening software keyboard.
-     * @param activity
+     *
+     * @param activity [Activity]
      */
     fun show(activity: Activity) {
         show()

@@ -25,10 +25,6 @@ class CalendarFragment : BaseFragment() {
     /** Analytics logger wrapper.  */
     private var logSender: LogSender? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         logSender = LogSender(context)
@@ -51,7 +47,7 @@ class CalendarFragment : BaseFragment() {
      */
     private fun initCalendarView() {
         binding?.calendar?.date = System.currentTimeMillis()
-        binding?.calendar?.setOnDateChangeListener{ view, year, month, dayOfMonth ->
+        binding?.calendar?.setOnDateChangeListener{ _, year, month, dayOfMonth ->
             val fragmentActivity = activity ?: return@setOnDateChangeListener
             startActivity(DateDetailActivity.makeIntent(fragmentActivity, year, month, dayOfMonth))
         }
