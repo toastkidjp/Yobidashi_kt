@@ -103,7 +103,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
 
         inflater!!.inflate(R.menu.favorite_toolbar_menu, menu)
 
-        menu!!.findItem(R.id.favorite_toolbar_menu_clear).setOnMenuItemClickListener { v ->
+        menu!!.findItem(R.id.favorite_toolbar_menu_clear).setOnMenuItemClickListener {
             val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
             ClearFavoriteSearchDialogFragment.show(
                     fragmentManager,
@@ -112,7 +112,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
             true
         }
 
-        menu.findItem(R.id.favorite_toolbar_menu_add).setOnMenuItemClickListener { v ->
+        menu.findItem(R.id.favorite_toolbar_menu_add).setOnMenuItemClickListener {
             invokeAddition()
             true
         }
