@@ -145,9 +145,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
     }
 
     @StringRes
-    override fun titleId(): Int {
-        return R.string.title_favorite_search
-    }
+    override fun titleId() = R.string.title_favorite_search
 
     override fun onDetach() {
         super.onDetach()
