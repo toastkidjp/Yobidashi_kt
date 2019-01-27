@@ -26,7 +26,6 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 class ClipboardModule(
         private val binding: ModuleSearchClipboardBinding,
         onClick: (String) -> Unit
-
 ) : BaseModule(binding.root) {
 
     /**
