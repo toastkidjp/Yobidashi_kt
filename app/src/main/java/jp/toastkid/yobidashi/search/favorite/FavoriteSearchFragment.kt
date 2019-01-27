@@ -157,6 +157,6 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
     companion object {
 
         /** Layout ID.  */
-        private val LAYOUT_ID = R.layout.fragment_favorite_search
+        private const val LAYOUT_ID = R.layout.fragment_favorite_search
     }
 }
