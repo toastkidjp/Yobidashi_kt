@@ -21,6 +21,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -31,10 +32,13 @@ import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.apps.AppModule
+import jp.toastkid.yobidashi.search.clip.ClipboardModule
 import jp.toastkid.yobidashi.search.favorite.ClearFavoriteSearchDialogFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
@@ -66,6 +70,8 @@ class SearchActivity : BaseActivity(),
      * View binder.
      */
     private var binding: ActivitySearchBinding? = null
+
+    private var clipboardModule: ClipboardModule? = null
 
     /**
      * Favorite search module.
@@ -117,6 +123,18 @@ class SearchActivity : BaseActivity(),
         initSearchInput()
 
         applyColor()
+
+        clipboardModule = ClipboardModule(
+                binding?.clipboardModule as ModuleSearchClipboardBinding,
+                { clipped ->
+                    if (Urls.isValidUrl(clipped)) {
+                        finish()
+                        startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
+                    } else {
+                        search(binding?.searchCategories?.selectedItem.toString(), clipped)
+                    }
+                }
+        )
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -256,6 +274,8 @@ class SearchActivity : BaseActivity(),
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         appModule?.enable = preferenceApplier.isEnableAppSearch()
+
+        clipboardModule?.switch()
     }
 
     /**
