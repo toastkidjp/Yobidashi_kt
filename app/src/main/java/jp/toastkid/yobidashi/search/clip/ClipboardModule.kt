@@ -16,6 +16,11 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 
 /**
+ * Search module using clipboard content.
+ *
+ * @param binding [ModuleSearchClipboardBinding]
+ * @param onClick callback
+ *
  * @author toastkidjp
  */
 class ClipboardModule(
@@ -24,9 +29,15 @@ class ClipboardModule(
 
 ) : BaseModule(binding.root) {
 
+    /**
+     * Link color.
+     */
     @ColorInt
     private val linkColor = ContextCompat.getColor(binding.root.context, R.color.link_blue)
 
+    /**
+     * Text color.
+     */
     @ColorInt
     private val textColor = ContextCompat.getColor(binding.root.context, R.color.black)
 
@@ -38,6 +49,9 @@ class ClipboardModule(
         }
     }
 
+    /**
+     * Switch content.
+     */
     fun switch() {
         val primary = Clipboard.getPrimary(binding.root.context)?.toString()
         if (primary == null || primary.isBlank()) {
@@ -53,12 +67,22 @@ class ClipboardModule(
         }
     }
 
+    /**
+     * Set search query and icon.
+     *
+     * @param query Query string
+     */
     private fun setSearch(query: String) {
         binding.image.setImageResource(R.drawable.ic_search)
         binding.text.setText(query)
         binding.text.setTextColor(textColor)
     }
 
+    /**
+     * Set open link and icon.
+     *
+     * @param link Link URL(string)
+     */
     private fun setLink(link: String) {
         binding.image.setImageResource(R.drawable.ic_web_black)
         binding.text.setText(link)
