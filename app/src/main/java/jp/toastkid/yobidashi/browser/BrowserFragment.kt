@@ -23,7 +23,6 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.net.toUri
 import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
 import com.cleveroad.cyclemenuwidget.OnStateChangedListener
@@ -51,6 +50,7 @@ import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
@@ -590,18 +590,7 @@ class BrowserFragment : BaseFragment(),
         val colorPair = colorPair()
         editorModule.applySettings()
 
-        context?.let { activityContext ->
-            val clipboardContent = Clipboard.getPrimary(activityContext)?.toString() ?: return@let
-            if (Urls.isValidUrl(clipboardContent)) {
-                Toaster.withAction(
-                        binding?.root as View,
-                        "Would you open \"$clipboardContent\"?",
-                        R.string.open,
-                        View.OnClickListener { loadWithNewTab(clipboardContent.toUri()) },
-                        colorPair
-                )
-            }
-        }
+        ClippingUrlOpener(binding?.root) { loadWithNewTab(it) }
 
         titleSubject.subscribe(
                 { progressBarCallback.onTitleChanged(it) },
