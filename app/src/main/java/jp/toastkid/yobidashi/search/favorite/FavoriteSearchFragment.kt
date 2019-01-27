@@ -133,7 +133,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
                 ?.addTo(disposables)
     }
 
-    fun add(v: View) {
+    fun add() {
         invokeAddition()
     }
 
