@@ -34,16 +34,16 @@ internal class ViewHolder(
     fun applyContent(f: File) {
         ImageLoader.setImageToImageView(this.binding.image, f.path)
         this.binding.text.text = f.name
-        this.binding.remove.setOnClickListener ({ removeSetImage(f) })
-        this.binding.root.setOnClickListener ({
+        this.binding.remove.setOnClickListener { removeSetImage(f) }
+        this.binding.root.setOnClickListener {
             preferenceApplier.backgroundImagePath = f.path
             Toaster.snackShort(
                     binding.image,
                     R.string.message_change_background_image,
                     preferenceApplier.colorPair()
             )
-        })
-        this.binding.root.setOnLongClickListener ({ v ->
+        }
+        this.binding.root.setOnLongClickListener { v ->
             try {
                 val context = v.context
                 if (context is FragmentActivity) {
@@ -58,7 +58,7 @@ internal class ViewHolder(
             }
 
             true
-        })
+        }
     }
 
     /**
