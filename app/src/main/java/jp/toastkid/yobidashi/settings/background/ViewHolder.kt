@@ -34,8 +34,8 @@ internal class ViewHolder(
     fun applyContent(f: File) {
         ImageLoader.setImageToImageView(this.binding.image, f.path)
         this.binding.text.text = f.name
-        this.binding.remove.setOnClickListener ({ v -> removeSetImage(f) })
-        this.binding.root.setOnClickListener ({ v ->
+        this.binding.remove.setOnClickListener ({ removeSetImage(f) })
+        this.binding.root.setOnClickListener ({
             preferenceApplier.backgroundImagePath = f.path
             Toaster.snackShort(
                     binding.image,
