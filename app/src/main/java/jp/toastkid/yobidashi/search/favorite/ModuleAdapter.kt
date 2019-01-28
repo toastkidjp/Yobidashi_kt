@@ -33,10 +33,14 @@ internal class ModuleAdapter(
         private val onClickAdd: (FavoriteSearch) -> Unit
 ) : OrmaRecyclerViewAdapter<FavoriteSearch, ModuleViewHolder>(context, relation) {
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /** Selected items.  */
+    /**
+     * Selected items.
+     */
     private val selected: MutableList<FavoriteSearch> = ArrayList(5)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleViewHolder {
@@ -68,9 +72,9 @@ internal class ModuleAdapter(
 
     /**
      * Execute query.
-     * @param s
      *
-     * @return
+     * @param s query word [String]
+     * @return [Disposable]
      */
     fun query(s: CharSequence): Disposable {
 
@@ -95,6 +99,7 @@ internal class ModuleAdapter(
 
     /**
      * Remove item with position.
+     *
      * @param position
      */
     fun removeAt(position: Int): Disposable {
@@ -113,7 +118,8 @@ internal class ModuleAdapter(
 
     /**
      * Return selected item is empty.
-     * @return
+     *
+     * @return if this adapter is empty, return true
      */
     private val isEmpty: Boolean
         get() = itemCount == 0
@@ -127,6 +133,7 @@ internal class ModuleAdapter(
 
     /**
      * Add passed history item to selected list.
+     *
      * @param history
      */
     private fun add(history: FavoriteSearch) {
