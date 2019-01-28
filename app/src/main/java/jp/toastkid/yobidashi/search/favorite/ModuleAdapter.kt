@@ -94,7 +94,7 @@ internal class ModuleAdapter(
                     onVisibilityChanged(!isEmpty)
                     notifyDataSetChanged()
                 }
-                .subscribe { it -> this.add(it) }
+                .subscribe(this::add)
     }
 
     /**
