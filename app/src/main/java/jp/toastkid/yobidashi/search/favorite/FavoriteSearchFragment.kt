@@ -42,13 +42,13 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<FragmentFavoriteSearchBinding>(
                 inflater, LAYOUT_ID, container, false)
-        binding!!.activity = this
+        binding?.activity = this
 
         initFavSearchView()
 
         setHasOptionsMenu(true)
 
-        return binding!!.root
+        return binding?.root
     }
 
     private fun initFavSearchView() {
@@ -57,10 +57,14 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
                 fragmentActivity,
                 DbInitializer.init(fragmentActivity).relationOfFavoriteSearch(),
                 { category, query -> this.startSearch(category, query) },
-                { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }
+                { messageId -> Toaster.snackShort(binding?.content as View, messageId, colorPair()) }
         )
-        binding!!.favoriteSearchView.adapter = adapter
-        binding!!.favoriteSearchView.layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.VERTICAL, false)
+
+        binding?.favoriteSearchView?.let {
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.VERTICAL, false)
+        }
+
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
                     override fun onMove(
@@ -70,7 +74,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
                     ): Boolean {
                         val fromPos = viewHolder.adapterPosition
                         val toPos = target.adapterPosition
-                        adapter!!.notifyItemMoved(fromPos, toPos)
+                        adapter?.notifyItemMoved(fromPos, toPos)
                         return true
                     }
 
@@ -81,9 +85,9 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
                         if (direction != ItemTouchHelper.RIGHT) {
                             return
                         }
-                        adapter!!.removeAt(viewHolder.adapterPosition)
+                        adapter?.removeAt(viewHolder.adapterPosition)
                     }
-                }).attachToRecyclerView(binding!!.favoriteSearchView)
+                }).attachToRecyclerView(binding?.favoriteSearchView)
     }
 
     /**
@@ -101,9 +105,9 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater!!.inflate(R.menu.favorite_toolbar_menu, menu)
+        inflater?.inflate(R.menu.favorite_toolbar_menu, menu)
 
-        menu!!.findItem(R.id.favorite_toolbar_menu_clear).setOnMenuItemClickListener {
+        menu?.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
             val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
             ClearFavoriteSearchDialogFragment.show(
                     fragmentManager,
@@ -112,7 +116,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
             true
         }
 
-        menu.findItem(R.id.favorite_toolbar_menu_add).setOnMenuItemClickListener {
+        menu?.findItem(R.id.favorite_toolbar_menu_add)?.setOnMenuItemClickListener {
             invokeAddition()
             true
         }
