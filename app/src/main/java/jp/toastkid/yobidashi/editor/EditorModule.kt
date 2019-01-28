@@ -24,7 +24,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -65,6 +64,9 @@ class EditorModule(
         }
     }
 
+    /**
+     * Last saved text.
+     */
     private var lastSavedTitle: String
 
     /**
@@ -72,10 +74,17 @@ class EditorModule(
      */
     private var path: String = ""
 
+    /**
+     * Text finder for [EditText].
+     */
+    private var finder: EditTextFinder
+
     init {
         val context = binding.root.context
 
         binding.editorModule = this
+
+        finder = EditTextFinder(binding.editorInput)
 
         binding.editorInput.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(contentEditable: Editable?) {
@@ -160,25 +169,45 @@ class EditorModule(
      * Paste clipped text as Markdown's quotation style.
      */
     fun pasteAsQuotation() {
-        val primary = Clipboard.getPrimary(context())
-        if (TextUtils.isEmpty(primary)) {
-            return
-        }
-        binding.editorInput.text.insert(binding.editorInput.selectionStart, Quotation(primary))
+        PasteAsConfirmationDialogFragment.show(binding.root.context)
     }
 
     /**
      * Go to top.
      */
     fun pageUp() {
-        binding.editorInput.setSelection(0)
+        moveToIndex(0)
     }
 
     /**
      * Go to bottom.
      */
     fun pageDown() {
-        binding.editorInput.setSelection(binding.editorInput.length())
+        moveToIndex(binding.editorInput.length())
+    }
+
+    /**
+     * Find text in bound to upward.
+     *
+     * @param text Finding text
+     */
+    fun findUp(text: String) = finder.findUp(text)
+
+    /**
+     * Find text in bound to downward.
+     *
+     * @param text Finding text
+     */
+    fun findDown(text: String) = finder.findDown(text)
+
+    /**
+     * Move cursor to specified index.
+     *
+     * @param index index of editor.
+     */
+    private fun moveToIndex(index: Int) {
+        binding.editorInput.requestFocus()
+        binding.editorInput.setSelection(index)
     }
 
     /**
@@ -317,6 +346,11 @@ class EditorModule(
             clearPath()
             return
         }
+
+        if (TextUtils.equals(file.absolutePath, path)) {
+            return
+        }
+
         val text = Okio.buffer(Okio.source(file)).use { it.readUtf8() }
         setContentText(text)
         snackText(R.string.done_load)
@@ -369,15 +403,6 @@ class EditorModule(
     private inline fun content(): String = binding.editorInput.text.toString()
 
     /**
-     * Show snackbar with specified id text.
-     *
-     * @param id
-     */
-    private inline fun snackText(@StringRes id: Int) {
-        Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
-    }
-
-    /**
      * Animate root view with specified [Animation].
      *
      * @param animation
@@ -418,19 +443,6 @@ class EditorModule(
     }
 
     /**
-     * Show message by [android.support.design.widget.Snackbar].
-     *
-     * @param message
-     */
-    private fun snackText(message: String) {
-        Toaster.snackShort(
-                binding.root,
-                message,
-                preferenceApplier.colorPair()
-        )
-    }
-
-    /**
      * Show menu's name.
      *
      * @param view [View] (TextView)
@@ -438,7 +450,7 @@ class EditorModule(
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
-                    binding.root,
+                    binding.snackbarContainer,
                     view.text.toString(),
                     R.string.run,
                     View.OnClickListener { view.performClick() },
@@ -447,6 +459,36 @@ class EditorModule(
             )
         }
         return true
+    }
+
+    /**
+     * Show snackbar with specified id text.
+     *
+     * @param id
+     */
+    private inline fun snackText(@StringRes id: Int) {
+        Toaster.snackShort(binding.snackbarContainer, id, preferenceApplier.colorPair())
+    }
+
+    /**
+     * Show message by [android.support.design.widget.Snackbar].
+     *
+     * @param message
+     */
+    private fun snackText(message: String) {
+        Toaster.snackShort(
+                binding.snackbarContainer,
+                message,
+                preferenceApplier.colorPair()
+        )
+    }
+
+    /**
+     * Insert text to [EditText].
+     * @param text insert text
+     */
+    fun insert(text: CharSequence?) {
+        binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
     }
 
     override fun hide() {

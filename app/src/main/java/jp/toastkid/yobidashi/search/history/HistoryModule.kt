@@ -17,7 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 
 /**
@@ -65,7 +65,7 @@ class HistoryModule(
     init {
         binding.module = this
 
-        relation = DbInitter.init(context()).relationOfSearchHistory()
+        relation = DbInitializer.init(context()).relationOfSearchHistory()
 
         binding.searchHistories.layoutManager =
                 LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)

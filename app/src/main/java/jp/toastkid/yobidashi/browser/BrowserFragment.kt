@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.TextUtils
@@ -46,10 +47,9 @@ import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
-import jp.toastkid.yobidashi.editor.ClearTextDialogFragment
-import jp.toastkid.yobidashi.editor.EditorModule
-import jp.toastkid.yobidashi.editor.InputNameDialogFragment
+import jp.toastkid.yobidashi.editor.*
 import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
@@ -66,13 +66,15 @@ import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
-import jp.toastkid.yobidashi.tab.tab_list.TabListModule
+import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import okhttp3.Request
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import kotlin.math.abs
 
 /**
  * Internal browser fragment.
@@ -85,7 +87,9 @@ class BrowserFragment : BaseFragment(),
         TabListClearDialogFragment.Callback,
         UserAgentDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
-        InputNameDialogFragment.Callback
+        InputNameDialogFragment.Callback,
+        PasteAsConfirmationDialogFragment.Callback,
+        TabListDialogFragment.Callback
 {
 
     /**
@@ -99,9 +103,9 @@ class BrowserFragment : BaseFragment(),
     private lateinit var tabs: TabAdapter
 
     /**
-     * WebTab list module.
+     * Tab list dialog fragment.
      */
-    private lateinit var tabListModule: TabListModule
+    private var tabListDialogFragment: DialogFragment? = null
 
     /**
      * Search-with-clip object.
@@ -111,12 +115,12 @@ class BrowserFragment : BaseFragment(),
     /**
      * Editor module.
      */
-    private lateinit var editor: EditorModule
+    private lateinit var editorModule: EditorModule
 
     /**
      * PDF module.
      */
-    private lateinit var pdf: PdfModule
+    private lateinit var pdfModule: PdfModule
 
     /**
      * Browser module.
@@ -158,7 +162,15 @@ class BrowserFragment : BaseFragment(),
      */
     private var menuOpen: Boolean = false
 
+    /**
+     * Progress bar callback.
+     */
     private lateinit var progressBarCallback: ProgressBarCallback
+
+    /**
+     * Floating preview object.
+     */
+    private lateinit var floatingPreview: FloatingPreview
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -195,12 +207,11 @@ class BrowserFragment : BaseFragment(),
         searchWithClip = SearchWithClip(
                 cm,
                 binding?.root as View,
-                colorPair,
-                { tabs.openNewWebTab() }
-        )
+                colorPair
+        ) { tabs.openNewWebTab() }
         searchWithClip.invoke()
 
-        editor = EditorModule(
+        editorModule = EditorModule(
                 binding?.editor as ModuleEditorBinding,
                 { intent, requestCode -> startActivityForResult(intent, requestCode) },
                 { file ->
@@ -212,7 +223,7 @@ class BrowserFragment : BaseFragment(),
                 }
         )
 
-        pdf = PdfModule(
+        pdfModule = PdfModule(
                 activityContext,
                 binding?.moduleContainer as ViewGroup
         )
@@ -230,26 +241,23 @@ class BrowserFragment : BaseFragment(),
                     }
                     progressSubject.onNext(progress)
                 },
-                historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
+                historyAddingCallback = { title, url -> tabs.addHistory(title, url) },
+                scrollCallback = { _, vertical, _, old ->
+                    val difference = vertical - old
+                    if (abs(difference) < 15) {
+                        return@BrowserModule
+                    }
+                    if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
+                }
         )
 
         tabs = TabAdapter(
                 binding?.webViewContainer as FrameLayout,
                 browserModule,
-                editor,
-                pdf,
+                editorModule,
+                pdfModule,
                 titleSubject::onNext,
                 this::onEmptyTabs
-        )
-
-        tabListModule = TabListModule(
-                DataBindingUtil.inflate(
-                        LayoutInflater.from(activity), R.layout.module_tab_list, null, false),
-                tabs,
-                binding?.root as View,
-                this::hideTabList,
-                this::openEditorTab,
-                this::openPdfTabFromStorage
         )
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
@@ -263,7 +271,7 @@ class BrowserFragment : BaseFragment(),
      * Action on empty tabs.
      */
     private fun onEmptyTabs() {
-        tabListModule.hide()
+        tabListDialogFragment?.dismiss()
         tabs.openNewWebTab()
     }
 
@@ -310,30 +318,30 @@ class BrowserFragment : BaseFragment(),
 
         inflater?.inflate(R.menu.browser, menu)
 
-        menu?.let {
-            it.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
+        menu?.let { menuNonNull ->
+            menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
                 switchMenu()
                 true
             }
 
-            it.findItem(R.id.open_tabs)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.open_tabs)?.setOnMenuItemClickListener {
                 switchTabList()
                 true
             }
 
             val activityContext = context ?: return@let
 
-            it.findItem(R.id.setting)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.setting)?.setOnMenuItemClickListener {
                 startActivity(SettingsActivity.makeIntent(activityContext))
                 true
             }
 
-            it.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
                 stopCurrentLoading()
                 true
             }
 
-            it.findItem(R.id.close_header)?.setOnMenuItemClickListener {
+            menuNonNull.findItem(R.id.close_header)?.setOnMenuItemClickListener {
                 hideHeader()
                 true
             }
@@ -445,9 +453,7 @@ class BrowserFragment : BaseFragment(),
                     startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
                 } catch (e: ActivityNotFoundException) {
                     Timber.e(e)
-                    binding?.root?.let {
-                        Toaster.snackShort(it, R.string.message_unabled_voice_search, colorPair())
-                    }
+                    binding?.root?.let { VoiceSearch.suggestInstallGoogleApp(it, colorPair()) }
                 }
             }
             Menu.REPLACE_HOME.ordinal -> {
@@ -506,9 +512,7 @@ class BrowserFragment : BaseFragment(),
      * Initialize tab list.
      */
     private fun initTabListIfNeed() {
-        if (binding?.tabListContainer?.childCount == 0) {
-            binding?.tabListContainer?.addView(tabListModule.moduleView)
-        }
+        tabListDialogFragment = TabListDialogFragment.make(this)
     }
 
     /**
@@ -516,7 +520,7 @@ class BrowserFragment : BaseFragment(),
      */
     private fun switchTabList() {
         initTabListIfNeed()
-        if (tabListModule.isVisible) {
+        if (tabListDialogFragment?.isVisible == true) {
             hideTabList()
         } else {
             tabs.updateCurrentTab()
@@ -583,15 +587,22 @@ class BrowserFragment : BaseFragment(),
         super.onResume()
 
         val colorPair = colorPair()
-        editor.applySettings()
+        editorModule.applySettings()
 
-        titleSubject.subscribe({ progressBarCallback.onTitleChanged(it) }).addTo(disposables)
-        progressSubject.subscribe({ progressBarCallback.onProgressChanged(it) }).addTo(disposables)
+        titleSubject.subscribe(
+                { progressBarCallback.onTitleChanged(it) },
+                Timber::e
+        ).addTo(disposables)
+
+        progressSubject.subscribe(
+                { progressBarCallback.onProgressChanged(it) },
+                Timber::e
+        ).addTo(disposables)
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
-        if (pdf.isVisible) {
-            pdf.applyColor(colorPair)
+        if (pdfModule.isVisible) {
+            pdfModule.applyColor(colorPair)
         }
 
         if (tabs.isNotEmpty()) {
@@ -602,30 +613,36 @@ class BrowserFragment : BaseFragment(),
 
         val preferenceApplier = preferenceApplier()
 
-        binding?.cycleMenu?.also {
+        binding?.cycleMenu?.also { cycleMenu ->
             val menuPos = preferenceApplier.menuPos()
-            it.setCorner(menuPos)
-            editor.setSpace(menuPos)
+            cycleMenu.setCorner(menuPos)
+            editorModule.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
-            it.setItemsBackgroundTint(ColorStateList.valueOf(color))
+            cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
                     ?.also { DrawableCompat.setTint(it, color) }
-                    ?.let { drawable -> it.setCornerImageDrawable(drawable) }
+                    ?.let { drawable -> cycleMenu.setCornerImageDrawable(drawable) }
         }
 
         browserModule.resizePool(preferenceApplier.poolSize)
 
-        if (preferenceApplier.browserScreenMode() == ScreenMode.FULL_SCREEN
-                || editor.isVisible
-                || pdf.isVisible
-                ) {
-            hideHeader()
-            return
-        }
-
         binding?.swipeRefresher?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
+        }
+
+        val browserScreenMode = preferenceApplier.browserScreenMode()
+        if (browserScreenMode == ScreenMode.FULL_SCREEN
+                || editorModule.isVisible
+                || pdfModule.isVisible
+        ) {
+            hideHeader()
+            return
+        }
+        if (browserScreenMode == ScreenMode.EXPANDABLE
+            || browserScreenMode == ScreenMode.FIXED) {
+            toolbarAction?.showToolbar()
+            return
         }
     }
 
@@ -657,7 +674,7 @@ class BrowserFragment : BaseFragment(),
      */
     private fun hideOption(): Boolean {
 
-        if (tabListModule.isVisible) {
+        if (tabListDialogFragment?.isVisible == true) {
             hideTabList()
             return true
         }
@@ -674,7 +691,7 @@ class BrowserFragment : BaseFragment(),
      * Hide tab list.
      */
     private fun hideTabList() {
-        tabListModule.hide()
+        tabListDialogFragment?.dismiss()
         tabs.replaceToCurrentTab(false)
     }
 
@@ -682,7 +699,7 @@ class BrowserFragment : BaseFragment(),
      * Show tab list.
      */
     private fun showTabList() {
-        tabListModule.show()
+        tabListDialogFragment?.show(fragmentManager, "")
     }
 
     override fun titleId(): Int = R.string.title_browser
@@ -713,7 +730,7 @@ class BrowserFragment : BaseFragment(),
                 }
             }
             EditorModule.REQUEST_CODE_LOAD -> {
-                editor.readFromFileUri(intent.data)
+                editorModule.readFromFileUri(intent.data)
             }
         }
     }
@@ -724,15 +741,18 @@ class BrowserFragment : BaseFragment(),
     private fun openPdfTabFromStorage() {
         rxPermissions
                 ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                ?.subscribe { granted ->
-                    if (!granted) {
-                        return@subscribe
-                    }
-                    startActivityForResult(
-                            IntentFactory.makeOpenDocument("application/pdf"),
-                            REQUEST_CODE_OPEN_PDF
-                    )
-                }
+                ?.subscribe(
+                        { granted ->
+                            if (!granted) {
+                                return@subscribe
+                            }
+                            startActivityForResult(
+                                    IntentFactory.makeOpenDocument("application/pdf"),
+                                    REQUEST_CODE_OPEN_PDF
+                            )
+                        },
+                        Timber::e
+                )?.addTo(disposables)
     }
 
     /**
@@ -796,8 +816,6 @@ class BrowserFragment : BaseFragment(),
         tabs.callLoadUrl(url)
     }
 
-    private lateinit var floatingPreview: FloatingPreview
-
     override fun preview(url: String) {
         val webView = browserModule.getWebView("preview")
         if (webView == null) {
@@ -831,13 +849,13 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickSaveForBackground(url: String) {
         val activityContext = context ?: return
-        storeImage(url, activityContext).subscribe({
+        storeImage(url, activityContext).subscribe {
             Toaster.snackShort(
                     binding?.root as View,
                     R.string.message_done_save,
                     preferenceApplier().colorPair()
             )
-        }).addTo(disposables)
+        }.addTo(disposables)
     }
 
     override fun onClickDownloadImage(url: String) {
@@ -893,17 +911,49 @@ class BrowserFragment : BaseFragment(),
     }
 
     override fun onClickClearInput() {
-        editor.clearInput()
+        editorModule.clearInput()
     }
 
     override fun onClickInputName(fileName: String) {
-        editor.assignNewFile(fileName)
+        editorModule.assignNewFile(fileName)
     }
+
+    override fun onClickPasteAs() {
+        val activityContext = context ?: return
+        val primary = Clipboard.getPrimary(activityContext)
+        if (TextUtils.isEmpty(primary)) {
+            return
+        }
+        editorModule.insert(Quotation(primary))
+    }
+
+    override fun onCloseTabListDialogFragment() = hideTabList()
+
+    override fun onOpenEditor() = openEditorTab()
+
+    override fun onOpenPdf() = openPdfTabFromStorage()
+
+    override fun openNewTabFromTabList() = tabs.openNewWebTab()
+
+    override fun tabIndexFromTabList() = tabs.index()
+
+    override fun currentTabIdFromTabList() = tabs.currentTabId()
+
+    override fun replaceTabFromTabList(tab: Tab) = tabs.replace(tab)
+
+    override fun getTabByIndexFromTabList(position: Int): Tab = tabs.getTabByIndex(position)
+
+    override fun closeTabFromTabList(position: Int) = tabs.closeTab(position)
+
+    override fun getTabAdapterSizeFromTabList(): Int = tabs.size()
+
+    override fun swapTabsFromTabList(from: Int, to: Int) = tabs.swap(from, to)
+
+    override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
     override fun onPause() {
         super.onPause()
-        editor.saveIfNeed()
-        binding?.tabListContainer?.removeAllViews()
+        editorModule.saveIfNeed()
         hideOption()
     }
 
@@ -920,6 +970,7 @@ class BrowserFragment : BaseFragment(),
     override fun onStop() {
         super.onStop()
         tabs.saveTabList()
+        binding?.cycleMenu?.close(false)
     }
 
     override fun onDestroy() {

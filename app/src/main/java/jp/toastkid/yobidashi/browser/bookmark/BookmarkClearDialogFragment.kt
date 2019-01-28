@@ -15,14 +15,22 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
+ * Dialog fragment of confirming clear bookmark.
+ *
  * @author toastkidjp
  */
 class BookmarkClearDialogFragment : DialogFragment() {
 
+    /**
+     * Callback interface.
+     */
     interface OnClickBookmarkClearCallback {
         fun onClickBookmarkClear()
     }
 
+    /**
+     * Callback instance, this is initialized with context.
+     */
     private var onClickBookmarkClear: OnClickBookmarkClearCallback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -35,8 +43,8 @@ class BookmarkClearDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_bookmark)
                 .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
                     onClickBookmarkClear?.onClickBookmarkClear()
                     d.dismiss()
                 }

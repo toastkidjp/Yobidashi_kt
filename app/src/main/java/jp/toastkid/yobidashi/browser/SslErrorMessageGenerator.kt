@@ -13,7 +13,7 @@ import java.util.*
  */
 internal object SslErrorMessageGenerator {
 
-    val dateFormatHolder: ThreadLocal<DateFormat> = object : ThreadLocal<DateFormat>() {
+    private val dateFormatHolder: ThreadLocal<DateFormat> = object : ThreadLocal<DateFormat>() {
         override fun initialValue(): DateFormat
                 = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
     }
@@ -29,13 +29,13 @@ internal object SslErrorMessageGenerator {
 
         val cause = when (error.getPrimaryError()) {
             SslError.SSL_EXPIRED ->
-                context.getString(R.string.message_ssl_error_expired) + dateFormat.format(cert.getValidNotAfterDate())
+                context.getString(R.string.message_ssl_error_expired) + dateFormat.format(cert.validNotAfterDate)
             SslError.SSL_IDMISMATCH ->
-                context.getString(R.string.message_ssl_error_id_mismatch) + cert.getIssuedTo().getCName()
+                context.getString(R.string.message_ssl_error_id_mismatch) + cert.issuedTo.cName
             SslError.SSL_NOTYETVALID ->
-                context.getString(R.string.message_ssl_error_not_yet_valid) + dateFormat.format(cert.getValidNotBeforeDate())
+                context.getString(R.string.message_ssl_error_not_yet_valid) + dateFormat.format(cert.validNotBeforeDate)
             SslError.SSL_UNTRUSTED ->
-                context.getString(R.string.message_ssl_error_untrusted) + cert.getIssuedBy().getDName()
+                context.getString(R.string.message_ssl_error_untrusted) + cert.issuedBy.dName
             else ->
                 context.getString(R.string.message_ssl_error_unknown)
         }

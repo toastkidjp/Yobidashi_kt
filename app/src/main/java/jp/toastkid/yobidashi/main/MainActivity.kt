@@ -39,6 +39,7 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.barcode.LinearBarcodeReader
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ProgressBarCallback
+import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -77,7 +78,12 @@ import java.text.MessageFormat
  *
  * @author toastkidjp
  */
-class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, ProgressBarCallback {
+class MainActivity :
+        BaseActivity(),
+        FragmentReplaceAction,
+        ToolbarAction,
+        ProgressBarCallback
+{
 
     /**
      * Navigation's background.
@@ -130,11 +136,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.appBarMain?.toolbar?.let {
-            initToolbar(it)
-            setSupportActionBar(it)
-            initDrawer(it)
-            it.setOnClickListener { findCurrentFragment()?.tapHeader() }
+        binding.appBarMain.toolbar?.let { toolbar ->
+            initToolbar(toolbar)
+            setSupportActionBar(toolbar)
+            initDrawer(toolbar)
+            toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
 
         initNavigation()
@@ -209,7 +215,6 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
                 finishWithoutTransition()
             }
         }
-
     }
 
     private fun finishWithoutTransition() {
@@ -219,17 +224,17 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
 
     override fun onProgressChanged(newProgress: Int) {
         if (70 < newProgress) {
-            binding.appBarMain?.progress?.visibility = View.GONE
+            binding.appBarMain.progress?.visibility = View.GONE
             return
         }
-        binding.appBarMain?.progress?.let {
+        binding.appBarMain.progress?.let {
             it.visibility = View.VISIBLE
             it.progress = newProgress
         }
     }
 
     override fun onTitleChanged(titlePair: TitlePair) {
-        binding.appBarMain?.toolbar?.let {
+        binding.appBarMain.toolbar?.let {
             it.title    = titlePair.title()
             it.subtitle = titlePair.subtitle()
         }
@@ -274,22 +279,25 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
      * @param fragment {@link BaseFragment} instance
      */
     private fun replaceFragment(fragment: BaseFragment) {
-
         if (fragment.isVisible) {
-            snackSuppressOpenFragment()
             return
         }
 
         val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager?.fragments
         if (fragments?.size != 0) {
-            fragments?.get(0)?.let { transaction.remove(it) }
+            fragments?.get(0)?.let {
+                if (it == fragment) {
+                    return
+                }
+                transaction.remove(it)
+            }
         }
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
-        binding.appBarMain?.toolbar?.let {
+        binding.appBarMain.toolbar?.let {
             it.setTitle(fragment.titleId())
             it.subtitle = ""
         }
@@ -405,7 +413,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
                 startActivity(IntentFactory.authorsApp())
             }
             R.id.nav_option_menu -> {
-                binding.appBarMain?.toolbar?.showOverflowMenu()
+                binding.appBarMain.toolbar?.showOverflowMenu()
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
             }
             R.id.nav_settings -> {
@@ -502,12 +510,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
     }
 
-    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?): Boolean {
-        if (event?.keyCode == KeyEvent.KEYCODE_BACK) {
-            return findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
-        }
-        return super.onKeyLongPress(keyCode, event)
-     }
+    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
+        KeyEvent.KEYCODE_BACK ->
+            findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
+        else ->
+            super.onKeyLongPress(keyCode, event)
+    }
 
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -552,15 +560,12 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.settings_toolbar_menu_exit) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.settings_toolbar_menu_exit -> {
             finish()
-            return true
+            true
         }
-
-        return super.onOptionsItemSelected(item)
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
@@ -572,7 +577,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        applyColorToToolbar(binding.appBarMain?.toolbar as Toolbar)
+        applyColorToToolbar(binding.appBarMain.toolbar as Toolbar)
 
         applyBackgrounds()
     }
@@ -618,7 +623,7 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
         binding.drawerBackground.setImageDrawable(background)
-        binding.appBarMain?.background?.setImageDrawable(background)
+        binding.appBarMain.background?.setImageDrawable(background)
     }
 
     override fun action(c: Command) {
@@ -635,32 +640,45 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
     }
 
     override fun hideToolbar() {
-        binding.appBarMain?.toolbar?.animate()?.let {
-            it.cancel()
-            it.translationY(-resources.getDimension(R.dimen.toolbar_height))
-                    .setDuration(HEADER_HIDING_DURATION)
-                    .withStartAction { binding.appBarMain?.content?.requestLayout() }
-                    .withEndAction   { binding.appBarMain?.toolbar?.visibility = View.GONE }
-                    .start()
+        when (preferenceApplier.browserScreenMode()) {
+            ScreenMode.FIXED -> Unit
+            ScreenMode.FULL_SCREEN -> {
+                binding.appBarMain.toolbar?.visibility = View.GONE
+            }
+            ScreenMode.EXPANDABLE -> {
+                binding.appBarMain.toolbar?.animate()?.let {
+                    it.cancel()
+                    it.translationY(-resources.getDimension(R.dimen.toolbar_height))
+                            .setDuration(HEADER_HIDING_DURATION)
+                            .withStartAction { binding.appBarMain.content?.requestLayout() }
+                            .withEndAction   {
+                                binding.appBarMain.toolbar?.visibility = View.GONE
+                            }
+                            .start()
+                }
+            }
         }
     }
 
     override fun showToolbar() {
-        binding.appBarMain?.toolbar?.animate()?.let {
-            it.cancel()
-            it.translationY(0f)
-                    .setDuration(HEADER_HIDING_DURATION)
-                    .withStartAction { binding.appBarMain?.toolbar?.visibility = View.VISIBLE }
-                    .withEndAction   { binding.appBarMain?.content?.requestLayout() }
-                    .start()
+        when (preferenceApplier.browserScreenMode()) {
+            ScreenMode.FIXED -> {
+                binding.appBarMain.toolbar?.visibility = View.VISIBLE
+            }
+            ScreenMode.FULL_SCREEN -> Unit
+            ScreenMode.EXPANDABLE -> {
+                binding.appBarMain.toolbar?.animate()?.let {
+                    it.cancel()
+                    it.translationY(0f)
+                            .setDuration(HEADER_HIDING_DURATION)
+                            .withStartAction {
+                                binding.appBarMain.toolbar?.visibility = View.VISIBLE
+                            }
+                            .withEndAction   { binding.appBarMain.content?.requestLayout() }
+                            .start()
+                }
+            }
         }
-    }
-
-    /**
-     * Show snackbar with confirm message of suppressed replacing fragment.
-     */
-    private fun snackSuppressOpenFragment() {
-        Toaster.snackShort(binding.root, R.string.message_has_opened_fragment, colorPair())
     }
 
     /**
@@ -737,23 +755,23 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
         /**
          * Header hiding duration.
          */
-        private const val HEADER_HIDING_DURATION: Long = 75L
+        private const val HEADER_HIDING_DURATION = 75L
 
         /**
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.activity_main
+        private const val LAYOUT_ID = R.layout.activity_main
 
         /**
          * For using daily alarm.
          */
-        private const val KEY_EXTRA_MONTH: String = "month"
+        private const val KEY_EXTRA_MONTH = "month"
 
         /**
          * For using daily alarm.
          */
-        private const val KEY_EXTRA_DOM: String = "dom"
+        private const val KEY_EXTRA_DOM = "dom"
 
         /**
          * Make launcher intent.
@@ -761,8 +779,8 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
          * @param context
          * @return [Intent]
          */
-        fun makeIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
-                .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
+        fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
+                .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
         /**
          * Make browser intent.
@@ -772,11 +790,11 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
          *
          * @return [Intent]
          */
-        fun makeBrowserIntent(context: Context, uri: Uri): Intent
-                = Intent(context, MainActivity::class.java).apply {
-                    action = Intent.ACTION_VIEW
-                    data = uri
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        fun makeBrowserIntent(context: Context, uri: Uri) = Intent(context, MainActivity::class.java)
+                .also {
+                    it.action = Intent.ACTION_VIEW
+                    it.data = uri
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
 
         /**
@@ -786,10 +804,10 @@ class MainActivity : BaseActivity(), FragmentReplaceAction, ToolbarAction, Progr
          * @param dayOfMonth
          * @return [Intent]
          */
-        fun makeIntent(context: Context, month: Int, dayOfMonth: Int): Intent
-                = makeIntent(context).apply {
-                    putExtra(KEY_EXTRA_MONTH, month)
-                    putExtra(KEY_EXTRA_DOM, dayOfMonth)
+        fun makeIntent(context: Context, month: Int, dayOfMonth: Int) = makeIntent(context)
+                .also {
+                    it.putExtra(KEY_EXTRA_MONTH, month)
+                    it.putExtra(KEY_EXTRA_DOM, dayOfMonth)
                 }
 
     }

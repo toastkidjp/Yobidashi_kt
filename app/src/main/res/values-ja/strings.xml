@@ -192,10 +192,10 @@
     <string name="center">中央</string>
     <string name="right">右</string>
     <string name="title_enable_javascript">JavaScript を有効にする</string>
-    <string name="subhead_displaying">表示の設定</string>
-    <string name="subhead_setting_browesr">ブラウザの設定</string>
-    <string name="subhead_others">その他設定</string>
-    <string name="subhead_notification">通知の設定</string>
+    <string name="subhead_displaying">表示</string>
+    <string name="subhead_setting_browesr">ブラウザ</string>
+    <string name="subhead_others">その他</string>
+    <string name="subhead_notification">通知</string>
     <string name="prefix_loading">ロード中: </string>
     <string name="title_clear_cache">キャッシュを消去</string>
     <string name="clear_form_data">フォームデータを消去</string>
@@ -254,8 +254,8 @@
     <string name="message_check_doesnot_retain_tabs">アプリ終了時にタブをすべて削除します。</string>
     <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
     <string name="title_default_search_engine">デフォルトの検索エンジン</string>
-    <string name="subhead_search">検索の設定</string>
-    <string name="subhead_browser">ブラウザの設定</string>
+    <string name="subhead_search">検索</string>
+    <string name="subhead_browser">ブラウザ</string>
     <string name="title_enable_search_with_clip">「クリップボードで検索」を使う</string>
     <string name="message_enable_swc">「クリップボードで検索」を有効にしました。</string>
     <string name="message_disable_swc">「クリップボードで検索」を無効にしました。</string>
@@ -394,5 +394,9 @@
     <string name="subhead_editor">エディタ</string>
     <string name="retry">やり直す</string>
     <string name="message_preview_failed">エラーが発生しました。やり直してください</string>
+    <string name="message_paste_as_dialog">クリップボードに保持している内容を貼り付けますか？</string>
+    <string name="install">インストール</string>
+    <string name="message_install_suggestion_google_app">Google 検索アプリをインストールしてください。</string>
+    <string name="content_description_background">背景画像</string>
 
 </resources>

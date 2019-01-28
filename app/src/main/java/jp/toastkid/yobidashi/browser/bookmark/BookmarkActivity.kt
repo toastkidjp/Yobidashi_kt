@@ -25,7 +25,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import okio.Okio
@@ -61,7 +61,7 @@ class BookmarkActivity: BaseActivity(),
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        val relation = DbInitter.init(this).relationOfBookmark()
+        val relation = DbInitializer.init(this).relationOfBookmark()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = ActivityAdapter(
@@ -225,7 +225,7 @@ class BookmarkActivity: BaseActivity(),
     }
 
     override fun onClickAddDefaultBookmark() {
-        BookmarkInitializer.invoke(this)
+        BookmarkInitializer(this)
         adapter.showRoot()
         Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
     }
@@ -294,7 +294,7 @@ class BookmarkActivity: BaseActivity(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        val bookmarks = DbInitter.init(this).relationOfBookmark().selector().toList()
+        val bookmarks = DbInitializer.init(this).relationOfBookmark().selector().toList()
         Okio.buffer(Okio.sink(contentResolver.openOutputStream(uri))).run {
             writeUtf8(Exporter(bookmarks).invoke())
             flush()

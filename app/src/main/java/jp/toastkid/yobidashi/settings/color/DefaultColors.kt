@@ -23,6 +23,8 @@ internal object DefaultColors {
         models.add(SavedColors.makeSavedColor(
                 fromRes(context, R.color.crimson_bg), fromRes(context, R.color.crimson_font)))
         models.add(SavedColors.makeSavedColor(
+                fromRes(context, R.color.dark_brown), fromRes(context, R.color.pink)))
+        models.add(SavedColors.makeSavedColor(
                 fromRes(context, R.color.cyan_bg), fromRes(context, R.color.white)))
         models.add(SavedColors.makeSavedColor(
                 fromRes(context, R.color.red_200_dd), fromRes(context, R.color.black)))

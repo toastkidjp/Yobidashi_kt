@@ -34,8 +34,8 @@ class DefaultBookmarkDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_add_default_bookmark)
                 .setMessage(R.string.message_add_default_bookmark)
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
                     onClick?.onClickAddDefaultBookmark()
                     d.dismiss()
                 }

@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import timber.log.Timber
 
 /**
@@ -31,7 +31,7 @@ class BookmarkInsertion (
 
     private fun insert(bookmark: Bookmark): Disposable {
         return Completable.create { e ->
-            DbInitter.init(context)
+            DbInitializer.init(context)
                     .relationOfBookmark()
                     .inserter(OnConflict.REPLACE)
                     .execute(bookmark)

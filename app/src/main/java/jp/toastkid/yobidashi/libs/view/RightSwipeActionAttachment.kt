@@ -4,16 +4,24 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 
 /**
+ * Attach right bound swipe action.
+ *
  * @author toastkidjp
  */
-object RightSwipeActionAttacher {
+object RightSwipeActionAttachment {
 
     /**
      * For minimize usage.
      */
     private const val RIGHT = ItemTouchHelper.RIGHT
 
-    fun invoke(recyclerView: RecyclerView, onSwipedAction: (Int) -> Unit) {
+    /**
+     * Attach action to passed [RecyclerView].
+     *
+     * @param recyclerView [RecyclerView]
+     * @param onSwipedAction action.
+     */
+    operator fun invoke(recyclerView: RecyclerView, onSwipedAction: (Int) -> Unit) {
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(RIGHT, RIGHT) {
                     override fun onMove(

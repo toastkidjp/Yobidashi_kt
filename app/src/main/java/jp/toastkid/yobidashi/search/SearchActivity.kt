@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -30,7 +31,7 @@ import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.apps.AppModule
@@ -326,16 +327,21 @@ class SearchActivity : BaseActivity(),
         binding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener({
+            it.searchAction.setOnClickListener { _ ->
                 if (useVoice) {
-                    startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
+                    try {
+                        startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
+                    } catch (e: ActivityNotFoundException) {
+                        Timber.e(e)
+                        VoiceSearch.suggestInstallGoogleApp(binding?.root as View, colorPair)
+                    }
                     return@setOnClickListener
                 }
                 search(
                         binding?.searchCategories?.selectedItem.toString(),
                         binding?.searchInput?.text.toString()
                 )
-            })
+            }
             it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
@@ -370,7 +376,7 @@ class SearchActivity : BaseActivity(),
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        DbInitter.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
+        DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
                 .subscribe { v ->
                     favoriteModule?.clear()
@@ -383,7 +389,7 @@ class SearchActivity : BaseActivity(),
     }
 
     override fun onClickClearSearchHistory() {
-        DbInitter.init(this).relationOfSearchHistory().deleter().executeAsSingle()
+        DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
                 .subscribe { v ->
                     historyModule?.clear()

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="fragment"
+            type="jp.toastkid.yobidashi.settings.fragment.NotificationSettingFragment" />
+    </data>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/notifications_module"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/SettingCardStyle"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <FrameLayout android:id="@+id/use_notification_widget"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{fragment::switchNotificationWidget}"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+                <TextView
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="@dimen/common_horizontal_margin"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/title_show_notification_widget"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="@dimen/common_horizontal_margin"
+                    android:src="@mipmap/thumbnail"
+                    />
+                <CheckBox
+                    android:id="@+id/use_notification_widget_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/common_horizontal_margin"
+                    android:layout_gravity="right"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

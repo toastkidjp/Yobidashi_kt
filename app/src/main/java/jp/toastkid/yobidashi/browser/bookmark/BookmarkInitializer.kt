@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
-import android.net.Uri
+import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import java.util.*
 
@@ -24,7 +24,8 @@ object BookmarkInitializer {
                     "Google Map" to "https://www.google.co.jp/maps/",
                     "Yelp" to "https://www.yelp.com/",
                     "Amazon" to "https://www.amazon.com/",
-                    "Project Gutenberg" to "http://www.gutenberg.org/"
+                    "Project Gutenberg" to "http://www.gutenberg.org/",
+                    "Expedia" to "https://www.expedia.com"
                     ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
@@ -46,7 +47,7 @@ object BookmarkInitializer {
      *
      * @param context
      */
-    fun invoke(context: Context) {
+    operator fun invoke(context: Context) {
         val favicons = FilesDir(context, "favicons")
 
         DEFAULT_BOOKMARKS.forEach {
@@ -62,7 +63,7 @@ object BookmarkInitializer {
                         context,
                         it.key,
                         it.value,
-                        favicons.assignNewFile(Uri.parse(it.value).host + ".png").absolutePath,
+                        favicons.assignNewFile("${it.value.toUri().host}.png").absolutePath,
                         parent
                 ).insert()
             }

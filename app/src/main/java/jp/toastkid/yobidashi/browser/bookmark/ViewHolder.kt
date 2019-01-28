@@ -13,47 +13,77 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import timber.log.Timber
 import java.io.File
 
 /**
+ * Bookmark item [ViewHolder].
+ *
+ * @param binding Data Binding object
  * @author toastkidjp
  */
 internal class ViewHolder(private val binding: ItemBookmarkBinding)
     : RecyclerView.ViewHolder(binding.root) {
 
+    /**
+     * Set text and URL.
+     *
+     * @param text text
+     * @param url URL string
+     */
     fun setText(text: String, url: String) {
         binding.title.text = text
         binding.url.text = url
     }
 
+    /**
+     * Set image with drawable ID.
+     *
+     * @param iconId Icon's drawable resource ID.
+     */
     fun setImageId(@DrawableRes iconId: Int) {
         binding.icon.setImageResource(iconId)
     }
 
+    /**
+     * Set image with favicon path.
+     *
+     * @param faviconPath favicon path
+     */
     fun setImage(faviconPath: String): Disposable {
         if (faviconPath.isEmpty()) {
             setDefaultIcon()
             return Disposables.empty()
         }
-        return Single.create<File>{ e -> e.onSuccess(File(faviconPath))}
+        return Single.fromCallable { File(faviconPath) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map { ImageLoader.loadBitmap(binding.root.context, Uri.fromFile(it)) as Bitmap }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { binding.icon.setImageBitmap(it) },
-                        { e -> setDefaultIcon() }
+                        { e ->
+                            Timber.e(e)
+                            setDefaultIcon()
+                        }
                 )
     }
 
+    /**
+     * Set default icon.
+     */
     private fun setDefaultIcon() {
-        binding.icon.setImageResource(
-                R.drawable.ic_bookmark_black
-        )
+        binding.icon.setImageResource(R.drawable.ic_bookmark_black)
     }
 
-    fun setOnClickAdd(history: Bookmark, onClickAdd: (Bookmark) -> Unit) {
-        binding.delete.setOnClickListener ({ _ -> onClickAdd(history) })
+    /**
+     * Set action when click add-button.
+     *
+     * @param bookmark [Bookmark] item
+     * @param onClickAdd click action
+     */
+    fun setOnClickAdd(bookmark: Bookmark, onClickAdd: (Bookmark) -> Unit) {
+        binding.delete.setOnClickListener { onClickAdd(bookmark) }
     }
 
 }

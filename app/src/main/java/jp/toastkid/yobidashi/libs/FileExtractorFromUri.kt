@@ -50,7 +50,7 @@ object FileExtractorFromUri {
                 } else if ("home".equals(type, ignoreCase = true)) {
                     Environment.getExternalStorageDirectory().resolve("documents/${split[1]}").absolutePath
                 } else {
-                    "/stroage/${type}/${split[1]}"
+                    "/storage/${type}/${split[1]}"
                 }
             }
             "com.android.providers.downloads.documents" == uri.authority -> {// DownloadsProvider

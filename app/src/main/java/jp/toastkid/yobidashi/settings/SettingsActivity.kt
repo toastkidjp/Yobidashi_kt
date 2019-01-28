@@ -9,12 +9,10 @@ import android.provider.Settings
 import android.support.annotation.StringRes
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivitySettingsBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 
 /**
@@ -29,11 +27,6 @@ class SettingsActivity : BaseActivity() {
      */
     private lateinit var binding: ActivitySettingsBinding
 
-    /**
-     * Settings fragment.
-     */
-    private lateinit var fragment: SettingsTopFragment
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
@@ -42,19 +35,15 @@ class SettingsActivity : BaseActivity() {
         setSupportActionBar(binding.toolbar)
         initToolbar(binding.toolbar)
 
-        val transaction = supportFragmentManager.beginTransaction()
-        fragment = SettingsTopFragment()
-        transaction.replace(R.id.container, fragment)
-        transaction.commit()
-
-        binding.categoryGroup.check(R.id.category_all)
+        supportFragmentManager?.let {
+            binding.container.adapter = PagerAdapter(it, { getString(it) })
+            binding.container.offscreenPageLimit = 3
+        }
     }
 
     override fun onResume() {
         super.onResume()
         applyColorToToolbar(binding.toolbar)
-
-        ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -74,64 +63,6 @@ class SettingsActivity : BaseActivity() {
     }
 
     @StringRes override fun titleId(): Int = R.string.title_settings
-
-    /**
-     * Switch all settings.
-     *
-     * @param ignored
-     */
-    fun switchAll(ignored: View) {
-        fragment.showAll()
-    }
-
-    /**
-     * Switch displaying menu.
-     *
-     * @param ignored
-     */
-    fun switchDisplaying(ignored: View) {
-        fragment.showDisplay()
-    }
-
-    /**
-     * Switch search menu.
-     *
-     * @param ignored
-     */
-    fun switchSearch(ignored: View) {
-        fragment.showSearch()
-    }
-
-    /**
-     * Switch browser menu.
-     *
-     * @param ignored
-     */
-    fun switchBrowser(ignored: View) {
-        fragment.showBrowser()
-    }
-
-    fun switchEditor() {
-        fragment.showEditor()
-    }
-
-    /**
-     * Switch notification menu.
-     *
-     * @param ignored
-     */
-    fun switchNotification(ignored: View) {
-        fragment.showNotifications()
-    }
-
-    /**
-     * Switch other menu.
-     *
-     * @param ignored
-     */
-    fun switchOther(ignored: View) {
-        fragment.showOthers()
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

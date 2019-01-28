@@ -9,12 +9,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.facade.BaseModule
-import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
+import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
 
 /**
- * Search hisotry module.
+ * Search history module.
  *
  * @param binding Data binding object
  * @param searchCallback
@@ -58,7 +58,7 @@ class FavoriteSearchModule(
 
         binding.module = this
 
-        relation = DbInitter.init(context()).relationOfFavoriteSearch()
+        relation = DbInitializer.init(context()).relationOfFavoriteSearch()
 
         binding.searchFavorites.layoutManager = LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
         moduleAdapter = ModuleAdapter(
@@ -76,8 +76,9 @@ class FavoriteSearchModule(
             }
         }
         uiThreadHandler.post {
-            RightSwipeActionAttacher
-                    .invoke(binding.searchFavorites, { moduleAdapter.removeAt(it).addTo(disposables) })
+            RightSwipeActionAttachment(binding.searchFavorites) {
+                moduleAdapter.removeAt(it).addTo(disposables)
+            }
         }
     }
 

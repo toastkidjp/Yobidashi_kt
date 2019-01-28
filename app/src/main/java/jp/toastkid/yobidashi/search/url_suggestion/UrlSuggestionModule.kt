@@ -9,9 +9,9 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.history.ViewHistory_Relation
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
-import jp.toastkid.yobidashi.libs.db.DbInitter
+import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.facade.BaseModule
-import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttacher
+import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
 import timber.log.Timber
 
 /**
@@ -41,13 +41,13 @@ class UrlSuggestionModule(
     /**
      * Database relation.
      */
-    private val relation: ViewHistory_Relation = DbInitter.init(context()).relationOfViewHistory()
+    private val relation: ViewHistory_Relation = DbInitializer.init(context()).relationOfViewHistory()
 
     init {
         binding.urlSuggestions.adapter = adapter
         binding.urlSuggestions.layoutManager =
                 LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
-        RightSwipeActionAttacher.invoke(
+        RightSwipeActionAttachment(
                 binding.urlSuggestions,
                 this::removeAt
         )

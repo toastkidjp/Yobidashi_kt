@@ -154,6 +154,25 @@ object Toaster {
      * Show snackbar on long time.
      *
      * @param view
+     * @param messageId
+     * @param actionTextId
+     * @param action
+     * @param pair
+     * @param duration default = Snackbar.LENGTH_INDEFINITE
+     */
+    fun withAction(
+            view: View,
+            @StringRes messageId: Int,
+            @StringRes actionTextId: Int,
+            action: View.OnClickListener,
+            pair: ColorPair,
+            duration: Int = Snackbar.LENGTH_INDEFINITE
+    ) = withAction(view, view.context.getString(messageId), actionTextId, action, pair, duration)
+
+    /**
+     * Show snackbar on long time.
+     *
+     * @param view
      * @param message
      * @param actionTextId
      * @param action

@@ -42,10 +42,11 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="@dimen/fab_margin_bottom"
                 android:layout_marginRight="@dimen/fab_margin"
+                android:layout_marginEnd="@dimen/fab_margin"
                 android:background="@color/colorPrimaryDark"
                 android:foreground="@drawable/ripple_transparent"
                 android:src="@drawable/ic_add_white"
-                android:onClick="@{activity.launchAdding}"
+                android:onClick="@{activity::launchAdding}"
                 />
         </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>

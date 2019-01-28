@@ -14,6 +14,7 @@ internal class WebViewPool(
         private val context: Context,
         private val webViewClientSupplier: () -> WebViewClient,
         private val webChromeClientSupplier: () -> WebChromeClient,
+        private val scrollCallback: (Int, Int, Int, Int) -> Unit,
         poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE
 ) {
 
@@ -40,6 +41,7 @@ internal class WebViewPool(
         val webView = WebViewFactory.make(context)
         webView.webViewClient = webViewClientSupplier()
         webView.webChromeClient = webChromeClientSupplier()
+        webView.scrollListener = scrollCallback
         pool.put(tabId, webView)
         return webView
     }

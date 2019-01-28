@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.editor
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -15,6 +16,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 
 /**
@@ -38,7 +40,7 @@ class InputNameDialogFragment : DialogFragment() {
 
         val inputLayout = TextInputs.withDefaultInput(activityContext, DEFAULT_FILE_NAME)
 
-        return AlertDialog.Builder(activityContext)
+        val dialog = AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)
                 .setPositiveButton(R.string.save) { d, _ ->
@@ -52,6 +54,14 @@ class InputNameDialogFragment : DialogFragment() {
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .create()
+        dialog.setOnShowListener {
+            (activity as? Activity)?.let { activity ->
+                inputLayout.editText?.let { editText ->
+                    Inputs.showKeyboard(activity, editText)
+                }
+            }
+        }
+        return dialog
     }
 
     companion object {

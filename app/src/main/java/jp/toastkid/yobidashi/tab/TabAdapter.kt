@@ -410,6 +410,7 @@ class TabAdapter(
         val tab = tabList.get(index)
         if (tab is WebTab) {
             deleteThumbnail(tab.thumbnailPath)
+            browserModule.disableWebView()
             browserModule.detachWebView(tab.id())
         }
 
@@ -425,21 +426,33 @@ class TabAdapter(
      * @param text
      */
     fun find(text: String) {
-        browserModule.findAllAsync(text)
+        when (currentTab()) {
+            is WebTab -> browserModule.findAllAsync(text)
+            is PdfTab -> Unit
+            is EditorTab -> Unit
+        }
     }
 
     /**
      * Find to upward.
      */
-    fun findUp() {
-        browserModule.findUp()
+    fun findUp(text: String) {
+        when (currentTab()) {
+            is WebTab -> browserModule.findUp()
+            is PdfTab -> Unit
+            is EditorTab -> editor.findUp(text)
+        }
     }
 
     /**
      * Find to downward.
      */
-    fun findDown() {
-        browserModule.findDown()
+    fun findDown(text: String) {
+        when (currentTab()) {
+            is WebTab -> browserModule.findDown()
+            is PdfTab -> Unit
+            is EditorTab -> editor.findDown(text)
+        }
     }
 
     fun index(): Int = tabList.getIndex()

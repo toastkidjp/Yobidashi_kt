@@ -43,7 +43,7 @@ class BarcodeReaderActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
 
-        binding = DataBindingUtil.setContentView<ActivityBarcodeReaderBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
         binding?.toolbar?.let {
             setSupportActionBar(it)
@@ -69,8 +69,9 @@ class BarcodeReaderActivity : BaseActivity() {
                 if (TextUtils.equals(text, getResultText())) {
                     return
                 }
+                @Suppress("UsePropertyAccessSyntax")
                 binding?.result?.setText(text)
-                showResult(text)
+                showResult()
             }
 
             override fun possibleResultPoints(list: List<ResultPoint>) = Unit
@@ -90,14 +91,14 @@ class BarcodeReaderActivity : BaseActivity() {
     /**
      * Share result text.
      */
-    fun share(ignored: View) {
+    fun share() {
         getResultText()?.let { startActivity(IntentFactory.makeShare(it)) }
     }
 
     /**
      * Open result text with browser.
      */
-    fun open(ignored: View) {
+    fun open() {
         getResultText()?.let {
             SearchAction(this, preferenceApplier.getDefaultSearchEngine(), it).invoke()
         }
@@ -106,14 +107,12 @@ class BarcodeReaderActivity : BaseActivity() {
     /**
      * Get result text.
      */
-    private fun getResultText(): String? = binding?.result?.getText()?.toString()
+    private fun getResultText(): String? = binding?.result?.text?.toString()
 
     /**
      * Show result with snackbar.
-     *
-     * @param text
      */
-    private fun showResult(text: String) {
+    private fun showResult() {
         binding?.resultArea?.let {
             if (it.visibility != View.VISIBLE) {
                 it.visibility = View.VISIBLE
@@ -162,7 +161,7 @@ class BarcodeReaderActivity : BaseActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_barcode_reader
+        private const val LAYOUT_ID = R.layout.activity_barcode_reader
 
         /**
          * Make this activity's intent.
