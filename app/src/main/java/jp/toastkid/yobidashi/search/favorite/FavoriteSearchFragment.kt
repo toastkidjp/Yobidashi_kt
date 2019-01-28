@@ -138,9 +138,8 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
     }
 
     private fun invokeAddition() {
-        Addition(
-                binding!!.additionArea
-        ) { messageId -> Toaster.snackShort(binding!!.content, messageId, colorPair()) }.invoke()
+        val layout = binding?.additionArea ?: return
+        Addition(layout) { messageId -> Toaster.snackShort(layout, messageId, colorPair()) }.invoke()
     }
 
     @StringRes
