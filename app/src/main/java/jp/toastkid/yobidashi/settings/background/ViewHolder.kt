@@ -29,7 +29,8 @@ internal class ViewHolder(
 
     /**
      * Apply file content.
-     * @param f
+     *
+     * @param f background image file
      */
     fun applyContent(f: File) {
         ImageLoader.setImageToImageView(this.binding.image, f.path)
@@ -64,7 +65,7 @@ internal class ViewHolder(
     /**
      * Remove set image.
      *
-     * @param file
+     * @param file Image file
      */
     private fun removeSetImage(file: File?) {
         if (file == null || !file.exists()) {
@@ -80,6 +81,11 @@ internal class ViewHolder(
         onRemoved()
     }
 
+    /**
+     * Show [Snackbar] with specified message resource.
+     *
+     * @param messageId Message ID
+     */
     private fun snack(@StringRes messageId: Int) {
         Toaster.snackShort(
                 binding.text,
