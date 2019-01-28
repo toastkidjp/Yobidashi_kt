@@ -9,7 +9,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.BackgroundSearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
@@ -38,10 +37,10 @@ internal class ModuleAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     /** Selected items.  */
-    private val selected: MutableList<FavoriteSearch> = ArrayList<FavoriteSearch>(5)
+    private val selected: MutableList<FavoriteSearch> = ArrayList(5)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleViewHolder {
-        return ModuleViewHolder(DataBindingUtil.inflate<ItemSearchHistoryBinding>(
+        return ModuleViewHolder(DataBindingUtil.inflate(
                 inflater, R.layout.item_search_history, parent, false))
     }
 
