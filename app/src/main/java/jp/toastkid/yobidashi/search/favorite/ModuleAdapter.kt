@@ -48,7 +48,7 @@ internal class ModuleAdapter(
     override fun onBindViewHolder(holder: ModuleViewHolder, position: Int) {
         val favorite = selected[position]
         holder.setText(favorite.query!!)
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             try {
                 onClick(favorite)
             } catch (e: Exception) {
@@ -103,7 +103,7 @@ internal class ModuleAdapter(
         return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
+                .subscribe {
                     selected.remove(item)
                     notifyItemRemoved(position)
                     if (isEmpty) {
