@@ -26,12 +26,19 @@ import jp.toastkid.yobidashi.search.SearchCategory
  */
 class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment.Callback {
 
-    /** RecyclerView's adapter  */
+    /**
+     * RecyclerView's adapter
+     */
     private var adapter: ActivityAdapter? = null
 
-    /** Data Binding object.  */
+    /**
+     * Data Binding object.
+     */
     private var binding: FragmentFavoriteSearchBinding? = null
 
+    /**
+     * [CompositeDisposable].
+     */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
@@ -51,6 +58,9 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
         return binding?.root
     }
 
+    /**
+     * Initialize favorite search view.
+     */
     private fun initFavSearchView() {
         val fragmentActivity = activity ?: return
         adapter = ActivityAdapter(
@@ -92,8 +102,8 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
 
     /**
      * Start search action.
-     * @param category Search category
      *
+     * @param category Search category
      * @param query    Search query
      */
     private fun startSearch(category: SearchCategory, query: String) {
@@ -137,10 +147,16 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
                 ?.addTo(disposables)
     }
 
+    /**
+     * Implement for called from Data-Binding.
+     */
     fun add() {
         invokeAddition()
     }
 
+    /**
+     * Invoke addition.
+     */
     private fun invokeAddition() {
         val layout = binding?.additionArea ?: return
         Addition(layout) { messageId -> Toaster.snackShort(layout, messageId, colorPair()) }.invoke()
@@ -156,7 +172,9 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
 
     companion object {
 
-        /** Layout ID.  */
+        /**
+         * Layout ID.
+         */
         private const val LAYOUT_ID = R.layout.fragment_favorite_search
     }
 }
