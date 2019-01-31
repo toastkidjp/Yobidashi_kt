@@ -10,7 +10,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
@@ -61,7 +60,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(
-                    DataBindingUtil.inflate<ItemHomeMenuBinding>(inflater, LAYOUT_ID, parent, false)
+                    DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false)
             )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -69,7 +68,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
         holder.setColorPair(colorPair)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
-        holder.setOnClick(View.OnClickListener { v -> menuSubject.onNext(menu) })
+        holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })
     }
 
     override fun getItemCount(): Int = MAXIMUM
@@ -86,7 +85,7 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.item_home_menu
+        private const val LAYOUT_ID = R.layout.item_home_menu
 
         /**
          * Maximum length of menus.

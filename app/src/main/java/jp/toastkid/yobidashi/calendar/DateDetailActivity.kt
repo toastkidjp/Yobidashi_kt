@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.analytics.LogSender
@@ -34,13 +33,11 @@ class DateDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         overridePendingTransition(0, 0)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityDateDetailBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         logSender = LogSender(this)
 
-        if (binding.toolbar != null) {
-            initToolbar(binding.toolbar as Toolbar)
-        }
+        initToolbar(binding.toolbar)
 
         initButtons()
 
@@ -77,7 +74,7 @@ class DateDetailActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        binding.toolbar?.let { applyColorToToolbar(it) }
+        applyColorToToolbar(binding.toolbar)
     }
 
     override fun titleId(): Int = R.string.title_activity_date_detail
@@ -114,14 +111,14 @@ class DateDetailActivity : BaseActivity() {
          *
          * @return [Intent]
          */
-        fun makeIntent(context: Context, year: Int, month: Int, dayOfMonth: Int): Intent {
-            val intent = Intent(context, DateDetailActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.putExtra(KEY_YEAR, year)
-            intent.putExtra(KEY_MONTH, month)
-            intent.putExtra(KEY_DAY_OF_MONTH, dayOfMonth)
-            return intent
-        }
+        fun makeIntent(context: Context, year: Int, month: Int, dayOfMonth: Int) =
+                Intent(context, DateDetailActivity::class.java)
+                    .also {
+                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        it.putExtra(KEY_YEAR, year)
+                        it.putExtra(KEY_MONTH, month)
+                        it.putExtra(KEY_DAY_OF_MONTH, dayOfMonth)
+                    }
     }
 
 }

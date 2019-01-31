@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.ColorInt
+import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
@@ -90,7 +91,7 @@ class HomeFragment : BaseFragment() {
      */
     private fun initMenus() {
         val fragmentActivity = activity ?: return
-        adapter = Adapter(fragmentActivity, Consumer<Menu> { this.processMenu(it) })
+        adapter = Adapter(fragmentActivity, Consumer { this.processMenu(it) })
         binding.menusView.adapter = adapter
         val layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false)
         binding.menusView.layoutManager = layoutManager
@@ -164,9 +165,8 @@ class HomeFragment : BaseFragment() {
 
     /**
      * Open search.
-     * @param ignored
      */
-    fun search(ignored: View) {
+    fun search() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.searchBar.transitionName = "share"
@@ -177,9 +177,8 @@ class HomeFragment : BaseFragment() {
 
     /**
      * Open voice search.
-     * @param ignored
      */
-    fun voiceSearch(ignored: View) {
+    fun voiceSearch() {
         activity?.let {
             try {
                 startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
@@ -218,6 +217,7 @@ class HomeFragment : BaseFragment() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_home
 
     }

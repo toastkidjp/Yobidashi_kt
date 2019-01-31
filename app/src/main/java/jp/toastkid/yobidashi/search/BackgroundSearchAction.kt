@@ -29,7 +29,6 @@ class BackgroundSearchAction(
         val context: Context = snackbarParent.context
         invokeSearchAction(context)
         showSnack(context)
-        true
     }
 
     /**

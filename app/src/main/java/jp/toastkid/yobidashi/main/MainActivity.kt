@@ -136,7 +136,7 @@ class MainActivity :
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.appBarMain.toolbar?.let { toolbar ->
+        binding.appBarMain.toolbar.let { toolbar ->
             initToolbar(toolbar)
             setSupportActionBar(toolbar)
             initDrawer(toolbar)
@@ -224,17 +224,17 @@ class MainActivity :
 
     override fun onProgressChanged(newProgress: Int) {
         if (70 < newProgress) {
-            binding.appBarMain.progress?.visibility = View.GONE
+            binding.appBarMain.progress.visibility = View.GONE
             return
         }
-        binding.appBarMain.progress?.let {
+        binding.appBarMain.progress.let {
             it.visibility = View.VISIBLE
             it.progress = newProgress
         }
     }
 
     override fun onTitleChanged(titlePair: TitlePair) {
-        binding.appBarMain.toolbar?.let {
+        binding.appBarMain.toolbar.let {
             it.title    = titlePair.title()
             it.subtitle = titlePair.subtitle()
         }
@@ -297,7 +297,7 @@ class MainActivity :
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
         binding.drawerLayout.closeDrawers()
-        binding.appBarMain.toolbar?.let {
+        binding.appBarMain.toolbar.let {
             it.setTitle(fragment.titleId())
             it.subtitle = ""
         }
@@ -413,7 +413,7 @@ class MainActivity :
                 startActivity(IntentFactory.authorsApp())
             }
             R.id.nav_option_menu -> {
-                binding.appBarMain.toolbar?.showOverflowMenu()
+                binding.appBarMain.toolbar.showOverflowMenu()
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
             }
             R.id.nav_settings -> {
@@ -643,16 +643,16 @@ class MainActivity :
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> Unit
             ScreenMode.FULL_SCREEN -> {
-                binding.appBarMain.toolbar?.visibility = View.GONE
+                binding.appBarMain.toolbar.visibility = View.GONE
             }
             ScreenMode.EXPANDABLE -> {
-                binding.appBarMain.toolbar?.animate()?.let {
+                binding.appBarMain.toolbar.animate()?.let {
                     it.cancel()
                     it.translationY(-resources.getDimension(R.dimen.toolbar_height))
                             .setDuration(HEADER_HIDING_DURATION)
                             .withStartAction { binding.appBarMain.content?.requestLayout() }
                             .withEndAction   {
-                                binding.appBarMain.toolbar?.visibility = View.GONE
+                                binding.appBarMain.toolbar.visibility = View.GONE
                             }
                             .start()
                 }
@@ -663,16 +663,16 @@ class MainActivity :
     override fun showToolbar() {
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> {
-                binding.appBarMain.toolbar?.visibility = View.VISIBLE
+                binding.appBarMain.toolbar.visibility = View.VISIBLE
             }
             ScreenMode.FULL_SCREEN -> Unit
             ScreenMode.EXPANDABLE -> {
-                binding.appBarMain.toolbar?.animate()?.let {
+                binding.appBarMain.toolbar.animate()?.let {
                     it.cancel()
                     it.translationY(0f)
                             .setDuration(HEADER_HIDING_DURATION)
                             .withStartAction {
-                                binding.appBarMain.toolbar?.visibility = View.VISIBLE
+                                binding.appBarMain.toolbar.visibility = View.VISIBLE
                             }
                             .withEndAction   { binding.appBarMain.content?.requestLayout() }
                             .start()

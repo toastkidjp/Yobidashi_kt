@@ -34,7 +34,7 @@ class SiteSearchDialogFragment : DialogFragment() {
         val dialog = AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_site_search_by_google)
                 .setView(textInputLayout)
-                .setPositiveButton(R.string.title_search_action) { d, i ->
+                .setPositiveButton(R.string.title_search_action) { d, _ ->
                     textInputLayout.editText?.text?.let { doAction(it.toString()) }
                     d.dismiss()
                 }
@@ -94,8 +94,16 @@ class SiteSearchDialogFragment : DialogFragment() {
          */
         private const val FORMAT = "https://www.google.com/search?as_dt=i&as_sitesearch=%s&as_q=%s"
 
+        /**
+         * Extra key for URL string.
+         */
         private const val KEY_URL = "url"
 
+        /**
+         * Make this fragment instance with URL string.
+         *
+         * @param url URL string.
+         */
         fun makeWithUrl(url: String?) = SiteSearchDialogFragment()
                 .also { it.arguments = bundleOf(KEY_URL to url) }
     }

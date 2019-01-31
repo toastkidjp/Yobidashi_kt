@@ -45,12 +45,13 @@ object FileExtractorFromUri {
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val type = split[0]
-                return if ("primary".equals(type, ignoreCase = true)) {
-                    Environment.getExternalStorageDirectory().resolve(split[1]).absolutePath
-                } else if ("home".equals(type, ignoreCase = true)) {
-                    Environment.getExternalStorageDirectory().resolve("documents/${split[1]}").absolutePath
-                } else {
-                    "/storage/${type}/${split[1]}"
+                return when {
+                    "primary".equals(type, ignoreCase = true) ->
+                        Environment.getExternalStorageDirectory().resolve(split[1]).absolutePath
+                    "home".equals(type, ignoreCase = true) ->
+                        Environment.getExternalStorageDirectory().resolve("documents/${split[1]}").absolutePath
+                    else ->
+                        "/storage/$type/${split[1]}"
                 }
             }
             "com.android.providers.downloads.documents" == uri.authority -> {// DownloadsProvider
@@ -62,8 +63,7 @@ object FileExtractorFromUri {
             "com.android.providers.media.documents" == uri.authority -> {// MediaProvider
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                var contentUri: Uri? = null
-                contentUri = MediaStore.Files.getContentUri("external")
+                val contentUri: Uri? = MediaStore.Files.getContentUri("external")
                 val selection = "_id=?"
                 val selectionArgs = arrayOf(split[1])
                 return getDataColumn(context, contentUri, selection, selectionArgs)

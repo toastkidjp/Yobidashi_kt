@@ -4,9 +4,7 @@ import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.CardItemBinding
 
 /**
  * RecyclerView's adapter.
@@ -15,21 +13,20 @@ import jp.toastkid.yobidashi.databinding.CardItemBinding
  */
 internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        return CardViewHolder(
-                DataBindingUtil.inflate<CardItemBinding>(
-                        LayoutInflater.from(parent.context),
-                        R.layout.card_item,
-                        parent,
-                        false
-                )
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            CardViewHolder(
+                    DataBindingUtil.inflate(
+                            LayoutInflater.from(parent.context),
+                            R.layout.card_item,
+                            parent,
+                            false
+                    )
+            )
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val text = Suite.values()[position % Suite.values().size].text()
         holder.setText(text)
-        holder.itemView.setOnClickListener { v -> holder.open() }
+        holder.itemView.setOnClickListener { holder.open() }
     }
 
     override fun getItemCount(): Int = MAXIMUM_SIZE

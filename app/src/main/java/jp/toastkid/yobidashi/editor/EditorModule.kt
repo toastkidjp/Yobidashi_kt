@@ -268,7 +268,7 @@ class EditorModule(
      * @param fileName
      * @return string
      */
-    private inline fun removeExtension(fileName: String): String {
+    private fun removeExtension(fileName: String): String {
         val endIndex = fileName.lastIndexOf(".")
         return if (endIndex == -1) fileName else fileName.substring(0, endIndex)
     }
@@ -280,7 +280,7 @@ class EditorModule(
      * @param fileName
      * @return [File]
      */
-    private inline fun assignFile(context: Context, fileName: String): File {
+    private fun assignFile(context: Context, fileName: String): File {
         val externalFilesDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
         } else {
@@ -400,7 +400,7 @@ class EditorModule(
      *
      * @return content [String]
      */
-    private inline fun content(): String = binding.editorInput.text.toString()
+    private fun content(): String = binding.editorInput.text.toString()
 
     /**
      * Animate root view with specified [Animation].
@@ -466,7 +466,7 @@ class EditorModule(
      *
      * @param id
      */
-    private inline fun snackText(@StringRes id: Int) {
+    private fun snackText(@StringRes id: Int) {
         Toaster.snackShort(binding.snackbarContainer, id, preferenceApplier.colorPair())
     }
 
