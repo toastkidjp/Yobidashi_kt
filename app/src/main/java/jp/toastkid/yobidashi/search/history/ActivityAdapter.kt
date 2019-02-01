@@ -30,7 +30,9 @@ internal class ActivityAdapter(
         private val onDelete: (SearchHistory) -> Unit
 ) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation), Removable {
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -65,7 +67,9 @@ internal class ActivityAdapter(
 
     /**
      * Remove item with position.
-     * @param position
+     *
+     * @param position Removing item's position
+     * @return [Disposable]
      */
     override fun removeAt(position: Int): Disposable =
             removeItemAsMaybe(getItem(position))
@@ -73,6 +77,12 @@ internal class ActivityAdapter(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { notifyItemRemoved(position) }
 
+    /**
+     * Clear all items.
+     *
+     * @param onComplete Callback
+     * @return [Disposable]
+     */
     fun clearAll(onComplete: () -> Unit): Disposable =
             clearAsSingle()
                 .subscribeOn(Schedulers.io())
