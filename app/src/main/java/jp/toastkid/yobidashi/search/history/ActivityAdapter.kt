@@ -39,8 +39,7 @@ internal class ActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val searchHistory: SearchHistory? = getItem(position)
-        searchHistory?.let { searchHistory ->
+        getItem(position).let { searchHistory ->
             searchHistory.query?.let { holder.setText(it) }
             holder.itemView.setOnClickListener { _ ->
                 try {
