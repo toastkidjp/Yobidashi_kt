@@ -68,15 +68,11 @@ internal class ActivityAdapter(
      * Remove item with position.
      * @param position
      */
-    override fun removeAt(position: Int): Disposable {
-        val item = getItem(position)
-        return removeItemAsMaybe(item)
+    override fun removeAt(position: Int): Disposable =
+            removeItemAsMaybe(getItem(position))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    notifyItemRemoved(position)
-                }
-    }
+                .subscribe { notifyItemRemoved(position) }
 
     fun clearAll(onComplete: () -> Unit): Disposable =
             clearAsSingle()
