@@ -52,8 +52,8 @@ internal class ActivityAdapter(
 
             holder.setOnClickDelete { removeAt(position) }
 
-            holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
-            holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
+            holder.setFavorite(searchHistory.category ?: "", searchHistory.query ?: "")
+            holder.setImageRes(SearchCategory.findByCategory(searchHistory.category ?: "").iconId)
             holder.itemView.setOnLongClickListener { v ->
                 BackgroundSearchAction(v, searchHistory.category, searchHistory.query, false).invoke()
                 true
