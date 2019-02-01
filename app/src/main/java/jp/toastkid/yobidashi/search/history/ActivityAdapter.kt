@@ -42,7 +42,7 @@ internal class ActivityAdapter(
         val searchHistory: SearchHistory? = getItem(position)
         searchHistory?.let {
             it.query?.let { holder.setText(it) }
-            holder.itemView.setOnClickListener { v ->
+            holder.itemView.setOnClickListener { _ ->
                 try {
                     onClick(it)
                 } catch (e: Exception) {
@@ -73,7 +73,7 @@ internal class ActivityAdapter(
         return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
+                .subscribe { 
                     notifyItemRemoved(position)
                 }
     }
