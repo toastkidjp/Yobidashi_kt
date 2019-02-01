@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySearchHistoryBinding
@@ -26,6 +28,8 @@ class SearchHistoryActivity : BaseActivity(),
     private lateinit var binding: ActivitySearchHistoryBinding
 
     private lateinit var adapter: ActivityAdapter
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +80,8 @@ class SearchHistoryActivity : BaseActivity(),
     }
 
     override fun onClickSearchHistoryClear() {
-        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair()) }
+        adapter.clearAll { Toaster.snackShort(binding.root, R.string.done_clear, colorPair()) }
+                .addTo(disposables)
         finish()
     }
 
