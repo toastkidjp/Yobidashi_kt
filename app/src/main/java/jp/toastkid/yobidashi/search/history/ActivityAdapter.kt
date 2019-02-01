@@ -40,11 +40,11 @@ internal class ActivityAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val searchHistory: SearchHistory? = getItem(position)
-        searchHistory?.let {
-            it.query?.let { holder.setText(it) }
+        searchHistory?.let { searchHistory ->
+            searchHistory.query?.let { holder.setText(it) }
             holder.itemView.setOnClickListener { _ ->
                 try {
-                    onClick(it)
+                    onClick(searchHistory)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -52,10 +52,10 @@ internal class ActivityAdapter(
 
             holder.setOnClickDelete { removeAt(position) }
 
-            holder.setFavorite(it.category as String, it.query as String)
-            holder.setImageRes(SearchCategory.findByCategory(it.category as String).iconId)
+            holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
+            holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
             holder.itemView.setOnLongClickListener { v ->
-                BackgroundSearchAction(v, it.category, it.query, false).invoke()
+                BackgroundSearchAction(v, searchHistory.category, searchHistory.query, false).invoke()
                 true
             }
         }
