@@ -78,14 +78,13 @@ internal class ActivityAdapter(
                 }
     }
 
-    fun clearAll(onComplete: () -> Unit): Disposable {
-        return clearAsSingle()
+    fun clearAll(onComplete: () -> Unit): Disposable =
+            clearAsSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { i ->
                     onComplete()
                     notifyItemRangeRemoved(0, i)
                 }
-    }
 
 }
