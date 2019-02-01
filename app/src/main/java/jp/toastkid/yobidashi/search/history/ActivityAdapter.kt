@@ -73,13 +73,13 @@ internal class ActivityAdapter(
         return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { 
+                .subscribe {
                     notifyItemRemoved(position)
                 }
     }
 
-    fun clearAll(onComplete: () -> Unit) {
-        clearAsSingle()
+    fun clearAll(onComplete: () -> Unit): Disposable {
+        return clearAsSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { i ->
