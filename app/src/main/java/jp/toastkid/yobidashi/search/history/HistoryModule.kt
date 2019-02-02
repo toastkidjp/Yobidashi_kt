@@ -95,8 +95,6 @@ class HistoryModule(
 
     /**
      * Clear search history.
-     *
-     * @param ignored for Data Binding
      */
     fun confirmClear() {
         val activityContext = context()
