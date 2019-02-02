@@ -38,7 +38,7 @@ internal class ModuleAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     /** Selected items.  */
-    private val selected: MutableList<SearchHistory> = ArrayList<SearchHistory>(5)
+    private val selected: MutableList<SearchHistory> = ArrayList(5)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate<ItemSearchHistoryBinding>(
