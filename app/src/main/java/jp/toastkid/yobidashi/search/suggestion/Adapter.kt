@@ -58,12 +58,12 @@ internal class Adapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mSuggestions[position]
         holder.setText(item)
-        holder.itemView.setOnClickListener { v -> onItemClicked(item) }
+        holder.itemView.setOnClickListener { onItemClicked(item) }
         holder.itemView.setOnLongClickListener {
             onLongClicked(item)
             true
         }
-        holder.setOnClickAdd(View.OnClickListener{ v -> onAddClicked(item) })
+        holder.setOnClickAdd(View.OnClickListener{ onAddClicked(item) })
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
