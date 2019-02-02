@@ -29,6 +29,9 @@
                 android:layout_marginRight="@dimen/search_horizontal_margin"
                 >
 
+                <include android:id="@+id/clipboard_module"
+                    layout="@layout/module_search_clipboard" />
+
                 <include android:id="@+id/url_suggestion_module"
                     layout="@layout/module_url_suggestion" />
 

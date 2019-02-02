@@ -50,6 +50,7 @@ import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
@@ -588,6 +589,8 @@ class BrowserFragment : BaseFragment(),
 
         val colorPair = colorPair()
         editorModule.applySettings()
+
+        ClippingUrlOpener(binding?.root) { loadWithNewTab(it) }
 
         titleSubject.subscribe(
                 { progressBarCallback.onTitleChanged(it) },

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="module" type="jp.toastkid.yobidashi.search.clip.ClipboardModule" />
+    </data>
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/search_vertical_margin"
+        android:layout_marginBottom="@dimen/search_vertical_margin"
+        android:padding="8dp"
+        android:background="@color/filter_white_bb"
+        app:cardElevation="4dp"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/ripple_transparent"
+            >
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                tools:src="@drawable/ic_web_black"
+                android:contentDescription="@null"
+                />
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="48dp"
+                android:layout_marginStart="48dp"
+                android:gravity="center_vertical"
+                tools:text="https://www.yahoo.com"
+                android:textSize="14sp"
+                />
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
+</layout>
