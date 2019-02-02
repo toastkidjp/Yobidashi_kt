@@ -7,8 +7,6 @@
  */
 package jp.toastkid.yobidashi.search.history
 
-import android.os.Handler
-import android.os.Looper
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import io.reactivex.Completable
@@ -55,11 +53,6 @@ class HistoryModule(
      * Use for disposing.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * For executing on UI thread.
-     */
-    private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     init {
         binding.module = this
