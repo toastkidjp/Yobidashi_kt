@@ -33,7 +33,6 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 class HistoryModule(
         private val binding: ModuleSearchHistoryBinding,
         searchCallback: (SearchHistory) -> Unit,
-        onTouch: () -> Unit,
         onClickAdd: (SearchHistory) -> Unit
 ) : BaseModule(binding.root) {
 

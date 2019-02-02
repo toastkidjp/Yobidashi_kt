@@ -233,7 +233,6 @@ class SearchActivity : BaseActivity(),
             historyModule = HistoryModule(
                     binding?.historyModule as ModuleSearchHistoryBinding,
                     { history -> search(history.category as String, history.query as String) },
-                    this::hideKeyboard,
                     { searchHistory ->
                         binding?.searchInput?.setText("${searchHistory.query} ")
                         binding?.searchInput?.setSelection(
