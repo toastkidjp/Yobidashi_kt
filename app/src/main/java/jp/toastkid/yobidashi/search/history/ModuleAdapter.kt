@@ -48,7 +48,7 @@ internal class ModuleAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val searchHistory = selected[position]
         holder.setText(searchHistory.query!!)
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             try {
                 onClick(searchHistory)
             } catch (e: Exception) {
@@ -106,7 +106,7 @@ internal class ModuleAdapter(
         return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
+                .subscribe {
                     selected.remove(item)
                     notifyItemRemoved(position)
                     if (isEmpty) {
