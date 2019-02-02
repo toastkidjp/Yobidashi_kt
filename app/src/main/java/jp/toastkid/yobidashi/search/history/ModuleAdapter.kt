@@ -34,10 +34,14 @@ internal class ModuleAdapter(
         private val onClickAdd: (SearchHistory) -> Unit
 ) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation), Removable {
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /** Selected items.  */
+    /**
+     * Selected items.
+     */
     private val selected: MutableList<SearchHistory> = ArrayList(5)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -72,9 +76,9 @@ internal class ModuleAdapter(
 
     /**
      * Execute query.
-     * @param s
      *
-     * @return
+     * @param s
+     * @return [Disposable]
      */
     fun query(s: CharSequence): Disposable {
 
@@ -99,7 +103,9 @@ internal class ModuleAdapter(
 
     /**
      * Remove item with position.
+     *
      * @param position
+     * @return [Disposable]
      */
     override fun removeAt(position: Int): Disposable {
         val item = selected[position]
@@ -117,7 +123,8 @@ internal class ModuleAdapter(
 
     /**
      * Return selected item is empty.
-     * @return
+     *
+     * @return If this adapter's item is zero, return true.
      */
     private val isEmpty: Boolean
         get() = itemCount == 0
