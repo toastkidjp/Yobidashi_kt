@@ -23,7 +23,6 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
  *
  * @param binding Data binding object
  * @param searchCallback
- * @param onTouch
  * @param onClickAdd
  *
  * @author toastkidjp
