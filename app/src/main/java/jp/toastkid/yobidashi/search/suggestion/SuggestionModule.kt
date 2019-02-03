@@ -141,7 +141,7 @@ class SuggestionModule(
     private fun replace(suggestions: Iterable<String>): Disposable =
             suggestions.toObservable()
                     .doOnNext { adapter.add(it) }
-                    .doOnSubscribe { d -> adapter.clear() }
+                    .doOnSubscribe { adapter.clear() }
                     .doOnTerminate {
                         show()
                         adapter.notifyDataSetChanged()
