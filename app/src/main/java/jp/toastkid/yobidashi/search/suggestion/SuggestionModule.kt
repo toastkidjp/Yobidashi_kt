@@ -163,6 +163,6 @@ class SuggestionModule(
         /**
          * Suggest cache capacity.
          */
-        private val SUGGESTION_CACHE_CAPACITY = 30
+        private const val SUGGESTION_CACHE_CAPACITY = 30
     }
 }
