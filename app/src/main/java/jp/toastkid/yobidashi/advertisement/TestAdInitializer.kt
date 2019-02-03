@@ -57,11 +57,9 @@ internal class TestAdInitializer(context: Context) : AdInitializer {
      *
      * @return [AdRequest] instance
      */
-    private fun makeTestAdRequest(): AdRequest {
-        return AdRequest.Builder()
-                .also { builder -> TEST_IDS.forEach { builder.addTestDevice(it) } }
-                .build()
-    }
+    private fun makeTestAdRequest() = AdRequest.Builder()
+            .also { builder -> TEST_IDS.forEach { builder.addTestDevice(it) } }
+            .build()
 
     companion object {
 
