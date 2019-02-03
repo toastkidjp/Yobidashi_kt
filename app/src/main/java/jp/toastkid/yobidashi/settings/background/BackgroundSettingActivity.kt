@@ -101,8 +101,6 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
 
     /**
      * Launch Adding action.
-     *
-     * @param ignored For use Data Binding.
      */
     fun launchAdding() {
         sendLog("set_bg_img")
