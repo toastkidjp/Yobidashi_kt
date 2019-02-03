@@ -113,7 +113,7 @@ class SuggestionModule(
                         .addTo(disposables)
                 return@fetchAsync
             }
-            cache.put(key, suggestions)
+            cache[key] = suggestions
             lastSubscription = replace(suggestions).addTo(disposables)
         }
     }
