@@ -105,7 +105,7 @@ class SuggestionModule(
             return
         }
 
-        fetcher.fetchAsync(key, { suggestions ->
+        fetcher.fetchAsync(key) { suggestions ->
             if (suggestions.isEmpty()) {
                 Completable.fromAction { hide() }
                         .subscribeOn(AndroidSchedulers.mainThread())
@@ -115,7 +115,7 @@ class SuggestionModule(
             }
             cache.put(key, suggestions)
             lastSubscription = replace(suggestions).addTo(disposables)
-        })
+        }
     }
 
     /**
