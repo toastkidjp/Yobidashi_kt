@@ -63,6 +63,9 @@ internal class TestAdInitializer(context: Context) : AdInitializer {
 
     companion object {
 
+        /**
+         * Test device IDs.
+         */
         private val TEST_IDS = setOf(
                 AdRequest.DEVICE_ID_EMULATOR,
                 "59A864957D348217B858A8CE956AA352",
