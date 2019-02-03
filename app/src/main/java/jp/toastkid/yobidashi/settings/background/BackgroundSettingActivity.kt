@@ -73,7 +73,7 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
                         it.imagesView,
                         getString(R.string.message_snackbar_suggestion_select_background_image),
                         R.string.select,
-                        View.OnClickListener { launchAdding(it) },
+                        View.OnClickListener { launchAdding() },
                         colorPair()
                         )
             }
@@ -88,7 +88,7 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
     override fun clickMenu(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
-                binding?.fab?.let { launchAdding(it) }
+                binding?.fab?.let { launchAdding() }
                 return true
             }
             R.id.background_settings_toolbar_menu_clear -> {
@@ -104,7 +104,7 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
      *
      * @param ignored For use Data Binding.
      */
-    fun launchAdding(ignored: View) {
+    fun launchAdding() {
         sendLog("set_bg_img")
         startActivityForResult(IntentFactory.makePickImage(), IMAGE_READ_REQUEST)
     }

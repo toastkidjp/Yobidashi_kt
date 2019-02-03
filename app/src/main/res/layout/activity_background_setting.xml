@@ -46,7 +46,7 @@
                 android:background="@color/colorPrimaryDark"
                 android:foreground="@drawable/ripple_transparent"
                 android:src="@drawable/ic_add_white"
-                android:onClick="@{activity::launchAdding}"
+                android:onClick="@{view -> activity.launchAdding()}"
                 />
         </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
