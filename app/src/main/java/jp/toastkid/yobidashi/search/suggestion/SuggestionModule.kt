@@ -24,8 +24,11 @@ import java.util.*
  * Facade of search suggestion module.
  * Initialize with binding object.
  *
- * @param binding
- * @param searchInput
+ * @param binding Data binding object
+ * @param searchInput Input field
+ * @param searchCallback Callback on search
+ * @param searchBackgroundCallback Callback for background search
+ * @param onClick Callback on click
  *
  * @author toastkidjp
  */
@@ -85,6 +88,7 @@ class SuggestionModule(
 
     /**
      * Request web API.
+     *
      * @param key
      */
     fun request(key: String) {
@@ -121,7 +125,7 @@ class SuggestionModule(
     /**
      * Use for voice search.
      *
-     * @param words
+     * @param words Recognizer result words.
      */
     internal fun addAll(words: List<String>) {
         words.toObservable()
@@ -137,6 +141,7 @@ class SuggestionModule(
      * Replace suggestions with specified items.
      *
      * @param suggestions
+     * @return [Disposable]
      */
     private fun replace(suggestions: Iterable<String>): Disposable =
             suggestions.toObservable()
