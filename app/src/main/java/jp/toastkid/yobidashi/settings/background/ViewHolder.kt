@@ -29,21 +29,22 @@ internal class ViewHolder(
 
     /**
      * Apply file content.
-     * @param f
+     *
+     * @param f background image file
      */
     fun applyContent(f: File) {
         ImageLoader.setImageToImageView(this.binding.image, f.path)
         this.binding.text.text = f.name
-        this.binding.remove.setOnClickListener ({ v -> removeSetImage(f) })
-        this.binding.root.setOnClickListener ({ v ->
+        this.binding.remove.setOnClickListener { removeSetImage(f) }
+        this.binding.root.setOnClickListener {
             preferenceApplier.backgroundImagePath = f.path
             Toaster.snackShort(
                     binding.image,
                     R.string.message_change_background_image,
                     preferenceApplier.colorPair()
             )
-        })
-        this.binding.root.setOnLongClickListener ({ v ->
+        }
+        this.binding.root.setOnLongClickListener { v ->
             try {
                 val context = v.context
                 if (context is FragmentActivity) {
@@ -58,13 +59,13 @@ internal class ViewHolder(
             }
 
             true
-        })
+        }
     }
 
     /**
      * Remove set image.
      *
-     * @param file
+     * @param file Image file
      */
     private fun removeSetImage(file: File?) {
         if (file == null || !file.exists()) {
@@ -80,6 +81,11 @@ internal class ViewHolder(
         onRemoved()
     }
 
+    /**
+     * Show [Snackbar] with specified message resource.
+     *
+     * @param messageId Message ID
+     */
     private fun snack(@StringRes messageId: Int) {
         Toaster.snackShort(
                 binding.text,

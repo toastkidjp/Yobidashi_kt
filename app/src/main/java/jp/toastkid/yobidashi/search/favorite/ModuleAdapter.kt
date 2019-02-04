@@ -9,7 +9,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.BackgroundSearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
@@ -34,21 +33,25 @@ internal class ModuleAdapter(
         private val onClickAdd: (FavoriteSearch) -> Unit
 ) : OrmaRecyclerViewAdapter<FavoriteSearch, ModuleViewHolder>(context, relation) {
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /** Selected items.  */
-    private val selected: MutableList<FavoriteSearch> = ArrayList<FavoriteSearch>(5)
+    /**
+     * Selected items.
+     */
+    private val selected: MutableList<FavoriteSearch> = ArrayList(5)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleViewHolder {
-        return ModuleViewHolder(DataBindingUtil.inflate<ItemSearchHistoryBinding>(
+        return ModuleViewHolder(DataBindingUtil.inflate(
                 inflater, R.layout.item_search_history, parent, false))
     }
 
     override fun onBindViewHolder(holder: ModuleViewHolder, position: Int) {
         val favorite = selected[position]
         holder.setText(favorite.query!!)
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             try {
                 onClick(favorite)
             } catch (e: Exception) {
@@ -69,9 +72,9 @@ internal class ModuleAdapter(
 
     /**
      * Execute query.
-     * @param s
      *
-     * @return
+     * @param s query word [String]
+     * @return [Disposable]
      */
     fun query(s: CharSequence): Disposable {
 
@@ -91,11 +94,12 @@ internal class ModuleAdapter(
                     onVisibilityChanged(!isEmpty)
                     notifyDataSetChanged()
                 }
-                .subscribe { it -> this.add(it) }
+                .subscribe(this::add)
     }
 
     /**
      * Remove item with position.
+     *
      * @param position
      */
     fun removeAt(position: Int): Disposable {
@@ -103,7 +107,7 @@ internal class ModuleAdapter(
         return removeItemAsMaybe(item)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
+                .subscribe {
                     selected.remove(item)
                     notifyItemRemoved(position)
                     if (isEmpty) {
@@ -114,7 +118,8 @@ internal class ModuleAdapter(
 
     /**
      * Return selected item is empty.
-     * @return
+     *
+     * @return if this adapter is empty, return true
      */
     private val isEmpty: Boolean
         get() = itemCount == 0
@@ -128,6 +133,7 @@ internal class ModuleAdapter(
 
     /**
      * Add passed history item to selected list.
+     *
      * @param history
      */
     private fun add(history: FavoriteSearch) {

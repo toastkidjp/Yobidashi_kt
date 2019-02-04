@@ -113,7 +113,7 @@ class SearchActivity : BaseActivity(),
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
-        binding?.searchClear?.setOnClickListener ({ binding?.searchInput?.setText("") })
+        binding?.searchClear?.setOnClickListener { binding?.searchInput?.setText("") }
         SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
 
         initFavoriteModule()
@@ -168,15 +168,7 @@ class SearchActivity : BaseActivity(),
             it.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
             it.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
 
-            // Set query.
-            intent?.getStringExtra(EXTRA_KEY_QUERY)?.let {
-                binding?.searchInput?.let { input ->
-                    input.setText(it)
-                    input.selectAll()
-                }
-                overridePendingTransition(0, 0)
-                withoutExitAnimation = true
-            }
+            setQuery()
         }
 
         Toaster.snackShort(
@@ -186,12 +178,23 @@ class SearchActivity : BaseActivity(),
                 )
     }
 
+    private fun setQuery() {
+        intent?.getStringExtra(EXTRA_KEY_QUERY)?.let { query ->
+            binding?.searchInput?.let { input ->
+                input.setText(query)
+                input.selectAll()
+            }
+            overridePendingTransition(0, 0)
+            withoutExitAnimation = true
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setListenerForKeyboardHiding() {
-        binding?.scroll?.setOnTouchListener({ _, _ ->
+        binding?.scroll?.setOnTouchListener { _, _ ->
             hideKeyboard()
             false
-        })
+        }
     }
 
     override fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
@@ -283,12 +286,12 @@ class SearchActivity : BaseActivity(),
      */
     private fun initSearchInput() {
         binding?.searchInput?.let {
-            it.setOnEditorActionListener({ v, actionId, _ ->
+            it.setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
                 }
                 true
-            })
+            }
             it.addTextChangedListener(object : TextWatcher {
 
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
@@ -398,7 +401,7 @@ class SearchActivity : BaseActivity(),
     override fun onClickDeleteAllFavoriteSearch() {
         DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { v ->
+                .subscribe {
                     favoriteModule?.clear()
                     Toaster.snackShort(
                             binding?.root as View,
@@ -411,7 +414,7 @@ class SearchActivity : BaseActivity(),
     override fun onClickClearSearchHistory() {
         DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { v ->
+                .subscribe {
                     historyModule?.clear()
                     Toaster.snackShort(
                             binding?.root as View,
@@ -474,19 +477,19 @@ class SearchActivity : BaseActivity(),
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.activity_search
+        private const val LAYOUT_ID = R.layout.activity_search
 
         /**
          * Extra key.
          */
-        private const val EXTRA_KEY_QUERY: String = "query"
+        private const val EXTRA_KEY_QUERY = "query"
 
         /**
          * Make launch [Intent].
          *
          * @param context [Context]
          */
-        fun makeIntent(context: Context): Intent =
+        fun makeIntent(context: Context) =
                 Intent(context, SearchActivity::class.java)
                         .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
