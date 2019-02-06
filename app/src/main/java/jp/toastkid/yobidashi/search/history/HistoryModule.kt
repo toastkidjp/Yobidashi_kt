@@ -7,8 +7,6 @@
  */
 package jp.toastkid.yobidashi.search.history
 
-import android.os.Handler
-import android.os.Looper
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import io.reactivex.Completable
@@ -25,7 +23,6 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
  *
  * @param binding Data binding object
  * @param searchCallback
- * @param onTouch
  * @param onClickAdd
  *
  * @author toastkidjp
@@ -33,7 +30,6 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 class HistoryModule(
         private val binding: ModuleSearchHistoryBinding,
         searchCallback: (SearchHistory) -> Unit,
-        onTouch: () -> Unit,
         onClickAdd: (SearchHistory) -> Unit
 ) : BaseModule(binding.root) {
 
@@ -56,11 +52,6 @@ class HistoryModule(
      * Use for disposing.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * For executing on UI thread.
-     */
-    private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     init {
         binding.module = this
@@ -96,8 +87,6 @@ class HistoryModule(
 
     /**
      * Clear search history.
-     *
-     * @param ignored for Data Binding
      */
     fun confirmClear() {
         val activityContext = context()

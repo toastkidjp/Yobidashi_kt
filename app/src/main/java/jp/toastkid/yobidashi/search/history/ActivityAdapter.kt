@@ -30,7 +30,9 @@ internal class ActivityAdapter(
         private val onDelete: (SearchHistory) -> Unit
 ) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation), Removable {
 
-    /** Layout inflater.  */
+    /**
+     * Layout inflater.
+     */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,12 +41,11 @@ internal class ActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val searchHistory: SearchHistory? = getItem(position)
-        searchHistory?.let {
-            it.query?.let { holder.setText(it) }
-            holder.itemView.setOnClickListener { v ->
+        getItem(position).let { searchHistory ->
+            searchHistory.query?.let { holder.setText(it) }
+            holder.itemView.setOnClickListener { _ ->
                 try {
-                    onClick(it)
+                    onClick(searchHistory)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -52,10 +53,10 @@ internal class ActivityAdapter(
 
             holder.setOnClickDelete { removeAt(position) }
 
-            holder.setFavorite(it.category as String, it.query as String)
-            holder.setImageRes(SearchCategory.findByCategory(it.category as String).iconId)
+            holder.setFavorite(searchHistory.category ?: "", searchHistory.query ?: "")
+            holder.setImageRes(SearchCategory.findByCategory(searchHistory.category ?: "").iconId)
             holder.itemView.setOnLongClickListener { v ->
-                BackgroundSearchAction(v, it.category, it.query, false).invoke()
+                BackgroundSearchAction(v, searchHistory.category, searchHistory.query, false).invoke()
                 true
             }
         }
@@ -66,26 +67,29 @@ internal class ActivityAdapter(
 
     /**
      * Remove item with position.
-     * @param position
+     *
+     * @param position Removing item's position
+     * @return [Disposable]
      */
-    override fun removeAt(position: Int): Disposable {
-        val item = getItem(position)
-        return removeItemAsMaybe(item)
+    override fun removeAt(position: Int): Disposable =
+            removeItemAsMaybe(getItem(position))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
-                    notifyItemRemoved(position)
-                }
-    }
+                .subscribe { notifyItemRemoved(position) }
 
-    fun clearAll(onComplete: () -> Unit) {
-        clearAsSingle()
+    /**
+     * Clear all items.
+     *
+     * @param onComplete Callback
+     * @return [Disposable]
+     */
+    fun clearAll(onComplete: () -> Unit): Disposable =
+            clearAsSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { i ->
                     onComplete()
                     notifyItemRangeRemoved(0, i)
                 }
-    }
 
 }

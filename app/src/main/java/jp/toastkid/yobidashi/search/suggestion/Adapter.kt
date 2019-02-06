@@ -13,27 +13,27 @@ import timber.log.Timber
 /**
  * Suggest list adapter.
  *
- * @param mInflater Layout inflater
- * @param mSearchInput EditText
- * @param mSuggestionsCallback Using selected suggest action
+ * @param layoutInflater Layout inflater
+ * @param searchInput EditText
+ * @param suggestionsCallback Using selected suggest action
  *
  * @author toastkidjp
  */
 internal class Adapter (
-        private val mInflater: LayoutInflater,
-        private val mSearchInput: EditText,
-        private val mSuggestionsCallback: (String) -> Unit,
+        private val layoutInflater: LayoutInflater,
+        private val searchInput: EditText,
+        private val suggestionsCallback: (String) -> Unit,
         private val onLongClicked: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /** Suggestion items.  */
-    private val mSuggestions: MutableList<String> = mutableListOf()
+    private val suggestions: MutableList<String> = mutableListOf()
 
     /**
      * Clear suggestions.
      */
     fun clear() {
-        mSuggestions.clear()
+        suggestions.clear()
         notifyDataSetChanged()
     }
 
@@ -42,28 +42,28 @@ internal class Adapter (
      * @param s
      */
     fun add(s: String) {
-        mSuggestions.add(s)
+        suggestions.add(s)
     }
 
     override fun getItemCount(): Int {
-        return mSuggestions.size
+        return suggestions.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
                 DataBindingUtil.inflate<ItemSearchSuggestionBinding>(
-                        mInflater, R.layout.item_search_suggestion, parent, false))
+                        layoutInflater, R.layout.item_search_suggestion, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mSuggestions[position]
+        val item = suggestions[position]
         holder.setText(item)
-        holder.itemView.setOnClickListener { v -> onItemClicked(item) }
+        holder.itemView.setOnClickListener { onItemClicked(item) }
         holder.itemView.setOnLongClickListener {
             onLongClicked(item)
             true
         }
-        holder.setOnClickAdd(View.OnClickListener{ v -> onAddClicked(item) })
+        holder.setOnClickAdd(View.OnClickListener{ onAddClicked(item) })
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
@@ -72,8 +72,8 @@ internal class Adapter (
      * @param suggestion
      */
     private fun onAddClicked(suggestion: String) {
-        mSearchInput.setText(suggestion + " ")
-        mSearchInput.setSelection(mSearchInput.text.toString().length)
+        searchInput.setText(suggestion + " ")
+        searchInput.setSelection(searchInput.text.toString().length)
     }
 
     /**
@@ -81,10 +81,10 @@ internal class Adapter (
      * @param suggest
      */
     private fun onItemClicked(suggest: String) {
-        mSearchInput.setText(suggest)
-        mSearchInput.setSelection(suggest.length)
+        searchInput.setText(suggest)
+        searchInput.setSelection(suggest.length)
         try {
-            mSuggestionsCallback(suggest)
+            suggestionsCallback(suggest)
         } catch (e: Exception) {
             Timber.e(e)
         }
