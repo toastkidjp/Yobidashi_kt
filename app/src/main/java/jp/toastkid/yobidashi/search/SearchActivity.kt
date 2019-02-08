@@ -124,17 +124,15 @@ class SearchActivity : BaseActivity(),
 
         applyColor()
 
-        clipboardModule = ClipboardModule(
-                binding?.clipboardModule as ModuleSearchClipboardBinding,
-                { clipped ->
-                    if (Urls.isValidUrl(clipped)) {
-                        finish()
-                        startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
-                    } else {
-                        search(binding?.searchCategories?.selectedItem.toString(), clipped)
-                    }
-                }
-        )
+        clipboardModule = ClipboardModule(binding?.clipboardModule as ModuleSearchClipboardBinding)
+        { clipped ->
+            if (Urls.isValidUrl(clipped)) {
+                finish()
+                startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
+            } else {
+                search(binding?.searchCategories?.selectedItem.toString(), clipped)
+            }
+        }
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
