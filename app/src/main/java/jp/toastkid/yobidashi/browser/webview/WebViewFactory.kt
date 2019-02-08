@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.webview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.support.v4.app.DialogFragment
@@ -46,6 +47,7 @@ internal object WebViewFactory {
      *
      * @param context [Context]
      */
+    @SuppressLint("ClickableViewAccessibility")
     fun make(context: Context): CustomWebView {
         val webView = CustomWebView(context)
         webView.setOnTouchListener { _, motionEvent ->
