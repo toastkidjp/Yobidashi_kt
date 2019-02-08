@@ -51,7 +51,7 @@ internal object WebViewFactory {
     fun make(context: Context): CustomWebView {
         val webView = CustomWebView(context)
         webView.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.getAction()) {
+            when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> webView.enablePullToRefresh = false
             }
             false
