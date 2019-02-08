@@ -18,18 +18,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/color_settings"
-                style="@style/OneLineTextMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_palette_black"
-                android:onClick="@{fragment::colorSettings}"
-                android:text="@string/title_settings_color"
-                />
-
-            <include layout="@layout/primary_dark_divider" />
-
-            <TextView
                 android:id="@+id/background_settings"
                 style="@style/OneLineTextMenu"
                 android:layout_width="match_parent"
