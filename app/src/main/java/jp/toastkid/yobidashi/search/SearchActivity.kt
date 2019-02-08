@@ -400,27 +400,33 @@ class SearchActivity : BaseActivity(),
     override fun onClickDeleteAllFavoriteSearch() {
         DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe {
-                    favoriteModule?.clear()
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.settings_color_delete,
-                            PreferenceApplier(this).colorPair()
-                    )
-                }
+                .subscribe(
+                        {
+                            favoriteModule?.clear()
+                            Toaster.snackShort(
+                                    binding?.root as View,
+                                    R.string.settings_color_delete,
+                                    PreferenceApplier(this).colorPair()
+                            )
+                        },
+                        Timber::e
+                )
     }
 
     override fun onClickClearSearchHistory() {
         DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe {
-                    historyModule?.clear()
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.settings_color_delete,
-                            PreferenceApplier(this).colorPair()
-                    )
-                }
+                .subscribe(
+                        {
+                            historyModule?.clear()
+                            Toaster.snackShort(
+                                    binding?.root as View,
+                                    R.string.settings_color_delete,
+                                    PreferenceApplier(this).colorPair()
+                            )
+                        },
+                        Timber::e
+                )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
