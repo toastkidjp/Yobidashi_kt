@@ -31,7 +31,6 @@ import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
-import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
 import timber.log.Timber
 
 /**
@@ -119,9 +118,6 @@ class HomeFragment : BaseFragment() {
             }
             Menu.SETTING -> {
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
-            }
-            Menu.COLOR_SETTING -> {
-                startActivity(ColorSettingFragment.makeIntent(fragmentActivity))
             }
             Menu.BACKGROUND_SETTING -> {
                 startActivity(BackgroundSettingActivity.makeIntent(fragmentActivity))

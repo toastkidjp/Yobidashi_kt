@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
@@ -273,22 +272,6 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
-    }
-
-    companion object {
-
-        /**
-         * Make launcher intent.
-         *
-         * @param context Context
-         *
-         * @return [Intent]
-         */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, ColorSettingFragment::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
     }
 
 }
