@@ -411,6 +411,7 @@ class SearchActivity : BaseActivity(),
                         },
                         Timber::e
                 )
+                .addTo(disposables)
     }
 
     override fun onClickClearSearchHistory() {
@@ -427,6 +428,7 @@ class SearchActivity : BaseActivity(),
                         },
                         Timber::e
                 )
+                .addTo(disposables)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
