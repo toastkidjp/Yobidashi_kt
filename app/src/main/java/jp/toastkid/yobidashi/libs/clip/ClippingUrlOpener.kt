@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.libs.clip
 
 import android.net.Uri
+import android.support.design.widget.Snackbar
 import android.text.TextUtils
 import android.view.View
 import androidx.core.net.toUri
@@ -43,7 +44,8 @@ object ClippingUrlOpener {
                 "Would you open \"$clipboardContent\"?",
                 R.string.open,
                 View.OnClickListener { onClick(clipboardContent.toUri()) },
-                PreferenceApplier(activityContext).colorPair()
+                PreferenceApplier(activityContext).colorPair(),
+                Snackbar.LENGTH_LONG
         )
     }
 }
