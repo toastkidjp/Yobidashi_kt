@@ -17,6 +17,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 object ClippingUrlOpener {
 
+    /**
+     * For suppress consecutive showing.
+     */
     private var previous: String? = null
 
     /**
