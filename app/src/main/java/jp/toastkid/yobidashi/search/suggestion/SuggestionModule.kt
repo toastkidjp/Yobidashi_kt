@@ -24,8 +24,11 @@ import java.util.*
  * Facade of search suggestion module.
  * Initialize with binding object.
  *
- * @param binding
- * @param searchInput
+ * @param binding Data binding object
+ * @param searchInput Input field
+ * @param searchCallback Callback on search
+ * @param searchBackgroundCallback Callback for background search
+ * @param onClick Callback on click
  *
  * @author toastkidjp
  */
@@ -85,6 +88,7 @@ class SuggestionModule(
 
     /**
      * Request web API.
+     *
      * @param key
      */
     fun request(key: String) {
@@ -105,7 +109,7 @@ class SuggestionModule(
             return
         }
 
-        fetcher.fetchAsync(key, { suggestions ->
+        fetcher.fetchAsync(key) { suggestions ->
             if (suggestions.isEmpty()) {
                 Completable.fromAction { hide() }
                         .subscribeOn(AndroidSchedulers.mainThread())
@@ -113,15 +117,15 @@ class SuggestionModule(
                         .addTo(disposables)
                 return@fetchAsync
             }
-            cache.put(key, suggestions)
+            cache[key] = suggestions
             lastSubscription = replace(suggestions).addTo(disposables)
-        })
+        }
     }
 
     /**
      * Use for voice search.
      *
-     * @param words
+     * @param words Recognizer result words.
      */
     internal fun addAll(words: List<String>) {
         words.toObservable()
@@ -137,11 +141,12 @@ class SuggestionModule(
      * Replace suggestions with specified items.
      *
      * @param suggestions
+     * @return [Disposable]
      */
     private fun replace(suggestions: Iterable<String>): Disposable =
             suggestions.toObservable()
                     .doOnNext { adapter.add(it) }
-                    .doOnSubscribe { d -> adapter.clear() }
+                    .doOnSubscribe { adapter.clear() }
                     .doOnTerminate {
                         show()
                         adapter.notifyDataSetChanged()
@@ -163,6 +168,6 @@ class SuggestionModule(
         /**
          * Suggest cache capacity.
          */
-        private val SUGGESTION_CACHE_CAPACITY = 30
+        private const val SUGGESTION_CACHE_CAPACITY = 30
     }
 }
