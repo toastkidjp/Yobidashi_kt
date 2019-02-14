@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.browser.screenshots
 
 import android.graphics.Bitmap
-import android.support.annotation.ColorInt
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.ColorInt
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemScreenshotBinding
 import java.text.DateFormat
 import java.text.SimpleDateFormat

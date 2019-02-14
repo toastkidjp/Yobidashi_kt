@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.libs.preference
 
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 /**
  * Color pair of toolbar and so on...

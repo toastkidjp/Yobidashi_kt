@@ -9,17 +9,17 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.support.annotation.Dimension
-import android.support.annotation.MainThread
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
 import android.widget.TextView
+import androidx.annotation.Dimension
+import androidx.annotation.MainThread
+import androidx.annotation.StringRes
 import com.cleveroad.cyclemenuwidget.CycleMenuWidget
+import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
@@ -471,7 +471,7 @@ class EditorModule(
     }
 
     /**
-     * Show message by [android.support.design.widget.Snackbar].
+     * Show message by [com.google.android.material.snackbar.Snackbar].
      *
      * @param message
      */

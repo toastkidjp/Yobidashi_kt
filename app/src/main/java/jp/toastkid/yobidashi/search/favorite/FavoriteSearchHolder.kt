@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi.search.favorite
 
-import android.support.annotation.DrawableRes
-import android.support.v7.widget.AppCompatDrawableManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.appcompat.widget.AppCompatDrawableManager
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemFavoriteSearchBinding
 
 /**

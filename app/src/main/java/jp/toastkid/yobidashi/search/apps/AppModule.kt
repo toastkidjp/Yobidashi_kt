@@ -7,7 +7,7 @@
  */
 package jp.toastkid.yobidashi.search.apps
 
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.TextUtils
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers

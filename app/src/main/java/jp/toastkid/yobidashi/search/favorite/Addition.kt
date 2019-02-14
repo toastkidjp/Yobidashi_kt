@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.annotation.LayoutRes
-import android.support.design.widget.TextInputLayout
+import androidx.annotation.LayoutRes
+import com.google.android.material.textfield.TextInputLayout
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View

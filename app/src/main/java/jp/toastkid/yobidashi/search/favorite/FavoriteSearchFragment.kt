@@ -2,11 +2,12 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
+import androidx.annotation.StringRes
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -72,7 +73,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
 
         binding?.favoriteSearchView?.let {
             it.adapter = adapter
-            it.layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.VERTICAL, false)
+            it.layoutManager = LinearLayoutManager(fragmentActivity, RecyclerView.VERTICAL, false)
         }
 
         ItemTouchHelper(
@@ -135,9 +136,9 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
     override fun onClickDeleteAllFavoriteSearch() {
         val activityContext = context ?: return
 
-        adapter?.relation?.deleter()?.executeAsSingle()
+        Completable.fromAction { adapter?.relation?.deleter()?.execute() }
                 ?.subscribeOn(Schedulers.io())
-                ?.subscribe { _ ->
+                ?.subscribe {
                     Toaster.snackShort(
                             binding?.root as View,
                             R.string.settings_color_delete,

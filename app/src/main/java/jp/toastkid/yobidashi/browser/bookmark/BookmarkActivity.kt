@@ -8,10 +8,10 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
 import android.text.TextUtils
 import android.view.MenuItem
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -63,7 +63,7 @@ class BookmarkActivity: BaseActivity(),
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         val relation = DbInitializer.init(this).relationOfBookmark()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
                 relation,

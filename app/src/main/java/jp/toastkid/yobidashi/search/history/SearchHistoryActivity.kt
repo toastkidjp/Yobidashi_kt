@@ -4,9 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseActivity
@@ -38,7 +39,7 @@ class SearchHistoryActivity : BaseActivity(),
         val relation = DbInitializer.init(this).relationOfSearchHistory()
 
         binding.historiesView.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
                 relation,

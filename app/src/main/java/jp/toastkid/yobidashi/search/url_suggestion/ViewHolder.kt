@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
 

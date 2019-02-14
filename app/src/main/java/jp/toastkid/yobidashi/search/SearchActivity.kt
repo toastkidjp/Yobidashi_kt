@@ -9,11 +9,6 @@ import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.support.annotation.ColorInt
-import android.support.annotation.LayoutRes
-import android.support.annotation.StringRes
-import android.support.v4.graphics.ColorUtils
-import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
@@ -21,6 +16,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.annotation.ColorInt
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
@@ -400,7 +400,7 @@ class SearchActivity : BaseActivity(),
     override fun onClickDeleteAllFavoriteSearch() {
         DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe {
+                .subscribe { _, _ ->
                     favoriteModule?.clear()
                     Toaster.snackShort(
                             binding?.root as View,
@@ -413,7 +413,7 @@ class SearchActivity : BaseActivity(),
     override fun onClickClearSearchHistory() {
         DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe {
+                .subscribe { _, _ ->
                     historyModule?.clear()
                     Toaster.snackShort(
                             binding?.root as View,

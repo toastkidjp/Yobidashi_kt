@@ -2,9 +2,9 @@ package jp.toastkid.yobidashi.browser
 
 import android.content.Context
 import android.os.Build
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import android.view.View
 import com.cleveroad.cyclemenuwidget.CycleMenuItem
 import jp.toastkid.yobidashi.R

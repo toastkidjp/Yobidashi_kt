@@ -5,7 +5,7 @@ import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.gfx.android.orma.Relation
+import com.github.gfx.android.orma.rx.RxRelation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi.search.SearchCategory
  */
 internal class ActivityAdapter(
         context: Context,
-        relation: Relation<FavoriteSearch, *>,
+        relation: RxRelation<FavoriteSearch, *>,
         private val searchAction: (SearchCategory, String) -> Unit,
         private val toasterCallback: (Int) -> Unit
 ) : OrmaRecyclerViewAdapter<FavoriteSearch, FavoriteSearchHolder>(context, relation) {

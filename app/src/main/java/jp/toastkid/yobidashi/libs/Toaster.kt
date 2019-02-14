@@ -1,12 +1,11 @@
 package jp.toastkid.yobidashi.libs
 
 import android.content.Context
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
@@ -92,7 +91,7 @@ object Toaster {
         val snackbar = Snackbar.make(view, message, duration)
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(pair.bgColor())
-        snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+        snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
                 .setTextColor(pair.fontColor())
         snackbar.show()
         return snackbar
@@ -191,9 +190,9 @@ object Toaster {
         snackbar.setAction(actionTextId, action)
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(pair.bgColor())
-        snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_text)
+        snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
                 .setTextColor(pair.fontColor())
-        snackbarView.findViewById<TextView>(android.support.design.R.id.snackbar_action)
+        snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_action)
                 .setTextColor(pair.fontColor())
         snackbar.show()
         return snackbar

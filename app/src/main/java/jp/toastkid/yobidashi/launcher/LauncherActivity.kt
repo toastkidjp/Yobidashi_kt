@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.MenuItem
+import androidx.annotation.IdRes
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityLauncherBinding
@@ -49,7 +49,7 @@ class LauncherActivity : BaseActivity() {
         initToolbar(binding.toolbar)
         binding.toolbar.inflateMenu(R.menu.launcher)
 
-        binding.appItemsView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.appItemsView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         binding.appItemsView.adapter = adapter
         binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
@@ -100,7 +100,7 @@ class LauncherActivity : BaseActivity() {
     override fun clickMenu(item: MenuItem): Boolean {
         @IdRes val itemId: Int = item.itemId
 
-        val itemCount = binding.appItemsView.adapter.itemCount
+        val itemCount = binding.appItemsView.adapter?.itemCount ?: 0
 
         when (itemId) {
             R.id.setting -> {

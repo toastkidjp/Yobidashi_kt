@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
-import android.support.annotation.IdRes
+import androidx.annotation.IdRes
 import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import jp.toastkid.yobidashi.R
 

@@ -6,11 +6,11 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.MenuItem
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityViewHistoryBinding
@@ -34,7 +34,7 @@ class ViewHistoryActivity: BaseActivity(), ClearDialogFragment.Callback {
         binding = DataBindingUtil.setContentView<ActivityViewHistoryBinding>(this, LAYOUT_ID)
         val relation = DbInitializer.init(this).relationOfViewHistory()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
                 relation,

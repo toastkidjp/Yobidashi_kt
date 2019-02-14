@@ -5,7 +5,7 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.reactivex.android.schedulers.AndroidSchedulers

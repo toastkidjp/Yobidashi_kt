@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.search
 
 import android.content.Context
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory

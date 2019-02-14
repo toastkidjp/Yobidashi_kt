@@ -1,11 +1,11 @@
 package jp.toastkid.yobidashi.search.history
 
-import android.support.annotation.DrawableRes
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateMargins
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchInsertion

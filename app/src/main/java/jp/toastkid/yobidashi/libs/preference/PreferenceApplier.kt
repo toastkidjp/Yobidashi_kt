@@ -3,8 +3,8 @@ package jp.toastkid.yobidashi.libs.preference
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.MenuPos

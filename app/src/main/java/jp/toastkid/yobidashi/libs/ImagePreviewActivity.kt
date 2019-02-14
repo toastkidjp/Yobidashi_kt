@@ -8,8 +8,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.annotation.StringRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import android.view.MenuItem
 import android.view.View
 import jp.toastkid.yobidashi.BaseActivity
