@@ -14,8 +14,8 @@ import java.util.*
 internal object SslErrorMessageGenerator {
 
     private val dateFormatHolder: ThreadLocal<DateFormat> = object : ThreadLocal<DateFormat>() {
-        override fun initialValue(): DateFormat
-                = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+        override fun initialValue() =
+                SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
     }
 
     fun generate(context: Context, error: SslError?): String {
