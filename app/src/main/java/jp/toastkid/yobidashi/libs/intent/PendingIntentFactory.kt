@@ -8,7 +8,6 @@ import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
-import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
 
 /**
  * Factory of [PendingIntent].
@@ -26,17 +25,6 @@ object PendingIntentFactory {
     fun makeSearchLauncher(context: Context): PendingIntent {
         val intent = SearchActivity.makeIntent(context)
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-    }
-
-    /**
-     * Make launch color settings intent.
-     * @param context
-     *
-     * @return [ColorSettingFragment]'s pending intent
-     */
-    fun makeColorSettingsIntent(context: Context): PendingIntent {
-        val intent = ColorSettingFragment.makeIntent(context)
-        return PendingIntent.getActivity(context, 2, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     /**

@@ -50,10 +50,6 @@ internal class ChromeTabsSearchIntentLauncher(private val context: Context) : Se
                         PendingIntentFactory.makeSearchLauncher(context)
                 )
                 .addMenuItem(
-                        context.getString(R.string.title_settings_color),
-                        PendingIntentFactory.makeColorSettingsIntent(context)
-                )
-                .addMenuItem(
                         context.getString(R.string.title_adding_favorite_search),
                         PendingIntentFactory.favoriteSearchAdding(context, category, query)
                 )
