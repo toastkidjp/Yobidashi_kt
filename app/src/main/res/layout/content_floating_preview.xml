@@ -20,7 +20,7 @@
             android:layout_gravity="bottom"
             tools:ignore="UselessParent"
             >
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/floating_preview_header_height"
@@ -64,7 +64,7 @@
                         tools:text="https://www.title.co.jp"
                         />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
             <FrameLayout
                 android:id="@+id/preview_container"
                 android:layout_width="match_parent"
