@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.http.SslCertificate
 import android.net.http.SslError
 import jp.toastkid.yobidashi.R
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,17 +12,12 @@ import java.util.*
  */
 internal object SslErrorMessageGenerator {
 
-    private val dateFormatHolder: ThreadLocal<DateFormat> = object : ThreadLocal<DateFormat>() {
-        override fun initialValue() =
-                SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-    }
-
     fun generate(context: Context, error: SslError?): String {
         if (error == null) {
             return ""
         }
         val cert: SslCertificate = error.getCertificate()
-        val dateFormat = dateFormatHolder.get()
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
 
         val firstLine = context.getString(R.string.message_ssl_error_first_line)
 
