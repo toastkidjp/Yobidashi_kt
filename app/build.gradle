@@ -8,8 +8,8 @@ apply plugin: 'io.fabric'
 apply from: 'signing/config.gradle', to: android
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     byte verMajor  = 1
     byte verMiddle = 1
     byte verMinor  = 5
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         if (verMiddle >= 100 || verMinor >= 10_000) {
             throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
         }
@@ -59,7 +59,7 @@ play {
 
 dependencies {
 
-    def supportLibVersion = '27.1.1'
+    def supportLibVersion = '28.0.0'
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
     implementation "com.android.support:design:${supportLibVersion}"
     implementation "com.android.support:customtabs:${supportLibVersion}"
