@@ -16,12 +16,12 @@ internal object SslErrorMessageGenerator {
         if (error == null) {
             return ""
         }
-        val cert: SslCertificate = error.getCertificate()
+        val cert: SslCertificate = error.certificate
         val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
 
         val firstLine = context.getString(R.string.message_ssl_error_first_line)
 
-        val cause = when (error.getPrimaryError()) {
+        val cause = when (error.primaryError) {
             SslError.SSL_EXPIRED ->
                 context.getString(R.string.message_ssl_error_expired) + dateFormat.format(cert.validNotAfterDate)
             SslError.SSL_IDMISMATCH ->
