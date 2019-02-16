@@ -1,6 +1,7 @@
 360.yahoo.com
 a.analytics.yahoo.com
 ad.ad-stir.com
+ad.adpon.jp
 ad.yahoo.com
 adroute.focas.jp
 ads.auctions.yahoo.com
@@ -33,6 +34,7 @@ im.ov.yahoo.co.jp
 js.ad-stir.com
 ov.yahoo.co.jp
 rd.ane.yahoo.co.jp
+ru.adpon.net
 tpc.googlesyndication.com
 yads.c.yimg.jp
 yads.yjtag.yahoo.co.jp
