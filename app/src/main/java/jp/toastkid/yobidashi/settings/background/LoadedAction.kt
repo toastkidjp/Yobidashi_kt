@@ -57,9 +57,9 @@ internal class LoadedAction (
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {
+                        { bitmap ->
                             onLoadedAction()
-                            it?.let { informDone(it) }
+                            bitmap?.let { informDone(it) }
                         },
                         {
                             Timber.e(it)
