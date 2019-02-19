@@ -24,19 +24,16 @@ import java.io.FileOutputStream
  * Action of loaded new background image.
  *
  * @param data
- * @param parent
- * @param colorPair
- * @param onLoadedAction
+ * @param parent Snackbar's parent.
+ * @param colorPair Color pair.
+ * @param onLoadedAction On loaded action.
  *
  * @author toastkidjp
  */
 internal class LoadedAction (
         data: Intent,
-        /** Snackbar's parent.  */
         private val parent: View,
-        /** Color pair.  */
         private val colorPair: ColorPair,
-        /** On loaded action.  */
         private val onLoadedAction: () -> Unit
 ) {
 
