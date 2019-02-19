@@ -6,6 +6,9 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.support.v4.app.FragmentActivity
 import android.view.View
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
@@ -15,7 +18,6 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.io.IOException
 
 /**
  * Action of loaded new background image.
@@ -44,26 +46,25 @@ internal class LoadedAction (
      * Invoke action.
      */
     operator fun invoke() {
+        val context = parent.context
 
-        try {
-            val context = parent.context
-
+        Maybe.fromCallable {
             val image = ImageLoader.loadBitmap(context, uri)
-
-            if (image == null) {
-                informFailed()
-                return
-            }
-
-            storeImageToFile(context, image)
-
-            onLoadedAction()
-
-            informDone(image)
-        } catch (e: IOException) {
-            Timber.e(e)
+            image?.let { storeImageToFile(context, it) }
+            image
         }
-
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            onLoadedAction()
+                            it?.let { informDone(it) }
+                        },
+                        {
+                            Timber.e(it)
+                            informFailed()
+                        }
+                )
     }
 
     /**
