@@ -124,17 +124,15 @@ class SearchActivity : BaseActivity(),
 
         applyColor()
 
-        clipboardModule = ClipboardModule(
-                binding?.clipboardModule as ModuleSearchClipboardBinding,
-                { clipped ->
-                    if (Urls.isValidUrl(clipped)) {
-                        finish()
-                        startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
-                    } else {
-                        search(binding?.searchCategories?.selectedItem.toString(), clipped)
-                    }
-                }
-        )
+        clipboardModule = ClipboardModule(binding?.clipboardModule as ModuleSearchClipboardBinding)
+        { clipped ->
+            if (Urls.isValidUrl(clipped)) {
+                finish()
+                startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
+            } else {
+                search(binding?.searchCategories?.selectedItem.toString(), clipped)
+            }
+        }
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -400,27 +398,35 @@ class SearchActivity : BaseActivity(),
     override fun onClickDeleteAllFavoriteSearch() {
         DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe {
-                    favoriteModule?.clear()
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.settings_color_delete,
-                            PreferenceApplier(this).colorPair()
-                    )
-                }
+                .subscribe(
+                        {
+                            favoriteModule?.clear()
+                            Toaster.snackShort(
+                                    binding?.root as View,
+                                    R.string.settings_color_delete,
+                                    PreferenceApplier(this).colorPair()
+                            )
+                        },
+                        Timber::e
+                )
+                .addTo(disposables)
     }
 
     override fun onClickClearSearchHistory() {
         DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe {
-                    historyModule?.clear()
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.settings_color_delete,
-                            PreferenceApplier(this).colorPair()
-                    )
-                }
+                .subscribe(
+                        {
+                            historyModule?.clear()
+                            Toaster.snackShort(
+                                    binding?.root as View,
+                                    R.string.settings_color_delete,
+                                    PreferenceApplier(this).colorPair()
+                            )
+                        },
+                        Timber::e
+                )
+                .addTo(disposables)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
