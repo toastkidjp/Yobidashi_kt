@@ -11,6 +11,8 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBackgroundSettingBinding
@@ -39,6 +41,8 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
      * Wrapper of FilesDir.
      */
     private lateinit var filesDir: FilesDir
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,9 +143,15 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
                 && data != null) {
             LoadedAction(data, binding?.fabParent as View, colorPair(), { adapter?.notifyDataSetChanged() })
                     .invoke()
+                    .addTo(disposables)
             sendLog("set_img")
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 
     @StringRes

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity
 import android.view.View
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -45,10 +46,10 @@ internal class LoadedAction (
     /**
      * Invoke action.
      */
-    operator fun invoke() {
+    operator fun invoke(): Disposable {
         val context = parent.context
 
-        Maybe.fromCallable {
+        return Maybe.fromCallable {
             val image = ImageLoader.loadBitmap(context, uri)
             image?.let { storeImageToFile(context, it) }
             image
