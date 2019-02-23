@@ -165,7 +165,10 @@
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             />
 
-        <service android:name=".search.favorite.AddingFavoriteSearchService">
+        <service
+            android:name=".search.favorite.AddingFavoriteSearchService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            >
             <intent-filter>
                 <action android:name="ADD_ITEM" />
             </intent-filter>
