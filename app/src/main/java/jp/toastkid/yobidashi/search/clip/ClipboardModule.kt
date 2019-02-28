@@ -53,7 +53,7 @@ class ClipboardModule(
      */
     fun switch() {
         val primary = Clipboard.getPrimary(binding.root.context)?.toString()
-        if (primary == null || primary.isBlank()) {
+        if (primary == null || primary.isBlank() || primary.length > CONTENT_LENGTH_LIMIT) {
             hide()
             return
         }
@@ -88,4 +88,12 @@ class ClipboardModule(
         binding.text.setTextColor(linkColor)
     }
 
+    companion object {
+
+        /**
+         * Content length limit.
+         */
+        private const val CONTENT_LENGTH_LIMIT = 50
+
+    }
 }
