@@ -61,7 +61,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         setCurrentValues()
     }
 
-    fun setCurrentValues() {
+    private fun setCurrentValues() {
         binding.let {
             Colors.setColors(it.homeButton, preferenceApplier.colorPair())
             it.homeInputLayout.editText?.setText(preferenceApplier.homeUrl)
