@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
@@ -125,6 +126,9 @@ internal object WebViewFactory {
         settings.builtInZoomControls = true
         settings.displayZoomControls = false
         settings.javaScriptCanOpenWindowsAutomatically = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            settings.safeBrowsingEnabled = true
+        }
         return webView
     }
 
