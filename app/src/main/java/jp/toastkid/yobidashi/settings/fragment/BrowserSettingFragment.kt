@@ -31,12 +31,20 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Setting fragment of WEB browser.
+ *
  * @author toastkidjp
  */
 class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, TitleIdSupplier {
 
+    /**
+     * Data Binding object.
+     */
     private lateinit var binding: FragmentSettingBrowserBinding
 
+    /**
+     * Preference wrappter.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,6 +69,9 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         setCurrentValues()
     }
 
+    /**
+     * Set current values to components.
+     */
     private fun setCurrentValues() {
         binding.let {
             Colors.setColors(it.homeButton, preferenceApplier.colorPair())
@@ -117,6 +128,9 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         }
     }
 
+    /**
+     * Initialize expansion setting.
+     */
     private fun initBrowserExpandable() {
         binding.browserExpand.screenMode?.setOnCheckedChangeListener { group, _ ->
             when (group.checkedRadioButtonId) {
@@ -126,7 +140,10 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             }
         }
     }
-    
+
+    /**
+     * Initialize menu position setting.
+     */
     private fun initMenuPos() {
         binding.menuPosRadio.let {
             it.setOnCheckedChangeListener { group, _ ->
@@ -244,6 +261,9 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         binding.saveViewHistoryCheck.isChecked = newState
     }
 
+    /**
+     * Switch AD remover setting.
+     */
     fun switchAdRemove() {
         val newState = !preferenceApplier.adRemove
         preferenceApplier.adRemove = newState
