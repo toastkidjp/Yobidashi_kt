@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi.settings.fragment
 
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -116,8 +115,8 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
      * OK button's action.
      */
     fun ok() {
-        val backgroundColor = binding.backgroundPalette.color ?: Color.BLACK
-        val fontColor = binding.fontPalette.color ?: Color.WHITE
+        val backgroundColor = binding.backgroundPalette.color
+        val fontColor = binding.fontPalette.color
 
         preferenceApplier.setEditorBackgroundColor(backgroundColor)
         preferenceApplier.setEditorFontColor(fontColor)
