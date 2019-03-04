@@ -143,7 +143,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      *
      * @param v
      */
-    fun switchInternalBrowser(v: View) {
+    fun switchInternalBrowser() {
         val newState = !preferenceApplier.useInternalBrowser()
         preferenceApplier.setUseInternalBrowser(newState)
         binding.useInternalBrowserCheck.isChecked = newState
@@ -158,7 +158,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      *
      * @param v
      */
-    fun switchRetainTabs(v: View) {
+    fun switchRetainTabs() {
         val newState = !preferenceApplier.doesRetainTabs()
         preferenceApplier.setRetainTabs(newState)
         binding.retainTabsCheck.isChecked = newState
@@ -173,7 +173,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      * Commit input.
      * @param view
      */
-    fun commitHomeInput(view: View) {
+    fun commitHomeInput() {
         val input = binding.homeInputLayout.editText?.text.toString()
         if (TextUtils.isEmpty(input)) {
             Toaster.snackShort(
@@ -201,7 +201,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      *
      * @param v
      */
-    fun switchUseInversion(v: View) {
+    fun switchUseInversion() {
         val preferenceApplier = preferenceApplier
         val newState = !preferenceApplier.useInversion
         preferenceApplier.useInversion = newState
@@ -212,7 +212,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      * Switch JavaScript enabling.
      * @param v
      */
-    fun switchJsEnabled(v: View) {
+    fun switchJsEnabled() {
         val preferenceApplier = preferenceApplier
         val newState = !preferenceApplier.useJavaScript()
         preferenceApplier.setUseJavaScript(newState)
@@ -230,7 +230,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      *
      * @param v
      */
-    fun switchLoadingImage(v: View) {
+    fun switchLoadingImage() {
         val newState = !preferenceApplier.doesLoadImage()
         preferenceApplier.setLoadImage(newState)
         binding.useImageCheck.isChecked = newState
@@ -241,7 +241,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      *
      * @param v
      */
-    fun switchSaveFormData(v: View) {
+    fun switchSaveFormData() {
         val newState = !preferenceApplier.doesSaveForm()
         preferenceApplier.setSaveForm(newState)
         binding.saveFormCheck.isChecked = newState
@@ -252,7 +252,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      *
      * @param v
      */
-    fun switchViewHistory(v: View) {
+    fun switchViewHistory() {
         val newState = !preferenceApplier.saveViewHistory
         preferenceApplier.saveViewHistory = newState
         binding.saveViewHistoryCheck.isChecked = newState
@@ -298,7 +298,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      *
      * @param v
      */
-    fun userAgent(v: View) {
+    fun userAgent() {
         val dialogFragment = UserAgentDialogFragment()
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(
