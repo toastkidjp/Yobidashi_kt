@@ -140,8 +140,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch browser.
-     *
-     * @param v
      */
     fun switchInternalBrowser() {
         val newState = !preferenceApplier.useInternalBrowser()
@@ -155,8 +153,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch retaining tabs.
-     *
-     * @param v
      */
     fun switchRetainTabs() {
         val newState = !preferenceApplier.doesRetainTabs()
@@ -171,7 +167,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /***
      * Commit input.
-     * @param view
      */
     fun commitHomeInput() {
         val input = binding.homeInputLayout.editText?.text.toString()
@@ -198,8 +193,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch content inversion enabling.
-     *
-     * @param v
      */
     fun switchUseInversion() {
         val preferenceApplier = preferenceApplier
@@ -210,7 +203,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     
     /**
      * Switch JavaScript enabling.
-     * @param v
      */
     fun switchJsEnabled() {
         val preferenceApplier = preferenceApplier
@@ -227,8 +219,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch loading images.
-     *
-     * @param v
      */
     fun switchLoadingImage() {
         val newState = !preferenceApplier.doesLoadImage()
@@ -238,8 +228,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switching saving form data.
-     *
-     * @param v
      */
     fun switchSaveFormData() {
         val newState = !preferenceApplier.doesSaveForm()
@@ -249,8 +237,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch saving view history.
-     *
-     * @param v
      */
     fun switchViewHistory() {
         val newState = !preferenceApplier.saveViewHistory
@@ -295,8 +281,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * UserAgent setting.
-     *
-     * @param v
      */
     fun userAgent() {
         val dialogFragment = UserAgentDialogFragment()
