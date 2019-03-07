@@ -56,17 +56,17 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
             initialBgColor = backgroundColor
             initialFontColor = fontColor
 
-            editorModule.backgroundPalette?.also {
+            editorModule.backgroundPalette.also {
                 it.addSVBar(editorModule.backgroundSvbar)
                 it.addOpacityBar(editorModule.backgroundOpacitybar)
-                it.setOnColorChangedListener { editorModule.ok?.setBackgroundColor(it) }
+                it.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
                 it.color = backgroundColor
             }
 
-            editorModule.fontPalette?.also {
+            editorModule.fontPalette.also {
                 it.addSVBar(editorModule.fontSvbar)
                 it.addOpacityBar(editorModule.fontOpacitybar)
-                it.setOnColorChangedListener { editorModule.ok?.setTextColor(it) }
+                it.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
                 it.color = fontColor
             }
             editorModule.fragment = this
@@ -116,14 +116,14 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
      * OK button's action.
      */
     fun ok() {
-        val backgroundColor = binding.backgroundPalette?.color ?: Color.BLACK
-        val fontColor = binding.fontPalette?.color ?: Color.WHITE
+        val backgroundColor = binding.backgroundPalette.color ?: Color.BLACK
+        val fontColor = binding.fontPalette.color ?: Color.WHITE
 
         preferenceApplier.setEditorBackgroundColor(backgroundColor)
         preferenceApplier.setEditorFontColor(fontColor)
 
-        binding.backgroundPalette?.color = backgroundColor
-        binding.fontPalette?.color = fontColor
+        binding.backgroundPalette.color = backgroundColor
+        binding.fontPalette.color = fontColor
 
         val colorPair = ColorPair(backgroundColor, fontColor)
         Colors.setColors(binding.ok as TextView, colorPair)
