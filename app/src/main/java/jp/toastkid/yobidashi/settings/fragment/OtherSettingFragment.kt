@@ -74,7 +74,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun switchWifiOnly(v: View) {
+    fun switchWifiOnly() {
         val newState = !preferenceApplier.wifiOnly
         preferenceApplier.wifiOnly = newState
         binding.wifiOnlyCheck.isChecked = newState
@@ -108,7 +108,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun deviceSetting(v: View) {
+    fun deviceSetting() {
         startActivity(SettingsIntentFactory.makeLaunch())
     }
 
@@ -117,7 +117,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun wifi(v: View) {
+    fun wifi() {
         startActivity(SettingsIntentFactory.wifi())
     }
 
@@ -126,7 +126,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun wireless(v: View) {
+    fun wireless() {
         startActivity(SettingsIntentFactory.wireless())
     }
 
@@ -135,7 +135,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun dateAndTime(v: View) {
+    fun dateAndTime() {
         startActivity(SettingsIntentFactory.dateAndTime())
     }
 
@@ -144,7 +144,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun display(v: View) {
+    fun display() {
         startActivity(SettingsIntentFactory.display())
     }
 
@@ -153,7 +153,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun allApps(v: View) {
+    fun allApps() {
         startActivity(SettingsIntentFactory.allApps())
     }
 
