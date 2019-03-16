@@ -39,7 +39,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
 
-        binding.startUpItems?.startUpSelector?.setOnCheckedChangeListener { radioGroup, checkedId ->
+        binding.startUpItems.startUpSelector.setOnCheckedChangeListener { radioGroup, checkedId ->
             preferenceApplier.startUp = StartUp.findById(checkedId)
         }
 
