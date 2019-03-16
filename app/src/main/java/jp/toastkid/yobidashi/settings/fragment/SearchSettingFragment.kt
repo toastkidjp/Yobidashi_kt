@@ -72,8 +72,6 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Open search categories spinner.
-     *
-     * @param v
      */
     fun openSearchCategory() {
         binding.searchCategories.performClick()
