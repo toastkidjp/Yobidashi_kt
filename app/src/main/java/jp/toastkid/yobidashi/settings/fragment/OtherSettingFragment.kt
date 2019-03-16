@@ -28,8 +28,14 @@ import jp.toastkid.yobidashi.main.StartUp
  */
 class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View Data Binding object.
+     */
     private lateinit var binding: FragmentSettingOtherBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -72,7 +78,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Clear all settings.
-
+     *
      * @param v
      */
     fun clearSettings(v: View) {
