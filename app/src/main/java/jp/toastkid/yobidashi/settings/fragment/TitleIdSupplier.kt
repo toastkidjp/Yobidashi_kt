@@ -7,9 +7,13 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
+import android.support.annotation.StringRes
+
 /**
  * @author toastkidjp
  */
 interface TitleIdSupplier {
+
+    @StringRes
     fun titleId(): Int
 }
