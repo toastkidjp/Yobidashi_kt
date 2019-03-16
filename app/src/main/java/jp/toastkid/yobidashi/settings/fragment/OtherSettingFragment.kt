@@ -39,7 +39,11 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_other, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
