@@ -98,7 +98,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
                     //TODO colorFilter.stop()
                     //TODO setCurrentValues()
                     Updater.update(fragmentActivity)
-                    Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())
+                    Toaster.snackShort(v, R.string.done_clear, preferenceApplier.colorPair())
                 }
                 .show()
     }
