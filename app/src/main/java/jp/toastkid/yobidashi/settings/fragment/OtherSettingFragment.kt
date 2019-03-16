@@ -97,6 +97,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
                     //TODO setCurrentValues()
                     Updater.update(fragmentActivity)
                     Toaster.snackShort(v, R.string.done_clear, preferenceApplier.colorPair())
+                    d.dismiss()
                 }
                 .show()
     }
