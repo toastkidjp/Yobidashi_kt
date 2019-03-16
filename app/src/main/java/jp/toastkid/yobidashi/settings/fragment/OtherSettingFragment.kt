@@ -39,7 +39,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
 
-        binding.startUpItems.startUpSelector.setOnCheckedChangeListener { radioGroup, checkedId ->
+        binding.startUpItems.startUpSelector.setOnCheckedChangeListener { _, checkedId ->
             preferenceApplier.startUp = StartUp.findById(checkedId)
         }
 
@@ -81,8 +81,8 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
                 .setTitle(R.string.title_clear_settings)
                 .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
                 .setCancelable(true)
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
                     preferenceApplier.clear()
                     //TODO colorFilter.stop()
                     //TODO setCurrentValues()
