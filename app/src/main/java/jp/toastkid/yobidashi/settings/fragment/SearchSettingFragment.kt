@@ -15,7 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Spinner
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -39,7 +38,7 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
 
-        SearchCategorySpinnerInitializer.invoke(binding.searchCategories as Spinner)
+        SearchCategorySpinnerInitializer.invoke(binding.searchCategories)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier.setDefaultSearchEngine(
