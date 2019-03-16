@@ -27,8 +27,14 @@ import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
  */
 class SearchSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View Data Binding object.
+     */
     private lateinit var binding: FragmentSettingSearchBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -89,7 +95,7 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
     /**
      * Switch notification widget displaying.
      *
-     * @param v
+     * @param v only use snackbar's parent.
      */
     fun switchSearchWithClip(v: View) {
         val newState = !preferenceApplier.enableSearchWithClip
@@ -101,30 +107,45 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         Toaster.snackShort(v, messageId, preferenceApplier.colorPair())
     }
 
+    /**
+     * Switch state of using query suggestion.
+     */
     fun switchUseSuggestion() {
         val newState = !preferenceApplier.isEnableSuggestion
         preferenceApplier.switchEnableSuggestion()
         binding.useSuggestionCheck.isChecked = newState
     }
 
+    /**
+     * Switch state of using search history words suggestion.
+     */
     fun switchUseSearchHistory() {
         val newState = !preferenceApplier.isEnableSearchHistory
         preferenceApplier.switchEnableSearchHistory()
         binding.useHistoryCheck.isChecked = newState
     }
 
+    /**
+     * Switch state of using favorite search word suggestion.
+     */
     fun switchUseFavoriteSearch() {
         val newState = !preferenceApplier.isEnableFavoriteSearch
         preferenceApplier.switchEnableFavoriteSearch()
         binding.useFavoriteCheck.isChecked = newState
     }
 
+    /**
+     * Switch state of using view history suggestion.
+     */
     fun switchUseViewHistory() {
         val newState = !preferenceApplier.isEnableViewHistory
         preferenceApplier.switchEnableViewHistory()
         binding.useViewHistoryCheck.isChecked = newState
     }
 
+    /**
+     * Switch state of using App search suggestion.
+     */
     fun switchUseAppSearch() {
         val newState = !preferenceApplier.isEnableAppSearch()
         preferenceApplier.switchEnableAppSearch()
