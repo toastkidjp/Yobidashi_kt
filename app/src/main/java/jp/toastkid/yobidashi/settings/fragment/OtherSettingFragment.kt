@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.settings.fragment
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
@@ -152,6 +153,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
         startActivity(SettingsIntentFactory.allApps())
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_others
 
 }
