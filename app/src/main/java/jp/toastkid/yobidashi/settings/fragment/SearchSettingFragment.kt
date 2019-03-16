@@ -75,7 +75,7 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun openSearchCategory(v: View) {
+    fun openSearchCategory() {
         binding.searchCategories.performClick()
     }
 
@@ -100,28 +100,28 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
 
         @StringRes val messageId: Int
                 = if (newState) { R.string.message_enable_swc } else { R.string.message_disable_swc }
-        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+        Toaster.snackShort(v, messageId, preferenceApplier.colorPair())
     }
 
-    fun switchUseSuggestion(v: View) {
+    fun switchUseSuggestion() {
         val newState = !preferenceApplier.isEnableSuggestion
         preferenceApplier.switchEnableSuggestion()
         binding.useSuggestionCheck.isChecked = newState
     }
 
-    fun switchUseSearchHistory(v: View) {
+    fun switchUseSearchHistory() {
         val newState = !preferenceApplier.isEnableSearchHistory
         preferenceApplier.switchEnableSearchHistory()
         binding.useHistoryCheck.isChecked = newState
     }
 
-    fun switchUseFavoriteSearch(v: View) {
+    fun switchUseFavoriteSearch() {
         val newState = !preferenceApplier.isEnableFavoriteSearch
         preferenceApplier.switchEnableFavoriteSearch()
         binding.useFavoriteCheck.isChecked = newState
     }
 
-    fun switchUseViewHistory(v: View) {
+    fun switchUseViewHistory() {
         val newState = !preferenceApplier.isEnableViewHistory
         preferenceApplier.switchEnableViewHistory()
         binding.useViewHistoryCheck.isChecked = newState
