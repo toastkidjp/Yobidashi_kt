@@ -71,8 +71,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Switch Wi-Fi only mode.
-     *
-     * @param v
      */
     fun switchWifiOnly() {
         val newState = !preferenceApplier.wifiOnly
@@ -105,8 +103,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Call device settings.
-     *
-     * @param v
      */
     fun deviceSetting() {
         startActivity(SettingsIntentFactory.makeLaunch())
@@ -114,8 +110,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Call Wi-Fi settings.
-     *
-     * @param v
      */
     fun wifi() {
         startActivity(SettingsIntentFactory.wifi())
@@ -123,8 +117,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Call Wireless settings.
-     *
-     * @param v
      */
     fun wireless() {
         startActivity(SettingsIntentFactory.wireless())
@@ -132,8 +124,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Call Date-and-Time settings.
-     *
-     * @param v
      */
     fun dateAndTime() {
         startActivity(SettingsIntentFactory.dateAndTime())
@@ -141,8 +131,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Call display settings.
-     *
-     * @param v
      */
     fun display() {
         startActivity(SettingsIntentFactory.display())
@@ -150,8 +138,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Call all app settings.
-     *
-     * @param v
      */
     fun allApps() {
         startActivity(SettingsIntentFactory.allApps())
