@@ -61,7 +61,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         setCurrentValues()
     }
 
-    fun setCurrentValues() {
+    private fun setCurrentValues() {
         binding.let {
             Colors.setColors(it.homeButton, preferenceApplier.colorPair())
             it.homeInputLayout.editText?.setText(preferenceApplier.homeUrl)
@@ -118,23 +118,23 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     }
 
     private fun initBrowserExpandable() {
-        binding.browserExpand.screenMode?.setOnCheckedChangeListener ({ group, checkedId ->
+        binding.browserExpand.screenMode?.setOnCheckedChangeListener { group, checkedId ->
             when (group.checkedRadioButtonId) {
                 R.id.full_screen  -> preferenceApplier.setBrowserScreenMode(ScreenMode.FULL_SCREEN)
                 R.id.expandable   -> preferenceApplier.setBrowserScreenMode(ScreenMode.EXPANDABLE)
                 R.id.fixed        -> preferenceApplier.setBrowserScreenMode(ScreenMode.FIXED)
             }
-        })
+        }
     }
     
     private fun initMenuPos() {
         binding.menuPosRadio.let {
-            it.setOnCheckedChangeListener ({ group, checkedId ->
+            it.setOnCheckedChangeListener { group, checkedId ->
                 when (group.checkedRadioButtonId) {
                     R.id.menu_pos_left  -> preferenceApplier.setMenuPos(MenuPos.LEFT)
                     R.id.menu_pos_right -> preferenceApplier.setMenuPos(MenuPos.RIGHT)
                 }
-            })
+            }
         }
     }
 
