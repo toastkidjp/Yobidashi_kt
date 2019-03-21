@@ -118,7 +118,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     }
 
     private fun initBrowserExpandable() {
-        binding.browserExpand.screenMode?.setOnCheckedChangeListener { group, checkedId ->
+        binding.browserExpand.screenMode?.setOnCheckedChangeListener { group, _ ->
             when (group.checkedRadioButtonId) {
                 R.id.full_screen  -> preferenceApplier.setBrowserScreenMode(ScreenMode.FULL_SCREEN)
                 R.id.expandable   -> preferenceApplier.setBrowserScreenMode(ScreenMode.EXPANDABLE)
@@ -129,7 +129,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     
     private fun initMenuPos() {
         binding.menuPosRadio.let {
-            it.setOnCheckedChangeListener { group, checkedId ->
+            it.setOnCheckedChangeListener { group, _ ->
                 when (group.checkedRadioButtonId) {
                     R.id.menu_pos_left  -> preferenceApplier.setMenuPos(MenuPos.LEFT)
                     R.id.menu_pos_right -> preferenceApplier.setMenuPos(MenuPos.RIGHT)
