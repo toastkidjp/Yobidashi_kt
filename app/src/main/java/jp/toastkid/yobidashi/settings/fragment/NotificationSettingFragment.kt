@@ -57,7 +57,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun switchNotificationWidget(v: View) {
+    fun switchNotificationWidget() {
         val newState = !preferenceApplier.useNotificationWidget()
         preferenceApplier.setUseNotificationWidget(newState)
         binding.useNotificationWidgetCheck.isChecked = newState

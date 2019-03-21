@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchNotificationWidget}"
+                android:onClick="@{view -> fragment.switchNotificationWidget()}"
                 xmlns:android="http://schemas.android.com/apk/res/android">
                 <TextView
                     android:orientation="horizontal"
