@@ -72,6 +72,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_notification
 
 }
