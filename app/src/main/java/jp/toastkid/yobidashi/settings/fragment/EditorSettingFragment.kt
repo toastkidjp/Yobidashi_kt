@@ -26,12 +26,20 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Editor setting fragment.
+ *
  * @author toastkidjp
  */
 class EditorSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View data binding object.
+     */
     private lateinit var binding: FragmentSettingEditorBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     /**
