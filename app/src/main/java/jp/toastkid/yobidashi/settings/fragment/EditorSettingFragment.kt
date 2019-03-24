@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi.settings.fragment
 
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -56,18 +55,18 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
             initialBgColor = backgroundColor
             initialFontColor = fontColor
 
-            editorModule.backgroundPalette.also {
-                it.addSVBar(editorModule.backgroundSvbar)
-                it.addOpacityBar(editorModule.backgroundOpacitybar)
-                it.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
-                it.color = backgroundColor
+            editorModule.backgroundPalette.also { picker ->
+                picker.addSVBar(editorModule.backgroundSvbar)
+                picker.addOpacityBar(editorModule.backgroundOpacitybar)
+                picker.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
+                picker.color = backgroundColor
             }
 
-            editorModule.fontPalette.also {
-                it.addSVBar(editorModule.fontSvbar)
-                it.addOpacityBar(editorModule.fontOpacitybar)
-                it.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
-                it.color = fontColor
+            editorModule.fontPalette.also { picker ->
+                picker.addSVBar(editorModule.fontSvbar)
+                picker.addOpacityBar(editorModule.fontOpacitybar)
+                picker.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
+                picker.color = fontColor
             }
             editorModule.fragment = this
             Colors.setColors(
@@ -116,8 +115,8 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
      * OK button's action.
      */
     fun ok() {
-        val backgroundColor = binding.backgroundPalette.color ?: Color.BLACK
-        val fontColor = binding.fontPalette.color ?: Color.WHITE
+        val backgroundColor = binding.backgroundPalette.color
+        val fontColor = binding.fontPalette.color
 
         preferenceApplier.setEditorBackgroundColor(backgroundColor)
         preferenceApplier.setEditorFontColor(fontColor)
