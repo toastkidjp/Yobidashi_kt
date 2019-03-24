@@ -41,7 +41,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/common_horizontal_margin"
                         android:layout_marginEnd="@dimen/common_horizontal_margin"
-                        android:layout_gravity="right"
+                        android:layout_gravity="end"
                         android:clickable="false"
                         style="@style/Border"
                         />
