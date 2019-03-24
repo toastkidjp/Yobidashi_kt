@@ -40,6 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_marginEnd="@dimen/common_horizontal_margin"
                         android:layout_gravity="right"
                         android:clickable="false"
                         style="@style/Border"
@@ -61,6 +62,7 @@
                     android:layout_height="wrap_content"
                     style="@style/OneLineTextMenu"
                     android:drawableLeft="@drawable/ic_settings_cell_black"
+                    android:drawableStart="@drawable/ic_settings_cell_black"
                     android:text="@string/title_settings_device"
                     android:onClick="@{view -> fragment.deviceSetting()}"
                     />
@@ -74,6 +76,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_wifi"
                     android:drawableLeft="@drawable/ic_wifi_black"
+                    android:drawableStart="@drawable/ic_wifi_black"
                     android:onClick="@{view -> fragment.wifi()}"
                     />
 
@@ -86,6 +89,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_wireless"
                     android:drawableLeft="@drawable/ic_network_black"
+                    android:drawableStart="@drawable/ic_network_black"
                     android:onClick="@{view -> fragment.wireless()}"
                     />
 
@@ -98,6 +102,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_date_and_time"
                     android:drawableLeft="@drawable/ic_time"
+                    android:drawableStart="@drawable/ic_time"
                     android:onClick="@{view -> fragment.dateAndTime()}"
                     />
 
@@ -110,6 +115,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_display"
                     android:drawableLeft="@drawable/ic_phone_android_black"
+                    android:drawableStart="@drawable/ic_phone_android_black"
                     android:onClick="@{view -> fragment.display()}"
                     />
 
@@ -122,6 +128,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_all_apps"
                     android:drawableLeft="@drawable/ic_android_app"
+                    android:drawableStart="@drawable/ic_android_app"
                     android:onClick="@{view -> fragment.allApps()}"
                     />
 
@@ -137,6 +144,7 @@
                         style="@style/OneLineTextMenu"
                         android:text="@string/title_clear_settings"
                         android:drawableLeft="@drawable/ic_close_black"
+                        android:drawableStart="@drawable/ic_close_black"
                         android:onClick="@{fragment::clearSettings}"
                         />
                 </android.support.v7.widget.CardView>
