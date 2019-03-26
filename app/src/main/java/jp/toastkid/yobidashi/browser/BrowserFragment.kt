@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -492,6 +493,18 @@ class BrowserFragment : BaseFragment(),
         }
     }
 
+    fun switchMenuVisibility() {
+        if (binding?.menusView?.isVisible == true) closeMenu() else openMenu()
+    }
+
+    private fun openMenu() {
+        binding?.menusView?.visibility = View.VISIBLE
+    }
+
+    private fun closeMenu() {
+        binding?.menusView?.visibility = View.GONE
+    }
+
     /**
      * Initialize tab list.
      */
@@ -664,8 +677,8 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
-        if (menuOpen) {
-            // TODO binding?.cycleMenu?.close(true)
+        if (binding?.menusView?.isVisible == true) {
+            closeMenu()
             return true
         }
 

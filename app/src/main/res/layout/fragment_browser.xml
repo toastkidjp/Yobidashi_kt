@@ -39,6 +39,17 @@
             android:layout_height="match_parent"
             android:layout_marginTop="12dp"
             android:layout_gravity="right"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/menu_switch"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/ic_menu_cycle"
+            android:background="@drawable/ripple_soft"
+            android:onClick="@{view -> fragment.switchMenuVisibility()}"
             />
 
         <include android:id="@+id/sip" layout="@layout/module_searcher" />
