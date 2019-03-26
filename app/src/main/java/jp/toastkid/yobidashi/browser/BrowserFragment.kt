@@ -8,28 +8,27 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.content.res.ColorStateList
-import androidx.databinding.DataBindingUtil
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.cleveroad.cyclemenuwidget.CycleMenuWidget
-import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
-import com.cleveroad.cyclemenuwidget.OnStateChangedListener
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -280,31 +279,12 @@ class BrowserFragment : BaseFragment(),
      * Initialize menus view.
      */
     private fun initMenus() {
-        binding?.cycleMenu?.also {
-            it.setMenuItems(Menu.items(context))
-            it.setOnMenuItemClickListener(object : OnMenuItemClickListener {
-                override fun onMenuItemLongClick(view: View?, itemPosition: Int) {
-                    Menu.showInformation(view)
-                }
+        val activityContext = context ?: return
 
-                override fun onMenuItemClick(view: View?, itemPosition: Int) {
-                    onMenuClick(view?.id ?: 0)
-                }
-            })
-            it.setStateChangeListener(object : OnStateChangedListener {
-                override fun onCloseComplete() = Unit
-
-                override fun onOpenComplete() = Unit
-
-                override fun onStateChanged(state: CycleMenuWidget.STATE?) {
-                    when (state) {
-                        CycleMenuWidget.STATE.OPEN -> menuOpen = true
-                        CycleMenuWidget.STATE.CLOSED -> menuOpen = false
-                        else -> Unit
-                    }
-                }
-            })
-        }
+        binding?.menusView?.adapter =
+                MenuAdapter(activityContext, Consumer { menu -> onMenuClick(menu.ordinal) })
+        binding?.menusView?.layoutManager =
+                LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     }
 
     /**
@@ -444,7 +424,7 @@ class BrowserFragment : BaseFragment(),
                 browserModule.saveArchive()
             }
             Menu.SEARCH.ordinal -> {
-                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
+                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
             }
             Menu.SITE_SEARCH.ordinal -> {
                 tabs.siteSearch()
@@ -494,7 +474,7 @@ class BrowserFragment : BaseFragment(),
             }
             Menu.ADD_BOOKMARK.ordinal -> {
                 tabs.addBookmark {
-                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
+                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
                 }
             }
             Menu.EDITOR.ordinal -> {
@@ -616,15 +596,14 @@ class BrowserFragment : BaseFragment(),
 
         val preferenceApplier = preferenceApplier()
 
-        binding?.cycleMenu?.also { cycleMenu ->
+        binding?.menusView?.also { cycleMenu ->
             val menuPos = preferenceApplier.menuPos()
-            cycleMenu.setCorner(menuPos)
             editorModule.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
-            cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
+            // TODO cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
                     ?.also { DrawableCompat.setTint(it, color) }
-                    ?.let { drawable -> cycleMenu.setCornerImageDrawable(drawable) }
+                    // TODO ?.let { drawable -> cycleMenu.setCornerImageDrawable(drawable) }
         }
 
         browserModule.resizePool(preferenceApplier.poolSize)
@@ -683,7 +662,7 @@ class BrowserFragment : BaseFragment(),
         }
 
         if (menuOpen) {
-            binding?.cycleMenu?.close(true)
+            // TODO binding?.cycleMenu?.close(true)
             return true
         }
 
@@ -973,7 +952,7 @@ class BrowserFragment : BaseFragment(),
     override fun onStop() {
         super.onStop()
         tabs.saveTabList()
-        binding?.cycleMenu?.close(false)
+        // TODO binding?.cycleMenu?.close(false)
     }
 
     override fun onDestroy() {

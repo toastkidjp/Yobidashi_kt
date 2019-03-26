@@ -33,19 +33,12 @@
             layout="@layout/content_floating_preview"
             />
 
-        <com.cleveroad.cyclemenuwidget.CycleMenuWidget
-            android:id="@+id/cycle_menu"
-            android:layout_width="match_parent"
+        <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
+            android:id="@+id/menus_view"
+            android:layout_width="120dp"
             android:layout_height="match_parent"
-            app:cm_autoMaxRadius="200dp"
-            app:cm_autoMinRadius="10dp"
-            app:cm_corner="right_bottom"
-            app:cm_corner_image_src="@drawable/ic_menu_cycle"
-            app:cm_fixedRadius="200dp"
-            app:cm_item_background_tint="@color/colorPrimary"
-            app:cm_radius_scale_type="auto"
-            app:cm_ripple_color="@color/filter_white_aa"
-            app:cm_scroll_type="endless"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="right"
             />
 
         <include android:id="@+id/sip" layout="@layout/module_searcher" />
