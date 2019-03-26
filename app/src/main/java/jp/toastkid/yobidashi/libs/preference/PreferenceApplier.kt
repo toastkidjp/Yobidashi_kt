@@ -157,8 +157,8 @@ class PreferenceApplier(private val context: Context) {
     fun menuPosId(): Int =
             MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
 
-    fun menuPos(): Int =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
+    fun menuPos(): MenuPos =
+            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name))
 
     fun setLoadImage(newState: Boolean) {
         preferences.edit().putBoolean(Key.LOAD_IMAGE.name, newState).apply()

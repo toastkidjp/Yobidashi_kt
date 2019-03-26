@@ -18,6 +18,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
@@ -613,7 +614,8 @@ class BrowserFragment : BaseFragment(),
         val preferenceApplier = preferenceApplier()
 
         binding?.menusView?.also {
-            val menuPos = preferenceApplier.menuPos()
+            setGravity(binding?.menusView)
+            setGravity(binding?.menuSwitch)
             // TODO editorModule.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
             // TODO menusView.setItemsBackgroundTint(ColorStateList.valueOf(color))
@@ -642,6 +644,12 @@ class BrowserFragment : BaseFragment(),
             toolbarAction?.showToolbar()
             return
         }
+    }
+
+    private fun setGravity(view: View?) {
+        val menuPos = preferenceApplier().menuPos()
+        val layoutParams = view?.layoutParams as CoordinatorLayout.LayoutParams
+        layoutParams.gravity = menuPos.gravity()
     }
 
     override fun pressLongBack(): Boolean {

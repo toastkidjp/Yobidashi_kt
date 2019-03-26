@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
+import android.annotation.SuppressLint
+import android.view.Gravity
 import androidx.annotation.IdRes
 import jp.toastkid.yobidashi.R
 
@@ -14,4 +16,8 @@ enum class MenuPos(
 
     @IdRes fun id(): Int = id
 
+    @SuppressLint("RtlHardcoded")
+    fun gravity() =
+            if (this == LEFT) Gravity.LEFT or Gravity.BOTTOM
+            else Gravity.RIGHT or Gravity.BOTTOM
 }
