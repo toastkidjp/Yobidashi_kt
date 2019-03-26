@@ -20,6 +20,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
@@ -214,15 +215,15 @@ class EditorModule(
      *
      * @param menuPos
      */
-    fun setSpace() = when {
-        /*TODO CycleMenuWidget.CORNER.LEFT_BOTTOM -> {
+    fun setSpace(menuPos: MenuPos) = when (menuPos) {
+        MenuPos.LEFT-> {
             binding.leftSpace.visibility = View.VISIBLE
             binding.rightSpace.visibility = View.GONE
         }
-        CycleMenuWidget.CORNER.RIGHT_BOTTOM -> {
+        MenuPos.RIGHT -> {
             binding.leftSpace.visibility = View.GONE
             binding.rightSpace.visibility = View.VISIBLE
-        }*/
+        }
         else -> Unit
     }
 

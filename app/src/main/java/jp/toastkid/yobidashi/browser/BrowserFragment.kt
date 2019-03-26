@@ -614,9 +614,10 @@ class BrowserFragment : BaseFragment(),
         val preferenceApplier = preferenceApplier()
 
         binding?.menusView?.also {
-            setGravity(binding?.menusView)
-            setGravity(binding?.menuSwitch)
-            // TODO editorModule.setSpace(menuPos)
+            val menuPos = preferenceApplier().menuPos()
+            setGravity(menuPos, binding?.menusView)
+            setGravity(menuPos, binding?.menuSwitch)
+            editorModule.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
             // TODO menusView.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
@@ -646,8 +647,7 @@ class BrowserFragment : BaseFragment(),
         }
     }
 
-    private fun setGravity(view: View?) {
-        val menuPos = preferenceApplier().menuPos()
+    private fun setGravity(menuPos: MenuPos, view: View?) {
         val layoutParams = view?.layoutParams as CoordinatorLayout.LayoutParams
         layoutParams.gravity = menuPos.gravity()
     }
