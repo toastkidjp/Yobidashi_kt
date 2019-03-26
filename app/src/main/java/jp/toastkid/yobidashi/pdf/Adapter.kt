@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.pdf
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri

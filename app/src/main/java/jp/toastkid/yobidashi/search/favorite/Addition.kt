@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import androidx.annotation.LayoutRes
 import com.google.android.material.textfield.TextInputLayout
 import android.text.TextUtils

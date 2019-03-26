@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher

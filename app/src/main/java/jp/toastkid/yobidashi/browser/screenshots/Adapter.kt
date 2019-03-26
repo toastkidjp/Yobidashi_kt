@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.browser.screenshots
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater

@@ -8,7 +8,7 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.annotation.SuppressLint
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment

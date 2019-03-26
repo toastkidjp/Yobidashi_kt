@@ -23,16 +23,16 @@ android {
         }
         versionCode ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
         versionName "${verMajor}.${verMiddle}.${verMinor}"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
             minifyEnabled true
             useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationIdSuffix ".d"
-            manifestPlaceholders = [app_name: "Xobidashi"]
-            versionNameSuffix = ".d"
+            applicationIdSuffix ".dx"
+            manifestPlaceholders = [app_name: "androidXobidashi"]
+            versionNameSuffix = ".dx"
         }
         release {
             minifyEnabled true
@@ -65,11 +65,10 @@ dependencies {
     implementation "androidx.cardview:cardview:${supportLibVersion}"
     implementation "com.google.android.material:material:1.0.0"
 
-    //implementation "com.google.firebase:firebase-core:16.0.1"
-    implementation "com.google.firebase:firebase-ads:16.0.1"
+    implementation "com.google.firebase:firebase-core:16.0.1"
     implementation "com.google.android.gms:play-services-oss-licenses:12.0.1"
 
-    implementation 'androidx.core:core-ktx:1.0.1'
+    implementation 'androidx.core:core-ktx:1.1.0-alpha05'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation 'com.larswerkman:HoloColorPicker:1.5'

@@ -8,7 +8,7 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment

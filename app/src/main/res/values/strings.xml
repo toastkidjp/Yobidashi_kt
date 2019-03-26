@@ -403,5 +403,6 @@
     <string name="install">Install</string>
     <string name="message_install_suggestion_google_app">Please would you install Google App?</string>
     <string name="content_description_background">Background image</string>
+    <string name="is_center">center</string>
 
 </resources>

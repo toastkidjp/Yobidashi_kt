@@ -398,5 +398,6 @@
     <string name="install">インストール</string>
     <string name="message_install_suggestion_google_app">Google 検索アプリをインストールしてください。</string>
     <string name="content_description_background">背景画像</string>
+    <string name="is_center">center</string>
 
 </resources>

@@ -27,8 +27,6 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 />
 
-            <include android:id="@+id/ad_container" layout="@layout/module_ad_container" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView

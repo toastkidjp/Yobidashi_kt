@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater

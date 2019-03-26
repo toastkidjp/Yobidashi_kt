@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.browser.history
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem

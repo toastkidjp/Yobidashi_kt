@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.browser.archive
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager

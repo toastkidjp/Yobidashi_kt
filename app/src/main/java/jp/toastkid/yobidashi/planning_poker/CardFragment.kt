@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.planning_poker
 
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.util.TypedValue

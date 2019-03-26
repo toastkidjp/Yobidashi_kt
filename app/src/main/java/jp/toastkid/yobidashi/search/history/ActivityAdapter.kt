@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
