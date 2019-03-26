@@ -283,8 +283,11 @@ class BrowserFragment : BaseFragment(),
 
         binding?.menusView?.adapter =
                 MenuAdapter(activityContext, Consumer { menu -> onMenuClick(menu.ordinal) })
+        val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding?.menusView?.layoutManager =
-                LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                layoutManager
+        layoutManager.scrollToPosition(MenuAdapter.mediumPosition())
+        binding?.menusView?.setNeedLoop(true)
     }
 
     /**
@@ -596,14 +599,14 @@ class BrowserFragment : BaseFragment(),
 
         val preferenceApplier = preferenceApplier()
 
-        binding?.menusView?.also { cycleMenu ->
+        binding?.menusView?.also {
             val menuPos = preferenceApplier.menuPos()
-            editorModule.setSpace(menuPos)
+            // TODO editorModule.setSpace(menuPos)
             val color = preferenceApplier.colorPair().bgColor()
-            // TODO cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
+            // TODO menusView.setItemsBackgroundTint(ColorStateList.valueOf(color))
             context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
                     ?.also { DrawableCompat.setTint(it, color) }
-                    // TODO ?.let { drawable -> cycleMenu.setCornerImageDrawable(drawable) }
+                    // TODO ?.let { drawable -> menusView.setCornerImageDrawable(drawable) }
         }
 
         browserModule.resizePool(preferenceApplier.poolSize)

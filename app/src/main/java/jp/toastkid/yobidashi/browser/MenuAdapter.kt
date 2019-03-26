@@ -69,11 +69,6 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
         holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })
-        /*
-         override fun onMenuItemLongClick(view: View?, itemPosition: Int) {
-                    Menu.showInformation(view)
-                }
-         */
     }
 
     override fun getItemCount(): Int = MAXIMUM

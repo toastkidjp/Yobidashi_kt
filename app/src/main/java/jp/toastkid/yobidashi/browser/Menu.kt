@@ -1,17 +1,11 @@
 package jp.toastkid.yobidashi.browser
 
-import android.content.Context
-import android.os.Build
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
-import android.view.View
-import com.cleveroad.cyclemenuwidget.CycleMenuItem
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import java.util.*
 
 /**
  * In App Browser's circular menu.
@@ -79,25 +73,6 @@ internal enum class Menu(
     ;
 
     companion object {
-        fun items(context: Context?): List<CycleMenuItem> {
-            if (context == null) {
-                return Collections.emptyList()
-            }
-            return if (Archive.canUseArchive()) {
-                values()
-                        .map { convertMenuItem(context, it) }
-            } else {
-                values()
-                        .filter { filter(it) }
-                        .map { convertMenuItem(context, it) }
-            }
-        }
-
-        private fun convertMenuItem(context: Context, menu: Menu) =
-                CycleMenuItem(menu.ordinal, ContextCompat.getDrawable(context, menu.iconId))
-
-        private fun filter(it: Menu): Boolean =
-                it != ARCHIVE && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || it != PDF)
 
         fun showInformation(view: View?) {
             if (view == null) {

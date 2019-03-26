@@ -18,7 +18,6 @@ import android.widget.TextView
 import androidx.annotation.Dimension
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
-import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
@@ -211,19 +210,19 @@ class EditorModule(
     }
 
     /**
-     * Set space for showing [CycleMenuWidget].
+     * Set space for showing menu.
      *
-     * @param menuPos [CycleMenuWidget.CORNER]
+     * @param menuPos
      */
-    fun setSpace(menuPos: CycleMenuWidget.CORNER) = when (menuPos) {
-        CycleMenuWidget.CORNER.LEFT_BOTTOM -> {
+    fun setSpace() = when {
+        /*TODO CycleMenuWidget.CORNER.LEFT_BOTTOM -> {
             binding.leftSpace.visibility = View.VISIBLE
             binding.rightSpace.visibility = View.GONE
         }
         CycleMenuWidget.CORNER.RIGHT_BOTTOM -> {
             binding.leftSpace.visibility = View.GONE
             binding.rightSpace.visibility = View.VISIBLE
-        }
+        }*/
         else -> Unit
     }
 

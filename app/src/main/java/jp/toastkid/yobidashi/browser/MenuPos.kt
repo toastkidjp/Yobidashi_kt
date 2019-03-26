@@ -1,18 +1,16 @@
 package jp.toastkid.yobidashi.browser
 
 import androidx.annotation.IdRes
-import com.cleveroad.cyclemenuwidget.CycleMenuWidget
 import jp.toastkid.yobidashi.R
 
 /**
  * @author toastkidjp
  */
 enum class MenuPos(
-        @param:IdRes internal val id: Int,
-        val corner: CycleMenuWidget.CORNER
+        @param:IdRes internal val id: Int
         ) {
-    LEFT(R.id.menu_pos_left, CycleMenuWidget.CORNER.LEFT_BOTTOM),
-    RIGHT(R.id.menu_pos_right, CycleMenuWidget.CORNER.RIGHT_BOTTOM);
+    LEFT(R.id.menu_pos_left),
+    RIGHT(R.id.menu_pos_right);
 
     @IdRes fun id(): Int = id
 
