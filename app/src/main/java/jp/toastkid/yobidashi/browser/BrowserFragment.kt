@@ -500,6 +500,7 @@ class BrowserFragment : BaseFragment(),
 
     private fun openMenu() {
         binding?.menusView?.visibility = View.VISIBLE
+        binding?.menusView?.scheduleLayoutAnimation()
     }
 
     private fun closeMenu() {
