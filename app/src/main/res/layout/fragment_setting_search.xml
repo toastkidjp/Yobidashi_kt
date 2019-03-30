@@ -25,7 +25,7 @@
                     android:id="@+id/default_search_engine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{fragment::openSearchCategory}"
+                    android:onClick="@{view -> fragment.openSearchCategory()}"
                     >
                     <TextView
                         android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment::switchUseSuggestion}"
+                    android:onClick="@{view -> fragment.switchUseSuggestion()}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -136,7 +136,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment::switchUseSearchHistory}"
+                    android:onClick="@{view -> fragment.switchUseSearchHistory()}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment::switchUseFavoriteSearch}"
+                    android:onClick="@{view -> ragment.switchUseFavoriteSearch()}"
                     >
                     <TextView
                         android:orientation="horizontal"
@@ -190,7 +190,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment::switchUseViewHistory}"
+                    android:onClick="@{view -> fragment.switchUseViewHistory()}"
                     >
                     <TextView
                         android:orientation="horizontal"
