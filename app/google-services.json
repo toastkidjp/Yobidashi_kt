@@ -200,68 +200,6 @@
         }
       }
     },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:174711349205:android:be552c3aeb8ceba4",
-        "android_client_info": {
-          "package_name": "jp.toastkid.yobidashi.dx"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "174711349205-9mpusku6rohjue26o7rm6se4d870nmar.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBCBX8tOjL-OIkNGtWStO14JtLkKlq9qhE"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:174711349205:android:c4ba67be02a5dd5e",
-        "android_client_info": {
-          "package_name": "jp.toastkid.jitte"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "174711349205-9mpusku6rohjue26o7rm6se4d870nmar.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBCBX8tOjL-OIkNGtWStO14JtLkKlq9qhE"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    }
   ],
   "configuration_version": "1"
 }

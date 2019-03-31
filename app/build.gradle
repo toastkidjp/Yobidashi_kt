@@ -30,9 +30,9 @@ android {
             minifyEnabled true
             useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationIdSuffix ".dx"
-            manifestPlaceholders = [app_name: "androidXobidashi"]
-            versionNameSuffix = ".dx"
+            applicationIdSuffix ".d"
+            manifestPlaceholders = [app_name: "Xobidashi"]
+            versionNameSuffix = ".d"
         }
         release {
             minifyEnabled true
