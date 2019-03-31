@@ -51,11 +51,11 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
             holder.setImage(image)
             holder.setIndicator(position + 1, itemCount)
             holder.setOnLongTap(
-                    View.OnLongClickListener{
+                    View.OnLongClickListener { view ->
                         val cachedBitmapFile: File = ImageCache.saveBitmap(context, image)
                         context.startActivity(
                                 ImagePreviewActivity.makeIntent(context, cachedBitmapFile),
-                                ActivityOptionsFactory.makeScaleUpBundle(it).toBundle()
+                                ActivityOptionsFactory.makeScaleUpBundle(view).toBundle()
                         )
                         true
                     }
