@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
@@ -24,6 +23,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -36,7 +36,6 @@ import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
-import jp.toastkid.yobidashi.barcode.LinearBarcodeReader
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ProgressBarCallback
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -447,9 +446,6 @@ class MainActivity :
             R.id.nav_barcode -> {
                 sendLog("nav_barcode")
                 startActivity(BarcodeReaderActivity.makeIntent(this))
-            }
-            R.id.nav_linear_barcode -> {
-                LinearBarcodeReader(this)
             }
             R.id.nav_home -> {
                 sendLog("nav_home")
