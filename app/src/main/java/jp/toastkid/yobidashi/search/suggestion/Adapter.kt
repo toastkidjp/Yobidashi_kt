@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
 import timber.log.Timber
 
 /**
@@ -51,8 +50,7 @@ internal class Adapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                DataBindingUtil.inflate<ItemSearchSuggestionBinding>(
-                        layoutInflater, R.layout.item_search_suggestion, parent, false))
+                DataBindingUtil.inflate(layoutInflater, R.layout.item_search_suggestion, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
