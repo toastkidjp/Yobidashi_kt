@@ -509,7 +509,7 @@ class BrowserFragment : BaseFragment(),
             it.cancel()
             it.alpha(0f)
                     .setDuration(350L)
-                    .withEndAction   {
+                    .withEndAction {
                         binding?.menusView?.visibility = View.GONE
                         binding?.menusView?.alpha = 1f
                         binding?.menuSwitch?.show()
