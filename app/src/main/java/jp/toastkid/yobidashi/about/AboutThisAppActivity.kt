@@ -2,14 +2,17 @@ package jp.toastkid.yobidashi.about
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
+import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 
 /**
  * About this app.
@@ -49,6 +52,20 @@ class AboutThisAppActivity : BaseActivity() {
         val intent = Intent(this, OssLicensesMenuActivity::class.java)
         OssLicensesMenuActivity.setActivityTitle(view.context.getString(R.string.title_licenses))
         startActivity(intent)
+    }
+
+    fun checkUpdate() {
+        startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
+    }
+
+    fun privacyPolicy() {
+        CustomTabsFactory.make(this, colorPair())
+                .build()
+                .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
+    }
+
+    fun aboutAuthorApp() {
+        startActivity(IntentFactory.authorsApp())
     }
 
     override fun titleId(): Int = R.string.title_about_this_app

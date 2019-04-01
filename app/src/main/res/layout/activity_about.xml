@@ -56,6 +56,35 @@
                 <include layout="@layout/primary_dark_divider" />
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:paddingLeft="@dimen/settings_item_left_margin"
+                    android:drawableLeft="@drawable/ic_store_black"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_go_google_play"
+                    android:textSize="16sp"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{view -> activity.checkUpdate()}"
+                    />
+
+                <include layout="@layout/primary_dark_divider" />
+
+                <TextView
+                    android:id="@+id/privacy_policy"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:paddingLeft="@dimen/settings_item_left_margin"
+                    android:drawableLeft="@drawable/ic_privacy"
+                    android:gravity="center_vertical"
+                    android:text="@string/privacy_policy"
+                    android:textSize="16sp"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{iew -> activity.privacyPolicy()}"
+                    />
+
+                <include layout="@layout/primary_dark_divider" />
+
+                <TextView
                     android:id="@+id/licenses"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_item_height"
@@ -98,9 +127,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="36dp"
                     android:gravity="center"
-                    android:background="@color/soft_background"
+                    android:background="@drawable/ripple_soft"
                     android:text="@string/copyright"
+                    android:onClick="@{view -> activity.aboutAuthorApp()}"
                     />
 
                 <include layout="@layout/primary_dark_divider" />
