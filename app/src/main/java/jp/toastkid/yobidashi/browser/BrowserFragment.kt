@@ -165,11 +165,6 @@ class BrowserFragment : BaseFragment(),
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
-     * This value is assigned by OnStateChangeListener.
-     */
-    private var menuOpen: Boolean = false
-
-    /**
      * Progress bar callback.
      */
     private lateinit var progressBarCallback: ProgressBarCallback
