@@ -499,6 +499,7 @@ class BrowserFragment : BaseFragment(),
     }
 
     private fun openMenu() {
+        binding?.menuSwitch?.hide()
         binding?.menusView?.visibility = View.VISIBLE
         binding?.menusView?.scheduleLayoutAnimation()
     }
@@ -511,6 +512,7 @@ class BrowserFragment : BaseFragment(),
                     .withEndAction   {
                         binding?.menusView?.visibility = View.GONE
                         binding?.menusView?.alpha = 1f
+                        binding?.menuSwitch?.show()
                     }
                     .start()
         }
