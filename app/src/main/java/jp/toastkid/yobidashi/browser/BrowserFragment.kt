@@ -312,7 +312,7 @@ class BrowserFragment : BaseFragment(),
 
         menu?.let { menuNonNull ->
             menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
-                switchMenu()
+                switchMenuVisibility()
                 true
             }
 
