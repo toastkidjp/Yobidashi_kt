@@ -53,6 +53,7 @@ abstract class BaseActivity : AppCompatActivity() {
             setTitle(titleId())
             inflateMenu(R.menu.settings_toolbar_menu)
             setOnMenuItemClickListener{ clickMenu(it) }
+            navigationIcon = null
         }
     }
 
