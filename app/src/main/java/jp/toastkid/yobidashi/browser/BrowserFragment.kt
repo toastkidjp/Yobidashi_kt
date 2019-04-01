@@ -36,6 +36,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
@@ -45,10 +46,12 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
+import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
+import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
@@ -60,6 +63,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
+import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -71,6 +75,7 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.torch.Torch
 import okhttp3.Request
 import timber.log.Timber
 import java.io.File
@@ -174,6 +179,11 @@ class BrowserFragment : BaseFragment(),
      */
     private lateinit var floatingPreview: FloatingPreview
 
+    /**
+     * Torch API facade.
+     */
+    private lateinit var torch: Torch
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
@@ -185,6 +195,7 @@ class BrowserFragment : BaseFragment(),
                 progressBarCallback = it
             }
         }
+        torch = Torch(context)
     }
 
     override fun onCreateView(
@@ -352,7 +363,9 @@ class BrowserFragment : BaseFragment(),
     /**
      * Menu action.
      *
-     * @param id
+     * TODO Divide starting activity to function.
+     *
+     * @param id menu's ordinal
      */
     private fun onMenuClick(id: Int) {
         val fragmentActivity = activity ?: return
@@ -488,10 +501,49 @@ class BrowserFragment : BaseFragment(),
             Menu.PDF.ordinal -> {
                 openPdfTabFromStorage()
             }
+            Menu.OVERLAY_COLOR_FILTER.ordinal -> {
+                val activity = activity
+                val rootView = binding?.root
+                if (activity == null || rootView == null) {
+                    return
+                }
+                ColorFilter(activity, rootView).switchState(activity)
+            }
+            Menu.PLANNING_POKER.ordinal -> {
+                context?.let { startActivity(PlanningPokerActivity.makeIntent(it)) }
+            }
+            Menu.CAMERA.ordinal -> {
+                useCameraPermission { startActivity(IntentFactory.camera()) }
+            }
+            Menu.TORCH.ordinal -> {
+                useCameraPermission { torch.switch() }
+            }
+            Menu.APP_LAUNCHER.ordinal -> {
+                context?.let { startActivity(LauncherActivity.makeIntent(it)) }
+            }
+            Menu.ABOUT.ordinal -> {
+                context?.let { startActivity(AboutThisAppActivity.makeIntent(it)) }
+            }
             Menu.EXIT.ordinal -> {
                 activity?.moveTaskToBack(true)
             }
         }
+    }
+
+    /**
+     * Use camera permission with specified action.
+     *
+     * @param onGranted action
+     */
+    private fun useCameraPermission(onGranted: () -> Unit) {
+        rxPermissions
+                ?.request(Manifest.permission.CAMERA)
+                ?.filter { it }
+                ?.subscribe(
+                        { onGranted() },
+                        { Timber.e(it) }
+                )
+                ?.addTo(disposables)
     }
 
     fun switchMenuVisibility() {
@@ -509,7 +561,7 @@ class BrowserFragment : BaseFragment(),
             it.cancel()
             it.alpha(0f)
                     .setDuration(350L)
-                    .withEndAction   {
+                    .withEndAction {
                         binding?.menusView?.visibility = View.GONE
                         binding?.menusView?.alpha = 1f
                         binding?.menuSwitch?.show()
@@ -998,6 +1050,11 @@ class BrowserFragment : BaseFragment(),
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
         browserModule.dispose()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        torch.dispose()
     }
 
     companion object {

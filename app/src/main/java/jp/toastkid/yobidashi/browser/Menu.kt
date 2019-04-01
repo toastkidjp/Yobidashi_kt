@@ -69,6 +69,18 @@ internal enum class Menu(
 
     PDF(R.string.title_open_pdf, R.drawable.ic_pdf),
 
+    CAMERA(R.string.title_camera, R.drawable.ic_camera),
+
+    PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),
+
+    TORCH(R.string.title_torch, R.drawable.ic_light),
+
+    APP_LAUNCHER(R.string.title_apps_launcher, R.drawable.ic_launcher),
+
+    OVERLAY_COLOR_FILTER(R.string.title_filter_color, R.drawable.ic_color_filter),
+
+    ABOUT(R.string.title_about_this_app, R.drawable.ic_privacy),
+
     EXIT(R.string.exit, R.drawable.ic_exit)
     ;
 
