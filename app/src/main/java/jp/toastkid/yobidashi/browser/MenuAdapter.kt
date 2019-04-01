@@ -17,7 +17,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
@@ -37,14 +36,11 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
     private val menus: Array<Menu> = Menu.values()
 
     /**
-     *  Color pair.
-     */
-    private val colorPair: ColorPair
-
-    /**
      * Menu action subject.
      */
     private val menuSubject: PublishSubject<Menu>
+
+    private val preferenceApplier = PreferenceApplier(context)
 
     /**
      * Subscription disposable.
@@ -52,8 +48,6 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
     private val disposable: Disposable?
 
     init {
-        val preferenceApplier = PreferenceApplier(context)
-        colorPair = preferenceApplier.colorPair()
         menuSubject = PublishSubject.create<Menu>()
         disposable = menuSubject.subscribe(consumer)
     }
@@ -65,7 +59,7 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = menus[position % menus.size]
-        holder.setColorPair(colorPair)
+        holder.setColorPair(preferenceApplier.colorPair())
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
         holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })

@@ -9,6 +9,8 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -179,6 +181,10 @@ class BrowserFragment : BaseFragment(),
      */
     private lateinit var torch: Torch
 
+    private var menuDrawable: Drawable? = null
+
+    private var previousIconColor: Int = Color.TRANSPARENT
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
@@ -191,6 +197,7 @@ class BrowserFragment : BaseFragment(),
             }
         }
         torch = Torch(context)
+        menuDrawable = ContextCompat.getDrawable(context, R.drawable.ic_menu)
     }
 
     override fun onCreateView(
@@ -677,11 +684,16 @@ class BrowserFragment : BaseFragment(),
             setGravity(menuPos, binding?.menusView)
             setGravity(menuPos, binding?.menuSwitch)
             editorModule.setSpace(menuPos)
-            val color = preferenceApplier.colorPair().bgColor()
-            // TODO menusView.setItemsBackgroundTint(ColorStateList.valueOf(color))
-            context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
-                    ?.also { DrawableCompat.setTint(it, color) }
-                    // TODO ?.let { drawable -> menusView.setCornerImageDrawable(drawable) }
+            it.requestLayout()
+        }
+
+        val newColor = preferenceApplier.colorPair().bgColor()
+        if (previousIconColor != newColor) {
+            menuDrawable?.also { drawable ->
+                DrawableCompat.setTint(drawable, preferenceApplier.colorPair().bgColor())
+                binding?.menuSwitch?.setImageDrawable(drawable)
+            }
+            previousIconColor = newColor
         }
 
         browserModule.resizePool(preferenceApplier.poolSize)
@@ -1019,7 +1031,6 @@ class BrowserFragment : BaseFragment(),
     override fun onPause() {
         super.onPause()
         editorModule.saveIfNeed()
-        hideOption()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
