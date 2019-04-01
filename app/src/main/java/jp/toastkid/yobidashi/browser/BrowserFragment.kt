@@ -499,12 +499,21 @@ class BrowserFragment : BaseFragment(),
     }
 
     private fun openMenu() {
+        binding?.menusView?.alpha = 1f
         binding?.menusView?.visibility = View.VISIBLE
         binding?.menusView?.scheduleLayoutAnimation()
     }
 
     private fun closeMenu() {
-        binding?.menusView?.visibility = View.GONE
+        binding?.menusView?.animate()?.let {
+            it.cancel()
+            it.alpha(0f)
+                    .setDuration(350L)
+                    .withEndAction   {
+                        binding?.menusView?.visibility = View.GONE
+                    }
+                    .start()
+        }
     }
 
     /**
