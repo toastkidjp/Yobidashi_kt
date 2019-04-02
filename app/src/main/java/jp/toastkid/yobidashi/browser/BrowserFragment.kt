@@ -370,8 +370,6 @@ class BrowserFragment : BaseFragment(),
     /**
      * Menu action.
      *
-     * TODO Divide starting activity to function.
-     *
      * @param id menu's ordinal
      */
     private fun onMenuClick(id: Int) {
@@ -1051,7 +1049,6 @@ class BrowserFragment : BaseFragment(),
     override fun onStop() {
         super.onStop()
         tabs.saveTabList()
-        // TODO binding?.cycleMenu?.close(false)
     }
 
     override fun onDestroy() {
