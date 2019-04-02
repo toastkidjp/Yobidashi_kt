@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.browser.menu
 
+import android.graphics.Color
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -29,13 +30,16 @@ class MenuViewHolder(private val binding: ItemHomeMenuBinding)
         binding.image.setImageResource(iconId)
     }
 
-    fun setColorPair(pair: ColorPair) {
+    fun setColorPair(pair: ColorPair, useIconColorFilter: Boolean = true) {
         itemView.setBackgroundColor(pair.bgColor())
+
         if (binding.count.isVisible) {
             binding.count.setTextColor(pair.fontColor())
         }
+
         binding.text.setTextColor(pair.fontColor())
-        binding.image.setColorFilter(pair.fontColor())
+
+        binding.image.setColorFilter(if (useIconColorFilter) pair.fontColor() else Color.TRANSPARENT)
     }
 
     fun setOnClick(onClick: View.OnClickListener) {

@@ -67,7 +67,7 @@ internal class MenuAdapter(
             holder.setCount(tabCountSupplier())
         }
 
-        holder.setColorPair(preferenceApplier.colorPair())
+        holder.setColorPair(preferenceApplier.colorPair(), menu != Menu.SITE_SEARCH)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
         holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })
