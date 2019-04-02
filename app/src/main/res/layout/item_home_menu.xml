@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -17,6 +17,7 @@
             android:adjustViewBounds="true"
             android:src="@mipmap/ic_launcher"
             tools:src="@drawable/ic_tab_black"
+            android:contentDescription="@string/title_icon"
             />
         <TextView
             android:id="@+id/count"
