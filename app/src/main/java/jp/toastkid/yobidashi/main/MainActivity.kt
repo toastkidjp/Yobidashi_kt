@@ -34,7 +34,6 @@ import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.calendar.CalendarArticleLinker
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.home.Command
@@ -150,15 +149,6 @@ class MainActivity :
                         .addTo(disposables)
                 return
             }
-        }
-
-        if (calledIntent.hasExtra(KEY_EXTRA_MONTH)) {
-            CalendarArticleLinker(
-                    this,
-                    calledIntent.getIntExtra(KEY_EXTRA_MONTH, -1),
-                    calledIntent.getIntExtra(KEY_EXTRA_DOM, -1)
-            ).invoke()
-            return
         }
 
         when (preferenceApplier.startUp) {
