@@ -22,8 +22,11 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 /**
  * @author toastkidjp
  */
-internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
-    : RecyclerView.Adapter<MenuViewHolder>() {
+internal class MenuAdapter(
+        context: Context,
+        consumer: Consumer<Menu>,
+        private val tabCountSupplier: () -> Int
+) : RecyclerView.Adapter<MenuViewHolder>() {
 
     /**
      * Layout inflater.
@@ -59,6 +62,11 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = menus[position % menus.size]
+
+        if (menu == Menu.TAB_LIST) {
+            holder.setCount(tabCountSupplier())
+        }
+
         holder.setColorPair(preferenceApplier.colorPair())
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)

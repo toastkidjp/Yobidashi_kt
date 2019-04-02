@@ -7,19 +7,19 @@
  */
 package jp.toastkid.yobidashi.browser.menu
 
-import android.util.TypedValue
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.planning_poker.CardViewActivity
 
 /**
  * @author toastkidjp
  */
-class MenuViewHolder(private val binding: ItemHomeMenuBinding) : RecyclerView.ViewHolder(binding.root) {
+class MenuViewHolder(private val binding: ItemHomeMenuBinding)
+    : RecyclerView.ViewHolder(binding.root) {
 
     fun setText(@StringRes titleId: Int) {
         binding.text.setText(titleId)
@@ -31,11 +31,19 @@ class MenuViewHolder(private val binding: ItemHomeMenuBinding) : RecyclerView.Vi
 
     fun setColorPair(pair: ColorPair) {
         itemView.setBackgroundColor(pair.bgColor())
+        if (binding.count.isVisible) {
+            binding.count.setTextColor(pair.fontColor())
+        }
         binding.text.setTextColor(pair.fontColor())
         binding.image.setColorFilter(pair.fontColor())
     }
 
     fun setOnClick(onClick: View.OnClickListener) {
         itemView.setOnClickListener(onClick)
+    }
+
+    fun setCount(tabCount: Int) {
+        binding.count.text = tabCount.toString()
+        binding.count.visibility = View.VISIBLE
     }
 }

@@ -299,8 +299,10 @@ class BrowserFragment : BaseFragment(),
     private fun initMenus() {
         val activityContext = context ?: return
 
-        binding?.menusView?.adapter =
-                MenuAdapter(activityContext, Consumer { menu -> onMenuClick(menu.ordinal) })
+        binding?.menusView?.adapter = MenuAdapter(
+                activityContext,
+                Consumer { menu -> onMenuClick(menu.ordinal) }
+        ) { tabs.size() }
         val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding?.menusView?.layoutManager =
                 layoutManager
