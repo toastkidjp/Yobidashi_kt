@@ -20,7 +20,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.MenuPos
+import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster

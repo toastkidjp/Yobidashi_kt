@@ -19,7 +19,7 @@ import android.webkit.WebView
 import android.widget.SeekBar
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
-import jp.toastkid.yobidashi.browser.MenuPos
+import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment

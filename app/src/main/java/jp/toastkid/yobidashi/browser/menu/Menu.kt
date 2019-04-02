@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.menu
 
 import android.view.View
 import androidx.annotation.DrawableRes
