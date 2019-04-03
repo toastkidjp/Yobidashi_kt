@@ -22,12 +22,20 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**
+ * Notification setting fragment.
+ *
  * @author toastkidjp
  */
 class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View data binding object.
+     */
     private lateinit var binding: FragmentSettingNotificationBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,10 +54,8 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Switch notification widget displaying.
-
-     * @param v
      */
-    fun switchNotificationWidget(v: View) {
+    fun switchNotificationWidget() {
         val newState = !preferenceApplier.useNotificationWidget()
         preferenceApplier.setUseNotificationWidget(newState)
         binding.useNotificationWidgetCheck.isChecked = newState
@@ -66,6 +72,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_notification
 
 }
