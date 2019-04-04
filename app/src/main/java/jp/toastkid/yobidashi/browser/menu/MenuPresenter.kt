@@ -25,7 +25,7 @@ import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
 /**
  * @author toastkidjp
  */
-class MenuViewModel(
+class MenuPresenter(
         private val recyclerView: CircleRecyclerView?,
         private val menuSwitch: FloatingActionButton?,
         private val onMenuClick: (Int) -> Unit,

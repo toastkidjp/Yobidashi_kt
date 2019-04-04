@@ -35,7 +35,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
-import jp.toastkid.yobidashi.browser.menu.MenuViewModel
+import jp.toastkid.yobidashi.browser.menu.MenuPresenter
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
@@ -174,7 +174,7 @@ class BrowserFragment : BaseFragment(),
      */
     private lateinit var torch: Torch
 
-    private var menuViewModel: MenuViewModel? = null
+    private var menuPresenter: MenuPresenter? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -265,7 +265,7 @@ class BrowserFragment : BaseFragment(),
 
         pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
 
-        menuViewModel = MenuViewModel(
+        menuPresenter = MenuPresenter(
                 binding?.menusView,
                 binding?.menuSwitch,
                 { onMenuClick(it) },
@@ -299,7 +299,7 @@ class BrowserFragment : BaseFragment(),
 
         menu?.let { menuNonNull ->
             menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
-                menuViewModel?.switchMenuVisibility()
+                menuPresenter?.switchMenuVisibility()
                 true
             }
 
@@ -633,7 +633,7 @@ class BrowserFragment : BaseFragment(),
 
         val preferenceApplier = preferenceApplier()
 
-        menuViewModel?.onResume { editorModule.setSpace(it) }
+        menuPresenter?.onResume { editorModule.setSpace(it) }
 
         browserModule.resizePool(preferenceApplier.poolSize)
 
@@ -690,8 +690,8 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
-        if (menuViewModel?.isVisible() == true) {
-            menuViewModel?.close()
+        if (menuPresenter?.isVisible() == true) {
+            menuPresenter?.close()
             return true
         }
 
