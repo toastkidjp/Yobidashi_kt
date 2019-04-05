@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.fragment
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,12 +27,20 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Editor setting fragment.
+ *
  * @author toastkidjp
  */
 class EditorSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View data binding object.
+     */
     private lateinit var binding: FragmentSettingEditorBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     /**
@@ -141,6 +150,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_editor
 
 }
