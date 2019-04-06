@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.planning_poker
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -64,6 +65,7 @@ class CardFragment : Fragment() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.card_item
     }
 
