@@ -28,7 +28,7 @@ class PlanningPokerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityPlanningPokerBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding?.cardsView?.let {
