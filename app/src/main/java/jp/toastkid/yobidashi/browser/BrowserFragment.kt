@@ -345,48 +345,48 @@ class BrowserFragment : BaseFragment(),
     /**
      * Menu action.
      *
-     * @param id menu's ordinal
+     * @param menu menu's ordinal
      */
-    private fun onMenuClick(id: Int) {
+    private fun onMenuClick(menu: Menu) {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
-        when (id) {
-            Menu.RELOAD.ordinal -> {
+        when (menu) {
+            Menu.RELOAD -> {
                 tabs.reload()
             }
-            Menu.BACK.ordinal -> {
+            Menu.BACK-> {
                 back()
             }
-            Menu.FORWARD.ordinal -> {
+            Menu.FORWARD-> {
                 forward()
             }
-            Menu.TOP.ordinal -> {
+            Menu.TOP-> {
                 toTop()
             }
-            Menu.BOTTOM.ordinal -> {
+            Menu.BOTTOM-> {
                 toBottom()
             }
-            Menu.FIND_IN_PAGE.ordinal -> {
+            Menu.FIND_IN_PAGE-> {
                 if (pageSearcherModule?.isVisible == true) {
                     pageSearcherModule?.hide()
                     return
                 }
                 pageSearcherModule?.show(fragmentActivity)
             }
-            Menu.SCREENSHOT.ordinal -> {
+            Menu.SCREENSHOT-> {
                 browserModule.currentSnap()
                 Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
             }
-            Menu.SHARE.ordinal -> {
+            Menu.SHARE-> {
                 startActivity(
                         IntentFactory.makeShare(browserModule.currentTitle()
                                 + System.getProperty("line.separator") + browserModule.currentUrl())
                 )
             }
-            Menu.SETTING.ordinal -> {
+            Menu.SETTING-> {
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
-            Menu.USER_AGENT.ordinal -> {
+            Menu.USER_AGENT-> {
                 val dialogFragment = UserAgentDialogFragment()
                 dialogFragment.setTargetFragment(this, 1)
                 dialogFragment.show(
@@ -394,10 +394,10 @@ class BrowserFragment : BaseFragment(),
                         UserAgentDialogFragment::class.java.simpleName
                 )
             }
-            Menu.WIFI_SETTING.ordinal -> {
+            Menu.WIFI_SETTING-> {
                 startActivity(SettingsIntentFactory.wifi())
             }
-            Menu.PAGE_INFORMATION.ordinal -> {
+            Menu.PAGE_INFORMATION-> {
                 PageInformationDialogFragment()
                         .also { it.arguments = tabs.makeCurrentPageInformation() }
                         .show(
@@ -405,29 +405,29 @@ class BrowserFragment : BaseFragment(),
                                 PageInformationDialogFragment::class.java.simpleName
                         )
             }
-            Menu.TAB_LIST.ordinal -> {
+            Menu.TAB_LIST-> {
                 switchTabList()
             }
-            Menu.STOP_LOADING.ordinal -> {
+            Menu.STOP_LOADING-> {
                 stopCurrentLoading()
             }
-            Menu.OTHER_BROWSER.ordinal -> {
+            Menu.OTHER_BROWSER-> {
                 browserModule.currentUrl()?.let {
                     CustomTabsFactory.make(fragmentActivity, colorPair())
                             .build()
                             .launchUrl(fragmentActivity, Uri.parse(it))
                 }
             }
-            Menu.ARCHIVE.ordinal -> {
+            Menu.ARCHIVE-> {
                 browserModule.saveArchive()
             }
-            Menu.SEARCH.ordinal -> {
+            Menu.SEARCH-> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
             }
-            Menu.SITE_SEARCH.ordinal -> {
+            Menu.SITE_SEARCH-> {
                 tabs.siteSearch()
             }
-            Menu.VOICE_SEARCH.ordinal -> {
+            Menu.VOICE_SEARCH-> {
                 try {
                     startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
                 } catch (e: ActivityNotFoundException) {
@@ -435,7 +435,7 @@ class BrowserFragment : BaseFragment(),
                     binding?.root?.let { VoiceSearch.suggestInstallGoogleApp(it, colorPair()) }
                 }
             }
-            Menu.REPLACE_HOME.ordinal -> {
+            Menu.REPLACE_HOME-> {
                 browserModule.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
                         Toaster.snackShort(
@@ -453,16 +453,16 @@ class BrowserFragment : BaseFragment(),
                     )
                 }
             }
-            Menu.LOAD_HOME.ordinal -> {
+            Menu.LOAD_HOME-> {
                 tabs.loadHome()
             }
-            Menu.VIEW_HISTORY.ordinal -> {
+            Menu.VIEW_HISTORY-> {
                 startActivityForResult(
                         ViewHistoryActivity.makeIntent(fragmentActivity),
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
-            Menu.BOOKMARK.ordinal -> {
+            Menu.BOOKMARK-> {
                 context?.let {
                     startActivityForResult(
                         BookmarkActivity.makeIntent(it),
@@ -470,25 +470,25 @@ class BrowserFragment : BaseFragment(),
                     )
                 }
             }
-            Menu.ADD_BOOKMARK.ordinal -> {
+            Menu.ADD_BOOKMARK-> {
                 tabs.addBookmark {
                     bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
                 }
             }
-            Menu.EDITOR.ordinal -> {
+            Menu.EDITOR-> {
                 openEditorTab()
             }
-            Menu.PDF.ordinal -> {
+            Menu.PDF-> {
                 openPdfTabFromStorage()
             }
-            Menu.SCHEDULE.ordinal -> {
+            Menu.SCHEDULE-> {
                 try {
                     startActivity(IntentFactory.makeCalendar())
                 } catch (e: ActivityNotFoundException) {
                     Timber.w(e)
                 }
             }
-            Menu.OVERLAY_COLOR_FILTER.ordinal -> {
+            Menu.OVERLAY_COLOR_FILTER-> {
                 val activity = activity
                 val rootView = binding?.root
                 if (activity == null || rootView == null) {
@@ -496,22 +496,22 @@ class BrowserFragment : BaseFragment(),
                 }
                 ColorFilter(activity, rootView).switchState(activity)
             }
-            Menu.PLANNING_POKER.ordinal -> {
+            Menu.PLANNING_POKER-> {
                 context?.let { startActivity(PlanningPokerActivity.makeIntent(it)) }
             }
-            Menu.CAMERA.ordinal -> {
+            Menu.CAMERA-> {
                 useCameraPermission { startActivity(IntentFactory.camera()) }
             }
-            Menu.TORCH.ordinal -> {
+            Menu.TORCH-> {
                 useCameraPermission { torch.switch() }
             }
-            Menu.APP_LAUNCHER.ordinal -> {
+            Menu.APP_LAUNCHER-> {
                 context?.let { startActivity(LauncherActivity.makeIntent(it)) }
             }
-            Menu.ABOUT.ordinal -> {
+            Menu.ABOUT-> {
                 context?.let { startActivity(AboutThisAppActivity.makeIntent(it)) }
             }
-            Menu.EXIT.ordinal -> {
+            Menu.EXIT-> {
                 activity?.moveTaskToBack(true)
             }
         }

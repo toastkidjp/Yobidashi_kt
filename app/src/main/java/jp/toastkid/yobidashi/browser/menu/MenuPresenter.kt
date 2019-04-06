@@ -28,7 +28,7 @@ import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
 class MenuPresenter(
         private val recyclerView: CircleRecyclerView?,
         private val menuSwitch: FloatingActionButton?,
-        private val onMenuClick: (Int) -> Unit,
+        private val onMenuClick: (Menu) -> Unit,
         private val tabCountSupplier: () -> Int
 ) {
 
@@ -47,7 +47,7 @@ class MenuPresenter(
         val activityContext = recyclerView?.context ?: return
         recyclerView.adapter = MenuAdapter(
                 activityContext,
-                Consumer { menu -> onMenuClick(menu.ordinal) },
+                Consumer { onMenuClick(it) },
                 tabCountSupplier
         )
         val layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)

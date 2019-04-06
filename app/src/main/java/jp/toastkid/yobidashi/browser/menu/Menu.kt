@@ -12,7 +12,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-internal enum class Menu(
+enum class Menu(
         @param:StringRes val titleId: Int,
         @param:DrawableRes val iconId: Int
 ) {
