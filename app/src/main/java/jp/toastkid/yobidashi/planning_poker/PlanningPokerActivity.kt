@@ -70,7 +70,7 @@ class PlanningPokerActivity : BaseActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_planning_poker
+        private const val LAYOUT_ID = R.layout.activity_planning_poker
 
         /**
          * Make this activity launcher intent.
