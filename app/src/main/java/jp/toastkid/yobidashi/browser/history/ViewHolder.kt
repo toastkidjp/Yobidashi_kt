@@ -3,8 +3,8 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.support.v4.app.FragmentActivity
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.launcher
 
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.text.format.DateFormat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             >
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
@@ -27,9 +27,7 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 />
 
-            <include android:id="@+id/ad_container" layout="@layout/module_ad_container" />
-
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/about_scroll"

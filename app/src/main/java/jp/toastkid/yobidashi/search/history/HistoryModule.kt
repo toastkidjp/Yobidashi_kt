@@ -7,8 +7,9 @@
  */
 package jp.toastkid.yobidashi.search.history
 
-import android.support.v4.app.FragmentActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -59,7 +60,7 @@ class HistoryModule(
         relation = DbInitializer.init(context()).relationOfSearchHistory()
 
         binding.searchHistories.layoutManager =
-                LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(context(), RecyclerView.VERTICAL, false)
         moduleAdapter = ModuleAdapter(
                 context(),
                 relation,

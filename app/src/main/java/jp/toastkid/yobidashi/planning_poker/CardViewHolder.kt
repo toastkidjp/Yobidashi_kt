@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.planning_poker
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 
 import jp.toastkid.yobidashi.databinding.CardItemBinding

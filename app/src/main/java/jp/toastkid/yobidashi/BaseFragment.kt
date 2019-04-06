@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi
 
 import android.content.Context
-import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
+import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 
 import jp.toastkid.yobidashi.analytics.LogSender
 import jp.toastkid.yobidashi.libs.preference.ColorPair

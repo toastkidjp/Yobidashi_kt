@@ -212,7 +212,6 @@
     <string name="message_empty_screenshots">It does not have any screenshots.</string>
     <string name="message_empty_archives">It does not have any screenshots.</string>
     <string name="title_instant_barcode">Generate barcode</string>
-    <string name="title_linear_barcode">Linear barcode reader</string>
     <string name="generate">Generate</string>
     <string name="message_requires_permission_camera">
         If you want to use this function, you should permit using camera to this app.</string>
@@ -382,8 +381,6 @@
     <string name="sample_number">20</string>
     <string name="sample_a">A</string>
     <string name="title_remove_ad">Experimental: Remove AD</string>
-    <string name="prompt_linear_barcode">Scan linear barcode</string>
-    <string name="message_linear_barcode_reader_failed">Read failed, your device maybe cannot use this function.</string>
     <string name="run">Run</string>
     <string name="message_cannot_launch_app">It has cannot open App.</string>
     <string name="title_tab_retaining_size">Tab retaining size</string>
@@ -403,5 +400,6 @@
     <string name="install">Install</string>
     <string name="message_install_suggestion_google_app">Please would you install Google App?</string>
     <string name="content_description_background">Background image</string>
+    <string name="is_center">center</string>
 
 </resources>

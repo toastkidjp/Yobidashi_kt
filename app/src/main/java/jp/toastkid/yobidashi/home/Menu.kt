@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.home
 
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
 import jp.toastkid.yobidashi.R
 

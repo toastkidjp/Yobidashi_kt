@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.graphics.Canvas
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * @author toastkidjp
@@ -41,17 +41,17 @@ object SwipeActionAttachment {
                 }
 
                 override fun clearView(
-                        recyclerView: RecyclerView?,
-                        viewHolder: RecyclerView.ViewHolder?
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder
                 ) {
                     super.clearView(recyclerView, viewHolder)
                     getDefaultUIUtil().clearView((viewHolder as ViewHolder).getFrontView())
                 }
 
                 override fun onChildDraw(
-                        c: Canvas?,
-                        recyclerView: RecyclerView?,
-                        viewHolder: RecyclerView.ViewHolder?,
+                        c: Canvas,
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
                         dX: Float,
                         dY: Float,
                         actionState: Int,
@@ -81,8 +81,8 @@ object SwipeActionAttachment {
             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
                 override fun getMovementFlags(
-                        recyclerView: RecyclerView?,
-                        viewHolder: RecyclerView.ViewHolder?
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder
                 ): Int {
                     val holder = viewHolder as ViewHolder
                     if (!holder.isButtonVisible()) {
@@ -97,19 +97,19 @@ object SwipeActionAttachment {
                         target: RecyclerView.ViewHolder
                 ) = false
 
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) = Unit
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
 
                 override fun clearView(
-                        recyclerView: RecyclerView?,
-                        viewHolder: RecyclerView.ViewHolder?
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder
                 ) {
                     getDefaultUIUtil().clearView((viewHolder as ViewHolder).getFrontView())
                 }
 
                 override fun onChildDraw(
-                        c: Canvas?,
-                        recyclerView: RecyclerView?,
-                        viewHolder: RecyclerView.ViewHolder?,
+                        c: Canvas,
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
                         dX: Float,
                         dY: Float,
                         actionState: Int,

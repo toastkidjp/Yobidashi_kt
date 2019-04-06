@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi.settings
 
 import android.graphics.Color
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
 import android.widget.SeekBar
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier

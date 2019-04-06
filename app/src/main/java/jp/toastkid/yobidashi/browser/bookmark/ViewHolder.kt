@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.support.annotation.DrawableRes
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.DrawableRes
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

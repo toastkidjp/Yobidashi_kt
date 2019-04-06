@@ -1,9 +1,8 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.net.Uri
-import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -11,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -58,7 +59,7 @@ class PdfModule(
     /**
      * LayoutManager.
      */
-    private val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    private val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
     /**
      * Use for save tab's thumbnail.

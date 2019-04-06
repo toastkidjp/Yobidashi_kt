@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi.search
 
 import android.content.Context
 import android.net.Uri
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.LocaleWrapper
 import java.util.*

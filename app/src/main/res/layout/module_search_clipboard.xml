@@ -3,7 +3,7 @@
     <data>
         <variable name="module" type="jp.toastkid.yobidashi.search.clip.ClipboardModule" />
     </data>
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -44,5 +44,5 @@
                 android:textSize="14sp"
                 />
         </FrameLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>

@@ -8,8 +8,8 @@ apply plugin: 'io.fabric'
 apply from: 'signing/config.gradle', to: android
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     byte verMajor  = 1
     byte verMiddle = 1
     byte verMinor  = 8
@@ -17,13 +17,13 @@ android {
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         if (verMiddle >= 100 || verMinor >= 10_000) {
             throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
         }
         versionCode ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
         versionName "${verMajor}.${verMiddle}.${verMinor}"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -59,18 +59,16 @@ play {
 
 dependencies {
 
-    def supportLibVersion = '27.1.1'
-    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
-    implementation "com.android.support:design:${supportLibVersion}"
-    implementation "com.android.support:customtabs:${supportLibVersion}"
-    implementation "com.android.support:cardview-v7:${supportLibVersion}"
+    def supportLibVersion = '1.0.0'
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.browser:browser:${supportLibVersion}"
+    implementation "androidx.cardview:cardview:${supportLibVersion}"
+    implementation "com.google.android.material:material:1.0.0"
 
-    def firebaseVersion = '11.6.2'
-    implementation "com.google.firebase:firebase-core:${firebaseVersion}"
-    implementation "com.google.firebase:firebase-ads:${firebaseVersion}"
-    implementation "com.google.android.gms:play-services-oss-licenses:${firebaseVersion}"
+    implementation "com.google.firebase:firebase-core:16.0.1"
+    implementation "com.google.android.gms:play-services-oss-licenses:12.0.1"
 
-    implementation 'androidx.core:core-ktx:0.3'
+    implementation 'androidx.core:core-ktx:1.1.0-alpha05'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation 'com.larswerkman:HoloColorPicker:1.5'
@@ -82,13 +80,12 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation 'com.squareup.moshi:moshi:1.7.0'
-    implementation 'com.cleveroad:cycle-menu:1.0.1'
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
 
-    implementation 'com.github.gfx.android.orma:orma:4.2.5'
+    implementation 'com.github.maskarade.android.orma:orma:6.0.2'
 
-    kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
+    kapt 'com.github.maskarade.android.orma:orma-processor:6.0.2'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.8"

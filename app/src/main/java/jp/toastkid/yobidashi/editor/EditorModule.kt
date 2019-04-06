@@ -9,18 +9,18 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.support.annotation.Dimension
-import android.support.annotation.MainThread
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
 import android.widget.TextView
-import com.cleveroad.cyclemenuwidget.CycleMenuWidget
+import androidx.annotation.Dimension
+import androidx.annotation.MainThread
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.MenuPos
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
@@ -211,16 +211,16 @@ class EditorModule(
     }
 
     /**
-     * Set space for showing [CycleMenuWidget].
+     * Set space for showing menu.
      *
-     * @param menuPos [CycleMenuWidget.CORNER]
+     * @param menuPos
      */
-    fun setSpace(menuPos: CycleMenuWidget.CORNER) = when (menuPos) {
-        CycleMenuWidget.CORNER.LEFT_BOTTOM -> {
+    fun setSpace(menuPos: MenuPos) = when (menuPos) {
+        MenuPos.LEFT-> {
             binding.leftSpace.visibility = View.VISIBLE
             binding.rightSpace.visibility = View.GONE
         }
-        CycleMenuWidget.CORNER.RIGHT_BOTTOM -> {
+        MenuPos.RIGHT -> {
             binding.leftSpace.visibility = View.GONE
             binding.rightSpace.visibility = View.VISIBLE
         }
@@ -471,7 +471,7 @@ class EditorModule(
     }
 
     /**
-     * Show message by [android.support.design.widget.Snackbar].
+     * Show message by [com.google.android.material.snackbar.Snackbar].
      *
      * @param message
      */

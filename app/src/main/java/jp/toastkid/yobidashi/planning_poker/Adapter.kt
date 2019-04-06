@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.planning_poker
 
-import android.databinding.DataBindingUtil
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import jp.toastkid.yobidashi.R

@@ -1,11 +1,18 @@
-package jp.toastkid.yobidashi.home
+/*
+ * Copyright (c) 2019 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+package jp.toastkid.yobidashi.browser
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.subjects.PublishSubject
@@ -14,17 +21,10 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
- * Menu's adapter.
- *
- * Initialize with context and menu click event consumer.
- *
- * @param context
- * @param consumer
- *
  * @author toastkidjp
  */
-internal class Adapter(context: Context, consumer: Consumer<Menu>)
-    : RecyclerView.Adapter<ViewHolder>() {
+internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
+    : RecyclerView.Adapter<MenuViewHolder>() {
 
     /**
      * Layout inflater.
@@ -58,12 +58,12 @@ internal class Adapter(context: Context, consumer: Consumer<Menu>)
         disposable = menuSubject.subscribe(consumer)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
+            MenuViewHolder(
                     DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false)
             )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = menus[position % menus.size]
         holder.setColorPair(colorPair)
         holder.setText(menu.titleId)

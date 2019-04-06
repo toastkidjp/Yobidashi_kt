@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="220dp"
         android:layout_height="220dp"
@@ -43,5 +43,5 @@
             android:src="@drawable/ic_remove_circle"
             android:background="@drawable/ripple_transparent"
             />
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>
