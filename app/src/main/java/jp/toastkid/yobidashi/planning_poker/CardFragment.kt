@@ -31,7 +31,7 @@ class CardFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding.root.setOnClickListener({ v ->
+        binding.root.setOnClickListener { v ->
             Toaster.snackLong(
                     v,
                     R.string.message_confirm_back,
@@ -39,7 +39,7 @@ class CardFragment : Fragment() {
                     View.OnClickListener{ activity?.finish() },
                     PreferenceApplier(v.context).colorPair()
             )
-        })
+        }
         val arguments = arguments ?: Bundle()
         if (arguments.containsKey(CardViewActivity.EXTRA_KEY_CARD_TEXT)) {
             setText(arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT))
