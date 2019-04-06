@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.CalendarContract
 import android.provider.MediaStore
 import androidx.browser.customtabs.CustomTabsIntent
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -54,16 +55,12 @@ object IntentFactory {
     /**
      * Make launching calendar intent.
      *
-     * @param eventStartMs
      * @return Intent
      */
-    fun makeCalendar(eventStartMs: Long): Intent {
-        val intent = Intent(Intent.ACTION_EDIT)
-        intent.type = "vnd.android.cursor.item/event"
-        intent.putExtra("beginTime", eventStartMs)
-        intent.putExtra("endTime", eventStartMs)
-        return intent
-    }
+    fun makeCalendar() = Intent(
+            Intent.ACTION_VIEW,
+            CalendarContract.CONTENT_URI.buildUpon().appendPath("time").build()
+    )
 
     /**
      * Make launching Google Play intent.

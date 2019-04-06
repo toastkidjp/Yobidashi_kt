@@ -69,6 +69,8 @@ internal enum class Menu(
 
     PDF(R.string.title_open_pdf, R.drawable.ic_pdf),
 
+    SCHEDULE(R.string.title_calendar, R.drawable.ic_schedule),
+
     CAMERA(R.string.title_camera, R.drawable.ic_camera),
 
     PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),

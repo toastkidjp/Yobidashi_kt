@@ -481,6 +481,13 @@ class BrowserFragment : BaseFragment(),
             Menu.PDF.ordinal -> {
                 openPdfTabFromStorage()
             }
+            Menu.SCHEDULE.ordinal -> {
+                try {
+                    startActivity(IntentFactory.makeCalendar())
+                } catch (e: ActivityNotFoundException) {
+                    Timber.w(e)
+                }
+            }
             Menu.OVERLAY_COLOR_FILTER.ordinal -> {
                 val activity = activity
                 val rootView = binding?.root
