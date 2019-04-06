@@ -27,12 +27,20 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Editor setting fragment.
+ *
  * @author toastkidjp
  */
 class EditorSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View data binding object.
+     */
     private lateinit var binding: FragmentSettingEditorBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     /**
@@ -56,18 +64,18 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
             initialBgColor = backgroundColor
             initialFontColor = fontColor
 
-            editorModule.backgroundPalette?.also {
-                it.addSVBar(editorModule.backgroundSvbar)
-                it.addOpacityBar(editorModule.backgroundOpacitybar)
-                it.setOnColorChangedListener { editorModule.ok?.setBackgroundColor(it) }
-                it.color = backgroundColor
+            editorModule.backgroundPalette.also { picker ->
+                picker.addSVBar(editorModule.backgroundSvbar)
+                picker.addOpacityBar(editorModule.backgroundOpacitybar)
+                picker.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
+                picker.color = backgroundColor
             }
 
-            editorModule.fontPalette?.also {
-                it.addSVBar(editorModule.fontSvbar)
-                it.addOpacityBar(editorModule.fontOpacitybar)
-                it.setOnColorChangedListener { editorModule.ok?.setTextColor(it) }
-                it.color = fontColor
+            editorModule.fontPalette.also { picker ->
+                picker.addSVBar(editorModule.fontSvbar)
+                picker.addOpacityBar(editorModule.fontOpacitybar)
+                picker.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
+                picker.color = fontColor
             }
             editorModule.fragment = this
             Colors.setColors(
@@ -116,14 +124,14 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
      * OK button's action.
      */
     fun ok() {
-        val backgroundColor = binding.backgroundPalette?.color ?: Color.BLACK
-        val fontColor = binding.fontPalette?.color ?: Color.WHITE
+        val backgroundColor = binding.backgroundPalette.color
+        val fontColor = binding.fontPalette.color
 
         preferenceApplier.setEditorBackgroundColor(backgroundColor)
         preferenceApplier.setEditorFontColor(fontColor)
 
-        binding.backgroundPalette?.color = backgroundColor
-        binding.fontPalette?.color = fontColor
+        binding.backgroundPalette.color = backgroundColor
+        binding.fontPalette.color = fontColor
 
         val colorPair = ColorPair(backgroundColor, fontColor)
         Colors.setColors(binding.ok as TextView, colorPair)
@@ -142,6 +150,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_editor
 
 }

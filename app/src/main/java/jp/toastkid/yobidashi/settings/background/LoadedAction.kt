@@ -6,6 +6,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import android.view.View
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
@@ -15,25 +19,21 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import java.io.IOException
 
 /**
  * Action of loaded new background image.
  *
  * @param data
- * @param parent
- * @param colorPair
- * @param onLoadedAction
+ * @param parent Snackbar's parent.
+ * @param colorPair Color pair.
+ * @param onLoadedAction On loaded action.
  *
  * @author toastkidjp
  */
 internal class LoadedAction (
         data: Intent,
-        /** Snackbar's parent.  */
         private val parent: View,
-        /** Color pair.  */
         private val colorPair: ColorPair,
-        /** On loaded action.  */
         private val onLoadedAction: () -> Unit
 ) {
 
@@ -43,27 +43,26 @@ internal class LoadedAction (
     /**
      * Invoke action.
      */
-    operator fun invoke() {
+    operator fun invoke(): Disposable {
+        val context = parent.context
 
-        try {
-            val context = parent.context
-
+        return Maybe.fromCallable {
             val image = ImageLoader.loadBitmap(context, uri)
-
-            if (image == null) {
-                informFailed()
-                return
-            }
-
-            storeImageToFile(context, image)
-
-            onLoadedAction()
-
-            informDone(image)
-        } catch (e: IOException) {
-            Timber.e(e)
+            image?.let { storeImageToFile(context, it) }
+            image
         }
-
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { bitmap ->
+                            onLoadedAction()
+                            bitmap?.let { informDone(it) }
+                        },
+                        {
+                            Timber.e(it)
+                            informFailed()
+                        }
+                )
     }
 
     /**

@@ -26,7 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment::switchWifiOnly}"
+                    android:onClick="@{view -> fragment.switchWifiOnly()}"
                     >
                     <TextView
                         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                     style="@style/OneLineTextMenu"
                     android:drawableLeft="@drawable/ic_settings_cell_black"
                     android:text="@string/title_settings_device"
-                    android:onClick="@{fragment::deviceSetting}"
+                    android:onClick="@{view -> fragment.deviceSetting()}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -74,7 +74,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_wifi"
                     android:drawableLeft="@drawable/ic_wifi_black"
-                    android:onClick="@{fragment::wifi}"
+                    android:onClick="@{view -> fragment.wifi()}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -86,7 +86,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_wireless"
                     android:drawableLeft="@drawable/ic_network_black"
-                    android:onClick="@{fragment::wireless}"
+                    android:onClick="@{view -> fragment.wireless()}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -98,7 +98,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_date_and_time"
                     android:drawableLeft="@drawable/ic_time"
-                    android:onClick="@{fragment::dateAndTime}"
+                    android:onClick="@{view -> fragment.dateAndTime()}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -110,7 +110,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_display"
                     android:drawableLeft="@drawable/ic_phone_android_black"
-                    android:onClick="@{fragment::display}"
+                    android:onClick="@{view -> fragment.display()}"
                     />
 
                 <include layout="@layout/primary_dark_divider"/>
@@ -122,7 +122,7 @@
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_settings_all_apps"
                     android:drawableLeft="@drawable/ic_android_app"
-                    android:onClick="@{fragment::allApps}"
+                    android:onClick="@{view -> fragment.allApps()}"
                     />
 
                 <androidx.cardview.widget.CardView

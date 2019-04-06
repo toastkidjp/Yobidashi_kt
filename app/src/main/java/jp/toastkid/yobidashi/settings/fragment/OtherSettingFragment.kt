@@ -28,18 +28,28 @@ import jp.toastkid.yobidashi.main.StartUp
  */
 class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View Data Binding object.
+     */
     private lateinit var binding: FragmentSettingOtherBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_other, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
 
-        binding.startUpItems?.startUpSelector?.setOnCheckedChangeListener { radioGroup, checkedId ->
+        binding.startUpItems.startUpSelector.setOnCheckedChangeListener { _, checkedId ->
             preferenceApplier.startUp = StartUp.findById(checkedId)
         }
 
@@ -60,10 +70,8 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Switch Wi-Fi only mode.
-     *
-     * @param v
      */
-    fun switchWifiOnly(v: View) {
+    fun switchWifiOnly() {
         val newState = !preferenceApplier.wifiOnly
         preferenceApplier.wifiOnly = newState
         binding.wifiOnlyCheck.isChecked = newState
@@ -72,7 +80,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Clear all settings.
-
+     *
      * @param v
      */
     fun clearSettings(v: View) {
@@ -81,71 +89,61 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
                 .setTitle(R.string.title_clear_settings)
                 .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
                 .setCancelable(true)
-                .setNegativeButton(R.string.cancel) { d, i -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, i ->
+                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                .setPositiveButton(R.string.ok) { d, _ ->
                     preferenceApplier.clear()
                     //TODO colorFilter.stop()
                     //TODO setCurrentValues()
                     Updater.update(fragmentActivity)
-                    Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())
+                    Toaster.snackShort(v, R.string.done_clear, preferenceApplier.colorPair())
+                    d.dismiss()
                 }
                 .show()
     }
 
     /**
      * Call device settings.
-     *
-     * @param v
      */
-    fun deviceSetting(v: View) {
+    fun deviceSetting() {
         startActivity(SettingsIntentFactory.makeLaunch())
     }
 
     /**
      * Call Wi-Fi settings.
-     *
-     * @param v
      */
-    fun wifi(v: View) {
+    fun wifi() {
         startActivity(SettingsIntentFactory.wifi())
     }
 
     /**
      * Call Wireless settings.
-     *
-     * @param v
      */
-    fun wireless(v: View) {
+    fun wireless() {
         startActivity(SettingsIntentFactory.wireless())
     }
 
     /**
      * Call Date-and-Time settings.
-     *
-     * @param v
      */
-    fun dateAndTime(v: View) {
+    fun dateAndTime() {
         startActivity(SettingsIntentFactory.dateAndTime())
     }
 
     /**
      * Call display settings.
-     *
-     * @param v
      */
-    fun display(v: View) {
+    fun display() {
         startActivity(SettingsIntentFactory.display())
     }
 
     /**
      * Call all app settings.
-     *
-     * @param v
      */
-    fun allApps(v: View) {
+    fun allApps() {
         startActivity(SettingsIntentFactory.allApps())
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_others
 
 }

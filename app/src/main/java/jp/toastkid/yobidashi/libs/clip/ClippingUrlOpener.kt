@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi.libs.clip
 
 import android.net.Uri
+import android.support.design.widget.Snackbar
+import android.text.TextUtils
 import android.view.View
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
@@ -16,6 +18,11 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 object ClippingUrlOpener {
 
     /**
+     * For suppress consecutive showing.
+     */
+    private var previous: String? = null
+
+    /**
      * Invoke action.
      *
      * @param view [View](Nullable)
@@ -29,16 +36,19 @@ object ClippingUrlOpener {
         val activityContext = view.context
         val clipboardContent = Clipboard.getPrimary(activityContext)?.toString() ?: return
 
-        if (Urls.isInvalidUrl(clipboardContent)) {
+        if (Urls.isInvalidUrl(clipboardContent) || TextUtils.equals(previous, clipboardContent)) {
             return
         }
+
+        previous = clipboardContent
 
         Toaster.withAction(
                 view,
                 "Would you open \"$clipboardContent\"?",
                 R.string.open,
                 View.OnClickListener { onClick(clipboardContent.toUri()) },
-                PreferenceApplier(activityContext).colorPair()
+                PreferenceApplier(activityContext).colorPair(),
+                Snackbar.LENGTH_LONG
         )
     }
 }

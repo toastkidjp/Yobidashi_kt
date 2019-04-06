@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi.browser.webview
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -46,10 +48,11 @@ internal object WebViewFactory {
      *
      * @param context [Context]
      */
+    @SuppressLint("ClickableViewAccessibility")
     fun make(context: Context): CustomWebView {
         val webView = CustomWebView(context)
         webView.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.getAction()) {
+            when (motionEvent.action) {
                 MotionEvent.ACTION_UP -> webView.enablePullToRefresh = false
             }
             false
@@ -123,6 +126,9 @@ internal object WebViewFactory {
         settings.builtInZoomControls = true
         settings.displayZoomControls = false
         settings.javaScriptCanOpenWindowsAutomatically = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            settings.safeBrowsingEnabled = true
+        }
         return webView
     }
 

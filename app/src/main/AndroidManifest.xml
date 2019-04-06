@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="jp.toastkid.yobidashi">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,12 +12,20 @@
     <application
         android:name=".ExtendedApplication"
         android:allowBackup="true"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning"
         >
+
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true"
+            />
+
         <activity
             android:name=".main.MainActivity"
             android:label="${app_name}"
@@ -162,7 +171,10 @@
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             />
 
-        <service android:name=".search.favorite.AddingFavoriteSearchService">
+        <service
+            android:name=".search.favorite.AddingFavoriteSearchService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            >
             <intent-filter>
                 <action android:name="ADD_ITEM" />
             </intent-filter>

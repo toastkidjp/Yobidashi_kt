@@ -31,12 +31,20 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
+ * Setting fragment of WEB browser.
+ *
  * @author toastkidjp
  */
 class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, TitleIdSupplier {
 
+    /**
+     * Data Binding object.
+     */
     private lateinit var binding: FragmentSettingBrowserBinding
 
+    /**
+     * Preference wrappter.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,7 +69,10 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         setCurrentValues()
     }
 
-    fun setCurrentValues() {
+    /**
+     * Set current values to components.
+     */
+    private fun setCurrentValues() {
         binding.let {
             Colors.setColors(it.homeButton, preferenceApplier.colorPair())
             it.homeInputLayout.editText?.setText(preferenceApplier.homeUrl)
@@ -117,33 +128,37 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         }
     }
 
+    /**
+     * Initialize expansion setting.
+     */
     private fun initBrowserExpandable() {
-        binding.browserExpand.screenMode?.setOnCheckedChangeListener ({ group, checkedId ->
+        binding.browserExpand.screenMode?.setOnCheckedChangeListener { group, _ ->
             when (group.checkedRadioButtonId) {
                 R.id.full_screen  -> preferenceApplier.setBrowserScreenMode(ScreenMode.FULL_SCREEN)
                 R.id.expandable   -> preferenceApplier.setBrowserScreenMode(ScreenMode.EXPANDABLE)
                 R.id.fixed        -> preferenceApplier.setBrowserScreenMode(ScreenMode.FIXED)
             }
-        })
+        }
     }
-    
+
+    /**
+     * Initialize menu position setting.
+     */
     private fun initMenuPos() {
-        binding.menuPosRadio?.let {
-            it.setOnCheckedChangeListener ({ group, checkedId ->
+        binding.menuPosRadio.let {
+            it.setOnCheckedChangeListener { group, _ ->
                 when (group.checkedRadioButtonId) {
                     R.id.menu_pos_left  -> preferenceApplier.setMenuPos(MenuPos.LEFT)
                     R.id.menu_pos_right -> preferenceApplier.setMenuPos(MenuPos.RIGHT)
                 }
-            })
+            }
         }
     }
 
     /**
      * Switch browser.
-     *
-     * @param v
      */
-    fun switchInternalBrowser(v: View) {
+    fun switchInternalBrowser() {
         val newState = !preferenceApplier.useInternalBrowser()
         preferenceApplier.setUseInternalBrowser(newState)
         binding.useInternalBrowserCheck.isChecked = newState
@@ -155,10 +170,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch retaining tabs.
-     *
-     * @param v
      */
-    fun switchRetainTabs(v: View) {
+    fun switchRetainTabs() {
         val newState = !preferenceApplier.doesRetainTabs()
         preferenceApplier.setRetainTabs(newState)
         binding.retainTabsCheck.isChecked = newState
@@ -171,10 +184,9 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /***
      * Commit input.
-     * @param view
      */
-    fun commitHomeInput(view: View) {
-        val input = binding.homeInputLayout?.editText?.text.toString()
+    fun commitHomeInput() {
+        val input = binding.homeInputLayout.editText?.text.toString()
         if (TextUtils.isEmpty(input)) {
             Toaster.snackShort(
                     binding.root,
@@ -198,25 +210,22 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch content inversion enabling.
-     *
-     * @param v
      */
-    fun switchUseInversion(v: View) {
+    fun switchUseInversion() {
         val preferenceApplier = preferenceApplier
         val newState = !preferenceApplier.useInversion
         preferenceApplier.useInversion = newState
-        binding.useInversionCheck?.isChecked = newState
+        binding.useInversionCheck.isChecked = newState
     }
     
     /**
      * Switch JavaScript enabling.
-     * @param v
      */
-    fun switchJsEnabled(v: View) {
+    fun switchJsEnabled() {
         val preferenceApplier = preferenceApplier
         val newState = !preferenceApplier.useJavaScript()
         preferenceApplier.setUseJavaScript(newState)
-        binding.browserJsCheck?.isChecked = newState
+        binding.browserJsCheck.isChecked = newState
         @StringRes val messageId: Int = if (newState)
             R.string.message_js_enabled
         else
@@ -227,37 +236,34 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * Switch loading images.
-     *
-     * @param v
      */
-    fun switchLoadingImage(v: View) {
+    fun switchLoadingImage() {
         val newState = !preferenceApplier.doesLoadImage()
         preferenceApplier.setLoadImage(newState)
-        binding.useImageCheck?.isChecked = newState
+        binding.useImageCheck.isChecked = newState
     }
 
     /**
      * Switching saving form data.
-     *
-     * @param v
      */
-    fun switchSaveFormData(v: View) {
+    fun switchSaveFormData() {
         val newState = !preferenceApplier.doesSaveForm()
         preferenceApplier.setSaveForm(newState)
-        binding.saveFormCheck?.isChecked = newState
+        binding.saveFormCheck.isChecked = newState
     }
 
     /**
      * Switch saving view history.
-     *
-     * @param v
      */
-    fun switchViewHistory(v: View) {
+    fun switchViewHistory() {
         val newState = !preferenceApplier.saveViewHistory
         preferenceApplier.saveViewHistory = newState
-        binding.saveViewHistoryCheck?.isChecked = newState
+        binding.saveViewHistoryCheck.isChecked = newState
     }
 
+    /**
+     * Switch AD remover setting.
+     */
     fun switchAdRemove() {
         val newState = !preferenceApplier.adRemove
         preferenceApplier.adRemove = newState
@@ -295,10 +301,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
     /**
      * UserAgent setting.
-     *
-     * @param v
      */
-    fun userAgent(v: View) {
+    fun userAgent() {
         val dialogFragment = UserAgentDialogFragment()
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(
@@ -308,7 +312,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     }
 
     override fun onClickUserAgent(userAgent: UserAgent) {
-        binding.userAgentValue?.text = userAgent.title()
+        binding.userAgentValue.text = userAgent.title()
     }
 
     override fun titleId() = R.string.subhead_setting_browesr
