@@ -1,14 +1,11 @@
 package jp.toastkid.yobidashi.libs.intent
 
 import android.annotation.TargetApi
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
 import android.provider.MediaStore
-import androidx.browser.customtabs.CustomTabsIntent
-import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
  * Common [android.content.Intent] factory.
@@ -28,18 +25,6 @@ object IntentFactory {
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, message)
     }
-
-    /**
-     * Make intent of sharing with twitter.
-     *
-     * @param context
-     * @param pair
-     * @return CustomTabsIntent
-     */
-    fun makeTwitter(
-            context: Context,
-            pair: ColorPair
-    ): CustomTabsIntent = CustomTabsFactory.make(context, pair.bgColor(), pair.fontColor()).build()
 
     /**
      * Make pick image intent.
