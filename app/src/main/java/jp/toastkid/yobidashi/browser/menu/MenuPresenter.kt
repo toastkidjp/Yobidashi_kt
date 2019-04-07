@@ -28,9 +28,8 @@ import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
 class MenuPresenter(
         private val recyclerView: CircleRecyclerView?,
         private val menuSwitch: FloatingActionButton?,
-        private val onMenuClick: (Menu) -> Unit,
-        private val tabCountSupplier: () -> Int
-) {
+        private val view: MenuContract.View
+) : MenuContract.Presenter {
 
     private var menuDrawable: Drawable? = null
 
@@ -38,6 +37,7 @@ class MenuPresenter(
 
     init {
         initialize()
+        view.menuPresenter = this
     }
 
     /**
@@ -47,8 +47,8 @@ class MenuPresenter(
         val activityContext = recyclerView?.context ?: return
         recyclerView.adapter = MenuAdapter(
                 activityContext,
-                Consumer { onMenuClick(it) },
-                tabCountSupplier
+                Consumer { view.onMenuClick(it) },
+                { view.getTabCount() }
         )
         val layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
         recyclerView.layoutManager =
@@ -59,7 +59,7 @@ class MenuPresenter(
         menuSwitch?.setOnClickListener { switchMenuVisibility() }
     }
 
-    fun switchMenuVisibility() {
+    override fun switchMenuVisibility() {
         if (recyclerView?.isVisible == true) close() else open()
     }
 
@@ -69,7 +69,7 @@ class MenuPresenter(
         recyclerView?.scheduleLayoutAnimation()
     }
 
-    fun close() {
+    override fun close() {
         recyclerView?.animate()?.let {
             it.cancel()
             it.alpha(0f)
@@ -83,7 +83,7 @@ class MenuPresenter(
         }
     }
 
-    fun onResume(additional: (MenuPos) -> Unit) {
+    override fun onResume(additional: (MenuPos) -> Unit) {
         val activityContext = recyclerView?.context ?: return
         val preferenceApplier = PreferenceApplier(activityContext)
         recyclerView.also {
@@ -104,7 +104,7 @@ class MenuPresenter(
         }
     }
     
-    fun isVisible() = recyclerView?.isVisible
+    override fun isVisible() = recyclerView?.isVisible ?: false
 
     private fun setGravity(menuPos: MenuPos, view: View?) {
         val layoutParams = view?.layoutParams as CoordinatorLayout.LayoutParams

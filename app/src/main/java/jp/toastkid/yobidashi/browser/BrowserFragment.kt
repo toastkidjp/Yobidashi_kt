@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
+import jp.toastkid.yobidashi.browser.menu.MenuContract
 import jp.toastkid.yobidashi.browser.menu.MenuPresenter
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
@@ -91,7 +92,8 @@ class BrowserFragment : BaseFragment(),
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
         PasteAsConfirmationDialogFragment.Callback,
-        TabListDialogFragment.Callback
+        TabListDialogFragment.Callback,
+        MenuContract.View
 {
 
     /**
@@ -174,7 +176,7 @@ class BrowserFragment : BaseFragment(),
      */
     private lateinit var torch: Torch
 
-    private var menuPresenter: MenuPresenter? = null
+    override lateinit var menuPresenter: MenuContract.Presenter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -268,8 +270,7 @@ class BrowserFragment : BaseFragment(),
         menuPresenter = MenuPresenter(
                 binding?.menusView,
                 binding?.menuSwitch,
-                { onMenuClick(it) },
-                { tabs.size() }
+                this
         )
 
         setHasOptionsMenu(true)
@@ -299,7 +300,7 @@ class BrowserFragment : BaseFragment(),
 
         menu?.let { menuNonNull ->
             menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
-                menuPresenter?.switchMenuVisibility()
+                menuPresenter.switchMenuVisibility()
                 true
             }
 
@@ -347,7 +348,7 @@ class BrowserFragment : BaseFragment(),
      *
      * @param menu menu's ordinal
      */
-    private fun onMenuClick(menu: Menu) {
+    override fun onMenuClick(menu: Menu) {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
         when (menu) {
@@ -516,6 +517,8 @@ class BrowserFragment : BaseFragment(),
             }
         }
     }
+
+    override fun getTabCount() = tabs.size()
 
     /**
      * Use camera permission with specified action.
