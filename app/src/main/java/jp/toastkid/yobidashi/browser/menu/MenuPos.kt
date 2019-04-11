@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.menu
 
 import android.annotation.SuppressLint
 import android.view.Gravity

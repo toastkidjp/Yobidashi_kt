@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.menu
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -17,14 +17,16 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
  */
-internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
-    : RecyclerView.Adapter<MenuViewHolder>() {
+internal class MenuAdapter(
+        context: Context,
+        consumer: Consumer<Menu>,
+        private val tabCountSupplier: () -> Int
+) : RecyclerView.Adapter<MenuViewHolder>() {
 
     /**
      * Layout inflater.
@@ -37,14 +39,11 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
     private val menus: Array<Menu> = Menu.values()
 
     /**
-     *  Color pair.
-     */
-    private val colorPair: ColorPair
-
-    /**
      * Menu action subject.
      */
     private val menuSubject: PublishSubject<Menu>
+
+    private val preferenceApplier = PreferenceApplier(context)
 
     /**
      * Subscription disposable.
@@ -52,8 +51,6 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
     private val disposable: Disposable?
 
     init {
-        val preferenceApplier = PreferenceApplier(context)
-        colorPair = preferenceApplier.colorPair()
         menuSubject = PublishSubject.create<Menu>()
         disposable = menuSubject.subscribe(consumer)
     }
@@ -65,7 +62,12 @@ internal class MenuAdapter(context: Context, consumer: Consumer<Menu>)
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = menus[position % menus.size]
-        holder.setColorPair(colorPair)
+
+        if (menu == Menu.TAB_LIST) {
+            holder.setCount(tabCountSupplier())
+        }
+
+        holder.setColorPair(preferenceApplier.colorPair(), menu != Menu.SITE_SEARCH)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
         holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })

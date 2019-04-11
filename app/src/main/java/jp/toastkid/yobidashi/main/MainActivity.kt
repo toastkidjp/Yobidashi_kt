@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.main
 
-import android.Manifest
 import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
@@ -16,37 +15,25 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BaseFragment
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppActivity
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ProgressBarCallback
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.TitlePair
-import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.browser.screenshots.ScreenshotsActivity
-import jp.toastkid.yobidashi.calendar.CalendarArticleLinker
-import jp.toastkid.yobidashi.calendar.CalendarFragment
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.home.Command
@@ -57,20 +44,13 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
-import jp.toastkid.yobidashi.libs.intent.ImplicitIntentInvokerDialogFragment
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
-import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
-import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
-import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.text.MessageFormat
 
 /**
  * Main of this calendar app.
@@ -83,11 +63,6 @@ class MainActivity :
         ToolbarAction,
         ProgressBarCallback
 {
-
-    /**
-     * Navigation's background.
-     */
-    private var navBackground: View? = null
 
     /**
      * Data binding object.
@@ -105,11 +80,6 @@ class MainActivity :
     private val homeFragment by lazy { HomeFragment() }
 
     /**
-     * Calendar fragment.
-     */
-    private val calendarFragment by lazy { CalendarFragment() }
-
-    /**
      * Disposables.
      */
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
@@ -124,11 +94,6 @@ class MainActivity :
      */
     private val torch by lazy { Torch(this) }
 
-    /**
-     * RxPermissions.
-     */
-    private val rxPermissions by lazy { RxPermissions(this) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
@@ -138,11 +103,8 @@ class MainActivity :
         binding.appBarMain.toolbar.let { toolbar ->
             initToolbar(toolbar)
             setSupportActionBar(toolbar)
-            initDrawer(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
-
-        initNavigation()
 
         browserFragment = BrowserFragment()
 
@@ -187,15 +149,6 @@ class MainActivity :
                         .addTo(disposables)
                 return
             }
-        }
-
-        if (calledIntent.hasExtra(KEY_EXTRA_MONTH)) {
-            CalendarArticleLinker(
-                    this,
-                    calledIntent.getIntExtra(KEY_EXTRA_MONTH, -1),
-                    calledIntent.getIntExtra(KEY_EXTRA_DOM, -1)
-            ).invoke()
-            return
         }
 
         when (preferenceApplier.startUp) {
@@ -295,215 +248,10 @@ class MainActivity :
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
-        binding.drawerLayout.closeDrawers()
         binding.appBarMain.toolbar.let {
             it.setTitle(fragment.titleId())
             it.subtitle = ""
         }
-    }
-
-    /**
-     * Initialize drawer.
-     *
-     * @param toolbar
-     */
-    private fun initDrawer(toolbar: Toolbar) {
-        val toggle = ActionBarDrawerToggle(
-                this,
-                binding.drawerLayout,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close
-        )
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-    }
-
-    /**
-     * Initialize navigation.
-     */
-    private fun initNavigation() {
-        binding.navView.setNavigationItemSelectedListener { item: MenuItem ->
-            invokeWithMenuId(item.itemId)
-            true
-        }
-        if (Archive.cannotUseArchive()) {
-            binding.navView.menu.findItem(R.id.nav_archives).isVisible = false
-        }
-        val headerView = binding.navView.getHeaderView(0)
-        navBackground = headerView?.findViewById(R.id.nav_header_background)
-    }
-
-    /**
-     * Invoke action with Menu ID.
-     *
-     * @param menuId Menu ID
-     */
-    private fun invokeWithMenuId(@IdRes menuId: Int) {
-        when (menuId) {
-            R.id.nav_search -> {
-                startActivityWithSlideIn("nav_search", SearchActivity.makeIntent(this))
-            }
-            R.id.nav_search_history -> {
-                startActivityWithSlideIn("nav_srch_hstry", SearchHistoryActivity.makeIntent(this))
-            }
-            R.id.nav_calendar -> {
-                sendLog("nav_cal")
-                replaceFragment(calendarFragment)
-            }
-            R.id.nav_favorite_search -> {
-                startActivityWithSlideIn(
-                        "nav_fav_search", FavoriteSearchActivity.makeIntent(this))
-            }
-            R.id.nav_intent_invoker -> {
-                sendLog("nav_intnt")
-                ImplicitIntentInvokerDialogFragment().show(
-                        supportFragmentManager,
-                        ImplicitIntentInvokerDialogFragment::class.java.simpleName
-                )
-            }
-            R.id.nav_color_filter -> {
-                ColorFilter(this, binding.root).switchState(this)
-            }
-            R.id.nav_launcher -> {
-                startActivityWithSlideIn("nav_lnchr", LauncherActivity.makeIntent(this))
-            }
-            R.id.nav_share -> {
-                sendLog("nav_shr")
-                startActivity(IntentFactory.makeShare(makeShareMessage()))
-            }
-            R.id.nav_share_twitter -> {
-                sendLog("nav_shr_twt")
-                IntentFactory.makeTwitter(this@MainActivity, colorPair())
-                        .launchUrl(
-                        this@MainActivity,
-                        Uri.parse("https://twitter.com/share?text=" + Uri.encode(makeShareMessage()))
-                )
-            }
-            R.id.nav_about_this_app -> {
-                startActivityWithSlideIn("nav_about", AboutThisAppActivity.makeIntent(this))
-            }
-            R.id.nav_archives -> {
-                if (Archive.cannotUseArchive()) {
-                    Toaster.snackShort(binding.root, R.string.message_disable_archive, colorPair())
-                    return
-                }
-                startActivityForResultWithSlideIn(
-                        "nav_archv",
-                        ArchivesActivity.makeIntent(this),
-                        ArchivesActivity.REQUEST_CODE
-                )
-            }
-            R.id.nav_screenshots -> {
-                startActivityWithSlideIn("nav_screenshots", ScreenshotsActivity.makeIntent(this))
-            }
-            R.id.nav_google_play -> {
-                sendLog("nav_gplay")
-                startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
-            }
-            R.id.nav_privacy_policy -> {
-                sendLog("nav_prvcy_plcy")
-                CustomTabsFactory.make(this, colorPair())
-                        .build()
-                        .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
-            }
-            R.id.nav_author -> {
-                sendLog("nav_author")
-                startActivity(IntentFactory.authorsApp())
-            }
-            R.id.nav_option_menu -> {
-                binding.appBarMain.toolbar.showOverflowMenu()
-                binding.drawerLayout.closeDrawer(GravityCompat.START)
-            }
-            R.id.nav_settings -> {
-                startActivityWithSlideIn("nav_set_top", SettingsActivity.makeIntent(this))
-            }
-            R.id.nav_planning_poker -> {
-                startActivityWithSlideIn("nav_poker", PlanningPokerActivity.makeIntent(this))
-            }
-            R.id.nav_camera -> {
-                sendLog("nav_camera")
-                useCameraPermission { startActivityWithSlideIn("nav_camera", IntentFactory.camera()) }
-            }
-            R.id.nav_bookmark -> {
-                startActivityForResultWithSlideIn(
-                        "nav_bkmk",
-                        BookmarkActivity.makeIntent(this),
-                        BookmarkActivity.REQUEST_CODE
-                )
-            }
-            R.id.nav_view_history -> {
-                startActivityForResultWithSlideIn(
-                        "nav_view_history",
-                        ViewHistoryActivity.makeIntent(this),
-                        ViewHistoryActivity.REQUEST_CODE
-                )
-            }
-            R.id.nav_torch -> {
-                sendLog("nav_torch")
-                useCameraPermission { torch.switch() }
-            }
-            R.id.nav_barcode -> {
-                sendLog("nav_barcode")
-                startActivity(BarcodeReaderActivity.makeIntent(this))
-            }
-            R.id.nav_home -> {
-                sendLog("nav_home")
-                replaceFragment(homeFragment)
-            }
-        }
-    }
-
-    /**
-     * Use camera permission with specified action.
-     *
-     * @param onGranted action
-     */
-    private fun useCameraPermission(onGranted: () -> Unit) {
-        rxPermissions
-                .request(Manifest.permission.CAMERA)
-                .filter { it }
-                .subscribe(
-                        { onGranted() },
-                        { Timber.e(it) }
-                )
-                .addTo(disposables)
-    }
-
-    /**
-     * Start activity with slide in transition.
-     *
-     * @param logKey
-     * @param intent activity launcher intent
-     */
-    private fun startActivityWithSlideIn(logKey: String, intent: Intent) {
-        sendLog(logKey)
-        startActivity(intent)
-        insertSlideInTransition()
-    }
-
-    /**
-     * Start activity for result with slide in transition.
-     *
-     * @param logKey
-     * @param intent activity launcher intent
-     * @param requestCode Request code
-     */
-    private fun startActivityForResultWithSlideIn(
-            logKey: String,
-            intent: Intent,
-            requestCode: Int
-            ) {
-        sendLog(logKey)
-        startActivityForResult(intent, requestCode)
-        insertSlideInTransition()
-    }
-
-    /**
-     * Insert slide-in transition.
-     */
-    private fun insertSlideInTransition() {
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right)
     }
 
     override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
@@ -514,11 +262,6 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-            return
-        }
-
         val fragment: BaseFragment? = findCurrentFragment()
         if (fragment == null) {
             confirmExit()
@@ -583,11 +326,8 @@ class MainActivity :
      */
     private fun applyBackgrounds() {
         val backgroundImagePath = backgroundImagePath
-        val fontColor = colorPair().fontColor()
-        navBackground?.setBackgroundColor(colorPair().bgColor())
         if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
-            navBackground?.findViewById<TextView>(R.id.nav_header_main)?.setTextColor(fontColor)
             return
         }
 
@@ -601,15 +341,13 @@ class MainActivity :
         } catch (e: IOException) {
             Timber.e(e)
             Toaster.snackShort(
-                    navBackground!!,
+                    binding.root,
                     getString(R.string.message_failed_read_image),
                     colorPair()
             )
             removeBackgroundImagePath()
             setBackgroundImage(null)
         }
-
-        navBackground?.findViewById<TextView>(R.id.nav_header_main)?.setTextColor(fontColor)
     }
 
     /**
@@ -618,7 +356,6 @@ class MainActivity :
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
-        binding.drawerBackground.setImageDrawable(background)
         binding.appBarMain.background?.setImageDrawable(background)
     }
 
@@ -676,13 +413,6 @@ class MainActivity :
             }
         }
     }
-
-    /**
-     * Make share message.
-     * @return string
-     */
-    private fun makeShareMessage(): String
-            = MessageFormat.format(getString(R.string.message_share), getString(R.string.app_name))
 
     @StringRes
     override fun titleId(): Int = R.string.app_name

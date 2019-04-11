@@ -17,29 +17,5 @@
             android:layout_height="match_parent"
             />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            >
-            <ImageView
-                android:id="@+id/drawer_background"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                />
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/nav_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:fitsSystemWindows="true"
-                android:background="@color/filter_white_bb"
-                app:headerLayout="@layout/nav_header_main"
-                app:menu="@menu/activity_main_drawer"
-                />
-        </RelativeLayout>
-
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
