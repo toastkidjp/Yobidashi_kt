@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{fragment::switchNotificationWidget}"
+                android:onClick="@{view -> fragment.switchNotificationWidget()}"
                 xmlns:android="http://schemas.android.com/apk/res/android">
                 <TextView
                     android:orientation="horizontal"
@@ -29,6 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:layout_marginLeft="@dimen/common_horizontal_margin"
+                    android:layout_marginStart="@dimen/common_horizontal_margin"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
                     android:text="@string/title_show_notification_widget"
@@ -39,13 +40,16 @@
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="4dp"
                     android:layout_marginLeft="@dimen/common_horizontal_margin"
+                    android:layout_marginStart="@dimen/common_horizontal_margin"
                     android:src="@mipmap/thumbnail"
+                    android:contentDescription="@string/thumbnail"
                     />
                 <CheckBox
                     android:id="@+id/use_notification_widget_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/common_horizontal_margin"
+                    android:layout_marginEnd="@dimen/common_horizontal_margin"
                     android:layout_gravity="right"
                     android:clickable="false"
                     style="@style/Border"

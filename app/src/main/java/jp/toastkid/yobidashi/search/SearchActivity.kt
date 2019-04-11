@@ -34,6 +34,7 @@ import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
@@ -124,17 +125,15 @@ class SearchActivity : BaseActivity(),
 
         applyColor()
 
-        clipboardModule = ClipboardModule(
-                binding?.clipboardModule as ModuleSearchClipboardBinding,
-                { clipped ->
-                    if (Urls.isValidUrl(clipped)) {
-                        finish()
-                        startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
-                    } else {
-                        search(binding?.searchCategories?.selectedItem.toString(), clipped)
-                    }
-                }
-        )
+        clipboardModule = ClipboardModule(binding?.clipboardModule as ModuleSearchClipboardBinding)
+        { clipped ->
+            if (Urls.isValidUrl(clipped)) {
+                finish()
+                startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
+            } else {
+                search(binding?.searchCategories?.selectedItem.toString(), clipped)
+            }
+        }
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -378,6 +377,14 @@ class SearchActivity : BaseActivity(),
      */
     @Suppress("NOTHING_TO_INLINE")
     private inline fun search(category: String, query: String, onBackground: Boolean = false) {
+        if (NetworkChecker.isNotAvailable(this)) {
+            Toaster.snackShort(
+                    binding?.root as View,
+                    "Network is not available...",
+                    colorPair()
+            )
+            return
+        }
         SearchAction(this, category, query, onBackground)
                 .invoke()
                 .addTo(disposables)
@@ -400,27 +407,35 @@ class SearchActivity : BaseActivity(),
     override fun onClickDeleteAllFavoriteSearch() {
         DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { _, _ ->
-                    favoriteModule?.clear()
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.settings_color_delete,
-                            PreferenceApplier(this).colorPair()
-                    )
-                }
+                .subscribe(
+                        {
+                            favoriteModule?.clear()
+                            Toaster.snackShort(
+                                    binding?.root as View,
+                                    R.string.settings_color_delete,
+                                    PreferenceApplier(this).colorPair()
+                            )
+                        },
+                        Timber::e
+                )
+                .addTo(disposables)
     }
 
     override fun onClickClearSearchHistory() {
         DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
                 .subscribeOn(Schedulers.io())
-                .subscribe { _, _ ->
-                    historyModule?.clear()
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.settings_color_delete,
-                            PreferenceApplier(this).colorPair()
-                    )
-                }
+                .subscribe(
+                        {
+                            historyModule?.clear()
+                            Toaster.snackShort(
+                                    binding?.root as View,
+                                    R.string.settings_color_delete,
+                                    PreferenceApplier(this).colorPair()
+                            )
+                        },
+                        Timber::e
+                )
+                .addTo(disposables)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -15,7 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Spinner
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -28,8 +27,14 @@ import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
  */
 class SearchSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View Data Binding object.
+     */
     private lateinit var binding: FragmentSettingSearchBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,7 +44,7 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
 
-        SearchCategorySpinnerInitializer.invoke(binding.searchCategories as Spinner)
+        SearchCategorySpinnerInitializer.invoke(binding.searchCategories)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier.setDefaultSearchEngine(
@@ -73,10 +78,8 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Open search categories spinner.
-     *
-     * @param v
      */
-    fun openSearchCategory(v: View) {
+    fun openSearchCategory() {
         binding.searchCategories.performClick()
     }
 
@@ -92,7 +95,7 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
     /**
      * Switch notification widget displaying.
      *
-     * @param v
+     * @param v only use snackbar's parent.
      */
     fun switchSearchWithClip(v: View) {
         val newState = !preferenceApplier.enableSearchWithClip
@@ -101,33 +104,48 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
 
         @StringRes val messageId: Int
                 = if (newState) { R.string.message_enable_swc } else { R.string.message_disable_swc }
-        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+        Toaster.snackShort(v, messageId, preferenceApplier.colorPair())
     }
 
-    fun switchUseSuggestion(v: View) {
+    /**
+     * Switch state of using query suggestion.
+     */
+    fun switchUseSuggestion() {
         val newState = !preferenceApplier.isEnableSuggestion
         preferenceApplier.switchEnableSuggestion()
         binding.useSuggestionCheck.isChecked = newState
     }
 
-    fun switchUseSearchHistory(v: View) {
+    /**
+     * Switch state of using search history words suggestion.
+     */
+    fun switchUseSearchHistory() {
         val newState = !preferenceApplier.isEnableSearchHistory
         preferenceApplier.switchEnableSearchHistory()
         binding.useHistoryCheck.isChecked = newState
     }
 
-    fun switchUseFavoriteSearch(v: View) {
+    /**
+     * Switch state of using favorite search word suggestion.
+     */
+    fun switchUseFavoriteSearch() {
         val newState = !preferenceApplier.isEnableFavoriteSearch
         preferenceApplier.switchEnableFavoriteSearch()
         binding.useFavoriteCheck.isChecked = newState
     }
 
-    fun switchUseViewHistory(v: View) {
+    /**
+     * Switch state of using view history suggestion.
+     */
+    fun switchUseViewHistory() {
         val newState = !preferenceApplier.isEnableViewHistory
         preferenceApplier.switchEnableViewHistory()
         binding.useViewHistoryCheck.isChecked = newState
     }
 
+    /**
+     * Switch state of using App search suggestion.
+     */
     fun switchUseAppSearch() {
         val newState = !preferenceApplier.isEnableAppSearch()
         preferenceApplier.switchEnableAppSearch()

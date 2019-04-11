@@ -20,13 +20,16 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:minHeight="48dp"
             android:foreground="@drawable/ripple_transparent"
             >
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 tools:src="@drawable/ic_web_black"
                 android:contentDescription="@null"
                 />

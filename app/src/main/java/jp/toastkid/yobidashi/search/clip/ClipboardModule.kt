@@ -53,7 +53,7 @@ class ClipboardModule(
      */
     fun switch() {
         val primary = Clipboard.getPrimary(binding.root.context)?.toString()
-        if (primary == null || primary.isBlank()) {
+        if (primary == null || primary.isBlank() || primary.length > CONTENT_LENGTH_LIMIT) {
             hide()
             return
         }
@@ -73,7 +73,7 @@ class ClipboardModule(
      */
     private fun setSearch(query: String) {
         binding.image.setImageResource(R.drawable.ic_search)
-        binding.text.setText(query)
+        binding.text.text = query
         binding.text.setTextColor(textColor)
     }
 
@@ -84,8 +84,16 @@ class ClipboardModule(
      */
     private fun setLink(link: String) {
         binding.image.setImageResource(R.drawable.ic_web_black)
-        binding.text.setText(link)
+        binding.text.text = link
         binding.text.setTextColor(linkColor)
     }
 
+    companion object {
+
+        /**
+         * Content length limit.
+         */
+        private const val CONTENT_LENGTH_LIMIT = 50
+
+    }
 }

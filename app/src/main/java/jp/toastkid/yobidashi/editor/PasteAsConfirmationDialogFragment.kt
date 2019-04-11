@@ -40,7 +40,7 @@ class PasteAsConfirmationDialogFragment : DialogFragment() {
             callback = targetFragment
         }
         return AlertDialog.Builder(activityContext)
-                .setTitle(activityContext.getString(R.string.title_dialog_input_file_name))
+                .setTitle(activityContext.getString(R.string.paste_as_quotation))
                 .setMessage(R.string.message_paste_as_dialog)
                 .setPositiveButton(R.string.save) { d, _ ->
                     callback?.onClickPasteAs()
