@@ -69,6 +69,8 @@ enum class Menu(
 
     PDF(R.string.title_open_pdf, R.drawable.ic_pdf),
 
+    CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
+
     SCHEDULE(R.string.title_calendar, R.drawable.ic_schedule),
 
     CAMERA(R.string.title_camera, R.drawable.ic_camera),

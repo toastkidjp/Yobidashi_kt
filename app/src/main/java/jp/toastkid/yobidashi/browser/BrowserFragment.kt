@@ -30,6 +30,7 @@ import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
+import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
@@ -481,6 +482,9 @@ class BrowserFragment : BaseFragment(),
             }
             Menu.PDF-> {
                 openPdfTabFromStorage()
+            }
+            Menu.CODE_READER -> {
+                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
             }
             Menu.SCHEDULE-> {
                 try {
