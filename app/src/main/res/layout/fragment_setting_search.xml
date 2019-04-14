@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> ragment.switchUseFavoriteSearch()}"
+                    android:onClick="@{view -> fragment.switchUseFavoriteSearch()}"
                     >
                     <TextView
                         android:orientation="horizontal"

@@ -7,13 +7,14 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingOtherBinding
