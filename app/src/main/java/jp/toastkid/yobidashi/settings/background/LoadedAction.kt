@@ -1,16 +1,19 @@
 package jp.toastkid.yobidashi.settings.background
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.net.Uri
-import androidx.fragment.app.FragmentActivity
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -77,7 +80,10 @@ internal class LoadedAction (
     private fun storeImageToFile(context: Context, image: Bitmap) {
         val output = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR).assignNewFile(uri)
         PreferenceApplier(context).backgroundImagePath = output.path
-        image.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
+        val size = Rect()
+        (context as Activity).windowManager.defaultDisplay.getRectSize(size)
+        BitmapScaling(image, size.width().toDouble(), size.height().toDouble())
+                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
     }
 
     /**
