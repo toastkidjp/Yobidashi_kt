@@ -97,4 +97,10 @@ repositories{
     }
 }
 
+kapt {
+    javacOptions {
+        option("-Xmaxerrs", 5000)
+    }
+}
+
 apply plugin: 'com.google.gms.google-services'

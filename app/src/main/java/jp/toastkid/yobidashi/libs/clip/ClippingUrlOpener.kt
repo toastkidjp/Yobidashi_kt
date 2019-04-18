@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi.libs.clip
 
 import android.net.Uri
-import android.support.design.widget.Snackbar
 import android.text.TextUtils
 import android.view.View
 import androidx.core.net.toUri
+import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
