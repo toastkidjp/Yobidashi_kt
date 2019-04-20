@@ -64,7 +64,6 @@ class MenuPresenter(
     }
 
     private fun open() {
-        menuSwitch?.hide()
         recyclerView?.visibility = View.VISIBLE
         recyclerView?.scheduleLayoutAnimation()
     }
@@ -77,7 +76,6 @@ class MenuPresenter(
                     .withEndAction {
                         recyclerView.visibility = View.GONE
                         recyclerView.alpha = 1f
-                        menuSwitch?.show()
                     }
                     .start()
         }
