@@ -704,7 +704,7 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
-        if (menuPresenter.isVisible() == true) {
+        if (menuPresenter.isVisible()) {
             menuPresenter.close()
             return true
         }
