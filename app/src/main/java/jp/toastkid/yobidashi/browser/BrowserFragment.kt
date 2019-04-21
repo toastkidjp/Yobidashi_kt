@@ -743,11 +743,12 @@ class BrowserFragment : BaseFragment(),
                 }
             }
             REQUEST_CODE_OPEN_PDF -> {
+                val uri = intent.data ?: return
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     val takeFlags: Int = intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    context?.contentResolver?.takePersistableUriPermission(intent.data, takeFlags)
+                    context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
                 }
-                tabs.openNewPdfTab(intent.data)
+                tabs.openNewPdfTab(uri)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 intent.data?.let {
@@ -755,7 +756,7 @@ class BrowserFragment : BaseFragment(),
                 }
             }
             EditorModule.REQUEST_CODE_LOAD -> {
-                editorModule.readFromFileUri(intent.data)
+                intent.data?.let { editorModule.readFromFileUri(it) }
             }
         }
     }
