@@ -287,13 +287,6 @@ class BrowserFragment : BaseFragment(),
         tabs.openNewWebTab()
     }
 
-    /**
-     * Switch menu visibility.
-     */
-    private fun switchMenu() {
-        hideTabList()
-    }
-
     override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
 
