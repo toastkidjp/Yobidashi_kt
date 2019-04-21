@@ -647,7 +647,7 @@ class BrowserFragment : BaseFragment(),
 
         val preferenceApplier = preferenceApplier()
 
-        menuPresenter?.onResume { editorModule.setSpace(it) }
+        menuPresenter.onResume { editorModule.setSpace(it) }
 
         browserModule.resizePool(preferenceApplier.poolSize)
 
