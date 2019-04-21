@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi.libs
 
 import android.graphics.Bitmap
 
-
-
 /**
  * @author toastkidjp
  */
