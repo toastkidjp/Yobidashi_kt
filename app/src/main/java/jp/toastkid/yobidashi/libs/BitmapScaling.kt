@@ -12,11 +12,7 @@ object BitmapScaling {
             return bitmap
         }
 
-        val resizeScale = if (bitmap.width >= bitmap.height) {
-            samplingWidth / bitmap.width
-        } else {
-            samplingHeight / bitmap.height
-        }
+        val resizeScale = calculateResizeScale(bitmap, samplingWidth, samplingHeight)
 
         return Bitmap.createScaledBitmap(
                 bitmap,
@@ -25,4 +21,8 @@ object BitmapScaling {
                 true
         )
     }
+
+    private fun calculateResizeScale(bitmap: Bitmap, samplingWidth: Double, samplingHeight: Double) =
+            if (bitmap.width >= bitmap.height) samplingWidth / bitmap.width
+            else samplingHeight / bitmap.height
 }
