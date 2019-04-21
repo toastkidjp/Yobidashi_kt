@@ -88,7 +88,7 @@ dependencies {
     kapt 'com.github.maskarade.android.orma:orma-processor:6.0.2'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.robolectric:robolectric:4.2.1"
 }
 
 repositories{
