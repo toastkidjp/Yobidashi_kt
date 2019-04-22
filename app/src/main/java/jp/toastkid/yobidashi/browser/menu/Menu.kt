@@ -10,6 +10,8 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 /**
  * In App Browser's circular menu.
  *
+ * @param titleId Menu title resource ID
+ * @param iconId Menu icon resource ID
  * @author toastkidjp
  */
 enum class Menu(
