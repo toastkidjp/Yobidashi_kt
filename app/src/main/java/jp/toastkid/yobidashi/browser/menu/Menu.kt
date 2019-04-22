@@ -93,9 +93,6 @@ enum class Menu(
     companion object {
 
         fun showInformation(view: View?) {
-            if (view == null) {
-                return
-            }
             val activityContext = view.context
             Toaster.snackLong(
                     view,
