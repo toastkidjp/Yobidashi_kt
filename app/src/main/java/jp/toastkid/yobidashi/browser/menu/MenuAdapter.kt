@@ -44,6 +44,9 @@ internal class MenuAdapter(
      */
     private val menuSubject = PublishSubject.create<Menu>()
 
+    /**
+     * Preference wrapper.
+     */
     private val preferenceApplier = PreferenceApplier(context)
 
     /**
