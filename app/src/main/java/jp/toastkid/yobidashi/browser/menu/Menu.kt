@@ -1,11 +1,8 @@
 package jp.toastkid.yobidashi.browser.menu
 
-import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * In App Browser's circular menu.
@@ -90,17 +87,4 @@ enum class Menu(
     EXIT(R.string.exit, R.drawable.ic_exit)
     ;
 
-    companion object {
-
-        fun showInformation(view: View?) {
-            val activityContext = view.context
-            Toaster.snackLong(
-                    view,
-                    values().find { it.ordinal == view.id }?.titleId ?: 0,
-                    R.string.run,
-                    View.OnClickListener { view.performClick() },
-                    PreferenceApplier(activityContext).colorPair()
-            )
-        }
-    }
 }
