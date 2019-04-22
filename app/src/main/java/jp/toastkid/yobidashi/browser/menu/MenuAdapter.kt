@@ -42,7 +42,7 @@ internal class MenuAdapter(
     /**
      * Menu action subject.
      */
-    private val menuSubject: PublishSubject<Menu>
+    private val menuSubject = PublishSubject.create<Menu>()
 
     private val preferenceApplier = PreferenceApplier(context)
 
@@ -52,7 +52,6 @@ internal class MenuAdapter(
     private val disposable: Disposable?
 
     init {
-        menuSubject = PublishSubject.create<Menu>()
         disposable = menuSubject.subscribe(consumer)
     }
 
