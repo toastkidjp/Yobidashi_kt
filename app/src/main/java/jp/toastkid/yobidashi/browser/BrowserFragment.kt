@@ -697,6 +697,11 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
+        if (pageSearcherModule?.isVisible == true) {
+            pageSearcherModule?.hide()
+            return true
+        }
+
         if (menuPresenter.isVisible()) {
             menuPresenter.close()
             return true
