@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
@@ -20,8 +21,10 @@ import jp.toastkid.yobidashi.tab.TabAdapter
  */
 class PageSearcherModule(
         binding: ModuleSearcherBinding,
-        val tabs: TabAdapter
+        private val tabs: TabAdapter
 ) : BaseModule(binding.root) {
+
+    private val height = context().resources.getDimension(R.dimen.toolbar_height)
 
     /**
      * Use for open software keyboard.
@@ -50,6 +53,7 @@ class PageSearcherModule(
             override fun afterTextChanged(s: Editable) = Unit
         })
         editText = binding.inputLayout.editText as EditText
+        hide()
     }
 
     /**
@@ -81,16 +85,34 @@ class PageSearcherModule(
      * @param activity [Activity]
      */
     fun show(activity: Activity) {
-        show()
-        editText.requestFocus()
-        Inputs.toggle(activity)
+        moduleView.animate()?.let {
+            it.cancel()
+            it.translationY(0f)
+                    .setDuration(ANIMATION_DURATION)
+                    .withStartAction { super.show() }
+                    .withEndAction {
+                        editText.requestFocus()
+                        Inputs.toggle(activity)
+                    }
+                    .start()
+        }
     }
 
     /**
      * Hide module.
      */
     override fun hide() {
-        super.hide()
-        Inputs.hideKeyboard(editText)
+        moduleView.animate()?.let {
+            it.cancel()
+            it.translationY(-height)
+                    .setDuration(ANIMATION_DURATION)
+                    .withStartAction { Inputs.hideKeyboard(editText) }
+                    .withEndAction { super.hide() }
+                    .start()
+        }
+    }
+
+    companion object {
+        private const val ANIMATION_DURATION = 250L
     }
 }
