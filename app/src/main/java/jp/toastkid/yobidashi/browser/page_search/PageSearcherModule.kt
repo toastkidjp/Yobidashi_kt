@@ -9,6 +9,8 @@ import android.widget.EditText
 import androidx.core.view.isVisible
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
@@ -38,6 +40,8 @@ class PageSearcherModule(
      * Use for open software keyboard.
      */
     private val editText: EditText
+
+    private val disposables = CompositeDisposable()
 
     init {
         TextInputs.setEmptyAlert(binding.inputLayout)
@@ -132,6 +136,11 @@ class PageSearcherModule(
                         { binding.root.visibility = to },
                         Timber::e
                 )
+                .addTo(disposables)
+    }
+
+    fun dispose() {
+        disposables.clear()
     }
 
     companion object {

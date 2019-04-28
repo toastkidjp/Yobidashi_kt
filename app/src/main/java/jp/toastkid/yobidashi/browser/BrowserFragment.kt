@@ -1002,6 +1002,7 @@ class BrowserFragment : BaseFragment(),
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
         browserModule.dispose()
+        pageSearcherModule?.dispose()
     }
 
     override fun onDetach() {
