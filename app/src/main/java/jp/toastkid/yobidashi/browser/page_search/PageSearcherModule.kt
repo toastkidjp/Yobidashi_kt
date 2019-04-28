@@ -106,7 +106,7 @@ class PageSearcherModule(
                     .withStartAction { switchVisibility(View.GONE, View.VISIBLE) }
                     .withEndAction {
                         editText.requestFocus()
-                        Inputs.toggle(activity)
+                        Inputs.showKeyboard(activity, editText)
                     }
                     .start()
         }
