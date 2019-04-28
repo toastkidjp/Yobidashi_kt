@@ -362,7 +362,7 @@ class BrowserFragment : BaseFragment(),
                 toBottom()
             }
             Menu.FIND_IN_PAGE-> {
-                if (pageSearcherModule?.isVisible == true) {
+                if (pageSearcherModule?.isVisible() == true) {
                     pageSearcherModule?.hide()
                     return
                 }
@@ -697,7 +697,7 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
-        if (pageSearcherModule?.isVisible == true) {
+        if (pageSearcherModule?.isVisible() == true) {
             pageSearcherModule?.hide()
             return true
         }
