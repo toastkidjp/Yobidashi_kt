@@ -28,8 +28,8 @@ import timber.log.Timber
  */
 class PageSearcherModule(
         private val binding: ModuleSearcherBinding,
-        private val tabs: TabAdapter
-) {
+        private val view: PageSearcherContract.View
+) : PageSearcherContract.Presenter {
 
     private val context = binding.root.context
 
@@ -58,7 +58,7 @@ class PageSearcherModule(
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                tabs.find(s.toString())
+                view.find(s.toString())
             }
 
             override fun afterTextChanged(s: Editable) = Unit
@@ -70,34 +70,34 @@ class PageSearcherModule(
     /**
      * Implement for Data Binding.
      */
-    fun findUp() {
-        tabs.findUp(editText.text.toString())
+    override fun findUp() {
+        view.findUp(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
 
     /**
      * Implement for Data Binding.
      */
-    fun findDown() {
-        tabs.findDown(editText.text.toString())
+    override fun findDown() {
+        view.findDown(editText.text.toString())
         Inputs.hideKeyboard(editText)
     }
 
     /**
      * Implement for Data Binding.
      */
-    fun clearInput() {
+    override fun clearInput() {
         editText.setText("")
     }
 
-    fun isVisible() = binding.root.isVisible
+    override fun isVisible() = binding.root.isVisible
 
     /**
      * Show module with opening software keyboard.
      *
      * @param activity [Activity]
      */
-    fun show(activity: Activity) {
+    override fun show(activity: Activity) {
         binding.root.animate()?.let {
             it.cancel()
             it.translationY(0f)
@@ -114,7 +114,7 @@ class PageSearcherModule(
     /**
      * Hide module.
      */
-    fun hide() {
+    override fun hide() {
         binding.root.animate()?.let {
             it.cancel()
             it.translationY(-height)
@@ -137,7 +137,7 @@ class PageSearcherModule(
                 .addTo(disposables)
     }
 
-    fun dispose() {
+    override fun dispose() {
         disposables.clear()
     }
 

@@ -38,6 +38,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.menu.MenuContract
 import jp.toastkid.yobidashi.browser.menu.MenuPresenter
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
@@ -94,7 +95,8 @@ class BrowserFragment : BaseFragment(),
         InputNameDialogFragment.Callback,
         PasteAsConfirmationDialogFragment.Callback,
         TabListDialogFragment.Callback,
-        MenuContract.View
+        MenuContract.View,
+        PageSearcherContract.View
 {
 
     /**
@@ -138,11 +140,6 @@ class BrowserFragment : BaseFragment(),
     private var binding: FragmentBrowserBinding? = null
 
     /**
-     * Find-in-page module.
-     */
-    private var pageSearcherModule: PageSearcherModule? = null
-
-    /**
      * Toolbar action object.
      */
     private var toolbarAction: ToolbarAction? = null
@@ -178,6 +175,11 @@ class BrowserFragment : BaseFragment(),
     private lateinit var torch: Torch
 
     override lateinit var menuPresenter: MenuContract.Presenter
+
+    /**
+     * Find-in-page module.
+     */
+    override lateinit var pageSearchPresenter: PageSearcherContract.Presenter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -266,7 +268,10 @@ class BrowserFragment : BaseFragment(),
                 this::onEmptyTabs
         )
 
-        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
+        pageSearchPresenter = PageSearcherModule(
+                binding?.sip as ModuleSearcherBinding,
+                this
+        )
 
         menuPresenter = MenuPresenter(
                 binding?.menusView,
@@ -362,11 +367,11 @@ class BrowserFragment : BaseFragment(),
                 toBottom()
             }
             Menu.FIND_IN_PAGE-> {
-                if (pageSearcherModule?.isVisible() == true) {
-                    pageSearcherModule?.hide()
+                if (pageSearchPresenter.isVisible()) {
+                    pageSearchPresenter.hide()
                     return
                 }
-                pageSearcherModule?.show(fragmentActivity)
+                pageSearchPresenter.show(fragmentActivity)
             }
             Menu.SCREENSHOT-> {
                 browserModule.currentSnap()
@@ -697,8 +702,8 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
-        if (pageSearcherModule?.isVisible() == true) {
-            pageSearcherModule?.hide()
+        if (pageSearchPresenter.isVisible()) {
+            pageSearchPresenter.hide()
             return true
         }
 
@@ -975,6 +980,18 @@ class BrowserFragment : BaseFragment(),
 
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
+    override fun find(s: String) {
+        tabs.find(s)
+    }
+
+    override fun findUp(s: String) {
+        tabs.findUp(s)
+    }
+
+    override fun findDown(s: String) {
+        tabs.findDown(s)
+    }
+
     override fun onPause() {
         super.onPause()
         editorModule.saveIfNeed()
@@ -1002,7 +1019,7 @@ class BrowserFragment : BaseFragment(),
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
         browserModule.dispose()
-        pageSearcherModule?.dispose()
+        pageSearchPresenter.dispose()
     }
 
     override fun onDetach() {
