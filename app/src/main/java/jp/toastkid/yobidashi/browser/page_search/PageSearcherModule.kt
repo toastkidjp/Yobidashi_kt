@@ -56,7 +56,7 @@ class PageSearcherModule(
 
         binding.module = this
 
-        setColorFilter()
+        setBackgroundColor()
 
         editText = binding.inputLayout.editText as EditText
         initializeEditText()
@@ -66,7 +66,7 @@ class PageSearcherModule(
     /**
      * Set background color to views.
      */
-    private fun setColorFilter() {
+    private fun setBackgroundColor() {
         PreferenceApplier(context).colorPair().bgColor().also {
             binding.close.setColorFilter(it)
             binding.sipClear.setColorFilter(it)
