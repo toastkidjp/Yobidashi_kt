@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser.page_search
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
@@ -126,7 +125,6 @@ class PageSearcherModule(
         }
     }
 
-    @SuppressLint("CheckResult")
     private fun switchVisibility(from: Int, to: Int) {
         Maybe.fromCallable { binding.root.visibility == from }
                 .subscribeOn(Schedulers.computation())
