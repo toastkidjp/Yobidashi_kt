@@ -54,7 +54,17 @@ class PageSearcherModule(
         binding.sipUpward.setColorFilter(bgColor)
         binding.sipDownward.setColorFilter(bgColor)
 
-        binding.inputLayout.editText?.addTextChangedListener(object : TextWatcher {
+        editText = binding.inputLayout.editText as EditText
+        initializeEditText()
+        hide()
+    }
+
+    private fun initializeEditText() {
+        editText.setOnEditorActionListener { input, _, _ ->
+            view.findDown(input.text.toString())
+            true
+        }
+        editText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -63,12 +73,6 @@ class PageSearcherModule(
 
             override fun afterTextChanged(s: Editable) = Unit
         })
-        editText = binding.inputLayout.editText as EditText
-        editText.setOnEditorActionListener { input, _, _ ->
-            view.findDown(input.text.toString())
-            true
-        }
-        hide()
     }
 
     /**
