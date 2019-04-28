@@ -47,16 +47,20 @@ class PageSearcherModule(
 
         binding.module = this
 
-        val colorPair = PreferenceApplier(context).colorPair()
-        val bgColor = colorPair.bgColor()
-        binding.close.setColorFilter(bgColor)
-        binding.sipClear.setColorFilter(bgColor)
-        binding.sipUpward.setColorFilter(bgColor)
-        binding.sipDownward.setColorFilter(bgColor)
+        setColorFilter()
 
         editText = binding.inputLayout.editText as EditText
         initializeEditText()
         hide()
+    }
+
+    private fun setColorFilter() {
+        PreferenceApplier(context).colorPair().bgColor().also {
+            binding.close.setColorFilter(it)
+            binding.sipClear.setColorFilter(it)
+            binding.sipUpward.setColorFilter(it)
+            binding.sipDownward.setColorFilter(it)
+        }
     }
 
     private fun initializeEditText() {
