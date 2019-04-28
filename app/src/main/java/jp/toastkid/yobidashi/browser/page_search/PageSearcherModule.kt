@@ -16,14 +16,14 @@ import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.tab.TabAdapter
 import timber.log.Timber
 
 /**
  * Module for find in page.
  *
  * @param binding [ModuleSearcherBinding]
- * @param tabs [TabAdapter]
+ * @param view [PageSearcherContract.View]
+ *
  * @author toastkidjp
  */
 class PageSearcherModule(
@@ -31,8 +31,14 @@ class PageSearcherModule(
         private val view: PageSearcherContract.View
 ) : PageSearcherContract.Presenter {
 
+    /**
+     * View context.
+     */
     private val context = binding.root.context
 
+    /**
+     * This value is used by show/hide animation.
+     */
     private val height = context.resources.getDimension(R.dimen.toolbar_height)
 
     /**
@@ -40,6 +46,9 @@ class PageSearcherModule(
      */
     private val editText: EditText
 
+    /**
+     * Use for disposing subscriptions.
+     */
     private val disposables = CompositeDisposable()
 
     init {
@@ -54,6 +63,9 @@ class PageSearcherModule(
         hide()
     }
 
+    /**
+     * Set background color to views.
+     */
     private fun setColorFilter() {
         PreferenceApplier(context).colorPair().bgColor().also {
             binding.close.setColorFilter(it)
@@ -63,6 +75,9 @@ class PageSearcherModule(
         }
     }
 
+    /**
+     * Initialize edit text.
+     */
     private fun initializeEditText() {
         editText.setOnEditorActionListener { input, _, _ ->
             view.findDown(input.text.toString())
@@ -149,11 +164,18 @@ class PageSearcherModule(
                 .addTo(disposables)
     }
 
+    /**
+     * Close subscriptions.
+     */
     override fun dispose() {
         disposables.clear()
     }
 
     companion object {
+
+        /**
+         * Animation duration [ms].
+         */
         private const val ANIMATION_DURATION = 250L
     }
 }
