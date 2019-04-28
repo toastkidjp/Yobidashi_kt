@@ -64,6 +64,10 @@ class PageSearcherModule(
             override fun afterTextChanged(s: Editable) = Unit
         })
         editText = binding.inputLayout.editText as EditText
+        editText.setOnEditorActionListener { input, _, _ ->
+            view.findDown(input.text.toString())
+            true
+        }
         hide()
     }
 
