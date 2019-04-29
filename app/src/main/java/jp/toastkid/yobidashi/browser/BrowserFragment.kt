@@ -873,10 +873,10 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickSaveForBackground(url: String) {
         val activityContext = context ?: return
-        ImageDownloader(url, { activityContext }, Consumer {
+        ImageDownloader(url, { activityContext }, Consumer { file ->
             Toaster.snackShort(
                     binding?.root as View,
-                    R.string.message_done_save,
+                    getString(R.string.message_done_save) + file.name,
                     preferenceApplier().colorPair()
             )
         }).addTo(disposables)
