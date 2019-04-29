@@ -58,7 +58,7 @@ object VoiceSearch {
     }
 
     /**
-     * Show Google App install suggestion by [Snackbar].
+     * Show Google App install suggestion by [android.support.design.widget.Snackbar].
      *
      * @param parent Snackbar's parent
      * @param colorPair [ColorPair]
