@@ -55,7 +55,9 @@
             android:layout_height="match_parent"
             android:layoutAnimation="@anim/layout_slide_in_right"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            >
+            <requestFocus/>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
