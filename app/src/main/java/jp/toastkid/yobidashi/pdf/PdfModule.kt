@@ -72,7 +72,7 @@ class PdfModule(
         binding.seek.max = adapter.itemCount
         binding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                binding.input.setText(p0?.progress?.toString() ?: "0")//TODO 1
+                binding.input.setText(p0?.progress?.toString() ?: "1")
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
