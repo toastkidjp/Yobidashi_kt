@@ -69,10 +69,10 @@ class PdfModule(
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
 
-        binding.seek.max = adapter.itemCount
         binding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                binding.input.setText(p0?.progress?.toString() ?: "1")
+                val progress = p0?.progress ?: 0
+                binding.input.setText((progress + 1).toString())
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -87,13 +87,17 @@ class PdfModule(
 
             override fun onTextChanged(inputText: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 inputText?.let {
-                    scrollTo(
-                            try {
-                                Integer.parseInt(it.toString())
-                            } catch (e: NumberFormatException) {
-                                0
-                            }
-                    )
+                    val newIndex = try {
+                        Integer.parseInt(it.toString()) - 1
+                    } catch (e: NumberFormatException) {
+                        -1
+                    }
+
+                    if (newIndex == -1) {
+                        return@let
+                    }
+
+                    scrollTo(newIndex)
                 }
             }
 
@@ -121,7 +125,7 @@ class PdfModule(
         }
         adapter.load(uri)
         binding.pdfImages.scheduleLayoutAnimation()
-        binding.seek.max = adapter.itemCount
+        binding.seek.max = adapter.itemCount - 1
     }
 
     /**
