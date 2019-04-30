@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
@@ -110,7 +112,9 @@ class PdfModule(
      * @param colorPair
      */
     fun applyColor(colorPair: ColorPair) {
-        binding.seekToolbar.setBackgroundColor(colorPair.bgColor())
+        binding.seekAppBar.setBackgroundColor(colorPair.bgColor())
+        binding.seek.progressDrawable.colorFilter =
+                PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
         Colors.setEditTextColor(binding.input, colorPair.fontColor())
     }
 
