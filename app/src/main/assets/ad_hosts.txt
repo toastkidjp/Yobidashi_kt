@@ -32,9 +32,12 @@ googlesyndication.com
 googletagmanager.com
 im.ov.yahoo.co.jp
 js.ad-stir.com
+k.zucks.net
 ov.yahoo.co.jp
 rd.ane.yahoo.co.jp
 ru.adpon.net
+spcdnsp.i-mobile.co.jp
+static.zucks.net.zimg.jp
 tpc.googlesyndication.com
 yads.c.yimg.jp
 yads.yjtag.yahoo.co.jp
