@@ -340,7 +340,7 @@ class BrowserFragment : BaseFragment(),
     /**
      * Menu action.
      *
-     * @param menu menu's ordinal
+     * @param menu [Menu]
      */
     override fun onMenuClick(menu: Menu) {
         val fragmentActivity = activity ?: return
