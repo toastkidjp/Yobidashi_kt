@@ -20,6 +20,7 @@ ard.yahoo.co.jp
 au.adserver.yahoo.com
 av.beap.bc.yahoo.com
 b4.yahoo.co.jp
+cat.jp.as.criteo.com
 cdn.jsdelivr.net
 cs.gssprt.jp
 gg.google.com
