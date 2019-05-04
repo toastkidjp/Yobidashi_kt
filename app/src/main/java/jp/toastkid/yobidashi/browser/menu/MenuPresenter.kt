@@ -48,6 +48,7 @@ class MenuPresenter(
         recyclerView.adapter = MenuAdapter(
                 activityContext,
                 Consumer { view.onMenuClick(it) },
+                { view.onMenuLongClick(it) },
                 { view.getTabCount() }
         )
         val layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)

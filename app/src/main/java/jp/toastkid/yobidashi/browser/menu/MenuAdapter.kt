@@ -25,6 +25,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 internal class MenuAdapter(
         context: Context,
         consumer: Consumer<Menu>,
+        private val onLongClick: (Menu) -> Boolean,
         private val tabCountSupplier: () -> Int
 ) : RecyclerView.Adapter<MenuViewHolder>() {
 
@@ -41,8 +42,11 @@ internal class MenuAdapter(
     /**
      * Menu action subject.
      */
-    private val menuSubject: PublishSubject<Menu>
+    private val menuSubject = PublishSubject.create<Menu>()
 
+    /**
+     * Preference wrapper.
+     */
     private val preferenceApplier = PreferenceApplier(context)
 
     /**
@@ -51,7 +55,6 @@ internal class MenuAdapter(
     private val disposable: Disposable?
 
     init {
-        menuSubject = PublishSubject.create<Menu>()
         disposable = menuSubject.subscribe(consumer)
     }
 
@@ -71,6 +74,7 @@ internal class MenuAdapter(
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
         holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })
+        holder.setOnLongClick(View.OnLongClickListener { onLongClick(menu) })
     }
 
     override fun getItemCount(): Int = MAXIMUM

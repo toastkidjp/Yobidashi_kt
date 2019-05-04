@@ -515,6 +515,18 @@ class BrowserFragment : BaseFragment(),
         }
     }
 
+    override fun onMenuLongClick(menu: Menu): Boolean {
+        val view = binding?.root ?: return true
+        Toaster.snackLong(
+                view,
+                menu.titleId,
+                R.string.run,
+                View.OnClickListener { onMenuClick(menu) },
+                preferenceApplier().colorPair()
+        )
+        return true
+    }
+
     override fun getTabCount() = tabs.size()
 
     /**

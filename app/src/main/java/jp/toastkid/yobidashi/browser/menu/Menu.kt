@@ -1,15 +1,14 @@
 package jp.toastkid.yobidashi.browser.menu
 
-import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * In App Browser's circular menu.
  *
+ * @param titleId Menu title resource ID
+ * @param iconId Menu icon resource ID
  * @author toastkidjp
  */
 enum class Menu(
@@ -88,20 +87,4 @@ enum class Menu(
     EXIT(R.string.exit, R.drawable.ic_exit)
     ;
 
-    companion object {
-
-        fun showInformation(view: View?) {
-            if (view == null) {
-                return
-            }
-            val activityContext = view.context
-            Toaster.snackLong(
-                    view,
-                    values().find { it.ordinal == view.id }?.titleId ?: 0,
-                    R.string.run,
-                    View.OnClickListener { view.performClick() },
-                    PreferenceApplier(activityContext).colorPair()
-            )
-        }
-    }
 }

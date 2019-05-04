@@ -15,6 +15,8 @@ interface MenuContract {
     interface View {
         fun onMenuClick(menu: Menu)
 
+        fun onMenuLongClick(menu: Menu): Boolean
+
         fun getTabCount(): Int
 
         var menuPresenter: Presenter

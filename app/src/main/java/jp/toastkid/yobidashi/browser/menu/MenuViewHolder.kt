@@ -46,6 +46,10 @@ class MenuViewHolder(private val binding: ItemHomeMenuBinding)
         itemView.setOnClickListener(onClick)
     }
 
+    fun setOnLongClick(onLongClick: View.OnLongClickListener) {
+        itemView.setOnLongClickListener(onLongClick)
+    }
+
     fun setCount(tabCount: Int) {
         binding.count.text = tabCount.toString()
         binding.count.visibility = View.VISIBLE
