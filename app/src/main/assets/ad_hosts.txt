@@ -22,6 +22,7 @@ av.beap.bc.yahoo.com
 b4.yahoo.co.jp
 cdn.jsdelivr.net
 cs.gssprt.jp
+dsp.send.microad.jp
 gg.google.com
 google-analytics.com
 googleads.g.doubleclick.net
@@ -34,6 +35,7 @@ im.ov.yahoo.co.jp
 js.ad-stir.com
 k.zucks.net
 ov.yahoo.co.jp
+rd.adingo.jp
 rd.ane.yahoo.co.jp
 ru.adpon.net
 spcdnsp.i-mobile.co.jp
