@@ -54,4 +54,8 @@ class MenuViewHolder(private val binding: ItemHomeMenuBinding)
         binding.count.text = tabCount.toString()
         binding.count.visibility = View.VISIBLE
     }
+
+    fun hideCount() {
+        binding.count.visibility = View.GONE
+    }
 }

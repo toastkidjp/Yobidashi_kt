@@ -68,6 +68,8 @@ internal class MenuAdapter(
 
         if (menu == Menu.TAB_LIST) {
             holder.setCount(tabCountSupplier())
+        } else {
+            holder.hideCount()
         }
 
         holder.setColorPair(preferenceApplier.colorPair(), menu != Menu.SITE_SEARCH)
