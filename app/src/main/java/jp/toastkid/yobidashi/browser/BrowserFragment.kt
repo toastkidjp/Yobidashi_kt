@@ -8,7 +8,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,11 +20,9 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Maybe
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
@@ -38,6 +35,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.menu.MenuContract
 import jp.toastkid.yobidashi.browser.menu.MenuPresenter
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
@@ -49,15 +47,16 @@ import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
 import jp.toastkid.yobidashi.launcher.LauncherActivity
-import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
+import jp.toastkid.yobidashi.libs.ImageDownloader
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
@@ -66,18 +65,15 @@ import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.torch.Torch
-import okhttp3.Request
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
 import kotlin.math.abs
 
 /**
@@ -94,7 +90,8 @@ class BrowserFragment : BaseFragment(),
         InputNameDialogFragment.Callback,
         PasteAsConfirmationDialogFragment.Callback,
         TabListDialogFragment.Callback,
-        MenuContract.View
+        MenuContract.View,
+        PageSearcherContract.View
 {
 
     /**
@@ -138,11 +135,6 @@ class BrowserFragment : BaseFragment(),
     private var binding: FragmentBrowserBinding? = null
 
     /**
-     * Find-in-page module.
-     */
-    private var pageSearcherModule: PageSearcherModule? = null
-
-    /**
      * Toolbar action object.
      */
     private var toolbarAction: ToolbarAction? = null
@@ -178,6 +170,11 @@ class BrowserFragment : BaseFragment(),
     private lateinit var torch: Torch
 
     override lateinit var menuPresenter: MenuContract.Presenter
+
+    /**
+     * Find-in-page module.
+     */
+    override lateinit var pageSearchPresenter: PageSearcherContract.Presenter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -266,7 +263,10 @@ class BrowserFragment : BaseFragment(),
                 this::onEmptyTabs
         )
 
-        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
+        pageSearchPresenter = PageSearcherModule(
+                binding?.sip as ModuleSearcherBinding,
+                this
+        )
 
         menuPresenter = MenuPresenter(
                 binding?.menusView,
@@ -362,11 +362,11 @@ class BrowserFragment : BaseFragment(),
                 toBottom()
             }
             Menu.FIND_IN_PAGE-> {
-                if (pageSearcherModule?.isVisible == true) {
-                    pageSearcherModule?.hide()
+                if (pageSearchPresenter.isVisible()) {
+                    pageSearchPresenter.hide()
                     return
                 }
-                pageSearcherModule?.show(fragmentActivity)
+                pageSearchPresenter.show(fragmentActivity)
             }
             Menu.SCREENSHOT-> {
                 browserModule.currentSnap()
@@ -709,8 +709,8 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
-        if (pageSearcherModule?.isVisible == true) {
-            pageSearcherModule?.hide()
+        if (pageSearchPresenter.isVisible()) {
+            pageSearchPresenter.hide()
             return true
         }
 
@@ -873,25 +873,25 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickSetBackground(url: String) {
         val activityContext = context ?: return
-        storeImage(url, activityContext).subscribe { file ->
+        ImageDownloader(url, { activityContext }, Consumer { file ->
             preferenceApplier().backgroundImagePath = file.absolutePath
             Toaster.snackShort(
                     binding?.root as View,
                     R.string.message_change_background_image,
                     preferenceApplier().colorPair()
             )
-        }.addTo(disposables)
+        }).addTo(disposables)
     }
 
     override fun onClickSaveForBackground(url: String) {
         val activityContext = context ?: return
-        storeImage(url, activityContext).subscribe {
+        ImageDownloader(url, { activityContext }, Consumer { file ->
             Toaster.snackShort(
                     binding?.root as View,
-                    R.string.message_done_save,
+                    getString(R.string.message_done_save) + file.name,
                     preferenceApplier().colorPair()
             )
-        }.addTo(disposables)
+        }).addTo(disposables)
     }
 
     override fun onClickDownloadImage(url: String) {
@@ -906,30 +906,6 @@ class BrowserFragment : BaseFragment(),
         }
 
         ImageDownloadActionDialogFragment.show(activityContext, url)
-    }
-
-    /**
-     * Store image to file.
-     *
-     * @param url URL string.
-     * @param context [Context]
-     */
-    private fun storeImage(url: String, context: Context): Maybe<File> {
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
-            Toaster.tShort(context, R.string.message_wifi_not_connecting)
-            return Maybe.empty()
-        }
-        return Single.fromCallable { HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .filter { it.code() == HttpURLConnection.HTTP_OK }
-                .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
-                .map {
-                    val storeroom = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
-                    val file = storeroom.assignNewFile(Uri.parse(url))
-                    Bitmaps.compress(it, file)
-                    file
-                }
     }
 
     override fun onClickClear() {
@@ -987,6 +963,18 @@ class BrowserFragment : BaseFragment(),
 
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
+    override fun find(s: String) {
+        tabs.find(s)
+    }
+
+    override fun findUp(s: String) {
+        tabs.findUp(s)
+    }
+
+    override fun findDown(s: String) {
+        tabs.findDown(s)
+    }
+
     override fun onPause() {
         super.onPause()
         editorModule.saveIfNeed()
@@ -1014,6 +1002,7 @@ class BrowserFragment : BaseFragment(),
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
         browserModule.dispose()
+        pageSearchPresenter.dispose()
     }
 
     override fun onDetach() {
@@ -1027,11 +1016,6 @@ class BrowserFragment : BaseFragment(),
          * Request code of opening PDF.
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 3
-
-        /**
-         * HTTP Client.
-         */
-        private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
 
     }
 
