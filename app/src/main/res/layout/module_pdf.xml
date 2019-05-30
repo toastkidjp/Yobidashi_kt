@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/seek_app_bar"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/seek_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:navigationIcon="@null"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <SeekBar
+                        android:id="@+id/seek"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/close"
+                        />
+                    <EditText
+                        android:id="@+id/input"
+                        android:layout_width="44dp"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/seek"
+                        android:maxLines="1"
+                        android:inputType="number"
+                        android:imeOptions="actionSearch"
+                        android:gravity="center_horizontal"
+                        android:text="@string/sample_number"
+                        android:textSize="11sp"
+                        />
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pdf_images"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layoutAnimation="@anim/layout_slide_in_right"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
-        <androidx.cardview.widget.CardView
-            android:id="@+id/seek_card"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            app:cardElevation="3dp"
             >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-                <ImageView
-                    android:id="@+id/close"
-                    android:layout_width="32dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="4dp"
-                    android:scaleType="center"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/ic_close"
-                    android:background="@drawable/ripple_transparent"
-                    />
-                <SeekBar
-                    android:id="@+id/seek"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/close"
-                    />
-                <EditText
-                    android:id="@+id/input"
-                    android:layout_width="44dp"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/seek"
-                    android:maxLines="1"
-                    android:inputType="number"
-                    android:imeOptions="actionSearch"
-                    android:gravity="center_horizontal"
-                    android:text="@string/sample_number"
-                    android:textSize="11sp"
-                    />
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-    </FrameLayout>
+            <requestFocus/>
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

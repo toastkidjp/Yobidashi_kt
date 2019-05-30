@@ -1,15 +1,16 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
@@ -70,10 +71,10 @@ class PdfModule(
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
 
-        binding.seek.max = adapter.itemCount
         binding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                binding.input.setText(p0?.progress?.toString() ?: "0")
+                val progress = p0?.progress ?: 0
+                binding.input.setText((progress + 1).toString())
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -88,18 +89,21 @@ class PdfModule(
 
             override fun onTextChanged(inputText: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 inputText?.let {
-                    scrollTo(
-                            try {
-                                Integer.parseInt(it.toString())
-                            } catch (e: NumberFormatException) {
-                                0
-                            }
-                    )
+                    val newIndex = try {
+                        Integer.parseInt(it.toString()) - 1
+                    } catch (e: NumberFormatException) {
+                        -1
+                    }
+
+                    if (newIndex == -1) {
+                        return@let
+                    }
+
+                    scrollTo(newIndex)
                 }
             }
 
         })
-        binding.close.setOnClickListener { binding.seekCard.visibility = View.GONE }
     }
 
     /**
@@ -108,7 +112,9 @@ class PdfModule(
      * @param colorPair
      */
     fun applyColor(colorPair: ColorPair) {
-        binding.seekCard.setBackgroundColor(colorPair.bgColor())
+        binding.seekAppBar.setBackgroundColor(colorPair.bgColor())
+        binding.seek.progressDrawable.colorFilter =
+                PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
         Colors.setEditTextColor(binding.input, colorPair.fontColor())
     }
 
@@ -123,7 +129,7 @@ class PdfModule(
         }
         adapter.load(uri)
         binding.pdfImages.scheduleLayoutAnimation()
-        binding.seek.max = adapter.itemCount
+        binding.seek.max = adapter.itemCount - 1
     }
 
     /**
