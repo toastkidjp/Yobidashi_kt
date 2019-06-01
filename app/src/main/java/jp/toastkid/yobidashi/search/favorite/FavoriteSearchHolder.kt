@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.search.favorite
 
+import android.graphics.BitmapFactory
 import android.view.View
 import androidx.annotation.DrawableRes
-import androidx.appcompat.widget.AppCompatDrawableManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemFavoriteSearchBinding
 
@@ -15,9 +15,9 @@ internal class FavoriteSearchHolder(private val binding: ItemFavoriteSearchBindi
     : RecyclerView.ViewHolder(binding.root) {
 
     fun setImageId(@DrawableRes iconId: Int) {
-        binding.favoriteSearchImage.setImageDrawable(
-                AppCompatDrawableManager.get()
-                        .getDrawable(binding.favoriteSearchImage.context, iconId))
+        binding.favoriteSearchImage.setImageBitmap(
+                BitmapFactory.decodeResource(binding.favoriteSearchImage.context.resources, iconId)
+        )
     }
 
     fun setText(query: String) {
