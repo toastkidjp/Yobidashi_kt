@@ -52,7 +52,6 @@ object SavedColors {
      *
      * @param view
      * @param deleter
-     * @param d
      */
     fun deleteAllAsync(
             view: View?,
