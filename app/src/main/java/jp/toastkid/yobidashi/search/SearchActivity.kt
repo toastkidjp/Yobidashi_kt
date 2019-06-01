@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -22,6 +21,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
+import androidx.databinding.DataBindingUtil
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -348,7 +348,7 @@ class SearchActivity : BaseActivity(),
         binding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener { _ ->
+            it.searchAction.setOnClickListener {
                 if (useVoice) {
                     try {
                         startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
