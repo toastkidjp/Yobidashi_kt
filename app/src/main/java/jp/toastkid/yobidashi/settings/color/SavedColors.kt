@@ -1,10 +1,11 @@
 package jp.toastkid.yobidashi.settings.color
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import androidx.annotation.ColorInt
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
@@ -76,6 +77,7 @@ object SavedColors {
      *
      * @param context
      */
+    @SuppressLint("CheckResult")
     fun insertDefaultColors(context: Context) {
         Completable.fromAction {
             DbInitializer.init(context).relationOfSavedColor()
