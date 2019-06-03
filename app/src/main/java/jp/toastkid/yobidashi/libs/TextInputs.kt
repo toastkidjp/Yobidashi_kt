@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.libs
 
 import android.content.Context
-import android.support.design.widget.TextInputLayout
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -9,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.LinearLayout
+import com.google.android.material.textfield.TextInputLayout
 import jp.toastkid.yobidashi.R
 
 /**

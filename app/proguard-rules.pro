@@ -51,10 +51,6 @@
     public *;
 }
 
--keep public class com.cleveroad.cyclemenuwidget.CycleMenuWidget {
-    *;
-}
-
 -keep public class com.google.android.gms.internal.** {
     *;
 }

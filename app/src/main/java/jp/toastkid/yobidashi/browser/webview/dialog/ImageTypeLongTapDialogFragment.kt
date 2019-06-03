@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.browser.webview.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import jp.toastkid.yobidashi.R
 

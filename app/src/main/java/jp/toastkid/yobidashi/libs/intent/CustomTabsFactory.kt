@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.libs.intent
 
 import android.content.Context
-import android.support.annotation.ColorInt
-import android.support.customtabs.CustomTabsIntent
+import androidx.annotation.ColorInt
+import androidx.browser.customtabs.CustomTabsIntent
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**

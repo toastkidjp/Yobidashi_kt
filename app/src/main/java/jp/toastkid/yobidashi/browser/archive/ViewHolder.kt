@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.browser.archive
 
-import android.support.annotation.ColorInt
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.ColorInt
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding

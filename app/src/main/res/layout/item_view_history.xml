@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -86,5 +86,5 @@
             android:layout_marginLeft="40dp"
             android:background="@color/search_divider"
             />
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </layout>

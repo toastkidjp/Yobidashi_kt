@@ -5,8 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.support.annotation.ColorInt
-import android.support.annotation.StringRes
+import androidx.annotation.ColorInt
+import androidx.annotation.StringRes
 import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster

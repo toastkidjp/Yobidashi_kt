@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             >
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
@@ -27,9 +27,7 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 />
 
-            <include android:id="@+id/ad_container" layout="@layout/module_ad_container" />
-
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/about_scroll"
@@ -53,6 +51,35 @@
                     android:padding="16dp"
                     android:text="@string/message_about_this_app"
                     android:textSize="16sp"
+                    />
+
+                <include layout="@layout/primary_dark_divider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:paddingLeft="@dimen/settings_item_left_margin"
+                    android:drawableLeft="@drawable/ic_store_black"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_go_google_play"
+                    android:textSize="16sp"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{view -> activity.checkUpdate()}"
+                    />
+
+                <include layout="@layout/primary_dark_divider" />
+
+                <TextView
+                    android:id="@+id/privacy_policy"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:paddingLeft="@dimen/settings_item_left_margin"
+                    android:drawableLeft="@drawable/ic_privacy"
+                    android:gravity="center_vertical"
+                    android:text="@string/privacy_policy"
+                    android:textSize="16sp"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{iew -> activity.privacyPolicy()}"
                     />
 
                 <include layout="@layout/primary_dark_divider" />
@@ -100,9 +127,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="36dp"
                     android:gravity="center"
-                    android:background="@color/soft_background"
+                    android:background="@drawable/ripple_soft"
                     android:text="@string/copyright"
+                    android:onClick="@{view -> activity.aboutAuthorApp()}"
                     />
 
                 <include layout="@layout/primary_dark_divider" />

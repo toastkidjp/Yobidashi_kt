@@ -1,24 +1,17 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.menu
 
-import android.content.Context
-import android.os.Build
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
-import android.view.View
-import com.cleveroad.cyclemenuwidget.CycleMenuItem
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.Archive
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import java.util.*
 
 /**
  * In App Browser's circular menu.
  *
+ * @param titleId Menu title resource ID
+ * @param iconId Menu icon resource ID
  * @author toastkidjp
  */
-internal enum class Menu(
+enum class Menu(
         @param:StringRes val titleId: Int,
         @param:DrawableRes val iconId: Int
 ) {
@@ -75,42 +68,23 @@ internal enum class Menu(
 
     PDF(R.string.title_open_pdf, R.drawable.ic_pdf),
 
+    CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
+
+    SCHEDULE(R.string.title_calendar, R.drawable.ic_schedule),
+
+    CAMERA(R.string.title_camera, R.drawable.ic_camera),
+
+    PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),
+
+    TORCH(R.string.title_torch, R.drawable.ic_light),
+
+    APP_LAUNCHER(R.string.title_apps_launcher, R.drawable.ic_launcher),
+
+    OVERLAY_COLOR_FILTER(R.string.title_filter_color, R.drawable.ic_color_filter),
+
+    ABOUT(R.string.title_about_this_app, R.drawable.ic_help),
+
     EXIT(R.string.exit, R.drawable.ic_exit)
     ;
 
-    companion object {
-        fun items(context: Context?): List<CycleMenuItem> {
-            if (context == null) {
-                return Collections.emptyList()
-            }
-            return if (Archive.canUseArchive()) {
-                values()
-                        .map { convertMenuItem(context, it) }
-            } else {
-                values()
-                        .filter { filter(it) }
-                        .map { convertMenuItem(context, it) }
-            }
-        }
-
-        private fun convertMenuItem(context: Context, menu: Menu) =
-                CycleMenuItem(menu.ordinal, ContextCompat.getDrawable(context, menu.iconId))
-
-        private fun filter(it: Menu): Boolean =
-                it != ARCHIVE && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || it != PDF)
-
-        fun showInformation(view: View?) {
-            if (view == null) {
-                return
-            }
-            val activityContext = view.context
-            Toaster.snackLong(
-                    view,
-                    values().find { it.ordinal == view.id }?.titleId ?: 0,
-                    R.string.run,
-                    View.OnClickListener { view.performClick() },
-                    PreferenceApplier(activityContext).colorPair()
-            )
-        }
-    }
 }

@@ -2,20 +2,20 @@ package jp.toastkid.yobidashi.tab.tab_list
 
 import android.app.Dialog
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
@@ -42,7 +42,7 @@ class TabListDialogFragment : DialogFragment() {
     private lateinit var adapter: Adapter
 
     /**
-     * For showing [android.support.design.widget.Snackbar].
+     * For showing [com.google.android.material.snackbar.Snackbar].
      */
     private lateinit var colorPair: ColorPair
 
@@ -52,7 +52,7 @@ class TabListDialogFragment : DialogFragment() {
     private var callback: TabListDialogFragment.Callback? = null
 
     /**
-     * For showing [android.support.design.widget.Snackbar].
+     * For showing [com.google.android.material.snackbar.Snackbar].
      */
     private var firstLaunch: Boolean = true
 
@@ -133,7 +133,7 @@ class TabListDialogFragment : DialogFragment() {
 
         binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
 
-        binding.recyclerView.layoutManager.scrollToPosition(index)
+        binding.recyclerView.layoutManager?.scrollToPosition(index)
         binding.recyclerView.scheduleLayoutAnimation()
         if (firstLaunch) {
             Toaster.snackShort(

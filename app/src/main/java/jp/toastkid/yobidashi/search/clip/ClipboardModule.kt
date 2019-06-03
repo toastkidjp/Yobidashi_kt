@@ -7,8 +7,8 @@
  */
 package jp.toastkid.yobidashi.search.clip
 
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchClipboardBinding
 import jp.toastkid.yobidashi.libs.Urls

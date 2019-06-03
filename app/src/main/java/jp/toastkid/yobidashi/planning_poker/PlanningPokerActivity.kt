@@ -2,11 +2,11 @@ package jp.toastkid.yobidashi.planning_poker
 
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityPlanningPokerBinding
@@ -43,7 +43,7 @@ class PlanningPokerActivity : BaseActivity() {
                         ): Boolean {
                             val fromPos = viewHolder.adapterPosition
                             val toPos = target.adapterPosition
-                            it.adapter.notifyItemMoved(fromPos, toPos)
+                            it.adapter?.notifyItemMoved(fromPos, toPos)
                             (viewHolder as CardViewHolder).open()
                             return true
                         }

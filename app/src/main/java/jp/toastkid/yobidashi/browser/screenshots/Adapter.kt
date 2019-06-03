@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi.browser.screenshots
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.support.v4.content.FileProvider
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageCache

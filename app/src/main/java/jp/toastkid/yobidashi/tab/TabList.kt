@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.tab
 
 import android.content.Context
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.reactivex.disposables.CompositeDisposable

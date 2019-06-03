@@ -7,7 +7,7 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 
 /**
  * @author toastkidjp

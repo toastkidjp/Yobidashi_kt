@@ -1,17 +1,17 @@
 package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.github.gfx.android.orma.Relation
+import androidx.annotation.StringRes
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.gfx.android.orma.rx.RxRelation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -251,7 +251,7 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
     /**
      * Saved color's adapter.
      */
-    private inner class SavedColorAdapter(activityContext: Context, relation: Relation<SavedColor, *>)
+    private inner class SavedColorAdapter(activityContext: Context, relation: RxRelation<SavedColor, *>)
         : OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>(activityContext, relation) {
 
         override fun onCreateViewHolder(
