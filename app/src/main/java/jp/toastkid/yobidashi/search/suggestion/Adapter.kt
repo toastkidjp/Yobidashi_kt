@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.search.suggestion
 
+import android.annotation.SuppressLint
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -69,8 +70,9 @@ internal class Adapter (
      * Add(+) clicked action.
      * @param suggestion
      */
+    @SuppressLint("SetTextI18n")
     private fun onAddClicked(suggestion: String) {
-        searchInput.setText(suggestion + " ")
+        searchInput.setText("$suggestion ")
         searchInput.setSelection(searchInput.text.toString().length)
     }
 

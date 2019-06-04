@@ -18,17 +18,17 @@ internal object RemoteViewsFactory {
     /**
      * Method name.
      */
-    private val METHOD_NAME_SET_COLOR_FILTER = "setColorFilter"
+    private const val METHOD_NAME_SET_COLOR_FILTER = "setColorFilter"
 
     /**
      * Method name.
      */
-    private val METHOD_NAME_SET_BACKGROUND_COLOR = "setBackgroundColor"
+    private const val METHOD_NAME_SET_BACKGROUND_COLOR = "setBackgroundColor"
 
     /**
      * Layout ID.
      */
-    private val APPWIDGET_LAYOUT_ID = R.layout.appwidget_layout
+    private const val APPWIDGET_LAYOUT_ID = R.layout.appwidget_layout
 
     /**
      * Make RemoteViews.

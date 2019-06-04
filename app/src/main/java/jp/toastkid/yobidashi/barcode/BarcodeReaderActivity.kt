@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import androidx.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -154,6 +155,7 @@ class BarcodeReaderActivity : BaseActivity() {
         finish()
     }
 
+    @StringRes
     override fun titleId(): Int = R.string.title_camera
 
     companion object {
