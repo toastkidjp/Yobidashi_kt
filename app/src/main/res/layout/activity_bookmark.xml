@@ -13,7 +13,7 @@
             android:scaleType="centerCrop"
             android:background="@color/c6"
             />
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/histories_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,20 +22,20 @@
             android:layout_marginRight="@dimen/search_horizontal_margin"
             android:layoutAnimation="@anim/layout_slide_in_right"
             />
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
             android:background="@color/transparent"
             >
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 android:minHeight="?android:actionBarSize"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 />
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
     </FrameLayout>
 </layout>

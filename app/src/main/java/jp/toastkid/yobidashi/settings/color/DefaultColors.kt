@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
-import android.support.v4.util.ArraySet
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.collection.ArraySet
+import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
 
 /**

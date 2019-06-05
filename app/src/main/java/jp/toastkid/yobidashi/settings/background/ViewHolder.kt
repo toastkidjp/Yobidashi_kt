@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.settings.background
 
-import android.support.annotation.StringRes
-import android.support.v4.app.FragmentActivity
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.StringRes
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.SavedImageBinding
 import jp.toastkid.yobidashi.libs.ImageLoader

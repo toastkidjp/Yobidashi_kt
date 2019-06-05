@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi.libs
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.support.annotation.ColorInt
-import android.support.v4.graphics.ColorUtils
+import androidx.annotation.ColorInt
+import androidx.core.graphics.ColorUtils
 import android.widget.EditText
 import android.widget.TextView
 import jp.toastkid.yobidashi.libs.preference.ColorPair

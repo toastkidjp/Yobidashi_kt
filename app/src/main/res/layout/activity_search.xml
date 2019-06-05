@@ -51,13 +51,13 @@
 
         </ScrollView>
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
             android:background="@color/transparent"
             >
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
@@ -72,7 +72,7 @@
                     android:foreground="@drawable/ripple_transparent"
                     >
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/search_input"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -88,7 +88,7 @@
                         android:background="@color/transparent"
                         >
                         <requestFocus/>
-                    </android.support.v7.widget.AppCompatEditText>
+                    </androidx.appcompat.widget.AppCompatEditText>
 
                     <View
                         android:id="@+id/search_input_border"
@@ -137,8 +137,8 @@
                     </FrameLayout>
 
                 </FrameLayout>
-            </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
     </FrameLayout>
 </layout>

@@ -2,16 +2,17 @@ package jp.toastkid.yobidashi.about
 
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.databinding.DataBindingUtil
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.advertisement.AdInitializerFactory
-import jp.toastkid.yobidashi.advertisement.BannerAdFactory
 import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
+import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 
 /**
  * About this app.
@@ -19,11 +20,6 @@ import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
  * @author toastkidjp
  */
 class AboutThisAppActivity : BaseActivity() {
-
-    /**
-     * Banner AD view.
-     */
-    private val bannerAd by lazy { BannerAdFactory.make(this) }
 
     /**
      * Data Binding.
@@ -39,17 +35,12 @@ class AboutThisAppActivity : BaseActivity() {
         binding?.toolbar?.let { initToolbar(it) }
 
         binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
-
-        val adInitializer = AdInitializerFactory(this)
-        binding?.adContainer?.ad?.addView(bannerAd)
-        adInitializer.invoke(bannerAd)
     }
 
     override fun onResume() {
         super.onResume()
 
         binding?.appBar?.setBackgroundColor(colorPair().bgColor())
-        binding?.adContainer?.adCard?.setCardBackgroundColor(colorPair().bgColor())
         binding?.toolbar?.let { applyColorToToolbar(it) }
     }
 
@@ -63,9 +54,18 @@ class AboutThisAppActivity : BaseActivity() {
         startActivity(intent)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        bannerAd.destroy()
+    fun checkUpdate() {
+        startActivity(IntentFactory.googlePlay(BuildConfig.APPLICATION_ID))
+    }
+
+    fun privacyPolicy() {
+        CustomTabsFactory.make(this, colorPair())
+                .build()
+                .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
+    }
+
+    fun aboutAuthorApp() {
+        startActivity(IntentFactory.authorsApp())
     }
 
     override fun titleId(): Int = R.string.title_about_this_app

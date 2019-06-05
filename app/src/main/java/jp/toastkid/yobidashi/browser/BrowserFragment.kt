@@ -8,73 +8,72 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.databinding.DataBindingUtil
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.cleveroad.cyclemenuwidget.CycleMenuWidget
-import com.cleveroad.cyclemenuwidget.OnMenuItemClickListener
-import com.cleveroad.cyclemenuwidget.OnStateChangedListener
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Maybe
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.BaseFragment
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.about.AboutThisAppActivity
+import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.menu.Menu
+import jp.toastkid.yobidashi.browser.menu.MenuContract
+import jp.toastkid.yobidashi.browser.menu.MenuPresenter
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
+import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
-import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.launcher.LauncherActivity
+import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
+import jp.toastkid.yobidashi.libs.ImageDownloader
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
+import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
-import okhttp3.Request
+import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
 import kotlin.math.abs
 
 /**
@@ -90,7 +89,9 @@ class BrowserFragment : BaseFragment(),
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
         PasteAsConfirmationDialogFragment.Callback,
-        TabListDialogFragment.Callback
+        TabListDialogFragment.Callback,
+        MenuContract.View,
+        PageSearcherContract.View
 {
 
     /**
@@ -134,11 +135,6 @@ class BrowserFragment : BaseFragment(),
     private var binding: FragmentBrowserBinding? = null
 
     /**
-     * Find-in-page module.
-     */
-    private var pageSearcherModule: PageSearcherModule? = null
-
-    /**
      * Toolbar action object.
      */
     private var toolbarAction: ToolbarAction? = null
@@ -159,11 +155,6 @@ class BrowserFragment : BaseFragment(),
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
-     * This value is assigned by OnStateChangeListener.
-     */
-    private var menuOpen: Boolean = false
-
-    /**
      * Progress bar callback.
      */
     private lateinit var progressBarCallback: ProgressBarCallback
@@ -172,6 +163,18 @@ class BrowserFragment : BaseFragment(),
      * Floating preview object.
      */
     private lateinit var floatingPreview: FloatingPreview
+
+    /**
+     * Torch API facade.
+     */
+    private lateinit var torch: Torch
+
+    override lateinit var menuPresenter: MenuContract.Presenter
+
+    /**
+     * Find-in-page module.
+     */
+    override lateinit var pageSearchPresenter: PageSearcherContract.Presenter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -184,6 +187,7 @@ class BrowserFragment : BaseFragment(),
                 progressBarCallback = it
             }
         }
+        torch = Torch(context)
     }
 
     override fun onCreateView(
@@ -198,8 +202,6 @@ class BrowserFragment : BaseFragment(),
             it.setOnRefreshListener { tabs.reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
         }
-
-        initMenus()
 
         val colorPair = colorPair()
 
@@ -261,7 +263,16 @@ class BrowserFragment : BaseFragment(),
                 this::onEmptyTabs
         )
 
-        pageSearcherModule = PageSearcherModule(binding?.sip as ModuleSearcherBinding, tabs)
+        pageSearchPresenter = PageSearcherModule(
+                binding?.sip as ModuleSearcherBinding,
+                this
+        )
+
+        menuPresenter = MenuPresenter(
+                binding?.menusView,
+                binding?.menuSwitch,
+                this
+        )
 
         setHasOptionsMenu(true)
 
@@ -276,44 +287,6 @@ class BrowserFragment : BaseFragment(),
         tabs.openNewWebTab()
     }
 
-    /**
-     * Initialize menus view.
-     */
-    private fun initMenus() {
-        binding?.cycleMenu?.also {
-            it.setMenuItems(Menu.items(context))
-            it.setOnMenuItemClickListener(object : OnMenuItemClickListener {
-                override fun onMenuItemLongClick(view: View?, itemPosition: Int) {
-                    Menu.showInformation(view)
-                }
-
-                override fun onMenuItemClick(view: View?, itemPosition: Int) {
-                    onMenuClick(view?.id ?: 0)
-                }
-            })
-            it.setStateChangeListener(object : OnStateChangedListener {
-                override fun onCloseComplete() = Unit
-
-                override fun onOpenComplete() = Unit
-
-                override fun onStateChanged(state: CycleMenuWidget.STATE?) {
-                    when (state) {
-                        CycleMenuWidget.STATE.OPEN -> menuOpen = true
-                        CycleMenuWidget.STATE.CLOSED -> menuOpen = false
-                        else -> Unit
-                    }
-                }
-            })
-        }
-    }
-
-    /**
-     * Switch menu visibility.
-     */
-    private fun switchMenu() {
-        hideTabList()
-    }
-
     override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -321,7 +294,7 @@ class BrowserFragment : BaseFragment(),
 
         menu?.let { menuNonNull ->
             menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
-                switchMenu()
+                menuPresenter.switchMenuVisibility()
                 true
             }
 
@@ -367,48 +340,48 @@ class BrowserFragment : BaseFragment(),
     /**
      * Menu action.
      *
-     * @param id
+     * @param menu [Menu]
      */
-    private fun onMenuClick(id: Int) {
+    override fun onMenuClick(menu: Menu) {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
-        when (id) {
-            Menu.RELOAD.ordinal -> {
+        when (menu) {
+            Menu.RELOAD -> {
                 tabs.reload()
             }
-            Menu.BACK.ordinal -> {
+            Menu.BACK-> {
                 back()
             }
-            Menu.FORWARD.ordinal -> {
+            Menu.FORWARD-> {
                 forward()
             }
-            Menu.TOP.ordinal -> {
+            Menu.TOP-> {
                 toTop()
             }
-            Menu.BOTTOM.ordinal -> {
+            Menu.BOTTOM-> {
                 toBottom()
             }
-            Menu.FIND_IN_PAGE.ordinal -> {
-                if (pageSearcherModule?.isVisible == true) {
-                    pageSearcherModule?.hide()
+            Menu.FIND_IN_PAGE-> {
+                if (pageSearchPresenter.isVisible()) {
+                    pageSearchPresenter.hide()
                     return
                 }
-                pageSearcherModule?.show(fragmentActivity)
+                pageSearchPresenter.show(fragmentActivity)
             }
-            Menu.SCREENSHOT.ordinal -> {
+            Menu.SCREENSHOT-> {
                 browserModule.currentSnap()
                 Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
             }
-            Menu.SHARE.ordinal -> {
+            Menu.SHARE-> {
                 startActivity(
                         IntentFactory.makeShare(browserModule.currentTitle()
                                 + System.getProperty("line.separator") + browserModule.currentUrl())
                 )
             }
-            Menu.SETTING.ordinal -> {
+            Menu.SETTING-> {
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
-            Menu.USER_AGENT.ordinal -> {
+            Menu.USER_AGENT-> {
                 val dialogFragment = UserAgentDialogFragment()
                 dialogFragment.setTargetFragment(this, 1)
                 dialogFragment.show(
@@ -416,10 +389,10 @@ class BrowserFragment : BaseFragment(),
                         UserAgentDialogFragment::class.java.simpleName
                 )
             }
-            Menu.WIFI_SETTING.ordinal -> {
+            Menu.WIFI_SETTING-> {
                 startActivity(SettingsIntentFactory.wifi())
             }
-            Menu.PAGE_INFORMATION.ordinal -> {
+            Menu.PAGE_INFORMATION-> {
                 PageInformationDialogFragment()
                         .also { it.arguments = tabs.makeCurrentPageInformation() }
                         .show(
@@ -427,29 +400,29 @@ class BrowserFragment : BaseFragment(),
                                 PageInformationDialogFragment::class.java.simpleName
                         )
             }
-            Menu.TAB_LIST.ordinal -> {
+            Menu.TAB_LIST-> {
                 switchTabList()
             }
-            Menu.STOP_LOADING.ordinal -> {
+            Menu.STOP_LOADING-> {
                 stopCurrentLoading()
             }
-            Menu.OTHER_BROWSER.ordinal -> {
+            Menu.OTHER_BROWSER-> {
                 browserModule.currentUrl()?.let {
                     CustomTabsFactory.make(fragmentActivity, colorPair())
                             .build()
                             .launchUrl(fragmentActivity, Uri.parse(it))
                 }
             }
-            Menu.ARCHIVE.ordinal -> {
+            Menu.ARCHIVE-> {
                 browserModule.saveArchive()
             }
-            Menu.SEARCH.ordinal -> {
-                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
+            Menu.SEARCH-> {
+                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
             }
-            Menu.SITE_SEARCH.ordinal -> {
+            Menu.SITE_SEARCH-> {
                 tabs.siteSearch()
             }
-            Menu.VOICE_SEARCH.ordinal -> {
+            Menu.VOICE_SEARCH-> {
                 try {
                     startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
                 } catch (e: ActivityNotFoundException) {
@@ -457,7 +430,7 @@ class BrowserFragment : BaseFragment(),
                     binding?.root?.let { VoiceSearch.suggestInstallGoogleApp(it, colorPair()) }
                 }
             }
-            Menu.REPLACE_HOME.ordinal -> {
+            Menu.REPLACE_HOME-> {
                 browserModule.currentUrl()?.let {
                     if (Urls.isInvalidUrl(it)) {
                         Toaster.snackShort(
@@ -475,16 +448,16 @@ class BrowserFragment : BaseFragment(),
                     )
                 }
             }
-            Menu.LOAD_HOME.ordinal -> {
+            Menu.LOAD_HOME-> {
                 tabs.loadHome()
             }
-            Menu.VIEW_HISTORY.ordinal -> {
+            Menu.VIEW_HISTORY-> {
                 startActivityForResult(
                         ViewHistoryActivity.makeIntent(fragmentActivity),
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
-            Menu.BOOKMARK.ordinal -> {
+            Menu.BOOKMARK-> {
                 context?.let {
                     startActivityForResult(
                         BookmarkActivity.makeIntent(it),
@@ -492,21 +465,84 @@ class BrowserFragment : BaseFragment(),
                     )
                 }
             }
-            Menu.ADD_BOOKMARK.ordinal -> {
+            Menu.ADD_BOOKMARK-> {
                 tabs.addBookmark {
-                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.cycleMenu as View))
+                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
                 }
             }
-            Menu.EDITOR.ordinal -> {
+            Menu.EDITOR-> {
                 openEditorTab()
             }
-            Menu.PDF.ordinal -> {
+            Menu.PDF-> {
                 openPdfTabFromStorage()
             }
-            Menu.EXIT.ordinal -> {
+            Menu.CODE_READER -> {
+                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
+            }
+            Menu.SCHEDULE-> {
+                try {
+                    startActivity(IntentFactory.makeCalendar())
+                } catch (e: ActivityNotFoundException) {
+                    Timber.w(e)
+                }
+            }
+            Menu.OVERLAY_COLOR_FILTER-> {
+                val activity = activity
+                val rootView = binding?.root
+                if (activity == null || rootView == null) {
+                    return
+                }
+                ColorFilter(activity, rootView).switchState(activity)
+            }
+            Menu.PLANNING_POKER-> {
+                context?.let { startActivity(PlanningPokerActivity.makeIntent(it)) }
+            }
+            Menu.CAMERA-> {
+                useCameraPermission { startActivity(IntentFactory.camera()) }
+            }
+            Menu.TORCH-> {
+                useCameraPermission { torch.switch() }
+            }
+            Menu.APP_LAUNCHER-> {
+                context?.let { startActivity(LauncherActivity.makeIntent(it)) }
+            }
+            Menu.ABOUT-> {
+                context?.let { startActivity(AboutThisAppActivity.makeIntent(it)) }
+            }
+            Menu.EXIT-> {
                 activity?.moveTaskToBack(true)
             }
         }
+    }
+
+    override fun onMenuLongClick(menu: Menu): Boolean {
+        val view = binding?.root ?: return true
+        Toaster.snackLong(
+                view,
+                menu.titleId,
+                R.string.run,
+                View.OnClickListener { onMenuClick(menu) },
+                preferenceApplier().colorPair()
+        )
+        return true
+    }
+
+    override fun getTabCount() = tabs.size()
+
+    /**
+     * Use camera permission with specified action.
+     *
+     * @param onGranted action
+     */
+    private fun useCameraPermission(onGranted: () -> Unit) {
+        rxPermissions
+                ?.request(Manifest.permission.CAMERA)
+                ?.filter { it }
+                ?.subscribe(
+                        { onGranted() },
+                        { Timber.e(it) }
+                )
+                ?.addTo(disposables)
     }
 
     /**
@@ -616,16 +652,7 @@ class BrowserFragment : BaseFragment(),
 
         val preferenceApplier = preferenceApplier()
 
-        binding?.cycleMenu?.also { cycleMenu ->
-            val menuPos = preferenceApplier.menuPos()
-            cycleMenu.setCorner(menuPos)
-            editorModule.setSpace(menuPos)
-            val color = preferenceApplier.colorPair().bgColor()
-            cycleMenu.setItemsBackgroundTint(ColorStateList.valueOf(color))
-            context?.let { ContextCompat.getDrawable(it, R.drawable.ic_menu) }
-                    ?.also { DrawableCompat.setTint(it, color) }
-                    ?.let { drawable -> cycleMenu.setCornerImageDrawable(drawable) }
-        }
+        menuPresenter.onResume { editorModule.setSpace(it) }
 
         browserModule.resizePool(preferenceApplier.poolSize)
 
@@ -682,8 +709,13 @@ class BrowserFragment : BaseFragment(),
             return true
         }
 
-        if (menuOpen) {
-            binding?.cycleMenu?.close(true)
+        if (pageSearchPresenter.isVisible()) {
+            pageSearchPresenter.hide()
+            return true
+        }
+
+        if (menuPresenter.isVisible()) {
+            menuPresenter.close()
             return true
         }
 
@@ -721,11 +753,12 @@ class BrowserFragment : BaseFragment(),
                 }
             }
             REQUEST_CODE_OPEN_PDF -> {
+                val uri = intent.data ?: return
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     val takeFlags: Int = intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    context?.contentResolver?.takePersistableUriPermission(intent.data, takeFlags)
+                    context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
                 }
-                tabs.openNewPdfTab(intent.data)
+                tabs.openNewPdfTab(uri)
             }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 intent.data?.let {
@@ -733,7 +766,7 @@ class BrowserFragment : BaseFragment(),
                 }
             }
             EditorModule.REQUEST_CODE_LOAD -> {
-                editorModule.readFromFileUri(intent.data)
+                intent.data?.let { editorModule.readFromFileUri(it) }
             }
         }
     }
@@ -840,25 +873,25 @@ class BrowserFragment : BaseFragment(),
 
     override fun onClickSetBackground(url: String) {
         val activityContext = context ?: return
-        storeImage(url, activityContext).subscribe { file ->
+        ImageDownloader(url, { activityContext }, Consumer { file ->
             preferenceApplier().backgroundImagePath = file.absolutePath
             Toaster.snackShort(
                     binding?.root as View,
                     R.string.message_change_background_image,
                     preferenceApplier().colorPair()
             )
-        }.addTo(disposables)
+        }).addTo(disposables)
     }
 
     override fun onClickSaveForBackground(url: String) {
         val activityContext = context ?: return
-        storeImage(url, activityContext).subscribe {
+        ImageDownloader(url, { activityContext }, Consumer { file ->
             Toaster.snackShort(
                     binding?.root as View,
-                    R.string.message_done_save,
+                    getString(R.string.message_done_save) + file.name,
                     preferenceApplier().colorPair()
             )
-        }.addTo(disposables)
+        }).addTo(disposables)
     }
 
     override fun onClickDownloadImage(url: String) {
@@ -873,30 +906,6 @@ class BrowserFragment : BaseFragment(),
         }
 
         ImageDownloadActionDialogFragment.show(activityContext, url)
-    }
-
-    /**
-     * Store image to file.
-     *
-     * @param url URL string.
-     * @param context [Context]
-     */
-    private fun storeImage(url: String, context: Context): Maybe<File> {
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
-            Toaster.tShort(context, R.string.message_wifi_not_connecting)
-            return Maybe.empty()
-        }
-        return Single.fromCallable { HTTP_CLIENT.newCall(Request.Builder().url(url).build()).execute() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .filter { it.code() == HttpURLConnection.HTTP_OK }
-                .map { BitmapFactory.decodeStream(it.body()?.byteStream()) }
-                .map {
-                    val storeroom = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
-                    val file = storeroom.assignNewFile(Uri.parse(url))
-                    Bitmaps.compress(it, file)
-                    file
-                }
     }
 
     override fun onClickClear() {
@@ -954,10 +963,21 @@ class BrowserFragment : BaseFragment(),
 
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
+    override fun find(s: String) {
+        tabs.find(s)
+    }
+
+    override fun findUp(s: String) {
+        tabs.findUp(s)
+    }
+
+    override fun findDown(s: String) {
+        tabs.findDown(s)
+    }
+
     override fun onPause() {
         super.onPause()
         editorModule.saveIfNeed()
-        hideOption()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -973,7 +993,6 @@ class BrowserFragment : BaseFragment(),
     override fun onStop() {
         super.onStop()
         tabs.saveTabList()
-        binding?.cycleMenu?.close(false)
     }
 
     override fun onDestroy() {
@@ -983,6 +1002,12 @@ class BrowserFragment : BaseFragment(),
         searchWithClip.dispose()
         toolbarAction?.showToolbar()
         browserModule.dispose()
+        pageSearchPresenter.dispose()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        torch.dispose()
     }
 
     companion object {
@@ -991,11 +1016,6 @@ class BrowserFragment : BaseFragment(),
          * Request code of opening PDF.
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 3
-
-        /**
-         * HTTP Client.
-         */
-        private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
 
     }
 

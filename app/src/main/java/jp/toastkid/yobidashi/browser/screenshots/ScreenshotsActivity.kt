@@ -2,10 +2,10 @@ package jp.toastkid.yobidashi.browser.screenshots
 
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.View
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R

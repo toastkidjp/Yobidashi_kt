@@ -2,13 +2,13 @@ package jp.toastkid.yobidashi.settings
 
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.annotation.StringRes
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.color_filter.ColorFilter

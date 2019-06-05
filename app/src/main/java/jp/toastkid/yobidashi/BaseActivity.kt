@@ -3,13 +3,13 @@ package jp.toastkid.yobidashi
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.ColorInt
-import android.support.annotation.StringRes
-import android.support.v4.graphics.ColorUtils
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import androidx.annotation.ColorInt
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.DrawableCompat
 
 import jp.toastkid.yobidashi.analytics.LogSender
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -53,6 +53,7 @@ abstract class BaseActivity : AppCompatActivity() {
             setTitle(titleId())
             inflateMenu(R.menu.settings_toolbar_menu)
             setOnMenuItemClickListener{ clickMenu(it) }
+            navigationIcon = null
         }
     }
 

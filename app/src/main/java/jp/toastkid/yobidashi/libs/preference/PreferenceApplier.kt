@@ -3,11 +3,10 @@ package jp.toastkid.yobidashi.libs.preference
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
-import com.cleveroad.cyclemenuwidget.CycleMenuWidget
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.MenuPos
+import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
@@ -158,8 +157,8 @@ class PreferenceApplier(private val context: Context) {
     fun menuPosId(): Int =
             MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
 
-    fun menuPos(): CycleMenuWidget.CORNER =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).corner
+    fun menuPos(): MenuPos =
+            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name))
 
     fun setLoadImage(newState: Boolean) {
         preferences.edit().putBoolean(Key.LOAD_IMAGE.name, newState).apply()

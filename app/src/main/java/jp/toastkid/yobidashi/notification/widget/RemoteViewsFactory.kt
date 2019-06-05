@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.notification.widget
 
 import android.content.Context
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import android.widget.RemoteViews
 
 import jp.toastkid.yobidashi.R

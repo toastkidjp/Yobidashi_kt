@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -46,7 +47,7 @@ class UrlSuggestionModule(
     init {
         binding.urlSuggestions.adapter = adapter
         binding.urlSuggestions.layoutManager =
-                LinearLayoutManager(context(), LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(context(), RecyclerView.VERTICAL, false)
         RightSwipeActionAttachment(
                 binding.urlSuggestions,
                 this::removeAt

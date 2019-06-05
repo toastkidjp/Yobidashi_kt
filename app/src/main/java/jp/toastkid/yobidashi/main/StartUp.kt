@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.main
 
-import android.support.annotation.IdRes
-import android.support.annotation.StringRes
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
 
 /**

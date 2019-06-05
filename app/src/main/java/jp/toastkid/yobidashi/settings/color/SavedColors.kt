@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
 import android.graphics.Color
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import android.view.View
 import android.widget.TextView
 import io.reactivex.Completable
