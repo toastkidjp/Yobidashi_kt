@@ -2,8 +2,9 @@ package jp.toastkid.yobidashi.planning_poker
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ class PlanningPokerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityPlanningPokerBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding?.cardsView?.let {
@@ -70,7 +71,8 @@ class PlanningPokerActivity : BaseActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_planning_poker
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.activity_planning_poker
 
         /**
          * Make this activity launcher intent.
