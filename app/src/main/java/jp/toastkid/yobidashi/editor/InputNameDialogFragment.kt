@@ -11,23 +11,36 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import androidx.appcompat.app.AlertDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 
 /**
+ * Dialog for input name dialog.
+ *
  * @author toastkidjp
  */
 class InputNameDialogFragment : DialogFragment() {
 
+    /**
+     * Callback interface.
+     */
     interface Callback {
+
+        /**
+         * Action using input name.
+         * @param fileName
+         */
         fun onClickInputName(fileName: String)
     }
 
+    /**
+     * Callback.
+     */
     private var callback: Callback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -71,6 +84,11 @@ class InputNameDialogFragment : DialogFragment() {
          */
         private const val DEFAULT_FILE_NAME: String = "memo"
 
+        /**
+         * Show dialog.
+         *
+         * @param context [Context]
+         */
         fun show(context: Context) {
             val dialogFragment = InputNameDialogFragment()
 
