@@ -7,14 +7,22 @@
  */
 package jp.toastkid.yobidashi.tab.tab_list
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 
 /**
+ * Drag attachment to specified [RecyclerView].
+ *
  * @author toastkidjp
  */
 object DragAttachment {
 
+    /**
+     * Invoke action.
+     *
+     * @param recyclerView [RecyclerView]
+     * @param direction [ItemTouchHelper]'s constant
+     */
     operator fun invoke(recyclerView: RecyclerView, direction: Int) {
         ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(direction, 0) {
