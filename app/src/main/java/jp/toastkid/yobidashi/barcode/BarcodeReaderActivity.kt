@@ -4,13 +4,13 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.StringRes
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
