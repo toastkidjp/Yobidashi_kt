@@ -17,12 +17,13 @@
             android:layout_height="wrap_content"
             >
 
-            <FrameLayout android:id="@+id/use_notification_widget"
+            <FrameLayout
+                android:id="@+id/use_notification_widget"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.switchNotificationWidget()}"
-                xmlns:android="http://schemas.android.com/apk/res/android">
+                >
                 <TextView
                     android:orientation="horizontal"
                     android:layout_width="match_parent"

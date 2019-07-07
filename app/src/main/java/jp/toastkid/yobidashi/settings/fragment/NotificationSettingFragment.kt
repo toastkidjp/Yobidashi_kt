@@ -8,13 +8,13 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -40,6 +40,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_notification, container, false)
+        binding.fragment = this
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
@@ -62,6 +63,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
         val activityContext: Context = context ?: return
 
+        // TODO Attempt to use if expression
         @StringRes var messageId: Int = R.string.message_done_showing_notification_widget
         if (newState) {
             NotificationWidget.show(activityContext)
