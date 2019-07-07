@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import com.google.zxing.ResultPoint
@@ -199,6 +200,7 @@ class BarcodeReaderActivity : BaseActivity() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_barcode_reader
 
         /**
