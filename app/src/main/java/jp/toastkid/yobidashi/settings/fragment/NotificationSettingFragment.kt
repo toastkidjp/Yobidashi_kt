@@ -63,13 +63,13 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
         val activityContext: Context = context ?: return
 
-        // TODO Attempt to use if expression
-        @StringRes var messageId: Int = R.string.message_done_showing_notification_widget
+        @StringRes val messageId =
         if (newState) {
             NotificationWidget.show(activityContext)
+            R.string.message_done_showing_notification_widget
         } else {
             NotificationWidget.hide(activityContext)
-            messageId = R.string.message_remove_notification_widget
+            R.string.message_remove_notification_widget
         }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
