@@ -30,7 +30,6 @@ import jp.toastkid.yobidashi.search.SearchAction
 import timber.log.Timber
 import java.io.FileOutputStream
 
-
 /**
  * Barcode reader activity.
  *
@@ -48,8 +47,6 @@ class BarcodeReaderActivity : BaseActivity() {
      */
     private val slideUpBottom by lazy { AnimationUtils.loadAnimation(this, R.anim.slide_up) }
 
-    private val rect = Rect()
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
@@ -66,8 +63,6 @@ class BarcodeReaderActivity : BaseActivity() {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
             return
         }
-
-        windowManager.defaultDisplay.getRectSize(rect)
 
         startDecode()
     }
@@ -128,9 +123,15 @@ class BarcodeReaderActivity : BaseActivity() {
                         "shoot_${System.currentTimeMillis()}.png"
                 )
 
-                sourceData?.cropRect = rect
+                sourceData?.cropRect = getRect()
                 sourceData?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
                 Toaster.snackShort(barcodeView, "Camera saved: ${output.absolutePath}", colorPair())
+            }
+
+            private fun getRect(): Rect {
+                val rect = Rect()
+                windowManager.defaultDisplay.getRectSize(rect)
+                return rect
             }
 
             override fun onPreviewError(e: Exception?) {
