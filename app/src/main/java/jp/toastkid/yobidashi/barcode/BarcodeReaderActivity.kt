@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -14,6 +16,8 @@ import androidx.databinding.DataBindingUtil
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.SourceData
+import com.journeyapps.barcodescanner.camera.PreviewCallback
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBarcodeReaderBinding
@@ -21,7 +25,11 @@ import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
 import jp.toastkid.yobidashi.search.SearchAction
+import timber.log.Timber
+import java.io.FileOutputStream
+
 
 /**
  * Barcode reader activity.
@@ -40,6 +48,8 @@ class BarcodeReaderActivity : BaseActivity() {
      */
     private val slideUpBottom by lazy { AnimationUtils.loadAnimation(this, R.anim.slide_up) }
 
+    private val rect = Rect()
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
@@ -56,6 +66,9 @@ class BarcodeReaderActivity : BaseActivity() {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
             return
         }
+
+        windowManager.defaultDisplay.getRectSize(rect)
+
         startDecode()
     }
 
@@ -103,6 +116,28 @@ class BarcodeReaderActivity : BaseActivity() {
         getResultText()?.let {
             SearchAction(this, preferenceApplier.getDefaultSearchEngine(), it).invoke()
         }
+    }
+
+    fun camera() {
+        val barcodeView = binding?.barcodeView ?: return
+
+        barcodeView.barcodeView?.cameraInstance?.requestPreview(object : PreviewCallback {
+            override fun onPreview(sourceData: SourceData?) {
+                val output = ExternalFileAssignment().assignFile(
+                        this@BarcodeReaderActivity,
+                        "shoot_${System.currentTimeMillis()}.png"
+                )
+
+                sourceData?.cropRect = rect
+                sourceData?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
+                Toaster.snackShort(barcodeView, "Camera saved: ${output.absolutePath}", colorPair())
+            }
+
+            override fun onPreviewError(e: Exception?) {
+                Timber.e(e)
+            }
+
+        })
     }
 
     /**

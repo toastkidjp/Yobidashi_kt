@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="activity" type="jp.toastkid.yobidashi.barcode.BarcodeReaderActivity" />
     </data>
@@ -22,6 +22,17 @@
             android:minHeight="?android:actionBarSize"
             android:background="@color/transparent"
             android:layout_gravity="top"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/camera"
+            android:layout_width="@dimen/menu_button_size"
+            android:layout_height="@dimen/menu_button_size"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/ic_camera_black"
+            app:backgroundTint="@color/soft_background"
+            android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> activity.camera()}"
             />
 
         <RelativeLayout
