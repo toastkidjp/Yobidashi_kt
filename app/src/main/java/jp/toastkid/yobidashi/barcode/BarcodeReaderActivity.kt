@@ -158,7 +158,7 @@ class BarcodeReaderActivity : BaseActivity() {
         }
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         binding?.barcodeView?.resume()
         val colorPair = colorPair()
@@ -172,7 +172,7 @@ class BarcodeReaderActivity : BaseActivity() {
         }
     }
 
-    public override fun onPause() {
+    override fun onPause() {
         super.onPause()
         binding?.barcodeView?.pause()
     }
