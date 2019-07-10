@@ -14,6 +14,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
+import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.Dimension
 import androidx.annotation.MainThread
