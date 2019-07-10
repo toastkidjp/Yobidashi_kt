@@ -109,6 +109,7 @@ class EditorModule(
                 binding.save,
                 binding.saveAs,
                 binding.load,
+                binding.loadAs,
                 binding.lastSaved,
                 binding.counter,
                 binding.backup,
@@ -251,6 +252,13 @@ class EditorModule(
      */
     fun saveAs() {
         InputNameDialogFragment.show(context())
+    }
+
+    /**
+     * Load text as other file.
+     */
+    fun loadAs() {
+        intentLauncher(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD_AS)
     }
 
     /**
@@ -504,6 +512,11 @@ class EditorModule(
          * Request code of specifying file.
          */
         const val REQUEST_CODE_LOAD: Int = 10111
+
+        /**
+         * Request code of specifying file.
+         */
+        const val REQUEST_CODE_LOAD_AS: Int = 10112
 
     }
 

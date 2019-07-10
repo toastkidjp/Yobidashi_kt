@@ -768,6 +768,12 @@ class BrowserFragment : BaseFragment(),
             EditorModule.REQUEST_CODE_LOAD -> {
                 intent.data?.let { editorModule.readFromFileUri(it) }
             }
+            EditorModule.REQUEST_CODE_LOAD_AS -> {
+                intent.data?.let {
+                    editorModule.readFromFileUri(it)
+                    editorModule.saveAs()
+                }
+            }
         }
     }
 

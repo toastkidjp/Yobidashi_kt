@@ -312,6 +312,7 @@
     <string name="done_save">保存しました。</string>
     <string name="save">保存</string>
     <string name="save_as">別名で保存</string>
+    <string name="load_as">別名で読込</string>
     <string name="title_dialog_input_file_name">ファイル名入力</string>
     <string name="message_requires_permission_storage">
         メモを使用するにはストレージの権限が必要です。</string>
