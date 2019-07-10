@@ -225,7 +225,6 @@ class EditorModule(
             binding.leftSpace.visibility = View.GONE
             binding.rightSpace.visibility = View.VISIBLE
         }
-        else -> Unit
     }
 
     /**
