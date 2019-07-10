@@ -134,7 +134,7 @@ class EditorModule(
         val fontColor = colorPair.fontColor()
         textViews.forEach { textView ->
             textView.setTextColor(fontColor)
-            textView.compoundDrawables?.forEach {
+            textView.compoundDrawables.forEach {
                 it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
             }
         }
