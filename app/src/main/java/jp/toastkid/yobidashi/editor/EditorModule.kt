@@ -318,8 +318,8 @@ class EditorModule(
         MediaScannerConnection.scanFile(
                 context,
                 arrayOf(filePath),
-                null,
-                { _, _ ->  })
+                null
+        ) { _, _ ->  }
         snackText("${context().getString(R.string.done_save)}: $filePath")
         setLastSaved(file.lastModified())
     }
