@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="editorModule"
             type="jp.toastkid.yobidashi.editor.EditorModule" />
@@ -31,6 +31,7 @@
                 android:inputType="textMultiLine"
                 android:minLines="10"
                 android:hint="@string/hint_editor_input"
+                tools:ignore="Autofill"
                 />
         </ScrollView>
 
