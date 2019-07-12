@@ -8,13 +8,14 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -38,8 +39,13 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_notification, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        binding.fragment = this
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
@@ -62,12 +68,13 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
         val activityContext: Context = context ?: return
 
-        @StringRes var messageId: Int = R.string.message_done_showing_notification_widget
+        @StringRes val messageId =
         if (newState) {
             NotificationWidget.show(activityContext)
+            R.string.message_done_showing_notification_widget
         } else {
             NotificationWidget.hide(activityContext)
-            messageId = R.string.message_remove_notification_widget
+            R.string.message_remove_notification_widget
         }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
@@ -75,4 +82,9 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
     @StringRes
     override fun titleId() = R.string.subhead_notification
 
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_setting_notification
+    }
 }
