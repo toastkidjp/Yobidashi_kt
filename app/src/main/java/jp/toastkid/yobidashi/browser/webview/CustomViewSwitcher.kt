@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.WebChromeClient
+import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.VideoView
 import androidx.core.content.ContextCompat
@@ -23,6 +24,10 @@ import jp.toastkid.yobidashi.R
 import timber.log.Timber
 
 /**
+ * [WebView]'s custom view switcher.
+ *
+ * @param contextSupplier Use for making parent view.
+ * @param currentWebViewSupplier Use for getting current [WebView]
  * @author toastkidjp
  */
 class CustomViewSwitcher(
@@ -30,16 +35,37 @@ class CustomViewSwitcher(
         private val currentWebViewSupplier: () -> View?
 ) {
 
+    /**
+     * Custom view container.
+     */
     private var customViewContainer: FrameLayout? = null
 
+    /**
+     * Holding for controlling video content.
+     */
     private var videoView: VideoView? = null
 
+    /**
+     * Holding for recover previous orientation.
+     */
     private var originalOrientation: Int = 0
 
+    /**
+     * Holding for disposing.
+     */
     private var customViewCallback: WebChromeClient.CustomViewCallback? = null
 
+    /**
+     * Holding for disposing custom view.
+     */
     private var customView: View? = null
 
+    /**
+     * Delegation from WebChromeClient.
+     *
+     * @param view Custom view from [WebView].
+     * @param callback from [WebView]
+     */
     fun onShowCustomView(view: View?, callback: WebChromeClient.CustomViewCallback?) {
         if (customView != null) {
             callback?.onCustomViewHidden()
@@ -82,6 +108,9 @@ class CustomViewSwitcher(
         currentWebViewSupplier()?.visibility = View.INVISIBLE
     }
 
+    /**
+     * Delegation from WebChromeClient.
+     */
     fun onHideCustomView() {
         val activity = contextSupplier() as? Activity ?: return
 
@@ -126,16 +155,36 @@ class CustomViewSwitcher(
         activity.requestedOrientation = originalOrientation
     }
 
+    /**
+     * Video completion listener.
+     */
     private inner class VideoCompletionListener
         : MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
+        /**
+         * Only return false.
+         *
+         * @param mp [MediaPlayer]
+         * @param what [Int]
+         * @param extra [Int]
+         * @return false
+         */
         override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean = false
 
+        /**
+         * Only call onHideCustomView.
+         *
+         * @param mp [MediaPlayer]
+         */
         override fun onCompletion(mp: MediaPlayer) = onHideCustomView()
 
     }
 
     companion object {
+
+        /**
+         * For centering video view.
+         */
         private val customViewParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT,
