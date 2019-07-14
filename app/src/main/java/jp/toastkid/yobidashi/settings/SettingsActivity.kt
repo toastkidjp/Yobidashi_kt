@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.MenuItem
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.BaseActivity
@@ -31,7 +30,6 @@ class SettingsActivity : BaseActivity() {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivitySettingsBinding>(this, LAYOUT_ID)
         binding.activity = this
-        setSupportActionBar(binding.toolbar)
         initToolbar(binding.toolbar)
 
         supportFragmentManager?.let {
@@ -43,17 +41,6 @@ class SettingsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         applyColorToToolbar(binding.toolbar)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.settings_toolbar_menu_exit) {
-            finish()
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     @StringRes override fun titleId(): Int = R.string.title_settings

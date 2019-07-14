@@ -12,7 +12,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
-import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -291,14 +290,6 @@ class MainActivity :
     private fun confirmExit() {
         CloseDialogFragment()
                 .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.settings_toolbar_menu_exit -> {
-            finish()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
