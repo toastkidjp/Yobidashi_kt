@@ -10,7 +10,6 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
@@ -29,6 +28,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
+import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.search.SearchAction
 import timber.log.Timber
 import java.io.FileOutputStream
@@ -50,7 +50,6 @@ class BarcodeReaderActivity : BaseActivity() {
      */
     private val slideUpBottom by lazy { AnimationUtils.loadAnimation(this, R.anim.slide_up) }
 
-    @SuppressLint("ClickableViewAccessibility")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
@@ -67,71 +66,13 @@ class BarcodeReaderActivity : BaseActivity() {
             return
         }
 
-        binding?.camera?.setOnTouchListener(object : View.OnTouchListener {
-
-            private val CLICK_DRAG_TOLERANCE = 10
-
-            private var downRawX = 0f
-
-            private var downRawY = 0f
-
-            private var dX = 0f
-
-            private var dY = 0f
-
-            override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
-                if (view == null || motionEvent == null) {
-                    return false
-                }
-                val action = motionEvent.action
-                return when (action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        downRawX = motionEvent.rawX
-                        downRawY = motionEvent.rawY
-                        dX = view.x - downRawX
-                        dY = view.y - downRawY
-                        true
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        val viewWidth = view.width
-                        val viewHeight = view.height
-
-                        val viewParent = view.parent as View
-                        val parentWidth = viewParent.width.toFloat()
-                        val parentHeight = viewParent.height.toFloat()
-
-                        var newX = motionEvent.rawX + dX
-                        newX = Math.max(0f, newX)
-                        newX = Math.min(parentWidth - viewWidth, newX)
-
-                        var newY = motionEvent.rawY + dY
-                        newY = Math.max(0f, newY)
-                        newY = Math.min(parentHeight - viewHeight, newY)
-
-                        view.animate()
-                                .x(newX)
-                                .y(newY)
-                                .setDuration(0)
-                                .start()
-                        return true
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        val upRawX = motionEvent.rawX
-                        val upRawY = motionEvent.rawY
-
-                        val upDX = upRawX - downRawX
-                        val upDY = upRawY - downRawY
-
-                        if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) {
-                            return binding?.camera?.performClick() ?: false
-                        }
-                        return true
-                    }
-                    else -> binding?.camera?.onTouchEvent(motionEvent) ?: false
-                }
-            }
-        })
+        setDraggableTouchListener()
         startDecode()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setDraggableTouchListener() {
+        binding?.camera?.setOnTouchListener(DraggableTouchListener())
     }
 
     /**
