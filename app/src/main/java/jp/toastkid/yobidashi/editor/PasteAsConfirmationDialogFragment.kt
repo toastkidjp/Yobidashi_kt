@@ -10,9 +10,9 @@ package jp.toastkid.yobidashi.editor
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import androidx.appcompat.app.AlertDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 
@@ -42,7 +42,7 @@ class PasteAsConfirmationDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.paste_as_quotation))
                 .setMessage(R.string.message_paste_as_dialog)
-                .setPositiveButton(R.string.save) { d, _ ->
+                .setPositiveButton(R.string.ok) { d, _ ->
                     callback?.onClickPasteAs()
                     d.dismiss()
                 }
