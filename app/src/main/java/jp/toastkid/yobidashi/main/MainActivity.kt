@@ -23,7 +23,7 @@ import com.google.zxing.integration.android.IntentResult
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.BaseActivity
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ProgressBarCallback
@@ -228,7 +228,7 @@ class MainActivity :
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: BaseFragment) {
+    private fun replaceFragment(fragment: Fragment) {
         if (fragment.isVisible) {
             return
         }
@@ -247,7 +247,9 @@ class MainActivity :
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
         binding.appBarMain.toolbar.let {
-            it.setTitle(fragment.titleId())
+            if (fragment is CommonFragmentAction) {
+                it.setTitle(fragment.titleId())
+            }
             it.subtitle = ""
         }
     }
@@ -260,7 +262,7 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        val fragment: BaseFragment? = findCurrentFragment()
+        val fragment: CommonFragmentAction? = findCurrentFragment()
         if (fragment == null) {
             confirmExit()
             return
@@ -278,10 +280,10 @@ class MainActivity :
      *
      * @return fragment or null
      */
-    private fun findCurrentFragment(): BaseFragment? {
+    private fun findCurrentFragment(): CommonFragmentAction? {
         val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.content)
 
-        return if (fragment != null) fragment as BaseFragment else null
+        return if (fragment != null) fragment as CommonFragmentAction else null
     }
 
     /**
