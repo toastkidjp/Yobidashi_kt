@@ -398,5 +398,6 @@
     <string name="content_description_background">背景画像</string>
     <string name="is_center">center</string>
     <string name="title_icon">アイコン</string>
+    <string name="reset_button_position">ボタンの位置をリセット</string>
 
 </resources>

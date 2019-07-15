@@ -10,6 +10,7 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
@@ -58,6 +59,7 @@ class BarcodeReaderActivity : BaseActivity() {
         binding?.activity = this
         binding?.toolbar?.let {
             initToolbar(it)
+            it.inflateMenu(R.menu.camera)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -66,13 +68,40 @@ class BarcodeReaderActivity : BaseActivity() {
             return
         }
 
-        setDraggableTouchListener()
+        initializeFab()
         startDecode()
     }
 
+    override fun clickMenu(item: MenuItem) = when (item.itemId) {
+        R.id.reset_fab_position -> {
+            binding?.camera?.also {
+                it.translationX = 0f
+                it.translationY = 0f
+                preferenceApplier.clearCameraFabPosition()
+            }
+            true
+        }
+        else -> super.clickMenu(item)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
-    private fun setDraggableTouchListener() {
-        binding?.camera?.setOnTouchListener(DraggableTouchListener())
+    private fun initializeFab() {
+        val draggableTouchListener = DraggableTouchListener()
+        draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                preferenceApplier.setNewCameraFabPosition(x, y)
+            }
+        })
+        binding?.camera?.setOnTouchListener(draggableTouchListener)
+
+        binding?.camera?.also {
+            val position = preferenceApplier.cameraFabPosition() ?: return@also
+            it.animate()
+                    .x(position.first)
+                    .y(position.second)
+                    .setDuration(10)
+                    .start()
+        }
     }
 
     /**

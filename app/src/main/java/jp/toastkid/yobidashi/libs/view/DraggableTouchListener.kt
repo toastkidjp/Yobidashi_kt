@@ -23,6 +23,16 @@ class DraggableTouchListener : View.OnTouchListener {
 
     private var dY = 0f
 
+    private var onNewPosition: OnNewPosition? = null
+
+    interface OnNewPosition {
+        fun onNewPosition(x: Float, y: Float)
+    }
+
+    fun setCallback(callback: OnNewPosition) {
+        onNewPosition = callback
+    }
+
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
         if (view == null || motionEvent == null) {
             return false
@@ -69,6 +79,7 @@ class DraggableTouchListener : View.OnTouchListener {
                 if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) {
                     return view.performClick()
                 }
+                onNewPosition?.onNewPosition(view.x, view.y)
                 return true
             }
             else -> false

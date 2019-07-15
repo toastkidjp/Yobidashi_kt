@@ -403,5 +403,6 @@
     <string name="content_description_background">Background image</string>
     <string name="is_center">center</string>
     <string name="title_icon">icon</string>
+    <string name="reset_button_position">Reset Button Position</string>
 
 </resources>
