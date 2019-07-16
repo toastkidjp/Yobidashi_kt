@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.media.MediaPlayer
 import android.view.Gravity
 import android.view.View
@@ -133,9 +132,6 @@ class CustomViewSwitcher(
             parent?.removeView(customViewContainer)
             customViewContainer?.removeAllViews()
         }
-
-        customViewContainer?.removeAllViews()
-        customViewContainer?.setBackgroundColor(Color.TRANSPARENT)
 
         customViewContainer = null
         customView = null
