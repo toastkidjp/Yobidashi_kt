@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ActivityNotFoundException
@@ -281,11 +282,16 @@ class BrowserFragment : Fragment(),
                 this
         )
 
-        binding?.menuSwitch?.setOnTouchListener(DraggableTouchListener())
+        setFabListener()
 
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setFabListener() {
+        binding?.menuSwitch?.setOnTouchListener(DraggableTouchListener())
     }
 
     /**
