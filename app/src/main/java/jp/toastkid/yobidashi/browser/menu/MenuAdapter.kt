@@ -11,6 +11,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.Disposable
@@ -93,6 +94,7 @@ internal class MenuAdapter(
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID = R.layout.item_home_menu
 
         /**
