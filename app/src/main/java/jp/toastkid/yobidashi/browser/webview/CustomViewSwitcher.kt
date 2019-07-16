@@ -83,17 +83,19 @@ class CustomViewSwitcher(
 
         customViewContainer = FrameLayout(activity)
         customViewContainer?.setBackgroundColor(ContextCompat.getColor(activity, R.color.filter_white_aa))
+
+        val listener = VideoCompletionListener()
         if (view is FrameLayout) {
             val child = view.focusedChild
             if (child is VideoView) {
                 videoView = child
-                videoView?.setOnErrorListener(VideoCompletionListener())
-                videoView?.setOnCompletionListener(VideoCompletionListener())
+                videoView?.setOnErrorListener(listener)
+                videoView?.setOnCompletionListener(listener)
             }
         } else if (view is VideoView) {
             videoView = view
-            videoView?.setOnErrorListener(VideoCompletionListener())
-            videoView?.setOnCompletionListener(VideoCompletionListener())
+            videoView?.setOnErrorListener(listener)
+            videoView?.setOnCompletionListener(listener)
         }
 
         customViewCallback = callback
