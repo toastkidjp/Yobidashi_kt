@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +49,7 @@ class ArchivesActivity : BaseActivity() {
 
         const val REQUEST_CODE = 0x0040
 
+        @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_archives
 
         const val EXTRA_KEY_FILE_NAME = "FILE_NAME"
