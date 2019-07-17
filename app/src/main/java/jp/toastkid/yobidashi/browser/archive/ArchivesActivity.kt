@@ -28,14 +28,15 @@ class ArchivesActivity : BaseActivity() {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView<ActivityArchivesBinding>(this, LAYOUT_ID)
         binding?.archivesView?.layoutManager = LinearLayoutManager(this)
-        val adapter = Adapter(
-                this
-        ) { filePath ->
-            val intent = Intent()
-            intent.putExtra(EXTRA_KEY_FILE_NAME, filePath)
-            setResult(Activity.RESULT_OK, intent)
+
+        val adapter = Adapter(this) { filePath ->
+            setResult(
+                    Activity.RESULT_OK,
+                    Intent().also { it.putExtra(EXTRA_KEY_FILE_NAME, filePath) }
+            )
             finish()
         }
+
         if (adapter.itemCount == 0) {
             finish()
             Toaster.tShort(this, R.string.message_empty_archives)
