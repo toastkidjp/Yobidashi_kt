@@ -12,6 +12,7 @@ import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityArchivesBinding
 import jp.toastkid.yobidashi.libs.Toaster
+import java.io.File
 
 /**
  * Activity of archives.
@@ -52,7 +53,11 @@ class ArchivesActivity : BaseActivity() {
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_archives
 
-        const val EXTRA_KEY_FILE_NAME = "FILE_NAME"
+        private const val EXTRA_KEY_FILE_NAME = "FILE_NAME"
+
+
+        fun extractFile(intent: Intent) =
+                File(intent.getStringExtra(EXTRA_KEY_FILE_NAME))
 
         /**
          * Make launcher intent.

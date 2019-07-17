@@ -765,7 +765,7 @@ class BrowserFragment : Fragment(),
         }
         when (requestCode) {
             ArchivesActivity.REQUEST_CODE -> {
-                loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
+                loadArchive(ArchivesActivity.extractFile(intent))
             }
             VoiceSearch.REQUEST_CODE -> {
                 activity?.let {
