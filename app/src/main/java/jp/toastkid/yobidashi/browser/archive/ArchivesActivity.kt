@@ -3,9 +3,9 @@ package jp.toastkid.yobidashi.browser.archive
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
@@ -50,7 +50,7 @@ class ArchivesActivity : BaseActivity() {
 
         private const val LAYOUT_ID = R.layout.activity_archives
 
-        val EXTRA_KEY_FILE_NAME = "FILE_NAME"
+        const val EXTRA_KEY_FILE_NAME = "FILE_NAME"
 
         /**
          * Make launcher intent.
