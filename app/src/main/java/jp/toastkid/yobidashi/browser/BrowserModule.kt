@@ -91,7 +91,9 @@ class BrowserModule(
             val urlStr = url ?: ""
 
             try {
-                titleCallback(TitlePair.make(title, urlStr))
+                if (view == currentView()) {
+                    titleCallback(TitlePair.make(title, urlStr))
+                }
             } catch (e: Exception) {
                 Timber.e(e)
             }
