@@ -431,6 +431,12 @@ class BrowserFragment : Fragment(),
             Menu.ARCHIVE-> {
                 browserModule.saveArchive()
             }
+            Menu.VIEW_ARCHIVE -> {
+                startActivityForResult(
+                        ArchivesActivity.makeIntent(fragmentActivity),
+                        ArchivesActivity.REQUEST_CODE
+                )
+            }
             Menu.SEARCH-> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
             }

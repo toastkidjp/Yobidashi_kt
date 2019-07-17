@@ -44,6 +44,8 @@ enum class Menu(
 
     ARCHIVE(R.string.title_archive, R.drawable.ic_archive),
 
+    VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
+
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
     REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
