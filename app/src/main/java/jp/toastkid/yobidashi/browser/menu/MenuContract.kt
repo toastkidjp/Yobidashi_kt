@@ -30,5 +30,7 @@ interface MenuContract {
         fun onResume(additional: (MenuPos) -> Unit)
 
         fun isVisible(): Boolean
+
+        fun notifyDataSetChanged()
     }
 }

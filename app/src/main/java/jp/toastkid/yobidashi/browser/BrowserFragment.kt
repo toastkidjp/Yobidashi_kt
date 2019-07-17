@@ -747,6 +747,7 @@ class BrowserFragment : Fragment(),
     private fun hideTabList() {
         tabListDialogFragment?.dismiss()
         tabs.replaceToCurrentTab(false)
+        menuPresenter.notifyDataSetChanged()
     }
 
     /**
