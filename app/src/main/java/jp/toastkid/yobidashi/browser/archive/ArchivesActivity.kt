@@ -26,7 +26,7 @@ class ArchivesActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityArchivesBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.archivesView?.layoutManager = LinearLayoutManager(this)
 
         val adapter = Adapter(this) { filePath ->
