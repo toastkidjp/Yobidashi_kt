@@ -291,7 +291,21 @@ class BrowserFragment : Fragment(),
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setFabListener() {
-        binding?.menuSwitch?.setOnTouchListener(DraggableTouchListener())
+        val listener = DraggableTouchListener()
+        listener.setCallback(object : DraggableTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                preferenceApplier.setNewMenuFabPosition(x, y)
+            }
+        })
+        binding?.menuSwitch?.setOnTouchListener(listener)
+        binding?.menuSwitch?.let {
+            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
+            it.animate()
+                    .x(fabPosition.first)
+                    .y(fabPosition.second)
+                    .setDuration(10)
+                    .start()
+        }
     }
 
     /**
@@ -339,6 +353,7 @@ class BrowserFragment : Fragment(),
                 binding?.menuSwitch?.let {
                     it.translationX = 0f
                     it.translationY = 0f
+                    preferenceApplier.clearMenuFabPosition()
                 }
                 true
             }
