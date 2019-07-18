@@ -14,6 +14,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.animation.Animation
+import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.Dimension
 import androidx.annotation.MainThread
@@ -109,6 +110,7 @@ class EditorModule(
                 binding.save,
                 binding.saveAs,
                 binding.load,
+                binding.loadAs,
                 binding.lastSaved,
                 binding.counter,
                 binding.backup,
@@ -133,7 +135,7 @@ class EditorModule(
         val fontColor = colorPair.fontColor()
         textViews.forEach { textView ->
             textView.setTextColor(fontColor)
-            textView.compoundDrawables?.forEach {
+            textView.compoundDrawables.forEach {
                 it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
             }
         }
@@ -224,7 +226,6 @@ class EditorModule(
             binding.leftSpace.visibility = View.GONE
             binding.rightSpace.visibility = View.VISIBLE
         }
-        else -> Unit
     }
 
     /**
@@ -251,6 +252,13 @@ class EditorModule(
      */
     fun saveAs() {
         InputNameDialogFragment.show(context())
+    }
+
+    /**
+     * Load text as other file.
+     */
+    fun loadAs() {
+        intentLauncher(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD_AS)
     }
 
     /**
@@ -311,8 +319,8 @@ class EditorModule(
         MediaScannerConnection.scanFile(
                 context,
                 arrayOf(filePath),
-                null,
-                { _, _ ->  })
+                null
+        ) { _, _ ->  }
         snackText("${context().getString(R.string.done_save)}: $filePath")
         setLastSaved(file.lastModified())
     }
@@ -504,6 +512,11 @@ class EditorModule(
          * Request code of specifying file.
          */
         const val REQUEST_CODE_LOAD: Int = 10111
+
+        /**
+         * Request code for 'Load as'.
+         */
+        const val REQUEST_CODE_LOAD_AS: Int = 10112
 
     }
 
