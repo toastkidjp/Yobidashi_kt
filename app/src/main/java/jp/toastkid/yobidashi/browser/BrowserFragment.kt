@@ -334,6 +334,14 @@ class BrowserFragment : Fragment(),
                 hideHeader()
                 true
             }
+
+            menuNonNull.findItem(R.id.reset_menu_position)?.setOnMenuItemClickListener {
+                binding?.menuSwitch?.let {
+                    it.translationX = 0f
+                    it.translationY = 0f
+                }
+                true
+            }
         }
     }
 
