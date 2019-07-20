@@ -9,11 +9,11 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import android.view.View
 import android.view.animation.Animation
 import android.webkit.*
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
+import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
 import jp.toastkid.yobidashi.libs.Bitmaps
@@ -32,6 +33,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import timber.log.Timber
+
 
 /**
  * @author toastkidjp
@@ -55,6 +57,8 @@ class BrowserModule(
      */
     private var isLoadFinished: Boolean = false
 
+    private var customViewSwitcher: CustomViewSwitcher? = null
+
     private val adRemover: AdRemover =
             AdRemover(context.assets.open("ad_hosts.txt"))
 
@@ -66,6 +70,8 @@ class BrowserModule(
                 scrollCallback,
                 preferenceApplier.poolSize
         )
+
+        customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
     }
 
     private fun makeWebViewClient(): WebViewClient = object : WebViewClient() {
@@ -218,6 +224,17 @@ class BrowserModule(
                 Bitmaps.compress(favicon, faviconApplier.assignFile(view.url))
             }
         }
+
+        override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+            super.onShowCustomView(view, callback)
+            customViewSwitcher?.onShowCustomView(view, callback)
+        }
+
+        override fun onHideCustomView() {
+            super.onHideCustomView()
+            customViewSwitcher?.onHideCustomView()
+        }
+
     }
 
     fun loadUrl(url: String) {
