@@ -18,7 +18,7 @@ internal object Archive {
     /**
      * Archive folder name.
      */
-    private val ARCHIVE_DIR = "archive"
+    private const val ARCHIVE_DIR = "archive"
 
     /**
      * Make new object.
