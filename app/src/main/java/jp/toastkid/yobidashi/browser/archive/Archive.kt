@@ -57,7 +57,7 @@ internal object Archive {
      * Return can use archive.
      * @return If runtime environment SDK is Kitkat and upper, return true.
      */
-    fun canUseArchive(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+    private fun canUseArchive(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     /**
      * Load archive.
