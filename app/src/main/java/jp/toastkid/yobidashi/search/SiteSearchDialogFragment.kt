@@ -4,12 +4,12 @@ import android.app.Dialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.appcompat.app.AlertDialog
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -33,6 +33,7 @@ class SiteSearchDialogFragment : DialogFragment() {
 
         val dialog = AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_site_search_by_google)
+                .setIcon(R.drawable.ic_google)
                 .setView(textInputLayout)
                 .setPositiveButton(R.string.title_search_action) { d, _ ->
                     textInputLayout.editText?.text?.let { doAction(it.toString()) }
