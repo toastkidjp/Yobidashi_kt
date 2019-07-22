@@ -460,7 +460,7 @@ class BrowserFragment : Fragment(),
                         ArchivesActivity.REQUEST_CODE
                 )
             }
-            Menu.SEARCH-> {
+            Menu.WEB_SEARCH-> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
             }
             Menu.SITE_SEARCH-> {
