@@ -2,13 +2,12 @@ package jp.toastkid.yobidashi.settings
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.color_filter.ColorFilter
@@ -44,11 +43,6 @@ class SettingsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         applyColorToToolbar(binding.toolbar)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.common, menu)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

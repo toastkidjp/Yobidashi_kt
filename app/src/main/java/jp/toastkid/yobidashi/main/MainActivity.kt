@@ -12,7 +12,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -292,11 +291,6 @@ class MainActivity :
     private fun confirmExit() {
         CloseDialogFragment()
                 .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.common, menu)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
