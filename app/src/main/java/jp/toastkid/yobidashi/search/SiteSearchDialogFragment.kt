@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
 import androidx.appcompat.app.AlertDialog
@@ -31,15 +32,6 @@ class SiteSearchDialogFragment : DialogFragment() {
         val textInputLayout = TextInputs.make(activityContext)
         TextInputs.setEmptyAlert(textInputLayout)
 
-        val dialog = AlertDialog.Builder(activityContext)
-                .setTitle(R.string.title_site_search_by_google)
-                .setIcon(R.drawable.ic_google)
-                .setView(textInputLayout)
-                .setPositiveButton(R.string.title_search_action) { d, _ ->
-                    textInputLayout.editText?.text?.let { doAction(it.toString()) }
-                    d.dismiss()
-                }
-                .create()
         textInputLayout.editText?.let { editText ->
             editText.hint = activityContext.getString(R.string.hint_please_input)
             editText.setOnEditorActionListener { _, actionId, _ ->
@@ -55,8 +47,20 @@ class SiteSearchDialogFragment : DialogFragment() {
             }
         }
 
-        textInputLayout.requestFocus()
-        return dialog
+        return AlertDialog.Builder(activityContext)
+                .setTitle(R.string.title_site_search_by_google)
+                .setIcon(R.drawable.ic_google)
+                .setView(textInputLayout)
+                .setPositiveButton(R.string.title_search_action) { d, _ ->
+                    textInputLayout.editText?.text?.let { doAction(it.toString()) }
+                    d.dismiss()
+                }
+                .create()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
     /**
