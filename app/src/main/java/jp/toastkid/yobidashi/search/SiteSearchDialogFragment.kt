@@ -64,7 +64,10 @@ class SiteSearchDialogFragment : DialogFragment() {
      *
      * @param query
      */
-    private fun doAction(query: String) {
+    private fun doAction(query: String?) {
+        if (query.isNullOrBlank()) {
+            return
+        }
         val context: Context = context ?: return
         if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
