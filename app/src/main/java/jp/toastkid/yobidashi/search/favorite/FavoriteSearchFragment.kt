@@ -142,8 +142,6 @@ class FavoriteSearchFragment : Fragment(),
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        val activityContext = context ?: return
-
         Completable.fromAction { adapter?.relation?.deleter()?.execute() }
                 ?.subscribeOn(Schedulers.io())
                 ?.subscribe {
