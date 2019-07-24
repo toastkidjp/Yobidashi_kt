@@ -312,10 +312,9 @@ class BrowserFragment : Fragment(),
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        // TODO Clean up
-        inflater?.inflate(R.menu.browser, menu)
+        inflater.inflate(R.menu.browser, menu)
 
-        menu?.let { menuNonNull ->
+        menu.let { menuNonNull ->
             menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
                 menuPresenter.switchMenuVisibility()
                 true

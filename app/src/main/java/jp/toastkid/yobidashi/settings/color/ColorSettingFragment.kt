@@ -230,10 +230,9 @@ class ColorSettingFragment : Fragment(),
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        // TODO Clean up
-        inflater?.inflate(R.menu.color_setting_toolbar_menu, menu)
+        inflater.inflate(R.menu.color_setting_toolbar_menu, menu)
 
-        menu?.let { menuNonNull ->
+        menu.let { menuNonNull ->
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_recommend)
                     ?.setOnMenuItemClickListener {
                         val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener false
