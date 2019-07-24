@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Handler
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.webkit.WebView
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
@@ -160,8 +160,9 @@ internal object WebViewFactory {
                 supportFragmentManager?.findFragmentByTag(BrowserFragment::class.java.simpleName),
                 1
         )
+        val fragmentManager = supportFragmentManager ?: return
         dialogFragment.show(
-                supportFragmentManager,
+                fragmentManager,
                 dialogFragment::class.java.simpleName
         )
     }

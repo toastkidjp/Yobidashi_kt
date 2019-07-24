@@ -7,20 +7,20 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.SeekBar
+import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
-import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
+import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
@@ -303,6 +303,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      * UserAgent setting.
      */
     fun userAgent() {
+        val fragmentManager = fragmentManager ?: return
+
         val dialogFragment = UserAgentDialogFragment()
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(

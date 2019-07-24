@@ -41,7 +41,7 @@ class SiteSearchDialogFragment : DialogFragment() {
                 }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     doAction(editText.text.toString())
-                    dialog.dismiss()
+                    dialog?.dismiss()
                 }
                 true
             }

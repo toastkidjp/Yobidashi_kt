@@ -121,9 +121,10 @@ class FavoriteSearchFragment : Fragment(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
+        // TODO Clean up
         inflater?.inflate(R.menu.favorite_toolbar_menu, menu)
 
         menu?.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
