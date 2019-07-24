@@ -9,9 +9,9 @@ package jp.toastkid.yobidashi.browser.webview.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 
 /**
@@ -36,9 +36,10 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
                 .setTitle("Image: $url")
                 .setItems(R.array.image_menu, { _, which ->
                     when (which) {
-                        0 -> onClick?.onClickSetBackground(url)
-                        1 -> onClick?.onClickSaveForBackground(url)
-                        2 -> onClick?.onClickDownloadImage(url)
+                        0 -> onClick?.onClickImageSearch(url)
+                        1 -> onClick?.onClickSetBackground(url)
+                        2 -> onClick?.onClickSaveForBackground(url)
+                        3 -> onClick?.onClickDownloadImage(url)
                     }
                 })
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }

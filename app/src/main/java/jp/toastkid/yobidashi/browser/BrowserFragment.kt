@@ -922,6 +922,10 @@ class BrowserFragment : Fragment(),
     
     private fun colorPair() = preferenceApplier.colorPair()
 
+    override fun onClickImageSearch(url: String) {
+        tabs.openNewWebTab("https://www.google.co.jp/searchbyimage?image_url=$url")
+    }
+
     override fun onClickSetBackground(url: String) {
         val activityContext = context ?: return
         ImageDownloader(url, { activityContext }, Consumer { file ->

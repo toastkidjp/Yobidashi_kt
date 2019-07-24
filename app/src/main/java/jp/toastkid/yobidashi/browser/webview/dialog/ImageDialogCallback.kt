@@ -12,6 +12,8 @@ package jp.toastkid.yobidashi.browser.webview.dialog
  */
 interface ImageDialogCallback {
 
+    fun onClickImageSearch(url: String)
+
     fun onClickSetBackground(url: String)
 
     fun onClickSaveForBackground(url: String)
