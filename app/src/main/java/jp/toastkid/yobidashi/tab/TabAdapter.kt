@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -19,7 +20,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
@@ -30,6 +30,8 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SiteSearchDialogFragment
 import jp.toastkid.yobidashi.tab.model.EditorTab
@@ -50,7 +52,6 @@ class TabAdapter(
         private val browserModule: BrowserModule,
         private val editor: EditorModule,
         private val pdf: PdfModule,
-        private val titleCallback: (TitlePair) -> Unit,
         private val tabEmptyCallback: () -> Unit
 ) {
 
@@ -72,11 +73,16 @@ class TabAdapter(
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_up)
 
+    private var headerViewModel: HeaderViewModel? = null
+
     init {
         val viewContext = webViewContainer.context
         tabsScreenshots = makeNewScreenshotDir(viewContext)
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
+        if (viewContext is MainActivity) {
+            headerViewModel = ViewModelProviders.of(viewContext).get(HeaderViewModel::class.java)
+        }
         setCurrentTabCount()
     }
     /**
@@ -239,7 +245,8 @@ class TabAdapter(
                 callLoadUrl(it.getUrl())
                 return@let
             }
-            titleCallback(TitlePair.make(it.title(), it.getUrl()))
+            headerViewModel?.title?.postValue(it.title())
+            headerViewModel?.url?.postValue(it.getUrl())
         }
     }
 
@@ -297,7 +304,9 @@ class TabAdapter(
                         pdf.load(uri)
                         pdf.scrollTo(currentTab.getScrolled())
                         pdf.assignNewThumbnail(currentTab).addTo(disposables)
-                        titleCallback(TitlePair.make(PDF_TAB_TITLE, uri.lastPathSegment ?: url))
+
+                        headerViewModel?.title?.postValue(PDF_TAB_TITLE)
+                        headerViewModel?.url?.postValue(uri.lastPathSegment ?: url)
                     } catch (e: SecurityException) {
                         failRead(e)
                         return

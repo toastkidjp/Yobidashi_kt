@@ -14,6 +14,7 @@ import android.view.animation.Animation
 import android.webkit.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -31,6 +32,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import timber.log.Timber
 
@@ -40,7 +42,6 @@ import timber.log.Timber
  */
 class BrowserModule(
         private val context: Context,
-        private val titleCallback: (TitlePair) -> Unit,
         private val loadingCallback: (Int, Boolean) -> Unit,
         private val historyAddingCallback: (String, String) -> Unit,
         scrollCallback: (Int, Int, Int, Int) -> Unit
@@ -62,6 +63,8 @@ class BrowserModule(
     private val adRemover: AdRemover =
             AdRemover(context.assets.open("ad_hosts.txt"))
 
+    private var headerViewModel: HeaderViewModel? = null
+
     init {
         webViewPool = WebViewPool(
                 context,
@@ -72,6 +75,10 @@ class BrowserModule(
         )
 
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
+
+        if (context is MainActivity) {
+            headerViewModel = ViewModelProviders.of(context).get(HeaderViewModel::class.java)
+        }
     }
 
     private fun makeWebViewClient(): WebViewClient = object : WebViewClient() {
@@ -92,7 +99,8 @@ class BrowserModule(
 
             try {
                 if (view == currentView()) {
-                    titleCallback(TitlePair.make(title, urlStr))
+                    headerViewModel?.title?.postValue(title)
+                    headerViewModel?.url?.postValue(urlStr)
                 }
             } catch (e: Exception) {
                 Timber.e(e)
@@ -208,15 +216,17 @@ class BrowserModule(
 
             loadingCallback(newProgress, newProgress < 65)
 
-            if (!isLoadFinished) {
-                try {
-                    titleCallback(
-                            TitlePair.make(view.context.getString(R.string.prefix_loading) + newProgress + "%", view.url ?: "")
-                    )
-                } catch (e: Exception) {
-                    Timber.e(e)
-                }
+            if (isLoadFinished) {
+                return
+            }
 
+            try {
+                val progressTitle =
+                        view.context.getString(R.string.prefix_loading) + newProgress + "%"
+                headerViewModel?.title?.postValue(progressTitle)
+                headerViewModel?.url?.postValue(view.url)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
 

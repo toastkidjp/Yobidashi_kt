@@ -18,6 +18,8 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import io.reactivex.disposables.CompositeDisposable
@@ -110,7 +112,25 @@ class MainActivity :
             ColorFilter(this, binding.root).start()
         }
 
+        initializeHeaderViewModel()
+
         processShortcut(intent)
+    }
+
+    private fun initializeHeaderViewModel() {
+        val headerViewModel = ViewModelProviders.of(this).get(HeaderViewModel::class.java)
+        headerViewModel.title.observe(this, Observer { title ->
+            if (title.isNullOrBlank()) {
+                return@Observer
+            }
+            binding.appBarMain.toolbar.title = title
+        })
+        headerViewModel.url.observe(this, Observer { url ->
+            if (url.isNullOrBlank()) {
+                return@Observer
+            }
+            binding.appBarMain.toolbar.subtitle = url
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -184,10 +204,7 @@ class MainActivity :
     }
 
     override fun onTitleChanged(titlePair: TitlePair) {
-        binding.appBarMain.toolbar.let {
-            it.title    = titlePair.title()
-            it.subtitle = titlePair.subtitle()
-        }
+        // TODO
     }
 
     /**

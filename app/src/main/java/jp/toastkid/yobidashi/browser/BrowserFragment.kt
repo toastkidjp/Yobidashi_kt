@@ -148,11 +148,6 @@ class BrowserFragment : Fragment(),
     /**
      * PublishSubject of title pair.
      */
-    private val titleSubject: PublishSubject<TitlePair> = PublishSubject.create<TitlePair>()
-
-    /**
-     * PublishSubject of title pair.
-     */
     private val progressSubject: PublishSubject<Int> = PublishSubject.create<Int>()
 
     /**
@@ -241,7 +236,6 @@ class BrowserFragment : Fragment(),
 
         browserModule = BrowserModule(
                 context as Context,
-                titleCallback = titleSubject::onNext,
                 loadingCallback = { progress, loading ->
                     if (!loading) {
                         binding?.swipeRefresher?.isRefreshing = false
@@ -267,7 +261,6 @@ class BrowserFragment : Fragment(),
                 browserModule,
                 editorModule,
                 pdfModule,
-                titleSubject::onNext,
                 this::onEmptyTabs
         )
 
@@ -316,9 +309,10 @@ class BrowserFragment : Fragment(),
         tabs.openNewWebTab()
     }
 
-    override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
+        // TODO Clean up
         inflater?.inflate(R.menu.browser, menu)
 
         menu?.let { menuNonNull ->
@@ -420,6 +414,7 @@ class BrowserFragment : Fragment(),
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
             Menu.USER_AGENT-> {
+                val fragmentManager = fragmentManager ?: return
                 val dialogFragment = UserAgentDialogFragment()
                 dialogFragment.setTargetFragment(this, 1)
                 dialogFragment.show(
@@ -431,6 +426,7 @@ class BrowserFragment : Fragment(),
                 startActivity(SettingsIntentFactory.wifi())
             }
             Menu.PAGE_INFORMATION-> {
+                val fragmentManager = fragmentManager ?: return
                 PageInformationDialogFragment()
                         .also { it.arguments = tabs.makeCurrentPageInformation() }
                         .show(
@@ -672,11 +668,6 @@ class BrowserFragment : Fragment(),
 
         ClippingUrlOpener(binding?.root) { loadWithNewTab(it) }
 
-        titleSubject.subscribe(
-                { progressBarCallback.onTitleChanged(it) },
-                Timber::e
-        ).addTo(disposables)
-
         progressSubject.subscribe(
                 { progressBarCallback.onProgressChanged(it) },
                 Timber::e
@@ -777,6 +768,7 @@ class BrowserFragment : Fragment(),
      * Show tab list.
      */
     private fun showTabList() {
+        val fragmentManager = fragmentManager ?: return
         tabListDialogFragment?.show(fragmentManager, "")
     }
 
