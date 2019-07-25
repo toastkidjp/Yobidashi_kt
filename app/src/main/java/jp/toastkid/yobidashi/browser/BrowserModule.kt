@@ -42,7 +42,6 @@ import timber.log.Timber
  */
 class BrowserModule(
         private val context: Context,
-        private val loadingCallback: (Int, Boolean) -> Unit,
         private val historyAddingCallback: (String, String) -> Unit,
         scrollCallback: (Int, Int, Int, Int) -> Unit
 ) {
@@ -85,14 +84,15 @@ class BrowserModule(
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            loadingCallback(0, true)
+            headerViewModel?.progress?.postValue(0)
             isLoadFinished = false
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
             isLoadFinished = true
-            loadingCallback(100, false)
+            headerViewModel?.progress?.postValue(100)
+            headerViewModel?.stopProgress?.postValue(true)
 
             val title = view.title ?: ""
             val urlStr = url ?: ""
@@ -130,7 +130,8 @@ class BrowserModule(
         override fun onReceivedError(
                 view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
-            loadingCallback(100, false)
+            headerViewModel?.progress?.postValue(100)
+            headerViewModel?.stopProgress?.postValue(true)
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
@@ -214,7 +215,8 @@ class BrowserModule(
         override fun onProgressChanged(view: WebView, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
 
-            loadingCallback(newProgress, newProgress < 65)
+            headerViewModel?.progress?.postValue(newProgress)
+            headerViewModel?.stopProgress?.postValue(newProgress < 65)
 
             if (isLoadFinished) {
                 return

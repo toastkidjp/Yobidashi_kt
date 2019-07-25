@@ -21,11 +21,12 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
@@ -60,6 +61,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
+import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
@@ -146,19 +148,9 @@ class BrowserFragment : Fragment(),
     private var toolbarAction: ToolbarAction? = null
 
     /**
-     * PublishSubject of title pair.
-     */
-    private val progressSubject: PublishSubject<Int> = PublishSubject.create<Int>()
-
-    /**
      * Composite disposer.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * Progress bar callback.
-     */
-    private lateinit var progressBarCallback: ProgressBarCallback
 
     /**
      * Floating preview object.
@@ -182,11 +174,6 @@ class BrowserFragment : Fragment(),
         toolbarAction = context as ToolbarAction?
         activity?.let {
             rxPermissions = RxPermissions(it)
-        }
-        activity?.let {
-            if (it is ProgressBarCallback) {
-                progressBarCallback = it
-            }
         }
         torch = Torch(context)
     }
@@ -236,16 +223,6 @@ class BrowserFragment : Fragment(),
 
         browserModule = BrowserModule(
                 context as Context,
-                loadingCallback = { progress, loading ->
-                    if (!loading) {
-                        binding?.swipeRefresher?.isRefreshing = false
-                        tabs.saveTabList()
-                        val currentTab = tabs.currentTab()
-                        tabs.deleteThumbnail(currentTab?.thumbnailPath)
-                        tabs.saveNewThumbnailAsync()
-                    }
-                    progressSubject.onNext(progress)
-                },
                 historyAddingCallback = { title, url -> tabs.addHistory(title, url) },
                 scrollCallback = { _, vertical, _, old ->
                     val difference = vertical - old
@@ -255,6 +232,18 @@ class BrowserFragment : Fragment(),
                     if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
                 }
         )
+
+        ViewModelProviders.of(this).get(HeaderViewModel::class.java)
+                .stopProgress.observe(this, Observer { stop ->
+            if (!stop) {
+                return@Observer
+            }
+            binding?.swipeRefresher?.isRefreshing = false
+            tabs.saveTabList()
+            val currentTab = tabs.currentTab()
+            tabs.deleteThumbnail(currentTab?.thumbnailPath)
+            tabs.saveNewThumbnailAsync()
+        })
 
         tabs = TabAdapter(
                 binding?.webViewContainer as FrameLayout,
@@ -666,11 +655,6 @@ class BrowserFragment : Fragment(),
         editorModule.applySettings()
 
         ClippingUrlOpener(binding?.root) { loadWithNewTab(it) }
-
-        progressSubject.subscribe(
-                { progressBarCallback.onProgressChanged(it) },
-                Timber::e
-        ).addTo(disposables)
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 

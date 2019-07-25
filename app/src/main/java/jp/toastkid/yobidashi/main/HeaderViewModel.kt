@@ -19,4 +19,8 @@ class HeaderViewModel : ViewModel() {
 
     val url = MutableLiveData<String?>()
 
+    val progress = MutableLiveData<Int>()
+
+    val stopProgress = MutableLiveData<Boolean>()
+
 }
