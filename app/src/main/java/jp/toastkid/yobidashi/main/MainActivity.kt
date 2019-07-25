@@ -28,7 +28,6 @@ import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.ProgressBarCallback
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
@@ -59,8 +58,7 @@ import java.io.IOException
 class MainActivity :
         BaseActivity(),
         FragmentReplaceAction,
-        ToolbarAction,
-        ProgressBarCallback
+        ToolbarAction
 {
 
     /**
@@ -199,10 +197,6 @@ class MainActivity :
     private fun finishWithoutTransition() {
         overridePendingTransition(0, 0)
         finish()
-    }
-
-    override fun onProgressChanged(newProgress: Int) {
-        // TODO
     }
 
     /**
