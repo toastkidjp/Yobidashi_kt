@@ -7,12 +7,12 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -34,6 +34,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
+        setHasOptionsMenu(true)
         return binding.root
     }
 

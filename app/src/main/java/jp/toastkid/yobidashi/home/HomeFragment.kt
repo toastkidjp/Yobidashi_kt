@@ -16,16 +16,18 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.databinding.FragmentHomeBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -38,12 +40,14 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : Fragment(), CommonFragmentAction {
 
     /**
      * Data binding object.
      */
     private lateinit var binding: FragmentHomeBinding
+
+    private lateinit var preferenceApplier: PreferenceApplier
 
     /**
      * Callback.
@@ -79,6 +83,10 @@ class HomeFragment : BaseFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
+
+        context?.let {
+            preferenceApplier = PreferenceApplier(it)
+        }
 
         initMenus()
 
@@ -135,16 +143,16 @@ class HomeFragment : BaseFragment() {
         super.onResume()
 
         binding.root.setBackgroundColor(
-                if (preferenceApplier().hasBackgroundImagePath())
+                if (preferenceApplier.hasBackgroundImagePath())
                     Color.TRANSPARENT
                 else
                     activity?.let { ContextCompat.getColor(it, R.color.darkgray_scale) } ?: Color.TRANSPARENT
         )
 
-        val colorPair = colorPair()
+        val colorPair = preferenceApplier.colorPair()
         @ColorInt val fontColor: Int = colorPair.fontColor()
 
-        binding.mainTitle.setTextColor(colorPair().fontColor())
+        binding.mainTitle.setTextColor(colorPair.fontColor())
         binding.searchAction.setTextColor(fontColor)
 
         @ColorInt val bgColor:   Int = colorPair.bgColor()
@@ -180,7 +188,7 @@ class HomeFragment : BaseFragment() {
                 startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
                 Timber.e(e)
-                VoiceSearch.suggestInstallGoogleApp(binding.root, colorPair())
+                VoiceSearch.suggestInstallGoogleApp(binding.root, preferenceApplier.colorPair())
             }
         }
     }

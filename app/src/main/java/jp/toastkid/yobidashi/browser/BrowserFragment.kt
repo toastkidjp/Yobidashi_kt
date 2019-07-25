@@ -19,12 +19,13 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
@@ -81,7 +82,8 @@ import kotlin.math.abs
  *
  * @author toastkidjp
  */
-class BrowserFragment : BaseFragment(),
+class BrowserFragment : Fragment(),
+        CommonFragmentAction,
         ImageDialogCallback,
         AnchorDialogCallback,
         TabListClearDialogFragment.Callback,
@@ -98,6 +100,8 @@ class BrowserFragment : BaseFragment(),
      * RxPermissions.
      */
     private var rxPermissions: RxPermissions? = null
+
+    private lateinit var preferenceApplier: PreferenceApplier
 
     /**
      * Archive folder.
@@ -203,9 +207,11 @@ class BrowserFragment : BaseFragment(),
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
         }
 
-        val colorPair = colorPair()
-
         val activityContext = context ?: return null
+
+        preferenceApplier = PreferenceApplier(activityContext)
+        val colorPair = preferenceApplier.colorPair()
+
         val cm = activityContext.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         searchWithClip = SearchWithClip(
                 cm,
@@ -440,7 +446,7 @@ class BrowserFragment : BaseFragment(),
                         )
                         return
                     }
-                    preferenceApplier().homeUrl = it
+                    preferenceApplier.homeUrl = it
                     Toaster.snackShort(
                             snackbarParent,
                             getString(R.string.message_replace_home_url, it) ,
@@ -522,7 +528,7 @@ class BrowserFragment : BaseFragment(),
                 menu.titleId,
                 R.string.run,
                 View.OnClickListener { onMenuClick(menu) },
-                preferenceApplier().colorPair()
+                preferenceApplier.colorPair()
         )
         return true
     }
@@ -647,10 +653,8 @@ class BrowserFragment : BaseFragment(),
         if (tabs.isNotEmpty()) {
             tabs.replaceToCurrentTab(false)
         } else {
-            tabs.openNewWebTab(preferenceApplier().homeUrl)
+            tabs.openNewWebTab(preferenceApplier.homeUrl)
         }
-
-        val preferenceApplier = preferenceApplier()
 
         menuPresenter.onResume { editorModule.setSpace(it) }
 
@@ -691,7 +695,7 @@ class BrowserFragment : BaseFragment(),
     override fun tapHeader() {
         val activityContext = context ?: return
         val currentUrl = browserModule.currentUrl()
-        val inputText = if (preferenceApplier().enableSearchQueryExtract) {
+        val inputText = if (preferenceApplier.enableSearchQueryExtract) {
             SearchQueryExtractor(currentUrl) ?: currentUrl
         } else {
             currentUrl
@@ -876,15 +880,17 @@ class BrowserFragment : BaseFragment(),
             floatingPreview.invoke(webView, url)
         }
     }
+    
+    private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onClickSetBackground(url: String) {
         val activityContext = context ?: return
         ImageDownloader(url, { activityContext }, Consumer { file ->
-            preferenceApplier().backgroundImagePath = file.absolutePath
+            preferenceApplier.backgroundImagePath = file.absolutePath
             Toaster.snackShort(
                     binding?.root as View,
                     R.string.message_change_background_image,
-                    preferenceApplier().colorPair()
+                    preferenceApplier.colorPair()
             )
         }).addTo(disposables)
     }
@@ -895,7 +901,7 @@ class BrowserFragment : BaseFragment(),
             Toaster.snackShort(
                     binding?.root as View,
                     getString(R.string.message_done_save) + file.name,
-                    preferenceApplier().colorPair()
+                    preferenceApplier.colorPair()
             )
         }).addTo(disposables)
     }
@@ -924,7 +930,7 @@ class BrowserFragment : BaseFragment(),
         Toaster.snackShort(
                 binding?.root as View,
                 getString(R.string.format_result_user_agent, userAgent.title()),
-                preferenceApplier().colorPair()
+                preferenceApplier.colorPair()
         )
     }
 

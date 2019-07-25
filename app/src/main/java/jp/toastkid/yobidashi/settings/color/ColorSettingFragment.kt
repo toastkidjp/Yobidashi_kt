@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,19 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.gfx.android.orma.rx.RxRelation
 import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 
 /**
@@ -30,7 +32,10 @@ import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
  *
  * @author toastkidjp
  */
-class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogFragment.Callback {
+class ColorSettingFragment : Fragment(),
+        CommonFragmentAction,
+        TitleIdSupplier,
+        ClearColorsDialogFragment.Callback {
 
     /**
      * Initial background color.
@@ -52,6 +57,8 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
      */
     private var adapter: OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>? = null
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     /**
      * Subscribed disposables.
      */
@@ -65,6 +72,9 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
                 false
         )
         binding?.fragment = this
+
+        val context = context ?: return null
+        preferenceApplier = PreferenceApplier(context)
 
         setHasOptionsMenu(true)
 
@@ -190,7 +200,6 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
      * @param fontColor Font color int
      */
     private fun commitNewColor(bgColor: Int, fontColor: Int) {
-        val preferenceApplier = preferenceApplier()
         preferenceApplier.color = bgColor
         preferenceApplier.fontColor = fontColor
 
@@ -207,7 +216,6 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
      * Reset button's action.
      */
     fun reset() {
-        val preferenceApplier = preferenceApplier()
         preferenceApplier.color = initialBgColor
         preferenceApplier.fontColor = initialFontColor
 
@@ -268,6 +276,8 @@ class ColorSettingFragment : BaseFragment(), TitleIdSupplier, ClearColorsDialogF
 
         override fun getItemCount(): Int = relation.count()
     }
+
+    private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onDestroy() {
         super.onDestroy()

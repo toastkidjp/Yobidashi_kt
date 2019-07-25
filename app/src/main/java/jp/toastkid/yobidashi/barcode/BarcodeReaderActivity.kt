@@ -55,7 +55,6 @@ class BarcodeReaderActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
         binding?.toolbar?.let {
-            setSupportActionBar(it)
             initToolbar(it)
         }
 

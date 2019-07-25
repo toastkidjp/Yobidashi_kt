@@ -1,9 +1,10 @@
 package jp.toastkid.yobidashi.search.favorite
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -25,7 +26,9 @@ import jp.toastkid.yobidashi.search.SearchCategory
  *
  * @author toastkidjp
  */
-class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment.Callback {
+class FavoriteSearchFragment : Fragment(),
+        CommonFragmentAction,
+        ClearFavoriteSearchDialogFragment.Callback {
 
     /**
      * RecyclerView's adapter
@@ -36,6 +39,8 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
      * Data Binding object.
      */
     private var binding: FragmentFavoriteSearchBinding? = null
+
+    private lateinit var preferenceApplier: PreferenceApplier
 
     /**
      * [CompositeDisposable].
@@ -51,6 +56,9 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
         binding = DataBindingUtil.inflate<FragmentFavoriteSearchBinding>(
                 inflater, LAYOUT_ID, container, false)
         binding?.activity = this
+
+        val context = context ?: return binding?.root
+        preferenceApplier = PreferenceApplier(context)
 
         initFavSearchView()
 
@@ -142,7 +150,7 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
                     Toaster.snackShort(
                             binding?.root as View,
                             R.string.settings_color_delete,
-                            PreferenceApplier(activityContext).colorPair()
+                            colorPair()
                     )
                 }
                 ?.addTo(disposables)
@@ -162,6 +170,8 @@ class FavoriteSearchFragment : BaseFragment(), ClearFavoriteSearchDialogFragment
         val layout = binding?.additionArea ?: return
         Addition(layout) { messageId -> Toaster.snackShort(layout, messageId, colorPair()) }.invoke()
     }
+
+    private fun colorPair() = preferenceApplier.colorPair()
 
     @StringRes
     override fun titleId() = R.string.title_favorite_search
