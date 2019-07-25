@@ -15,13 +15,6 @@ package jp.toastkid.yobidashi.browser
 interface ProgressBarCallback {
 
     /**
-     * Call on title changed.
-     *
-     * @param titlePair [TitlePair]
-     */
-    fun onTitleChanged(titlePair: TitlePair)
-
-    /**
      * Call on progress changed.
      *
      * @param newProgress progress value.

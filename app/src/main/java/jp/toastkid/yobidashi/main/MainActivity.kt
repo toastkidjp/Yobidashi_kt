@@ -30,7 +30,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ProgressBarCallback
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -201,10 +200,6 @@ class MainActivity :
             it.visibility = View.VISIBLE
             it.progress = newProgress
         }
-    }
-
-    override fun onTitleChanged(titlePair: TitlePair) {
-        // TODO
     }
 
     /**
