@@ -291,14 +291,6 @@ class BrowserFragment : Fragment(),
             }
         })
         binding?.menuSwitch?.setOnTouchListener(listener)
-        binding?.menuSwitch?.let {
-            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
-            it.animate()
-                    .x(fabPosition.first)
-                    .y(fabPosition.second)
-                    .setDuration(10)
-                    .start()
-        }
     }
 
     /**
@@ -662,6 +654,8 @@ class BrowserFragment : Fragment(),
     override fun onResume() {
         super.onResume()
 
+        setFabPosition()
+
         val colorPair = colorPair()
         editorModule.applySettings()
 
@@ -700,6 +694,24 @@ class BrowserFragment : Fragment(),
             || browserScreenMode == ScreenMode.FIXED) {
             toolbarAction?.showToolbar()
             return
+        }
+    }
+
+    private fun setFabPosition() {
+        binding?.menuSwitch?.let {
+            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
+            val displayMetrics = it.context.resources.displayMetrics
+            val x = if (fabPosition.first > displayMetrics.widthPixels.toFloat()) {
+                displayMetrics.widthPixels.toFloat()
+            } else {
+                fabPosition.first
+            }
+            val y = if (fabPosition.second > displayMetrics.heightPixels.toFloat()) {
+                displayMetrics.heightPixels.toFloat()
+            } else {
+                fabPosition.second
+            }
+            it.animate().x(x).y(y).setDuration(10).start()
         }
     }
 
