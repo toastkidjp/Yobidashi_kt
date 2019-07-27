@@ -227,18 +227,6 @@ class BrowserFragment : Fragment(),
                 historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
         )
 
-        ViewModelProviders.of(this).get(HeaderViewModel::class.java)
-                .stopProgress.observe(this, Observer { stop ->
-            if (!stop) {
-                return@Observer
-            }
-            binding?.swipeRefresher?.isRefreshing = false
-            tabs.saveTabList()
-            val currentTab = tabs.currentTab()
-            tabs.deleteThumbnail(currentTab?.thumbnailPath)
-            tabs.saveNewThumbnailAsync()
-        })
-
         tabs = TabAdapter(
                 binding?.webViewContainer as FrameLayout,
                 browserModule,
@@ -279,6 +267,18 @@ class BrowserFragment : Fragment(),
                 return@Observer
             }
             if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
+        })
+
+        ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+                .stopProgress.observe(activity, Observer { stop ->
+            if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
+                return@Observer
+            }
+            binding?.swipeRefresher?.isRefreshing = false
+            tabs.saveTabList()
+            val currentTab = tabs.currentTab()
+            tabs.deleteThumbnail(currentTab?.thumbnailPath)
+            tabs.saveNewThumbnailAsync()
         })
     }
 
