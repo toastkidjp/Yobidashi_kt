@@ -42,6 +42,7 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
+import jp.toastkid.yobidashi.browser.webview.WebViewViewModel
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.color_filter.ColorFilter
@@ -223,14 +224,7 @@ class BrowserFragment : Fragment(),
 
         browserModule = BrowserModule(
                 context as Context,
-                historyAddingCallback = { title, url -> tabs.addHistory(title, url) },
-                scrollCallback = { _, vertical, _, old ->
-                    val difference = vertical - old
-                    if (abs(difference) < 15) {
-                        return@BrowserModule
-                    }
-                    if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
-                }
+                historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
         )
 
         ViewModelProviders.of(this).get(HeaderViewModel::class.java)
@@ -269,6 +263,23 @@ class BrowserFragment : Fragment(),
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val activity = activity ?: return
+        ViewModelProviders.of(activity).get(WebViewViewModel::class.java)
+                .scrollEvent.observe(activity, Observer { scrollEvent ->
+            if (scrollEvent == null) {
+                return@Observer
+            }
+            val difference = scrollEvent.vertical - scrollEvent.oldVertical
+            if (abs(difference) < 15) {
+                return@Observer
+            }
+            if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
+        })
     }
 
     @SuppressLint("ClickableViewAccessibility")

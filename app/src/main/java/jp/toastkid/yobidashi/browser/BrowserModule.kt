@@ -42,8 +42,7 @@ import timber.log.Timber
  */
 class BrowserModule(
         private val context: Context,
-        private val historyAddingCallback: (String, String) -> Unit,
-        scrollCallback: (Int, Int, Int, Int) -> Unit
+        private val historyAddingCallback: (String, String) -> Unit
 ) {
 
     private val webViewPool: WebViewPool
@@ -69,7 +68,6 @@ class BrowserModule(
                 context,
                 { makeWebViewClient() },
                 { makeWebChromeClient() },
-                scrollCallback,
                 preferenceApplier.poolSize
         )
 

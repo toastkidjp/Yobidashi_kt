@@ -8,6 +8,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.webkit.WebView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.UrlFactory
 
@@ -23,10 +25,13 @@ internal class CustomWebView(context: Context) : WebView(context) {
      */
     var enablePullToRefresh = false
 
-    /**
-     * Scroll listener.
-     */
-    var scrollListener: (Int, Int, Int, Int) -> Unit = { _, _, _, _  -> }
+    private var webViewViewModel: WebViewViewModel? = null
+
+    init {
+        if (context is FragmentActivity) {
+            webViewViewModel = ViewModelProviders.of(context).get(WebViewViewModel::class.java)
+        }
+    }
 
     /**
      * Scrolling value.
@@ -49,7 +54,8 @@ internal class CustomWebView(context: Context) : WebView(context) {
     override fun onScrollChanged(horizontal: Int, vertical: Int, oldHorizontal: Int, oldVertical: Int) {
         super.onScrollChanged(horizontal, vertical, oldHorizontal, oldVertical)
         scrolling += vertical
-        scrollListener(horizontal, vertical, oldHorizontal, oldVertical)
+        webViewViewModel?.scrollEvent
+                ?.postValue(ScrollEvent(horizontal, vertical, oldHorizontal, oldVertical))
     }
 
     override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode =
