@@ -236,10 +236,6 @@ class TabAdapter(
         browserModule.reloadWebViewSettings().addTo(disposables)
         browserModule.enableWebView()
 
-        currentTab()?.getUrl()?.let {
-
-        }
-
         currentTab()?.let {
             if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
                 callLoadUrl(it.getUrl())
