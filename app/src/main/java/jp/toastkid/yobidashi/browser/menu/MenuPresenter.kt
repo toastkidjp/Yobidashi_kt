@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.browser.menu
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
@@ -109,8 +109,11 @@ class MenuPresenter(
         recyclerView?.adapter?.notifyDataSetChanged()
     }
 
+    /**
+     * TODO Delete and replace.
+     */
     private fun setGravity(menuPos: MenuPos, view: View?) {
-        val layoutParams = view?.layoutParams as CoordinatorLayout.LayoutParams
+        val layoutParams = view?.layoutParams as FrameLayout.LayoutParams
         layoutParams.gravity = menuPos.gravity()
     }
 

@@ -18,6 +18,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -266,11 +267,11 @@ class BrowserFragment : Fragment(),
             if (abs(difference) < 15) {
                 return@Observer
             }
-            if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
+            //if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
         })
 
-        ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
-                .stopProgress.observe(activity, Observer { stop ->
+        val headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+        headerViewModel.stopProgress.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
             }
@@ -279,6 +280,17 @@ class BrowserFragment : Fragment(),
             val currentTab = tabs.currentTab()
             tabs.deleteThumbnail(currentTab?.thumbnailPath)
             tabs.saveNewThumbnailAsync()
+        })
+
+        headerViewModel.progress.observe(this, Observer { newProgress ->
+            if (70 < newProgress) {
+                binding?.progress?.isVisible = false
+                return@Observer
+            }
+            binding?.progress?.let {
+                it.isVisible = true
+                it.progress = newProgress
+            }
         })
     }
 
@@ -663,7 +675,7 @@ class BrowserFragment : Fragment(),
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
-        if (pdfModule.isVisible) {
+        if (pdfModule.isVisible()) {
             pdfModule.applyColor(colorPair)
         }
 
@@ -684,8 +696,8 @@ class BrowserFragment : Fragment(),
 
         val browserScreenMode = preferenceApplier.browserScreenMode()
         if (browserScreenMode == ScreenMode.FULL_SCREEN
-                || editorModule.isVisible
-                || pdfModule.isVisible
+                || editorModule.isVisible()
+                || pdfModule.isVisible()
         ) {
             hideHeader()
             return

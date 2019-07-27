@@ -128,16 +128,6 @@ class MainActivity :
             }
             binding.appBarMain.toolbar.subtitle = url
         })
-        headerViewModel.progress.observe(this, Observer { newProgress ->
-            if (70 < newProgress) {
-                binding.appBarMain.progress.visibility = View.GONE
-                return@Observer
-            }
-            binding.appBarMain.progress.let {
-                it.visibility = View.VISIBLE
-                it.progress = newProgress
-            }
-        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -404,7 +394,7 @@ class MainActivity :
                                 binding.appBarMain.toolbar.visibility = View.VISIBLE
                             }
                             .withEndAction   { binding.appBarMain.content?.requestLayout() }
-                            .start()
+                            //.start()
                 }
             }
         }

@@ -6,8 +6,26 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context="jp.toastkid.yobidashi.main.MainActivity"
         >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            >
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:foreground="@drawable/ripple_transparent"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:layout_scrollFlags="scroll|enterAlways"
+                />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ImageView
             android:id="@+id/background"
@@ -21,36 +39,8 @@
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                >
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/toolbar_height"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    android:foreground="@drawable/ripple_transparent"
-                    />
-            </com.google.android.material.appbar.AppBarLayout>
-            <ProgressBar
-                android:id="@+id/progress"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-6dp"
-                android:layout_below="@id/app_bar"
-                android:visibility="gone"
-                />
-        </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

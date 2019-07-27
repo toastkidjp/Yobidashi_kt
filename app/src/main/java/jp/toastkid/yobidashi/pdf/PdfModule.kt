@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -207,4 +208,5 @@ class PdfModule(
         RecyclerViewScroller.toBottom(binding.pdfImages, adapter.itemCount)
     }
 
+    override fun isVisible() = binding.root.isVisible
 }
