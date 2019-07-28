@@ -12,8 +12,6 @@ import androidx.annotation.Size
 import androidx.core.view.NestedScrollingChild
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.UrlFactory
 
@@ -30,14 +28,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
      * Pull-to-Refresh availability.
      */
     var enablePullToRefresh = false
-
-    private var webViewViewModel: WebViewViewModel? = null
-
-    init {
-        if (context is FragmentActivity) {
-            webViewViewModel = ViewModelProviders.of(context).get(WebViewViewModel::class.java)
-        }
-    }
 
     /**
      * Scrolling value.
@@ -108,8 +98,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     override fun onScrollChanged(horizontal: Int, vertical: Int, oldHorizontal: Int, oldVertical: Int) {
         super.onScrollChanged(horizontal, vertical, oldHorizontal, oldVertical)
         scrolling += vertical
-        webViewViewModel?.scrollEvent
-                ?.postValue(ScrollEvent(horizontal, vertical, oldHorizontal, oldVertical))
     }
 
     override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode =
