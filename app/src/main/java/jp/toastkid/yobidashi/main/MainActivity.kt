@@ -97,7 +97,7 @@ class MainActivity :
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.appBarMain.toolbar.let { toolbar ->
+        binding.toolbar.let { toolbar ->
             initToolbar(toolbar)
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
@@ -120,13 +120,13 @@ class MainActivity :
             if (title.isNullOrBlank()) {
                 return@Observer
             }
-            binding.appBarMain.toolbar.title = title
+            binding.toolbar.title = title
         })
         headerViewModel.url.observe(this, Observer { url ->
             if (url.isNullOrBlank()) {
                 return@Observer
             }
-            binding.appBarMain.toolbar.subtitle = url
+            binding.toolbar.subtitle = url
         })
     }
 
@@ -245,7 +245,7 @@ class MainActivity :
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
-        binding.appBarMain.toolbar.let {
+        binding.toolbar.let {
             if (fragment is CommonFragmentAction) {
                 it.setTitle(fragment.titleId())
             }
@@ -302,7 +302,7 @@ class MainActivity :
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        applyColorToToolbar(binding.appBarMain.toolbar as Toolbar)
+        applyColorToToolbar(binding.toolbar as Toolbar)
 
         applyBackgrounds()
     }
@@ -342,7 +342,7 @@ class MainActivity :
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
-        binding.appBarMain.background?.setImageDrawable(background)
+        binding.background?.setImageDrawable(background)
     }
 
     override fun action(c: Command) {
@@ -362,16 +362,16 @@ class MainActivity :
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> Unit
             ScreenMode.FULL_SCREEN -> {
-                binding.appBarMain.toolbar.visibility = View.GONE
+                binding.toolbar.visibility = View.GONE
             }
             ScreenMode.EXPANDABLE -> {
-                binding.appBarMain.toolbar.animate()?.let {
+                binding.toolbar.animate()?.let {
                     it.cancel()
                     it.translationY(-resources.getDimension(R.dimen.toolbar_height))
                             .setDuration(HEADER_HIDING_DURATION)
-                            .withStartAction { binding.appBarMain.content?.requestLayout() }
+                            .withStartAction { binding.content?.requestLayout() }
                             .withEndAction   {
-                                binding.appBarMain.toolbar.visibility = View.GONE
+                                binding.toolbar.visibility = View.GONE
                             }
                             .start()
                 }
@@ -382,18 +382,18 @@ class MainActivity :
     override fun showToolbar() {
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> {
-                binding.appBarMain.toolbar.visibility = View.VISIBLE
+                binding.toolbar.visibility = View.VISIBLE
             }
             ScreenMode.FULL_SCREEN -> Unit
             ScreenMode.EXPANDABLE -> {
-                binding.appBarMain.toolbar.animate()?.let {
+                binding.toolbar.animate()?.let {
                     it.cancel()
                     it.translationY(0f)
                             .setDuration(HEADER_HIDING_DURATION)
                             .withStartAction {
-                                binding.appBarMain.toolbar.visibility = View.VISIBLE
+                                binding.toolbar.visibility = View.VISIBLE
                             }
-                            .withEndAction   { binding.appBarMain.content?.requestLayout() }
+                            .withEndAction   { binding.content?.requestLayout() }
                             //.start()
                 }
             }
