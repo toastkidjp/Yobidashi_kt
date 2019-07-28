@@ -747,6 +747,11 @@ class BrowserFragment : Fragment(),
             return true
         }
 
+        if (floatingPreview.isVisible()) {
+            floatingPreview.hide(browserModule.getWebView("preview"))
+            return true
+        }
+
         if (pageSearchPresenter.isVisible()) {
             pageSearchPresenter.hide()
             return true

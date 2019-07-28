@@ -15,6 +15,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import jp.toastkid.yobidashi.databinding.ContentFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
 
@@ -116,4 +117,6 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         webView?.isEnabled = false
         webView?.onPause()
     }
+
+    fun isVisible() = binding.previewBackground.isVisible
 }
