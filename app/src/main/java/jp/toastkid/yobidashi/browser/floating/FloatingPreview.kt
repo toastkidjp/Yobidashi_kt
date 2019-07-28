@@ -55,14 +55,20 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
         webView.loadUrl(url)
 
+        startEnterAnimation()
+    }
+
+    private fun startEnterAnimation() {
+        val heightPixels = binding.contentPanel.context.resources.displayMetrics.heightPixels
+
         binding.contentPanel.animate()
-                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels.toFloat())
+                .y(heightPixels.toFloat())
                 .setDuration(0)
                 .start()
 
         binding.contentPanel.animate()
-                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels * 0.6f)
-                .setDuration(200)
+                .y(heightPixels * 0.6f)
+                .setDuration(DURATION_MS)
                 .start()
     }
 
@@ -120,7 +126,7 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
     fun hide(webView: WebView?) {
         binding.contentPanel.animate()
                 .y(binding.contentPanel.context.resources.displayMetrics.heightPixels.toFloat())
-                .setDuration(200)
+                .setDuration(DURATION_MS)
                 .withEndAction {
                     binding.previewBackground.visibility = View.GONE
                     webView?.isEnabled = false
@@ -130,4 +136,8 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
     }
 
     fun isVisible() = binding.previewBackground.isVisible
+
+    companion object {
+        private const val DURATION_MS = 200L
+    }
 }
