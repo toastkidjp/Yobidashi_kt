@@ -12,9 +12,10 @@
         tools:visibility="visible"
         >
         <LinearLayout
+            android:id="@+id/content_panel"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/floating_preview_height"
+            android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_gravity="bottom"

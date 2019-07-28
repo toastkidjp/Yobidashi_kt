@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.browser.floating
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.View
 import android.webkit.WebChromeClient
@@ -40,6 +41,8 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
         binding.header.setOnClickListener { openNewTabWithUrl(url) }
 
+        setSlidingListener()
+
         binding.icon.setImageBitmap(null)
 
         webView.isEnabled = true
@@ -50,6 +53,16 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         binding.previewContainer.addView(webView)
 
         webView.loadUrl(url)
+
+        binding.contentPanel.animate()
+                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels * 0.6f)
+                .setDuration(0)
+                .start()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setSlidingListener() {
+        binding.header.setOnTouchListener(SlidingTouchListener(binding.contentPanel))
     }
 
     /**
