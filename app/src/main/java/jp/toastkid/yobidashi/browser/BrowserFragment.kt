@@ -189,6 +189,7 @@ class BrowserFragment : Fragment(),
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { tabs.reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
+            it.setDistanceToTriggerSync(5000)
         }
 
         val activityContext = context ?: return null
