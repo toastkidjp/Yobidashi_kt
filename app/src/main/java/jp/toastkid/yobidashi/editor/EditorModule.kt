@@ -458,7 +458,7 @@ class EditorModule(
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
-                    binding.snackbarContainer,
+                    binding.editorInput,
                     view.text.toString(),
                     R.string.run,
                     View.OnClickListener { view.performClick() },
@@ -475,7 +475,7 @@ class EditorModule(
      * @param id
      */
     private fun snackText(@StringRes id: Int) {
-        Toaster.snackShort(binding.snackbarContainer, id, preferenceApplier.colorPair())
+        Toaster.snackShort(binding.editorInput, id, preferenceApplier.colorPair())
     }
 
     /**
@@ -485,7 +485,7 @@ class EditorModule(
      */
     private fun snackText(message: String) {
         Toaster.snackShort(
-                binding.snackbarContainer,
+                binding.editorInput,
                 message,
                 preferenceApplier.colorPair()
         )
