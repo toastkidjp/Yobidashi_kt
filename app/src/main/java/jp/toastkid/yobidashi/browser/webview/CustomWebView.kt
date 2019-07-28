@@ -83,6 +83,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 returnValue = super.onTouchEvent(event)
+                enablePullToRefresh = false
                 // end NestedScroll
                 stopNestedScroll()
             }

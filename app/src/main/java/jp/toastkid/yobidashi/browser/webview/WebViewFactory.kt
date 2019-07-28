@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
-import android.view.MotionEvent
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.fragment.app.DialogFragment
@@ -56,12 +55,6 @@ internal object WebViewFactory {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        webView.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_UP -> webView.enablePullToRefresh = false
-            }
-            false
-        }
 
         val preferenceApplier = PreferenceApplier(context)
 
