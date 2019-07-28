@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser.webview
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.text.TextUtils
 import android.view.ActionMode
@@ -42,8 +41,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private val scrollConsumed = IntArray(2)
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(motionEvent: MotionEvent?): Boolean {
+    override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
         if (motionEvent?.action == MotionEvent.ACTION_UP) {
             scrolling = 0
         }
@@ -66,7 +64,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     event.offsetLocation(0f, -scrollOffset[1].toFloat())
                     nestedOffsetY += scrollOffset[1]
                 }
-                returnValue = super.onTouchEvent(event)
+                returnValue = super.dispatchTouchEvent(event)
 
                 // NestedScroll
                 if (dispatchNestedScroll(0, scrollOffset[1], 0, deltaY.toInt(), scrollOffset)) {
@@ -76,13 +74,13 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 }
             }
             MotionEvent.ACTION_DOWN -> {
-                returnValue = super.onTouchEvent(event)
+                returnValue = super.dispatchTouchEvent(event)
                 lastY = eventY.toFloat()
                 // start NestedScroll
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                returnValue = super.onTouchEvent(event)
+                returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
                 // end NestedScroll
                 stopNestedScroll()
