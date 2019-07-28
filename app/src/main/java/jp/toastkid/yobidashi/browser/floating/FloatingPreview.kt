@@ -56,8 +56,13 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         webView.loadUrl(url)
 
         binding.contentPanel.animate()
-                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels * 0.6f)
+                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels.toFloat())
                 .setDuration(0)
+                .start()
+
+        binding.contentPanel.animate()
+                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels * 0.6f)
+                .setDuration(200)
                 .start()
     }
 
@@ -113,9 +118,15 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
      * @param webView [WebView]
      */
     fun hide(webView: WebView?) {
-        binding.previewBackground.visibility = View.GONE
-        webView?.isEnabled = false
-        webView?.onPause()
+        binding.contentPanel.animate()
+                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels.toFloat())
+                .setDuration(200)
+                .withEndAction {
+                    binding.previewBackground.visibility = View.GONE
+                    webView?.isEnabled = false
+                    webView?.onPause()
+                }
+                .start()
     }
 
     fun isVisible() = binding.previewBackground.isVisible
