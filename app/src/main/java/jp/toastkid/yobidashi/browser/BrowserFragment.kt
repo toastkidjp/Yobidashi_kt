@@ -1079,7 +1079,7 @@ class BrowserFragment : Fragment(),
          * Layout ID.
          */
         @LayoutRes
-        private val layoutId = R.layout.fragment_browser
+        private const val layoutId = R.layout.fragment_browser
 
     }
 
