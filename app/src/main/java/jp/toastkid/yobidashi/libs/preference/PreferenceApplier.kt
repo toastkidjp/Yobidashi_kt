@@ -6,8 +6,8 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
+import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -36,7 +36,8 @@ class PreferenceApplier(private val context: Context) {
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
-        EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_FONT_SIZE
+        EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_FONT_SIZE,
+        CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y
     }
 
     private val preferences: SharedPreferences =
@@ -291,6 +292,29 @@ class PreferenceApplier(private val context: Context) {
 
     fun editorFontSize(): Int {
         return preferences.getInt(Key.EDITOR_FONT_SIZE.name, 16)
+    }
+
+    fun setNewCameraFabPosition(x: Float, y: Float) {
+        preferences.edit()
+                .putFloat(Key.CAMERA_FAB_BUTTON_POSITION_X.name, x)
+                .putFloat(Key.CAMERA_FAB_BUTTON_POSITION_Y.name, y)
+                .apply()
+    }
+
+    fun clearCameraFabPosition() {
+        preferences.edit()
+                .remove(Key.CAMERA_FAB_BUTTON_POSITION_X.name)
+                .remove(Key.CAMERA_FAB_BUTTON_POSITION_Y.name)
+                .apply()
+    }
+
+    fun cameraFabPosition(): Pair<Float, Float>? {
+        if (!preferences.contains(Key.CAMERA_FAB_BUTTON_POSITION_X.name)
+                || !preferences.contains(Key.CAMERA_FAB_BUTTON_POSITION_Y.name)) {
+            return null
+        }
+        return preferences.getFloat(Key.CAMERA_FAB_BUTTON_POSITION_X.name, -1f) to
+                preferences.getFloat(Key.CAMERA_FAB_BUTTON_POSITION_Y.name, -1f)
     }
 
     fun clear() {

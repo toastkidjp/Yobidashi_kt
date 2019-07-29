@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ActivityNotFoundException
@@ -58,6 +59,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
@@ -280,9 +282,16 @@ class BrowserFragment : Fragment(),
                 this
         )
 
+        setFabListener()
+
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setFabListener() {
+        binding?.menuSwitch?.setOnTouchListener(DraggableTouchListener())
     }
 
     /**
