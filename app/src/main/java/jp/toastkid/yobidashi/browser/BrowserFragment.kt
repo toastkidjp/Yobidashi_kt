@@ -18,6 +18,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -183,7 +184,7 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding?.fragment = this
 
         binding?.swipeRefresher?.let {
@@ -1073,6 +1074,12 @@ class BrowserFragment : Fragment(),
          * Request code of opening PDF.
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 3
+
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private val layoutId = R.layout.fragment_browser
 
     }
 
