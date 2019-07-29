@@ -13,6 +13,7 @@ import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.search.SearchCategory
 import java.io.File
 import java.util.*
+import kotlin.math.max
 
 /**
  * Preferences wrapper.
@@ -321,8 +322,8 @@ class PreferenceApplier(private val context: Context) {
 
     fun setNewMenuFabPosition(x: Float, y: Float) {
         preferences.edit()
-                .putFloat(Key.MENU_FAB_BUTTON_POSITION_X.name, x)
-                .putFloat(Key.MENU_FAB_BUTTON_POSITION_Y.name, y)
+                .putFloat(Key.MENU_FAB_BUTTON_POSITION_X.name, max(0f, x))
+                .putFloat(Key.MENU_FAB_BUTTON_POSITION_Y.name, max(0f, y))
                 .apply()
     }
 
