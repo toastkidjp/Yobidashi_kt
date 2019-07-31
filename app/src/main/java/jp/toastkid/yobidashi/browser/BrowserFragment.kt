@@ -74,6 +74,7 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
@@ -654,6 +655,8 @@ class BrowserFragment : Fragment(),
     override fun onResume() {
         super.onResume()
 
+        switchToolbarVisibility()
+
         setFabPosition()
 
         val colorPair = colorPair()
@@ -681,19 +684,21 @@ class BrowserFragment : Fragment(),
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }
+    }
 
+    private fun switchToolbarVisibility() {
         val browserScreenMode = preferenceApplier.browserScreenMode()
+        val currentTab = tabs.currentTab()
         if (browserScreenMode == ScreenMode.FULL_SCREEN
-                || editorModule.isVisible()
-                || pdfModule.isVisible()
+                || currentTab is EditorTab
+                || currentTab is PdfTab
         ) {
             hideHeader()
             return
         }
         if (browserScreenMode == ScreenMode.EXPANDABLE
-            || browserScreenMode == ScreenMode.FIXED) {
+                || browserScreenMode == ScreenMode.FIXED) {
             toolbarAction?.showToolbar()
-            return
         }
     }
 
