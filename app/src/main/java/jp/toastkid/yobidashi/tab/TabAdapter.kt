@@ -4,13 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.core.view.get
+import androidx.fragment.app.FragmentActivity
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -130,7 +130,7 @@ class TabAdapter(
     /**
      * Open new tab with URL string.
      */
-    fun openNewWebTab(url: String = preferenceApplier.homeUrl) {
+    fun openNewWebTab(url: String = preferenceApplier.homeUrl, withLoad: Boolean = true) {
         val newTab = WebTab()
         if (Urls.isValidUrl(url)) {
             newTab.histories.add(0, History("", url))
@@ -138,7 +138,9 @@ class TabAdapter(
         tabList.add(newTab)
         setIndexByTab(newTab)
         replaceWebView()
-        callLoadUrl(url)
+        if (withLoad) {
+            callLoadUrl(url)
+        }
         Toaster.snackShort(
                 webViewContainer,
                 webViewContainer.context.getString(R.string.message_tab_open_new, url),
@@ -387,6 +389,7 @@ class TabAdapter(
      */
     @Throws(IOException::class)
     fun loadArchive(archiveFile: File) {
+        openNewWebTab(withLoad = true)
         currentWebView()?.let { Archive.loadArchive(it, archiveFile) }
     }
 

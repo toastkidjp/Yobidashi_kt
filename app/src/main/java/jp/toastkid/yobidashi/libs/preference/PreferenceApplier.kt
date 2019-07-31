@@ -37,7 +37,8 @@ class PreferenceApplier(private val context: Context) {
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
         EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_FONT_SIZE,
-        CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y
+        CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
+        MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y
     }
 
     private val preferences: SharedPreferences =
@@ -315,6 +316,30 @@ class PreferenceApplier(private val context: Context) {
         }
         return preferences.getFloat(Key.CAMERA_FAB_BUTTON_POSITION_X.name, -1f) to
                 preferences.getFloat(Key.CAMERA_FAB_BUTTON_POSITION_Y.name, -1f)
+    }
+
+
+    fun setNewMenuFabPosition(x: Float, y: Float) {
+        preferences.edit()
+                .putFloat(Key.MENU_FAB_BUTTON_POSITION_X.name, x)
+                .putFloat(Key.MENU_FAB_BUTTON_POSITION_Y.name, y)
+                .apply()
+    }
+
+    fun clearMenuFabPosition() {
+        preferences.edit()
+                .remove(Key.MENU_FAB_BUTTON_POSITION_X.name)
+                .remove(Key.MENU_FAB_BUTTON_POSITION_Y.name)
+                .apply()
+    }
+
+    fun menuFabPosition(): Pair<Float, Float>? {
+        if (!preferences.contains(Key.MENU_FAB_BUTTON_POSITION_X.name)
+                || !preferences.contains(Key.MENU_FAB_BUTTON_POSITION_Y.name)) {
+            return null
+        }
+        return preferences.getFloat(Key.MENU_FAB_BUTTON_POSITION_X.name, -1f) to
+                preferences.getFloat(Key.MENU_FAB_BUTTON_POSITION_Y.name, -1f)
     }
 
     fun clear() {

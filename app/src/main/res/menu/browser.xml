@@ -35,4 +35,11 @@
         android:checkable="false"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/reset_menu_position"
+        android:orderInCategory="100"
+        android:title="@string/reset_button_position"
+        android:checkable="false"
+        app:showAsAction="never"
+        />
 </menu>

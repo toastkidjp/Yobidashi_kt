@@ -417,8 +417,7 @@ class MainActivity :
                 try {
                     replaceWithBrowser()
                     uiThreadHandler.postDelayed(
-                            { browserFragment.loadArchive(
-                                    File(data.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))},
+                            { browserFragment.loadArchive(ArchivesActivity.extractFile(intent)) },
                             200L
                     )
                 } catch (e: IOException) {

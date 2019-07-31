@@ -291,7 +291,21 @@ class BrowserFragment : Fragment(),
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setFabListener() {
-        binding?.menuSwitch?.setOnTouchListener(DraggableTouchListener())
+        val listener = DraggableTouchListener()
+        listener.setCallback(object : DraggableTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                preferenceApplier.setNewMenuFabPosition(x, y)
+            }
+        })
+        binding?.menuSwitch?.setOnTouchListener(listener)
+        binding?.menuSwitch?.let {
+            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
+            it.animate()
+                    .x(fabPosition.first)
+                    .y(fabPosition.second)
+                    .setDuration(10)
+                    .start()
+        }
     }
 
     /**
@@ -332,6 +346,15 @@ class BrowserFragment : Fragment(),
 
             menuNonNull.findItem(R.id.close_header)?.setOnMenuItemClickListener {
                 hideHeader()
+                true
+            }
+
+            menuNonNull.findItem(R.id.reset_menu_position)?.setOnMenuItemClickListener {
+                binding?.menuSwitch?.let {
+                    it.translationX = 0f
+                    it.translationY = 0f
+                    preferenceApplier.clearMenuFabPosition()
+                }
                 true
             }
         }
@@ -430,6 +453,12 @@ class BrowserFragment : Fragment(),
             }
             Menu.ARCHIVE-> {
                 browserModule.saveArchive()
+            }
+            Menu.VIEW_ARCHIVE -> {
+                startActivityForResult(
+                        ArchivesActivity.makeIntent(fragmentActivity),
+                        ArchivesActivity.REQUEST_CODE
+                )
             }
             Menu.SEARCH-> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
@@ -741,6 +770,7 @@ class BrowserFragment : Fragment(),
     private fun hideTabList() {
         tabListDialogFragment?.dismiss()
         tabs.replaceToCurrentTab(false)
+        menuPresenter.notifyDataSetChanged()
     }
 
     /**
@@ -758,7 +788,7 @@ class BrowserFragment : Fragment(),
         }
         when (requestCode) {
             ArchivesActivity.REQUEST_CODE -> {
-                loadArchive(File(intent.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))
+                loadArchive(ArchivesActivity.extractFile(intent))
             }
             VoiceSearch.REQUEST_CODE -> {
                 activity?.let {

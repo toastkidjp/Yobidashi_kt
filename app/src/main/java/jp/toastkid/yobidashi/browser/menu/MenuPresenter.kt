@@ -105,6 +105,10 @@ class MenuPresenter(
     
     override fun isVisible() = recyclerView?.isVisible ?: false
 
+    override fun notifyDataSetChanged() {
+        recyclerView?.adapter?.notifyDataSetChanged()
+    }
+
     private fun setGravity(menuPos: MenuPos, view: View?) {
         val layoutParams = view?.layoutParams as CoordinatorLayout.LayoutParams
         layoutParams.gravity = menuPos.gravity()
