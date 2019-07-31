@@ -45,6 +45,11 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         if (motionEvent?.action == MotionEvent.ACTION_UP) {
             scrolling = 0
         }
+
+        if (isMultiTap(motionEvent)) {
+            return super.dispatchTouchEvent(motionEvent)
+        }
+
         var returnValue = false
 
         val event = MotionEvent.obtain(motionEvent)
@@ -54,6 +59,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         }
         val eventY = event.y.toInt()
         event.offsetLocation(0f, nestedOffsetY)
+
         when (action) {
             MotionEvent.ACTION_MOVE -> {
                 var deltaY: Float = lastY - eventY
@@ -64,6 +70,8 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     event.offsetLocation(0f, -scrollOffset[1].toFloat())
                     nestedOffsetY += scrollOffset[1]
                 }
+                requestDisallowInterceptTouchEvent(true)
+
                 returnValue = super.dispatchTouchEvent(event)
 
                 // NestedScroll
@@ -72,22 +80,38 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     nestedOffsetY += scrollOffset[1]
                     lastY -= scrollOffset[1]
                 }
+                return returnValue
             }
             MotionEvent.ACTION_DOWN -> {
+                requestDisallowInterceptTouchEvent(true)
                 returnValue = super.dispatchTouchEvent(event)
                 lastY = eventY.toFloat()
                 // start NestedScroll
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
+                return returnValue
             }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+            MotionEvent.ACTION_UP -> {
+                requestDisallowInterceptTouchEvent(false)
                 returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
                 // end NestedScroll
                 stopNestedScroll()
+                return returnValue
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                requestDisallowInterceptTouchEvent(false)
+                returnValue = super.dispatchTouchEvent(event)
+                enablePullToRefresh = false
+                // end NestedScroll
+                stopNestedScroll()
+                return returnValue
             }
         }
-        return returnValue
+        return true
     }
+
+    private fun isMultiTap(motionEvent: MotionEvent?) =
+            (motionEvent?.pointerCount ?: 0) >= 2
 
     override fun onOverScrolled(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) {
         super.onOverScrolled(scrollX, scrollY, clampedX, clampedY)
