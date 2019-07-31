@@ -156,7 +156,7 @@ class BrowserFragment : Fragment(),
     /**
      * Floating preview object.
      */
-    private lateinit var floatingPreview: FloatingPreview
+    private var floatingPreview: FloatingPreview? = null
 
     /**
      * Torch API facade.
@@ -748,8 +748,8 @@ class BrowserFragment : Fragment(),
             return true
         }
 
-        if (floatingPreview.isVisible()) {
-            floatingPreview.hide(browserModule.getWebView("preview"))
+        if (floatingPreview?.isVisible() == true) {
+            floatingPreview?.hide(browserModule.getWebView("preview"))
             return true
         }
 
@@ -919,7 +919,7 @@ class BrowserFragment : Fragment(),
 
         binding?.floatingPreview?.let {
             floatingPreview = FloatingPreview(it)
-            floatingPreview.invoke(webView, url)
+            floatingPreview?.invoke(webView, url)
         }
     }
     
