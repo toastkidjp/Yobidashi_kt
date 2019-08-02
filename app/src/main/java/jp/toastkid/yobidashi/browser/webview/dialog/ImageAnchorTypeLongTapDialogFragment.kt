@@ -9,9 +9,9 @@ package jp.toastkid.yobidashi.browser.webview.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
@@ -48,10 +48,11 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
                         0 -> onClickAnchor?.openNewTab(anchor)
                         1 -> onClickAnchor?.openBackgroundTab(anchor)
                         2 -> onClickAnchor?.openCurrent(anchor)
-                        3 -> onClickImage?.onClickSetBackground(url)
-                        4 -> onClickImage?.onClickSaveForBackground(url)
-                        5 -> onClickImage?.onClickDownloadImage(url)
-                        6 -> Clipboard.clip(activityContext, anchor)
+                        3 -> onClickImage?.onClickImageSearch(url)
+                        4 -> onClickImage?.onClickSetBackground(url)
+                        5 -> onClickImage?.onClickSaveForBackground(url)
+                        6 -> onClickImage?.onClickDownloadImage(url)
+                        7 -> Clipboard.clip(activityContext, anchor)
                     }
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }

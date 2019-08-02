@@ -62,7 +62,7 @@ enum class Menu(
 
     SITE_SEARCH(R.string.title_site_search_by_google, R.drawable.ic_google),
 
-    SEARCH(R.string.title_search_action, R.drawable.ic_search_white),
+    WEB_SEARCH(R.string.title_search, R.drawable.ic_search_white),
 
     SETTING(R.string.title_settings, R.drawable.ic_settings),
 
