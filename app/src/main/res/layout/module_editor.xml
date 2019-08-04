@@ -4,6 +4,7 @@
         <variable name="editorModule"
             type="jp.toastkid.yobidashi.editor.EditorModule" />
     </data>
+
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,14 +13,14 @@
         android:layout_height="match_parent"
         android:background="@color/soft_background"
         android:visibility="gone"
-        tools:visibility="visible"
-        >
+        tools:visibility="visible">
 
         <ScrollView
             android:id="@+id/editor_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="44dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginBottom="@dimen/toolbar_height"
             android:fillViewport="true"
             >
             <EditText
@@ -39,7 +40,7 @@
             android:id="@+id/editor_menu"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             >
             <LinearLayout
                 android:orientation="horizontal"
