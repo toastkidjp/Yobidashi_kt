@@ -40,7 +40,6 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.menu.MenuBinder
 import jp.toastkid.yobidashi.browser.menu.MenuViewModel
-import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
@@ -97,8 +96,7 @@ class BrowserFragment : Fragment(),
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
         PasteAsConfirmationDialogFragment.Callback,
-        TabListDialogFragment.Callback,
-        PageSearcherContract.View
+        TabListDialogFragment.Callback
 {
 
     /**
@@ -168,7 +166,7 @@ class BrowserFragment : Fragment(),
     /**
      * Find-in-page module.
      */
-    override lateinit var pageSearchPresenter: PageSearcherContract.Presenter
+    private lateinit var pageSearchPresenter: PageSearcherModule
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -236,11 +234,6 @@ class BrowserFragment : Fragment(),
                 this::onEmptyTabs
         )
 
-        pageSearchPresenter = PageSearcherModule(
-                binding?.sip as ModuleSearcherBinding,
-                this
-        )
-
         setFabListener()
 
         setHasOptionsMenu(true)
@@ -254,6 +247,14 @@ class BrowserFragment : Fragment(),
         initializeHeaderViewModel()
 
         initializeMenuViewModel()
+
+        pageSearchPresenter = PageSearcherModule(
+                this,
+                binding?.sip as ModuleSearcherBinding,
+                { tabs.find(it) },
+                { tabs.findDown(it) },
+                { tabs.findUp(it) }
+        )
     }
 
     private fun initializeHeaderViewModel() {
@@ -1048,18 +1049,6 @@ class BrowserFragment : Fragment(),
     override fun swapTabsFromTabList(from: Int, to: Int) = tabs.swap(from, to)
 
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
-
-    override fun find(s: String) {
-        tabs.find(s)
-    }
-
-    override fun findUp(s: String) {
-        tabs.findUp(s)
-    }
-
-    override fun findDown(s: String) {
-        tabs.findDown(s)
-    }
 
     override fun onPause() {
         super.onPause()
