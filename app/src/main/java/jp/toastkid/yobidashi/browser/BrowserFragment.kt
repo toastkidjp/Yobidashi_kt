@@ -383,7 +383,7 @@ class BrowserFragment : Fragment(),
      *
      * @param menu [Menu]
      */
-    fun onMenuClick(menu: Menu) {
+    private fun onMenuClick(menu: Menu) {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
         when (menu) {
@@ -564,7 +564,7 @@ class BrowserFragment : Fragment(),
         }
     }
 
-    fun onMenuLongClick(menu: Menu): Boolean {
+    private fun onMenuLongClick(menu: Menu): Boolean {
         val view = binding?.root ?: return true
         Toaster.snackLong(
                 view,
