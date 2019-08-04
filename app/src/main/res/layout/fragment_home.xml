@@ -100,14 +100,5 @@
             android:textSize="60sp"
             android:textStyle="bold"
             />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/menus_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/search"
-            android:layout_marginTop="12dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            />
     </RelativeLayout>
 </layout>
