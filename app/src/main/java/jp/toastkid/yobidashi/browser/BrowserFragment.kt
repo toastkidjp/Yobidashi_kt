@@ -38,8 +38,8 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
-import jp.toastkid.yobidashi.browser.menu.MenuContract
-import jp.toastkid.yobidashi.browser.menu.MenuPresenter
+import jp.toastkid.yobidashi.browser.menu.MenuBinder
+import jp.toastkid.yobidashi.browser.menu.MenuViewModel
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
@@ -98,7 +98,6 @@ class BrowserFragment : Fragment(),
         InputNameDialogFragment.Callback,
         PasteAsConfirmationDialogFragment.Callback,
         TabListDialogFragment.Callback,
-        MenuContract.View,
         PageSearcherContract.View
 {
 
@@ -164,7 +163,7 @@ class BrowserFragment : Fragment(),
      */
     private lateinit var torch: Torch
 
-    override lateinit var menuPresenter: MenuContract.Presenter
+    private var menuViewModel: MenuViewModel? = null
 
     /**
      * Find-in-page module.
@@ -242,12 +241,6 @@ class BrowserFragment : Fragment(),
                 this
         )
 
-        menuPresenter = MenuPresenter(
-                binding?.menusView,
-                binding?.menuSwitch,
-                this
-        )
-
         setFabListener()
 
         setHasOptionsMenu(true)
@@ -258,7 +251,14 @@ class BrowserFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeHeaderViewModel()
+
+        initializeMenuViewModel()
+    }
+
+    private fun initializeHeaderViewModel() {
         val activity = activity ?: return
+
         val headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
         headerViewModel.stopProgress.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
@@ -278,6 +278,25 @@ class BrowserFragment : Fragment(),
                 it.isVisible = true
                 it.progress = newProgress
             }
+        })
+    }
+
+    private fun initializeMenuViewModel() {
+        menuViewModel = ViewModelProviders.of(this).get(MenuViewModel::class.java)
+
+        MenuBinder(
+                this,
+                menuViewModel,
+                binding?.menusView,
+                binding?.menuSwitch
+        )
+
+        menuViewModel?.click?.observe(this, Observer { menu ->
+            onMenuClick(menu)
+        })
+
+        menuViewModel?.longClick?.observe(this, Observer { menu ->
+            onMenuLongClick(menu)
         })
     }
 
@@ -307,7 +326,7 @@ class BrowserFragment : Fragment(),
 
         menu.let { menuNonNull ->
             menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
-                menuPresenter.switchMenuVisibility()
+                menuViewModel?.visibility?.postValue(binding?.menusView?.isVisible == false)
                 true
             }
 
@@ -364,7 +383,7 @@ class BrowserFragment : Fragment(),
      *
      * @param menu [Menu]
      */
-    override fun onMenuClick(menu: Menu) {
+    fun onMenuClick(menu: Menu) {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
         when (menu) {
@@ -545,7 +564,7 @@ class BrowserFragment : Fragment(),
         }
     }
 
-    override fun onMenuLongClick(menu: Menu): Boolean {
+    fun onMenuLongClick(menu: Menu): Boolean {
         val view = binding?.root ?: return true
         Toaster.snackLong(
                 view,
@@ -556,8 +575,6 @@ class BrowserFragment : Fragment(),
         )
         return true
     }
-
-    override fun getTabCount() = tabs.size()
 
     /**
      * Use camera permission with specified action.
@@ -674,7 +691,8 @@ class BrowserFragment : Fragment(),
             tabs.openNewWebTab(preferenceApplier.homeUrl)
         }
 
-        menuPresenter.onResume { editorModule.setSpace(it) }
+        menuViewModel?.onResume()
+        menuViewModel?.tabCount(tabs.size())
 
         browserModule.resizePool(preferenceApplier.poolSize)
 
@@ -761,8 +779,8 @@ class BrowserFragment : Fragment(),
             return true
         }
 
-        if (menuPresenter.isVisible()) {
-            menuPresenter.close()
+        if (binding?.menusView?.isVisible == true) {
+            menuViewModel?.close()
             return true
         }
 
@@ -775,7 +793,7 @@ class BrowserFragment : Fragment(),
     private fun hideTabList() {
         tabListDialogFragment?.dismiss()
         tabs.replaceToCurrentTab(false)
-        menuPresenter.notifyDataSetChanged()
+        menuViewModel?.tabCount(tabs.size())
     }
 
     /**
