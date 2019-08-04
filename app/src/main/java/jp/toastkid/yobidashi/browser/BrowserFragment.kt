@@ -770,7 +770,7 @@ class BrowserFragment : Fragment(),
         }
 
         if (floatingPreview?.isVisible() == true) {
-            floatingPreview?.hide(browserModule.getWebView("preview"))
+            floatingPreview?.hide(browserModule.getWebView(FloatingPreview.getSpecialId()))
             return true
         }
 
@@ -933,7 +933,7 @@ class BrowserFragment : Fragment(),
     }
 
     override fun preview(url: String) {
-        val webView = browserModule.getWebView("preview")
+        val webView = browserModule.getWebView(FloatingPreview.getSpecialId())
         if (webView == null) {
             Toaster.snackLong(
                     binding?.root as View,
