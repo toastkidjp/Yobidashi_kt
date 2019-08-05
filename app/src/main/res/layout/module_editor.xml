@@ -15,12 +15,11 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/editor_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
-            android:layout_marginBottom="@dimen/toolbar_height"
             android:fillViewport="true"
             >
             <EditText
@@ -34,7 +33,7 @@
                 android:hint="@string/hint_editor_input"
                 tools:ignore="Autofill"
                 />
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <HorizontalScrollView
             android:id="@+id/editor_menu"
