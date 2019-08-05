@@ -151,12 +151,6 @@
                     android:onClick="@{view -> editorModule.clear()}"
                     android:onLongClick="@{editorModule::showName}"
                     />
-                <Space
-                    android:id="@+id/right_space"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    />
             </LinearLayout>
         </HorizontalScrollView>
 
