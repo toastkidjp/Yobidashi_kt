@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -71,6 +72,7 @@ class PdfModule(
     init {
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
+        PagerSnapHelper().attachToRecyclerView(binding.pdfImages)
 
         binding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
@@ -113,7 +115,7 @@ class PdfModule(
      * @param colorPair
      */
     fun applyColor(colorPair: ColorPair) {
-        binding.seekAppBar.setBackgroundColor(colorPair.bgColor())
+        binding.header.setBackgroundColor(colorPair.bgColor())
         binding.seek.progressDrawable.colorFilter =
                 PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
         Colors.setEditTextColor(binding.input, colorPair.fontColor())
