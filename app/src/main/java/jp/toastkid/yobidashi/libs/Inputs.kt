@@ -3,6 +3,8 @@ package jp.toastkid.yobidashi.libs
 import android.app.Activity
 import android.content.Context
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 
@@ -47,5 +49,15 @@ object Inputs {
         }
         manager.hideSoftInputFromWindow(
                 v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+
+    /**
+     * Show software keyboard for input dialog.
+     * You should call this method from `onActivityCreated(savedInstanceState: Bundle?)`.
+     *
+     * @param window Nullable [Window] for calling setSoftInputMode.
+     */
+    fun showKeyboardForInputDialog(window: Window?) {
+        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 }

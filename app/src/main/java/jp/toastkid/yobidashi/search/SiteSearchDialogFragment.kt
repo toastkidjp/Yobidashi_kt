@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
 import androidx.appcompat.app.AlertDialog
@@ -12,6 +11,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
@@ -41,7 +41,7 @@ class SiteSearchDialogFragment : DialogFragment() {
                 }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     doAction(editText.text.toString())
-                    dialog.dismiss()
+                    dialog?.dismiss()
                 }
                 true
             }
@@ -60,7 +60,7 @@ class SiteSearchDialogFragment : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        Inputs.showKeyboardForInputDialog(dialog?.window)
     }
 
     /**

@@ -11,9 +11,9 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import androidx.appcompat.app.AlertDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.libs.Inputs
@@ -62,6 +62,11 @@ class InputNameDialogFragment : DialogFragment() {
             }
         }
         return dialog
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        Inputs.showKeyboardForInputDialog(dialog?.window)
     }
 
     companion object {

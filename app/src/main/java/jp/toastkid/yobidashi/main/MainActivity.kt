@@ -18,6 +18,8 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import io.reactivex.disposables.CompositeDisposable
@@ -26,9 +28,7 @@ import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.ProgressBarCallback
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -58,8 +58,7 @@ import java.io.IOException
 class MainActivity :
         BaseActivity(),
         FragmentReplaceAction,
-        ToolbarAction,
-        ProgressBarCallback
+        ToolbarAction
 {
 
     /**
@@ -110,7 +109,35 @@ class MainActivity :
             ColorFilter(this, binding.root).start()
         }
 
+        initializeHeaderViewModel()
+
         processShortcut(intent)
+    }
+
+    private fun initializeHeaderViewModel() {
+        val headerViewModel = ViewModelProviders.of(this).get(HeaderViewModel::class.java)
+        headerViewModel.title.observe(this, Observer { title ->
+            if (title.isNullOrBlank()) {
+                return@Observer
+            }
+            binding.appBarMain.toolbar.title = title
+        })
+        headerViewModel.url.observe(this, Observer { url ->
+            if (url.isNullOrBlank()) {
+                return@Observer
+            }
+            binding.appBarMain.toolbar.subtitle = url
+        })
+        headerViewModel.progress.observe(this, Observer { newProgress ->
+            if (70 < newProgress) {
+                binding.appBarMain.progress.visibility = View.GONE
+                return@Observer
+            }
+            binding.appBarMain.progress.let {
+                it.visibility = View.VISIBLE
+                it.progress = newProgress
+            }
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -170,24 +197,6 @@ class MainActivity :
     private fun finishWithoutTransition() {
         overridePendingTransition(0, 0)
         finish()
-    }
-
-    override fun onProgressChanged(newProgress: Int) {
-        if (70 < newProgress) {
-            binding.appBarMain.progress.visibility = View.GONE
-            return
-        }
-        binding.appBarMain.progress.let {
-            it.visibility = View.VISIBLE
-            it.progress = newProgress
-        }
-    }
-
-    override fun onTitleChanged(titlePair: TitlePair) {
-        binding.appBarMain.toolbar.let {
-            it.title    = titlePair.title()
-            it.subtitle = titlePair.subtitle()
-        }
     }
 
     /**

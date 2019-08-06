@@ -134,6 +134,7 @@ class ColorSettingFragment : Fragment(),
         binding?.savedColors?.layoutManager =
                 LinearLayoutManager(activityContext, LinearLayoutManager.HORIZONTAL, false)
         binding?.clearSavedColor?.setOnClickListener{
+            val fragmentManager = fragmentManager ?: return@setOnClickListener
             ClearColorsDialogFragment().show(
                     fragmentManager,
                     ClearColorsDialogFragment::class.java.simpleName
@@ -226,14 +227,15 @@ class ColorSettingFragment : Fragment(),
 
     override fun titleId(): Int = R.string.title_settings_color
 
-    override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater?.inflate(R.menu.color_setting_toolbar_menu, menu)
+        inflater.inflate(R.menu.color_setting_toolbar_menu, menu)
 
-        menu?.let { menuNonNull ->
+        menu.let { menuNonNull ->
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_recommend)
                     ?.setOnMenuItemClickListener {
+                        val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener false
                         RecommendColorDialogFragment().show(
                                 fragmentManager,
                                 RecommendColorDialogFragment::class.java.simpleName

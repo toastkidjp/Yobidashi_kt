@@ -21,11 +21,12 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
@@ -41,6 +42,7 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
+import jp.toastkid.yobidashi.browser.webview.WebViewViewModel
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.color_filter.ColorFilter
@@ -60,6 +62,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
+import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
@@ -146,24 +149,9 @@ class BrowserFragment : Fragment(),
     private var toolbarAction: ToolbarAction? = null
 
     /**
-     * PublishSubject of title pair.
-     */
-    private val titleSubject: PublishSubject<TitlePair> = PublishSubject.create<TitlePair>()
-
-    /**
-     * PublishSubject of title pair.
-     */
-    private val progressSubject: PublishSubject<Int> = PublishSubject.create<Int>()
-
-    /**
      * Composite disposer.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * Progress bar callback.
-     */
-    private lateinit var progressBarCallback: ProgressBarCallback
 
     /**
      * Floating preview object.
@@ -187,11 +175,6 @@ class BrowserFragment : Fragment(),
         toolbarAction = context as ToolbarAction?
         activity?.let {
             rxPermissions = RxPermissions(it)
-        }
-        activity?.let {
-            if (it is ProgressBarCallback) {
-                progressBarCallback = it
-            }
         }
         torch = Torch(context)
     }
@@ -241,25 +224,7 @@ class BrowserFragment : Fragment(),
 
         browserModule = BrowserModule(
                 context as Context,
-                titleCallback = titleSubject::onNext,
-                loadingCallback = { progress, loading ->
-                    if (!loading) {
-                        binding?.swipeRefresher?.isRefreshing = false
-                        tabs.saveTabList()
-                        val currentTab = tabs.currentTab()
-                        tabs.deleteThumbnail(currentTab?.thumbnailPath)
-                        tabs.saveNewThumbnailAsync()
-                    }
-                    progressSubject.onNext(progress)
-                },
-                historyAddingCallback = { title, url -> tabs.addHistory(title, url) },
-                scrollCallback = { _, vertical, _, old ->
-                    val difference = vertical - old
-                    if (abs(difference) < 15) {
-                        return@BrowserModule
-                    }
-                    if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
-                }
+                historyAddingCallback = { title, url -> tabs.addHistory(title, url) }
         )
 
         tabs = TabAdapter(
@@ -267,7 +232,6 @@ class BrowserFragment : Fragment(),
                 browserModule,
                 editorModule,
                 pdfModule,
-                titleSubject::onNext,
                 this::onEmptyTabs
         )
 
@@ -289,6 +253,35 @@ class BrowserFragment : Fragment(),
         return binding?.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val activity = activity ?: return
+        ViewModelProviders.of(activity).get(WebViewViewModel::class.java)
+                .scrollEvent.observe(activity, Observer { scrollEvent ->
+            if (scrollEvent == null) {
+                return@Observer
+            }
+            val difference = scrollEvent.vertical - scrollEvent.oldVertical
+            if (abs(difference) < 15) {
+                return@Observer
+            }
+            if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
+        })
+
+        ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+                .stopProgress.observe(activity, Observer { stop ->
+            if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
+                return@Observer
+            }
+            binding?.swipeRefresher?.isRefreshing = false
+            tabs.saveTabList()
+            val currentTab = tabs.currentTab()
+            tabs.deleteThumbnail(currentTab?.thumbnailPath)
+            tabs.saveNewThumbnailAsync()
+        })
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setFabListener() {
         val listener = DraggableTouchListener()
@@ -298,14 +291,6 @@ class BrowserFragment : Fragment(),
             }
         })
         binding?.menuSwitch?.setOnTouchListener(listener)
-        binding?.menuSwitch?.let {
-            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
-            it.animate()
-                    .x(fabPosition.first)
-                    .y(fabPosition.second)
-                    .setDuration(10)
-                    .start()
-        }
     }
 
     /**
@@ -316,12 +301,12 @@ class BrowserFragment : Fragment(),
         tabs.openNewWebTab()
     }
 
-    override fun onCreateOptionsMenu(menu: android.view.Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater?.inflate(R.menu.browser, menu)
+        inflater.inflate(R.menu.browser, menu)
 
-        menu?.let { menuNonNull ->
+        menu.let { menuNonNull ->
             menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
                 menuPresenter.switchMenuVisibility()
                 true
@@ -420,6 +405,7 @@ class BrowserFragment : Fragment(),
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
             Menu.USER_AGENT-> {
+                val fragmentManager = fragmentManager ?: return
                 val dialogFragment = UserAgentDialogFragment()
                 dialogFragment.setTargetFragment(this, 1)
                 dialogFragment.show(
@@ -431,6 +417,7 @@ class BrowserFragment : Fragment(),
                 startActivity(SettingsIntentFactory.wifi())
             }
             Menu.PAGE_INFORMATION-> {
+                val fragmentManager = fragmentManager ?: return
                 PageInformationDialogFragment()
                         .also { it.arguments = tabs.makeCurrentPageInformation() }
                         .show(
@@ -667,20 +654,12 @@ class BrowserFragment : Fragment(),
     override fun onResume() {
         super.onResume()
 
+        setFabPosition()
+
         val colorPair = colorPair()
         editorModule.applySettings()
 
         ClippingUrlOpener(binding?.root) { loadWithNewTab(it) }
-
-        titleSubject.subscribe(
-                { progressBarCallback.onTitleChanged(it) },
-                Timber::e
-        ).addTo(disposables)
-
-        progressSubject.subscribe(
-                { progressBarCallback.onProgressChanged(it) },
-                Timber::e
-        ).addTo(disposables)
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
@@ -715,6 +694,24 @@ class BrowserFragment : Fragment(),
             || browserScreenMode == ScreenMode.FIXED) {
             toolbarAction?.showToolbar()
             return
+        }
+    }
+
+    private fun setFabPosition() {
+        binding?.menuSwitch?.let {
+            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
+            val displayMetrics = it.context.resources.displayMetrics
+            val x = if (fabPosition.first > displayMetrics.widthPixels.toFloat()) {
+                displayMetrics.widthPixels.toFloat()
+            } else {
+                fabPosition.first
+            }
+            val y = if (fabPosition.second > displayMetrics.heightPixels.toFloat()) {
+                displayMetrics.heightPixels.toFloat()
+            } else {
+                fabPosition.second
+            }
+            it.animate().x(x).y(y).setDuration(10).start()
         }
     }
 
@@ -777,6 +774,7 @@ class BrowserFragment : Fragment(),
      * Show tab list.
      */
     private fun showTabList() {
+        val fragmentManager = fragmentManager ?: return
         tabListDialogFragment?.show(fragmentManager, "")
     }
 

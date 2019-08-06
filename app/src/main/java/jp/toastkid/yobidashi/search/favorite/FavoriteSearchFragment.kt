@@ -121,12 +121,12 @@ class FavoriteSearchFragment : Fragment(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater?.inflate(R.menu.favorite_toolbar_menu, menu)
+        inflater.inflate(R.menu.favorite_toolbar_menu, menu)
 
-        menu?.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
+        menu.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
             val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
             ClearFavoriteSearchDialogFragment.show(
                     fragmentManager,
@@ -135,15 +135,13 @@ class FavoriteSearchFragment : Fragment(),
             true
         }
 
-        menu?.findItem(R.id.favorite_toolbar_menu_add)?.setOnMenuItemClickListener {
+        menu.findItem(R.id.favorite_toolbar_menu_add)?.setOnMenuItemClickListener {
             invokeAddition()
             true
         }
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        val activityContext = context ?: return
-
         Completable.fromAction { adapter?.relation?.deleter()?.execute() }
                 ?.subscribeOn(Schedulers.io())
                 ?.subscribe {
