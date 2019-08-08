@@ -10,10 +10,13 @@ package jp.toastkid.yobidashi.editor
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import com.google.android.material.textfield.TextInputLayout
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.libs.Inputs
@@ -44,13 +47,7 @@ class InputNameDialogFragment : DialogFragment() {
                 .setTitle(activityContext.getString(R.string.title_dialog_input_file_name))
                 .setView(inputLayout)
                 .setPositiveButton(R.string.save) { d, _ ->
-                    if (inputLayout.editText?.text?.isEmpty() as Boolean) {
-                        d.dismiss()
-                        return@setPositiveButton
-                    }
-
-                    callback?.onClickInputName("${inputLayout.editText?.text.toString()}.txt")
-                    d.dismiss()
+                    saveAndClose(inputLayout, d)
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .create()
@@ -61,7 +58,28 @@ class InputNameDialogFragment : DialogFragment() {
                 }
             }
         }
+
+        inputLayout.editText?.let {
+            it.imeOptions = EditorInfo.IME_ACTION_GO
+            it.setOnEditorActionListener { textView, actionId, keyEvent ->
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    saveAndClose(inputLayout, dialog)
+                    return@setOnEditorActionListener true
+                }
+                return@setOnEditorActionListener false
+            }
+        }
         return dialog
+    }
+
+    private fun saveAndClose(inputLayout: TextInputLayout, d: DialogInterface) {
+        if (inputLayout.editText?.text?.isEmpty() as Boolean) {
+            d.dismiss()
+            return
+        }
+
+        callback?.onClickInputName("${inputLayout.editText?.text.toString()}.txt")
+        d.dismiss()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
