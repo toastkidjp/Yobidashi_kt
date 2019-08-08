@@ -61,7 +61,7 @@ class InputNameDialogFragment : DialogFragment() {
 
         inputLayout.editText?.let {
             it.imeOptions = EditorInfo.IME_ACTION_GO
-            it.setOnEditorActionListener { textView, actionId, keyEvent ->
+            it.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     saveAndClose(inputLayout, dialog)
                     return@setOnEditorActionListener true
