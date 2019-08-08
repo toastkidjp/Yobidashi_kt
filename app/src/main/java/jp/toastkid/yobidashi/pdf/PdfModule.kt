@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -149,20 +150,26 @@ class PdfModule(
      *
      * @param tab [PdfTab]
      */
-    internal fun assignNewThumbnail(tab: PdfTab): Disposable =
-            Completable.fromAction { buildThumbnail() }
+    internal fun assignNewThumbnail(tab: PdfTab): Disposable {
+        Timber.e(RuntimeException("thumb"))
+        return Completable.fromAction { buildThumbnail() }
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
                 .subscribe(
                         {
                             binding.pdfImages.drawingCache?.let {
                                 val file = screenshotDir.assignNewFile(tab.id() + ".png")
-                                Bitmaps.compress(binding.pdfImages.drawingCache, file)
+                                Bitmaps.compress(it, file)
                                 tab.thumbnailPath = file.absolutePath
+
+                                Completable.fromAction {
+                                    binding.root.background = it.toDrawable(binding.root.resources)
+                                }
                             }
                         },
                         Timber::e
                 )
+    }
 
     /**
      * Build current thumbnail.
