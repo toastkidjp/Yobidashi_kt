@@ -105,8 +105,9 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
             it.poolSizeValue.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
-                    preferenceApplier.poolSize = bar?.progress ?: preferenceApplier.poolSize
-                    it.poolSizeText.setText(preferenceApplier.poolSize.toString())
+                    val newSize = bar?.progress ?: 0
+                    preferenceApplier.poolSize = newSize + 1
+                    it.poolSizeText.setText((newSize + 1).toString())
                 }
 
                 override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -114,7 +115,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
             })
-            it.poolSizeValue.progress = preferenceApplier.poolSize
+            it.poolSizeValue.progress = preferenceApplier.poolSize - 1
         }
 
         binding.browserExpand.screenMode?.let {

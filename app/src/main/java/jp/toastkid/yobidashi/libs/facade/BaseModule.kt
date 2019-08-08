@@ -41,8 +41,7 @@ abstract class BaseModule(val moduleView: View) {
     /**
      * Is visible this module visible.
      */
-    val isVisible: Boolean
-        get() = moduleView.visibility == View.VISIBLE
+    open fun isVisible() = moduleView.visibility == View.VISIBLE
 
     /**
      * Return view context.

@@ -18,6 +18,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -42,7 +43,6 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherContract
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
-import jp.toastkid.yobidashi.browser.webview.WebViewViewModel
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.color_filter.ColorFilter
@@ -80,7 +80,6 @@ import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import kotlin.math.abs
 
 /**
  * Internal browser fragment.
@@ -190,6 +189,7 @@ class BrowserFragment : Fragment(),
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { tabs.reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
+            it.setDistanceToTriggerSync(5000)
         }
 
         val activityContext = context ?: return null
@@ -257,20 +257,8 @@ class BrowserFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         val activity = activity ?: return
-        ViewModelProviders.of(activity).get(WebViewViewModel::class.java)
-                .scrollEvent.observe(activity, Observer { scrollEvent ->
-            if (scrollEvent == null) {
-                return@Observer
-            }
-            val difference = scrollEvent.vertical - scrollEvent.oldVertical
-            if (abs(difference) < 15) {
-                return@Observer
-            }
-            if (difference > 0) toolbarAction?.hideToolbar() else toolbarAction?.showToolbar()
-        })
-
-        ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
-                .stopProgress.observe(activity, Observer { stop ->
+        val headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+        headerViewModel.stopProgress.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
             }
@@ -279,6 +267,17 @@ class BrowserFragment : Fragment(),
             val currentTab = tabs.currentTab()
             tabs.deleteThumbnail(currentTab?.thumbnailPath)
             tabs.saveNewThumbnailAsync()
+        })
+
+        headerViewModel.progress.observe(this, Observer { newProgress ->
+            if (70 < newProgress) {
+                binding?.progress?.isVisible = false
+                return@Observer
+            }
+            binding?.progress?.let {
+                it.isVisible = true
+                it.progress = newProgress
+            }
         })
     }
 
@@ -663,7 +662,7 @@ class BrowserFragment : Fragment(),
 
         tabs.loadBackgroundTabsFromDirIfNeed()
 
-        if (pdfModule.isVisible) {
+        if (pdfModule.isVisible()) {
             pdfModule.applyColor(colorPair)
         }
 
@@ -684,8 +683,8 @@ class BrowserFragment : Fragment(),
 
         val browserScreenMode = preferenceApplier.browserScreenMode()
         if (browserScreenMode == ScreenMode.FULL_SCREEN
-                || editorModule.isVisible
-                || pdfModule.isVisible
+                || editorModule.isVisible()
+                || pdfModule.isVisible()
         ) {
             hideHeader()
             return

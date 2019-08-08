@@ -20,6 +20,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserModule
 import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
@@ -228,13 +229,20 @@ class TabAdapter(
             if (it.parent != null) {
                 return@let
             }
-            webViewContainer.addView(it, 0, MATCH_PARENT)
+            it.isEnabled = true
+            it.visibility = View.VISIBLE
             it.onResume()
+            webViewContainer.addView(it)
+
+            val mainActivity = webViewContainer.context
+            if (mainActivity is MainActivity
+                    && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
+                mainActivity.showToolbar()
+            }
             browserModule.animate(slideUpFromBottom)
         }
 
         browserModule.reloadWebViewSettings().addTo(disposables)
-        browserModule.enableWebView()
 
         currentTab()?.let {
             if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
@@ -248,7 +256,7 @@ class TabAdapter(
 
     internal fun replace(tab: Tab) {
         setIndexByTab(tab)
-        replaceToCurrentTab(true)
+        //replaceToCurrentTab(true)
     }
 
     /**
@@ -261,10 +269,10 @@ class TabAdapter(
         when (currentTab) {
             is WebTab -> {
                 replaceWebView()
-                if (editor.isVisible) {
+                if (editor.isVisible()) {
                     editor.hide()
                 }
-                if (pdf.isVisible) {
+                if (pdf.isVisible()) {
                     pdf.hide()
                 }
             }
@@ -275,7 +283,7 @@ class TabAdapter(
                     editor.clearPath()
                 }
 
-                if (pdf.isVisible) {
+                if (pdf.isVisible()) {
                     pdf.hide()
                 }
                 editor.show()
@@ -288,7 +296,7 @@ class TabAdapter(
                 tabList.save()
             }
             is PdfTab -> {
-                if (editor.isVisible) {
+                if (editor.isVisible()) {
                     editor.hide()
                 }
                 pdf.show()
@@ -324,7 +332,7 @@ class TabAdapter(
 
     fun callLoadUrl(url: String) {
         browserModule.loadUrl(url)
-        if (editor.isVisible) {
+        if (editor.isVisible()) {
             editor.hide()
         }
     }
@@ -578,9 +586,9 @@ class TabAdapter(
          */
         private const val PDF_TAB_TITLE: String = "PDF Tab"
 
-        private val MATCH_PARENT = FrameLayout.LayoutParams(
+        private val WRAP_CONTENT = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
+                FrameLayout.LayoutParams.WRAP_CONTENT
         )
 
         /**

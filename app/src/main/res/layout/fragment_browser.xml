@@ -3,23 +3,32 @@
     <data>
         <variable name="fragment" type="jp.toastkid.yobidashi.browser.BrowserFragment" />
     </data>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresher"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
-            <FrameLayout
-                android:id="@+id/web_view_container"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresher"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                >
+                <FrameLayout
+                    android:id="@+id/web_view_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <include android:id="@+id/editor" layout="@layout/module_editor" />
 
@@ -43,6 +52,16 @@
             android:visibility="gone"
             />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="top"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/menu_switch"
             android:layout_width="@dimen/menu_button_size"
@@ -55,5 +74,5 @@
 
         <include android:id="@+id/sip" layout="@layout/module_searcher" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
 </layout>

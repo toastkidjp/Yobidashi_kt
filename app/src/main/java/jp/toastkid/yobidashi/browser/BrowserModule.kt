@@ -398,22 +398,6 @@ class BrowserModule(
     }
 
     /**
-     * Enable [WebView].
-     */
-    fun enableWebView() {
-        currentView()?.let {
-            it.isEnabled = true
-            it.visibility = View.VISIBLE
-        }
-
-        val mainActivity = context
-        if (mainActivity is MainActivity
-                && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
-            mainActivity.showToolbar()
-        }
-    }
-
-    /**
      * Disable [WebView].
      */
     fun disableWebView() {

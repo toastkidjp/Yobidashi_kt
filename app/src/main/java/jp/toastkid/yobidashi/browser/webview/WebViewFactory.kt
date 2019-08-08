@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
-import android.view.MotionEvent
+import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -51,12 +51,10 @@ internal object WebViewFactory {
     @SuppressLint("ClickableViewAccessibility")
     fun make(context: Context): CustomWebView {
         val webView = CustomWebView(context)
-        webView.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_UP -> webView.enablePullToRefresh = false
-            }
-            false
-        }
+        webView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
 
         val preferenceApplier = PreferenceApplier(context)
 
@@ -129,6 +127,7 @@ internal object WebViewFactory {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             settings.safeBrowsingEnabled = true
         }
+        webView.isNestedScrollingEnabled = true
         return webView
     }
 
