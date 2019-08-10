@@ -53,7 +53,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
 
