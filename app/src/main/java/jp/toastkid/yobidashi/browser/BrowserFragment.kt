@@ -18,6 +18,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -73,6 +74,7 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
@@ -155,7 +157,7 @@ class BrowserFragment : Fragment(),
     /**
      * Floating preview object.
      */
-    private lateinit var floatingPreview: FloatingPreview
+    private var floatingPreview: FloatingPreview? = null
 
     /**
      * Torch API facade.
@@ -183,7 +185,7 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding?.fragment = this
 
         binding?.swipeRefresher?.let {
@@ -653,6 +655,8 @@ class BrowserFragment : Fragment(),
     override fun onResume() {
         super.onResume()
 
+        switchToolbarVisibility()
+
         setFabPosition()
 
         val colorPair = colorPair()
@@ -680,19 +684,21 @@ class BrowserFragment : Fragment(),
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }
+    }
 
+    private fun switchToolbarVisibility() {
         val browserScreenMode = preferenceApplier.browserScreenMode()
+        val currentTab = tabs.currentTab()
         if (browserScreenMode == ScreenMode.FULL_SCREEN
-                || editorModule.isVisible()
-                || pdfModule.isVisible()
+                || currentTab is EditorTab
+                || currentTab is PdfTab
         ) {
             hideHeader()
             return
         }
         if (browserScreenMode == ScreenMode.EXPANDABLE
-            || browserScreenMode == ScreenMode.FIXED) {
+                || browserScreenMode == ScreenMode.FIXED) {
             toolbarAction?.showToolbar()
-            return
         }
     }
 
@@ -744,6 +750,11 @@ class BrowserFragment : Fragment(),
 
         if (tabListDialogFragment?.isVisible == true) {
             hideTabList()
+            return true
+        }
+
+        if (floatingPreview?.isVisible() == true) {
+            floatingPreview?.hide(browserModule.getWebView("preview"))
             return true
         }
 
@@ -913,7 +924,7 @@ class BrowserFragment : Fragment(),
 
         binding?.floatingPreview?.let {
             floatingPreview = FloatingPreview(it)
-            floatingPreview.invoke(webView, url)
+            floatingPreview?.invoke(webView, url)
         }
     }
     
@@ -1068,6 +1079,12 @@ class BrowserFragment : Fragment(),
          * Request code of opening PDF.
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 3
+
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private const val layoutId = R.layout.fragment_browser
 
     }
 

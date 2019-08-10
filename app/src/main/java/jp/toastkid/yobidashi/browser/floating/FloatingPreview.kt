@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.browser.floating
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.View
 import android.webkit.WebChromeClient
@@ -14,6 +15,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import jp.toastkid.yobidashi.databinding.ContentFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
 
@@ -40,6 +42,8 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
         binding.header.setOnClickListener { openNewTabWithUrl(url) }
 
+        setSlidingListener()
+
         binding.icon.setImageBitmap(null)
 
         webView.isEnabled = true
@@ -50,6 +54,27 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         binding.previewContainer.addView(webView)
 
         webView.loadUrl(url)
+
+        startEnterAnimation()
+    }
+
+    private fun startEnterAnimation() {
+        val heightPixels = binding.contentPanel.context.resources.displayMetrics.heightPixels
+
+        binding.contentPanel.animate()
+                .y(heightPixels.toFloat())
+                .setDuration(0)
+                .start()
+
+        binding.contentPanel.animate()
+                .y(heightPixels * 0.6f)
+                .setDuration(DURATION_MS)
+                .start()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setSlidingListener() {
+        binding.header.setOnTouchListener(SlidingTouchListener(binding.contentPanel))
     }
 
     /**
@@ -99,8 +124,20 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
      * @param webView [WebView]
      */
     fun hide(webView: WebView?) {
-        binding.previewBackground.visibility = View.GONE
-        webView?.isEnabled = false
-        webView?.onPause()
+        binding.contentPanel.animate()
+                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels.toFloat())
+                .setDuration(DURATION_MS)
+                .withEndAction {
+                    binding.previewBackground.visibility = View.GONE
+                    webView?.isEnabled = false
+                    webView?.onPause()
+                }
+                .start()
+    }
+
+    fun isVisible() = binding.previewBackground.isVisible
+
+    companion object {
+        private const val DURATION_MS = 200L
     }
 }
