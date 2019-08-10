@@ -4,30 +4,32 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.ItemTouchHelper
 import android.text.TextUtils
 import android.view.MenuItem
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import okio.Okio
 import timber.log.Timber
 
@@ -36,7 +38,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class BookmarkActivity: BaseActivity(),
+class BookmarkActivity: AppCompatActivity(),
         BookmarkClearDialogFragment.OnClickBookmarkClearCallback,
         DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
         AddingFolderDialogFragment.OnClickAddingFolder
@@ -52,6 +54,8 @@ class BookmarkActivity: BaseActivity(),
      */
     private lateinit var adapter: ActivityAdapter
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     /**
      * Composite of disposables.
      */
@@ -60,6 +64,9 @@ class BookmarkActivity: BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         val relation = DbInitializer.init(this).relationOfBookmark()
 
@@ -68,7 +75,7 @@ class BookmarkActivity: BaseActivity(),
                 this,
                 relation,
                 { history -> finishWithResult(Uri.parse(history.url)) },
-                { history -> Toaster.snackShort(binding.root, history.title, colorPair()) },
+                { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) },
                 binding.historiesView::scheduleLayoutAnimation
         )
         binding.historiesView.adapter = adapter
@@ -99,10 +106,13 @@ class BookmarkActivity: BaseActivity(),
                     }
                 }).attachToRecyclerView(binding.historiesView)
 
-        binding.toolbar.let {
-            initToolbar(it)
-            it.setNavigationOnClickListener { onBackPressed() }
-            it.inflateMenu(R.menu.bookmark)
+        binding.toolbar.also { toolbar ->
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setTitle(R.string.title_bookmark)
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.inflateMenu(R.menu.bookmark)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+            toolbar.setNavigationOnClickListener { onBackPressed() }
         }
 
         adapter.showRoot()
@@ -123,12 +133,12 @@ class BookmarkActivity: BaseActivity(),
     override fun onResume() {
         super.onResume()
 
-        applyColorToToolbar(binding.toolbar)
+        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
-        ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
+        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
+    private fun clickMenu(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.clear -> {
                 BookmarkClearDialogFragment()
@@ -160,7 +170,7 @@ class BookmarkActivity: BaseActivity(),
                                         Toaster.snackShort(
                                                 binding.root,
                                                 R.string.message_requires_permission_storage,
-                                                colorPair()
+                                                preferenceApplier.colorPair()
                                         )
                                         return@subscribe
                                     }
@@ -176,7 +186,7 @@ class BookmarkActivity: BaseActivity(),
             }
             R.id.export_bookmark -> {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    Toaster.snackShort(binding.root, R.string.message_disusable_menu, colorPair())
+                    Toaster.snackShort(binding.root, R.string.message_disusable_menu, preferenceApplier.colorPair())
                     return true
                 }
                 RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -186,7 +196,7 @@ class BookmarkActivity: BaseActivity(),
                                         Toaster.snackShort(
                                                 binding.root,
                                                 R.string.message_requires_permission_storage,
-                                                colorPair()
+                                                preferenceApplier.colorPair()
                                         )
                                         return@subscribe
                                     }
@@ -209,8 +219,17 @@ class BookmarkActivity: BaseActivity(),
                 RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
                 return true
             }
+            R.id.menu_exit -> {
+                moveTaskToBack(true)
+                return true
+            }
+            R.id.menu_close -> {
+                finish()
+                return true
+            }
+            else -> return true
         }
-        return super.clickMenu(item)
+        return true
     }
 
     override fun onBackPressed() {
@@ -221,13 +240,13 @@ class BookmarkActivity: BaseActivity(),
     }
 
     override fun onClickBookmarkClear() {
-        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, colorPair())}
+        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())}
     }
 
     override fun onClickAddDefaultBookmark() {
         BookmarkInitializer(this)
         adapter.showRoot()
-        Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
+        Toaster.snackShort(binding.root, R.string.done_addition, preferenceApplier.colorPair())
     }
 
     override fun onClickAddFolder(title: String?) {
@@ -247,16 +266,17 @@ class BookmarkActivity: BaseActivity(),
                 .addTo(disposables)
     }
 
-    override fun titleId(): Int = R.string.title_bookmark
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
         if (intent == null || resultCode != Activity.RESULT_OK) {
             return
         }
 
+        val data = intent.data ?: return
+
         when (requestCode) {
-            REQUEST_CODE_IMPORT_BOOKMARK -> importBookmark(intent.data)
-            REQUEST_CODE_EXPORT_BOOKMARK -> exportBookmark(intent.data)
+            REQUEST_CODE_IMPORT_BOOKMARK -> importBookmark(data)
+            REQUEST_CODE_EXPORT_BOOKMARK -> exportBookmark(data)
         }
     }
 
@@ -282,7 +302,11 @@ class BookmarkActivity: BaseActivity(),
                 .subscribe(
                         {
                             adapter.reload()
-                            Toaster.snackShort(binding.root, R.string.done_addition, colorPair())
+                            Toaster.snackShort(
+                                    binding.root,
+                                    R.string.done_addition,
+                                    preferenceApplier.colorPair()
+                            )
                         },
                         { Timber.e(it) }
                 ).addTo(disposables)
