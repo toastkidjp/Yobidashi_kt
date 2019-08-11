@@ -2,22 +2,24 @@ package jp.toastkid.yobidashi.browser.screenshots
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
 import android.view.View
-import jp.toastkid.yobidashi.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityScreenshotsBinding
 import jp.toastkid.yobidashi.libs.Toaster
 
 /**
  * Screenshots viewer.
-
+ *
+ * TODO Clean up code.
+ *
  * @author toastkidjp
  */
-class ScreenshotsActivity : BaseActivity() {
+class ScreenshotsActivity : AppCompatActivity() {
 
     /** Data binding object.  */
     private var binding: ActivityScreenshotsBinding? = null
@@ -52,10 +54,6 @@ class ScreenshotsActivity : BaseActivity() {
                 binding?.preview?.visibility = View.VISIBLE
             }
         }
-    }
-
-    public override fun titleId(): Int {
-        return R.string.title_screenshot
     }
 
     companion object {
