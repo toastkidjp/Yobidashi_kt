@@ -3,19 +3,20 @@ package jp.toastkid.yobidashi.libs
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import android.view.MenuItem
 import android.view.View
-import jp.toastkid.yobidashi.BaseActivity
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityImagePreviewBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import java.io.File
 
 /**
@@ -23,7 +24,7 @@ import java.io.File
  *
  * @author toastkidjp
  */
-class ImagePreviewActivity(): BaseActivity() {
+class ImagePreviewActivity(): AppCompatActivity() {
 
     /**
      * Image file's path.
@@ -34,6 +35,8 @@ class ImagePreviewActivity(): BaseActivity() {
      * Snackbar parent view.
      */
     private lateinit var snackbarParent: View
+
+    private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,9 @@ class ImagePreviewActivity(): BaseActivity() {
         }
 
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         val binding: ActivityImagePreviewBinding =
                 DataBindingUtil.setContentView(this, LAYOUT_ID)
 
@@ -69,10 +75,10 @@ class ImagePreviewActivity(): BaseActivity() {
      * @param messageId
      */
     private fun showSnackbar(@StringRes messageId: Int) {
-        Toaster.snackShort(snackbarParent, messageId, colorPair())
+        Toaster.snackShort(snackbarParent, messageId, preferenceApplier.colorPair())
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
+    private fun clickMenu(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.close -> {
                 finish()
@@ -84,7 +90,7 @@ class ImagePreviewActivity(): BaseActivity() {
                 )
             }
         }
-        return super.clickMenu(item)
+        return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -102,8 +108,6 @@ class ImagePreviewActivity(): BaseActivity() {
             showSnackbar(R.string.done_save)
         }
     }
-
-    override fun titleId(): Int = R.string.app_name
 
     companion object {
 
