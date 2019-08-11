@@ -5,10 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityArchivesBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -19,7 +18,7 @@ import java.io.File
  *
  * @author toastkidjp
  */
-class ArchivesActivity : BaseActivity() {
+class ArchivesActivity : AppCompatActivity() {
 
     private var binding: ActivityArchivesBinding? = null
 
@@ -43,8 +42,6 @@ class ArchivesActivity : BaseActivity() {
         }
         binding?.archivesView?.adapter = adapter
     }
-
-    @StringRes override fun titleId(): Int = R.string.title_archives
 
     companion object {
 
