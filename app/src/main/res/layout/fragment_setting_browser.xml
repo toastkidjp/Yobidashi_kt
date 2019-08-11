@@ -355,6 +355,40 @@
 
                 <include layout="@layout/primary_dark_divider"/>
 
+                <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_item_height"
+                    android:layout_marginLeft="16dp"
+                    >
+                    <TextView
+                        android:id="@+id/title_background_alpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Background alpha"
+                        />
+                    <TextView
+                        android:id="@+id/text_background_alpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@id/title_background_alpha"
+                        android:layout_toEndOf="@id/title_background_alpha"
+                        />
+                    <SeekBar
+                        android:id="@+id/value_background_alpha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/title_background_alpha"
+                        android:layout_marginTop="8dp"
+                        style="@style/OneLineTextMenu"
+                        android:max="100"
+                        />
+                </RelativeLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
                 <FrameLayout
                     android:id="@+id/ad_remove"
                     android:layout_width="match_parent"

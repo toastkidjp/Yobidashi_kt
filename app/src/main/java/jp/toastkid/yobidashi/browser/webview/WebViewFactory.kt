@@ -7,12 +7,10 @@ import android.os.Handler
 import android.text.TextUtils
 import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.reactivex.disposables.CompositeDisposable
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
@@ -44,6 +42,8 @@ internal object WebViewFactory {
      * Extracted anchor URL.
      */
     private var anchor: String = ""
+
+    private val alphaConverter = AlphaConverter()
 
     /**
      * Make new [WebView].
@@ -130,7 +130,7 @@ internal object WebViewFactory {
             settings.safeBrowsingEnabled = true
         }
         webView.isNestedScrollingEnabled = true
-        webView.setBackgroundColor(ContextCompat.getColor(context, R.color.filter_white_aa))
+        webView.setBackgroundColor(alphaConverter.readBackground(context))
         return webView
     }
 
