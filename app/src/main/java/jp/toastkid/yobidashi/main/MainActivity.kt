@@ -12,10 +12,12 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,7 +26,6 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -42,6 +43,8 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
@@ -56,7 +59,7 @@ import java.io.IOException
  * @author toastkidjp
  */
 class MainActivity :
-        BaseActivity(),
+        AppCompatActivity(),
         FragmentReplaceAction,
         ToolbarAction
 {
@@ -91,14 +94,21 @@ class MainActivity :
      */
     private val torch by lazy { Torch(this) }
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.toolbar.let { toolbar ->
-            initToolbar(toolbar)
+        binding.toolbar.also { toolbar ->
+            toolbar.setTitle(titleId())
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
@@ -205,7 +215,7 @@ class MainActivity :
             return
         }
         CustomTabsFactory
-                .make(this, colorPair())
+                .make(this, preferenceApplier.colorPair())
                 .build()
                 .launchUrl(this, uri)
     }
@@ -302,7 +312,7 @@ class MainActivity :
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        applyColorToToolbar(binding.toolbar as Toolbar)
+        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
         applyBackgrounds()
     }
@@ -311,7 +321,7 @@ class MainActivity :
      * Apply background appearance.
      */
     private fun applyBackgrounds() {
-        val backgroundImagePath = backgroundImagePath
+        val backgroundImagePath = preferenceApplier.backgroundImagePath
         if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
             return
@@ -329,9 +339,9 @@ class MainActivity :
             Toaster.snackShort(
                     binding.root,
                     getString(R.string.message_failed_read_image),
-                    colorPair()
+                    preferenceApplier.colorPair()
             )
-            removeBackgroundImagePath()
+            preferenceApplier.removeBackgroundImagePath()
             setBackgroundImage(null)
         }
     }
@@ -400,8 +410,25 @@ class MainActivity :
         }
     }
 
+
+    private fun clickMenu(item: MenuItem): Boolean {
+        @IdRes val itemId: Int = item.itemId
+
+        when (itemId) {
+            R.id.menu_exit -> {
+                moveTaskToBack(true)
+                return true
+            }
+            R.id.menu_close -> {
+                finish()
+                return true
+            }
+            else -> return true
+        }
+    }
+
     @StringRes
-    override fun titleId(): Int = R.string.app_name
+    private fun titleId(): Int = R.string.app_name
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -431,7 +458,7 @@ class MainActivity :
                     Toaster.snackShort(
                             binding.root,
                             R.string.message_cannot_draw_overlay,
-                            colorPair()
+                            preferenceApplier.colorPair()
                     )
                     return
                 }
@@ -441,7 +468,7 @@ class MainActivity :
                 val result: IntentResult? =
                         IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
                 if (result?.contents == null) {
-                    Toaster.snackShort(binding.root, "Cancelled", colorPair())
+                    Toaster.snackShort(binding.root, "Cancelled", preferenceApplier.colorPair())
                     return
                 }
                 Toaster.snackLong(
@@ -449,7 +476,7 @@ class MainActivity :
                         "Scanned: ${result.contents}",
                         R.string.clip,
                         View.OnClickListener { Clipboard.clip(this, result.contents) },
-                        colorPair()
+                        preferenceApplier.colorPair()
                 )
             }
         }
