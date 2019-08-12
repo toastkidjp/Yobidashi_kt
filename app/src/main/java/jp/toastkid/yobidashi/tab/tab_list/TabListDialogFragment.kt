@@ -165,6 +165,7 @@ class TabListDialogFragment : DialogFragment() {
                 it.isClickable = false
                 callback?.onOpenEditor()
                 it.isClickable = true
+                dismiss()
             }
 
     /**
@@ -226,6 +227,7 @@ class TabListDialogFragment : DialogFragment() {
                 callback?.openNewTabFromTabList()
                 adapter.notifyItemInserted(adapter.itemCount - 1)
                 addTab.isClickable = true
+                dismiss()
             }
 
     companion object {
