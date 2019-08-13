@@ -266,14 +266,12 @@ class BrowserFragment : Fragment(),
             }
             binding?.swipeRefresher?.isRefreshing = false
             tabs.saveTabList()
-            val currentTab = tabs.currentTab()
-            tabs.deleteThumbnail(currentTab?.thumbnailPath)
-            tabs.saveNewThumbnailAsync()
         })
 
         headerViewModel.progress.observe(this, Observer { newProgress ->
             if (70 < newProgress) {
                 binding?.progress?.isVisible = false
+                refreshThumbnail()
                 return@Observer
             }
             binding?.progress?.let {
@@ -784,8 +782,15 @@ class BrowserFragment : Fragment(),
      * Show tab list.
      */
     private fun showTabList() {
+        refreshThumbnail()
         val fragmentManager = fragmentManager ?: return
         tabListDialogFragment?.show(fragmentManager, "")
+    }
+
+    private fun refreshThumbnail() {
+        val currentTab = tabs.currentTab()
+        tabs.deleteThumbnail(currentTab?.thumbnailPath)
+        tabs.saveNewThumbnailAsync()
     }
 
     override fun titleId(): Int = R.string.title_browser
