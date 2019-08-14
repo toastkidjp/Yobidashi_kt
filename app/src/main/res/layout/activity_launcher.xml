@@ -6,6 +6,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         >
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -50,6 +51,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
             <ImageView
@@ -66,7 +68,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layoutAnimation="@anim/layout_slide_in_right"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 />
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
