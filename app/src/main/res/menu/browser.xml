@@ -29,13 +29,6 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/close_header"
-        android:orderInCategory="100"
-        android:title="@string/title_close_header"
-        android:checkable="false"
-        app:showAsAction="never"
-        />
-    <item
         android:id="@+id/reset_menu_position"
         android:orderInCategory="100"
         android:title="@string/reset_button_position"

@@ -348,11 +348,6 @@ class BrowserFragment : Fragment(),
                 true
             }
 
-            menuNonNull.findItem(R.id.close_header)?.setOnMenuItemClickListener {
-                hideHeader()
-                true
-            }
-
             menuNonNull.findItem(R.id.reset_menu_position)?.setOnMenuItemClickListener {
                 binding?.menuSwitch?.let {
                     it.translationX = 0f
