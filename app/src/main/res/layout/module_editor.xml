@@ -4,6 +4,7 @@
         <variable name="editorModule"
             type="jp.toastkid.yobidashi.editor.EditorModule" />
     </data>
+
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,15 +13,13 @@
         android:layout_height="match_parent"
         android:background="@color/soft_background"
         android:visibility="gone"
-        tools:visibility="visible"
-        >
+        tools:visibility="visible">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/editor_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="44dp"
-            android:fillViewport="true"
+            android:layout_marginTop="44dp"
             >
             <EditText
                 android:id="@+id/editor_input"
@@ -33,13 +32,13 @@
                 android:hint="@string/hint_editor_input"
                 tools:ignore="Autofill"
                 />
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <HorizontalScrollView
             android:id="@+id/editor_menu"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             >
             <LinearLayout
                 android:orientation="horizontal"
@@ -150,12 +149,6 @@
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.clear()}"
                     android:onLongClick="@{editorModule::showName}"
-                    />
-                <Space
-                    android:id="@+id/right_space"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
                     />
             </LinearLayout>
         </HorizontalScrollView>

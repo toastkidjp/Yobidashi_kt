@@ -139,5 +139,9 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
 
     companion object {
         private const val DURATION_MS = 200L
+
+        private const val SPECIAL_WEB_VIEW_ID = "preview"
+
+        fun getSpecialId() = SPECIAL_WEB_VIEW_ID
     }
 }

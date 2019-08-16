@@ -2,13 +2,14 @@ package jp.toastkid.yobidashi.tab.tab_list
 
 import android.app.Dialog
 import android.content.Context
-import androidx.databinding.DataBindingUtil
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -107,6 +108,16 @@ class TabListDialogFragment : DialogFragment() {
                 }
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        callback?.onCloseTabListDialogFragment()
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        callback?.onCloseTabListDialogFragment()
+    }
+
     /**
      * Initialize views.
      *
@@ -153,7 +164,6 @@ class TabListDialogFragment : DialogFragment() {
             binding.addEditorTab.setOnClickListener {
                 it.isClickable = false
                 callback?.onOpenEditor()
-                callback?.onCloseTabListDialogFragment()
                 it.isClickable = true
             }
 
@@ -215,7 +225,6 @@ class TabListDialogFragment : DialogFragment() {
                 addTab.isClickable = false
                 callback?.openNewTabFromTabList()
                 adapter.notifyItemInserted(adapter.itemCount - 1)
-                callback?.onCloseTabListDialogFragment()
                 addTab.isClickable = true
             }
 

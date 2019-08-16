@@ -21,7 +21,6 @@ import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
@@ -210,22 +209,6 @@ class EditorModule(
     private fun moveToIndex(index: Int) {
         binding.editorInput.requestFocus()
         binding.editorInput.setSelection(index)
-    }
-
-    /**
-     * Set space for showing menu.
-     *
-     * @param menuPos
-     */
-    fun setSpace(menuPos: MenuPos) = when (menuPos) {
-        MenuPos.LEFT-> {
-            binding.leftSpace.visibility = View.VISIBLE
-            binding.rightSpace.visibility = View.GONE
-        }
-        MenuPos.RIGHT -> {
-            binding.leftSpace.visibility = View.GONE
-            binding.rightSpace.visibility = View.VISIBLE
-        }
     }
 
     /**

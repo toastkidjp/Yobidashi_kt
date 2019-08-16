@@ -17,22 +17,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.databinding.FragmentHomeBinding
-import jp.toastkid.yobidashi.launcher.LauncherActivity
-import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ToolbarAction
-import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
-import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import timber.log.Timber
 
 /**
@@ -60,11 +52,6 @@ class HomeFragment : Fragment(), CommonFragmentAction {
     private var toolbarAction: ToolbarAction? = null
 
     /**
-     * ModuleAdapter.
-     */
-    private var adapter: Adapter? = null
-
-    /**
      * Disposables.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -88,55 +75,7 @@ class HomeFragment : Fragment(), CommonFragmentAction {
             preferenceApplier = PreferenceApplier(it)
         }
 
-        initMenus()
-
         return binding.root
-    }
-
-    /**
-     * Initialize RecyclerView menu.
-     */
-    private fun initMenus() {
-        val fragmentActivity = activity ?: return
-        adapter = Adapter(fragmentActivity, Consumer { this.processMenu(it) })
-        binding.menusView.adapter = adapter
-        val layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false)
-        binding.menusView.layoutManager = layoutManager
-        layoutManager.scrollToPosition(Adapter.mediumPosition())
-    }
-
-    /**
-     * Process menu.
-     * @param menu
-     */
-    private fun processMenu(menu: Menu) {
-        val fragmentActivity = activity ?: return
-        when (menu) {
-            Menu.CODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
-            }
-            Menu.LAUNCHER -> {
-                startActivity(LauncherActivity.makeIntent(fragmentActivity))
-            }
-            Menu.BROWSER -> {
-                action?.action(Command.OPEN_BROWSER)
-            }
-            Menu.PLANNING_POKER -> {
-                startActivity(PlanningPokerActivity.makeIntent(fragmentActivity))
-            }
-            Menu.SETTING -> {
-                startActivity(SettingsActivity.makeIntent(fragmentActivity))
-            }
-            Menu.BACKGROUND_SETTING -> {
-                startActivity(BackgroundSettingActivity.makeIntent(fragmentActivity))
-            }
-            Menu.WIFI_SETTING -> {
-                startActivity(SettingsIntentFactory.wifi())
-            }
-            Menu.EXIT -> {
-                fragmentActivity.moveTaskToBack(true)
-            }
-        }
     }
 
     override fun onResume() {
@@ -161,8 +100,6 @@ class HomeFragment : Fragment(), CommonFragmentAction {
         binding.searchIcon.setColorFilter(bgColor)
         binding.voiceSearch.setColorFilter(bgColor)
         binding.searchInputBorder.setBackgroundColor(bgColor)
-
-        binding.menusView.requestLayout()
 
         toolbarAction?.hideToolbar()
     }
@@ -209,7 +146,6 @@ class HomeFragment : Fragment(), CommonFragmentAction {
 
     override fun onDetach() {
         super.onDetach()
-        adapter?.dispose()
         disposables.clear()
     }
 

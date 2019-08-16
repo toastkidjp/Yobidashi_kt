@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <variable name="module" type="jp.toastkid.yobidashi.browser.page_search.PageSearcherModule" />
+        <variable
+            name="viewModel"
+            type="jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel"
+            />
     </data>
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -37,7 +40,7 @@
             android:adjustViewBounds="true"
             android:src="@drawable/ic_close"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{view -> module.hide()}"
+            android:onClick="@{view -> viewModel.hide()}"
             />
         <ImageView
             android:id="@+id/sip_clear"
@@ -49,7 +52,7 @@
             android:adjustViewBounds="true"
             android:src="@drawable/ic_clear_form"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{view -> module.clearInput()}"
+            android:onClick="@{view -> viewModel.clearInput()}"
             />
 
         <ImageView
@@ -62,7 +65,7 @@
             android:scaleType="center"
             android:src="@drawable/ic_up"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{view -> module.findUp()}"
+            android:onClick="@{view -> viewModel.findUp()}"
             />
 
         <ImageView
@@ -76,7 +79,7 @@
             android:adjustViewBounds="true"
             android:src="@drawable/ic_down"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{view -> module.findDown()}"
+            android:onClick="@{view -> viewModel.findDown()}"
             />
 
     </androidx.cardview.widget.CardView>

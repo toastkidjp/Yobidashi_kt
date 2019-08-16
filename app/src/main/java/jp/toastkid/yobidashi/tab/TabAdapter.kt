@@ -256,7 +256,7 @@ class TabAdapter(
 
     internal fun replace(tab: Tab) {
         setIndexByTab(tab)
-        //replaceToCurrentTab(true)
+        //TODO replaceToCurrentTab(true)
     }
 
     /**
