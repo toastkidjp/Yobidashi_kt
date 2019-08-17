@@ -43,15 +43,6 @@
             layout="@layout/content_floating_preview"
             />
 
-        <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
-            android:id="@+id/menus_view"
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:layoutAnimation="@anim/layout_slide_in_right"
-            android:visibility="gone"
-            />
-
         <ProgressBar
             android:id="@+id/progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -60,16 +51,6 @@
             android:layout_gravity="top"
             android:visibility="gone"
             tools:visibility="visible"
-            />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/menu_switch"
-            android:layout_width="@dimen/menu_button_size"
-            android:layout_height="@dimen/menu_button_size"
-            android:layout_gravity="right|bottom"
-            android:src="@drawable/ic_menu_cycle"
-            app:backgroundTint="@color/soft_background"
-            android:background="@drawable/ripple_transparent"
             />
 
         <include android:id="@+id/sip" layout="@layout/module_searcher" />

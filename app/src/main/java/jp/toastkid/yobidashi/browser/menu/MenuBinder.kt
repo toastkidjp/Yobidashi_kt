@@ -14,7 +14,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +27,7 @@ import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
  * @author toastkidjp
  */
 class MenuBinder(
-        fragment: Fragment,
+        fragmentActivity: FragmentActivity,
         private val menuViewModel: MenuViewModel?,
         private val recyclerView: CircleRecyclerView?,
         private val menuSwitch: FloatingActionButton?
@@ -40,20 +40,20 @@ class MenuBinder(
     private var previousIconColor: Int = Color.TRANSPARENT
 
     init {
-        fragment.context?.let {
+        fragmentActivity.let {
             menuAdapter = MenuAdapter(it, menuViewModel)
         }
 
-        menuViewModel?.visibility?.observe(fragment, Observer { newVisible ->
+        menuViewModel?.visibility?.observe(fragmentActivity, Observer { newVisible ->
             if (newVisible) open() else close()
         })
 
-        menuViewModel?.tabCount?.observe(fragment, Observer {
+        menuViewModel?.tabCount?.observe(fragmentActivity, Observer {
             menuAdapter?.setTabCount(it)
             menuAdapter?.notifyDataSetChanged()
         })
 
-        menuViewModel?.onResume?.observe(fragment, Observer {
+        menuViewModel?.onResume?.observe(fragmentActivity, Observer {
             val activityContext = recyclerView?.context ?: return@Observer
             val preferenceApplier = PreferenceApplier(activityContext)
             recyclerView.also {
@@ -70,7 +70,7 @@ class MenuBinder(
             }
         })
 
-        fragment.context?.let { initializeWithContext(it) }
+        initializeWithContext(fragmentActivity)
     }
 
     private fun initializeWithContext(context: Context) {
