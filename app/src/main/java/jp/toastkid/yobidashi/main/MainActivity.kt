@@ -501,15 +501,17 @@ class MainActivity :
         binding?.menuSwitch?.let {
             val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
             val displayMetrics = it.context.resources.displayMetrics
-            val x = if (fabPosition.first > displayMetrics.widthPixels.toFloat()) {
-                displayMetrics.widthPixels.toFloat()
-            } else {
-                fabPosition.first
+            val x = when {
+                fabPosition.first > displayMetrics.widthPixels.toFloat() ->
+                    displayMetrics.widthPixels.toFloat()
+                fabPosition.first < 0 -> 0f
+                else -> fabPosition.first
             }
-            val y = if (fabPosition.second > displayMetrics.heightPixels.toFloat()) {
-                displayMetrics.heightPixels.toFloat()
-            } else {
-                fabPosition.second
+            val y = when {
+                fabPosition.second > displayMetrics.heightPixels.toFloat() ->
+                    displayMetrics.heightPixels.toFloat()
+                fabPosition.second < 0 -> 0f
+                else -> fabPosition.second
             }
             it.animate().x(x).y(y).setDuration(10).start()
         }
