@@ -115,6 +115,9 @@ class TabAdapter(
                 is EditorTab -> {
                     editor.makeThumbnail()
                 }
+                is PdfTab -> {
+                    pdf.makeThumbnail()
+                }
                 else -> null
             }
 
@@ -307,7 +310,7 @@ class TabAdapter(
                         val uri = Uri.parse(url)
                         pdf.load(uri)
                         pdf.scrollTo(currentTab.getScrolled())
-                        pdf.assignNewThumbnail(currentTab).addTo(disposables)
+                        saveNewThumbnailAsync()
 
                         headerViewModel?.title?.postValue(PDF_TAB_TITLE)
                         headerViewModel?.url?.postValue(uri.lastPathSegment ?: url)
