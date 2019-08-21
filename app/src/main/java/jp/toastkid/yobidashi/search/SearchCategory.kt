@@ -118,10 +118,6 @@ enum class SearchCategory(
     MVNREPOSITORY(R.string.search_category_mvnrepository,
             R.drawable.ic_mvn,
             "https://mvnrepository.com/search?q="
-    ),
-    SEARCH_CODE(R.string.search_category_search_code,
-            R.drawable.ic_searchcode,
-            "https://searchcode.com/?q="
     );
 
     /**
