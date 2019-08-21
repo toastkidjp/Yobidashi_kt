@@ -398,5 +398,8 @@
     <string name="is_center">center</string>
     <string name="title_icon">アイコン</string>
     <string name="reset_button_position">ボタンの位置をリセット</string>
+    <string name="medium">Medium</string>
+    <string name="ted">TED</string>
+    <string name="buzzfeed">BuzzFeed</string>
 
 </resources>

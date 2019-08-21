@@ -403,5 +403,8 @@
     <string name="is_center">center</string>
     <string name="title_icon">icon</string>
     <string name="reset_button_position">Reset Button Position</string>
+    <string name="medium">Medium</string>
+    <string name="ted">TED</string>
+    <string name="buzzfeed">BuzzFeed</string>
 
 </resources>

@@ -118,7 +118,20 @@ enum class SearchCategory(
     MVNREPOSITORY(R.string.search_category_mvnrepository,
             R.drawable.ic_mvn,
             "https://mvnrepository.com/search?q="
-    );
+    ),
+    MEDIUM(R.string.medium,
+            R.drawable.ic_medium,
+            "https://medium.com/search?q="
+    ),
+    TED(R.string.ted,
+            R.drawable.ic_ted,
+            "https://www.ted.com/search?q="
+    ),
+    BUZZFEED(R.string.buzzfeed,
+            R.drawable.ic_buzzfeed,
+            "https://www.buzzfeed.com/jp/search?q="
+    ),
+    ;
 
     /**
      * Make search URL with query.
