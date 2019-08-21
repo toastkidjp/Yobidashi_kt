@@ -59,7 +59,7 @@ enum class SearchCategory(
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
     ),
     TWITTER(R.string.search_category_twitter,
-            R.drawable.ic_sns,
+            R.drawable.ic_twitter,
             "https://twitter.com/search?src=typd&q="
     ),
     FACEBOOK(R.string.search_category_facebook,
@@ -75,7 +75,7 @@ enum class SearchCategory(
             "https://www.google.co.jp/maps/place/"
     ),
     APPS(R.string.search_category_apps,
-            R.drawable.ic_android_app_green,
+            R.drawable.ic_google_play,
             "https://play.google.com/store/search?q="
     ),
     YELP(R.string.yelp,
@@ -87,7 +87,7 @@ enum class SearchCategory(
             "http://www.gutenberg.org/ebooks/search/?query="
     ),
     AMAZON(R.string.search_category_shopping,
-            R.drawable.ic_shopping,
+            R.drawable.ic_amazon,
             "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords=",
             { l, h, q ->
                 if (Locale.JAPANESE.language == l) {
@@ -102,7 +102,7 @@ enum class SearchCategory(
             "https://stackoverflow.com/search?q="
     ),
     TECHNOLOGY(R.string.search_category_technology,
-            R.drawable.ic_technology,
+            R.drawable.ic_techcrunch,
             "http://jp.techcrunch.com/search/",
             {l, h, q ->
                 if (Locale.JAPANESE.language == l) {
