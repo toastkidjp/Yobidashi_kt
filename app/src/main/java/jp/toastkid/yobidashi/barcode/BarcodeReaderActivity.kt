@@ -14,20 +14,20 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.search.SearchAction
@@ -39,7 +39,7 @@ import java.io.FileOutputStream
  *
  * @author toastkidjp
  */
-class BarcodeReaderActivity : BaseActivity() {
+class BarcodeReaderActivity : AppCompatActivity() {
 
     /**
      * Data Binding object.
@@ -51,15 +51,24 @@ class BarcodeReaderActivity : BaseActivity() {
      */
     private val slideUpBottom by lazy { AnimationUtils.loadAnimation(this, R.anim.slide_up) }
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    private lateinit var preferenceApplier: PreferenceApplier
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
 
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
-        binding?.toolbar?.let {
-            initToolbar(it)
-            it.inflateMenu(R.menu.camera)
+        binding?.toolbar?.let { toolbar ->
+            setTitle(R.string.title_camera)
+            toolbar.inflateMenu(R.menu.camera)
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener { finish() }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -72,7 +81,7 @@ class BarcodeReaderActivity : BaseActivity() {
         startDecode()
     }
 
-    override fun clickMenu(item: MenuItem) = when (item.itemId) {
+    fun clickMenu(item: MenuItem) = when (item.itemId) {
         R.id.reset_fab_position -> {
             binding?.camera?.also {
                 it.translationX = 0f
@@ -81,7 +90,15 @@ class BarcodeReaderActivity : BaseActivity() {
             }
             true
         }
-        else -> super.clickMenu(item)
+        R.id.menu_exit -> {
+            moveTaskToBack(true)
+            true
+        }
+        R.id.menu_close -> {
+            finish()
+            true
+        }
+        else -> true
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -130,7 +147,7 @@ class BarcodeReaderActivity : BaseActivity() {
     fun clip(snackbarParent: View) {
         getResultText()?.let {
             Clipboard.clip(this, it)
-            Toaster.snackShort(snackbarParent, it, colorPair())
+            Toaster.snackShort(snackbarParent, it, preferenceApplier.colorPair())
         }
     }
 
@@ -162,7 +179,11 @@ class BarcodeReaderActivity : BaseActivity() {
 
                 sourceData?.cropRect = getRect()
                 sourceData?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
-                Toaster.snackShort(barcodeView, "Camera saved: ${output.absolutePath}", colorPair())
+                Toaster.snackShort(
+                        barcodeView,
+                        "Camera saved: ${output.absolutePath}",
+                        preferenceApplier.colorPair()
+                )
             }
 
             private fun getRect(): Rect {
@@ -198,7 +219,7 @@ class BarcodeReaderActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         binding?.barcodeView?.resume()
-        val colorPair = colorPair()
+        val colorPair = preferenceApplier.colorPair()
         binding?.toolbar?.setTitleTextColor(colorPair.fontColor())
         binding?.let {
             it.resultArea.setBackgroundColor(colorPair.bgColor())
@@ -227,9 +248,6 @@ class BarcodeReaderActivity : BaseActivity() {
         Toaster.tShort(this, R.string.message_requires_permission_camera)
         finish()
     }
-
-    @StringRes
-    override fun titleId(): Int = R.string.title_camera
 
     companion object {
 

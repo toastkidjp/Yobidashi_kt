@@ -4,35 +4,49 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 
 /**
  * About this app.
  *
  * @author toastkidjp
  */
-class AboutThisAppActivity : BaseActivity() {
+class AboutThisAppActivity : AppCompatActivity() {
 
     /**
      * Data Binding.
      */
     private var binding: ActivityAboutBinding? = null
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
 
-        binding?.toolbar?.let { initToolbar(it) }
+        binding?.toolbar?.also { toolbar ->
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener { finish() }
+            toolbar.setTitle(R.string.title_about_this_app)
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+        }
 
         binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
     }
@@ -40,8 +54,9 @@ class AboutThisAppActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        binding?.appBar?.setBackgroundColor(colorPair().bgColor())
-        binding?.toolbar?.let { applyColorToToolbar(it) }
+        val colorPair = preferenceApplier.colorPair()
+        binding?.appBar?.setBackgroundColor(colorPair.bgColor())
+        binding?.toolbar?.let { ToolbarColorApplier()(window, it, colorPair) }
     }
 
     /**
@@ -59,7 +74,7 @@ class AboutThisAppActivity : BaseActivity() {
     }
 
     fun privacyPolicy() {
-        CustomTabsFactory.make(this, colorPair())
+        CustomTabsFactory.make(this, preferenceApplier.colorPair())
                 .build()
                 .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
     }
@@ -68,7 +83,18 @@ class AboutThisAppActivity : BaseActivity() {
         startActivity(IntentFactory.authorsApp())
     }
 
-    override fun titleId(): Int = R.string.title_about_this_app
+    fun clickMenu(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        if (itemId == R.id.menu_exit) {
+            moveTaskToBack(true)
+            return true
+        }
+        if (itemId == R.id.menu_close) {
+            finish()
+            return true
+        }
+        return true
+    }
 
     companion object {
 

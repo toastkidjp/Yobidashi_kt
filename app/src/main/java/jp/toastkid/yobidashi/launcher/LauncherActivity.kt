@@ -2,31 +2,34 @@ package jp.toastkid.yobidashi.launcher
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.MenuItem
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityLauncherBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.settings.SettingsActivity
-
 
 /**
  * App Launcher.
  *
+ * TODO Fix header behavior.
+ *
  * @author toastkidjp
  */
-class LauncherActivity : BaseActivity() {
+class LauncherActivity : AppCompatActivity() {
 
     /**
      * Binding object.
@@ -42,12 +45,22 @@ class LauncherActivity : BaseActivity() {
         Adapter(this, binding.toolbar)
     }
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
         
-        initToolbar(binding.toolbar)
-        binding.toolbar.inflateMenu(R.menu.launcher)
+        binding.toolbar.also { toolbar ->
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener { finish() }
+            toolbar.setTitle(R.string.title_apps_launcher)
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.inflateMenu(R.menu.launcher)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+        }
 
         binding.appItemsView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
@@ -81,7 +94,7 @@ class LauncherActivity : BaseActivity() {
                 }
                 prev = s.toString()
                 adapter.filter(s.toString())
-                binding.appItemsView.scheduleLayoutAnimation();
+                binding.appItemsView.scheduleLayoutAnimation()
             }
 
             override fun afterTextChanged(s: Editable) = Unit
@@ -90,14 +103,15 @@ class LauncherActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        applyColorToToolbar(binding.toolbar)
-        val fontColor = colorPair().fontColor()
+        val colorPair = preferenceApplier.colorPair()
+        ToolbarColorApplier()(window, binding.toolbar, colorPair)
+        val fontColor = colorPair.fontColor()
         Colors.setEditTextColor(binding.filter, fontColor)
         binding.inputBorder.setBackgroundColor(fontColor)
-        ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
+        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
+    private fun clickMenu(item: MenuItem): Boolean {
         @IdRes val itemId: Int = item.itemId
 
         val itemCount = binding.appItemsView.adapter?.itemCount ?: 0
@@ -115,16 +129,22 @@ class LauncherActivity : BaseActivity() {
                 RecyclerViewScroller.toBottom(binding.appItemsView, itemCount)
                 return true
             }
+            R.id.menu_exit -> {
+                moveTaskToBack(true)
+                return true
+            }
+            R.id.menu_close -> {
+                finish()
+                return true
+            }
+            else -> return true
         }
-        return super.clickMenu(item)
     }
 
     override fun onPause() {
         super.onPause()
         Inputs.hideKeyboard(binding.filter)
     }
-
-    override fun titleId(): Int = R.string.title_apps_launcher
 
     override fun onDestroy() {
         super.onDestroy()
