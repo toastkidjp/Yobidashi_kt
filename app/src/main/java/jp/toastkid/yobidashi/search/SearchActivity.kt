@@ -362,7 +362,7 @@ class SearchActivity : AppCompatActivity(),
         binding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener { _ ->
+            it.searchAction.setOnClickListener {
                 if (useVoice) {
                     try {
                         startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)

@@ -18,6 +18,8 @@ import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
@@ -39,6 +41,8 @@ internal class PageInformationDialogFragment: DialogFragment() {
     private var title: String? = null
 
     private var url: String? = null
+
+    private val disposables = CompositeDisposable()
 
     override fun setArguments(args: Bundle?) {
         super.setArguments(args)
@@ -63,6 +67,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ setBitmap(it, imageView, contentView) }, Timber::e)
+                .addTo(disposables)
 
         val builder = AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_menu_page_information)
@@ -110,6 +115,11 @@ internal class PageInformationDialogFragment: DialogFragment() {
                 "It has copied URL to clipboard.$lineSeparator$url"
         )
         d.dismiss()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 
     companion object {
