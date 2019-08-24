@@ -57,6 +57,10 @@ enum class SearchCategory(
             R.drawable.ic_video,
             "https://www.youtube.com/results?search_query="
     ),
+    TIKTOK(R.string.search_category_tiktok,
+            R.drawable.ic_tiktok,
+            "https://www.tiktok.com/tag/"
+    ),
     WIKIPEDIA(R.string.search_category_wikipedia,
             R.drawable.ic_wikipedia,
             "https://%s.wikipedia.org/w/index.php?search=",
