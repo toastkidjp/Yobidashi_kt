@@ -8,6 +8,15 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 
 /**
+ * [WebView] pool.
+ *
+ * @param context Use for make [WebViewFactory] instance.
+ * @param webViewClientSupplier
+ * @param webChromeClientSupplier
+ * @param scrollCallback Use for implementing action on scroll
+ * @param poolSize (Optional) Count of containing [WebView] instance. If you don't passed it,
+ * it use default size.
+ *
  * @author toastkidjp
  */
 internal class WebViewPool(
@@ -17,16 +26,28 @@ internal class WebViewPool(
         poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE
 ) {
 
+    /**
+     * Containing [WebView] instance.
+     */
     private val pool: LruCache<String, WebView>
 
     private val alphaConverter = AlphaConverter()
 
+    /**
+     * Latest tab's ID.
+     */
     private var latestTabId: String? = null
 
     init {
         pool = LruCache(if (0 < poolSize) poolSize else DEFAULT_MAXIMUM_POOL_SIZE)
     }
 
+    /**
+     * Get specified [WebView] by tab ID.
+     *
+     * @param tabId tab ID
+     * @return [WebView] (Nullable)
+     */
     fun get(tabId: String?): WebView? {
         if (tabId == null) {
             return null
@@ -46,8 +67,18 @@ internal class WebViewPool(
         return webView
     }
 
+    /**
+     * Get latest [WebView].
+     *
+     * @return [WebView] (Nullable)
+     */
     fun getLatest(): WebView? = latestTabId?.let { pool.get(it) }
 
+    /**
+     * Remove [WebView] by tab ID.
+     *
+     * @param tabId tab ID
+     */
     fun remove(tabId: String?) {
         if (tabId == null) {
             return
@@ -55,6 +86,11 @@ internal class WebViewPool(
         pool.remove(tabId)
     }
 
+    /**
+     * Resize poll size.
+     *
+     * @param newSize new pool size
+     */
     fun resize(newSize: Int) {
         if (newSize == pool.maxSize()) {
             return
@@ -65,17 +101,24 @@ internal class WebViewPool(
         }
     }
 
+
     fun applyNewAlpha() {
         val newAlphaBackground = alphaConverter.readBackground(context)
         pool.snapshot().values.forEach { it.setBackgroundColor(newAlphaBackground) }
     }
 
+    /**
+     * Destroy all [WebView].
+     */
     fun dispose() {
         pool.snapshot().values.forEach { it.destroy() }
     }
 
     companion object {
 
+        /**
+         * Default pool size.
+         */
         private const val DEFAULT_MAXIMUM_POOL_SIZE = 6
     }
 
