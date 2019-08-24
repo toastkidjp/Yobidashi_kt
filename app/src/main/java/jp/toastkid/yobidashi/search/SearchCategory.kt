@@ -45,6 +45,10 @@ enum class SearchCategory(
             R.drawable.ic_yahoo_japan_logo,
             "https://search.yahoo.co.jp/search?p="
     ),
+    BAIDU(R.string.baidu,
+            R.drawable.ic_baidu,
+            "https://www.baidu.com/s?wd="
+    ),
     IMAGE(R.string.search_category_image,
             R.drawable.ic_image_search,
             "https://www.google.co.jp/search?site=imghp&tbm=isch&q="
@@ -139,7 +143,6 @@ enum class SearchCategory(
             R.drawable.ic_buzzfeed,
             "https://www.buzzfeed.com/jp/search?q="
     ),
-    //https://ie=UTF-8&sa=Search
     ;
 
     /**
