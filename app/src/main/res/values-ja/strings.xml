@@ -16,7 +16,7 @@
     <string name="search_category_youtube">動画</string>
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_shopping">ショッピング</string>
-    <string name="search_category_technical_qa">ソフトウェア技術Ｑ＆Ａ</string>
+    <string name="search_category_stack_overflow">Stack Overflow</string>
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>

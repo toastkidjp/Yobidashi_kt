@@ -16,7 +16,7 @@
     <string name="search_category_youtube">Video</string>
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_shopping">Shopping</string>
-    <string name="search_category_technical_qa">Software technical Q&amp;A</string>
+    <string name="search_category_stack_overflow">Stack Overflow</string>
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>

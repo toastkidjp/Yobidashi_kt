@@ -97,7 +97,7 @@ enum class SearchCategory(
                 }
             }
     ),
-    TECHNICAL_QA(R.string.search_category_technical_qa,
+    TECHNICAL_QA(R.string.search_category_stack_overflow,
             R.drawable.ic_stackoverflow,
             "https://stackoverflow.com/search?q="
     ),
