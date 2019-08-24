@@ -43,6 +43,8 @@ internal object WebViewFactory {
      */
     private var anchor: String = ""
 
+    private val alphaConverter = AlphaConverter()
+
     /**
      * Make new [WebView].
      *
@@ -128,6 +130,7 @@ internal object WebViewFactory {
             settings.safeBrowsingEnabled = true
         }
         webView.isNestedScrollingEnabled = true
+        webView.setBackgroundColor(alphaConverter.readBackground(context))
         return webView
     }
 

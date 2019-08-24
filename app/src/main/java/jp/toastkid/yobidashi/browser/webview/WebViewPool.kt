@@ -31,6 +31,8 @@ internal class WebViewPool(
      */
     private val pool: LruCache<String, WebView>
 
+    private val alphaConverter = AlphaConverter()
+
     /**
      * Latest tab's ID.
      */
@@ -97,6 +99,12 @@ internal class WebViewPool(
             && 0 < newSize) {
             pool.resize(newSize)
         }
+    }
+
+
+    fun applyNewAlpha() {
+        val newAlphaBackground = alphaConverter.readBackground(context)
+        pool.snapshot().values.forEach { it.setBackgroundColor(newAlphaBackground) }
     }
 
     /**

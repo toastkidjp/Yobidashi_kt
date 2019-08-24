@@ -475,4 +475,8 @@ class BrowserModule(
         webViewPool.resize(poolSize)
     }
 
+    fun applyNewAlpha() {
+        webViewPool.applyNewAlpha()
+    }
+
 }

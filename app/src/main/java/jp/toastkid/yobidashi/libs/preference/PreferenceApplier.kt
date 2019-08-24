@@ -39,7 +39,8 @@ class PreferenceApplier(private val context: Context) {
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
         EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_FONT_SIZE,
         CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
-        MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y
+        MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
+        WEB_VIEW_BACKGROUND_ALPHA
     }
 
     private val preferences: SharedPreferences =
@@ -341,6 +342,14 @@ class PreferenceApplier(private val context: Context) {
         }
         return preferences.getFloat(Key.MENU_FAB_BUTTON_POSITION_X.name, -1f) to
                 preferences.getFloat(Key.MENU_FAB_BUTTON_POSITION_Y.name, -1f)
+    }
+
+    fun setWebViewBackgroundAlpha(alpha: Float) {
+        preferences.edit().putFloat(Key.WEB_VIEW_BACKGROUND_ALPHA.name, alpha).apply()
+    }
+
+    fun getWebViewBackgroundAlpha(): Float {
+        return preferences.getFloat(Key.WEB_VIEW_BACKGROUND_ALPHA.name, 0f)
     }
 
     fun clear() {

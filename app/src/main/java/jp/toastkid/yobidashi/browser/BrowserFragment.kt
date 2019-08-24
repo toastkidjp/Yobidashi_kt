@@ -696,6 +696,7 @@ class BrowserFragment : Fragment(),
         menuViewModel?.tabCount(tabs.size())
 
         browserModule.resizePool(preferenceApplier.poolSize)
+        browserModule.applyNewAlpha()
 
         binding?.swipeRefresher?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
