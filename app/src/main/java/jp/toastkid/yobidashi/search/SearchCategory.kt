@@ -123,10 +123,6 @@ enum class SearchCategory(
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
     ),
-    SLASHDOT(R.string.search_category_slashdot,
-            R.drawable.ic_slashdot,
-            "https://slashdot.org/index2.pl?fhfilter="
-    ),
     REDDIT(R.string.search_category_reddit,
             R.drawable.ic_reddit,
             "https://www.reddit.com/search/?q="
