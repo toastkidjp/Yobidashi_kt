@@ -123,6 +123,10 @@ enum class SearchCategory(
             R.drawable.ic_slashdot,
             "https://slashdot.org/index2.pl?fhfilter="
     ),
+    REDDIT(R.string.search_category_reddit,
+            R.drawable.ic_reddit,
+            "https://www.reddit.com/search/?q="
+    ),
     GITHUB(R.string.search_category_github,
             R.drawable.ic_github,
             "https://github.com/search?utf8=%E2%9C%93&type=&q="
