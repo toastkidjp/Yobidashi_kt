@@ -405,5 +405,6 @@
     <string name="speakerdeck">Speaker Deck</string>
     <string name="baidu">Baidu</string>
     <string name="search_category_flickr">Flickr</string>
+    <string name="livejournal">LiveJournal</string>
 
 </resources>

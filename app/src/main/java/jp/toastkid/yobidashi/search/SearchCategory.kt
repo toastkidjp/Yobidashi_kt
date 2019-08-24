@@ -147,6 +147,10 @@ enum class SearchCategory(
             R.drawable.ic_buzzfeed,
             "https://www.buzzfeed.com/jp/search?q="
     ),
+    LIVEJOURNAL(R.string.livejournal,
+            R.drawable.ic_livejournal,
+            "https://www.livejournal.com/gsearch/?engine=google&cx=partner-pub-5600223439108080:3711723852&q="
+    ),
     ;
 
     /**
