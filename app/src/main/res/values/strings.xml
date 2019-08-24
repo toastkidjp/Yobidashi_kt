@@ -411,5 +411,6 @@
     <string name="baidu">Baidu</string>
     <string name="search_category_flickr">Flickr</string>
     <string name="livejournal">LiveJournal</string>
+    <string name="search_category_slashdot">Slashdot</string>
 
 </resources>

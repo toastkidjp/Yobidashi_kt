@@ -119,6 +119,10 @@ enum class SearchCategory(
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
     ),
+    SLASHDOT(R.string.search_category_slashdot,
+            R.drawable.ic_slashdot,
+            "https://slashdot.org/index2.pl?fhfilter="
+    ),
     GITHUB(R.string.search_category_github,
             R.drawable.ic_github,
             "https://github.com/search?utf8=%E2%9C%93&type=&q="
