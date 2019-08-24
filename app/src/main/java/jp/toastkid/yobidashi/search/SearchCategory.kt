@@ -74,6 +74,10 @@ enum class SearchCategory(
             R.drawable.ic_instagram_logo,
             "https://www.instagram.com/explore/tags/"
     ),
+    FLICKR(R.string.search_category_flickr,
+            R.drawable.ic_flickr,
+            "https://www.flickr.com/search/?text="
+    ),
     MAP(R.string.search_category_map,
             R.drawable.ic_map,
             "https://www.google.co.jp/maps/place/"

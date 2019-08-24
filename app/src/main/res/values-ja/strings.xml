@@ -404,5 +404,6 @@
     <string name="slideshare">SlideShare</string>
     <string name="speakerdeck">Speaker Deck</string>
     <string name="baidu">Baidu</string>
+    <string name="search_category_flickr">Flickr</string>
 
 </resources>
