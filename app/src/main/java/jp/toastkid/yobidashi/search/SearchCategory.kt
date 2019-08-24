@@ -131,10 +131,15 @@ enum class SearchCategory(
             R.drawable.ic_slideshare,
             "https://www.slideshare.net/search/slideshow?q="
     ),
+    SPEAKERDECK(R.string.speakerdeck,
+            R.drawable.ic_speakerdeck,
+            "https://cse.google.com/cse?cx=010150859881542981030%3Ahqhxyxpwtc4&q=java"
+    ),
     BUZZFEED(R.string.buzzfeed,
             R.drawable.ic_buzzfeed,
             "https://www.buzzfeed.com/jp/search?q="
     ),
+    //https://ie=UTF-8&sa=Search
     ;
 
     /**
