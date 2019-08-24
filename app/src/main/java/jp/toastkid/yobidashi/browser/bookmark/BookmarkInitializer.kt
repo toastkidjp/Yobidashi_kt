@@ -25,7 +25,8 @@ object BookmarkInitializer {
                     "Yelp" to "https://www.yelp.com/",
                     "Amazon" to "https://www.amazon.com/",
                     "Project Gutenberg" to "http://www.gutenberg.org/",
-                    "Expedia" to "https://www.expedia.com"
+                    "Expedia" to "https://www.expedia.com",
+                    "Slashdot" to "https://m.slashdot.org"
                     ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
