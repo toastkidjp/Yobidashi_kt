@@ -127,6 +127,10 @@ enum class SearchCategory(
             R.drawable.ic_ted,
             "https://www.ted.com/search?q="
     ),
+    SLIDESHARE(R.string.slideshare,
+            R.drawable.ic_slideshare,
+            "https://www.slideshare.net/search/slideshow?q="
+    ),
     BUZZFEED(R.string.buzzfeed,
             R.drawable.ic_buzzfeed,
             "https://www.buzzfeed.com/jp/search?q="

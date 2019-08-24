@@ -401,5 +401,6 @@
     <string name="medium">Medium</string>
     <string name="ted">TED</string>
     <string name="buzzfeed">BuzzFeed</string>
+    <string name="slideshare">SlideShare</string>
 
 </resources>
