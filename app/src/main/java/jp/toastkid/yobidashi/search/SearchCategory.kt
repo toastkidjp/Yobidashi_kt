@@ -153,7 +153,7 @@ enum class SearchCategory(
     ),
     SPEAKERDECK(R.string.speakerdeck,
             R.drawable.ic_speakerdeck,
-            "https://cse.google.com/cse?cx=010150859881542981030%3Ahqhxyxpwtc4&q=java"
+            "https://cse.google.com/cse?cx=010150859881542981030%3Ahqhxyxpwtc4&q="
     ),
     BUZZFEED(R.string.buzzfeed,
             R.drawable.ic_buzzfeed,
