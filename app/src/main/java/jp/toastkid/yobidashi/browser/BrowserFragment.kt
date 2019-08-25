@@ -12,10 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
@@ -282,27 +279,25 @@ class BrowserFragment : Fragment(),
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
         inflater.inflate(R.menu.browser, menu)
+    }
 
-        menu.let { menuNonNull ->
-            menuNonNull.findItem(R.id.open_tabs)?.setOnMenuItemClickListener {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.open_tabs -> {
                 switchTabList()
-                true
+                return true
             }
-
-            val activityContext = context ?: return@let
-
-            menuNonNull.findItem(R.id.setting)?.setOnMenuItemClickListener {
-                startActivity(SettingsActivity.makeIntent(activityContext))
-                true
+            R.id.setting -> {
+                startActivity(SettingsActivity.makeIntent(requireContext()))
+                return true
             }
-
-            menuNonNull.findItem(R.id.stop_loading)?.setOnMenuItemClickListener {
+            R.id.stop_loading -> {
                 stopCurrentLoading()
-                true
+                return true
             }
         }
+        return super.onOptionsItemSelected(item)
     }
 
     fun onMenuClick(menu: Menu) {

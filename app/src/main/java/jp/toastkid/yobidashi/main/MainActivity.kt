@@ -17,7 +17,6 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -126,9 +125,6 @@ class MainActivity :
 
         binding.toolbar.also { toolbar ->
             toolbar.setTitle(titleId())
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.inflateMenu(R.menu.main_fab_menu)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
@@ -572,18 +568,22 @@ class MainActivity :
         }
     }
 
+    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.settings_toolbar_menu, menu)
+        menuInflater.inflate(R.menu.main_fab_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-    private fun clickMenu(item: MenuItem): Boolean {
-        @IdRes val itemId: Int = item.itemId
-
-        when (itemId) {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
             R.id.menu_exit -> {
                 moveTaskToBack(true)
-                return true
+                true
             }
             R.id.menu_close -> {
                 finish()
-                return true
+                true
             }
             R.id.reset_menu_position -> {
                 binding?.menuSwitch?.let {
@@ -591,10 +591,10 @@ class MainActivity :
                     it.translationY = 0f
                     preferenceApplier.clearMenuFabPosition()
                 }
+                true
             }
-            else -> return true
+            else -> super.onOptionsItemSelected(item)
         }
-        return true
     }
 
     @StringRes
