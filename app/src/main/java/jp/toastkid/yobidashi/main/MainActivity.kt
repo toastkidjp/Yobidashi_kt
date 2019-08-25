@@ -124,7 +124,7 @@ class MainActivity :
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         binding.toolbar.also { toolbar ->
-            toolbar.setTitle(titleId())
+            toolbar.setTitle(TITLE_ID)
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
@@ -585,9 +585,6 @@ class MainActivity :
         else -> super.onOptionsItemSelected(item)
     }
 
-    @StringRes
-    private fun titleId(): Int = R.string.app_name
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK || data == null) {
@@ -652,6 +649,9 @@ class MainActivity :
          * Header hiding duration.
          */
         private const val HEADER_HIDING_DURATION = 75L
+
+        @StringRes
+        private const val TITLE_ID = R.string.app_name
 
         /**
          * Layout ID.
