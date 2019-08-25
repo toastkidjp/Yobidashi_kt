@@ -48,6 +48,8 @@ object SearchQueryExtractor {
                 uri.getQueryParameter("search")
             host.endsWith("search.yahoo.co.jp") ->
                 uri.getQueryParameter("p")
+            host.endsWith("www.baidu.com") ->
+                uri.getQueryParameter("wd")
             else -> uri.getQueryParameter(
                     commonQueryParameterNames
                             .find { uri.queryParameterNames.contains(it) } ?: ""
