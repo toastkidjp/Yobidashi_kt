@@ -202,9 +202,9 @@ enum class SearchCategory(
                     return f
                 }
             }
-            return SearchCategory.values()
-                    .find { it.name == category.toUpperCase() }
-                    .let { if (it == null) { GOOGLE } else { it } }
+            return SearchCategory
+                    .values()
+                    .find { it.name == category.toUpperCase() } ?: GOOGLE
         }
 
         /**
