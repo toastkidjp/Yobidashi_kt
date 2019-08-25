@@ -575,26 +575,24 @@ class MainActivity :
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.menu_exit -> {
-                moveTaskToBack(true)
-                true
-            }
-            R.id.menu_close -> {
-                finish()
-                true
-            }
-            R.id.reset_menu_position -> {
-                binding?.menuSwitch?.let {
-                    it.translationX = 0f
-                    it.translationY = 0f
-                    preferenceApplier.clearMenuFabPosition()
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.menu_exit -> {
+            moveTaskToBack(true)
+            true
         }
+        R.id.menu_close -> {
+            finish()
+            true
+        }
+        R.id.reset_menu_position -> {
+            binding?.menuSwitch?.let {
+                it.translationX = 0f
+                it.translationY = 0f
+                preferenceApplier.clearMenuFabPosition()
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     @StringRes
