@@ -650,6 +650,9 @@ class MainActivity :
          */
         private const val HEADER_HIDING_DURATION = 75L
 
+        /**
+         * Title resource ID.
+         */
         @StringRes
         private const val TITLE_ID = R.string.app_name
 
