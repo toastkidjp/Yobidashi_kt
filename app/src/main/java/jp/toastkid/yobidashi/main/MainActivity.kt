@@ -569,9 +569,10 @@ class MainActivity :
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
-        val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.settings_toolbar_menu, menu)
-        menuInflater.inflate(R.menu.main_fab_menu, menu)
+        menuInflater.also {
+            it.inflate(R.menu.settings_toolbar_menu, menu)
+            it.inflate(R.menu.main_fab_menu, menu)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
