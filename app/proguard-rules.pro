@@ -8,6 +8,7 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 -dontwarn jp.toastkid.yobidashi.browser.BrowserFragment**
+-dontwarn jp.toastkid.yobidashi.barcode.BarcodeReaderActivity**
 -keep class jp.toastkid.yobidashi.tab.model.** { *; }
 -keepclassmembers enum jp.toastkid.yobidashi.** { *; }
 

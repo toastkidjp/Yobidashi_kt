@@ -16,6 +16,8 @@ import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -52,6 +54,8 @@ class BarcodeReaderActivity : AppCompatActivity() {
     private val slideUpBottom by lazy { AnimationUtils.loadAnimation(this, R.anim.slide_up) }
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,7 +182,28 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 )
 
                 sourceData?.cropRect = getRect()
-                sourceData?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
+                sourceData?.bitmap?.let {
+                    it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
+                    detector.processImage(FirebaseVisionImage.fromBitmap(it))
+                            .addOnSuccessListener { visionText ->
+                                visionText.textBlocks
+                                        .asSequence()
+                                        .map { block -> block.text }
+                                        .forEach { text ->
+                                            Toaster.snackLong(
+                                                    barcodeView,
+                                                    text,
+                                                    R.string.clip,
+                                                    View.OnClickListener {
+                                                        Clipboard.clip(this@BarcodeReaderActivity, text)
+                                                    },
+                                                    preferenceApplier.colorPair()
+                                            )
+                                }
+                            }
+                            .addOnFailureListener { e -> Timber.e(e) }
+                }
+
                 Toaster.snackShort(
                         barcodeView,
                         "Camera saved: ${output.absolutePath}",
