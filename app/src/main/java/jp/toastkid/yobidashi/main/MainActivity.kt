@@ -373,9 +373,9 @@ class MainActivity :
         }
 
         val transaction = supportFragmentManager.beginTransaction()
-        val fragments = supportFragmentManager?.fragments
-        if (fragments?.size != 0) {
-            fragments?.get(0)?.let {
+        val fragments = supportFragmentManager.fragments
+        if (fragments.size != 0) {
+            fragments.get(0)?.let {
                 if (it == fragment) {
                     return
                 }
