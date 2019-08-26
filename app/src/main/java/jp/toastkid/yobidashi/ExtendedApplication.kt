@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
 import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.translation.TranslationModelLoader
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.SavedColors
@@ -50,6 +51,8 @@ class ExtendedApplication : Application() {
         if (preferenceApplier.useNotificationWidget()) {
             NotificationWidget.show(this)
         }
+
+        TranslationModelLoader().invoke()
     }
 
     /**

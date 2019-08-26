@@ -414,5 +414,6 @@
     <string name="search_category_slashdot">Slashdot</string>
     <string name="search_category_reddit">reddit</string>
     <string name="search_category_tiktok">TikTok</string>
+    <string name="translate">Translate</string>
 
 </resources>

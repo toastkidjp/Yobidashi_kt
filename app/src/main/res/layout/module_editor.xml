@@ -118,6 +118,17 @@
                     android:onLongClick="@{editorModule::showName}"
                     />
                 <TextView
+                    android:id="@+id/translate"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    style="?android:attr/buttonBarStyle"
+                    android:text="@string/translate"
+                    android:drawableTop="@drawable/ic_translate"
+                    android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.translate()}"
+                    android:onLongClick="@{editorModule::showName}"
+                    />
+                <TextView
                     android:id="@+id/counter"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
