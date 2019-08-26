@@ -553,7 +553,16 @@ class MainActivity :
                 binding.toolbar.visibility = View.VISIBLE
             }
             ScreenMode.FULL_SCREEN -> Unit
-            ScreenMode.EXPANDABLE -> Unit
+            ScreenMode.EXPANDABLE -> binding.toolbar.animate()?.let {
+                it.cancel()
+                it.translationY(0f)
+                        .setDuration(HEADER_HIDING_DURATION)
+                        .withStartAction {
+                            binding.toolbar.visibility = View.VISIBLE
+                        }
+                        .withEndAction   { binding.content?.requestLayout() }
+                        .start()
+            }
         }
     }
 
