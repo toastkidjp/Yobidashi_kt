@@ -166,8 +166,8 @@ class MainActivity :
         MenuBinder(
                 this,
                 menuViewModel,
-                binding?.menusView,
-                binding?.menuSwitch
+                binding.menusView,
+                binding.menuSwitch
         )
 
         menuViewModel?.click?.observe(this, Observer { menu ->
@@ -187,7 +187,7 @@ class MainActivity :
                 preferenceApplier.setNewMenuFabPosition(x, y)
             }
         })
-        binding?.menuSwitch?.setOnTouchListener(listener)
+        binding.menuSwitch.setOnTouchListener(listener)
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -274,7 +274,7 @@ class MainActivity :
                 }
             }
             Menu.OVERLAY_COLOR_FILTER-> {
-                val rootView = binding?.root
+                val rootView = binding.root
                 ColorFilter(this, rootView).switchState(this)
             }
             Menu.PLANNING_POKER-> {
@@ -303,9 +303,8 @@ class MainActivity :
 
 
     private fun onMenuLongClick(menu: Menu): Boolean {
-        val view = binding?.root ?: return true
         Toaster.snackLong(
-                view,
+                binding.root,
                 menu.titleId,
                 R.string.run,
                 View.OnClickListener { onMenuClick(menu) },
@@ -490,11 +489,11 @@ class MainActivity :
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
-        binding.background?.setImageDrawable(background)
+        binding.background.setImageDrawable(background)
     }
 
     private fun setFabPosition() {
-        binding?.menuSwitch?.let {
+        binding.menuSwitch.let {
             val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
             val displayMetrics = it.context.resources.displayMetrics
             val x = when {
@@ -537,7 +536,7 @@ class MainActivity :
                     it.cancel()
                     it.translationY(-resources.getDimension(R.dimen.toolbar_height))
                             .setDuration(HEADER_HIDING_DURATION)
-                            .withStartAction { binding.content?.requestLayout() }
+                            .withStartAction { binding.content.requestLayout() }
                             .withEndAction   {
                                 binding.toolbar.visibility = View.GONE
                             }
@@ -560,7 +559,7 @@ class MainActivity :
                         .withStartAction {
                             binding.toolbar.visibility = View.VISIBLE
                         }
-                        .withEndAction   { binding.content?.requestLayout() }
+                        .withEndAction   { binding.content.requestLayout() }
                         .start()
             }
         }
@@ -584,7 +583,7 @@ class MainActivity :
             true
         }
         R.id.reset_menu_position -> {
-            binding?.menuSwitch?.let {
+            binding.menuSwitch.let {
                 it.translationX = 0f
                 it.translationY = 0f
                 preferenceApplier.clearMenuFabPosition()
