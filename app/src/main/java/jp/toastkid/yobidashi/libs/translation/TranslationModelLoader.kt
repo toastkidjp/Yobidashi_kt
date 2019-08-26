@@ -14,12 +14,20 @@ import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateRemoteM
 import timber.log.Timber
 
 /**
+ * Translation model loader.
+ *
  * @author toastkidjp
  */
 class TranslationModelLoader {
 
+    /**
+     * Language model manager.
+     */
     private val modelManager = FirebaseTranslateModelManager.getInstance()
 
+    /**
+     * Download English and Japanese language models.
+     */
     operator fun invoke() {
         modelManager
                 .downloadRemoteModelIfNeeded(makeModel(FirebaseTranslateLanguage.EN))
@@ -29,10 +37,18 @@ class TranslationModelLoader {
                 .addOnFailureListener { Timber.e(it) }
     }
 
+    /**
+     * Make model.
+     *
+     * @param language
+     */
     private fun makeModel(language: Int) = FirebaseTranslateRemoteModel.Builder(language)
             .setDownloadConditions(makeCommonCondition())
             .build()
 
+    /**
+     * Make common condition, it contains requireWifi.
+     */
     private fun makeCommonCondition() = FirebaseModelDownloadConditions.Builder()
             .requireWifi()
             .build()
