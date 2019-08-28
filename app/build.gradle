@@ -97,6 +97,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:4.2.1"
+    testImplementation "io.mockk:mockk:1.9.3"
 }
 
 repositories{
