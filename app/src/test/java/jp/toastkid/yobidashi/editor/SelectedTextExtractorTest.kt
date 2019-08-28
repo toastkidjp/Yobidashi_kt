@@ -9,12 +9,17 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
+ * [SelectedTextExtractor]'s test cases.
+ *
  * @author toastkidjp
  */
 class SelectedTextExtractorTest {
 
+    /**
+     * Check behavior of found target text case.
+     */
     @Test
-    fun test() {
+    fun testFoundCase() {
         val editText = mockk<EditText>()
 
         every { editText.selectionStart }.returns(3)
@@ -31,6 +36,9 @@ class SelectedTextExtractorTest {
         verify { editable.substring(3, 5) }
     }
 
+    /**
+     * Check behavior of not found target text case.
+     */
     @Test
     fun testNotFoundCase() {
         val editText = mockk<EditText>()
