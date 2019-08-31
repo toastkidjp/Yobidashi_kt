@@ -20,12 +20,20 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 
 /**
+ * Display setting fragment.
+ *
  * @author toastkidjp
  */
 class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View binding.
+     */
     private lateinit var binding: FragmentSettingDisplayBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreateView(
