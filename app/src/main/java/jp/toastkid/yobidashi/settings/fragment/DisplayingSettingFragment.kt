@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -43,7 +44,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
     ): View? {
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_setting_display,
+                LAYOUT_ID,
                 container,
                 false
         )
@@ -81,4 +82,11 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
     }
 
     override fun titleId() = R.string.title_settings_display
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_setting_display
+
+    }
 }
