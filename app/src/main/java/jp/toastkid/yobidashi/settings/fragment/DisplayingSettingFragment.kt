@@ -28,8 +28,17 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_display, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_setting_display,
+                container,
+                false
+        )
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
