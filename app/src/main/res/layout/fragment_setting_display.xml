@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_photo_black"
-                android:onClick="@{fragment::backgroundSettings}"
+                android:onClick="@{view -> fragment.backgroundSettings()}"
                 android:text="@string/title_set_bg" />
 
             <include layout="@layout/primary_dark_divider" />
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_close_black"
-                android:onClick="@{fragment::clearBackgroundSettings}"
+                android:onClick="@{view -> fragment.clearBackgroundSettings()}"
                 android:text="@string/title_bg_reset" />
 
         </LinearLayout>

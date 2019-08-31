@@ -61,7 +61,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param view
      */
-    fun backgroundSettings(view: View) {
+    fun backgroundSettings() {
         activity?.let {
             startActivity(BackgroundSettingActivity.makeIntent(it))
         }
@@ -72,7 +72,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param view
      */
-    fun clearBackgroundSettings(view: View) {
+    fun clearBackgroundSettings() {
         preferenceApplier.removeBackgroundImagePath()
         Toaster.snackShort(
                 binding.root,
