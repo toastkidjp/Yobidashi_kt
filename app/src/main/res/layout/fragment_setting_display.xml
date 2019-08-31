@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment" />
@@ -23,8 +23,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_photo_black"
+                android:drawableStart="@drawable/ic_photo_black"
                 android:onClick="@{view -> fragment.backgroundSettings()}"
-                android:text="@string/title_set_bg" />
+                android:text="@string/title_set_bg"
+                />
 
             <include layout="@layout/primary_dark_divider" />
 
@@ -34,8 +36,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_close_black"
+                android:drawableStart="@drawable/ic_close_black"
                 android:onClick="@{view -> fragment.clearBackgroundSettings()}"
-                android:text="@string/title_bg_reset" />
+                android:text="@string/title_bg_reset"
+                />
 
         </LinearLayout>
     </FrameLayout>
