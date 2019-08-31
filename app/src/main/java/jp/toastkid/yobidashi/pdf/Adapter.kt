@@ -25,7 +25,7 @@ import java.io.File
  * @author toastkidjp
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
+class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() {
 
     /**
      * Layout inflater.
@@ -75,7 +75,7 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
         val contentResolver = context.contentResolver
         fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
         pdfRenderer?.close()
-        pdfRenderer = PdfRenderer(fileDescriptor)
+        pdfRenderer = fileDescriptor?.let { PdfRenderer(it) }
         notifyDataSetChanged()
     }
 
