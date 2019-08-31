@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.tab
 
 import android.net.Uri
 import java.util.*
-import java.util.concurrent.ArrayBlockingQueue
 
 /**
  * Uri queue for opening on background.
@@ -15,7 +14,7 @@ object BackgroundTabQueue {
     /**
      * Tab material's queue.
      */
-    private val queue: Queue<Pair<String, Uri>> = ArrayBlockingQueue<Pair<String, Uri>>(10)
+    private val queue: Queue<Pair<String, Uri>> = ArrayDeque<Pair<String, Uri>>(10)
 
     /**
      * Add tab material.

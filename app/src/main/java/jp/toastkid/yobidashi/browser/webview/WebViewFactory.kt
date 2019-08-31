@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Handler
+import android.text.TextUtils
+import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import android.text.TextUtils
-import android.view.MotionEvent
-import android.webkit.WebView
 import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
@@ -43,6 +43,8 @@ internal object WebViewFactory {
      */
     private var anchor: String = ""
 
+    private val alphaConverter = AlphaConverter()
+
     /**
      * Make new [WebView].
      *
@@ -51,12 +53,10 @@ internal object WebViewFactory {
     @SuppressLint("ClickableViewAccessibility")
     fun make(context: Context): CustomWebView {
         val webView = CustomWebView(context)
-        webView.setOnTouchListener { _, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_UP -> webView.enablePullToRefresh = false
-            }
-            false
-        }
+        webView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
 
         val preferenceApplier = PreferenceApplier(context)
 
@@ -129,6 +129,8 @@ internal object WebViewFactory {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             settings.safeBrowsingEnabled = true
         }
+        webView.isNestedScrollingEnabled = true
+        webView.setBackgroundColor(alphaConverter.readBackground(context))
         return webView
     }
 
@@ -160,8 +162,9 @@ internal object WebViewFactory {
                 supportFragmentManager?.findFragmentByTag(BrowserFragment::class.java.simpleName),
                 1
         )
+        val fragmentManager = supportFragmentManager ?: return
         dialogFragment.show(
-                supportFragmentManager,
+                fragmentManager,
                 dialogFragment::class.java.simpleName
         )
     }

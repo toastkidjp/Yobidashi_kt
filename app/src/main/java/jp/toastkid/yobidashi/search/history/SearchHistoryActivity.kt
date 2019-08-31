@@ -2,20 +2,22 @@ package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySearchHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.search.SearchAction
 
 /**
@@ -23,18 +25,23 @@ import jp.toastkid.yobidashi.search.SearchAction
  *
  * @author toastkidjp
  */
-class SearchHistoryActivity : BaseActivity(),
+class SearchHistoryActivity : AppCompatActivity(),
         SearchHistoryClearDialogFragment.OnClickSearchHistoryClearCallback {
 
     private lateinit var binding: ActivitySearchHistoryBinding
 
     private lateinit var adapter: ActivityAdapter
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         val relation = DbInitializer.init(this).relationOfSearchHistory()
 
@@ -44,14 +51,21 @@ class SearchHistoryActivity : BaseActivity(),
                 this,
                 relation,
                 { history -> SearchAction(this, history.category as String, history.query as String).invoke()},
-                { history -> Toaster.snackShort(binding.root, history.query as String, colorPair()) }
+                { history -> Toaster.snackShort(binding.root, history.query as String, preferenceApplier.colorPair()) }
         )
         binding.historiesView.adapter = adapter
 
         SwipeActionAttachment.invoke(binding.historiesView)
 
-        initToolbar(binding.toolbar)
-        binding.toolbar.inflateMenu(R.menu.search_history)
+        binding.toolbar.also { toolbar ->
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener { finish() }
+            toolbar.setTitle(titleId())
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.inflateMenu(R.menu.search_history)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+        }
+
         binding.historiesView.scheduleLayoutAnimation()
     }
 
@@ -64,29 +78,30 @@ class SearchHistoryActivity : BaseActivity(),
             return
         }
 
-        applyColorToToolbar(binding.toolbar)
+        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
-        ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
+        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
+    private fun clickMenu(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.close -> finish()
             R.id.clear -> SearchHistoryClearDialogFragment().show(
                     supportFragmentManager,
                     SearchHistoryClearDialogFragment::class.java.simpleName
             )
+            R.id.menu_exit -> moveTaskToBack(true)
         }
         return true
     }
 
     override fun onClickSearchHistoryClear() {
-        adapter.clearAll { Toaster.snackShort(binding.root, R.string.done_clear, colorPair()) }
+        adapter.clearAll { Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair()) }
                 .addTo(disposables)
         finish()
     }
 
-    override fun titleId(): Int = R.string.title_search_history
+    private fun titleId(): Int = R.string.title_search_history
 
     companion object {
 

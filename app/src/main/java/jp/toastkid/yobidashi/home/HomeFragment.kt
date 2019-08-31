@@ -16,21 +16,15 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.databinding.FragmentHomeBinding
-import jp.toastkid.yobidashi.launcher.LauncherActivity
-import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ToolbarAction
-import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
-import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 import timber.log.Timber
 
 /**
@@ -38,12 +32,14 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : Fragment(), CommonFragmentAction {
 
     /**
      * Data binding object.
      */
     private lateinit var binding: FragmentHomeBinding
+
+    private lateinit var preferenceApplier: PreferenceApplier
 
     /**
      * Callback.
@@ -54,11 +50,6 @@ class HomeFragment : BaseFragment() {
      * For hiding toolbar.
      */
     private var toolbarAction: ToolbarAction? = null
-
-    /**
-     * ModuleAdapter.
-     */
-    private var adapter: Adapter? = null
 
     /**
      * Disposables.
@@ -80,71 +71,27 @@ class HomeFragment : BaseFragment() {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
 
-        initMenus()
+        context?.let {
+            preferenceApplier = PreferenceApplier(it)
+        }
 
         return binding.root
-    }
-
-    /**
-     * Initialize RecyclerView menu.
-     */
-    private fun initMenus() {
-        val fragmentActivity = activity ?: return
-        adapter = Adapter(fragmentActivity, Consumer { this.processMenu(it) })
-        binding.menusView.adapter = adapter
-        val layoutManager = LinearLayoutManager(fragmentActivity, LinearLayoutManager.HORIZONTAL, false)
-        binding.menusView.layoutManager = layoutManager
-        layoutManager.scrollToPosition(Adapter.mediumPosition())
-    }
-
-    /**
-     * Process menu.
-     * @param menu
-     */
-    private fun processMenu(menu: Menu) {
-        val fragmentActivity = activity ?: return
-        when (menu) {
-            Menu.CODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
-            }
-            Menu.LAUNCHER -> {
-                startActivity(LauncherActivity.makeIntent(fragmentActivity))
-            }
-            Menu.BROWSER -> {
-                action?.action(Command.OPEN_BROWSER)
-            }
-            Menu.PLANNING_POKER -> {
-                startActivity(PlanningPokerActivity.makeIntent(fragmentActivity))
-            }
-            Menu.SETTING -> {
-                startActivity(SettingsActivity.makeIntent(fragmentActivity))
-            }
-            Menu.BACKGROUND_SETTING -> {
-                startActivity(BackgroundSettingActivity.makeIntent(fragmentActivity))
-            }
-            Menu.WIFI_SETTING -> {
-                startActivity(SettingsIntentFactory.wifi())
-            }
-            Menu.EXIT -> {
-                fragmentActivity.moveTaskToBack(true)
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
 
         binding.root.setBackgroundColor(
-                if (preferenceApplier().hasBackgroundImagePath())
+                if (preferenceApplier.hasBackgroundImagePath())
                     Color.TRANSPARENT
                 else
                     activity?.let { ContextCompat.getColor(it, R.color.darkgray_scale) } ?: Color.TRANSPARENT
         )
 
-        val colorPair = colorPair()
+        val colorPair = preferenceApplier.colorPair()
         @ColorInt val fontColor: Int = colorPair.fontColor()
 
-        binding.mainTitle.setTextColor(colorPair().fontColor())
+        binding.mainTitle.setTextColor(colorPair.fontColor())
         binding.searchAction.setTextColor(fontColor)
 
         @ColorInt val bgColor:   Int = colorPair.bgColor()
@@ -153,8 +100,6 @@ class HomeFragment : BaseFragment() {
         binding.searchIcon.setColorFilter(bgColor)
         binding.voiceSearch.setColorFilter(bgColor)
         binding.searchInputBorder.setBackgroundColor(bgColor)
-
-        binding.menusView.requestLayout()
 
         toolbarAction?.hideToolbar()
     }
@@ -180,7 +125,7 @@ class HomeFragment : BaseFragment() {
                 startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
                 Timber.e(e)
-                VoiceSearch.suggestInstallGoogleApp(binding.root, colorPair())
+                VoiceSearch.suggestInstallGoogleApp(binding.root, preferenceApplier.colorPair())
             }
         }
     }
@@ -201,7 +146,6 @@ class HomeFragment : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        adapter?.dispose()
         disposables.clear()
     }
 

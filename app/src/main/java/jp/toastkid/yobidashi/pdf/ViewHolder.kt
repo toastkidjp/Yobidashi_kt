@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.graphics.Bitmap
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemPdfContentBinding
 
 /**
@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi.databinding.ItemPdfContentBinding
  * @param binding [ItemPdfContentBinding]
  * @author toastkidjp
  */
-class ViewHolder(val binding: ItemPdfContentBinding) : RecyclerView.ViewHolder(binding.root) {
+class ViewHolder(private val binding: ItemPdfContentBinding) : RecyclerView.ViewHolder(binding.root) {
 
     /**
      * Set image bitmap.

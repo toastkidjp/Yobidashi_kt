@@ -18,7 +18,7 @@ internal object Archive {
     /**
      * Archive folder name.
      */
-    private val ARCHIVE_DIR = "archive"
+    private const val ARCHIVE_DIR = "archive"
 
     /**
      * Make new object.
@@ -57,7 +57,7 @@ internal object Archive {
      * Return can use archive.
      * @return If runtime environment SDK is Kitkat and upper, return true.
      */
-    fun canUseArchive(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+    private fun canUseArchive(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     /**
      * Load archive.

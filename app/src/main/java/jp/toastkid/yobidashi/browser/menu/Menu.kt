@@ -44,6 +44,8 @@ enum class Menu(
 
     ARCHIVE(R.string.title_archive, R.drawable.ic_archive),
 
+    VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
+
     SHARE(R.string.section_title_share, R.drawable.ic_share),
 
     REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
@@ -60,7 +62,7 @@ enum class Menu(
 
     SITE_SEARCH(R.string.title_site_search_by_google, R.drawable.ic_google),
 
-    SEARCH(R.string.title_search_action, R.drawable.ic_search_white),
+    WEB_SEARCH(R.string.title_search, R.drawable.ic_search_white),
 
     SETTING(R.string.title_settings, R.drawable.ic_settings),
 

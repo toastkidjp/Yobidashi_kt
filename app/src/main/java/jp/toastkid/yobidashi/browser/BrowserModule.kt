@@ -9,11 +9,12 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import android.view.View
 import android.view.animation.Animation
 import android.webkit.*
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,6 +24,7 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
+import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
 import jp.toastkid.yobidashi.libs.Bitmaps
@@ -30,18 +32,17 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import timber.log.Timber
+
 
 /**
  * @author toastkidjp
  */
 class BrowserModule(
         private val context: Context,
-        private val titleCallback: (TitlePair) -> Unit,
-        private val loadingCallback: (Int, Boolean) -> Unit,
-        private val historyAddingCallback: (String, String) -> Unit,
-        scrollCallback: (Int, Int, Int, Int) -> Unit
+        private val historyAddingCallback: (String, String) -> Unit
 ) {
 
     private val webViewPool: WebViewPool
@@ -55,37 +56,50 @@ class BrowserModule(
      */
     private var isLoadFinished: Boolean = false
 
+    private var customViewSwitcher: CustomViewSwitcher? = null
+
     private val adRemover: AdRemover =
             AdRemover(context.assets.open("ad_hosts.txt"))
+
+    private var headerViewModel: HeaderViewModel? = null
 
     init {
         webViewPool = WebViewPool(
                 context,
                 { makeWebViewClient() },
                 { makeWebChromeClient() },
-                scrollCallback,
                 preferenceApplier.poolSize
         )
+
+        customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
+
+        if (context is MainActivity) {
+            headerViewModel = ViewModelProviders.of(context).get(HeaderViewModel::class.java)
+        }
     }
 
     private fun makeWebViewClient(): WebViewClient = object : WebViewClient() {
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            loadingCallback(0, true)
+            headerViewModel?.progress?.postValue(0)
             isLoadFinished = false
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
             isLoadFinished = true
-            loadingCallback(100, false)
+            headerViewModel?.progress?.postValue(100)
+            headerViewModel?.stopProgress?.postValue(true)
 
             val title = view.title ?: ""
             val urlStr = url ?: ""
 
             try {
-                titleCallback(TitlePair.make(title, urlStr))
+                if (view == currentView()) {
+                    headerViewModel?.title?.postValue(title)
+                    headerViewModel?.url?.postValue(urlStr)
+                }
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -114,7 +128,8 @@ class BrowserModule(
         override fun onReceivedError(
                 view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
-            loadingCallback(100, false)
+            headerViewModel?.progress?.postValue(100)
+            headerViewModel?.stopProgress?.postValue(true)
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
@@ -198,17 +213,20 @@ class BrowserModule(
         override fun onProgressChanged(view: WebView, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
 
-            loadingCallback(newProgress, newProgress < 65)
+            headerViewModel?.progress?.postValue(newProgress)
+            headerViewModel?.stopProgress?.postValue(newProgress < 65)
 
-            if (!isLoadFinished) {
-                try {
-                    titleCallback(
-                            TitlePair.make(view.context.getString(R.string.prefix_loading) + newProgress + "%", view.url ?: "")
-                    )
-                } catch (e: Exception) {
-                    Timber.e(e)
-                }
+            if (isLoadFinished) {
+                return
+            }
 
+            try {
+                val progressTitle =
+                        view.context.getString(R.string.prefix_loading) + newProgress + "%"
+                headerViewModel?.title?.postValue(progressTitle)
+                headerViewModel?.url?.postValue(view.url)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
 
@@ -218,6 +236,17 @@ class BrowserModule(
                 Bitmaps.compress(favicon, faviconApplier.assignFile(view.url))
             }
         }
+
+        override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
+            super.onShowCustomView(view, callback)
+            customViewSwitcher?.onShowCustomView(view, callback)
+        }
+
+        override fun onHideCustomView() {
+            super.onHideCustomView()
+            customViewSwitcher?.onHideCustomView()
+        }
+
     }
 
     fun loadUrl(url: String) {
@@ -369,22 +398,6 @@ class BrowserModule(
     }
 
     /**
-     * Enable [WebView].
-     */
-    fun enableWebView() {
-        currentView()?.let {
-            it.isEnabled = true
-            it.visibility = View.VISIBLE
-        }
-
-        val mainActivity = context
-        if (mainActivity is MainActivity
-                && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
-            mainActivity.showToolbar()
-        }
-    }
-
-    /**
      * Disable [WebView].
      */
     fun disableWebView() {
@@ -460,6 +473,10 @@ class BrowserModule(
      */
     fun resizePool(poolSize: Int) {
         webViewPool.resize(poolSize)
+    }
+
+    fun applyNewAlpha() {
+        webViewPool.applyNewAlpha()
     }
 
 }

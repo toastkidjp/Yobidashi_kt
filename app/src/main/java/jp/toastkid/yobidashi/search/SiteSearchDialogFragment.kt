@@ -4,13 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.appcompat.app.AlertDialog
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
@@ -31,14 +32,6 @@ class SiteSearchDialogFragment : DialogFragment() {
         val textInputLayout = TextInputs.make(activityContext)
         TextInputs.setEmptyAlert(textInputLayout)
 
-        val dialog = AlertDialog.Builder(activityContext)
-                .setTitle(R.string.title_site_search_by_google)
-                .setView(textInputLayout)
-                .setPositiveButton(R.string.title_search_action) { d, _ ->
-                    textInputLayout.editText?.text?.let { doAction(it.toString()) }
-                    d.dismiss()
-                }
-                .create()
         textInputLayout.editText?.let { editText ->
             editText.hint = activityContext.getString(R.string.hint_please_input)
             editText.setOnEditorActionListener { _, actionId, _ ->
@@ -48,14 +41,26 @@ class SiteSearchDialogFragment : DialogFragment() {
                 }
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     doAction(editText.text.toString())
-                    dialog.dismiss()
+                    dialog?.dismiss()
                 }
                 true
             }
         }
 
-        textInputLayout.requestFocus()
-        return dialog
+        return AlertDialog.Builder(activityContext)
+                .setTitle(R.string.title_site_search_by_google)
+                .setIcon(R.drawable.ic_google)
+                .setView(textInputLayout)
+                .setPositiveButton(R.string.title_search_action) { d, _ ->
+                    textInputLayout.editText?.text?.let { doAction(it.toString()) }
+                    d.dismiss()
+                }
+                .create()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        Inputs.showKeyboardForInputDialog(dialog?.window)
     }
 
     /**
@@ -63,7 +68,10 @@ class SiteSearchDialogFragment : DialogFragment() {
      *
      * @param query
      */
-    private fun doAction(query: String) {
+    private fun doAction(query: String?) {
+        if (query.isNullOrBlank()) {
+            return
+        }
         val context: Context = context ?: return
         if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)

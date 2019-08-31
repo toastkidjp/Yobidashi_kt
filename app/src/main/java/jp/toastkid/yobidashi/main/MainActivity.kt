@@ -12,25 +12,24 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.KeyEvent
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.BaseActivity
-import jp.toastkid.yobidashi.BaseFragment
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.ProgressBarCallback
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.browser.TitlePair
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -44,6 +43,8 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
@@ -58,10 +59,9 @@ import java.io.IOException
  * @author toastkidjp
  */
 class MainActivity :
-        BaseActivity(),
+        AppCompatActivity(),
         FragmentReplaceAction,
-        ToolbarAction,
-        ProgressBarCallback
+        ToolbarAction
 {
 
     /**
@@ -94,14 +94,21 @@ class MainActivity :
      */
     private val torch by lazy { Torch(this) }
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.appBarMain.toolbar.let { toolbar ->
-            initToolbar(toolbar)
+        binding.toolbar.also { toolbar ->
+            toolbar.setTitle(titleId())
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
@@ -112,7 +119,25 @@ class MainActivity :
             ColorFilter(this, binding.root).start()
         }
 
+        initializeHeaderViewModel()
+
         processShortcut(intent)
+    }
+
+    private fun initializeHeaderViewModel() {
+        val headerViewModel = ViewModelProviders.of(this).get(HeaderViewModel::class.java)
+        headerViewModel.title.observe(this, Observer { title ->
+            if (title.isNullOrBlank()) {
+                return@Observer
+            }
+            binding.toolbar.title = title
+        })
+        headerViewModel.url.observe(this, Observer { url ->
+            if (url.isNullOrBlank()) {
+                return@Observer
+            }
+            binding.toolbar.subtitle = url
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -174,24 +199,6 @@ class MainActivity :
         finish()
     }
 
-    override fun onProgressChanged(newProgress: Int) {
-        if (70 < newProgress) {
-            binding.appBarMain.progress.visibility = View.GONE
-            return
-        }
-        binding.appBarMain.progress.let {
-            it.visibility = View.VISIBLE
-            it.progress = newProgress
-        }
-    }
-
-    override fun onTitleChanged(titlePair: TitlePair) {
-        binding.appBarMain.toolbar.let {
-            it.title    = titlePair.title()
-            it.subtitle = titlePair.subtitle()
-        }
-    }
-
     /**
      * Load Uri.
      *
@@ -208,7 +215,7 @@ class MainActivity :
             return
         }
         CustomTabsFactory
-                .make(this, colorPair())
+                .make(this, preferenceApplier.colorPair())
                 .build()
                 .launchUrl(this, uri)
     }
@@ -230,7 +237,7 @@ class MainActivity :
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: BaseFragment) {
+    private fun replaceFragment(fragment: Fragment) {
         if (fragment.isVisible) {
             return
         }
@@ -248,8 +255,10 @@ class MainActivity :
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
-        binding.appBarMain.toolbar.let {
-            it.setTitle(fragment.titleId())
+        binding.toolbar.let {
+            if (fragment is CommonFragmentAction) {
+                it.setTitle(fragment.titleId())
+            }
             it.subtitle = ""
         }
     }
@@ -262,7 +271,7 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        val fragment: BaseFragment? = findCurrentFragment()
+        val fragment: CommonFragmentAction? = findCurrentFragment()
         if (fragment == null) {
             confirmExit()
             return
@@ -280,10 +289,10 @@ class MainActivity :
      *
      * @return fragment or null
      */
-    private fun findCurrentFragment(): BaseFragment? {
+    private fun findCurrentFragment(): CommonFragmentAction? {
         val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.content)
 
-        return if (fragment != null) fragment as BaseFragment else null
+        return if (fragment != null) fragment as CommonFragmentAction else null
     }
 
     /**
@@ -292,19 +301,6 @@ class MainActivity :
     private fun confirmExit() {
         CloseDialogFragment()
                 .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.common, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.settings_toolbar_menu_exit -> {
-            finish()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
@@ -316,7 +312,7 @@ class MainActivity :
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        applyColorToToolbar(binding.appBarMain.toolbar as Toolbar)
+        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
         applyBackgrounds()
     }
@@ -325,7 +321,7 @@ class MainActivity :
      * Apply background appearance.
      */
     private fun applyBackgrounds() {
-        val backgroundImagePath = backgroundImagePath
+        val backgroundImagePath = preferenceApplier.backgroundImagePath
         if (backgroundImagePath.isEmpty()) {
             setBackgroundImage(null)
             return
@@ -343,9 +339,9 @@ class MainActivity :
             Toaster.snackShort(
                     binding.root,
                     getString(R.string.message_failed_read_image),
-                    colorPair()
+                    preferenceApplier.colorPair()
             )
-            removeBackgroundImagePath()
+            preferenceApplier.removeBackgroundImagePath()
             setBackgroundImage(null)
         }
     }
@@ -356,7 +352,7 @@ class MainActivity :
      * @param background nullable
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
-        binding.appBarMain.background?.setImageDrawable(background)
+        binding.background?.setImageDrawable(background)
     }
 
     override fun action(c: Command) {
@@ -376,16 +372,16 @@ class MainActivity :
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> Unit
             ScreenMode.FULL_SCREEN -> {
-                binding.appBarMain.toolbar.visibility = View.GONE
+                binding.toolbar.visibility = View.GONE
             }
             ScreenMode.EXPANDABLE -> {
-                binding.appBarMain.toolbar.animate()?.let {
+                binding.toolbar.animate()?.let {
                     it.cancel()
                     it.translationY(-resources.getDimension(R.dimen.toolbar_height))
                             .setDuration(HEADER_HIDING_DURATION)
-                            .withStartAction { binding.appBarMain.content?.requestLayout() }
+                            .withStartAction { binding.content?.requestLayout() }
                             .withEndAction   {
-                                binding.appBarMain.toolbar.visibility = View.GONE
+                                binding.toolbar.visibility = View.GONE
                             }
                             .start()
                 }
@@ -396,26 +392,43 @@ class MainActivity :
     override fun showToolbar() {
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> {
-                binding.appBarMain.toolbar.visibility = View.VISIBLE
+                binding.toolbar.visibility = View.VISIBLE
             }
             ScreenMode.FULL_SCREEN -> Unit
             ScreenMode.EXPANDABLE -> {
-                binding.appBarMain.toolbar.animate()?.let {
+                binding.toolbar.animate()?.let {
                     it.cancel()
                     it.translationY(0f)
                             .setDuration(HEADER_HIDING_DURATION)
                             .withStartAction {
-                                binding.appBarMain.toolbar.visibility = View.VISIBLE
+                                binding.toolbar.visibility = View.VISIBLE
                             }
-                            .withEndAction   { binding.appBarMain.content?.requestLayout() }
-                            .start()
+                            .withEndAction   { binding.content?.requestLayout() }
+                            //TODO .start()
                 }
             }
         }
     }
 
+
+    private fun clickMenu(item: MenuItem): Boolean {
+        @IdRes val itemId: Int = item.itemId
+
+        when (itemId) {
+            R.id.menu_exit -> {
+                moveTaskToBack(true)
+                return true
+            }
+            R.id.menu_close -> {
+                finish()
+                return true
+            }
+            else -> return true
+        }
+    }
+
     @StringRes
-    override fun titleId(): Int = R.string.app_name
+    private fun titleId(): Int = R.string.app_name
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -430,8 +443,7 @@ class MainActivity :
                 try {
                     replaceWithBrowser()
                     uiThreadHandler.postDelayed(
-                            { browserFragment.loadArchive(
-                                    File(data.getStringExtra(ArchivesActivity.EXTRA_KEY_FILE_NAME)))},
+                            { browserFragment.loadArchive(ArchivesActivity.extractFile(intent)) },
                             200L
                     )
                 } catch (e: IOException) {
@@ -446,7 +458,7 @@ class MainActivity :
                     Toaster.snackShort(
                             binding.root,
                             R.string.message_cannot_draw_overlay,
-                            colorPair()
+                            preferenceApplier.colorPair()
                     )
                     return
                 }
@@ -456,7 +468,7 @@ class MainActivity :
                 val result: IntentResult? =
                         IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
                 if (result?.contents == null) {
-                    Toaster.snackShort(binding.root, "Cancelled", colorPair())
+                    Toaster.snackShort(binding.root, "Cancelled", preferenceApplier.colorPair())
                     return
                 }
                 Toaster.snackLong(
@@ -464,7 +476,7 @@ class MainActivity :
                         "Scanned: ${result.contents}",
                         R.string.clip,
                         View.OnClickListener { Clipboard.clip(this, result.contents) },
-                        colorPair()
+                        preferenceApplier.colorPair()
                 )
             }
         }

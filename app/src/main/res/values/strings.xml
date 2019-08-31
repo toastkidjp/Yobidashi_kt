@@ -25,6 +25,7 @@
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
     <string name="search_category_yahoo">Yahoo!</string>
+    <string name="search_category_yahoo_japan">Yahoo! JAPAN</string>
 
     <string name="search">Search</string>
     <string name="close">Close</string>
@@ -235,7 +236,7 @@
     <string name="message_enable_color_filter">It has be enabled to display color filter.</string>
     <string name="message_stop_color_filter">It has turn off color filter.</string>
     <string name="title_color_filter">Overlay Color Filter</string>
-    <string name="title_site_search_by_google">Search by Google</string>
+    <string name="title_site_search_by_google">Site Search by Google</string>
     <string name="title_open_other_browser">Open with other browser</string>
     <string name="title_clear_form_data">Clear form data</string>
     <string name="title_voice_search">Voice Search</string>
@@ -318,6 +319,7 @@
     <string name="done_save">It has saved to file.</string>
     <string name="save">Save</string>
     <string name="save_as">Save as</string>
+    <string name="load_as">Load As</string>
     <string name="title_dialog_input_file_name">Input file name</string>
     <string name="message_requires_permission_storage" >
         If you want to use this function, you should permit using storage to this app.</string>
@@ -402,5 +404,6 @@
     <string name="content_description_background">Background image</string>
     <string name="is_center">center</string>
     <string name="title_icon">icon</string>
+    <string name="reset_button_position">Reset Button Position</string>
 
 </resources>

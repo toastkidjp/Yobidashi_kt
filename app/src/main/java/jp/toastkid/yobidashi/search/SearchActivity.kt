@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -18,15 +17,15 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
+import androidx.databinding.DataBindingUtil
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.*
 import jp.toastkid.yobidashi.libs.Colors
@@ -37,6 +36,7 @@ import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.clip.ClipboardModule
@@ -57,7 +57,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
-class SearchActivity : BaseActivity(),
+class SearchActivity : AppCompatActivity(),
         ClearFavoriteSearchDialogFragment.Callback,
         ClearSearchHistoryDialogFragment.Callback
 {
@@ -109,9 +109,14 @@ class SearchActivity : BaseActivity(),
      */
     private var withoutExitAnimation: Boolean = false
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
         binding?.searchClear?.setOnClickListener { binding?.searchInput?.setText("") }
@@ -157,15 +162,16 @@ class SearchActivity : BaseActivity(),
             binding?.searchBar?.transitionName = "share"
         }
 
-        binding?.toolbar?.let {
-            initToolbar(it)
-            it.navigationIcon = null
-            it.setPadding(0,0,0,0)
-            it.setContentInsetsAbsolute(0,0)
+        binding?.toolbar?.also { toolbar ->
+            toolbar.navigationIcon = null
+            toolbar.setPadding(0,0,0,0)
+            toolbar.setContentInsetsAbsolute(0,0)
 
-            it.inflateMenu(R.menu.search_menu)
-            it.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
-            it.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.inflateMenu(R.menu.search_menu)
+            toolbar.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
+            toolbar.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+            toolbar.setOnMenuItemClickListener { clickMenu(it) }
 
             setQuery()
         }
@@ -173,7 +179,7 @@ class SearchActivity : BaseActivity(),
         Toaster.snackShort(
                 binding?.background as View,
                 getString(R.string.message_search_on_background),
-                colorPair()
+                preferenceApplier.colorPair()
                 )
     }
 
@@ -196,7 +202,7 @@ class SearchActivity : BaseActivity(),
         }
     }
 
-    override fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
+    private fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
         R.id.suggestion_check -> {
             preferenceApplier.switchEnableSuggestion()
             item.isChecked = preferenceApplier.isEnableSuggestion
@@ -219,7 +225,15 @@ class SearchActivity : BaseActivity(),
             startActivity(SettingsActivity.makeIntent(this))
             true
         }
-        else -> super.clickMenu(item)
+        R.id.menu_close -> {
+            finish()
+            true
+        }
+        R.id.menu_exit -> {
+            moveTaskToBack(true)
+            true
+        }
+        else -> true
     }
 
     @SuppressLint("SetTextI18n")
@@ -268,7 +282,7 @@ class SearchActivity : BaseActivity(),
         super.onResume()
         Inputs.toggle(this)
 
-        applyColorToToolbar(binding?.toolbar as Toolbar)
+        ToolbarColorApplier()(window, binding?.toolbar as Toolbar, preferenceApplier.colorPair())
 
         suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         historyModule?.enable = preferenceApplier.isEnableSearchHistory
@@ -340,7 +354,7 @@ class SearchActivity : BaseActivity(),
      * Apply color to views.
      */
     private fun applyColor() {
-        val colorPair : ColorPair = colorPair()
+        val colorPair : ColorPair = preferenceApplier.colorPair()
         @ColorInt val bgColor:   Int = colorPair.bgColor()
         @ColorInt val fontColor: Int = colorPair.fontColor()
         Colors.setEditTextColor(binding?.searchInput as EditText, fontColor)
@@ -348,7 +362,7 @@ class SearchActivity : BaseActivity(),
         binding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener { _ ->
+            it.searchAction.setOnClickListener {
                 if (useVoice) {
                     try {
                         startActivityForResult(VoiceSearch.makeIntent(this), VoiceSearch.REQUEST_CODE)
@@ -381,7 +395,7 @@ class SearchActivity : BaseActivity(),
             Toaster.snackShort(
                     binding?.root as View,
                     "Network is not available...",
-                    colorPair()
+                    preferenceApplier.colorPair()
             )
             return
         }
@@ -392,7 +406,7 @@ class SearchActivity : BaseActivity(),
             Toaster.snackShort(
                     binding?.root as View,
                     getString(R.string.message_background_search, query),
-                    colorPair()
+                    preferenceApplier.colorPair()
             )
         }
     }
@@ -481,9 +495,6 @@ class SearchActivity : BaseActivity(),
             overridePendingTransition(0, 0)
         }
     }
-
-    @StringRes
-    override fun titleId(): Int = R.string.title_search
 
     companion object {
 

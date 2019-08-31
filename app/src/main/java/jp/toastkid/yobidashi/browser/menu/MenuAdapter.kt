@@ -11,11 +11,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
-import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
@@ -24,9 +22,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 internal class MenuAdapter(
         context: Context,
-        consumer: Consumer<Menu>,
-        private val onLongClick: (Menu) -> Boolean,
-        private val tabCountSupplier: () -> Int
+        private val menuViewModel: MenuViewModel?
 ) : RecyclerView.Adapter<MenuViewHolder>() {
 
     /**
@@ -40,23 +36,11 @@ internal class MenuAdapter(
     private val menus: Array<Menu> = Menu.values()
 
     /**
-     * Menu action subject.
-     */
-    private val menuSubject = PublishSubject.create<Menu>()
-
-    /**
      * Preference wrapper.
      */
     private val preferenceApplier = PreferenceApplier(context)
 
-    /**
-     * Subscription disposable.
-     */
-    private val disposable: Disposable?
-
-    init {
-        disposable = menuSubject.subscribe(consumer)
-    }
+    private var tabCount = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
             MenuViewHolder(
@@ -67,7 +51,7 @@ internal class MenuAdapter(
         val menu = menus[position % menus.size]
 
         if (menu == Menu.TAB_LIST) {
-            holder.setCount(tabCountSupplier())
+            holder.setCount(tabCount)
         } else {
             holder.hideCount()
         }
@@ -75,17 +59,19 @@ internal class MenuAdapter(
         holder.setColorPair(preferenceApplier.colorPair(), menu != Menu.SITE_SEARCH)
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
-        holder.setOnClick(View.OnClickListener { menuSubject.onNext(menu) })
-        holder.setOnLongClick(View.OnLongClickListener { onLongClick(menu) })
+        holder.setOnClick(View.OnClickListener { menuViewModel?.click?.postValue(menu) })
+        holder.setOnLongClick(
+                View.OnLongClickListener {
+                    menuViewModel?.longClick?.postValue(menu)
+                    true
+                }
+        )
     }
 
     override fun getItemCount(): Int = MAXIMUM
 
-    /**
-     * Dispose subscription.
-     */
-    fun dispose() {
-        disposable?.dispose()
+    fun setTabCount(count: Int) {
+        tabCount = count
     }
 
     companion object {
@@ -93,6 +79,7 @@ internal class MenuAdapter(
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID = R.layout.item_home_menu
 
         /**

@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
@@ -10,16 +11,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
-import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -27,7 +25,6 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.PdfTab
-import timber.log.Timber
 
 /**
  * PDF Module.
@@ -70,6 +67,7 @@ class PdfModule(
     init {
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
+        PagerSnapHelper().attachToRecyclerView(binding.pdfImages)
 
         binding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
@@ -112,7 +110,7 @@ class PdfModule(
      * @param colorPair
      */
     fun applyColor(colorPair: ColorPair) {
-        binding.seekAppBar.setBackgroundColor(colorPair.bgColor())
+        binding.header.setBackgroundColor(colorPair.bgColor())
         binding.seek.progressDrawable.colorFilter =
                 PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
         Colors.setEditTextColor(binding.input, colorPair.fontColor())
@@ -146,27 +144,10 @@ class PdfModule(
      *
      * @param tab [PdfTab]
      */
-    internal fun assignNewThumbnail(tab: PdfTab): Disposable =
-            Completable.fromAction { buildThumbnail() }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            binding.pdfImages.drawingCache?.let {
-                                val file = screenshotDir.assignNewFile(tab.id() + ".png")
-                                Bitmaps.compress(binding.pdfImages.drawingCache, file)
-                                tab.thumbnailPath = file.absolutePath
-                            }
-                        },
-                        Timber::e
-                )
-
-    /**
-     * Build current thumbnail.
-     */
-    private fun buildThumbnail() {
+    fun makeThumbnail(): Bitmap {
         binding.pdfImages.invalidate()
         binding.pdfImages.buildDrawingCache()
+        return binding.pdfImages.drawingCache
     }
 
     /**
@@ -207,4 +188,5 @@ class PdfModule(
         RecyclerViewScroller.toBottom(binding.pdfImages, adapter.itemCount)
     }
 
+    override fun isVisible() = binding.root.isVisible
 }

@@ -2,30 +2,43 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.annotation.LayoutRes
 import android.view.MenuItem
-import jp.toastkid.yobidashi.BaseActivity
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityEmptyBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 
 /**
  * Search history list activity.
  *
  * @author toastkidjp
  */
-class FavoriteSearchActivity : BaseActivity() {
+class FavoriteSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEmptyBinding
+
+    private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView<ActivityEmptyBinding>(this, LAYOUT_ID)
 
-        initToolbar(binding.toolbar)
+        binding.toolbar.also { toolbar ->
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener { finish() }
+            toolbar.setTitle(titleId())
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+        }
 
         val fragment = FavoriteSearchFragment()
         val transaction = supportFragmentManager.beginTransaction()
@@ -36,21 +49,24 @@ class FavoriteSearchActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        applyColorToToolbar(binding.toolbar)
+        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
-        ImageLoader.setImageToImageView(binding.background, backgroundImagePath)
+        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.close) {
-            finish()
-            return true
+    private fun clickMenu(item: MenuItem) = when (item.itemId) {
+        R.id.menu_exit -> {
+            moveTaskToBack(true)
+            true
         }
-        return super.clickMenu(item)
+        R.id.menu_close -> {
+            finish()
+            true
+        }
+        else -> true
     }
 
-    override fun titleId(): Int = R.string.title_favorite_search
+    private fun titleId(): Int = R.string.title_favorite_search
 
     companion object {
         @LayoutRes const val LAYOUT_ID: Int = R.layout.activity_empty

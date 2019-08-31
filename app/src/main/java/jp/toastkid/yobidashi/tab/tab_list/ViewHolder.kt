@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
 import android.graphics.Color
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
-import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemTabListBinding
 import jp.toastkid.yobidashi.libs.ImageLoader

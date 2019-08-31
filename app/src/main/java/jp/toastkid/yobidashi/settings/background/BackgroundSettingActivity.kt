@@ -3,29 +3,31 @@ package jp.toastkid.yobidashi.settings.background
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBackgroundSettingBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 
 /**
  * Background settings.
  *
  * @author toastkidjp
  */
-class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Callback {
+class BackgroundSettingActivity : AppCompatActivity(), ClearImagesDialogFragment.Callback {
 
     /**
      * Data Binding object.
@@ -42,16 +44,28 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
      */
     private lateinit var filesDir: FilesDir
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+
+        preferenceApplier = PreferenceApplier(this)
+
         binding = DataBindingUtil.setContentView<ActivityBackgroundSettingBinding>(this, LAYOUT_ID)
         binding?.let {
             it.activity = this
-            initToolbar(it.toolbar)
-            it.toolbar.inflateMenu(R.menu.background_setting_menu)
+        }
+
+        binding?.toolbar?.also { toolbar ->
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener { finish() }
+            toolbar.setTitle(titleId())
+            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.inflateMenu(R.menu.background_setting_menu)
+            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
         }
 
         filesDir = FilesDir(this, BACKGROUND_DIR)
@@ -78,7 +92,7 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
                         getString(R.string.message_snackbar_suggestion_select_background_image),
                         R.string.select,
                         View.OnClickListener { launchAdding() },
-                        colorPair()
+                        preferenceApplier.colorPair()
                         )
             }
         }
@@ -86,10 +100,10 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
 
     override fun onResume() {
         super.onResume()
-        binding?.toolbar?.let { applyColorToToolbar(it) }
+        binding?.toolbar?.let { ToolbarColorApplier()(window, it, preferenceApplier.colorPair()) }
     }
 
-    override fun clickMenu(item: MenuItem): Boolean {
+    private fun clickMenu(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
                 binding?.fab?.let { launchAdding() }
@@ -99,7 +113,15 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
                 clearImages()
                 return true
             }
-            else -> super.clickMenu(item)
+            R.id.menu_exit -> {
+                moveTaskToBack(true)
+                true
+            }
+            R.id.menu_close -> {
+                finish()
+                true
+            }
+            else -> true
         }
     }
 
@@ -107,7 +129,6 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
      * Launch Adding action.
      */
     fun launchAdding() {
-        sendLog("set_bg_img")
         startActivityForResult(IntentFactory.makePickImage(), IMAGE_READ_REQUEST)
     }
 
@@ -122,12 +143,11 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
     }
 
     override fun onClickClearImages() {
-        sendLog("clear_bg_img")
         filesDir.clean()
         Toaster.snackShort(
                 binding?.fabParent as View,
                 getString(R.string.message_success_image_removal),
-                colorPair()
+                preferenceApplier.colorPair()
         )
         adapter?.notifyDataSetChanged()
     }
@@ -141,10 +161,9 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
         if (requestCode == IMAGE_READ_REQUEST
                 && resultCode == Activity.RESULT_OK
                 && data != null) {
-            LoadedAction(data, binding?.fabParent as View, colorPair(), { adapter?.notifyDataSetChanged() })
+            LoadedAction(data, binding?.fabParent as View, preferenceApplier.colorPair(), { adapter?.notifyDataSetChanged() })
                     .invoke()
                     .addTo(disposables)
-            sendLog("set_img")
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -155,7 +174,7 @@ class BackgroundSettingActivity : BaseActivity(), ClearImagesDialogFragment.Call
     }
 
     @StringRes
-    override fun titleId(): Int = R.string.title_background_image_setting
+    private fun titleId(): Int = R.string.title_background_image_setting
 
     companion object {
 

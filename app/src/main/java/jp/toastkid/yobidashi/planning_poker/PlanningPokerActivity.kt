@@ -2,22 +2,24 @@ package jp.toastkid.yobidashi.planning_poker
 
 import android.content.Context
 import android.content.Intent
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.BaseActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityPlanningPokerBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Planning Poker Fragment.
  *
  * @author toastkidjp
  */
-class PlanningPokerActivity : BaseActivity() {
+class PlanningPokerActivity : AppCompatActivity() {
 
     /**
      * DataBinding object.
@@ -27,7 +29,7 @@ class PlanningPokerActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-        binding = DataBindingUtil.setContentView<ActivityPlanningPokerBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding?.cardsView?.let {
@@ -60,17 +62,18 @@ class PlanningPokerActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        binding?.background?.let { ImageLoader.setImageToImageView(it, backgroundImagePath) }
+        binding?.background?.let { ImageLoader.setImageToImageView(it, backgroundImagePath()) }
     }
 
-    public override fun titleId(): Int = R.string.title_planning_poker
+    private fun backgroundImagePath() = PreferenceApplier(this).backgroundImagePath
 
     companion object {
 
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_planning_poker
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.activity_planning_poker
 
         /**
          * Make this activity launcher intent.

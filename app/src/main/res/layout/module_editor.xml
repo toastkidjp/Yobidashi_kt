@@ -4,6 +4,7 @@
         <variable name="editorModule"
             type="jp.toastkid.yobidashi.editor.EditorModule" />
     </data>
+
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,15 +13,13 @@
         android:layout_height="match_parent"
         android:background="@color/soft_background"
         android:visibility="gone"
-        tools:visibility="visible"
-        >
+        tools:visibility="visible">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/editor_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="44dp"
-            android:fillViewport="true"
+            android:layout_marginTop="44dp"
             >
             <EditText
                 android:id="@+id/editor_input"
@@ -31,22 +30,15 @@
                 android:inputType="textMultiLine"
                 android:minLines="10"
                 android:hint="@string/hint_editor_input"
+                tools:ignore="Autofill"
                 />
-        </ScrollView>
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/snackbar_container"
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="44dp"
-            />
+        </androidx.core.widget.NestedScrollView>
 
         <HorizontalScrollView
             android:id="@+id/editor_menu"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             >
             <LinearLayout
                 android:orientation="horizontal"
@@ -114,6 +106,17 @@
                     android:onClick="@{view -> editorModule.pasteAsQuotation()}"
                     android:onLongClick="@{editorModule::showName}"
                     />
+                <Button
+                    android:id="@+id/load_as"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    style="?android:attr/buttonBarStyle"
+                    android:text="@string/load_as"
+                    android:drawableTop="@drawable/ic_load_as"
+                    android:foreground="@drawable/ripple_transparent"
+                    android:onClick="@{view -> editorModule.loadAs()}"
+                    android:onLongClick="@{editorModule::showName}"
+                    />
                 <TextView
                     android:id="@+id/counter"
                     android:layout_width="wrap_content"
@@ -146,12 +149,6 @@
                     android:foreground="@drawable/ripple_transparent"
                     android:onClick="@{view -> editorModule.clear()}"
                     android:onLongClick="@{editorModule::showName}"
-                    />
-                <Space
-                    android:id="@+id/right_space"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
                     />
             </LinearLayout>
         </HorizontalScrollView>

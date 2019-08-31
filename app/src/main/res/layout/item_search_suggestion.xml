@@ -31,6 +31,7 @@
             android:layout_marginStart="@dimen/search_horizontal_margin"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_search_black"
+            android:contentDescription="@string/image"
             />
         <TextView
             android:id="@+id/search_suggest_add"
@@ -38,7 +39,7 @@
             android:layout_height="32dp"
             android:layout_marginRight="@dimen/search_horizontal_margin"
             android:layout_marginEnd="@dimen/search_horizontal_margin"
-            android:layout_gravity="right|center_vertical"
+            android:layout_gravity="end|center_vertical"
             android:gravity="center"
             android:text="@string/plus"
             android:textSize="20dp"

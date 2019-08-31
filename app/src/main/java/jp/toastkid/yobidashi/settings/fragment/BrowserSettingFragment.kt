@@ -7,20 +7,20 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.SeekBar
+import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
-import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.ScreenMode
+import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
@@ -105,8 +105,9 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
 
             it.poolSizeValue.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
-                    preferenceApplier.poolSize = bar?.progress ?: preferenceApplier.poolSize
-                    it.poolSizeText.setText(preferenceApplier.poolSize.toString())
+                    val newSize = bar?.progress ?: 0
+                    preferenceApplier.poolSize = newSize + 1
+                    it.poolSizeText.setText((newSize + 1).toString())
                 }
 
                 override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -114,7 +115,21 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
             })
-            it.poolSizeValue.progress = preferenceApplier.poolSize
+            it.poolSizeValue.progress = preferenceApplier.poolSize - 1
+
+            it.valueBackgroundAlpha.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
+                    val newSize = bar?.progress ?: 0
+                    preferenceApplier.setWebViewBackgroundAlpha(newSize.toFloat() / 100f)
+                    it.textBackgroundAlpha.setText((newSize).toString())
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) = Unit
+
+                override fun onStopTrackingTouch(p0: SeekBar?) = Unit
+
+            })
+            it.valueBackgroundAlpha.progress = (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
         }
 
         binding.browserExpand.screenMode?.let {
@@ -303,6 +318,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      * UserAgent setting.
      */
     fun userAgent() {
+        val fragmentManager = fragmentManager ?: return
+
         val dialogFragment = UserAgentDialogFragment()
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(

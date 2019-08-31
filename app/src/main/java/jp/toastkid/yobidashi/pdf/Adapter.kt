@@ -2,16 +2,16 @@ package jp.toastkid.yobidashi.pdf
 
 import android.annotation.TargetApi
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.ImageCache
@@ -25,7 +25,7 @@ import java.io.File
  * @author toastkidjp
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
+class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() {
 
     /**
      * Layout inflater.
@@ -75,7 +75,7 @@ class Adapter(val context: Context): RecyclerView.Adapter<ViewHolder>() {
         val contentResolver = context.contentResolver
         fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
         pdfRenderer?.close()
-        pdfRenderer = PdfRenderer(fileDescriptor)
+        pdfRenderer = fileDescriptor?.let { PdfRenderer(it) }
         notifyDataSetChanged()
     }
 
