@@ -9,6 +9,8 @@ import org.junit.Assert.fail
 import org.junit.Test
 
 /**
+ * [Torch]'s unit test.
+ *
  * @author toastkidjp
  */
 class TorchTest {
