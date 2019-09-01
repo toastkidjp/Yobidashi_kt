@@ -27,6 +27,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import com.journeyapps.barcodescanner.camera.CameraManager
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -106,7 +107,11 @@ class MainActivity :
     /**
      * Torch API facade.
      */
-    private val torch by lazy { Torch(this) }
+    private val torch by lazy {
+        Torch(CameraManager(this)) {
+            Toaster.snackShort(binding.root, it, preferenceApplier.colorPair())
+        }
+    }
 
     private var menuViewModel: MenuViewModel? = null
 
