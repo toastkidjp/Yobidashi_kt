@@ -65,7 +65,6 @@ import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
-import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -147,11 +146,6 @@ class BrowserFragment : Fragment(),
     private var menuViewModel: MenuViewModel? = null
 
     /**
-     * Torch API facade.
-     */
-    private lateinit var torch: Torch
-
-    /**
      * Find-in-page module.
      */
     private lateinit var pageSearchPresenter: PageSearcherModule
@@ -162,7 +156,6 @@ class BrowserFragment : Fragment(),
         activity?.let {
             rxPermissions = RxPermissions(it)
         }
-        torch = Torch(context)
     }
 
     override fun onCreateView(
@@ -436,6 +429,7 @@ class BrowserFragment : Fragment(),
             Menu.PDF-> {
                 openPdfTabFromStorage()
             }
+            //TODO else case
         }
     }
     /**
@@ -911,11 +905,6 @@ class BrowserFragment : Fragment(),
         toolbarAction?.showToolbar()
         browserModule.dispose()
         pageSearchPresenter.dispose()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        torch.dispose()
     }
 
     companion object {
