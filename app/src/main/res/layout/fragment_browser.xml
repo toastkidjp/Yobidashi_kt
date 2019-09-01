@@ -38,11 +38,6 @@
             android:layout_height="match_parent"
             />
 
-        <include
-            android:id="@+id/floating_preview"
-            layout="@layout/content_floating_preview"
-            />
-
         <ProgressBar
             android:id="@+id/progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
