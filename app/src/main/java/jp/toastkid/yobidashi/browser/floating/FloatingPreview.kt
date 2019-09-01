@@ -50,11 +50,7 @@ class FloatingPreview(context: Context) {
         popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
 
         popupWindow.setOnDismissListener {
-            if (binding.previewContainer.isEmpty()) {
-                return@setOnDismissListener
-            }
-            val view = binding.previewContainer.get(0)
-            (view as? WebView)?.also {
+            extractWebView()?.also {
                 it.isEnabled = false
                 it.onPause()
             }
@@ -77,8 +73,6 @@ class FloatingPreview(context: Context) {
         if (binding.previewContainer.childCount != 0) {
             binding.previewContainer.removeAllViews()
         }
-
-        binding.header.setOnClickListener { openNewTabWithUrl(url) }
 
         setSlidingListener()
 
@@ -117,6 +111,13 @@ class FloatingPreview(context: Context) {
      */
     fun hide() {
         popupWindow.dismiss()
+    }
+
+    fun openCurrentWithNewTab() {
+        extractWebView()?.also {
+            openNewTabWithUrl(it.url)
+            hide()
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -163,6 +164,14 @@ class FloatingPreview(context: Context) {
             binding.previewBackground.visibility = View.GONE
             binding.previewContainer.removeAllViews()
         }
+    }
+
+    private fun extractWebView(): WebView? {
+        if (binding.previewContainer.isEmpty()) {
+            return null
+        }
+        val view = binding.previewContainer.get(0)
+        return view as? WebView
     }
 
     fun isVisible() = popupWindow.isShowing

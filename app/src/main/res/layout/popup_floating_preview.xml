@@ -29,6 +29,7 @@
                 android:layout_height="@dimen/floating_preview_header_height"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="2dp"
+                android:onClick="@{view -> preview.openCurrentWithNewTab()}"
                 >
                 <ImageView
                     android:id="@+id/icon"
