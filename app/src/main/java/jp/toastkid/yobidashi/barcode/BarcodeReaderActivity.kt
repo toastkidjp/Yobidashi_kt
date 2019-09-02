@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.objects.FirebaseVisionObject
+import com.google.firebase.ml.vision.objects.FirebaseVisionObjectDetectorOptions
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -56,6 +58,15 @@ class BarcodeReaderActivity : AppCompatActivity() {
     private lateinit var preferenceApplier: PreferenceApplier
 
     private val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
+
+    private val objectDetector = FirebaseVision.getInstance()
+            .getOnDeviceObjectDetector(
+                    FirebaseVisionObjectDetectorOptions.Builder()
+                            .setDetectorMode(FirebaseVisionObjectDetectorOptions.SINGLE_IMAGE_MODE)
+                            .enableMultipleObjects()
+                            .enableClassification()
+                            .build()
+            )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -205,6 +216,29 @@ class BarcodeReaderActivity : AppCompatActivity() {
                                 showResult()
                             }
                             .addOnFailureListener { e -> Timber.e(e) }
+
+                    objectDetector.processImage(FirebaseVisionImage.fromBitmap(it))
+                            .addOnSuccessListener { detectedObjects ->
+                                if (detectedObjects.isEmpty()) {
+                                    return@addOnSuccessListener
+                                }
+                                val result = detectedObjects.map {
+                                    when (it.classificationCategory) {
+                                        FirebaseVisionObject.CATEGORY_FASHION_GOOD -> "Fashion"
+                                        FirebaseVisionObject.CATEGORY_FOOD -> "Food"
+                                        FirebaseVisionObject.CATEGORY_HOME_GOOD -> "Home goods"
+                                        FirebaseVisionObject.CATEGORY_PLACE -> "Place"
+                                        FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
+                                        else -> ""
+                                    }
+                                }
+                                        .reduce { base, item -> "$base\n$item" }
+                                @Suppress("UsePropertyAccessSyntax")
+                                binding?.result?.setText(result)
+                                showResult()
+                            }
+                            .addOnFailureListener { Timber.e(it) }
+
                 }
 
                 Toaster.snackShort(
