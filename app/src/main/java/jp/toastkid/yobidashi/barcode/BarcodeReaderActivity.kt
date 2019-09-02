@@ -217,27 +217,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
                             }
                             .addOnFailureListener { e -> Timber.e(e) }
 
-                    objectDetector.processImage(FirebaseVisionImage.fromBitmap(it))
-                            .addOnSuccessListener { detectedObjects ->
-                                if (detectedObjects.isEmpty()) {
-                                    return@addOnSuccessListener
-                                }
-                                val result = detectedObjects.map {
-                                    when (it.classificationCategory) {
-                                        FirebaseVisionObject.CATEGORY_FASHION_GOOD -> "Fashion"
-                                        FirebaseVisionObject.CATEGORY_FOOD -> "Food"
-                                        FirebaseVisionObject.CATEGORY_HOME_GOOD -> "Home goods"
-                                        FirebaseVisionObject.CATEGORY_PLACE -> "Place"
-                                        FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
-                                        else -> ""
-                                    }
-                                }
-                                        .reduce { base, item -> "$base\n$item" }
-                                @Suppress("UsePropertyAccessSyntax")
-                                binding?.result?.setText(result)
-                                showResult()
-                            }
-                            .addOnFailureListener { Timber.e(it) }
+                    detectObject(FirebaseVisionImage.fromBitmap(it))
 
                 }
 
@@ -259,6 +239,30 @@ class BarcodeReaderActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun detectObject(image: FirebaseVisionImage) {
+        objectDetector.processImage(image)
+                .addOnSuccessListener { detectedObjects ->
+                    if (detectedObjects.isEmpty()) {
+                        return@addOnSuccessListener
+                    }
+                    val result = detectedObjects.map {
+                        when (it.classificationCategory) {
+                            FirebaseVisionObject.CATEGORY_FASHION_GOOD -> "Fashion"
+                            FirebaseVisionObject.CATEGORY_FOOD -> "Food"
+                            FirebaseVisionObject.CATEGORY_HOME_GOOD -> "Home goods"
+                            FirebaseVisionObject.CATEGORY_PLACE -> "Place"
+                            FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
+                            else -> ""
+                        }
+                    }
+                            .reduce { base, item -> "$base\n$item" }
+                    @Suppress("UsePropertyAccessSyntax")
+                    binding?.result?.setText(result)
+                    showResult()
+                }
+                .addOnFailureListener { Timber.e(it) }
     }
 
     private fun detectText(bitmap: Bitmap) {
