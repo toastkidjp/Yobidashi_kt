@@ -59,7 +59,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
 
     private val labeler = FirebaseVision.getInstance().onDeviceImageLabeler
 
-    private val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
+    private val textRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
 
     private val objectDetector = FirebaseVision.getInstance()
             .getOnDeviceObjectDetector(
@@ -270,7 +270,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
 
     private fun detectText(image: FirebaseVisionImage) {
         val view = binding?.root ?: return
-        detector.processImage(image)
+        textRecognizer.processImage(image)
                 .addOnSuccessListener { visionText ->
                     visionText.textBlocks
                             .asSequence()
