@@ -184,24 +184,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 sourceData?.cropRect = getRect()
                 sourceData?.bitmap?.let {
                     it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
-                    detector.processImage(FirebaseVisionImage.fromBitmap(it))
-                            .addOnSuccessListener { visionText ->
-                                visionText.textBlocks
-                                        .asSequence()
-                                        .map { block -> block.text }
-                                        .forEach { text ->
-                                            Toaster.snackLong(
-                                                    barcodeView,
-                                                    text,
-                                                    R.string.clip,
-                                                    View.OnClickListener {
-                                                        Clipboard.clip(this@BarcodeReaderActivity, text)
-                                                    },
-                                                    preferenceApplier.colorPair()
-                                            )
-                                }
-                            }
-                            .addOnFailureListener { e -> Timber.e(e) }
+                    detectText(it)
                 }
 
                 Toaster.snackShort(
@@ -222,6 +205,28 @@ class BarcodeReaderActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun detectText(bitmap: Bitmap) {
+        val view = binding?.root ?: return
+        detector.processImage(FirebaseVisionImage.fromBitmap(bitmap))
+                .addOnSuccessListener { visionText ->
+                    visionText.textBlocks
+                            .asSequence()
+                            .map { block -> block.text }
+                            .forEach { text ->
+                                Toaster.snackLong(
+                                        view,
+                                        text,
+                                        R.string.clip,
+                                        View.OnClickListener {
+                                            Clipboard.clip(this@BarcodeReaderActivity, text)
+                                        },
+                                        preferenceApplier.colorPair()
+                                )
+                            }
+                }
+                .addOnFailureListener { e -> Timber.e(e) }
     }
 
     /**
