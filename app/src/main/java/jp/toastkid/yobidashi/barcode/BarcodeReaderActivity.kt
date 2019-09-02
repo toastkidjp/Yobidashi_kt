@@ -185,6 +185,26 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 sourceData?.bitmap?.let {
                     it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
                     detectText(it)
+
+                    val labeler = FirebaseVision.getInstance().onDeviceImageLabeler
+                    labeler.processImage(FirebaseVisionImage.fromBitmap(it))
+                            .addOnSuccessListener { labels ->
+                                if (labels.isEmpty()) {
+                                    return@addOnSuccessListener
+                                }
+
+                                labels.forEach {
+                                    Timber.i("${it.text} ${it.entityId} ${it.confidence}")
+                                }
+
+                                @Suppress("UsePropertyAccessSyntax")
+                                binding?.result?.setText(
+                                        labels.map { "${it.text} ${it.entityId} ${it.confidence}" }
+                                                .reduce { base, item -> "$base\n$item" }
+                                )
+                                showResult()
+                            }
+                            .addOnFailureListener { e -> Timber.e(e) }
                 }
 
                 Toaster.snackShort(
