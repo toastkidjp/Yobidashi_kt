@@ -65,10 +65,10 @@ internal class WebTab: Tab {
 
     val latest: History
         get() {
-            if (index < 0 || histories.size <= index) {
+            if (index < 0) {
                 return History.EMPTY
             }
-            return histories[index]
+            return histories[histories.size - 1]
         }
 
     internal fun currentIndex() : Int = index

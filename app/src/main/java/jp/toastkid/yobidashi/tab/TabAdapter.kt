@@ -143,7 +143,7 @@ class TabAdapter(
     fun openNewWebTab(url: String = preferenceApplier.homeUrl, withLoad: Boolean = true) {
         val newTab = WebTab()
         if (Urls.isValidUrl(url)) {
-            newTab.histories.add(0, History("", url))
+            newTab.histories.add(0, History("New tab: $url", url))
         }
         tabList.add(newTab)
         setIndexByTab(newTab)
