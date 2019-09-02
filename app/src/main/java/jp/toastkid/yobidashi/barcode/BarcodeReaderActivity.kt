@@ -197,12 +197,10 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 sourceData?.cropRect = getRect()
                 sourceData?.bitmap?.let {
                     it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
-                    detectText(it)
-
-                    label(FirebaseVisionImage.fromBitmap(it))
-
-                    detectObject(FirebaseVisionImage.fromBitmap(it))
-
+                    val image = FirebaseVisionImage.fromBitmap(it)
+                    detectText(image)
+                    label(image)
+                    detectObject(image)
                 }
 
                 Toaster.snackShort(
@@ -270,9 +268,9 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 .addOnFailureListener { Timber.e(it) }
     }
 
-    private fun detectText(bitmap: Bitmap) {
+    private fun detectText(image: FirebaseVisionImage) {
         val view = binding?.root ?: return
-        detector.processImage(FirebaseVisionImage.fromBitmap(bitmap))
+        detector.processImage(image)
                 .addOnSuccessListener { visionText ->
                     visionText.textBlocks
                             .asSequence()
