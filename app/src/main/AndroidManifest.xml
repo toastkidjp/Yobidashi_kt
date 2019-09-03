@@ -31,11 +31,6 @@
             android:value="text"
             />
 
-        <meta-data
-            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="label"
-            />
-
         <activity
             android:name=".main.MainActivity"
             android:label="${app_name}"

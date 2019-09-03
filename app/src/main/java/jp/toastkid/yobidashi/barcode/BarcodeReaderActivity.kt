@@ -57,8 +57,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private val labeler = FirebaseVision.getInstance().onDeviceImageLabeler
-
     private val textRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
 
     private val objectDetector = FirebaseVision.getInstance()
@@ -199,7 +197,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
                     it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
                     val image = FirebaseVisionImage.fromBitmap(it)
                     detectText(image)
-                    label(image)
                     detectObject(image)
                 }
 
@@ -221,27 +218,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    private fun label(image: FirebaseVisionImage) {
-        labeler.processImage(image)
-                .addOnSuccessListener { labels ->
-                    if (labels.isEmpty()) {
-                        return@addOnSuccessListener
-                    }
-
-                    labels.forEach {
-                        Timber.i("${it.text} ${it.entityId} ${it.confidence}")
-                    }
-
-                    @Suppress("UsePropertyAccessSyntax")
-                    binding?.result?.setText(
-                            labels.map { "${it.text} ${it.entityId} ${it.confidence}" }
-                                    .reduce { base, item -> "$base\n$item" }
-                    )
-                    showResult()
-                }
-                .addOnFailureListener { e -> Timber.e(e) }
     }
 
     private fun detectObject(image: FirebaseVisionImage) {
