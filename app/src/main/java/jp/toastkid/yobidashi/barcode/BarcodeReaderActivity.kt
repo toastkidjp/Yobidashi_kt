@@ -15,7 +15,10 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.objects.FirebaseVisionObject
@@ -26,6 +29,8 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.barcode.detection.Adapter
+import jp.toastkid.yobidashi.barcode.detection.Detection
 import jp.toastkid.yobidashi.databinding.ActivityBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
@@ -40,7 +45,7 @@ import java.io.FileOutputStream
 
 /**
  * Barcode reader activity.
- *
+ * TODO Clean up code.
  * @author toastkidjp
  */
 class BarcodeReaderActivity : AppCompatActivity() {
@@ -147,6 +152,8 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 }
                 @Suppress("UsePropertyAccessSyntax")
                 binding?.result?.setText(text)
+                binding?.result?.isVisible = true
+                binding?.detections?.isVisible = false
                 showResult()
             }
 
@@ -222,8 +229,14 @@ class BarcodeReaderActivity : AppCompatActivity() {
                     if (detectedObjects.isEmpty()) {
                         return@addOnSuccessListener
                     }
-                    val result = detectedObjects.map {
-                        when (it.classificationCategory) {
+
+                    val recyclerView = binding?.detections
+                    recyclerView?.layoutManager =
+                            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+                    val adapter = Adapter(this)
+                    recyclerView?.adapter = adapter
+                    detectedObjects.map {
+                        val category = when (it.classificationCategory) {
                             FirebaseVisionObject.CATEGORY_FASHION_GOOD -> "Fashion"
                             FirebaseVisionObject.CATEGORY_FOOD -> "Food"
                             FirebaseVisionObject.CATEGORY_HOME_GOOD -> "Home goods"
@@ -231,10 +244,26 @@ class BarcodeReaderActivity : AppCompatActivity() {
                             FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
                             else -> ""
                         }
+                        val boundingBox = it.boundingBox
+                        Detection(
+                                Bitmap.createBitmap(
+                                        image.bitmap,
+                                        boundingBox.left,
+                                        boundingBox.top,
+                                        boundingBox.width(),
+                                        boundingBox.height()
+                                ),
+                                category
+                        )
                     }
-                            .reduce { base, item -> "$base\n$item" }
-                    @Suppress("UsePropertyAccessSyntax")
-                    binding?.result?.setText(result)
+                            .filter { it.category.isNotBlank() }
+                            .forEach { adapter.add(it) }
+                    if (adapter.isEmpty()) {
+                        return@addOnSuccessListener
+                    }
+                    binding?.detections?.isVisible = true
+                    binding?.result?.isVisible = false
+                    adapter.notifyDataSetChanged()
                     showResult()
                 }
                 .addOnFailureListener { Timber.e(it) }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="activity" type="jp.toastkid.yobidashi.barcode.BarcodeReaderActivity" />
     </data>
@@ -38,19 +39,23 @@
             android:onClick="@{view -> activity.camera()}"
             />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/result_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/filter_white_aa"
             android:layout_gravity="bottom"
             android:visibility="gone"
+            tools:visibility="visible"
             >
             <LinearLayout
                 android:id="@+id/submenus"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 >
                 <TextView
                     android:id="@+id/clip"
@@ -71,15 +76,22 @@
                     android:onClick="@{view -> activity.open()}"
                     />
             </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/submenus"
+                android:visibility="gone"
+                />
             <TextView
                 android:id="@+id/result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                android:layout_below="@id/submenus"
+                app:layout_constraintTop_toBottomOf="@id/submenus"
                 android:textSize="20sp"
                 />
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 </layout>
