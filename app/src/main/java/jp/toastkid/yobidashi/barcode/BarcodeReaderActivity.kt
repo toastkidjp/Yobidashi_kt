@@ -236,15 +236,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
                     val adapter = Adapter(this)
                     recyclerView?.adapter = adapter
                     detectedObjects.map {
-                        val category = when (it.classificationCategory) {
-                            FirebaseVisionObject.CATEGORY_FASHION_GOOD -> "Fashion"
-                            FirebaseVisionObject.CATEGORY_FOOD -> "Food"
-                            FirebaseVisionObject.CATEGORY_HOME_GOOD -> "Home goods"
-                            FirebaseVisionObject.CATEGORY_PLACE -> "Place"
-                            FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
-                            else -> ""
-                        }
-                        makeDetection(image.bitmap, it.boundingBox, category)
+                        makeDetection(image.bitmap, it.boundingBox, findCategoryName(it))
                     }
                             .filter { it.category.isNotBlank() }
                             .forEach { adapter.add(it) }
@@ -257,6 +249,18 @@ class BarcodeReaderActivity : AppCompatActivity() {
                     showResult()
                 }
                 .addOnFailureListener { Timber.e(it) }
+    }
+
+    private fun findCategoryName(it: FirebaseVisionObject): String {
+        val category = when (it.classificationCategory) {
+            FirebaseVisionObject.CATEGORY_FASHION_GOOD -> "Fashion"
+            FirebaseVisionObject.CATEGORY_FOOD -> "Food"
+            FirebaseVisionObject.CATEGORY_HOME_GOOD -> "Home goods"
+            FirebaseVisionObject.CATEGORY_PLACE -> "Place"
+            FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
+            else -> ""
+        }
+        return category
     }
 
     private fun makeDetection(bitmap: Bitmap, boundingBox: Rect, category: String): Detection {
