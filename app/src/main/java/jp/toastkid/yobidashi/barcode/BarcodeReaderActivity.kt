@@ -57,8 +57,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private val textRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
-
     private val objectDetector = FirebaseVision.getInstance()
             .getOnDeviceObjectDetector(
                     FirebaseVisionObjectDetectorOptions.Builder()
@@ -195,9 +193,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 sourceData?.cropRect = getRect()
                 sourceData?.bitmap?.let {
                     it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
-                    val image = FirebaseVisionImage.fromBitmap(it)
-                    detectText(image)
-                    detectObject(image)
+                    detectObject(FirebaseVisionImage.fromBitmap(it))
                 }
 
                 Toaster.snackShort(
@@ -242,28 +238,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
                     showResult()
                 }
                 .addOnFailureListener { Timber.e(it) }
-    }
-
-    private fun detectText(image: FirebaseVisionImage) {
-        val view = binding?.root ?: return
-        textRecognizer.processImage(image)
-                .addOnSuccessListener { visionText ->
-                    visionText.textBlocks
-                            .asSequence()
-                            .map { block -> block.text }
-                            .forEach { text ->
-                                Toaster.snackLong(
-                                        view,
-                                        text,
-                                        R.string.clip,
-                                        View.OnClickListener {
-                                            Clipboard.clip(this@BarcodeReaderActivity, text)
-                                        },
-                                        preferenceApplier.colorPair()
-                                )
-                            }
-                }
-                .addOnFailureListener { e -> Timber.e(e) }
     }
 
     /**
