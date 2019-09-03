@@ -244,17 +244,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
                             FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
                             else -> ""
                         }
-                        val boundingBox = it.boundingBox
-                        Detection(
-                                Bitmap.createBitmap(
-                                        image.bitmap,
-                                        boundingBox.left,
-                                        boundingBox.top,
-                                        boundingBox.width(),
-                                        boundingBox.height()
-                                ),
-                                category
-                        )
+                        makeDetection(image.bitmap, it.boundingBox, category)
                     }
                             .filter { it.category.isNotBlank() }
                             .forEach { adapter.add(it) }
@@ -267,6 +257,19 @@ class BarcodeReaderActivity : AppCompatActivity() {
                     showResult()
                 }
                 .addOnFailureListener { Timber.e(it) }
+    }
+
+    private fun makeDetection(bitmap: Bitmap, boundingBox: Rect, category: String): Detection {
+        return Detection(
+                Bitmap.createBitmap(
+                        bitmap,
+                        boundingBox.left,
+                        boundingBox.top,
+                        boundingBox.width(),
+                        boundingBox.height()
+                ),
+                category
+        )
     }
 
     /**
