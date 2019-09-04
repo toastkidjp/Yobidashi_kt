@@ -27,5 +27,9 @@ class SearchQueryExtractorTest {
                 "programmer",
                 SearchQueryExtractor("https://www.job.com/search?query=programmer")
         )
+        assertEquals(
+                "Noodle",
+                SearchQueryExtractor("https://commons.wikimedia.org/w/index.php?search=Noodle&ns0=1")
+        )
     }
 }
