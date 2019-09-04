@@ -82,6 +82,10 @@ enum class SearchCategory(
             R.drawable.ic_flickr,
             "https://www.flickr.com/search/?text="
     ),
+    WIKIMEDIA_COMMONS(R.string.search_category_wikimedia_commons,
+            R.drawable.ic_wikimedia_commons,
+            "https://commons.wikimedia.org/w/index.php?search="
+    ),
     MAP(R.string.search_category_map,
             R.drawable.ic_map,
             "https://www.google.co.jp/maps/place/"
