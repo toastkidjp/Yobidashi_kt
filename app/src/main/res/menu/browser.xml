@@ -2,13 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/open_menu"
-        android:orderInCategory="100"
-        android:title="@string/title_menu"
-        android:checkable="false"
-        app:showAsAction="never"
-        />
-    <item
         android:id="@+id/setting"
         android:orderInCategory="100"
         android:title="@string/title_settings"
@@ -25,20 +18,6 @@
         android:id="@+id/stop_loading"
         android:orderInCategory="100"
         android:title="@string/title_stop_loading"
-        android:checkable="false"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/close_header"
-        android:orderInCategory="100"
-        android:title="@string/title_close_header"
-        android:checkable="false"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/reset_menu_position"
-        android:orderInCategory="100"
-        android:title="@string/reset_button_position"
         android:checkable="false"
         app:showAsAction="never"
         />

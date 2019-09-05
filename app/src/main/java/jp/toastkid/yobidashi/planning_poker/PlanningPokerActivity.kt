@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityPlanningPokerBinding
@@ -57,6 +58,7 @@ class PlanningPokerActivity : AppCompatActivity() {
                             (viewHolder as CardViewHolder).open()
                         }
                     }).attachToRecyclerView(it)
+            LinearSnapHelper().attachToRecyclerView(it)
         }
     }
 

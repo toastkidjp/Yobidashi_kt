@@ -1,7 +1,10 @@
 package jp.toastkid.yobidashi.main
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
@@ -18,21 +21,28 @@ import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.about.AboutThisAppActivity
+import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.menu.Menu
+import jp.toastkid.yobidashi.browser.menu.MenuBinder
+import jp.toastkid.yobidashi.browser.menu.MenuViewModel
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.home.Command
@@ -43,11 +53,16 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
+import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
+import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
@@ -94,6 +109,10 @@ class MainActivity :
      */
     private val torch by lazy { Torch(this) }
 
+    private var menuViewModel: MenuViewModel? = null
+
+    private var rxPermissions: RxPermissions? = null
+
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +127,7 @@ class MainActivity :
         binding.toolbar.also { toolbar ->
             toolbar.setTitle(titleId())
             toolbar.inflateMenu(R.menu.settings_toolbar_menu)
+            toolbar.inflateMenu(R.menu.main_fab_menu)
             toolbar.setOnMenuItemClickListener{ clickMenu(it) }
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
@@ -119,7 +139,11 @@ class MainActivity :
             ColorFilter(this, binding.root).start()
         }
 
+        rxPermissions = RxPermissions(this)
+
         initializeHeaderViewModel()
+        setFabListener()
+        initializeMenuViewModel()
 
         processShortcut(intent)
     }
@@ -138,6 +162,36 @@ class MainActivity :
             }
             binding.toolbar.subtitle = url
         })
+    }
+
+    private fun initializeMenuViewModel() {
+        menuViewModel = ViewModelProviders.of(this).get(MenuViewModel::class.java)
+
+        MenuBinder(
+                this,
+                menuViewModel,
+                binding?.menusView,
+                binding?.menuSwitch
+        )
+
+        menuViewModel?.click?.observe(this, Observer { menu ->
+            onMenuClick(menu)
+        })
+
+        menuViewModel?.longClick?.observe(this, Observer { menu ->
+            onMenuLongClick(menu)
+        })
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setFabListener() {
+        val listener = DraggableTouchListener()
+        listener.setCallback(object : DraggableTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                preferenceApplier.setNewMenuFabPosition(x, y)
+            }
+        })
+        binding?.menuSwitch?.setOnTouchListener(listener)
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -197,6 +251,87 @@ class MainActivity :
     private fun finishWithoutTransition() {
         overridePendingTransition(0, 0)
         finish()
+    }
+
+    /**
+     * Menu action.
+     *
+     * @param menu [Menu]
+     */
+    private fun onMenuClick(menu: Menu) {
+        val fragmentActivity = this
+        when (menu) {
+            Menu.SETTING-> {
+                startActivity(SettingsActivity.makeIntent(fragmentActivity))
+            }
+            Menu.WIFI_SETTING-> {
+                startActivity(SettingsIntentFactory.wifi())
+            }
+            Menu.CODE_READER -> {
+                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
+            }
+            Menu.SCHEDULE-> {
+                try {
+                    startActivity(IntentFactory.makeCalendar())
+                } catch (e: ActivityNotFoundException) {
+                    Timber.w(e)
+                }
+            }
+            Menu.OVERLAY_COLOR_FILTER-> {
+                val rootView = binding?.root
+                ColorFilter(this, rootView).switchState(this)
+            }
+            Menu.PLANNING_POKER-> {
+                startActivity(PlanningPokerActivity.makeIntent(this))
+            }
+            Menu.CAMERA-> {
+                useCameraPermission { startActivity(IntentFactory.camera()) }
+            }
+            Menu.TORCH-> {
+                useCameraPermission { torch.switch() }
+            }
+            Menu.APP_LAUNCHER-> {
+                startActivity(LauncherActivity.makeIntent(this))
+            }
+            Menu.ABOUT-> {
+                startActivity(AboutThisAppActivity.makeIntent(this))
+            }
+            Menu.EXIT-> {
+                moveTaskToBack(true)
+            }
+            else -> {
+                browserFragment.onMenuClick(menu)
+            }
+        }
+    }
+
+
+    private fun onMenuLongClick(menu: Menu): Boolean {
+        val view = binding?.root ?: return true
+        Toaster.snackLong(
+                view,
+                menu.titleId,
+                R.string.run,
+                View.OnClickListener { onMenuClick(menu) },
+                preferenceApplier.colorPair()
+        )
+        return true
+    }
+
+    /**
+     * Use camera permission with specified action.
+     *
+     * @param onGranted action
+     */
+    private fun useCameraPermission(onGranted: () -> Unit) {
+        rxPermissions
+                ?.request(Manifest.permission.CAMERA)
+                ?.filter { it }
+                ?.subscribe(
+                        { onGranted() },
+                        { Timber.e(it) }
+                )
+                ?.addTo(disposables)
     }
 
     /**
@@ -281,6 +416,11 @@ class MainActivity :
             return
         }
 
+        if (binding.menusView.isVisible) {
+            menuViewModel?.close()
+            return
+        }
+
         confirmExit()
     }
 
@@ -306,6 +446,8 @@ class MainActivity :
     override fun onResume() {
         super.onResume()
         refresh()
+        menuViewModel?.onResume()
+        setFabPosition()
     }
 
     /**
@@ -353,6 +495,24 @@ class MainActivity :
      */
     private fun setBackgroundImage(background: BitmapDrawable?) {
         binding.background?.setImageDrawable(background)
+    }
+
+    private fun setFabPosition() {
+        binding?.menuSwitch?.let {
+            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
+            val displayMetrics = it.context.resources.displayMetrics
+            val x = if (fabPosition.first > displayMetrics.widthPixels.toFloat()) {
+                displayMetrics.widthPixels.toFloat()
+            } else {
+                fabPosition.first
+            }
+            val y = if (fabPosition.second > displayMetrics.heightPixels.toFloat()) {
+                displayMetrics.heightPixels.toFloat()
+            } else {
+                fabPosition.second
+            }
+            it.animate().x(x).y(y).setDuration(10).start()
+        }
     }
 
     override fun action(c: Command) {
@@ -423,8 +583,16 @@ class MainActivity :
                 finish()
                 return true
             }
+            R.id.reset_menu_position -> {
+                binding?.menuSwitch?.let {
+                    it.translationX = 0f
+                    it.translationY = 0f
+                    preferenceApplier.clearMenuFabPosition()
+                }
+            }
             else -> return true
         }
+        return true
     }
 
     @StringRes

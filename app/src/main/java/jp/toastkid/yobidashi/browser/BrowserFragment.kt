@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.ActivityNotFoundException
@@ -31,26 +30,21 @@ import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppActivity
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
-import jp.toastkid.yobidashi.browser.menu.MenuBinder
 import jp.toastkid.yobidashi.browser.menu.MenuViewModel
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
-import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
-import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.ImageDownloader
 import jp.toastkid.yobidashi.libs.Toaster
@@ -59,13 +53,10 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
-import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -156,12 +147,12 @@ class BrowserFragment : Fragment(),
      */
     private var floatingPreview: FloatingPreview? = null
 
+    private var menuViewModel: MenuViewModel? = null
+
     /**
      * Torch API facade.
      */
     private lateinit var torch: Torch
-
-    private var menuViewModel: MenuViewModel? = null
 
     /**
      * Find-in-page module.
@@ -234,8 +225,6 @@ class BrowserFragment : Fragment(),
                 this::onEmptyTabs
         )
 
-        setFabListener()
-
         setHasOptionsMenu(true)
 
         return binding?.root
@@ -246,7 +235,8 @@ class BrowserFragment : Fragment(),
 
         initializeHeaderViewModel()
 
-        initializeMenuViewModel()
+        menuViewModel = ViewModelProviders.of(requireActivity())
+                .get(MenuViewModel::class.java)
 
         pageSearchPresenter = PageSearcherModule(
                 this,
@@ -282,36 +272,6 @@ class BrowserFragment : Fragment(),
         })
     }
 
-    private fun initializeMenuViewModel() {
-        menuViewModel = ViewModelProviders.of(this).get(MenuViewModel::class.java)
-
-        MenuBinder(
-                this,
-                menuViewModel,
-                binding?.menusView,
-                binding?.menuSwitch
-        )
-
-        menuViewModel?.click?.observe(this, Observer { menu ->
-            onMenuClick(menu)
-        })
-
-        menuViewModel?.longClick?.observe(this, Observer { menu ->
-            onMenuLongClick(menu)
-        })
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setFabListener() {
-        val listener = DraggableTouchListener()
-        listener.setCallback(object : DraggableTouchListener.OnNewPosition {
-            override fun onNewPosition(x: Float, y: Float) {
-                preferenceApplier.setNewMenuFabPosition(x, y)
-            }
-        })
-        binding?.menuSwitch?.setOnTouchListener(listener)
-    }
-
     /**
      * Action on empty tabs.
      */
@@ -326,11 +286,6 @@ class BrowserFragment : Fragment(),
         inflater.inflate(R.menu.browser, menu)
 
         menu.let { menuNonNull ->
-            menuNonNull.findItem(R.id.open_menu)?.setOnMenuItemClickListener {
-                menuViewModel?.visibility?.postValue(binding?.menusView?.isVisible == false)
-                true
-            }
-
             menuNonNull.findItem(R.id.open_tabs)?.setOnMenuItemClickListener {
                 switchTabList()
                 true
@@ -347,52 +302,18 @@ class BrowserFragment : Fragment(),
                 stopCurrentLoading()
                 true
             }
-
-            menuNonNull.findItem(R.id.close_header)?.setOnMenuItemClickListener {
-                hideHeader()
-                true
-            }
-
-            menuNonNull.findItem(R.id.reset_menu_position)?.setOnMenuItemClickListener {
-                binding?.menuSwitch?.let {
-                    it.translationX = 0f
-                    it.translationY = 0f
-                    preferenceApplier.clearMenuFabPosition()
-                }
-                true
-            }
         }
     }
 
-    /**
-     * Hide footer with animation.
-     */
-    private fun hideHeader() {
-        toolbarAction?.hideToolbar()
-    }
-
-    /**
-     * Stop current tab's loading.
-     */
-    private fun stopCurrentLoading() {
-        browserModule.stopLoading()
-        Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
-    }
-
-    /**
-     * Menu action.
-     *
-     * @param menu [Menu]
-     */
-    private fun onMenuClick(menu: Menu) {
+    fun onMenuClick(menu: Menu) {
         val fragmentActivity = activity ?: return
         val snackbarParent = binding?.root as View
         when (menu) {
             Menu.RELOAD -> {
                 tabs.reload()
             }
-            Menu.BACK-> {
-                back()
+            Menu.BACK -> {
+                tabs.back()
             }
             Menu.FORWARD-> {
                 forward()
@@ -420,9 +341,6 @@ class BrowserFragment : Fragment(),
                                 + System.getProperty("line.separator") + browserModule.currentUrl())
                 )
             }
-            Menu.SETTING-> {
-                startActivity(SettingsActivity.makeIntent(fragmentActivity))
-            }
             Menu.USER_AGENT-> {
                 val fragmentManager = fragmentManager ?: return
                 val dialogFragment = UserAgentDialogFragment()
@@ -431,9 +349,6 @@ class BrowserFragment : Fragment(),
                         fragmentManager,
                         UserAgentDialogFragment::class.java.simpleName
                 )
-            }
-            Menu.WIFI_SETTING-> {
-                startActivity(SettingsIntentFactory.wifi())
             }
             Menu.PAGE_INFORMATION-> {
                 val fragmentManager = fragmentManager ?: return
@@ -467,7 +382,7 @@ class BrowserFragment : Fragment(),
                 )
             }
             Menu.WEB_SEARCH-> {
-                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
+                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.root as View))
             }
             Menu.SITE_SEARCH-> {
                 tabs.siteSearch()
@@ -510,14 +425,14 @@ class BrowserFragment : Fragment(),
             Menu.BOOKMARK-> {
                 context?.let {
                     startActivityForResult(
-                        BookmarkActivity.makeIntent(it),
-                        BookmarkActivity.REQUEST_CODE
+                            BookmarkActivity.makeIntent(it),
+                            BookmarkActivity.REQUEST_CODE
                     )
                 }
             }
             Menu.ADD_BOOKMARK-> {
                 tabs.addBookmark {
-                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.menusView as View))
+                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.root as View))
                 }
             }
             Menu.EDITOR-> {
@@ -526,71 +441,21 @@ class BrowserFragment : Fragment(),
             Menu.PDF-> {
                 openPdfTabFromStorage()
             }
-            Menu.CODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
-            }
-            Menu.SCHEDULE-> {
-                try {
-                    startActivity(IntentFactory.makeCalendar())
-                } catch (e: ActivityNotFoundException) {
-                    Timber.w(e)
-                }
-            }
-            Menu.OVERLAY_COLOR_FILTER-> {
-                val activity = activity
-                val rootView = binding?.root
-                if (activity == null || rootView == null) {
-                    return
-                }
-                ColorFilter(activity, rootView).switchState(activity)
-            }
-            Menu.PLANNING_POKER-> {
-                context?.let { startActivity(PlanningPokerActivity.makeIntent(it)) }
-            }
-            Menu.CAMERA-> {
-                useCameraPermission { startActivity(IntentFactory.camera()) }
-            }
-            Menu.TORCH-> {
-                useCameraPermission { torch.switch() }
-            }
-            Menu.APP_LAUNCHER-> {
-                context?.let { startActivity(LauncherActivity.makeIntent(it)) }
-            }
-            Menu.ABOUT-> {
-                context?.let { startActivity(AboutThisAppActivity.makeIntent(it)) }
-            }
-            Menu.EXIT-> {
-                activity?.moveTaskToBack(true)
-            }
         }
     }
-
-    private fun onMenuLongClick(menu: Menu): Boolean {
-        val view = binding?.root ?: return true
-        Toaster.snackLong(
-                view,
-                menu.titleId,
-                R.string.run,
-                View.OnClickListener { onMenuClick(menu) },
-                preferenceApplier.colorPair()
-        )
-        return true
+    /**
+     * Hide footer with animation.
+     */
+    private fun hideHeader() {
+        toolbarAction?.hideToolbar()
     }
 
     /**
-     * Use camera permission with specified action.
-     *
-     * @param onGranted action
+     * Stop current tab's loading.
      */
-    private fun useCameraPermission(onGranted: () -> Unit) {
-        rxPermissions
-                ?.request(Manifest.permission.CAMERA)
-                ?.filter { it }
-                ?.subscribe(
-                        { onGranted() },
-                        { Timber.e(it) }
-                )
-                ?.addTo(disposables)
+    private fun stopCurrentLoading() {
+        browserModule.stopLoading()
+        Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
     }
 
     /**
@@ -673,8 +538,6 @@ class BrowserFragment : Fragment(),
 
         switchToolbarVisibility()
 
-        setFabPosition()
-
         val colorPair = colorPair()
         editorModule.applySettings()
 
@@ -692,9 +555,6 @@ class BrowserFragment : Fragment(),
             tabs.openNewWebTab(preferenceApplier.homeUrl)
         }
 
-        menuViewModel?.onResume()
-        menuViewModel?.tabCount(tabs.size())
-
         browserModule.resizePool(preferenceApplier.poolSize)
         browserModule.applyNewAlpha()
 
@@ -702,6 +562,8 @@ class BrowserFragment : Fragment(),
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
             it.setColorSchemeColors(preferenceApplier.fontColor)
         }
+
+        menuViewModel?.tabCount(tabs.size())
     }
 
     private fun switchToolbarVisibility() {
@@ -717,24 +579,6 @@ class BrowserFragment : Fragment(),
         if (browserScreenMode == ScreenMode.EXPANDABLE
                 || browserScreenMode == ScreenMode.FIXED) {
             toolbarAction?.showToolbar()
-        }
-    }
-
-    private fun setFabPosition() {
-        binding?.menuSwitch?.let {
-            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
-            val displayMetrics = it.context.resources.displayMetrics
-            val x = if (fabPosition.first > displayMetrics.widthPixels.toFloat()) {
-                displayMetrics.widthPixels.toFloat()
-            } else {
-                fabPosition.first
-            }
-            val y = if (fabPosition.second > displayMetrics.heightPixels.toFloat()) {
-                displayMetrics.heightPixels.toFloat()
-            } else {
-                fabPosition.second
-            }
-            it.animate().x(x).y(y).setDuration(10).start()
         }
     }
 
@@ -778,11 +622,6 @@ class BrowserFragment : Fragment(),
 
         if (pageSearchPresenter.isVisible()) {
             pageSearchPresenter.hide()
-            return true
-        }
-
-        if (binding?.menusView?.isVisible == true) {
-            menuViewModel?.close()
             return true
         }
 

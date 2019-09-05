@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.R
@@ -212,6 +213,7 @@ class TabListDialogFragment : DialogFragment() {
                 }).attachToRecyclerView(recyclerView)
         DragAttachment(recyclerView, ItemTouchHelper.RIGHT)
         DragAttachment(recyclerView, ItemTouchHelper.LEFT)
+        LinearSnapHelper().attachToRecyclerView(recyclerView)
 
         recyclerView.adapter = adapter
     }
