@@ -45,6 +45,10 @@ enum class SearchCategory(
             R.drawable.ic_yahoo_japan_logo,
             "https://search.yahoo.co.jp/search?p="
     ),
+    BAIDU(R.string.baidu,
+            R.drawable.ic_baidu,
+            "https://www.baidu.com/s?wd="
+    ),
     IMAGE(R.string.search_category_image,
             R.drawable.ic_image_search,
             "https://www.google.co.jp/search?site=imghp&tbm=isch&q="
@@ -53,13 +57,17 @@ enum class SearchCategory(
             R.drawable.ic_video,
             "https://www.youtube.com/results?search_query="
     ),
+    TIKTOK(R.string.search_category_tiktok,
+            R.drawable.ic_tiktok,
+            "https://www.tiktok.com/tag/"
+    ),
     WIKIPEDIA(R.string.search_category_wikipedia,
             R.drawable.ic_wikipedia,
             "https://%s.wikipedia.org/w/index.php?search=",
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
     ),
     TWITTER(R.string.search_category_twitter,
-            R.drawable.ic_sns,
+            R.drawable.ic_twitter,
             "https://twitter.com/search?src=typd&q="
     ),
     FACEBOOK(R.string.search_category_facebook,
@@ -70,12 +78,16 @@ enum class SearchCategory(
             R.drawable.ic_instagram_logo,
             "https://www.instagram.com/explore/tags/"
     ),
+    FLICKR(R.string.search_category_flickr,
+            R.drawable.ic_flickr,
+            "https://www.flickr.com/search/?text="
+    ),
     MAP(R.string.search_category_map,
             R.drawable.ic_map,
             "https://www.google.co.jp/maps/place/"
     ),
     APPS(R.string.search_category_apps,
-            R.drawable.ic_android_app_green,
+            R.drawable.ic_google_play,
             "https://play.google.com/store/search?q="
     ),
     YELP(R.string.yelp,
@@ -87,7 +99,7 @@ enum class SearchCategory(
             "http://www.gutenberg.org/ebooks/search/?query="
     ),
     AMAZON(R.string.search_category_shopping,
-            R.drawable.ic_shopping,
+            R.drawable.ic_amazon,
             "https://www.amazon.co.jp/s/ref=nb_sb_noss?field-keywords=",
             { l, h, q ->
                 if (Locale.JAPANESE.language == l) {
@@ -97,12 +109,12 @@ enum class SearchCategory(
                 }
             }
     ),
-    TECHNICAL_QA(R.string.search_category_technical_qa,
+    TECHNICAL_QA(R.string.search_category_stack_overflow,
             R.drawable.ic_stackoverflow,
             "https://stackoverflow.com/search?q="
     ),
     TECHNOLOGY(R.string.search_category_technology,
-            R.drawable.ic_technology,
+            R.drawable.ic_techcrunch,
             "http://jp.techcrunch.com/search/",
             {l, h, q ->
                 if (Locale.JAPANESE.language == l) {
@@ -110,6 +122,10 @@ enum class SearchCategory(
                 }
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
+    ),
+    REDDIT(R.string.search_category_reddit,
+            R.drawable.ic_reddit,
+            "https://www.reddit.com/search/?q="
     ),
     GITHUB(R.string.search_category_github,
             R.drawable.ic_github,
@@ -119,10 +135,31 @@ enum class SearchCategory(
             R.drawable.ic_mvn,
             "https://mvnrepository.com/search?q="
     ),
-    SEARCH_CODE(R.string.search_category_search_code,
-            R.drawable.ic_searchcode,
-            "https://searchcode.com/?q="
-    );
+    MEDIUM(R.string.medium,
+            R.drawable.ic_medium,
+            "https://medium.com/search?q="
+    ),
+    TED(R.string.ted,
+            R.drawable.ic_ted,
+            "https://www.ted.com/search?q="
+    ),
+    SLIDESHARE(R.string.slideshare,
+            R.drawable.ic_slideshare,
+            "https://www.slideshare.net/search/slideshow?q="
+    ),
+    SPEAKERDECK(R.string.speakerdeck,
+            R.drawable.ic_speakerdeck,
+            "https://cse.google.com/cse?cx=010150859881542981030%3Ahqhxyxpwtc4&q="
+    ),
+    BUZZFEED(R.string.buzzfeed,
+            R.drawable.ic_buzzfeed,
+            "https://www.buzzfeed.com/jp/search?q="
+    ),
+    LIVEJOURNAL(R.string.livejournal,
+            R.drawable.ic_livejournal,
+            "https://www.livejournal.com/gsearch/?engine=google&cx=partner-pub-5600223439108080:3711723852&q="
+    ),
+    ;
 
     /**
      * Make search URL with query.

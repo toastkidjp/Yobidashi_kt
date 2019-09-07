@@ -17,7 +17,6 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -125,10 +124,7 @@ class MainActivity :
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         binding.toolbar.also { toolbar ->
-            toolbar.setTitle(titleId())
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.inflateMenu(R.menu.main_fab_menu)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+            toolbar.setTitle(TITLE_ID)
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
@@ -501,15 +497,17 @@ class MainActivity :
         binding?.menuSwitch?.let {
             val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
             val displayMetrics = it.context.resources.displayMetrics
-            val x = if (fabPosition.first > displayMetrics.widthPixels.toFloat()) {
-                displayMetrics.widthPixels.toFloat()
-            } else {
-                fabPosition.first
+            val x = when {
+                fabPosition.first > displayMetrics.widthPixels.toFloat() ->
+                    displayMetrics.widthPixels.toFloat()
+                fabPosition.first < 0 -> 0f
+                else -> fabPosition.first
             }
-            val y = if (fabPosition.second > displayMetrics.heightPixels.toFloat()) {
-                displayMetrics.heightPixels.toFloat()
-            } else {
-                fabPosition.second
+            val y = when {
+                fabPosition.second > displayMetrics.heightPixels.toFloat() ->
+                    displayMetrics.heightPixels.toFloat()
+                fabPosition.second < 0 -> 0f
+                else -> fabPosition.second
             }
             it.animate().x(x).y(y).setDuration(10).start()
         }
@@ -555,48 +553,37 @@ class MainActivity :
                 binding.toolbar.visibility = View.VISIBLE
             }
             ScreenMode.FULL_SCREEN -> Unit
-            ScreenMode.EXPANDABLE -> {
-                binding.toolbar.animate()?.let {
-                    it.cancel()
-                    it.translationY(0f)
-                            .setDuration(HEADER_HIDING_DURATION)
-                            .withStartAction {
-                                binding.toolbar.visibility = View.VISIBLE
-                            }
-                            .withEndAction   { binding.content?.requestLayout() }
-                            //TODO .start()
-                }
-            }
+            ScreenMode.EXPANDABLE -> Unit
         }
     }
 
-
-    private fun clickMenu(item: MenuItem): Boolean {
-        @IdRes val itemId: Int = item.itemId
-
-        when (itemId) {
-            R.id.menu_exit -> {
-                moveTaskToBack(true)
-                return true
-            }
-            R.id.menu_close -> {
-                finish()
-                return true
-            }
-            R.id.reset_menu_position -> {
-                binding?.menuSwitch?.let {
-                    it.translationX = 0f
-                    it.translationY = 0f
-                    preferenceApplier.clearMenuFabPosition()
-                }
-            }
-            else -> return true
+    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        menuInflater.also {
+            it.inflate(R.menu.settings_toolbar_menu, menu)
+            it.inflate(R.menu.main_fab_menu, menu)
         }
-        return true
+        return super.onCreateOptionsMenu(menu)
     }
 
-    @StringRes
-    private fun titleId(): Int = R.string.app_name
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.menu_exit -> {
+            moveTaskToBack(true)
+            true
+        }
+        R.id.menu_close -> {
+            finish()
+            true
+        }
+        R.id.reset_menu_position -> {
+            binding?.menuSwitch?.let {
+                it.translationX = 0f
+                it.translationY = 0f
+                preferenceApplier.clearMenuFabPosition()
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -662,6 +649,12 @@ class MainActivity :
          * Header hiding duration.
          */
         private const val HEADER_HIDING_DURATION = 75L
+
+        /**
+         * Title resource ID.
+         */
+        @StringRes
+        private const val TITLE_ID = R.string.app_name
 
         /**
          * Layout ID.

@@ -16,11 +16,10 @@
     <string name="search_category_youtube">動画</string>
     <string name="search_category_wikipedia">Wikipedia</string>
     <string name="search_category_shopping">ショッピング</string>
-    <string name="search_category_technical_qa">ソフトウェア技術Ｑ＆Ａ</string>
+    <string name="search_category_stack_overflow">Stack Overflow</string>
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
-    <string name="search_category_search_code">searchcode</string>
     <string name="search_category_startpage">startpage</string>
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
@@ -399,5 +398,16 @@
     <string name="is_center">center</string>
     <string name="title_icon">アイコン</string>
     <string name="reset_button_position">ボタンの位置をリセット</string>
+    <string name="medium">Medium</string>
+    <string name="ted">TED</string>
+    <string name="buzzfeed">BuzzFeed</string>
+    <string name="slideshare">SlideShare</string>
+    <string name="speakerdeck">Speaker Deck</string>
+    <string name="baidu">Baidu</string>
+    <string name="search_category_flickr">Flickr</string>
+    <string name="livejournal">LiveJournal</string>
+    <string name="search_category_slashdot">Slashdot</string>
+    <string name="search_category_reddit">reddit</string>
+    <string name="search_category_tiktok">TikTok</string>
 
 </resources>

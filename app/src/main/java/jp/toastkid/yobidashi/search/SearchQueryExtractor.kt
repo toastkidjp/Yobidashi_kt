@@ -23,7 +23,14 @@ object SearchQueryExtractor {
                     or host.endsWith("github.com")
                     or host.endsWith("mvnrepository.com")
                     or host.endsWith("searchcode.com")
-                    or host.startsWith("search.yahoo.") ->
+                    or host.startsWith("search.yahoo.com")
+                    or host.equals("www.reddit.com")
+                    or host.endsWith("medium.com")
+                    or host.endsWith("ted.com")
+                    or host.endsWith(".slideshare.net")
+                    or host.endsWith("cse.google.com")
+                    or host.endsWith(".buzzfeed.com")
+                    or host.endsWith(".livejournal.com") ->
                 uri.getQueryParameter("q")
             host.startsWith("www.amazon.") ->
                 uri.getQueryParameter("field-keywords")
@@ -31,12 +38,18 @@ object SearchQueryExtractor {
                 uri.getQueryParameter("text")
             host.startsWith("www.youtube.") ->
                 uri.getQueryParameter("search_query")
+            host.startsWith("www.flickr.") ->
+                uri.getQueryParameter("text")
+            host.endsWith(".yelp.com") ->
+                uri.getQueryParameter("find_desc")
             host.startsWith("facebook.com") ->
                 uri.getQueryParameter("query")
             host.endsWith(".wikipedia.org") ->
                 uri.getQueryParameter("search")
             host.endsWith("search.yahoo.co.jp") ->
                 uri.getQueryParameter("p")
+            host.endsWith("www.baidu.com") ->
+                uri.getQueryParameter("wd")
             else -> uri.getQueryParameter(
                     commonQueryParameterNames
                             .find { uri.queryParameterNames.contains(it) } ?: ""
