@@ -25,14 +25,26 @@ import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
+ * Popup for showing barcode reader's result.
+ *
+ * @param context [Context]
  * @author toastkidjp
  */
 class BarcodeReaderResultPopup(context: Context) {
 
+    /**
+     * Popup window.
+     */
     private val popupWindow = PopupWindow(context)
 
+    /**
+     * View binding.
+     */
     private val binding: PopupBarcodeResultBinding
 
+    /**
+     * ViewModel of this popup.
+     */
     private var popupViewModel: BarcodeReaderResultPopupViewModel? = null
 
     /**
@@ -66,6 +78,11 @@ class BarcodeReaderResultPopup(context: Context) {
         }
     }
 
+    /**
+     * Set current colors.
+     *
+     * @param colorPair current color pair
+     */
     fun onResume(colorPair: ColorPair) {
         binding.let {
             it.resultArea.setBackgroundColor(colorPair.bgColor())
@@ -98,8 +115,19 @@ class BarcodeReaderResultPopup(context: Context) {
         popupViewModel?.open?.postValue(currentText())
     }
 
+    /**
+     * Get current text.
+     *
+     * @return current text
+     */
     fun currentText() = binding.result.text?.toString()
 
+    /**
+     * Show popup with parent-view and text.
+     *
+     * @param parent Parent View of this popup window
+     * @param text Result text string.
+     */
     fun show(parent: View, text: String) {
         @Suppress("UsePropertyAccessSyntax")
         binding.result.setText(text)
