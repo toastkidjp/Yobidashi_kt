@@ -130,10 +130,18 @@ class BarcodeReaderResultPopup(context: Context) {
      * @param text Result text string.
      */
     fun show(parent: View, text: String) {
+        if (popupWindow.isShowing) {
+            popupWindow.dismiss()
+        }
+
         @Suppress("UsePropertyAccessSyntax")
         binding.result.setText(text)
         binding.root.startAnimation(slideUpBottom)
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
+    }
+
+    fun hide() {
+        popupWindow.dismiss()
     }
 
     companion object {

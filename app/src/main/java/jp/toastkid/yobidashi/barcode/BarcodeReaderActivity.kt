@@ -209,6 +209,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         binding?.barcodeView?.pause()
+        resultPopup.hide()
     }
 
     override fun onRequestPermissionsResult(
