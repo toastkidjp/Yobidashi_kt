@@ -15,22 +15,13 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.objects.FirebaseVisionObject
-import com.google.firebase.ml.vision.objects.FirebaseVisionObjectDetectorOptions
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.barcode.detection.Adapter
-import jp.toastkid.yobidashi.barcode.detection.Detection
 import jp.toastkid.yobidashi.databinding.ActivityBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
@@ -61,15 +52,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
     private val slideUpBottom by lazy { AnimationUtils.loadAnimation(this, R.anim.slide_up) }
 
     private lateinit var preferenceApplier: PreferenceApplier
-
-    private val objectDetector = FirebaseVision.getInstance()
-            .getOnDeviceObjectDetector(
-                    FirebaseVisionObjectDetectorOptions.Builder()
-                            .setDetectorMode(FirebaseVisionObjectDetectorOptions.SINGLE_IMAGE_MODE)
-                            .enableMultipleObjects()
-                            .enableClassification()
-                            .build()
-            )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,8 +134,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 }
                 @Suppress("UsePropertyAccessSyntax")
                 binding?.result?.setText(text)
-                binding?.result?.isVisible = true
-                binding?.detections?.isVisible = false
                 showResult()
             }
 
@@ -198,10 +178,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 )
 
                 sourceData?.cropRect = getRect()
-                sourceData?.bitmap?.let {
-                    it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
-                    detectObject(FirebaseVisionImage.fromBitmap(it))
-                }
+                sourceData?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
 
                 Toaster.snackShort(
                         barcodeView,
@@ -221,59 +198,6 @@ class BarcodeReaderActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    private fun detectObject(image: FirebaseVisionImage) {
-        objectDetector.processImage(image)
-                .addOnSuccessListener { detectedObjects ->
-                    if (detectedObjects.isEmpty()) {
-                        return@addOnSuccessListener
-                    }
-
-                    val recyclerView = binding?.detections
-                    recyclerView?.layoutManager =
-                            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-                    val adapter = Adapter(this)
-                    recyclerView?.adapter = adapter
-                    detectedObjects.map {
-                        makeDetection(image.bitmap, it.boundingBox, findCategoryName(it))
-                    }
-                            .filter { it.category.isNotBlank() }
-                            .forEach { adapter.add(it) }
-                    if (adapter.isEmpty()) {
-                        return@addOnSuccessListener
-                    }
-                    binding?.detections?.isVisible = true
-                    binding?.result?.isVisible = false
-                    adapter.notifyDataSetChanged()
-                    showResult()
-                }
-                .addOnFailureListener { Timber.e(it) }
-    }
-
-    private fun findCategoryName(it: FirebaseVisionObject): String {
-        val category = when (it.classificationCategory) {
-            FirebaseVisionObject.CATEGORY_FASHION_GOOD -> "Fashion"
-            FirebaseVisionObject.CATEGORY_FOOD -> "Food"
-            FirebaseVisionObject.CATEGORY_HOME_GOOD -> "Home goods"
-            FirebaseVisionObject.CATEGORY_PLACE -> "Place"
-            FirebaseVisionObject.CATEGORY_PLANT -> "Plant"
-            else -> ""
-        }
-        return category
-    }
-
-    private fun makeDetection(bitmap: Bitmap, boundingBox: Rect, category: String): Detection {
-        return Detection(
-                Bitmap.createBitmap(
-                        bitmap,
-                        boundingBox.left,
-                        boundingBox.top,
-                        boundingBox.width(),
-                        boundingBox.height()
-                ),
-                category
-        )
     }
 
     /**
