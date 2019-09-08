@@ -15,6 +15,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.PopupWindow
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -54,7 +55,7 @@ class BarcodeReaderResultPopup(context: Context) {
 
     init {
         val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_barcode_result, null, false)
+        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.popup = this
 
         popupWindow.contentView = binding.root
@@ -135,4 +136,12 @@ class BarcodeReaderResultPopup(context: Context) {
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
     }
 
+    companion object {
+
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.popup_barcode_result
+    }
 }
