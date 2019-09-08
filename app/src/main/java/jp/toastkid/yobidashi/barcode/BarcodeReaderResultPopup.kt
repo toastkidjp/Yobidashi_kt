@@ -99,21 +99,21 @@ class BarcodeReaderResultPopup(context: Context) {
      * Copy result text to clipboard.
      */
     fun clip() {
-        popupViewModel?.clip?.postValue(currentText())
+        popupViewModel?.clipText(currentText())
     }
 
     /**
      * Share result text.
      */
     fun share() {
-        popupViewModel?.share?.postValue(currentText())
+        popupViewModel?.shareText(currentText())
     }
 
     /**
      * Open result text with browser.
      */
     fun open() {
-        popupViewModel?.open?.postValue(currentText())
+        popupViewModel?.openText(currentText())
     }
 
     /**

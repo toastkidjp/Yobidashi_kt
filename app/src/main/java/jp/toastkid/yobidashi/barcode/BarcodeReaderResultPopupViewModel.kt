@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.barcode
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -16,15 +17,33 @@ import androidx.lifecycle.ViewModel
 class BarcodeReaderResultPopupViewModel : ViewModel() {
 
     private val _clip = MutableLiveData<String>()
+    val clip: LiveData<String> = _clip
 
-    val clip = _clip
+    fun clipText(text: String?) {
+        if (text == null) {
+            return
+        }
+        _clip.postValue(text)
+    }
 
     private val _share = MutableLiveData<String>()
+    val share: LiveData<String> = _share
 
-    val share = _share
+    fun shareText(text: String?) {
+        if (text == null) {
+            return
+        }
+        _share.postValue(text)
+    }
 
     private val _open = MutableLiveData<String>()
+    val open: LiveData<String> = _open
 
-    val open = _open
+    fun openText(text: String?) {
+        if (text == null) {
+            return
+        }
+        _open.postValue(text)
+    }
 
 }
