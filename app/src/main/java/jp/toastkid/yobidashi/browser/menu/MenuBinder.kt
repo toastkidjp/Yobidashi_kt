@@ -10,6 +10,8 @@ package jp.toastkid.yobidashi.browser.menu
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.RippleDrawable
+import android.os.Build
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -82,6 +84,13 @@ class MenuBinder(
         recyclerView?.setNeedLoop(true)
         menuDrawable = ContextCompat.getDrawable(context, R.drawable.ic_menu)
         menuSwitch?.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                (it.background as? RippleDrawable)?.also { ripple ->
+                    ripple.state = arrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled)
+                            .toIntArray()
+                    menuSwitch.postDelayed({ ripple.state = IntArray(0) }, 200)
+                }
+            }
             menuViewModel?.visibility?.postValue(recyclerView?.isVisible == false)
         }
     }
