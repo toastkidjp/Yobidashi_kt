@@ -18,7 +18,7 @@ enum class SearchCategory(
         @DrawableRes val iconId: Int,
         private val host: String,
         private val generator: (l: String, h: String, q: String) -> String = { _, h, q ->  h + q }
-    ) {
+) {
 
     GOOGLE(R.string.google,
             R.drawable.ic_google,
@@ -89,6 +89,10 @@ enum class SearchCategory(
     MAP(R.string.search_category_map,
             R.drawable.ic_map,
             "https://www.google.co.jp/maps/place/"
+    ),
+    OPEN_WEATHER_MAP(R.string.search_category_open_weather,
+            R.drawable.ic_open_weather,
+            "https://openweathermap.org/find?q="
     ),
     APPS(R.string.search_category_apps,
             R.drawable.ic_google_play,
