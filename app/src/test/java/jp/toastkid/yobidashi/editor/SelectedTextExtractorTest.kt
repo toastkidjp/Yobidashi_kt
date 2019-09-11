@@ -43,8 +43,8 @@ class SelectedTextExtractorTest {
     fun testNotFoundCase() {
         val editText = mockk<EditText>()
 
-        every { editText.selectionStart }.returns(-1)
-        every { editText.selectionEnd }.returns(5)
+        every { editText.selectionStart }.returns(0)
+        every { editText.selectionEnd }.returns(0)
         val editable = mockk<Editable>().also {
             every { it.toString() }.returns("abcdefgh")
         }
