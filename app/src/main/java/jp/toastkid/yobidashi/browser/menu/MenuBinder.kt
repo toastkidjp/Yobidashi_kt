@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.R
@@ -76,6 +77,7 @@ class MenuBinder(
     }
 
     private fun initializeWithContext(context: Context) {
+        LinearSnapHelper().attachToRecyclerView(recyclerView)
         recyclerView?.adapter = menuAdapter
         val layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
