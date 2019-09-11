@@ -57,6 +57,13 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_editor, container, false)
         val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
+        binding.fragment = this
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.also { editorModule ->
             val backgroundColor = preferenceApplier.editorBackgroundColor()
             val fontColor = preferenceApplier.editorFontColor()
@@ -68,14 +75,12 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                 picker.addSVBar(editorModule.backgroundSvbar)
                 picker.addOpacityBar(editorModule.backgroundOpacitybar)
                 picker.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
-                picker.color = backgroundColor
             }
 
             editorModule.fontPalette.also { picker ->
                 picker.addSVBar(editorModule.fontSvbar)
                 picker.addOpacityBar(editorModule.fontOpacitybar)
                 picker.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
-                picker.color = fontColor
             }
             editorModule.fragment = this
             Colors.setColors(
@@ -99,10 +104,11 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                 @SuppressLint("ViewHolder")
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                     val item = EditorFontSize.values()[position]
-                    val view = inflater.inflate(android.R.layout.simple_spinner_item, parent, false)
-                    val textView = view.findViewById<TextView>(android.R.id.text1)
+                    val itemView = LayoutInflater.from(context)
+                            .inflate(android.R.layout.simple_spinner_item, parent, false)
+                    val textView = itemView.findViewById<TextView>(android.R.id.text1)
                     textView.text = item.size.toString()
-                    return view
+                    return itemView
                 }
             }
             binding.fontSize.setSelection(
@@ -116,8 +122,9 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
         }
-        binding.fragment = this
-        return binding.root
+        val colorPair = preferenceApplier.colorPair()
+        binding.backgroundPalette.color = colorPair.bgColor()
+        binding.fontPalette.color = colorPair.fontColor()
     }
 
     /**
