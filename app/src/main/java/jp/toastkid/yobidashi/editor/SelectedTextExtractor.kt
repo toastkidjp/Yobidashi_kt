@@ -24,7 +24,7 @@ class SelectedTextExtractor(private val editText: EditText) {
     operator fun invoke(): String {
         val selectionStart = editText.selectionStart
         val selectionEnd = editText.selectionEnd
-        if (selectionStart == -1 || selectionEnd == -1) {
+        if (selectionStart == 0 && selectionEnd == 0) {
             return editText.text.toString()
         }
         return editText.text.substring(selectionStart, selectionEnd)
