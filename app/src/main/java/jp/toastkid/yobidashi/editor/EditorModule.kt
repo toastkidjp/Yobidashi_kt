@@ -20,6 +20,9 @@ import androidx.annotation.Dimension
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
@@ -28,7 +31,9 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.translation.TranslationResultPopup
 import okio.Okio
+import timber.log.Timber
 import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -79,6 +84,19 @@ class EditorModule(
      */
     private var finder: EditTextFinder
 
+    private val j2eTranslator =
+            FirebaseNaturalLanguage.getInstance()
+                    .getTranslator(
+                            FirebaseTranslatorOptions.Builder()
+                                    .setSourceLanguage(FirebaseTranslateLanguage.JA)
+                                    .setTargetLanguage(FirebaseTranslateLanguage.EN)
+                                    .build()
+                    )
+
+    private val selectedTextExtractor = SelectedTextExtractor(binding.editorInput)
+
+    private val translationResultPopup = TranslationResultPopup(context())
+
     init {
         val context = binding.root.context
 
@@ -110,6 +128,7 @@ class EditorModule(
                 binding.saveAs,
                 binding.load,
                 binding.loadAs,
+                binding.translate,
                 binding.lastSaved,
                 binding.counter,
                 binding.backup,
@@ -349,6 +368,18 @@ class EditorModule(
         saveTabCallback(file)
 
         setLastSaved(file.lastModified())
+    }
+
+    fun translate() {
+        val content = selectedTextExtractor()
+        j2eTranslator.translate(content)
+                .addOnSuccessListener {
+                    translationResultPopup.show(binding.root, it)
+                }
+                .addOnFailureListener {
+                    Timber.e(it)
+                    Toaster.snackShort(binding.root, it.localizedMessage, preferenceApplier.colorPair())
+                }
     }
 
     /**
