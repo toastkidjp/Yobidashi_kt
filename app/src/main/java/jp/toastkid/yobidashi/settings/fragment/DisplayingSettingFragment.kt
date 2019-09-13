@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -20,16 +21,33 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
 
 /**
+ * Display setting fragment.
+ *
  * @author toastkidjp
  */
 class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
 
+    /**
+     * View binding.
+     */
     private lateinit var binding: FragmentSettingDisplayBinding
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_display, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+                inflater,
+                LAYOUT_ID,
+                container,
+                false
+        )
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
@@ -43,7 +61,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param view
      */
-    fun backgroundSettings(view: View) {
+    fun backgroundSettings() {
         activity?.let {
             startActivity(BackgroundSettingActivity.makeIntent(it))
         }
@@ -54,7 +72,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param view
      */
-    fun clearBackgroundSettings(view: View) {
+    fun clearBackgroundSettings() {
         preferenceApplier.removeBackgroundImagePath()
         Toaster.snackShort(
                 binding.root,
@@ -64,4 +82,11 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
     }
 
     override fun titleId() = R.string.title_settings_display
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_setting_display
+
+    }
 }
