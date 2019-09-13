@@ -58,8 +58,6 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Call background setting.
-     *
-     * @param view
      */
     fun backgroundSettings() {
         activity?.let {
@@ -69,8 +67,6 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Clear background setting.
-     *
-     * @param view
      */
     fun clearBackgroundSettings() {
         preferenceApplier.removeBackgroundImagePath()
