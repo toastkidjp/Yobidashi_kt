@@ -15,7 +15,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             >
 
             <RelativeLayout
@@ -136,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
-                android:background="@color/filter_white_bb"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{v -> fragment.showCursorColorSetting()}"
                 >
                 <TextView
@@ -163,7 +163,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
-                android:background="@color/filter_white_bb"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{v -> fragment.showHighlightColorSetting()}"
                 >
                 <TextView
