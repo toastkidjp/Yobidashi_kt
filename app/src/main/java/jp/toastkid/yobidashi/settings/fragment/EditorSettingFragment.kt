@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
@@ -51,11 +52,13 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
     /**
      * Initial background color.
      */
+    @ColorInt
     private var initialBgColor: Int = 0
 
     /**
      * Initial font color.
      */
+    @ColorInt
     private var initialFontColor: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
