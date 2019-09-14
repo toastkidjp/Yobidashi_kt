@@ -219,7 +219,7 @@ class TabAdapter(
     private fun replaceWebView() {
         val currentWebView = currentWebView()
         if (webViewContainer.childCount != 0) {
-            val previousView = webViewContainer.get(0)
+            val previousView = webViewContainer[0]
             if (currentWebView != previousView) {
                 if (previousView is WebView) {
                     previousView.stopLoading()
