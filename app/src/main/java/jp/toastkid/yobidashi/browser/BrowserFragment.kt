@@ -21,6 +21,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
+import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -51,6 +53,7 @@ import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.translation.E2JTranslator
 import jp.toastkid.yobidashi.libs.translation.J2ETranslator
 import jp.toastkid.yobidashi.libs.translation.TranslationResultPopup
 import jp.toastkid.yobidashi.main.HeaderViewModel
@@ -156,6 +159,10 @@ class BrowserFragment : Fragment(),
 
     private lateinit var j2ETranslator: J2ETranslator
 
+    private lateinit var e2JTranslator: E2JTranslator
+
+    private lateinit var languageIdentifier: FirebaseLanguageIdentification
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         toolbarAction = context as ToolbarAction?
@@ -165,6 +172,8 @@ class BrowserFragment : Fragment(),
 
         translationResultPopup = TranslationResultPopup(requireActivity())
         j2ETranslator = J2ETranslator()
+        e2JTranslator = E2JTranslator()
+        languageIdentifier = FirebaseNaturalLanguage.getInstance().languageIdentification
     }
 
     override fun onCreateView(
@@ -919,16 +928,30 @@ class BrowserFragment : Fragment(),
     fun translate() {
         val parent = binding?.root ?: return
         tabs.currentSelectedText { text ->
-            j2ETranslator.invoke(
-                    text,
-                    { result ->
-                        result?.let { translationResultPopup.show(parent, result) }
-                    },
-                    {
-                        Timber.e(it)
-                        Toaster.snackShort(parent, it.localizedMessage, preferenceApplier.colorPair())
+            languageIdentifier.identifyLanguage(text)
+                    .addOnSuccessListener {
+                        val translator = when (it) {
+                            "ja" -> j2ETranslator
+                            "en" -> e2JTranslator
+                            else -> e2JTranslator
+                        }
+
+                        translator.invoke(
+                                text,
+                                { result ->
+                                    result?.let { translationResultPopup.show(parent, result) }
+                                },
+                                { e ->
+                                    Timber.e(e)
+                                    Toaster.snackShort(
+                                            parent,
+                                            e.localizedMessage,
+                                            preferenceApplier.colorPair()
+                                    )
+                                }
+                        )
                     }
-            )
+                    .addOnFailureListener { Timber.e(it) }
         }
     }
 

@@ -14,14 +14,14 @@ import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOption
 /**
  * @author toastkidjp
  */
-class J2ETranslator : Translator {
+class E2JTranslator : Translator {
 
     private val translator =
             FirebaseNaturalLanguage.getInstance()
                     .getTranslator(
                             FirebaseTranslatorOptions.Builder()
-                                    .setSourceLanguage(FirebaseTranslateLanguage.JA)
-                                    .setTargetLanguage(FirebaseTranslateLanguage.EN)
+                                    .setSourceLanguage(FirebaseTranslateLanguage.EN)
+                                    .setTargetLanguage(FirebaseTranslateLanguage.JA)
                                     .build()
                     )
 
@@ -29,7 +29,7 @@ class J2ETranslator : Translator {
             text: String?,
             onSuccess: (String?) -> Unit,
             onError: (Exception) -> Unit
-            ) {
+    ) {
         if (text.isNullOrBlank()) {
             return
         }
