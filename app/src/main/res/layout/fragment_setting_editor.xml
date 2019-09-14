@@ -132,6 +132,31 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
         <FrameLayout
+            android:id="@+id/cursor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/OneLineTextMenu"
+            android:background="@color/filter_white_bb"
+            android:onClick="@{v -> fragment.showCursorColorSetting()}"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/search_category_spinner_width"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/ic_cursor_black"
+                android:text="@string/title_cursor_color"
+                />
+            <Button
+                android:id="@+id/cursor_preview"
+                android:layout_width="@dimen/search_category_spinner_width"
+                android:layout_height="@dimen/search_category_spinner_width"
+                android:layout_marginLeft="@dimen/settings_item_left_margin"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="right|center_vertical"
+                style="?android:attr/buttonBarStyle"
+                />
+        </FrameLayout>
+        <FrameLayout
             android:id="@+id/default_search_engine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

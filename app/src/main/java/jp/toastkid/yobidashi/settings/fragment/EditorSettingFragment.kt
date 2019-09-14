@@ -18,6 +18,8 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
@@ -25,6 +27,8 @@ import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragment
+import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragmentViewModel
 
 /**
  * Editor setting fragment.
@@ -125,6 +129,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         val colorPair = preferenceApplier.colorPair()
         binding.backgroundPalette.color = colorPair.bgColor()
         binding.fontPalette.color = colorPair.fontColor()
+        binding.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor())
     }
 
     /**
@@ -155,6 +160,22 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         Colors.setColors(binding.ok as TextView, ColorPair(initialBgColor, initialFontColor))
 
         Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
+    }
+
+    fun showCursorColorSetting() {
+        val activity = requireActivity()
+        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorCursorColor())
+                .show(
+                        activity.supportFragmentManager,
+                        ColorChooserDialogFragment::class.java.canonicalName
+                )
+        ViewModelProviders.of(activity)
+                .get(ColorChooserDialogFragmentViewModel::class.java)
+                .color
+                .observe(activity, Observer {
+                    preferenceApplier.setEditorCursorColor(it)
+                    binding.cursorPreview.setBackgroundColor(it)
+                })
     }
 
     @StringRes

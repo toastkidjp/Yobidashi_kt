@@ -37,7 +37,7 @@ class PreferenceApplier(private val context: Context) {
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
-        EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_FONT_SIZE,
+        EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_CURSOR_COLOR, EDITOR_FONT_SIZE,
         CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
         WEB_VIEW_BACKGROUND_ALPHA
@@ -287,6 +287,18 @@ class PreferenceApplier(private val context: Context) {
 
     fun editorFontColor(): Int {
         return preferences.getInt(Key.EDITOR_FONT_COLOR.name, Color.BLACK)
+    }
+
+    fun setEditorCursorColor(@ColorInt newValue: Int) {
+        preferences.edit().putInt(Key.EDITOR_CURSOR_COLOR.name, newValue).apply()
+    }
+
+    @ColorInt
+    fun editorCursorColor(): Int {
+        return preferences.getInt(
+                Key.EDITOR_CURSOR_COLOR.name,
+                ContextCompat.getColor(context, R.color.colorAccent)
+        )
     }
 
     fun setEditorFontSize(newSize: Int) {
