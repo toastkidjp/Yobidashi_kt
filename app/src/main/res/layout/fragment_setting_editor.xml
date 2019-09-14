@@ -7,16 +7,17 @@
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.EditorSettingFragment" />
     </data>
-    <LinearLayout
-        android:orientation="vertical"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="3dp"
         >
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="3dp"
+            android:layout_height="match_parent"
             >
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -130,84 +131,85 @@
                         />
                 </LinearLayout>
             </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-        <FrameLayout
-            android:id="@+id/cursor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/OneLineTextMenu"
-            android:background="@color/filter_white_bb"
-            android:onClick="@{v -> fragment.showCursorColorSetting()}"
-            >
-            <TextView
+            <FrameLayout
+                android:id="@+id/cursor"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/search_category_spinner_width"
-                android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_cursor_black"
-                android:text="@string/title_cursor_color"
-                />
-            <Button
-                android:id="@+id/cursor_preview"
-                android:layout_width="@dimen/search_category_spinner_width"
-                android:layout_height="@dimen/search_category_spinner_width"
-                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                android:layout_marginRight="8dp"
-                android:layout_gravity="right|center_vertical"
-                style="?android:attr/buttonBarStyle"
-                android:clickable="false"
-                />
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                style="@style/OneLineTextMenu"
+                android:background="@color/filter_white_bb"
+                android:onClick="@{v -> fragment.showCursorColorSetting()}"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/search_category_spinner_width"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_cursor_black"
+                    android:text="@string/title_cursor_color"
+                    />
+                <Button
+                    android:id="@+id/cursor_preview"
+                    android:layout_width="@dimen/search_category_spinner_width"
+                    android:layout_height="@dimen/search_category_spinner_width"
+                    android:layout_marginLeft="@dimen/settings_item_left_margin"
+                    android:layout_marginRight="8dp"
+                    android:layout_gravity="right|center_vertical"
+                    style="?android:attr/buttonBarStyle"
+                    android:clickable="false"
+                    />
+            </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/highlight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/OneLineTextMenu"
-            android:background="@color/filter_white_bb"
-            android:onClick="@{v -> fragment.showHighlightColorSetting()}"
-            >
-            <TextView
+            <FrameLayout
+                android:id="@+id/highlight"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/search_category_spinner_width"
-                android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_highlight_black"
-                android:text="@string/title_highlight_color"
-                />
-            <Button
-                android:id="@+id/highlight_preview"
-                android:layout_width="@dimen/search_category_spinner_width"
-                android:layout_height="@dimen/search_category_spinner_width"
-                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                android:layout_marginRight="8dp"
-                android:layout_gravity="right|center_vertical"
-                style="?android:attr/buttonBarStyle"
-                android:clickable="false"
-                />
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                style="@style/OneLineTextMenu"
+                android:background="@color/filter_white_bb"
+                android:onClick="@{v -> fragment.showHighlightColorSetting()}"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/search_category_spinner_width"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_highlight_black"
+                    android:text="@string/title_highlight_color"
+                    />
+                <Button
+                    android:id="@+id/highlight_preview"
+                    android:layout_width="@dimen/search_category_spinner_width"
+                    android:layout_height="@dimen/search_category_spinner_width"
+                    android:layout_marginLeft="@dimen/settings_item_left_margin"
+                    android:layout_marginRight="8dp"
+                    android:layout_gravity="right|center_vertical"
+                    style="?android:attr/buttonBarStyle"
+                    android:clickable="false"
+                    />
+            </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/default_search_engine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/OneLineTextMenu"
-            android:background="@color/filter_white_bb"
-            >
-            <TextView
+            <FrameLayout
+                android:id="@+id/default_search_engine"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/search_category_spinner_width"
-                android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_search_black"
-                android:text="@string/title_font_size"
-                />
-            <Spinner
-                android:id="@+id/font_size"
-                android:layout_width="@dimen/search_category_spinner_width"
-                android:layout_height="@dimen/search_category_spinner_width"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="8dp"
-                android:spinnerMode="dropdown"
-                android:background="@color/spinner_background"
-                />
-        </FrameLayout>
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                style="@style/OneLineTextMenu"
+                android:background="@color/filter_white_bb"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/search_category_spinner_width"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_search_black"
+                    android:text="@string/title_font_size"
+                    />
+                <Spinner
+                    android:id="@+id/font_size"
+                    android:layout_width="@dimen/search_category_spinner_width"
+                    android:layout_height="@dimen/search_category_spinner_width"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:spinnerMode="dropdown"
+                    android:background="@color/spinner_background"
+                    />
+            </FrameLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
