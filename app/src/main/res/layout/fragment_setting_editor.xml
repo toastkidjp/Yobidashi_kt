@@ -154,6 +154,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_gravity="right|center_vertical"
                 style="?android:attr/buttonBarStyle"
+                android:clickable="false"
                 />
         </FrameLayout>
 
@@ -180,6 +181,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_gravity="right|center_vertical"
                 style="?android:attr/buttonBarStyle"
+                android:clickable="false"
                 />
         </FrameLayout>
 
