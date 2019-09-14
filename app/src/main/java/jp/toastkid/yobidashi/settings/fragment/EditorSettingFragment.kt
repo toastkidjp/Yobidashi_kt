@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -58,7 +59,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
     private var initialFontColor: Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_editor, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
@@ -198,4 +199,10 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
     @StringRes
     override fun titleId() = R.string.subhead_editor
 
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_setting_editor
+
+    }
 }
