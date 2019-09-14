@@ -603,7 +603,6 @@ class MainActivity :
         val menus = mode?.menu
         mode?.menuInflater?.inflate(R.menu.action_mode, menus)
         menus?.findItem(R.id.action_translate)?.setOnMenuItemClickListener {
-            // TODO
             browserFragment.translate()
             return@setOnMenuItemClickListener true
         }
