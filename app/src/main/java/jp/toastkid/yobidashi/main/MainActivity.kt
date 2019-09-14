@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.view.ActionMode
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -596,6 +597,17 @@ class MainActivity :
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onActionModeStarted(mode: ActionMode?) {
+        val menus = mode?.menu
+        mode?.menuInflater?.inflate(R.menu.action_mode, menus)
+        menus?.findItem(R.id.action_translate)?.setOnMenuItemClickListener {
+            // TODO
+            browserFragment.translate()
+            return@setOnMenuItemClickListener true
+        }
+        super.onActionModeStarted(mode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

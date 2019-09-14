@@ -51,6 +51,8 @@ import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.translation.J2ETranslator
+import jp.toastkid.yobidashi.libs.translation.TranslationResultPopup
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
@@ -145,10 +147,14 @@ class BrowserFragment : Fragment(),
 
     private var menuViewModel: MenuViewModel? = null
 
+    private lateinit var translationResultPopup: TranslationResultPopup
+
     /**
      * Find-in-page module.
      */
     private lateinit var pageSearchPresenter: PageSearcherModule
+
+    private lateinit var j2ETranslator: J2ETranslator
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -156,6 +162,9 @@ class BrowserFragment : Fragment(),
         activity?.let {
             rxPermissions = RxPermissions(it)
         }
+
+        translationResultPopup = TranslationResultPopup(requireActivity())
+        j2ETranslator = J2ETranslator()
     }
 
     override fun onCreateView(
@@ -905,6 +914,22 @@ class BrowserFragment : Fragment(),
         toolbarAction?.showToolbar()
         browserModule.dispose()
         pageSearchPresenter.dispose()
+    }
+
+    fun translate() {
+        val parent = binding?.root ?: return
+        tabs.currentSelectedText { text ->
+            j2ETranslator.invoke(
+                    text,
+                    { result ->
+                        result?.let { translationResultPopup.show(parent, result) }
+                    },
+                    {
+                        Timber.e(it)
+                        Toaster.snackShort(parent, it.localizedMessage, preferenceApplier.colorPair())
+                    }
+            )
+        }
     }
 
     companion object {

@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.tab
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -576,6 +577,17 @@ class TabAdapter(
     fun makeCurrentPageInformation(): Bundle = browserModule.makeCurrentPageInformation()
 
     private fun currentWebView() = browserModule.getWebView(currentTabId())
+
+    fun currentSelectedText(callback: (String) -> Unit) {
+        val currentTab = currentTab()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && currentTab is WebTab) {
+            currentWebView()
+                    ?.evaluateJavascript(
+                            "(function(){return window.getSelection().toString()})()"
+                    ) { value -> callback(value) }
+        }
+    }
 
     companion object {
 
