@@ -385,6 +385,8 @@ class EditorModule(
                 }
     }
 
+    fun currentSelectedText() = selectedTextExtractor()
+
     /**
      * Set last modified time.
      *

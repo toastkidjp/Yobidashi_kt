@@ -580,13 +580,20 @@ class TabAdapter(
 
     fun currentSelectedText(callback: (String) -> Unit) {
         val currentTab = currentTab()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && currentTab is WebTab) {
-            currentWebView()
-                    ?.evaluateJavascript(
-                            "(function(){return window.getSelection().toString()})()"
-                    ) { value -> callback(value) }
+        when (currentTab) {
+            is WebTab -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    currentWebView()
+                            ?.evaluateJavascript(
+                                    "(function(){return window.getSelection().toString()})()"
+                            ) { value -> callback(value) }
+                }
+            }
+            is EditorTab -> {
+                callback(editor.currentSelectedText())
+            }
         }
+
     }
 
     companion object {
