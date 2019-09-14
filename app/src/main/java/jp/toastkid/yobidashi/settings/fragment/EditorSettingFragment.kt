@@ -130,6 +130,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         binding.backgroundPalette.color = colorPair.bgColor()
         binding.fontPalette.color = colorPair.fontColor()
         binding.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor())
+        binding.highlightPreview.setBackgroundColor(preferenceApplier.editorHighlightColor())
     }
 
     /**
@@ -175,6 +176,22 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                 .observe(activity, Observer {
                     preferenceApplier.setEditorCursorColor(it)
                     binding.cursorPreview.setBackgroundColor(it)
+                })
+    }
+
+    fun showHighlightColorSetting() {
+        val activity = requireActivity()
+        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorHighlightColor())
+                .show(
+                        activity.supportFragmentManager,
+                        ColorChooserDialogFragment::class.java.canonicalName
+                )
+        ViewModelProviders.of(activity)
+                .get(ColorChooserDialogFragmentViewModel::class.java)
+                .color
+                .observe(activity, Observer {
+                    preferenceApplier.setEditorHighlightColor(it)
+                    binding.highlightPreview.setBackgroundColor(it)
                 })
     }
 

@@ -143,6 +143,7 @@ class EditorModule(
         binding.editorInput.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
 
         CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor())
+        binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor()
     }
 
     /**

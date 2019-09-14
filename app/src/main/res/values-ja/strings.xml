@@ -415,5 +415,6 @@
     <string name="title_dialog_color_chooser">色を選択</string>
     <string name="current_color">現在の色:</string>
     <string name="title_cursor_color">カーソルの色</string>
+    <string name="title_highlight_color">テキスト選択の色</string>
 
 </resources>
