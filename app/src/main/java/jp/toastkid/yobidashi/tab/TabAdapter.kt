@@ -609,11 +609,6 @@ class TabAdapter(
          */
         private const val PDF_TAB_TITLE: String = "PDF Tab"
 
-        private val WRAP_CONTENT = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-        )
-
         /**
          * Make new screenshot dir wrapper instance.
          */
