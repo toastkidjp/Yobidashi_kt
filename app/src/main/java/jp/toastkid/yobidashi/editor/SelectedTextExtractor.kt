@@ -10,11 +10,17 @@ package jp.toastkid.yobidashi.editor
 import android.widget.EditText
 
 /**
- * TODO write test
+ * Extract selected text from passed [EditText].
+ *
  * @author toastkidjp
  */
 class SelectedTextExtractor(private val editText: EditText) {
 
+    /**
+     * Extract text.
+     *
+     * @return extracted text
+     */
     operator fun invoke(): String {
         val selectionStart = editText.selectionStart
         val selectionEnd = editText.selectionEnd
