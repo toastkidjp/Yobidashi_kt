@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
@@ -41,6 +44,15 @@ internal class Adapter(
      */
     private var index = -1
 
+    private var viewModel: TabListViewModel? = null
+
+    init {
+        if (context is FragmentActivity) {
+            viewModel = ViewModelProviders.of(context)
+                    .get(TabListViewModel::class.java)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
                 DataBindingUtil.inflate(inflater, R.layout.item_tab_list, parent, false))
@@ -52,6 +64,17 @@ internal class Adapter(
             callback.replaceTabFromTabList(tab)
             callback.onCloseTabListDialogFragment()
         }
+
+        holder.itemView.setOnLongClickListener {
+            viewModel?.sendStartDrag(holder)
+            Toaster.snackShort(
+                    holder.itemView,
+                    "Start to move tab \"${tab.title()}\".",
+                    colorPair
+            )
+            return@setOnLongClickListener true
+        }
+
         holder.setImagePath(tab.thumbnailPath)
         holder.setTitle(tab.title())
         holder.setCloseAction(View.OnClickListener { closeAt(callback.tabIndexOfFromTabList(tab)) })

@@ -23,8 +23,8 @@ object DragAttachment {
      * @param recyclerView [RecyclerView]
      * @param direction [ItemTouchHelper]'s constant
      */
-    operator fun invoke(recyclerView: RecyclerView, direction: Int) {
-        ItemTouchHelper(
+    operator fun invoke(recyclerView: RecyclerView, direction: Int): ItemTouchHelper {
+        val itemTouchHelper = ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(direction, 0) {
                     override fun onMove(
                             rv: RecyclerView,
@@ -43,6 +43,8 @@ object DragAttachment {
                             direction: Int
                     ) = Unit
                 }
-        ).attachToRecyclerView(recyclerView)
+        )
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+        return itemTouchHelper
     }
 }
