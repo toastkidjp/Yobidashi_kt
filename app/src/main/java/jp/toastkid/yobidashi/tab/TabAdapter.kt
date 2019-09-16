@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -146,6 +147,7 @@ class TabAdapter(
         if (Urls.isValidUrl(url)) {
             newTab.histories.add(0, History("New tab: $url", url))
         }
+        browserModule.onSaveInstanceState(currentTabId())
         tabList.add(newTab)
         setIndexByTab(newTab)
         replaceWebView()
@@ -248,6 +250,7 @@ class TabAdapter(
 
         browserModule.reloadWebViewSettings().addTo(disposables)
 
+        browserModule.onViewStateRestored(currentTabId())
         currentTab()?.let {
             if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
                 callLoadUrl(it.getUrl())
