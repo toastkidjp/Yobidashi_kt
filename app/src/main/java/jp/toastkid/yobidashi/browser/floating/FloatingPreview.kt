@@ -8,15 +8,25 @@
 package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.PopupWindow
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.isVisible
-import jp.toastkid.yobidashi.databinding.ContentFloatingPreviewBinding
+import androidx.core.view.get
+import androidx.core.view.isEmpty
+import androidx.databinding.DataBindingUtil
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
 
 /**
@@ -24,7 +34,34 @@ import jp.toastkid.yobidashi.main.MainActivity
  *
  * @author toastkidjp
  */
-class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
+class FloatingPreview(context: Context) {
+
+    private val popupWindow = PopupWindow(context)
+
+    private val binding: PopupFloatingPreviewBinding
+
+    init {
+        val layoutInflater = LayoutInflater.from(context)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_floating_preview, null, false)
+        binding.preview = this
+
+        popupWindow.contentView = binding.root
+
+        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
+
+        popupWindow.setOnDismissListener {
+            extractWebView()?.also {
+                it.isEnabled = false
+                it.onPause()
+            }
+        }
+
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+
+        popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
+        popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
+    }
 
     /**
      * Invoke floating preview.
@@ -32,15 +69,10 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
      * @param webView [WebView]
      * @param url URL string
      */
-    operator fun invoke(webView: WebView, url: String) {
+    fun show(parent: View, webView: WebView, url: String) {
         if (binding.previewContainer.childCount != 0) {
             binding.previewContainer.removeAllViews()
         }
-        binding.previewBackground.visibility = View.VISIBLE
-
-        binding.previewBackground.setOnClickListener { hide(webView) }
-
-        binding.header.setOnClickListener { openNewTabWithUrl(url) }
 
         setSlidingListener()
 
@@ -54,6 +86,8 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         binding.previewContainer.addView(webView)
 
         webView.loadUrl(url)
+
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
 
         startEnterAnimation()
     }
@@ -70,6 +104,20 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
                 .y(heightPixels * 0.6f)
                 .setDuration(DURATION_MS)
                 .start()
+    }
+
+    /**
+     * Hide this preview.
+     */
+    fun hide() {
+        popupWindow.dismiss()
+    }
+
+    fun openCurrentWithNewTab() {
+        extractWebView()?.also {
+            openNewTabWithUrl(it.url)
+            hide()
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -118,24 +166,15 @@ class FloatingPreview(private val binding: ContentFloatingPreviewBinding) {
         }
     }
 
-    /**
-     * Hide this preview.
-     *
-     * @param webView [WebView]
-     */
-    fun hide(webView: WebView?) {
-        binding.contentPanel.animate()
-                .y(binding.contentPanel.context.resources.displayMetrics.heightPixels.toFloat())
-                .setDuration(DURATION_MS)
-                .withEndAction {
-                    binding.previewBackground.visibility = View.GONE
-                    webView?.isEnabled = false
-                    webView?.onPause()
-                }
-                .start()
+    private fun extractWebView(): WebView? {
+        if (binding.previewContainer.isEmpty()) {
+            return null
+        }
+        val view = binding.previewContainer.get(0)
+        return view as? WebView
     }
 
-    fun isVisible() = binding.previewBackground.isVisible
+    fun isVisible() = popupWindow.isShowing
 
     companion object {
         private const val DURATION_MS = 200L

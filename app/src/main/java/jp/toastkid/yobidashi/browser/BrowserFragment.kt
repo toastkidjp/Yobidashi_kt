@@ -610,11 +610,6 @@ class BrowserFragment : Fragment(),
             return true
         }
 
-        if (floatingPreview?.isVisible() == true) {
-            floatingPreview?.hide(browserModule.getWebView(FloatingPreview.getSpecialId()))
-            return true
-        }
-
         if (pageSearchPresenter.isVisible()) {
             pageSearchPresenter.hide()
             return true
@@ -781,9 +776,12 @@ class BrowserFragment : Fragment(),
             return
         }
 
-        binding?.floatingPreview?.let {
-            floatingPreview = FloatingPreview(it)
-            floatingPreview?.invoke(webView, url)
+        if (floatingPreview == null) {
+            floatingPreview = FloatingPreview(requireContext())
+        }
+
+        binding?.root?.let {
+            floatingPreview?.show(it, webView, url)
         }
     }
     
