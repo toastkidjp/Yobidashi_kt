@@ -420,7 +420,7 @@ class TabAdapter(
      *
      * @return
      */
-    internal fun getTabByIndex(index: Int): Tab = tabList.get(index)
+    internal fun getTabByIndex(index: Int): Tab? = tabList.get(index)
 
     /**
      * Close specified index' tab.

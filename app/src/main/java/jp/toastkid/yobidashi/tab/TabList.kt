@@ -50,8 +50,10 @@ class TabList private constructor() {
     @Keep
     fun size(): Int = tabs.size
 
-    internal fun get(position: Int): Tab =
-            if (position < 0 || tabs.size <= position) {
+    internal fun get(position: Int): Tab? =
+            if (tabs.isEmpty()) {
+                null
+            } else if (position < 0 || tabs.size <= position) {
                 tabs[0]
             } else {
                 tabs[position]

@@ -57,6 +57,7 @@ import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.update.InAppUpdater
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
@@ -120,6 +121,8 @@ class MainActivity :
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var inAppUpdater: InAppUpdater? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
@@ -128,6 +131,9 @@ class MainActivity :
         preferenceApplier = PreferenceApplier(this)
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
+
+        inAppUpdater = InAppUpdater(binding.root)
+        inAppUpdater?.invoke()
 
         binding.toolbar.also { toolbar ->
             toolbar.setTitle(TITLE_ID)
@@ -449,6 +455,7 @@ class MainActivity :
         refresh()
         menuViewModel?.onResume()
         setFabPosition()
+        inAppUpdater?.onResume()
     }
 
     /**

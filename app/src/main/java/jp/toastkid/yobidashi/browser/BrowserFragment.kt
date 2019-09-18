@@ -885,7 +885,7 @@ class BrowserFragment : Fragment(),
 
     override fun replaceTabFromTabList(tab: Tab) = tabs.replace(tab)
 
-    override fun getTabByIndexFromTabList(position: Int): Tab = tabs.getTabByIndex(position)
+    override fun getTabByIndexFromTabList(position: Int): Tab? = tabs.getTabByIndex(position)
 
     override fun closeTabFromTabList(position: Int) = tabs.closeTab(position)
 
