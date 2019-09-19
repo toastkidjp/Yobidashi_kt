@@ -96,6 +96,9 @@ class BrowserFragment : Fragment(),
      */
     private var rxPermissions: RxPermissions? = null
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     /**
