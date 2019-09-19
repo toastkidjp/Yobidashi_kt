@@ -50,13 +50,16 @@ class TranslationResultPopup(context: Context) {
 
         popupWindow.contentView = popupView
 
-        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
+        popupWindow.setBackgroundDrawable(
+                ColorDrawable(ContextCompat.getColor(context, R.color.transparent))
+        )
 
         popupWindow.isOutsideTouchable = true
         popupWindow.isFocusable = true
 
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
-        popupWindow.height = context.resources.getDimensionPixelSize(R.dimen.translation_popup_height)
+        popupWindow.height =
+                context.resources.getDimensionPixelSize(R.dimen.translation_popup_height)
     }
 
     fun show(parent: View, content: String) {
