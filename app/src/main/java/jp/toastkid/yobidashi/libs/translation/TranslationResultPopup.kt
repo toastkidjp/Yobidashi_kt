@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.libs.translation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
@@ -33,6 +34,7 @@ class TranslationResultPopup(context: Context) {
             = AnimationUtils.loadAnimation(context, R.anim.slide_up)
 
     init {
+        @SuppressLint("InflateParams")
         val popupView = LayoutInflater.from(context).inflate(R.layout.popup_translated, null)
         popupView.findViewById<View>(R.id.close).setOnClickListener {
             if (popupWindow.isShowing) {
