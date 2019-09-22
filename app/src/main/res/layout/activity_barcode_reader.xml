@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
     <data>
         <variable name="activity" type="jp.toastkid.yobidashi.barcode.BarcodeReaderActivity" />
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -37,49 +38,6 @@
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> activity.camera()}"
             />
-
-        <RelativeLayout
-            android:id="@+id/result_area"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/filter_white_aa"
-            android:layout_gravity="bottom"
-            android:visibility="gone"
-            >
-            <LinearLayout
-                android:id="@+id/submenus"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <TextView
-                    android:id="@+id/clip"
-                    style="@style/BarcodeReaderSubMenuStyle"
-                    android:text="@string/clip"
-                    android:onClick="@{activity::clip}"
-                    />
-                <TextView
-                    android:id="@+id/share"
-                    style="@style/BarcodeReaderSubMenuStyle"
-                    android:text="@string/share"
-                    android:onClick="@{view -> activity.share()}"
-                    />
-                <TextView
-                    android:id="@+id/open"
-                    style="@style/BarcodeReaderSubMenuStyle"
-                    android:text="@string/open"
-                    android:onClick="@{view -> activity.open()}"
-                    />
-            </LinearLayout>
-            <TextView
-                android:id="@+id/result"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:layout_below="@id/submenus"
-                android:textSize="20sp"
-                />
-        </RelativeLayout>
 
     </FrameLayout>
 </layout>

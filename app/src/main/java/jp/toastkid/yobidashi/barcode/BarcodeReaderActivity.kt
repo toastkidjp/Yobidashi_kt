@@ -11,13 +11,11 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
-import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -25,7 +23,6 @@ import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityBarcodeReaderBinding
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -38,7 +35,7 @@ import java.io.FileOutputStream
 
 /**
  * Barcode reader activity.
- *
+ * TODO Clean up code.
  * @author toastkidjp
  */
 class BarcodeReaderActivity : AppCompatActivity() {
@@ -48,14 +45,9 @@ class BarcodeReaderActivity : AppCompatActivity() {
      */
     private var binding: ActivityBarcodeReaderBinding? = null
 
-    /**
-     * Animation of slide up bottom.
-     */
-    private val slideUpBottom by lazy { AnimationUtils.loadAnimation(this, R.anim.slide_up) }
-
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private val detector = FirebaseVision.getInstance().onDeviceTextRecognizer
+    private lateinit var resultPopup: BarcodeReaderResultPopup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +72,19 @@ class BarcodeReaderActivity : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
             return
         }
+
+        resultPopup = BarcodeReaderResultPopup(this)
+
+        ViewModelProviders.of(this).get(BarcodeReaderResultPopupViewModel::class.java)
+                .also {
+                    it.clip.observe(this, Observer { text -> clip(text) })
+                    it.share.observe(this, Observer { text ->
+                        startActivity(IntentFactory.makeShare(text))
+                    })
+                    it.open.observe(this, Observer { text ->
+                        SearchAction(this, preferenceApplier.getDefaultSearchEngine(), text).invoke()
+                    })
+                }
 
         initializeFab()
         startDecode()
@@ -133,12 +138,10 @@ class BarcodeReaderActivity : AppCompatActivity() {
 
             override fun barcodeResult(barcodeResult: BarcodeResult) {
                 val text = barcodeResult.text
-                if (TextUtils.equals(text, getResultText())) {
+                if (TextUtils.equals(text, resultPopup.currentText())) {
                     return
                 }
-                @Suppress("UsePropertyAccessSyntax")
-                binding?.result?.setText(text)
-                showResult()
+                showResult(text)
             }
 
             override fun possibleResultPoints(list: List<ResultPoint>) = Unit
@@ -148,26 +151,10 @@ class BarcodeReaderActivity : AppCompatActivity() {
     /**
      * Copy result text to clipboard.
      */
-    fun clip(snackbarParent: View) {
-        getResultText()?.let {
-            Clipboard.clip(this, it)
-            Toaster.snackShort(snackbarParent, it, preferenceApplier.colorPair())
-        }
-    }
-
-    /**
-     * Share result text.
-     */
-    fun share() {
-        getResultText()?.let { startActivity(IntentFactory.makeShare(it)) }
-    }
-
-    /**
-     * Open result text with browser.
-     */
-    fun open() {
-        getResultText()?.let {
-            SearchAction(this, preferenceApplier.getDefaultSearchEngine(), it).invoke()
+    private fun clip(text: String) {
+        Clipboard.clip(this, text)
+        binding?.root?.let { snackbarParent ->
+            Toaster.snackShort(snackbarParent, text, preferenceApplier.colorPair())
         }
     }
 
@@ -182,27 +169,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
                 )
 
                 sourceData?.cropRect = getRect()
-                sourceData?.bitmap?.let {
-                    it.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
-                    detector.processImage(FirebaseVisionImage.fromBitmap(it))
-                            .addOnSuccessListener { visionText ->
-                                visionText.textBlocks
-                                        .asSequence()
-                                        .map { block -> block.text }
-                                        .forEach { text ->
-                                            Toaster.snackLong(
-                                                    barcodeView,
-                                                    text,
-                                                    R.string.clip,
-                                                    View.OnClickListener {
-                                                        Clipboard.clip(this@BarcodeReaderActivity, text)
-                                                    },
-                                                    preferenceApplier.colorPair()
-                                            )
-                                }
-                            }
-                            .addOnFailureListener { e -> Timber.e(e) }
-                }
+                sourceData?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
 
                 Toaster.snackShort(
                         barcodeView,
@@ -225,20 +192,10 @@ class BarcodeReaderActivity : AppCompatActivity() {
     }
 
     /**
-     * Get result text.
-     */
-    private fun getResultText(): String? = binding?.result?.text?.toString()
-
-    /**
      * Show result with snackbar.
      */
-    private fun showResult() {
-        binding?.resultArea?.let {
-            if (it.visibility != View.VISIBLE) {
-                it.visibility = View.VISIBLE
-            }
-            it.startAnimation(slideUpBottom)
-        }
+    private fun showResult(text: String) {
+        binding?.root?.let { resultPopup.show(it, text) }
     }
 
     override fun onResume() {
@@ -246,18 +203,13 @@ class BarcodeReaderActivity : AppCompatActivity() {
         binding?.barcodeView?.resume()
         val colorPair = preferenceApplier.colorPair()
         binding?.toolbar?.setTitleTextColor(colorPair.fontColor())
-        binding?.let {
-            it.resultArea.setBackgroundColor(colorPair.bgColor())
-            Colors.setColors(it.clip, colorPair)
-            Colors.setColors(it.share, colorPair)
-            Colors.setColors(it.open, colorPair)
-            Colors.setColors(it.result, colorPair)
-        }
+        resultPopup.onResume(colorPair)
     }
 
     override fun onPause() {
         super.onPause()
         binding?.barcodeView?.pause()
+        resultPopup.hide()
     }
 
     override fun onRequestPermissionsResult(

@@ -44,7 +44,8 @@ object SearchQueryExtractor {
                 uri.getQueryParameter("find_desc")
             host.startsWith("facebook.com") ->
                 uri.getQueryParameter("query")
-            host.endsWith(".wikipedia.org") ->
+            host.endsWith(".wikipedia.org")
+                or host.endsWith(".wikimedia.org") ->
                 uri.getQueryParameter("search")
             host.endsWith("search.yahoo.co.jp") ->
                 uri.getQueryParameter("p")

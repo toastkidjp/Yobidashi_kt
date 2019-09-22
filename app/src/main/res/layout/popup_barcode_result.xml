@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="popup" type="jp.toastkid.yobidashi.barcode.BarcodeReaderResultPopup" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/result_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/filter_white_aa"
+        android:layout_gravity="bottom"
+        >
+        <TextView
+            android:id="@+id/clip"
+            style="@style/BarcodeReaderSubMenuStyle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/share"
+            android:text="@string/clip"
+            android:onClick="@{view -> popup.clip()}"
+            />
+        <TextView
+            android:id="@+id/share"
+            style="@style/BarcodeReaderSubMenuStyle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/clip"
+            app:layout_constraintEnd_toStartOf="@id/open"
+            android:text="@string/share"
+            android:onClick="@{view -> popup.share()}"
+            />
+        <TextView
+            android:id="@+id/open"
+            style="@style/BarcodeReaderSubMenuStyle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/share"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/open"
+            android:onClick="@{view -> popup.open()}"
+            />
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:layout_constraintTop_toBottomOf="@id/open"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
