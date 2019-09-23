@@ -31,13 +31,11 @@ class BarcodeReaderActivity : AppCompatActivity() {
         /**
          * Make this activity's intent.
          *
-         * @param context
+         * @param context [Context]
          * @return [Intent]
          */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, BarcodeReaderActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
+        fun makeIntent(context: Context) =
+                Intent(context, BarcodeReaderActivity::class.java)
+                        .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
     }
 }
