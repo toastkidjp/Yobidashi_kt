@@ -55,7 +55,13 @@ class BarcodeReaderFragment : Fragment() {
 
     private lateinit var resultPopup: BarcodeReaderResultPopup
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private val permission = Manifest.permission.CAMERA
+
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
         return binding?.root
@@ -77,9 +83,8 @@ class BarcodeReaderFragment : Fragment() {
             toolbar.setNavigationOnClickListener { activity?.finish() }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && activity?.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
+        if (isNotGranted()) {
+            requestPermissions(arrayOf(permission), 1)
             return
         }
 
@@ -93,13 +98,21 @@ class BarcodeReaderFragment : Fragment() {
                         startActivity(IntentFactory.makeShare(text))
                     })
                     it.open.observe(this, Observer { text ->
-                        SearchAction(requireActivity, preferenceApplier.getDefaultSearchEngine(), text).invoke()
+                        SearchAction(
+                                requireActivity,
+                                preferenceApplier.getDefaultSearchEngine(),
+                                text
+                        ).invoke()
                     })
                 }
 
         initializeFab()
         startDecode()
     }
+
+    private fun isNotGranted() =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                    && activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
 
     fun clickMenu(item: MenuItem) = when (item.itemId) {
         R.id.reset_fab_position -> {
@@ -180,7 +193,11 @@ class BarcodeReaderFragment : Fragment() {
                 )
 
                 sourceData?.cropRect = getRect()
-                sourceData?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
+                sourceData?.bitmap?.compress(
+                        Bitmap.CompressFormat.PNG,
+                        100,
+                        FileOutputStream(output)
+                )
 
                 Toaster.snackShort(
                         barcodeView,
