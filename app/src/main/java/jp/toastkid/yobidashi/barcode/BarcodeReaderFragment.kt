@@ -114,7 +114,7 @@ class BarcodeReaderFragment : Fragment() {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                     && activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
 
-    fun clickMenu(item: MenuItem) = when (item.itemId) {
+    private fun clickMenu(item: MenuItem) = when (item.itemId) {
         R.id.reset_fab_position -> {
             binding?.camera?.also {
                 it.translationX = 0f
