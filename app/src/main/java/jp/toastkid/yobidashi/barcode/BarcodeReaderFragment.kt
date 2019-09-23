@@ -42,6 +42,8 @@ import timber.log.Timber
 import java.io.FileOutputStream
 
 /**
+ * Barcode reader function fragment.
+ *
  * @author toastkidjp
  */
 class BarcodeReaderFragment : Fragment() {
@@ -51,10 +53,19 @@ class BarcodeReaderFragment : Fragment() {
      */
     private var binding: FragmentBarcodeReaderBinding? = null
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
+    /**
+     * For showing barcode reader result.
+     */
     private lateinit var resultPopup: BarcodeReaderResultPopup
 
+    /**
+     * Required permission for this fragment(and function).
+     */
     private val permission = Manifest.permission.CAMERA
 
     override fun onCreateView(
@@ -110,10 +121,21 @@ class BarcodeReaderFragment : Fragment() {
         startDecode()
     }
 
+    /**
+     * Return is granted required permission.
+     *
+     * @return If is granted camera permission, return true
+     */
     private fun isNotGranted() =
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                     && activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
 
+    /**
+     * Invoke click menu action.
+     *
+     * @param item [MenuItem]
+     * @return This function always return true
+     */
     private fun clickMenu(item: MenuItem) = when (item.itemId) {
         R.id.reset_fab_position -> {
             binding?.camera?.also {
@@ -174,6 +196,8 @@ class BarcodeReaderFragment : Fragment() {
 
     /**
      * Copy result text to clipboard.
+     *
+     * @param text Result text
      */
     private fun clip(text: String) {
         binding?.root?.let { snackbarParent ->
@@ -221,6 +245,8 @@ class BarcodeReaderFragment : Fragment() {
 
     /**
      * Show result with snackbar.
+     *
+     * @param text [String]
      */
     private fun showResult(text: String) {
         binding?.root?.let { resultPopup.show(it, text) }
