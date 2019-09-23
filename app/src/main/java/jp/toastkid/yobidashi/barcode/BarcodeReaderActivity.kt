@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.barcode
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import jp.toastkid.yobidashi.R
 
@@ -15,7 +16,7 @@ class BarcodeReaderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_barcode_reader)
+        setContentView(LAYOUT_ID)
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(
@@ -27,6 +28,9 @@ class BarcodeReaderActivity : AppCompatActivity() {
     }
 
     companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.activity_barcode_reader
 
         /**
          * Make this activity's intent.
