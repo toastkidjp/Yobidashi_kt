@@ -115,10 +115,19 @@ class MainActivity :
         }
     }
 
+    /**
+     * Menu's view model.
+     */
     private var menuViewModel: MenuViewModel? = null
 
+    /**
+     * Rx permission.
+     */
     private var rxPermissions: RxPermissions? = null
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -186,6 +195,9 @@ class MainActivity :
         })
     }
 
+    /**
+     * Set FAB's listener.
+     */
     @SuppressLint("ClickableViewAccessibility")
     private fun setFabListener() {
         val listener = DraggableTouchListener()
