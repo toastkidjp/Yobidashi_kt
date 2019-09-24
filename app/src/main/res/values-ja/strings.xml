@@ -411,5 +411,6 @@
     <string name="search_category_reddit">reddit</string>
     <string name="search_category_tiktok">TikTok</string>
     <string name="translate">翻訳</string>
+    <string name="search_category_open_weather">Open Weather</string>
 
 </resources>
