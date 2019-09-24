@@ -366,7 +366,7 @@ class MainActivity :
      * Load Uri.
      *
      * @param uri
-     * @param shouldLoadInternal for avoiding infinite loop
+     * @param shouldLoadInternal for avoiding infinite loop, default is false
      */
     private fun loadUri(uri: Uri, shouldLoadInternal: Boolean = false) {
         if (preferenceApplier.useInternalBrowser() || shouldLoadInternal) {
