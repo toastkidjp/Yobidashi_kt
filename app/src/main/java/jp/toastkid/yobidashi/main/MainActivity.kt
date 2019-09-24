@@ -68,6 +68,7 @@ import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import kotlin.math.min
 
 /**
  * Main of this calendar app.
@@ -193,7 +194,21 @@ class MainActivity :
                 preferenceApplier.setNewMenuFabPosition(x, y)
             }
         })
+
         binding.menuSwitch.setOnTouchListener(listener)
+
+        binding.menuSwitch.viewTreeObserver.addOnGlobalLayoutListener {
+            val menuFabPosition = preferenceApplier.menuFabPosition()
+            val displayMetrics = binding.menuSwitch.context.resources.displayMetrics
+            if (binding.menuSwitch.x > displayMetrics.widthPixels) {
+                binding.menuSwitch.x =
+                        min(menuFabPosition?.first ?: 0f, displayMetrics.widthPixels.toFloat())
+            }
+            if (binding.menuSwitch.y > displayMetrics.heightPixels) {
+                binding.menuSwitch.y =
+                        min(menuFabPosition?.second ?: 0f, displayMetrics.heightPixels.toFloat())
+            }
+        }
     }
 
     override fun onNewIntent(passedIntent: Intent) {
