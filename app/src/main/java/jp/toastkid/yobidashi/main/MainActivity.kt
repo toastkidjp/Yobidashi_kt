@@ -277,6 +277,9 @@ class MainActivity :
         }
     }
 
+    /**
+     * Finish this activity with transition animation.
+     */
     private fun finishWithoutTransition() {
         overridePendingTransition(0, 0)
         finish()
@@ -334,7 +337,12 @@ class MainActivity :
         }
     }
 
-
+    /**
+     * Callback method on long clicked menu.
+     *
+     * @param menu
+     * @return true
+     */
     private fun onMenuLongClick(menu: Menu): Boolean {
         Toaster.snackLong(
                 binding.root,
