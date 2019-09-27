@@ -9,10 +9,21 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class CircularViewMode() {
 
-    private var circleOffset = 500
+    private var rightCircleOffset = 500
+    private var leftCircleOffset = -100
     private var degToRad = 1.0f / 180.0f * Math.PI.toFloat()
     private var scalingRatio = 0.001f
     private var translationRatio = 0.09f
+
+    private var leftMode = false
+
+    fun setLeftMode() {
+        leftMode = true
+    }
+
+    fun setRightMode() {
+        leftMode = false
+    }
 
     fun applyToView(v: View, parent: RecyclerView) {
         val halfHeight = v.height * 0.5f
@@ -23,10 +34,12 @@ class CircularViewMode() {
         v.pivotX = 0.0f
         v.pivotY = halfHeight
         v.rotation = rot * 0.05f
-        v.translationX = (-Math.cos((rot * translationRatio * degToRad).toDouble()) + 1).toFloat() * circleOffset
+        v.translationX = (-Math.cos((rot * translationRatio * degToRad).toDouble()) + 1).toFloat() * getCircleOffset()
 
         val scale = 1.0f - Math.abs(parentHalfHeight - halfHeight - y) * scalingRatio
         v.scaleX = scale
         v.scaleY = scale
     }
+
+    private fun getCircleOffset() = if (leftMode) leftCircleOffset else rightCircleOffset
 }

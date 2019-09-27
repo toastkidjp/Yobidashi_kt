@@ -237,6 +237,14 @@ class CircleRecyclerView @JvmOverloads constructor(
         }
     }
 
+    fun setMode(useLeft: Boolean) {
+        if (useLeft) {
+            viewMode?.setLeftMode()
+        } else {
+            viewMode?.setRightMode()
+        }
+    }
+
     companion object {
 
         private const val DEFAULT_SELECTION = Integer.MAX_VALUE shr 1

@@ -10,13 +10,18 @@ package jp.toastkid.yobidashi.browser.menu
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.RippleDrawable
+import android.os.Build
+import android.view.Gravity
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.R
@@ -74,6 +79,7 @@ class MenuBinder(
     }
 
     private fun initializeWithContext(context: Context) {
+        LinearSnapHelper().attachToRecyclerView(recyclerView)
         recyclerView?.adapter = menuAdapter
         val layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -82,11 +88,25 @@ class MenuBinder(
         recyclerView?.setNeedLoop(true)
         menuDrawable = ContextCompat.getDrawable(context, R.drawable.ic_menu)
         menuSwitch?.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                (it.background as? RippleDrawable)?.also { ripple ->
+                    ripple.state = arrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled)
+                            .toIntArray()
+                    menuSwitch.postDelayed({ ripple.state = IntArray(0) }, 200)
+                }
+            }
             menuViewModel?.visibility?.postValue(recyclerView?.isVisible == false)
         }
     }
 
     private fun open() {
+        val menuX: Float = menuSwitch?.x ?: 1000f
+        val useLeft = menuX < 200f
+        recyclerView?.layoutParams =
+                (recyclerView?.layoutParams as? CoordinatorLayout.LayoutParams)?.also {
+                    it.gravity = if (useLeft) Gravity.LEFT else Gravity.RIGHT
+                }
+        recyclerView?.setMode(useLeft)
         recyclerView?.visibility = View.VISIBLE
         recyclerView?.scheduleLayoutAnimation()
     }
