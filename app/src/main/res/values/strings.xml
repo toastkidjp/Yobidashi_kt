@@ -421,5 +421,6 @@
     <string name="current_color">Current color:</string>
     <string name="title_cursor_color">Cursor color</string>
     <string name="title_highlight_color">Selected text color</string>
+    <string name="menu_random_wikipedia">Random Wikipedia</string>
 
 </resources>

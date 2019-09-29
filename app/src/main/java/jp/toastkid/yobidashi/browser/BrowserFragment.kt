@@ -15,6 +15,7 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -24,9 +25,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
 import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -70,6 +74,7 @@ import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -389,6 +394,22 @@ class BrowserFragment : Fragment(),
                         ArchivesActivity.makeIntent(fragmentActivity),
                         ArchivesActivity.REQUEST_CODE
                 )
+            }
+            Menu.RANDOM_WIKIPEDIA -> {
+                Maybe.fromCallable { RandomWikipedia().fetch() }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                {
+                                    loadWithNewTab("https://ja.wikipedia.org/wiki/$it".toUri())
+                                    val parent = binding?.webViewContainer ?: return@subscribe
+                                    Toaster.snackShort(
+                                            parent,
+                                            "Open Wikipedia article \"$it\".", colorPair())
+                                },
+                                Timber::e
+                        )
+                        .addTo(disposables)
             }
             Menu.WEB_SEARCH-> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.root as View))
