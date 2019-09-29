@@ -401,7 +401,7 @@ class BrowserFragment : Fragment(),
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {
-                                    loadWithNewTab("https://ja.wikipedia.org/wiki/$it".toUri())
+                                    loadWithNewTab(getString(R.string.link_wikipedia_article, it).toUri())
                                     val parent = binding?.webViewContainer ?: return@subscribe
                                     Toaster.snackShort(
                                             parent,
