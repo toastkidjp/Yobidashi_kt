@@ -405,7 +405,8 @@ class BrowserFragment : Fragment(),
                                     val parent = binding?.webViewContainer ?: return@subscribe
                                     Toaster.snackShort(
                                             parent,
-                                            "Open Wikipedia article \"$it\".", colorPair())
+                                            "Open Wikipedia article \"$it\".", colorPair()
+                                    )
                                 },
                                 Timber::e
                         )
