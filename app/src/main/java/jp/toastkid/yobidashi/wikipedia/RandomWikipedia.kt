@@ -7,6 +7,11 @@
  */
 package jp.toastkid.yobidashi.wikipedia
 
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import kotlin.random.Random
 
 /**
@@ -16,8 +21,16 @@ class RandomWikipedia {
 
     private val wikipediaApi = WikipediaApi()
 
-    fun fetch(): String {
-        val titles = wikipediaApi.invoke()?.filter { it.ns == 0 } ?: return ""
-        return titles[Random.nextInt(titles.size)].title
-    }
+    fun fetchWithAction(titleConsumer: (String) -> Unit): Disposable =
+            Maybe.fromCallable {
+                val titles = wikipediaApi.invoke()?.filter { it.ns == 0 } ?: throw NullPointerException()
+                return@fromCallable titles[Random.nextInt(titles.size)].title
+            }
+                    .retry(3)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { titleConsumer(it) },
+                            Timber::e
+                    )
 }

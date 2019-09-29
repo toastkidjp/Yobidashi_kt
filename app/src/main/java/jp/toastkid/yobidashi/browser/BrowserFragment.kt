@@ -25,12 +25,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
 import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -48,10 +45,7 @@ import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
-import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
-import jp.toastkid.yobidashi.libs.ImageDownloader
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
@@ -396,20 +390,20 @@ class BrowserFragment : Fragment(),
                 )
             }
             Menu.RANDOM_WIKIPEDIA -> {
-                Maybe.fromCallable { RandomWikipedia().fetch() }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                {
-                                    loadWithNewTab(getString(R.string.link_wikipedia_article, it).toUri())
-                                    val parent = binding?.webViewContainer ?: return@subscribe
-                                    Toaster.snackShort(
-                                            parent,
-                                            "Open Wikipedia article \"$it\".", colorPair()
-                                    )
-                                },
-                                Timber::e
-                        )
+                if (preferenceApplier.wifiOnly &&
+                        WifiConnectionChecker.isNotConnecting(requireContext())) {
+                    return
+                }
+
+                RandomWikipedia()
+                        .fetchWithAction {
+                            loadWithNewTab(getString(R.string.link_wikipedia_article, it).toUri())
+                            val parent = binding?.webViewContainer ?: return@fetchWithAction
+                            Toaster.snackShort(
+                                    parent,
+                                    "Open Wikipedia article \"$it\".", colorPair()
+                            )
+                        }
                         .addTo(disposables)
             }
             Menu.WEB_SEARCH-> {
