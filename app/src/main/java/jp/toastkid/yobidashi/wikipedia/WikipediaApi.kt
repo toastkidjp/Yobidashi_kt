@@ -17,10 +17,12 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  */
 class WikipediaApi {
 
+    private val urlDecider = UrlDecider()
+
     @WorkerThread
     fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://ja.wikipedia.org/")
+                .baseUrl(urlDecider())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
 

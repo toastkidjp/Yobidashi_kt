@@ -15,7 +15,6 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -164,6 +163,8 @@ class BrowserFragment : Fragment(),
     private lateinit var e2JTranslator: E2JTranslator
 
     private lateinit var languageIdentifier: FirebaseLanguageIdentification
+
+    private lateinit var randomWikipedia: RandomWikipedia
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -395,13 +396,16 @@ class BrowserFragment : Fragment(),
                     return
                 }
 
-                RandomWikipedia()
-                        .fetchWithAction {
-                            loadWithNewTab(getString(R.string.link_wikipedia_article, it).toUri())
+                if (!::randomWikipedia.isInitialized) {
+                    randomWikipedia = RandomWikipedia()
+                }
+                randomWikipedia
+                        .fetchWithAction { title, link ->
+                            loadWithNewTab(link)
                             val parent = binding?.webViewContainer ?: return@fetchWithAction
                             Toaster.snackShort(
                                     parent,
-                                    "Open Wikipedia article \"$it\".", colorPair()
+                                    "Open Wikipedia article \"$title\".", colorPair()
                             )
                         }
                         .addTo(disposables)

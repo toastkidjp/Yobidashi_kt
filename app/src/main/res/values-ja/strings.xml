@@ -417,6 +417,5 @@
     <string name="title_cursor_color">カーソルの色</string>
     <string name="title_highlight_color">テキスト選択の色</string>
     <string name="menu_random_wikipedia">ランダム Wikipedia</string>
-    <string name="link_wikipedia_article">https://ja.wikipedia.org/wiki/%s</string>
 
 </resources>

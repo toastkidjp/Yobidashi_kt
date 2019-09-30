@@ -7,6 +7,8 @@
  */
 package jp.toastkid.yobidashi.wikipedia
 
+import android.net.Uri
+import androidx.core.net.toUri
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -21,7 +23,9 @@ class RandomWikipedia {
 
     private val wikipediaApi = WikipediaApi()
 
-    fun fetchWithAction(titleConsumer: (String) -> Unit): Disposable =
+    private val urlDecider = UrlDecider()
+
+    fun fetchWithAction(titleAndLinkConsumer: (String, Uri) -> Unit): Disposable =
             Maybe.fromCallable {
                 val titles = wikipediaApi.invoke()?.filter { it.ns == 0 } ?: throw NullPointerException()
                 return@fromCallable titles[Random.nextInt(titles.size)].title
@@ -30,7 +34,7 @@ class RandomWikipedia {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            { titleConsumer(it) },
+                            { titleAndLinkConsumer(it, "${urlDecider()}wiki/$it".toUri()) },
                             Timber::e
                     )
 }
