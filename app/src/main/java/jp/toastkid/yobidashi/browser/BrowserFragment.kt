@@ -405,7 +405,8 @@ class BrowserFragment : Fragment(),
                             val parent = binding?.webViewContainer ?: return@fetchWithAction
                             Toaster.snackShort(
                                     parent,
-                                    "Open Wikipedia article \"$title\".", colorPair()
+                                    getString(R.string.message_open_random_wikipedia, title),
+                                    colorPair()
                             )
                         }
                         .addTo(disposables)
