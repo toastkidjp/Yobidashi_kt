@@ -10,9 +10,16 @@ package jp.toastkid.yobidashi.wikipedia
 import java.util.*
 
 /**
+ * Generator for Wikipedia domain.
+ *
  * @author toastkidjp
  */
 class UrlDecider {
 
+    /**
+     * Generate Wikipedia domain.
+     *
+     * @return Wikipedia domain
+     */
     operator fun invoke() = "https://${Locale.getDefault().language}.wikipedia.org/"
 }
