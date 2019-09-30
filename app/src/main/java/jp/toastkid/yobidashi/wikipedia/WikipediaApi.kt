@@ -19,11 +19,13 @@ class WikipediaApi {
 
     private val urlDecider = UrlDecider()
 
+    private val converterFactory = MoshiConverterFactory.create()
+
     @WorkerThread
     fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()
                 .baseUrl(urlDecider())
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(converterFactory)
                 .build()
 
         val service = retrofit.create(WikipediaService::class.java)
