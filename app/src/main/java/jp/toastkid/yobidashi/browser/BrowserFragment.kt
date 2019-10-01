@@ -393,6 +393,12 @@ class BrowserFragment : Fragment(),
             Menu.RANDOM_WIKIPEDIA -> {
                 if (preferenceApplier.wifiOnly &&
                         WifiConnectionChecker.isNotConnecting(requireContext())) {
+                    val parent = binding?.webViewContainer ?: return
+                    Toaster.snackShort(
+                            parent,
+                            getString(R.string.message_wifi_not_connecting),
+                            colorPair()
+                    )
                     return
                 }
 
