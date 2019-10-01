@@ -27,7 +27,8 @@ class RandomWikipedia {
 
     fun fetchWithAction(titleAndLinkConsumer: (String, Uri) -> Unit): Disposable =
             Maybe.fromCallable {
-                val titles = wikipediaApi.invoke()?.filter { it.ns == 0 } ?: throw NullPointerException()
+                val titles = wikipediaApi.invoke()?.filter { it.ns == 0 }
+                        ?: throw NullPointerException()
                 return@fromCallable titles[Random.nextInt(titles.size)].title
             }
                     .retry(3)
