@@ -72,6 +72,7 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation 'com.google.firebase:firebase-ml-natural-language:20.0.0'
     implementation 'com.google.firebase:firebase-ml-natural-language-translate-model:20.0.0'
+    implementation 'com.google.firebase:firebase-ml-natural-language-language-id-model:20.0.0'
 
     implementation "com.google.android.gms:play-services-oss-licenses:16.0.1"
 

@@ -59,7 +59,7 @@ class TranslationResultPopup(context: Context) {
 
     fun show(parent: View, content: String) {
         textView.setText(content)
-        popupWindow.showAtLocation(parent, Gravity.CENTER, 0, 0)
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
         popupWindow.contentView.startAnimation(slideUpFromBottom)
     }
 

@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.tab
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -218,7 +219,7 @@ class TabAdapter(
     private fun replaceWebView() {
         val currentWebView = currentWebView()
         if (webViewContainer.childCount != 0) {
-            val previousView = webViewContainer.get(0)
+            val previousView = webViewContainer[0]
             if (currentWebView != previousView) {
                 if (previousView is WebView) {
                     previousView.stopLoading()
@@ -577,6 +578,25 @@ class TabAdapter(
 
     private fun currentWebView() = browserModule.getWebView(currentTabId())
 
+    fun currentSelectedText(callback: (String) -> Unit) {
+        val currentTab = currentTab()
+        when (currentTab) {
+            is WebTab -> {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                    return
+                }
+                currentWebView()
+                        ?.evaluateJavascript(
+                                "(function(){return window.getSelection().toString()})()"
+                        ) { value -> callback(value) }
+            }
+            is EditorTab -> {
+                callback(editor.currentSelectedText())
+            }
+        }
+
+    }
+
     companion object {
 
         /**
@@ -588,11 +608,6 @@ class TabAdapter(
          * PDF tab's dummy title.
          */
         private const val PDF_TAB_TITLE: String = "PDF Tab"
-
-        private val WRAP_CONTENT = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-        )
 
         /**
          * Make new screenshot dir wrapper instance.
