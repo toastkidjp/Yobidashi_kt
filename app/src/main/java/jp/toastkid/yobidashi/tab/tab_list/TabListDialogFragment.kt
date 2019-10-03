@@ -13,6 +13,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -62,6 +64,10 @@ class TabListDialogFragment : DialogFragment() {
      * Tab ID when this module opened.
      */
     private var lastTabId: String = ""
+
+    private var rightTouchHelper: ItemTouchHelper? = null
+
+    private var leftTouchHelper: ItemTouchHelper? = null
 
     interface Callback {
         fun onCloseTabListDialogFragment()
@@ -211,11 +217,22 @@ class TabListDialogFragment : DialogFragment() {
                             direction: Int
                     ) = (viewHolder as ViewHolder).close()
                 }).attachToRecyclerView(recyclerView)
-        DragAttachment(recyclerView, ItemTouchHelper.RIGHT)
-        DragAttachment(recyclerView, ItemTouchHelper.LEFT)
+        rightTouchHelper = DragAttachment(recyclerView, ItemTouchHelper.RIGHT)
+        leftTouchHelper = DragAttachment(recyclerView, ItemTouchHelper.LEFT)
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 
         recyclerView.adapter = adapter
+
+        val activity = requireActivity()
+        ViewModelProviders.of(activity)
+                .get(TabListViewModel::class.java)
+                .startDrag
+                .observe(activity, Observer { startDrag(it) })
+    }
+
+    private fun startDrag(viewHolder: RecyclerView.ViewHolder) {
+        rightTouchHelper?.startDrag(viewHolder)
+        leftTouchHelper?.startDrag(viewHolder)
     }
 
     /**
