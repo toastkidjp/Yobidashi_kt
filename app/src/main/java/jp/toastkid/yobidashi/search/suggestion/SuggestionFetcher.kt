@@ -38,10 +38,8 @@ class SuggestionFetcher {
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                if (response.body() == null) {
-                    return
-                }
-                listCallback(SuggestionParser.parse(response.body()?.string() ?: ""))
+                val body = response.body()?.string() ?: return
+                listCallback(SuggestionParser.parse(body))
             }
         })
     }
