@@ -51,7 +51,7 @@ class SuggestionFetcher {
      * @return suggest Web API requesting URL
      */
     private fun makeSuggestUrl(query: String): String {
-        return URL + "&hl=" + findHl(query) + "&q=" + Uri.encode(query)
+        return "$URL&hl=${findHl(query)}&q=${Uri.encode(query)}"
     }
 
     /**
