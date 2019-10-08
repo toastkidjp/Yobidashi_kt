@@ -71,6 +71,6 @@ class SuggestionFetcher {
         /**
          * Suggest Web API.
          */
-        private val URL = "https://www.google.com/complete/search?&output=toolbar"
+        private const val URL = "https://www.google.com/complete/search?&output=toolbar"
     }
 }
