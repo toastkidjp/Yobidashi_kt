@@ -10,12 +10,14 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Suggest Web API response fetcher.
-
+ *
  * @author toastkidjp
  */
 class SuggestionFetcher {
 
-    /** HTTP client.  */
+    /**
+     * HTTP client.
+     */
     private val mClient: OkHttpClient = OkHttpClient.Builder()
             .connectTimeout(3L, TimeUnit.SECONDS)
             .readTimeout(3L, TimeUnit.SECONDS)
@@ -23,9 +25,8 @@ class SuggestionFetcher {
 
     /**
      * Fetch Web API result asynchronously.
-
-     * @param query
      *
+     * @param query
      * @param listCallback
      */
     fun fetchAsync(query: String, listCallback: (List<String>) -> Unit) {
@@ -47,8 +48,8 @@ class SuggestionFetcher {
 
     /**
      * Make suggest Web API requesting URL.
-     * @param query Query
      *
+     * @param query Query
      * @return suggest Web API requesting URL
      */
     private fun makeSuggestUrl(query: String): String {
@@ -57,9 +58,9 @@ class SuggestionFetcher {
 
     /**
      * Find appropriate language.
-     * @param query
      *
-     * @return
+     * @param query
+     * @return language (ex: "ja", "en")
      */
     private fun findHl(query: String): String {
         return if (Strings.containsMultiByte(query)) "ja" else Locale.getDefault().language
@@ -67,7 +68,9 @@ class SuggestionFetcher {
 
     companion object {
 
-        /** Suggest Web API.  */
+        /**
+         * Suggest Web API.
+         */
         private val URL = "https://www.google.com/complete/search?&output=toolbar"
     }
 }
