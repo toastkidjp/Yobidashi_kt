@@ -9,9 +9,8 @@ import java.util.concurrent.TimeUnit
  * @author toastkidjp
  */
 object HttpClientFactory {
-    fun make(): OkHttpClient {
-        return withTimeout(5L)
-    }
+
+    fun make(): OkHttpClient = withTimeout(5L)
 
     fun withTimeout(seconds: Long): OkHttpClient =
             OkHttpClient.Builder()
