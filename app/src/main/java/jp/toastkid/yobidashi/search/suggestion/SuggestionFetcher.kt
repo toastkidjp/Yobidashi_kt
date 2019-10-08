@@ -2,11 +2,14 @@ package jp.toastkid.yobidashi.search.suggestion
 
 import android.net.Uri
 import jp.toastkid.yobidashi.libs.Strings
-import okhttp3.*
+import jp.toastkid.yobidashi.libs.network.HttpClientFactory
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Request
+import okhttp3.Response
 import timber.log.Timber
 import java.io.IOException
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * Suggest Web API response fetcher.
@@ -18,10 +21,7 @@ class SuggestionFetcher {
     /**
      * HTTP client.
      */
-    private val mClient: OkHttpClient = OkHttpClient.Builder()
-            .connectTimeout(3L, TimeUnit.SECONDS)
-            .readTimeout(3L, TimeUnit.SECONDS)
-            .build()
+    private val mClient = HttpClientFactory.withTimeout(3L)
 
     /**
      * Fetch Web API result asynchronously.
