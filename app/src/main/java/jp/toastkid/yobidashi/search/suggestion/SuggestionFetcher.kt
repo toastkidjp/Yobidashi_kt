@@ -21,7 +21,7 @@ class SuggestionFetcher {
     /**
      * HTTP client.
      */
-    private val mClient = HttpClientFactory.withTimeout(3L)
+    private val httpClient = HttpClientFactory.withTimeout(3L)
 
     /**
      * Fetch Web API result asynchronously.
@@ -33,7 +33,7 @@ class SuggestionFetcher {
         val request = Request.Builder()
                 .url(makeSuggestUrl(query))
                 .build()
-        mClient.newCall(request).enqueue(object : Callback {
+        httpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) = Timber.e(e)
 
             @Throws(IOException::class)
