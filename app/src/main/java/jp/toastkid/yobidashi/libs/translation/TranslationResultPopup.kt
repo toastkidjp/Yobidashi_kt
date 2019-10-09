@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.libs.translation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
@@ -21,18 +22,31 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 /**
+ * Popsup for showing translation-result.
+ *
+ * @param context [Context]
  * @author toastkidjp
  */
 class TranslationResultPopup(context: Context) {
 
+    /**
+     * Window.
+     */
     private val popupWindow: PopupWindow = PopupWindow(context)
 
+    /**
+     * Content area.
+     */
     private var textView: TextView
 
+    /**
+     * Enter animation.
+     */
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(context, R.anim.slide_up)
 
     init {
+        @SuppressLint("InflateParams")
         val popupView = LayoutInflater.from(context).inflate(R.layout.popup_translated, null)
         popupView.findViewById<View>(R.id.close).setOnClickListener {
             if (popupWindow.isShowing) {
@@ -48,21 +62,33 @@ class TranslationResultPopup(context: Context) {
 
         popupWindow.contentView = popupView
 
-        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
+        popupWindow.setBackgroundDrawable(
+                ColorDrawable(ContextCompat.getColor(context, R.color.transparent))
+        )
 
         popupWindow.isOutsideTouchable = true
         popupWindow.isFocusable = true
 
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
-        popupWindow.height = context.resources.getDimensionPixelSize(R.dimen.translation_popup_height)
+        popupWindow.height =
+                context.resources.getDimensionPixelSize(R.dimen.translation_popup_height)
     }
 
+    /**
+     * Show this popup with parent view and content.
+     *
+     * @param parent [View]
+     * @param content [String]
+     */
     fun show(parent: View, content: String) {
         textView.setText(content)
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
         popupWindow.contentView.startAnimation(slideUpFromBottom)
     }
 
+    /**
+     * Hide this popup.
+     */
     fun hide() {
         popupWindow.takeIf { it.isShowing }?.dismiss()
     }
