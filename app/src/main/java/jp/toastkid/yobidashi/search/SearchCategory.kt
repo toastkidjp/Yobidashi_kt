@@ -19,7 +19,11 @@ enum class SearchCategory(
         private val host: String,
         private val generator: (l: String, h: String, q: String) -> String = { _, h, q ->  h + q }
 ) {
-
+    SITE_SEARCH(
+            R.string.title_site_search_by_google,
+            R.drawable.ic_site_search,
+            "https://www.google.com/search?q="
+    ),
     GOOGLE(R.string.google,
             R.drawable.ic_google,
             "https://www.google.com/search?q="
@@ -174,10 +178,13 @@ enum class SearchCategory(
      *
      * @param context [Context]
      * @param query Query string
-     *
+     * @param currentUrl
      * @return Search result URL
      */
-    fun make(context: Context, query: String): String {
+    fun make(context: Context, query: String, currentUrl: String?): String {
+        if (this == SITE_SEARCH && currentUrl != null) {
+            return SiteSearchUrlGenerator().invoke(currentUrl, query)
+        }
         return generate(
                 LocaleWrapper.getLocale(context.resources.configuration),
                 host,

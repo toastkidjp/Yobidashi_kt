@@ -41,8 +41,8 @@ class BackgroundSearchAction(
                 context,
                 category ?: "",
                 query ?: "",
-                true,
-                saveHistory
+                onBackground = true,
+                saveHistory = saveHistory
         ).invoke()
     }
 
