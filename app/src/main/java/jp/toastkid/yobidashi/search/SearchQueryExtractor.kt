@@ -23,7 +23,6 @@ object SearchQueryExtractor {
                     or host.endsWith("github.com")
                     or host.endsWith("mvnrepository.com")
                     or host.endsWith("searchcode.com")
-                    or host.startsWith("search.yahoo.com")
                     or host.equals("www.reddit.com")
                     or host.endsWith("medium.com")
                     or host.endsWith("ted.com")
@@ -48,7 +47,8 @@ object SearchQueryExtractor {
             host.endsWith(".wikipedia.org")
                 or host.endsWith(".wikimedia.org") ->
                 uri.getQueryParameter("search")
-            host.endsWith("search.yahoo.co.jp") ->
+            host.endsWith("search.yahoo.com")
+                    or host.endsWith("search.yahoo.co.jp") ->
                 uri.getQueryParameter("p")
             host.endsWith("www.baidu.com") ->
                 uri.getQueryParameter("wd")
