@@ -9,9 +9,11 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
+import android.os.Message
 import android.view.View
 import android.view.animation.Animation
 import android.webkit.*
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -35,7 +37,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import timber.log.Timber
-
 
 /**
  * @author toastkidjp
@@ -247,6 +248,20 @@ class BrowserModule(
             customViewSwitcher?.onHideCustomView()
         }
 
+        override fun onCreateWindow(
+                view: WebView?,
+                isDialog: Boolean,
+                isUserGesture: Boolean,
+                resultMsg: Message?
+        ): Boolean {
+            val href = view?.handler?.obtainMessage()
+            view?.requestFocusNodeHref(href)
+            val url = href?.data?.getString("url")?.toUri()
+                    ?: return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
+            view.stopLoading()
+            context.startActivity(MainActivity.makeBrowserIntent(context, url))
+            return true
+        }
     }
 
     fun loadUrl(url: String) {

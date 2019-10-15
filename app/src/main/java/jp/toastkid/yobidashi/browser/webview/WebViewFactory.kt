@@ -129,6 +129,7 @@ internal object WebViewFactory {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             settings.safeBrowsingEnabled = true
         }
+        settings.setSupportMultipleWindows(true)
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
         return webView
