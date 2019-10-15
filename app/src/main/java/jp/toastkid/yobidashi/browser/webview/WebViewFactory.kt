@@ -64,10 +64,7 @@ internal object WebViewFactory {
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
                 WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
-                    val url = hitResult.extra
-                    if (url.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val url = hitResult.extra ?: return@setOnLongClickListener false
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (context is FragmentActivity) {
                         if (TextUtils.isEmpty(anchor)) {
@@ -79,10 +76,7 @@ internal object WebViewFactory {
                     false
                 }
                 WebView.HitTestResult.IMAGE_TYPE -> {
-                    val url = hitResult.extra
-                    if (url.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val url = hitResult.extra ?: return@setOnLongClickListener false
                     if (context is FragmentActivity) {
                         showDialogFragment(
                                 ImageTypeLongTapDialogFragment.make(url),
@@ -92,10 +86,7 @@ internal object WebViewFactory {
                     true
                 }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
-                    val url = hitResult.extra
-                    if (url.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val url = hitResult.extra ?: return@setOnLongClickListener false
                     if (context is FragmentActivity) {
                         showDialogFragment(
                                 AnchorTypeLongTapDialogFragment.make(url),
@@ -105,10 +96,7 @@ internal object WebViewFactory {
                     false
                 }
                 else -> {
-                    val extra = hitResult.extra
-                    if (extra == null || extra.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val extra = hitResult.extra ?: return@setOnLongClickListener false
 
                     if (context is FragmentActivity) {
                         ElseCaseLongTapDialogFragment
