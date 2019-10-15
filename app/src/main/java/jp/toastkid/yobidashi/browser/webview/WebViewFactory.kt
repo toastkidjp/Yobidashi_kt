@@ -43,12 +43,16 @@ internal object WebViewFactory {
      */
     private var anchor: String = ""
 
+    /**
+     * Color alpha converter.
+     */
     private val alphaConverter = AlphaConverter()
 
     /**
      * Make new [WebView].
      *
      * @param context [Context]
+     * @return [CustomWebView]
      */
     @SuppressLint("ClickableViewAccessibility")
     fun make(context: Context): CustomWebView {
