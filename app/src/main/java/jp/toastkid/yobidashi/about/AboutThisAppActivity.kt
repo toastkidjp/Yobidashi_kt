@@ -101,7 +101,7 @@ class AboutThisAppActivity : AppCompatActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_about
+        private const val LAYOUT_ID = R.layout.activity_about
 
         /**
          * Make launcher intent.
