@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -101,6 +102,7 @@ class AboutThisAppActivity : AppCompatActivity() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_about
 
         /**
