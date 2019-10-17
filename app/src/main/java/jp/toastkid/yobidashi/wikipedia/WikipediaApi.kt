@@ -13,14 +13,25 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**
+ * Wikipedia API.
+ *
  * @author toastkidjp
  */
 class WikipediaApi {
 
+    /**
+     * Wikipedia URL decider.
+     */
     private val urlDecider = UrlDecider()
 
+    /**
+     * Converter factory.
+     */
     private val converterFactory = MoshiConverterFactory.create()
 
+    /**
+     * You should call this method on worker-thread.
+     */
     @WorkerThread
     fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()
