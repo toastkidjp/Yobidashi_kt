@@ -1,12 +1,16 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.BackgroundSearchAction
@@ -18,7 +22,7 @@ import java.util.*
  * ModuleAdapter of search history list.
  *
  * @param context
- * @param relation Relation
+ * @param favoriteSearchRepository Relation
  * @param onClick On click callback
  * @param onVisibilityChanged On changed visibility callback
  * @param onClickAdd
@@ -27,11 +31,11 @@ import java.util.*
  */
 internal class ModuleAdapter(
         context: Context,
-        private val relation: FavoriteSearch_Relation,
+        private val favoriteSearchRepository: FavoriteSearchRepository,
         private val onClick: (FavoriteSearch) -> Unit,
         private val onVisibilityChanged: (Boolean) -> Unit,
         private val onClickAdd: (FavoriteSearch) -> Unit
-) : OrmaRecyclerViewAdapter<FavoriteSearch, ModuleViewHolder>(context, relation) {
+) : RecyclerView.Adapter<ModuleViewHolder>() {
 
     /**
      * Layout inflater.
@@ -77,19 +81,16 @@ internal class ModuleAdapter(
      * @return [Disposable]
      */
     fun query(s: CharSequence): Disposable {
-
         clear()
 
-        val selector = relation.selector()
-        if (s.isNotEmpty()) {
-            selector.where(relation.schema.query, "LIKE", s.toString() + "%")
+        if (s.isBlank()) {
+            return Disposables.empty()
         }
-        return selector
-                .orderByIdDesc()
-                .limit(5)
-                .executeAsObservable()
+
+        return Maybe.fromCallable { favoriteSearchRepository.select("$s%") }
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .flatMapObservable { Observable.fromIterable(it) }
                 .doOnTerminate {
                     onVisibilityChanged(!isEmpty)
                     notifyDataSetChanged()
@@ -104,7 +105,7 @@ internal class ModuleAdapter(
      */
     fun removeAt(position: Int): Disposable {
         val item = selected[position]
-        return removeItemAsMaybe(item)
+        return Completable.fromAction { favoriteSearchRepository.delete(item) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

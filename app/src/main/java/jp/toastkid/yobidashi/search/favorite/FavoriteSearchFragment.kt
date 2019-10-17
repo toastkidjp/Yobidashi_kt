@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -16,7 +17,7 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -72,9 +73,12 @@ class FavoriteSearchFragment : Fragment(),
      */
     private fun initFavSearchView() {
         val fragmentActivity = activity ?: return
+
+        val repository = DatabaseFinder().invoke(fragmentActivity).favoriteSearchRepository()
+
         adapter = ActivityAdapter(
                 fragmentActivity,
-                DbInitializer.init(fragmentActivity).relationOfFavoriteSearch(),
+                repository,
                 { category, query -> this.startSearch(category, query) },
                 { messageId -> Toaster.snackShort(binding?.content as View, messageId, colorPair()) }
         )
@@ -104,9 +108,10 @@ class FavoriteSearchFragment : Fragment(),
                         if (direction != ItemTouchHelper.RIGHT) {
                             return
                         }
-                        adapter?.removeAt(viewHolder.adapterPosition)
+                        adapter?.deleteAt(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(binding?.favoriteSearchView)
+        adapter?.refresh()
     }
 
     /**
@@ -142,8 +147,9 @@ class FavoriteSearchFragment : Fragment(),
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        Completable.fromAction { adapter?.relation?.deleter()?.execute() }
+        Completable.fromAction { adapter?.clear() }
                 ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe {
                     Toaster.snackShort(
                             binding?.root as View,

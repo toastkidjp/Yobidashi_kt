@@ -3,10 +3,12 @@ package jp.toastkid.yobidashi.search.favorite
 import android.content.Context
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -20,23 +22,27 @@ class FavoriteSearchInsertion(
     /**
      * Invoke action.
      */
-    fun invoke() {
-        Completable
+    fun invoke(): Disposable {
+        return Completable
                 .fromAction { insert() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    Toaster.tShort(
-                            context,
-                            context.getString(R.string.format_message_done_adding_favorite_search, query))
-                }
+                .subscribe(
+                        {
+                            Toaster.tShort(
+                                    context,
+                                    context.getString(R.string.format_message_done_adding_favorite_search, query))
+                        },
+                        Timber::e
+                )
     }
 
     /**
      * Insert record.
      */
     private fun insert() {
-        DbInitializer.init(context).insertIntoFavoriteSearch(makeFavoriteSearch(category, query))
+        val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
+        repository.insert(makeFavoriteSearch(category, query))
     }
 
     /**

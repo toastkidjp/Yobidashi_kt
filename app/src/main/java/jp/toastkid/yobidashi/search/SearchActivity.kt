@@ -32,6 +32,7 @@ import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -423,7 +424,8 @@ class SearchActivity : AppCompatActivity(),
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        DbInitializer.init(this).relationOfFavoriteSearch().deleter().executeAsSingle()
+        val repository = DatabaseFinder().invoke(this).favoriteSearchRepository()
+        Completable.fromAction { repository.deleteAll() }
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         {

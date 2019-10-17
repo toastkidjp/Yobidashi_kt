@@ -1,21 +1,18 @@
 package jp.toastkid.yobidashi.search.favorite
 
-import com.github.gfx.android.orma.annotation.Column
-import com.github.gfx.android.orma.annotation.PrimaryKey
-import com.github.gfx.android.orma.annotation.Table
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * @author toastkidjp
  */
-@Table
+@Entity(tableName = "FavoriteSearch")
 class FavoriteSearch {
 
-    @PrimaryKey(autoincrement = true)
+    @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
-    @Column
     var category: String? = null
 
-    @Column
     var query: String? = null
 }
