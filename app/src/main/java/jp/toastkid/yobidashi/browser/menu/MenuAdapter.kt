@@ -56,7 +56,7 @@ internal class MenuAdapter(
             holder.hideCount()
         }
 
-        holder.setColorPair(preferenceApplier.colorPair(), menu != Menu.SITE_SEARCH)
+        holder.setColorPair(preferenceApplier.colorPair())
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
         holder.setOnClick(View.OnClickListener { menuViewModel?.click?.postValue(menu) })
