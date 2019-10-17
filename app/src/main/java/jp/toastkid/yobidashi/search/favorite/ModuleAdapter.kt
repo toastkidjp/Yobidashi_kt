@@ -10,7 +10,6 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.BackgroundSearchAction
@@ -83,12 +82,14 @@ internal class ModuleAdapter(
     fun query(s: CharSequence): Disposable {
         clear()
 
-        if (s.isBlank()) {
-            return Disposables.empty()
+        return Maybe.fromCallable {
+            if (s.isNotBlank()) {
+                favoriteSearchRepository.select("$s%")
+            } else {
+                favoriteSearchRepository.findLast5()
+            }
         }
-
-        return Maybe.fromCallable { favoriteSearchRepository.select("$s%") }
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapObservable { Observable.fromIterable(it) }
                 .doOnTerminate {

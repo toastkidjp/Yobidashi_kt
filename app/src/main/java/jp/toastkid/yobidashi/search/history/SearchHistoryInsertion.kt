@@ -1,13 +1,10 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
-
-import com.github.gfx.android.orma.annotation.OnConflict
-
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 
 /**
  * @author toastkidjp
@@ -27,10 +24,8 @@ class SearchHistoryInsertion private constructor(
 
     private fun insert(searchHistory: SearchHistory): Disposable {
         return Completable.create { e ->
-            DbInitializer.init(context)
-                    .relationOfSearchHistory()
-                    .inserter(OnConflict.REPLACE)
-                    .execute(searchHistory)
+            val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
+            repository.insert(searchHistory)
             e.onComplete()
         }.subscribeOn(Schedulers.io()).subscribe()
     }

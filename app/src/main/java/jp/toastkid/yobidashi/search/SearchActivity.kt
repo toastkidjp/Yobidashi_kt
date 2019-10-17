@@ -33,7 +33,6 @@ import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.db.DbInitializer
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -442,7 +441,7 @@ class SearchActivity : AppCompatActivity(),
     }
 
     override fun onClickClearSearchHistory() {
-        DbInitializer.init(this).relationOfSearchHistory().deleter().executeAsSingle()
+        Completable.fromAction { DatabaseFinder().invoke(this).searchHistoryRepository().deleteAll() }
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         {

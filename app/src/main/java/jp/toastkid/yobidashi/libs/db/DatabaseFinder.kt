@@ -19,7 +19,7 @@ class DatabaseFinder {
         return Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
-                "yobidashi.db"
+                "yobidashi2.db"
         )
                 .fallbackToDestructiveMigration()
                 .build()

@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySearchHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.search.SearchAction
@@ -43,13 +43,15 @@ class SearchHistoryActivity : AppCompatActivity(),
         preferenceApplier = PreferenceApplier(this)
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        val relation = DbInitializer.init(this).relationOfSearchHistory()
 
         binding.historiesView.layoutManager =
                 LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
+        val repository = DatabaseFinder().invoke(this).searchHistoryRepository()
+
         adapter = ActivityAdapter(
                 this,
-                relation,
+                repository,
                 { history -> SearchAction(this, history.category as String, history.query as String).invoke()},
                 { history -> Toaster.snackShort(binding.root, history.query as String, preferenceApplier.colorPair()) }
         )
@@ -72,15 +74,20 @@ class SearchHistoryActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
 
-        if (adapter.itemCount == 0) {
-            Toaster.tShort(this, getString(R.string.message_none_search_histories))
-            finish()
-            return
-        }
+        adapter.refresh()
 
         ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
         ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+
+        if (adapter.itemCount == 0) {
+            Toaster.tShort(this, getString(R.string.message_none_search_histories))
+            finish()
+        }
     }
 
     private fun clickMenu(item: MenuItem): Boolean {
