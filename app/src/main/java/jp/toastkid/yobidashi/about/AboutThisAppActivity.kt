@@ -85,14 +85,9 @@ class AboutThisAppActivity : AppCompatActivity() {
     }
 
     fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.menu_exit) {
-            moveTaskToBack(true)
-            return true
-        }
-        if (itemId == R.id.menu_close) {
-            finish()
-            return true
+        when (item.itemId) {
+            R.id.menu_exit -> moveTaskToBack(true)
+            R.id.menu_close -> finish()
         }
         return true
     }
