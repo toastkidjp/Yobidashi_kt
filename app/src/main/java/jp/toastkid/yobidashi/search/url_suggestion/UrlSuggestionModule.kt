@@ -2,15 +2,17 @@ package jp.toastkid.yobidashi.search.url_suggestion
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.browser.history.ViewHistory_Relation
+import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
 import timber.log.Timber
@@ -42,7 +44,7 @@ class UrlSuggestionModule(
     /**
      * Database relation.
      */
-    private val relation: ViewHistory_Relation = DbInitializer.init(context()).relationOfViewHistory()
+    private val relation: ViewHistoryRepository = DatabaseFinder().invoke(context()).viewHistoryRepository()
 
     init {
         binding.urlSuggestions.adapter = adapter
@@ -76,12 +78,9 @@ class UrlSuggestionModule(
             return Disposables.empty()
         }
 
-        return relation.selector()
-                .where(relation.schema.url, "LIKE", "%$q%")
-                .orderBy_idDesc()
-                .limit(ITEM_LIMIT)
-                .executeAsObservable()
-                .subscribeOn(Schedulers.newThread())
+        return Maybe.fromCallable { relation.search("%$q%", ITEM_LIMIT) }
+                .subscribeOn(Schedulers.io())
+                .flatMapObservable { it.toObservable() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate {
                     if (adapter.isNotEmpty()) {
@@ -106,6 +105,6 @@ class UrlSuggestionModule(
         /**
          * Item limit.
          */
-        private const val ITEM_LIMIT: Long = 3L
+        private const val ITEM_LIMIT = 3
     }
 }

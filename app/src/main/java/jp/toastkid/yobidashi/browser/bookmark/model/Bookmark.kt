@@ -42,7 +42,7 @@ class Bookmark {
     }
 
     override fun toString(): String {
-        return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', parent='$parent', folder=$folder, view_count=$view_count, last_viewed=$last_viewed)"
+        return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', parent='$parent', folder=$folder, viewCount=$view_count, lastViewed=$last_viewed)"
     }
 
 

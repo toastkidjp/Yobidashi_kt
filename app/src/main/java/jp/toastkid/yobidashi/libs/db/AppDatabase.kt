@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi.libs.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import jp.toastkid.yobidashi.browser.history.ViewHistory
+import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearch
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchRepository
 import jp.toastkid.yobidashi.search.history.SearchHistory
@@ -12,8 +14,8 @@ import jp.toastkid.yobidashi.settings.color.SavedColorRepository
  * @author toastkidjp
  */
 @Database(
-        entities = [FavoriteSearch::class, SearchHistory::class, SavedColor::class],
-        version = 1
+        entities = [FavoriteSearch::class, SearchHistory::class, SavedColor::class, ViewHistory::class],
+        version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
 
@@ -22,4 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun searchHistoryRepository(): SearchHistoryRepository
 
     abstract fun savedColorRepository(): SavedColorRepository
+
+    abstract fun viewHistoryRepository(): ViewHistoryRepository
+
 }
