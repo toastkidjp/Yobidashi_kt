@@ -1,13 +1,12 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
-import com.github.gfx.android.orma.annotation.OnConflict
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import timber.log.Timber
 
 /**
@@ -30,13 +29,15 @@ class BookmarkInsertion (
     }
 
     private fun insert(bookmark: Bookmark): Disposable {
-        return Completable.create { e ->
-            DbInitializer.init(context)
-                    .relationOfBookmark()
-                    .inserter(OnConflict.REPLACE)
-                    .execute(bookmark)
-            e.onComplete()
-        }.subscribeOn(Schedulers.io()).subscribe({}, {Timber.e(it)})
+        return Completable.fromAction {
+            DatabaseFinder().invoke(context).bookmarkRepository()
+                    .add(bookmark)
+        }
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {},
+                        Timber::e
+                )
     }
 
     private fun makeItem(
@@ -50,7 +51,7 @@ class BookmarkInsertion (
         bookmark.title = title
         bookmark.url = url
         bookmark.favicon = faviconPath
-        bookmark.last_viewed = System.currentTimeMillis()
+        bookmark.lastViewed = System.currentTimeMillis()
         bookmark.parent = parent
         bookmark.folder = folder
         return bookmark

@@ -17,15 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
@@ -56,6 +58,8 @@ class BookmarkActivity: AppCompatActivity(),
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private lateinit var relation: BookmarkRepository
+
     /**
      * Composite of disposables.
      */
@@ -68,7 +72,7 @@ class BookmarkActivity: AppCompatActivity(),
         preferenceApplier = PreferenceApplier(this)
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        val relation = DbInitializer.init(this).relationOfBookmark()
+        relation = DatabaseFinder().invoke(this).bookmarkRepository()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
@@ -132,6 +136,8 @@ class BookmarkActivity: AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
+
+        adapter.refresh()
 
         ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
@@ -318,12 +324,19 @@ class BookmarkActivity: AppCompatActivity(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        val bookmarks = DbInitializer.init(this).relationOfBookmark().selector().toList()
-        Okio.buffer(Okio.sink(contentResolver.openOutputStream(uri))).run {
-            writeUtf8(Exporter(bookmarks).invoke())
-            flush()
-            close()
-        }
+        Maybe.fromCallable { relation.all() }
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {
+                            Okio.buffer(Okio.sink(contentResolver.openOutputStream(uri))).run {
+                                writeUtf8(Exporter(it).invoke())
+                                flush()
+                                close()
+                            }
+                        },
+                        Timber::e
+                )
+                .addTo(disposables)
     }
 
     override fun onDestroy() {
