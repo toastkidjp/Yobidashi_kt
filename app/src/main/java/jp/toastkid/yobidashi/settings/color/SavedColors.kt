@@ -3,17 +3,12 @@ package jp.toastkid.yobidashi.settings.color
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitializer
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import timber.log.Timber
 import java.util.*
 
@@ -48,30 +43,6 @@ object SavedColors {
     }
 
     /**
-     * Delete all asynchronously.
-     *
-     * @param view
-     * @param deleter
-     */
-    fun deleteAllAsync(
-            view: View?,
-            deleter: SavedColor_Deleter?
-    ): Disposable {
-        if (view == null || deleter == null) {
-            return Disposables.empty()
-        }
-        return deleter.executeAsSingle()
-                .subscribeOn(Schedulers.io())
-                .subscribe { _, _ ->
-                    Toaster.snackShort(
-                            view,
-                            R.string.settings_color_delete,
-                            PreferenceApplier(view.context).colorPair()
-                    )
-                }
-    }
-
-    /**
      * Insert default colors.
      *
      * @param context
@@ -79,11 +50,14 @@ object SavedColors {
     @SuppressLint("CheckResult")
     fun insertDefaultColors(context: Context) {
         Completable.fromAction {
-            DbInitializer.init(context).relationOfSavedColor()
-                    .inserter()
-                    .executeAllAsObservable(DefaultColors.make(context))
-                    .subscribe()
-        }.subscribeOn(Schedulers.io()).subscribe({}, {Timber.e(it)})
+            val repository = DatabaseFinder().invoke(context).savedColorRepository()
+            DefaultColors.make(context).forEach { repository.add(it) }
+        }
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {},
+                        Timber::e
+                )
     }
 
     /**
@@ -110,10 +84,9 @@ object SavedColors {
         )
 
         return Completable.fromAction {
-            DbInitializer.init(context).relationOfSavedColor()
-                    .inserter()
-                    .executeAsSingle(makeSavedColor(bg, font))
-                    .subscribe()
+            DatabaseFinder().invoke(context)
+                    .savedColorRepository()
+                    .add(makeSavedColor(bg, font))
         }
                 .subscribeOn(Schedulers.io())
                 .subscribe()

@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.settings.color
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +11,12 @@ import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.gfx.android.orma.rx.RxRelation
-import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -23,12 +25,15 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
+import timber.log.Timber
 
 /**
  * Color setting activity.
+ *
+ * TODO clean up with ViewModel.
  *
  * @author toastkidjp
  */
@@ -55,9 +60,11 @@ class ColorSettingFragment : Fragment(),
     /**
      * Saved color's adapter.
      */
-    private var adapter: OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>? = null
+    private var adapter: SavedColorAdapter? = null
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private lateinit var repository: SavedColorRepository
 
     /**
      * Subscribed disposables.
@@ -126,16 +133,18 @@ class ColorSettingFragment : Fragment(),
      */
     private fun initSavedColors() {
         val activityContext = context ?: return
-        adapter = SavedColorAdapter(
-                activityContext,
-                DbInitializer.init(activityContext).relationOfSavedColor()
-        )
+
+        repository = DatabaseFinder().invoke(activityContext).savedColorRepository()
+
+        adapter = SavedColorAdapter(repository)
         binding?.savedColors?.adapter = adapter
         binding?.savedColors?.layoutManager =
                 LinearLayoutManager(activityContext, LinearLayoutManager.HORIZONTAL, false)
         binding?.clearSavedColor?.setOnClickListener{
             val fragmentManager = fragmentManager ?: return@setOnClickListener
-            ClearColorsDialogFragment().show(
+            val clearColorsDialogFragment = ClearColorsDialogFragment()
+            clearColorsDialogFragment.setTargetFragment(this, 1)
+            clearColorsDialogFragment.show(
                     fragmentManager,
                     ClearColorsDialogFragment::class.java.simpleName
             )
@@ -143,10 +152,7 @@ class ColorSettingFragment : Fragment(),
     }
 
     override fun onClickClearColor() {
-        SavedColors.deleteAllAsync(
-                binding?.root,
-                adapter?.relation?.deleter() as? SavedColor_Deleter
-        ).addTo(disposables)
+        adapter?.clear()
     }
 
     /**
@@ -159,9 +165,15 @@ class ColorSettingFragment : Fragment(),
         SavedColors.setSaved(holder.textView, color)
         holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
         holder.remove.setOnClickListener {
-            adapter?.removeItemAsMaybe(color)
+            Completable.fromAction {
+                repository.delete(color)
+                adapter?.deleteAt(color)
+            }
                     ?.subscribeOn(Schedulers.io())
-                    ?.subscribe()
+                    ?.subscribe(
+                            { },
+                            Timber::e
+                    )
                     ?.addTo(disposables)
             snackShort(R.string.settings_color_delete)
         }
@@ -177,6 +189,7 @@ class ColorSettingFragment : Fragment(),
      */
     private fun refresh() {
         Colors.setColors(binding?.settingsColorOk as TextView, colorPair())
+        adapter?.refresh()
     }
 
     /**
@@ -188,9 +201,17 @@ class ColorSettingFragment : Fragment(),
 
         commitNewColor(bgColor, fontColor)
 
-        adapter?.addItemAsSingle(SavedColors.makeSavedColor(bgColor, fontColor))
+        Completable.fromAction {
+            val savedColor = SavedColors.makeSavedColor(bgColor, fontColor)
+            repository.add(savedColor)
+            adapter?.add(savedColor)
+        }
                 ?.subscribeOn(Schedulers.io())
-                ?.subscribe()
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(
+                        { adapter?.notifyDataSetChanged() },
+                        Timber::e
+                )
                 ?.addTo(disposables)
     }
 
@@ -261,8 +282,10 @@ class ColorSettingFragment : Fragment(),
     /**
      * Saved color's adapter.
      */
-    private inner class SavedColorAdapter(activityContext: Context, relation: RxRelation<SavedColor, *>)
-        : OrmaRecyclerViewAdapter<SavedColor, SavedColorHolder>(activityContext, relation) {
+    private inner class SavedColorAdapter(private val repository: SavedColorRepository)
+        : RecyclerView.Adapter<SavedColorHolder>() {
+
+        private val items = mutableListOf<SavedColor>()
 
         override fun onCreateViewHolder(
                 parent: ViewGroup,
@@ -273,10 +296,67 @@ class ColorSettingFragment : Fragment(),
         }
 
         override fun onBindViewHolder(holder: SavedColorHolder, position: Int) {
-            bindView(holder, relation.get(position))
+            bindView(holder, items.get(position))
         }
 
-        override fun getItemCount(): Int = relation.count()
+        override fun getItemCount(): Int = items.count()
+
+        fun refresh(): Disposable {
+            items.clear()
+            return Maybe.fromCallable { repository.findAll() }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {
+                                items.addAll(it)
+                                notifyDataSetChanged()
+                            },
+                            Timber::e
+                    )
+        }
+
+        fun deleteAt(savedColor: SavedColor): Disposable {
+            return delete(savedColor)
+        }
+
+        private fun delete(favoriteSearch: SavedColor): Disposable {
+            return Completable.fromAction {
+                repository.delete(favoriteSearch)
+                items.remove(favoriteSearch)
+            }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { notifyDataSetChanged() },
+                            Timber::e
+                    )
+        }
+
+        fun add(savedColor: SavedColor) {
+            items.add(savedColor)
+        }
+
+        fun clear() {
+            Completable.fromAction {
+                repository.deleteAll()
+                items.clear()
+            }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {
+                                notifyDataSetChanged()
+                                val root = binding?.root ?: return@subscribe
+                                Toaster.snackShort(
+                                        root,
+                                        R.string.settings_color_delete,
+                                        colorPair()
+                                )
+                            },
+                            Timber::e
+                    )
+                    .addTo(disposables)
+        }
     }
 
     private fun colorPair() = preferenceApplier.colorPair()
