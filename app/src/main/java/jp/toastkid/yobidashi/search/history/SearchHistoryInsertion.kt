@@ -12,7 +12,7 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class SearchHistoryInsertion private constructor(
-        private val context: Context,
+        context: Context,
         private val category: String,
         private val query: String
 ) {
