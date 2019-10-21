@@ -37,12 +37,14 @@ class SearchHistoryInsertion private constructor(
 
     companion object {
 
-        fun make(
-                context: Context,
-                category: String,
-                query: String
-        ): SearchHistoryInsertion {
-            return SearchHistoryInsertion(context, category, query)
-        }
+        /**
+         * Make search history insertion object.
+         *
+         * @param context [Context]
+         * @param category search category name
+         * @param query search query
+         */
+        fun make(context: Context, category: String, query: String) =
+                SearchHistoryInsertion(context, category, query)
     }
 }
