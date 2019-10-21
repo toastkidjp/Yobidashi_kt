@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -15,6 +16,9 @@ class SearchHistoryInsertion private constructor(
         private val query: String
 ) {
 
+    private val repository =
+            DatabaseFinder().invoke(context).searchHistoryRepository()
+
     fun insert(): Disposable {
         if (category.isEmpty() || query.isEmpty()) {
             return EMPTY
@@ -22,13 +26,13 @@ class SearchHistoryInsertion private constructor(
         return insert(makeItem(category, query))
     }
 
-    private fun insert(searchHistory: SearchHistory): Disposable {
-        return Completable.create { e ->
-            val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
-            repository.insert(searchHistory)
-            e.onComplete()
-        }.subscribeOn(Schedulers.io()).subscribe()
-    }
+    private fun insert(searchHistory: SearchHistory) =
+            Completable.fromAction { repository.insert(searchHistory) }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                            {},
+                            Timber::e
+                    )
 
     private fun makeItem(category: String, query: String): SearchHistory {
         val sh = SearchHistory()
