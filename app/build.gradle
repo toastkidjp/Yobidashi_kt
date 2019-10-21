@@ -24,6 +24,7 @@ android {
         versionCode ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
         versionName "${verMajor}.${verMiddle}.${verMinor}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {
