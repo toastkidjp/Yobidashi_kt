@@ -9,6 +9,11 @@ import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import timber.log.Timber
 
 /**
+ *
+ * @param context [Context]
+ * @param category search category name
+ * @param query search query
+ *
  * @author toastkidjp
  */
 class SearchHistoryInsertion private constructor(
