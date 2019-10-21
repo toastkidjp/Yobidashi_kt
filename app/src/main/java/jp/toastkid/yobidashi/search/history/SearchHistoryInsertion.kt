@@ -23,7 +23,7 @@ class SearchHistoryInsertion private constructor(
         if (category.isEmpty() || query.isEmpty()) {
             return EMPTY
         }
-        return insert(makeItem(category, query))
+        return insert(SearchHistory.make(category, query))
     }
 
     private fun insert(searchHistory: SearchHistory) =
@@ -33,15 +33,6 @@ class SearchHistoryInsertion private constructor(
                             {},
                             Timber::e
                     )
-
-    private fun makeItem(category: String, query: String): SearchHistory {
-        val sh = SearchHistory()
-        sh.key = category + query
-        sh.category = category
-        sh.query = query
-        sh.timestamp = System.currentTimeMillis()
-        return sh
-    }
 
     companion object {
 
