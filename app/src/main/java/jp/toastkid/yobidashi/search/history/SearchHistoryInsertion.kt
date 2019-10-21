@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.search.history
 import android.content.Context
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import timber.log.Timber
@@ -21,7 +22,7 @@ class SearchHistoryInsertion private constructor(
 
     fun insert(): Disposable {
         if (category.isEmpty() || query.isEmpty()) {
-            return EMPTY
+            return Disposables.empty()
         }
         return insert(SearchHistory.make(category, query))
     }
@@ -35,16 +36,6 @@ class SearchHistoryInsertion private constructor(
                     )
 
     companion object {
-
-        private val EMPTY = object : Disposable {
-            override fun dispose() {
-
-            }
-
-            override fun isDisposed(): Boolean {
-                return false
-            }
-        }
 
         fun make(
                 context: Context,
