@@ -42,9 +42,10 @@ class UrlSuggestionModule(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
-     * Database relation.
+     * Database repository.
      */
-    private val relation: ViewHistoryRepository = DatabaseFinder().invoke(context()).viewHistoryRepository()
+    private val viewHistoryRepository: ViewHistoryRepository =
+            DatabaseFinder().invoke(context()).viewHistoryRepository()
 
     init {
         binding.urlSuggestions.adapter = adapter
@@ -62,7 +63,7 @@ class UrlSuggestionModule(
      * @param index
      */
     private fun removeAt(index: Int) {
-        adapter.removeAt(relation, index).addTo(disposables)
+        adapter.removeAt(viewHistoryRepository, index).addTo(disposables)
     }
 
     /**
@@ -78,7 +79,7 @@ class UrlSuggestionModule(
             return Disposables.empty()
         }
 
-        return Maybe.fromCallable { relation.search("%$q%", ITEM_LIMIT) }
+        return Maybe.fromCallable { viewHistoryRepository.search("%$q%", ITEM_LIMIT) }
                 .subscribeOn(Schedulers.io())
                 .flatMapObservable { it.toObservable() }
                 .observeOn(AndroidSchedulers.mainThread())

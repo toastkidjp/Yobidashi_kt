@@ -31,7 +31,7 @@ import java.util.*
  */
 internal class ActivityAdapter(
         context: Context,
-        private val relation: BookmarkRepository,
+        private val bookmarkRepository: BookmarkRepository,
         private val onClick: (Bookmark) -> Unit,
         private val onDelete: (Bookmark) -> Unit,
         private val onRefresh: () -> Unit
@@ -100,7 +100,7 @@ internal class ActivityAdapter(
 
     fun refresh() {
         items.clear()
-        Maybe.fromCallable { items.addAll(relation.all()) }
+        Maybe.fromCallable { items.addAll(bookmarkRepository.all()) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -142,7 +142,7 @@ internal class ActivityAdapter(
      * @param title
      */
     fun query(title: String) {
-        Maybe.fromCallable { relation.search(title) }
+        Maybe.fromCallable { bookmarkRepository.search(title) }
                 .subscribeOn(Schedulers.io())
                 .flatMapObservable { it.toObservable() }
                 .doOnSubscribe { items.clear() }
@@ -182,7 +182,7 @@ internal class ActivityAdapter(
      * @param position position
      */
     fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
-        Completable.fromAction { relation.delete(item) }
+        Completable.fromAction { bookmarkRepository.delete(item) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -198,7 +198,7 @@ internal class ActivityAdapter(
      * @param onComplete callback
      */
     fun clearAll(onComplete: () -> Unit) {
-        Completable.fromAction { relation.clear() }
+        Completable.fromAction { bookmarkRepository.clear() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

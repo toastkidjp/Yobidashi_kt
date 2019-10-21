@@ -94,14 +94,14 @@ class Adapter(
     /**
      * Remove at index.
      *
-     * @param relation
+     * @param viewHistoryRepository
      * @param index
      * @return disposable
      */
-    fun removeAt(relation: ViewHistoryRepository, index: Int): Disposable {
+    fun removeAt(viewHistoryRepository: ViewHistoryRepository, index: Int): Disposable {
         return Completable.fromAction {
             val item = get(index)
-            relation.delete(item)
+            viewHistoryRepository.delete(item)
             suggestions.remove(item)
         }
                 .subscribeOn(Schedulers.io())

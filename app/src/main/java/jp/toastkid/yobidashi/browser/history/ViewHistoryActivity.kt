@@ -39,12 +39,12 @@ class ViewHistoryActivity: AppCompatActivity(), ClearDialogFragment.Callback {
         preferenceApplier = PreferenceApplier(this)
 
         binding = DataBindingUtil.setContentView<ActivityViewHistoryBinding>(this, LAYOUT_ID)
-        val relation = DatabaseFinder().invoke(this).viewHistoryRepository()
+        val viewHistoryRepository = DatabaseFinder().invoke(this).viewHistoryRepository()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
-                relation,
+                viewHistoryRepository,
                 { history -> finishWithResult(Uri.parse(history.url)) },
                 { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) }
         )

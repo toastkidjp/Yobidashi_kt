@@ -35,7 +35,7 @@ class FavoriteSearchModule(
     private val moduleAdapter: ModuleAdapter
 
     /**
-     * Database relation.
+     * Database repository.
      */
     private val repository: FavoriteSearchRepository
 

@@ -58,7 +58,7 @@ class BookmarkActivity: AppCompatActivity(),
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private lateinit var relation: BookmarkRepository
+    private lateinit var bookmarkRepository: BookmarkRepository
 
     /**
      * Composite of disposables.
@@ -72,12 +72,12 @@ class BookmarkActivity: AppCompatActivity(),
         preferenceApplier = PreferenceApplier(this)
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        relation = DatabaseFinder().invoke(this).bookmarkRepository()
+        bookmarkRepository = DatabaseFinder().invoke(this).bookmarkRepository()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
-                relation,
+                bookmarkRepository,
                 { history -> finishWithResult(Uri.parse(history.url)) },
                 { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) },
                 binding.historiesView::scheduleLayoutAnimation
@@ -324,7 +324,7 @@ class BookmarkActivity: AppCompatActivity(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        Maybe.fromCallable { relation.all() }
+        Maybe.fromCallable { bookmarkRepository.all() }
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         {

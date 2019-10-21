@@ -25,7 +25,7 @@ import java.util.*
  * View history activity's adapter.
  *
  * @param context
- * @param relation
+ * @param viewHistoryRepository
  * @param onClick
  * @param onDelete
  *
@@ -33,7 +33,7 @@ import java.util.*
  */
 internal class ActivityAdapter(
         private val context: Context,
-        private val relation: ViewHistoryRepository,
+        private val viewHistoryRepository: ViewHistoryRepository,
         private val onClick: (ViewHistory) -> Unit,
         private val onDelete: (ViewHistory) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
@@ -93,7 +93,7 @@ internal class ActivityAdapter(
     override fun getItemCount(): Int = items.size
 
     fun refresh(onComplete: () -> Unit = {}) {
-        CompletableLift.fromAction { items.addAll(relation.reversed()) }
+        CompletableLift.fromAction { items.addAll(viewHistoryRepository.reversed()) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -114,7 +114,7 @@ internal class ActivityAdapter(
     fun removeAt(position: Int) {
         val item = items[position]
         Completable.fromAction {
-            relation.delete(item)
+            viewHistoryRepository.delete(item)
             items.remove(item)
         }
                 .subscribeOn(Schedulers.io())
@@ -129,7 +129,7 @@ internal class ActivityAdapter(
      * @param onComplete
      */
     fun clearAll(onComplete: () -> Unit) {
-        Completable.fromAction { relation.deleteAll() }
+        Completable.fromAction { viewHistoryRepository.deleteAll() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
