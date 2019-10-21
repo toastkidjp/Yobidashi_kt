@@ -68,6 +68,7 @@ import jp.toastkid.yobidashi.torch.Torch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import kotlin.math.min
 
 /**
  * Main of this calendar app.
@@ -114,10 +115,19 @@ class MainActivity :
         }
     }
 
+    /**
+     * Menu's view model.
+     */
     private var menuViewModel: MenuViewModel? = null
 
+    /**
+     * Rx permission.
+     */
     private var rxPermissions: RxPermissions? = null
 
+    /**
+     * Preferences wrapper.
+     */
     private lateinit var preferenceApplier: PreferenceApplier
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -185,6 +195,9 @@ class MainActivity :
         })
     }
 
+    /**
+     * Set FAB's listener.
+     */
     @SuppressLint("ClickableViewAccessibility")
     private fun setFabListener() {
         val listener = DraggableTouchListener()
@@ -193,7 +206,21 @@ class MainActivity :
                 preferenceApplier.setNewMenuFabPosition(x, y)
             }
         })
+
         binding.menuSwitch.setOnTouchListener(listener)
+
+        binding.menuSwitch.viewTreeObserver.addOnGlobalLayoutListener {
+            val menuFabPosition = preferenceApplier.menuFabPosition()
+            val displayMetrics = binding.menuSwitch.context.resources.displayMetrics
+            if (binding.menuSwitch.x > displayMetrics.widthPixels) {
+                binding.menuSwitch.x =
+                        min(menuFabPosition?.first ?: 0f, displayMetrics.widthPixels.toFloat())
+            }
+            if (binding.menuSwitch.y > displayMetrics.heightPixels) {
+                binding.menuSwitch.y =
+                        min(menuFabPosition?.second ?: 0f, displayMetrics.heightPixels.toFloat())
+            }
+        }
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -250,6 +277,9 @@ class MainActivity :
         }
     }
 
+    /**
+     * Finish this activity with transition animation.
+     */
     private fun finishWithoutTransition() {
         overridePendingTransition(0, 0)
         finish()
@@ -307,7 +337,12 @@ class MainActivity :
         }
     }
 
-
+    /**
+     * Callback method on long clicked menu.
+     *
+     * @param menu
+     * @return true
+     */
     private fun onMenuLongClick(menu: Menu): Boolean {
         Toaster.snackLong(
                 binding.root,
@@ -339,7 +374,7 @@ class MainActivity :
      * Load Uri.
      *
      * @param uri
-     * @param shouldLoadInternal for avoiding infinite loop
+     * @param shouldLoadInternal for avoiding infinite loop, default is false
      */
     private fun loadUri(uri: Uri, shouldLoadInternal: Boolean = false) {
         if (preferenceApplier.useInternalBrowser() || shouldLoadInternal) {
