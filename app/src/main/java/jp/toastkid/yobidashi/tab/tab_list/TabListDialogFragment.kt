@@ -77,7 +77,7 @@ class TabListDialogFragment : DialogFragment() {
         fun tabIndexFromTabList(): Int
         fun currentTabIdFromTabList(): String
         fun replaceTabFromTabList(tab: Tab)
-        fun getTabByIndexFromTabList(position: Int): Tab
+        fun getTabByIndexFromTabList(position: Int): Tab?
         fun closeTabFromTabList(position: Int)
         fun getTabAdapterSizeFromTabList(): Int
         fun swapTabsFromTabList(from: Int, to: Int)
