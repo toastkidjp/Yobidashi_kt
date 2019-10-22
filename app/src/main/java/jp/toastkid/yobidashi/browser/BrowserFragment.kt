@@ -474,7 +474,7 @@ class BrowserFragment : Fragment(),
             Menu.PDF-> {
                 openPdfTabFromStorage()
             }
-            //TODO else case
+            else -> Unit
         }
     }
     /**
