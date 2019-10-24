@@ -64,6 +64,8 @@ enum class Menu(
 
     WEB_SEARCH(R.string.title_search, R.drawable.ic_search_white),
 
+    RANDOM_WIKIPEDIA(R.string.menu_random_wikipedia, R.drawable.ic_wikipedia_white),
+
     SETTING(R.string.title_settings, R.drawable.ic_settings),
 
     EDITOR(R.string.title_editor, R.drawable.ic_edit),

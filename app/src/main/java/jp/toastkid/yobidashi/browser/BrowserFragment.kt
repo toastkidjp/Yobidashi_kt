@@ -44,10 +44,7 @@ import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
-import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
-import jp.toastkid.yobidashi.libs.ImageDownloader
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
@@ -70,6 +67,7 @@ import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -165,6 +163,8 @@ class BrowserFragment : Fragment(),
     private lateinit var e2JTranslator: E2JTranslator
 
     private lateinit var languageIdentifier: FirebaseLanguageIdentification
+
+    private lateinit var randomWikipedia: RandomWikipedia
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -389,6 +389,33 @@ class BrowserFragment : Fragment(),
                         ArchivesActivity.makeIntent(fragmentActivity),
                         ArchivesActivity.REQUEST_CODE
                 )
+            }
+            Menu.RANDOM_WIKIPEDIA -> {
+                if (preferenceApplier.wifiOnly &&
+                        WifiConnectionChecker.isNotConnecting(requireContext())) {
+                    val parent = binding?.webViewContainer ?: return
+                    Toaster.snackShort(
+                            parent,
+                            getString(R.string.message_wifi_not_connecting),
+                            colorPair()
+                    )
+                    return
+                }
+
+                if (!::randomWikipedia.isInitialized) {
+                    randomWikipedia = RandomWikipedia()
+                }
+                randomWikipedia
+                        .fetchWithAction { title, link ->
+                            loadWithNewTab(link)
+                            val parent = binding?.webViewContainer ?: return@fetchWithAction
+                            Toaster.snackShort(
+                                    parent,
+                                    getString(R.string.message_open_random_wikipedia, title),
+                                    colorPair()
+                            )
+                        }
+                        .addTo(disposables)
             }
             Menu.WEB_SEARCH-> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.root as View))

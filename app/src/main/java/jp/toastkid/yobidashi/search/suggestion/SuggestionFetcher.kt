@@ -2,64 +2,63 @@ package jp.toastkid.yobidashi.search.suggestion
 
 import android.net.Uri
 import jp.toastkid.yobidashi.libs.Strings
-import okhttp3.*
+import jp.toastkid.yobidashi.libs.network.HttpClientFactory
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Request
+import okhttp3.Response
 import timber.log.Timber
 import java.io.IOException
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * Suggest Web API response fetcher.
-
+ *
  * @author toastkidjp
  */
 class SuggestionFetcher {
 
-    /** HTTP client.  */
-    private val mClient: OkHttpClient = OkHttpClient.Builder()
-            .connectTimeout(3L, TimeUnit.SECONDS)
-            .readTimeout(3L, TimeUnit.SECONDS)
-            .build()
+    /**
+     * HTTP client.
+     */
+    private val httpClient = HttpClientFactory.withTimeout(3L)
 
     /**
      * Fetch Web API result asynchronously.
-
-     * @param query
      *
+     * @param query
      * @param listCallback
      */
     fun fetchAsync(query: String, listCallback: (List<String>) -> Unit) {
         val request = Request.Builder()
                 .url(makeSuggestUrl(query))
                 .build()
-        mClient.newCall(request).enqueue(object : Callback {
+        httpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) = Timber.e(e)
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                if (response.body() == null) {
-                    return
-                }
-                listCallback(SuggestionParser.parse(response.body()?.string() ?: ""))
+                val body = response.body()?.string() ?: return
+                listCallback(SuggestionParser.parse(body))
             }
         })
     }
 
     /**
      * Make suggest Web API requesting URL.
-     * @param query Query
      *
+     * @param query Query
      * @return suggest Web API requesting URL
      */
     private fun makeSuggestUrl(query: String): String {
-        return URL + "&hl=" + findHl(query) + "&q=" + Uri.encode(query)
+        return "$URL&hl=${findHl(query)}&q=${Uri.encode(query)}"
     }
 
     /**
      * Find appropriate language.
-     * @param query
      *
-     * @return
+     * @param query
+     * @return language (ex: "ja", "en")
      */
     private fun findHl(query: String): String {
         return if (Strings.containsMultiByte(query)) "ja" else Locale.getDefault().language
@@ -67,7 +66,9 @@ class SuggestionFetcher {
 
     companion object {
 
-        /** Suggest Web API.  */
-        private val URL = "https://www.google.com/complete/search?&output=toolbar"
+        /**
+         * Suggest Web API.
+         */
+        private const val URL = "https://www.google.com/complete/search?&output=toolbar"
     }
 }
