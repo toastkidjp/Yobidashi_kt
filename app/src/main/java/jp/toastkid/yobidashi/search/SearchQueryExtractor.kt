@@ -57,6 +57,7 @@ object SearchQueryExtractor {
                 uri.getQueryParameter("p")
             host.endsWith("www.baidu.com") ->
                 uri.getQueryParameter("wd")
+            host.equals("www.tumblr.com") -> uri.lastPathSegment
             else -> uri.getQueryParameter(
                     commonQueryParameterNames
                             .find { uri.queryParameterNames.contains(it) } ?: ""

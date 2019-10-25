@@ -35,5 +35,9 @@ class SearchQueryExtractorTest {
                 "スウィープ",
                 SearchQueryExtractor("https://ja.wikipedia.org/wiki/%E3%82%B9%E3%82%A6%E3%82%A3%E3%83%BC%E3%83%97")
         )
+        assertEquals(
+                "ラーメン",
+                SearchQueryExtractor("https://www.tumblr.com/search/%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3")
+        )
     }
 }

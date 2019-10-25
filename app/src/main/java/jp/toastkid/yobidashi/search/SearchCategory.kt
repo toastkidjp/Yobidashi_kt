@@ -151,6 +151,10 @@ enum class SearchCategory(
             R.drawable.ic_medium,
             "https://medium.com/search?q="
     ),
+    TUMBLR(R.string.tumblr,
+            R.drawable.ic_tumblr,
+            "https://www.tumblr.com/search/"
+    ),
     TED(R.string.ted,
             R.drawable.ic_ted,
             "https://www.ted.com/search?q="
