@@ -31,5 +31,9 @@ class SearchQueryExtractorTest {
                 "Noodle",
                 SearchQueryExtractor("https://commons.wikimedia.org/w/index.php?search=Noodle&ns0=1")
         )
+        assertEquals(
+                "スウィープ",
+                SearchQueryExtractor("https://ja.wikipedia.org/wiki/%E3%82%B9%E3%82%A6%E3%82%A3%E3%83%BC%E3%83%97")
+        )
     }
 }

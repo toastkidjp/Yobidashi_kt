@@ -46,7 +46,12 @@ object SearchQueryExtractor {
                 uri.getQueryParameter("query")
             host.endsWith(".wikipedia.org")
                 or host.endsWith(".wikimedia.org") ->
-                uri.getQueryParameter("search")
+                if (uri.queryParameterNames.contains("search")) {
+                    uri.getQueryParameter("search")
+                } else {
+                    // "/wiki/"'s length.
+                    Uri.decode(uri.encodedPath?.substring(6))
+                }
             host.endsWith("search.yahoo.com")
                     or host.endsWith("search.yahoo.co.jp") ->
                 uri.getQueryParameter("p")
