@@ -129,7 +129,7 @@ class BookmarkActivity: AppCompatActivity(),
      */
     private fun finishWithResult(uri: Uri) {
         val intent = Intent()
-        intent.setData(uri)
+        intent.data = uri
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
