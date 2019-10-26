@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -44,7 +45,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_other, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
@@ -147,4 +148,9 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
     @StringRes
     override fun titleId() = R.string.subhead_others
 
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_setting_other
+    }
 }
