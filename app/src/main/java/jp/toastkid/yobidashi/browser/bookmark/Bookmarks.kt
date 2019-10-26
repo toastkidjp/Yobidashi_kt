@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
-import android.net.Uri
+import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
@@ -12,6 +12,7 @@ object Bookmarks {
     const val ROOT_FOLDER_NAME: String = "root"
 
     fun makeFaviconUrl(context: Context, url: String): String {
-        return FilesDir(context, "favicons").assignNewFile(Uri.parse(url).host + ".png").absolutePath
+        val host = url.toUri().host ?: url
+        return FilesDir(context, "favicons").assignNewFile("$host.png").absolutePath
     }
 }
