@@ -13,7 +13,6 @@ import jp.toastkid.yobidashi.R
  * @author toastkidjp
  */
 enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
-    START(R.string.title_startup_start, R.id.start_up_start),
     SEARCH(R.string.title_search, R.id.start_up_search),
     BROWSER(R.string.title_browser, R.id.start_up_browser),
     APPS_LAUNCHER(R.string.title_apps_launcher, R.id.start_up_launcher);
