@@ -293,7 +293,8 @@ class BookmarkActivity: AppCompatActivity(),
      */
     private fun importBookmark(uri: Uri) {
         Completable.fromAction {
-            ExportedFileParser(contentResolver.openInputStream(uri)).forEach {
+            val inputStream = contentResolver.openInputStream(uri) ?: return@fromAction
+            ExportedFileParser(inputStream).forEach {
                 BookmarkInsertion(
                         this,
                         title  = it.title,
@@ -328,7 +329,8 @@ class BookmarkActivity: AppCompatActivity(),
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         {
-                            Okio.buffer(Okio.sink(contentResolver.openOutputStream(uri))).run {
+                            val outputStream = contentResolver.openOutputStream(uri) ?: return@subscribe
+                            Okio.buffer(Okio.sink(outputStream)).run {
                                 writeUtf8(Exporter(it).invoke())
                                 flush()
                                 close()
