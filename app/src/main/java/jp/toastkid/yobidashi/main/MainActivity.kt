@@ -738,8 +738,9 @@ class MainActivity :
         /**
          * Make launcher intent.
          *
-         * @param context
-         * @param dayOfMonth
+         * @param context [Context]
+         * @param month Month
+         * @param dayOfMonth Day of month
          * @return [Intent]
          */
         fun makeIntent(context: Context, month: Int, dayOfMonth: Int) = makeIntent(context)
