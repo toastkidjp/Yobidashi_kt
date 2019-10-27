@@ -61,7 +61,7 @@ play {
 dependencies {
 
     def supportLibVersion = '1.0.0'
-    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.appcompat:appcompat:1.0.2"
     implementation "androidx.browser:browser:${supportLibVersion}"
     implementation "androidx.cardview:cardview:${supportLibVersion}"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
