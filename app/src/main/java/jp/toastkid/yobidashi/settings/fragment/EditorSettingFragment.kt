@@ -83,12 +83,14 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                 picker.addSVBar(editorModule.backgroundSvbar)
                 picker.addOpacityBar(editorModule.backgroundOpacitybar)
                 picker.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
+                picker.color = preferenceApplier.editorBackgroundColor()
             }
 
             editorModule.fontPalette.also { picker ->
                 picker.addSVBar(editorModule.fontSvbar)
                 picker.addOpacityBar(editorModule.fontOpacitybar)
                 picker.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
+                picker.color = preferenceApplier.editorFontColor()
             }
             editorModule.fragment = this
             Colors.setColors(
@@ -100,7 +102,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                     ColorPair(initialBgColor, initialFontColor)
             )
 
-            binding.fontSize.adapter = object : BaseAdapter() {
+            editorModule.fontSize.adapter = object : BaseAdapter() {
                 override fun getCount(): Int = EditorFontSize.values().size
 
                 override fun getItem(position: Int): EditorFontSize
@@ -119,22 +121,20 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                     return itemView
                 }
             }
-            binding.fontSize.setSelection(
+            editorModule.fontSize.setSelection(
                     EditorFontSize.findIndex(preferenceApplier.editorFontSize())
             )
-            binding.fontSize.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            editorModule.fontSize.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     preferenceApplier.setEditorFontSize(EditorFontSize.values()[position].size)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
+
+            editorModule.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor())
+            editorModule.highlightPreview.setBackgroundColor(preferenceApplier.editorHighlightColor())
         }
-        val colorPair = preferenceApplier.colorPair()
-        binding.backgroundPalette.color = colorPair.bgColor()
-        binding.fontPalette.color = colorPair.fontColor()
-        binding.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor())
-        binding.highlightPreview.setBackgroundColor(preferenceApplier.editorHighlightColor())
     }
 
     /**
@@ -161,6 +161,9 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
     fun reset() {
         preferenceApplier.setEditorBackgroundColor(initialBgColor)
         preferenceApplier.setEditorFontColor(initialFontColor)
+
+        binding.backgroundPalette.color = initialBgColor
+        binding.fontPalette.color = initialFontColor
 
         Colors.setColors(binding.ok as TextView, ColorPair(initialBgColor, initialFontColor))
 
