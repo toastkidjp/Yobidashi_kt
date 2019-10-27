@@ -546,11 +546,12 @@ class BrowserFragment : Fragment(),
      */
     private fun search(option: ActivityOptions) {
         context?.let {
-            val query = SearchQueryExtractor.invoke(browserModule.currentUrl())
+            val currentUrl = browserModule.currentUrl()
+            val query = SearchQueryExtractor.invoke(currentUrl)
             val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
-                SearchActivity.makeIntent(it)
+                SearchActivity.makeIntent(it, currentUrl)
             } else {
-                SearchActivity.makeIntentWithQuery(it, query ?: "")
+                SearchActivity.makeIntentWithQuery(it, query ?: "", currentUrl)
             }
             startActivity(makeIntent, option.toBundle())
         }
@@ -639,7 +640,7 @@ class BrowserFragment : Fragment(),
         } else {
             currentUrl
         }
-        startActivity(SearchActivity.makeIntentWithQuery(activityContext, inputText ?: ""))
+        startActivity(SearchActivity.makeIntentWithQuery(activityContext, inputText ?: "", currentUrl))
     }
 
     /**

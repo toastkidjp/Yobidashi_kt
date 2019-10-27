@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.search
 
 import android.app.Dialog
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
@@ -17,7 +16,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
-import java.util.*
 
 /**
  * In site search with Google.
@@ -25,6 +23,8 @@ import java.util.*
  * @author toastkidjp
  */
 class SiteSearchDialogFragment : DialogFragment() {
+
+    private val siteSearchUrlGenerator = SiteSearchUrlGenerator()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
@@ -80,27 +80,12 @@ class SiteSearchDialogFragment : DialogFragment() {
         startActivity(
                 MainActivity.makeBrowserIntent(
                         context,
-                        makeUrl(arguments?.getString(KEY_URL), query).toUri()
+                        siteSearchUrlGenerator(arguments?.getString(KEY_URL), query).toUri()
                 )
         )
     }
 
-    /**
-     * Make URL.
-     *
-     * @param url
-     * @param rawQuery
-     * @return Search result URL
-     */
-    private fun makeUrl(url: String?, rawQuery: String): String =
-            Formatter().format(FORMAT, url?.toUri()?.host, Uri.encode(rawQuery)).toString()
-
     companion object {
-
-        /**
-         * Site search URL format.
-         */
-        private const val FORMAT = "https://www.google.com/search?as_dt=i&as_sitesearch=%s&as_q=%s"
 
         /**
          * Extra key for URL string.

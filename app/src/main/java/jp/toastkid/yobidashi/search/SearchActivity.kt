@@ -111,6 +111,8 @@ class SearchActivity : AppCompatActivity(),
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var currentUrl: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
@@ -175,6 +177,8 @@ class SearchActivity : AppCompatActivity(),
 
             setQuery()
         }
+
+        currentUrl = intent.getStringExtra(EXTRA_KEY_URL)
 
         Toaster.snackShort(
                 binding?.background as View,
@@ -399,7 +403,7 @@ class SearchActivity : AppCompatActivity(),
             )
             return
         }
-        SearchAction(this, category, query, onBackground)
+        SearchAction(this, category, query, currentUrl, onBackground)
                 .invoke()
                 .addTo(disposables)
         if (onBackground) {
@@ -508,15 +512,21 @@ class SearchActivity : AppCompatActivity(),
          * Extra key.
          */
         private const val EXTRA_KEY_QUERY = "query"
+        private const val EXTRA_KEY_URL = "url"
 
         /**
          * Make launch [Intent].
          *
          * @param context [Context]
          */
-        fun makeIntent(context: Context) =
+        fun makeIntent(context: Context, url: String? = null) =
                 Intent(context, SearchActivity::class.java)
-                        .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
+                        .apply {
+                            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            url?.let {
+                                putExtra(EXTRA_KEY_URL, it)
+                            }
+                        }
 
         /**
          * Make launcher [Intent] with query.
@@ -524,8 +534,8 @@ class SearchActivity : AppCompatActivity(),
          * @param context [Context]
          * @param query Query
          */
-        fun makeIntentWithQuery(context: Context, query: String): Intent =
-                makeIntent(context).apply { putExtra(EXTRA_KEY_QUERY, query) }
+        fun makeIntentWithQuery(context: Context, query: String, url: String? = null): Intent =
+                makeIntent(context, url).apply { putExtra(EXTRA_KEY_QUERY, query) }
 
     }
 }

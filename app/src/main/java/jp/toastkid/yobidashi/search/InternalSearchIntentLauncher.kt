@@ -13,6 +13,7 @@ internal class InternalSearchIntentLauncher(private val context: Context) : Sear
 
     private var query: String = ""
 
+    private var currentUrl: String? = null
 
     fun setCategory(category: String): InternalSearchIntentLauncher {
         this.category = category
@@ -24,11 +25,16 @@ internal class InternalSearchIntentLauncher(private val context: Context) : Sear
         return this
     }
 
+    fun setCurrentUrl(currentUrl: String?): InternalSearchIntentLauncher {
+        this.currentUrl = currentUrl
+        return this
+    }
+
     override fun invoke() {
         context.startActivity(
                 MainActivity.makeBrowserIntent(
                         context,
-                        UrlFactory.make(context, category, query)
+                        UrlFactory.make(context, category, query, currentUrl)
                 )
         )
     }

@@ -29,6 +29,7 @@ class SearchAction(
         private val activityContext: Context,
         private val category: String,
         private val query: String,
+        private val currentUrl: String? = null,
         private val onBackground: Boolean = false,
         private val saveHistory: Boolean = true
 ) {
@@ -93,13 +94,15 @@ class SearchAction(
         if (onBackground) {
             BackgroundTabQueue.add(
                     activityContext.getString(R.string.title_tab_background_search, query),
-                    UrlFactory.make(activityContext, category, query)
+                    UrlFactory.make(activityContext, category, query, currentUrl)
             )
             return
         }
+
         InternalSearchIntentLauncher(activityContext)
                 .setCategory(category)
                 .setQuery(query)
+                .setCurrentUrl(currentUrl)
                 .invoke()
     }
 
