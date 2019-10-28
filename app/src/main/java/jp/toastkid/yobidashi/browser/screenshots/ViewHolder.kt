@@ -10,17 +10,12 @@ import java.util.*
 
 /**
  * Screenshot's view holder.
-
+ *
+ * @param binding Initialize with data binding object.
  * @author toastkidjp
  */
-internal class ViewHolder
-/**
- * Initialize with data binding object.
- * @param binding
- */
-(
-        /** Data binding object.  */
-        private val binding: ItemScreenshotBinding) : RecyclerView.ViewHolder(binding.root) {
+internal class ViewHolder(private val binding: ItemScreenshotBinding)
+    : RecyclerView.ViewHolder(binding.root) {
 
     private val dateFormatHolder = object : ThreadLocal<DateFormat>() {
         override fun initialValue(): DateFormat =
