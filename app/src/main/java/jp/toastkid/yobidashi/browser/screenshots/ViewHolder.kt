@@ -48,7 +48,7 @@ internal class ViewHolder(private val binding: ItemScreenshotBinding)
     }
 
     fun setTimestamp(lastModified: Long) {
-        binding.datetime.text = dateFormatHolder.get().format(lastModified)
+        binding.datetime.text = dateFormatHolder.get()?.format(lastModified)
     }
 
 }
