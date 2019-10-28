@@ -31,7 +31,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     /**
      * Scrolling value.
      */
-    var scrolling: Int = 0
+    private var scrolling: Int = 0
 
     private var nestedOffsetY: Float = 0f
 
