@@ -30,6 +30,7 @@ object SearchQueryExtractor {
                     or host.endsWith("cse.google.com")
                     or host.endsWith(".buzzfeed.com")
                     or host.endsWith("openweathermap.org")
+                    or host.endsWith(".quora.com")
                     or host.endsWith(".livejournal.com") ->
                 uri.getQueryParameter("q")
             host.startsWith("www.amazon.") ->

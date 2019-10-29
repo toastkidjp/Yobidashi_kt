@@ -43,5 +43,9 @@ class SearchQueryExtractorTest {
                 "java",
                 SearchQueryExtractor("https://www.reddit.com/search/?q=java")
         )
+        assertEquals(
+                "kotlin",
+                SearchQueryExtractor("https://www.quora.com/search?q=kotlin")
+        )
     }
 }

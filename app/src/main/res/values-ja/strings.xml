@@ -419,5 +419,6 @@
     <string name="message_open_random_wikipedia">Wikipedia の「%s」を開きました。</string>
     <string name="tumblr">Tumblr</string>
     <string name="search_category_open_street_map">OpenStreetMap</string>
+    <string name="search_category_quora">Quora</string>
 
 </resources>

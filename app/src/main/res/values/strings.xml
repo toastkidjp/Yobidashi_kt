@@ -424,5 +424,6 @@
     <string name="message_open_random_wikipedia">Open Wikipedia article "%s".</string>
     <string name="tumblr">Tumblr</string>
     <string name="search_category_open_street_map">OpenStreetMap</string>
+    <string name="search_category_quora">Quora</string>
 
 </resources>

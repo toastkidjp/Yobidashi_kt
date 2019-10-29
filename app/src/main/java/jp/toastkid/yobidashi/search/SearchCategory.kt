@@ -125,6 +125,17 @@ enum class SearchCategory(
                 }
             }
     ),
+    QUORA(R.string.search_category_quora,
+            R.drawable.ic_quora,
+            "https://www.quora.com/search?q=",
+            { l, h, q ->
+                if (Locale.JAPANESE.language == l) {
+                    "https://jp.quora.com/search?q=${Uri.encode(q)}"
+                } else {
+                    "$h${Uri.encode(q)}"
+                }
+            }
+    ),
     TECHNICAL_QA(R.string.search_category_stack_overflow,
             R.drawable.ic_stackoverflow,
             "https://stackoverflow.com/search?q="
