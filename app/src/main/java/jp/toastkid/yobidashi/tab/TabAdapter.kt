@@ -513,7 +513,7 @@ class TabAdapter(
                 webViewContainer,
                 context.getString(R.string.message_done_added_bookmark),
                 R.string.open,
-                View.OnClickListener { _ -> callback()},
+                View.OnClickListener { callback() },
                 colorPair
         )
     }
