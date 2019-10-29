@@ -101,10 +101,15 @@ class ImagePreviewActivity(): AppCompatActivity() {
         intent?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 val takeFlags: Int = intent.getFlags() and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                contentResolver.takePersistableUriPermission(intent.data, takeFlags)
+                intent.data?.let { uri ->
+                    contentResolver.takePersistableUriPermission(uri, takeFlags)
+                }
             }
-            ImageLoader.loadBitmap(this, Uri.parse(File(imagePath).toURI().toString()))
-                ?.compress(Bitmap.CompressFormat.PNG, 100, contentResolver.openOutputStream(it.data))
+
+            intent.data?.let { uri ->
+                ImageLoader.loadBitmap(this, Uri.parse(File(imagePath).toURI().toString()))
+                        ?.compress(Bitmap.CompressFormat.PNG, 100, contentResolver.openOutputStream(uri))
+            }
             showSnackbar(R.string.done_save)
         }
     }
