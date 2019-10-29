@@ -267,8 +267,7 @@ class TabAdapter(
      * @param withAnimation for suppress redundant animation.
      */
     fun replaceToCurrentTab(withAnimation: Boolean = true) {
-        val currentTab = tabList.currentTab()
-        when (currentTab) {
+        when (val currentTab = tabList.currentTab()) {
             is WebTab -> {
                 replaceWebView()
                 if (editor.isVisible()) {
