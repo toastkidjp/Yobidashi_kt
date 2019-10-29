@@ -189,7 +189,7 @@ class TabAdapter(
      */
     internal fun openNewPdfTab(uri: Uri) {
         val pdfTab = PdfTab().apply {
-            setTitle(uri.path)
+            setTitle(uri.path ?: "")
             setPath(uri.toString())
         }
         tabList.add(pdfTab)
