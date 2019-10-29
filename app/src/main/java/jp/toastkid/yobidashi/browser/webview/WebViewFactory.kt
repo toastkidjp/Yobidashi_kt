@@ -59,7 +59,7 @@ internal object WebViewFactory {
         val webView = CustomWebView(context)
         webView.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT
         )
 
         val preferenceApplier = PreferenceApplier(context)
