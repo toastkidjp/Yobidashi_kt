@@ -100,7 +100,7 @@ class ImagePreviewActivity(): AppCompatActivity() {
         }
         intent?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                val takeFlags: Int = intent.getFlags() and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                val takeFlags: Int = intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
                 intent.data?.let { uri ->
                     contentResolver.takePersistableUriPermission(uri, takeFlags)
                 }
