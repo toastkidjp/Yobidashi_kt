@@ -94,6 +94,10 @@ enum class SearchCategory(
             R.drawable.ic_map,
             "https://www.google.co.jp/maps/place/"
     ),
+    OPEN_STREET_MAP(R.string.search_category_open_street_map,
+            R.drawable.ic_openstreetmap,
+            "https://www.openstreetmap.org/search?query="
+    ),
     OPEN_WEATHER_MAP(R.string.search_category_open_weather,
             R.drawable.ic_open_weather,
             "https://openweathermap.org/find?q="
