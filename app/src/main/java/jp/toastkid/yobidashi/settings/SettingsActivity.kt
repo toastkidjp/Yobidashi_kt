@@ -36,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
 
         preferenceApplier = PreferenceApplier(this)
 
-        binding = DataBindingUtil.setContentView<ActivitySettingsBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding.activity = this
         binding.toolbar.also { toolbar ->
             toolbar.setNavigationIcon(R.drawable.ic_back)
