@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.tab
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View

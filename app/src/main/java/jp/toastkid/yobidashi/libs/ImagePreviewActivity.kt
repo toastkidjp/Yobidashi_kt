@@ -24,7 +24,7 @@ import java.io.File
  *
  * @author toastkidjp
  */
-class ImagePreviewActivity(): AppCompatActivity() {
+class ImagePreviewActivity : AppCompatActivity() {
 
     /**
      * Image file's path.
