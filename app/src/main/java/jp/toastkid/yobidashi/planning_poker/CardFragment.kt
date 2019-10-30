@@ -1,13 +1,13 @@
 package jp.toastkid.yobidashi.planning_poker
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.CardItemBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -43,7 +43,8 @@ class CardFragment : Fragment() {
         }
         val arguments = arguments ?: Bundle()
         if (arguments.containsKey(CardViewActivity.EXTRA_KEY_CARD_TEXT)) {
-            setText(arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT))
+            arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT)
+                    ?.let { setText(it) }
         }
         return binding.root
     }
