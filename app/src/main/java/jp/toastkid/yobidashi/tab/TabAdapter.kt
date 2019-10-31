@@ -11,7 +11,6 @@ import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.core.view.get
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 
 import io.reactivex.Completable
@@ -36,7 +35,6 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.pdf.PdfModule
-import jp.toastkid.yobidashi.search.SiteSearchDialogFragment
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -380,24 +378,6 @@ class TabAdapter(
             is PdfTab -> pdf.pageDown()
             is EditorTab -> editor.pageDown()
         }
-    }
-
-    /**
-     * Invoke site search.
-     */
-    fun siteSearch() {
-        if (currentTab() is WebTab) {
-            val activityContext = webViewContainer.context
-            if (activityContext is FragmentActivity) {
-                SiteSearchDialogFragment.makeWithUrl(currentWebView()?.url)
-                        .show(
-                                activityContext.supportFragmentManager,
-                                SiteSearchDialogFragment::class.java.simpleName
-                        )
-            }
-            return
-        }
-        Toaster.snackShort(webViewContainer, "This menu can be used on only web page.", colorPair)
     }
 
     /**

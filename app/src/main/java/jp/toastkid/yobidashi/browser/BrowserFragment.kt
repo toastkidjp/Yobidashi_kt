@@ -420,9 +420,6 @@ class BrowserFragment : Fragment(),
             Menu.WEB_SEARCH-> {
                 search(ActivityOptionsFactory.makeScaleUpBundle(binding?.root as View))
             }
-            Menu.SITE_SEARCH-> {
-                tabs.siteSearch()
-            }
             Menu.VOICE_SEARCH-> {
                 try {
                     startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)

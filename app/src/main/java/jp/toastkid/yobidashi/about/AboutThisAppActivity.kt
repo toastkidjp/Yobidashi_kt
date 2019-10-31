@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -84,14 +85,9 @@ class AboutThisAppActivity : AppCompatActivity() {
     }
 
     fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        if (itemId == R.id.menu_exit) {
-            moveTaskToBack(true)
-            return true
-        }
-        if (itemId == R.id.menu_close) {
-            finish()
-            return true
+        when (item.itemId) {
+            R.id.menu_exit -> moveTaskToBack(true)
+            R.id.menu_close -> finish()
         }
         return true
     }
@@ -101,7 +97,8 @@ class AboutThisAppActivity : AppCompatActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_about
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.activity_about
 
         /**
          * Make launcher intent.

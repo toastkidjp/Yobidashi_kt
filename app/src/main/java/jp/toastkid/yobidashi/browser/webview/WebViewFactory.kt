@@ -43,12 +43,16 @@ internal object WebViewFactory {
      */
     private var anchor: String = ""
 
+    /**
+     * Color alpha converter.
+     */
     private val alphaConverter = AlphaConverter()
 
     /**
      * Make new [WebView].
      *
      * @param context [Context]
+     * @return [CustomWebView]
      */
     @SuppressLint("ClickableViewAccessibility")
     fun make(context: Context): CustomWebView {
@@ -64,10 +68,7 @@ internal object WebViewFactory {
             val hitResult = webView.hitTestResult
             when (hitResult.type) {
                 WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
-                    val url = hitResult.extra
-                    if (url.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val url = hitResult.extra ?: return@setOnLongClickListener false
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (context is FragmentActivity) {
                         if (TextUtils.isEmpty(anchor)) {
@@ -79,10 +80,7 @@ internal object WebViewFactory {
                     false
                 }
                 WebView.HitTestResult.IMAGE_TYPE -> {
-                    val url = hitResult.extra
-                    if (url.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val url = hitResult.extra ?: return@setOnLongClickListener false
                     if (context is FragmentActivity) {
                         showDialogFragment(
                                 ImageTypeLongTapDialogFragment.make(url),
@@ -92,10 +90,7 @@ internal object WebViewFactory {
                     true
                 }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
-                    val url = hitResult.extra
-                    if (url.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val url = hitResult.extra ?: return@setOnLongClickListener false
                     if (context is FragmentActivity) {
                         showDialogFragment(
                                 AnchorTypeLongTapDialogFragment.make(url),
@@ -105,10 +100,7 @@ internal object WebViewFactory {
                     false
                 }
                 else -> {
-                    val extra = hitResult.extra
-                    if (extra == null || extra.isEmpty()) {
-                        return@setOnLongClickListener false
-                    }
+                    val extra = hitResult.extra ?: return@setOnLongClickListener false
 
                     if (context is FragmentActivity) {
                         ElseCaseLongTapDialogFragment
@@ -129,6 +121,7 @@ internal object WebViewFactory {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             settings.safeBrowsingEnabled = true
         }
+        settings.setSupportMultipleWindows(true)
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
         return webView
