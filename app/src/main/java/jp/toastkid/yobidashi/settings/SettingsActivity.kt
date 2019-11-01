@@ -47,8 +47,8 @@ class SettingsActivity : AppCompatActivity() {
             toolbar.setOnMenuItemClickListener{ clickMenu(it) }
         }
 
-        supportFragmentManager?.let {
-            binding.container.adapter = PagerAdapter(it) { getString(it) }
+        supportFragmentManager?.let { fragmentManager ->
+            binding.container.adapter = PagerAdapter(fragmentManager) { getString(it) }
             binding.container.offscreenPageLimit = 3
         }
     }
