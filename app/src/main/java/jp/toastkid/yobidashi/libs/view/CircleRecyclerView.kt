@@ -140,7 +140,7 @@ class CircleRecyclerView @JvmOverloads constructor(
     }
 
     override fun onScrollStateChanged(state: Int) {
-        if (state == RecyclerView.SCROLL_STATE_IDLE
+        if (state == SCROLL_STATE_IDLE
                 && needCenterForce
                 && !isForceCentering) {
             isForceCentering = true
