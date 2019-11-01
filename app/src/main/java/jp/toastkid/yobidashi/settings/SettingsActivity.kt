@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -91,6 +92,7 @@ class SettingsActivity : AppCompatActivity() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_settings
 
         /**
