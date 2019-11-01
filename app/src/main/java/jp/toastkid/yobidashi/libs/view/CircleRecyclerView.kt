@@ -228,7 +228,7 @@ class CircleRecyclerView @JvmOverloads constructor(
         fun onScrolled(dx: Int, dy: Int)
     }
 
-    override fun setAdapter(adapter: RecyclerView.Adapter<*>?) {
+    override fun setAdapter(adapter: Adapter<*>?) {
         super.setAdapter(adapter)
         if (firstSetAdapter) {
             firstSetAdapter = false
