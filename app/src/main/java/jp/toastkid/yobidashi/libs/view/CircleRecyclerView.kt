@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.libs.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Message
@@ -154,6 +155,7 @@ class CircleRecyclerView @JvmOverloads constructor(
         onScrollListener?.onScrollStateChanged(state)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(e: MotionEvent): Boolean {
         removeCallbacks(centerRunnable)
         isForceCentering = false
