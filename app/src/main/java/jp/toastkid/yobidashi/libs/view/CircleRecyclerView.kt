@@ -100,7 +100,7 @@ class CircleRecyclerView @JvmOverloads constructor(
         super.requestLayout()
 
         val layoutManager = layoutManager ?: return
-        val count = layoutManager.childCount ?: 0
+        val count = layoutManager.childCount
         for (i in 0 until count) {
             val v = getChildAt(i)
             if (v !== currentCenterChildView && centerItemClickListener != null) {
