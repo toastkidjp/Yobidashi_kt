@@ -48,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         supportFragmentManager?.let {
-            binding.container.adapter = PagerAdapter(it, { getString(it) })
+            binding.container.adapter = PagerAdapter(it) { getString(it) }
             binding.container.offscreenPageLimit = 3
         }
     }
