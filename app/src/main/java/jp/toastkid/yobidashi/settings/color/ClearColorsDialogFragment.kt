@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.settings.color
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -28,8 +28,9 @@ class ClearColorsDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        if (activityContext is Callback) {
-            onClick = activityContext
+        val targetFragment = targetFragment
+        if (targetFragment is Callback) {
+            onClick = targetFragment
         }
 
         return AlertDialog.Builder(activityContext)

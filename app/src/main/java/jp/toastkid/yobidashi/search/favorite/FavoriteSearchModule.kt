@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
 
@@ -35,9 +35,9 @@ class FavoriteSearchModule(
     private val moduleAdapter: ModuleAdapter
 
     /**
-     * Database relation.
+     * Database repository.
      */
-    private val relation: FavoriteSearch_Relation
+    private val repository: FavoriteSearchRepository
 
     /**
      * Last subscription.
@@ -58,12 +58,13 @@ class FavoriteSearchModule(
 
         binding.module = this
 
-        relation = DbInitializer.init(context()).relationOfFavoriteSearch()
+        val context = context()
+        repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
 
-        binding.searchFavorites.layoutManager = LinearLayoutManager(context(), RecyclerView.VERTICAL, false)
+        binding.searchFavorites.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         moduleAdapter = ModuleAdapter(
-                context(),
-                relation,
+                context,
+                repository,
                 searchCallback,
                 { visible -> if (visible) { show() } else { hide() } },
                 { history -> onClickAdd(history) }

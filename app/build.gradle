@@ -24,6 +24,7 @@ android {
         versionCode ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
         versionName "${verMajor}.${verMiddle}.${verMinor}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {
@@ -67,6 +68,10 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
+    def roomVersion = '2.1.0'
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
     implementation "com.google.android.material:material:1.0.0"
 
     implementation "com.google.firebase:firebase-core:16.0.1"
@@ -92,10 +97,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
-
-    implementation 'com.github.maskarade.android.orma:orma:6.0.2'
-
-    kapt 'com.github.maskarade.android.orma:orma-processor:6.0.2'
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:4.2.1"

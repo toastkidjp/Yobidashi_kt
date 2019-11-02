@@ -1,14 +1,16 @@
 package jp.toastkid.yobidashi.browser.history
 
 import android.content.Context
-import com.github.gfx.android.orma.annotation.OnConflict
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import timber.log.Timber
 
 /**
+ * TODO clean up code.
+ *
  * @author toastkidjp
  */
 class ViewHistoryInsertion private constructor(
@@ -26,13 +28,16 @@ class ViewHistoryInsertion private constructor(
     }
 
     private fun insert(searchHistory: ViewHistory): Disposable {
-        return Completable.create { e ->
-            DbInitializer.init(context)
-                    .relationOfViewHistory()
-                    .inserter(OnConflict.REPLACE)
-                    .execute(searchHistory)
-            e.onComplete()
-        }.subscribeOn(Schedulers.io()).subscribe()
+        return Completable.fromAction {
+            DatabaseFinder().invoke(context)
+                    .viewHistoryRepository()
+                    .add(searchHistory)
+        }
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {},
+                        Timber::e
+                )
     }
 
     private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory {
@@ -40,7 +45,7 @@ class ViewHistoryInsertion private constructor(
         sh.title = title
         sh.url = url
         sh.favicon = faviconPath
-        sh.last_viewed = System.currentTimeMillis()
+        sh.lastViewed = System.currentTimeMillis()
         return sh
     }
 

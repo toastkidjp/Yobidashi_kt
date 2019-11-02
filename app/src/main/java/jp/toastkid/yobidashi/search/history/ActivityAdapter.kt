@@ -1,10 +1,12 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -17,7 +19,7 @@ import timber.log.Timber
  * ModuleAdapter of search history list.
  *
  * @param context [Context]
- * @param relation Relation
+ * @param repository repository
  * @param onClick On click callback
  * @param onDelete On delete callback
  *
@@ -25,15 +27,17 @@ import timber.log.Timber
  */
 internal class ActivityAdapter(
         context: Context,
-        private val relation: SearchHistory_Relation,
+        private val repository: SearchHistoryRepository,
         private val onClick: (SearchHistory) -> Unit,
         private val onDelete: (SearchHistory) -> Unit
-) : OrmaRecyclerViewAdapter<SearchHistory, ViewHolder>(context, relation), Removable {
+) : RecyclerView.Adapter<ViewHolder>(), Removable {
 
     /**
      * Layout inflater.
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    private val items = mutableListOf<SearchHistory>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(
@@ -41,7 +45,7 @@ internal class ActivityAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position).let { searchHistory ->
+        items.get(position).let { searchHistory ->
             searchHistory.query?.let { holder.setText(it) }
             holder.itemView.setOnClickListener { _ ->
                 try {
@@ -72,7 +76,7 @@ internal class ActivityAdapter(
      * @return [Disposable]
      */
     override fun removeAt(position: Int): Disposable =
-            removeItemAsMaybe(getItem(position))
+            Completable.fromAction { repository.delete(items.get(position)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { notifyItemRemoved(position) }
@@ -84,12 +88,29 @@ internal class ActivityAdapter(
      * @return [Disposable]
      */
     fun clearAll(onComplete: () -> Unit): Disposable =
-            clearAsSingle()
+            Completable.fromAction { repository.deleteAll() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
-                    onComplete()
-                    notifyItemRangeRemoved(0, i)
-                }
+                .subscribe(
+                        {
+                            onComplete()
+                            notifyDataSetChanged()
+                        },
+                        Timber::e
+                )
 
+    fun refresh(): Disposable {
+        return Maybe.fromCallable { repository.findAll() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            items.addAll(it)
+                            notifyDataSetChanged()
+                        },
+                        Timber::e
+                )
+    }
+
+    override fun getItemCount() = items.size
 }

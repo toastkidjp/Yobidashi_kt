@@ -1,17 +1,18 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.history.ViewHistory
-import jp.toastkid.yobidashi.browser.history.ViewHistory_Relation
+import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import timber.log.Timber
 
 /**
@@ -93,20 +94,20 @@ class Adapter(
     /**
      * Remove at index.
      *
-     * @param relation
+     * @param viewHistoryRepository
      * @param index
      * @return disposable
      */
-    fun removeAt(relation: ViewHistory_Relation, index: Int): Disposable {
-        val item = get(index)
-        return relation.deleteAsMaybe(item)
+    fun removeAt(viewHistoryRepository: ViewHistoryRepository, index: Int): Disposable {
+        return Completable.fromAction {
+            val item = get(index)
+            viewHistoryRepository.delete(item)
+            suggestions.remove(item)
+        }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {
-                            suggestions.remove(item)
-                            notifyItemRemoved(index)
-                        },
+                        { notifyItemRemoved(index) },
                         Timber::e
                 )
     }

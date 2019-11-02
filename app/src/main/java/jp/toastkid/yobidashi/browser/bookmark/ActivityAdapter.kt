@@ -1,20 +1,23 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark_Relation
+import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.tab.BackgroundTabQueue
@@ -28,7 +31,7 @@ import java.util.*
  */
 internal class ActivityAdapter(
         context: Context,
-        private val relation: Bookmark_Relation,
+        private val bookmarkRepository: BookmarkRepository,
         private val onClick: (Bookmark) -> Unit,
         private val onDelete: (Bookmark) -> Unit,
         private val onRefresh: () -> Unit
@@ -95,6 +98,18 @@ internal class ActivityAdapter(
         }
     }
 
+    fun refresh() {
+        items.clear()
+        Maybe.fromCallable { items.addAll(bookmarkRepository.all()) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { notifyDataSetChanged() },
+                        Timber::e
+                )
+                .addTo(disposables)
+    }
+
     /**
      * Return current folder name.
      */
@@ -127,10 +142,9 @@ internal class ActivityAdapter(
      * @param title
      */
     fun query(title: String) {
-        relation.selector()
-                .parentEq(title)
-                .executeAsObservable()
+        Maybe.fromCallable { bookmarkRepository.search(title) }
                 .subscribeOn(Schedulers.io())
+                .flatMapObservable { it.toObservable() }
                 .doOnSubscribe { items.clear() }
                 .observeOn(Schedulers.computation())
                 .subscribe(
@@ -168,7 +182,7 @@ internal class ActivityAdapter(
      * @param position position
      */
     fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
-        relation.deleteAsMaybe(item)
+        Completable.fromAction { bookmarkRepository.delete(item) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -184,14 +198,13 @@ internal class ActivityAdapter(
      * @param onComplete callback
      */
     fun clearAll(onComplete: () -> Unit) {
-        relation.deleter()
-                .executeAsSingle()
+        Completable.fromAction { bookmarkRepository.clear() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { i ->
+                .subscribe {
                     onComplete()
                     items.clear()
-                    notifyItemRangeRemoved(0, i)
+                    notifyDataSetChanged()
                 }
                 .addTo(disposables)
     }

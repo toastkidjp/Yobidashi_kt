@@ -16,7 +16,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityViewHistoryBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
@@ -39,12 +39,12 @@ class ViewHistoryActivity: AppCompatActivity(), ClearDialogFragment.Callback {
         preferenceApplier = PreferenceApplier(this)
 
         binding = DataBindingUtil.setContentView<ActivityViewHistoryBinding>(this, LAYOUT_ID)
-        val relation = DbInitializer.init(this).relationOfViewHistory()
+        val viewHistoryRepository = DatabaseFinder().invoke(this).viewHistoryRepository()
 
         binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
                 this,
-                relation,
+                viewHistoryRepository,
                 { history -> finishWithResult(Uri.parse(history.url)) },
                 { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) }
         )
@@ -96,10 +96,11 @@ class ViewHistoryActivity: AppCompatActivity(), ClearDialogFragment.Callback {
     override fun onResume() {
         super.onResume()
 
-        if (adapter.itemCount == 0) {
-            Toaster.tShort(this, getString(R.string.message_none_search_histories))
-            finish()
-            return
+        adapter.refresh {
+            if (adapter.itemCount == 0) {
+                Toaster.tShort(this, getString(R.string.message_none_search_histories))
+                finish()
+            }
         }
 
         ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())

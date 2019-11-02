@@ -16,7 +16,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
-import jp.toastkid.yobidashi.libs.db.DbInitializer
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 
 /**
@@ -40,11 +40,6 @@ class HistoryModule(
     private val moduleAdapter: ModuleAdapter
 
     /**
-     * Database relation.
-     */
-    private val relation: SearchHistory_Relation
-
-    /**
      * Last subscription.
      */
     private var disposable: Disposable? = null
@@ -57,13 +52,14 @@ class HistoryModule(
     init {
         binding.module = this
 
-        relation = DbInitializer.init(context()).relationOfSearchHistory()
-
         binding.searchHistories.layoutManager =
                 LinearLayoutManager(context(), RecyclerView.VERTICAL, false)
+
+        val repository = DatabaseFinder().invoke(context()).searchHistoryRepository()
+
         moduleAdapter = ModuleAdapter(
                 context(),
-                relation,
+                repository,
                 searchCallback,
                 { visible -> if (visible) { show() } else { hide() } },
                 { history -> onClickAdd(history) }

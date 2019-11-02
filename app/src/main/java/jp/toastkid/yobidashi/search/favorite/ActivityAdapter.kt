@@ -1,16 +1,20 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.gfx.android.orma.rx.RxRelation
-import com.github.gfx.android.orma.widget.OrmaRecyclerViewAdapter
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.BackgroundSearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
+import timber.log.Timber
 
 /**
  * Favorite Search activity's adapter.
@@ -19,15 +23,17 @@ import jp.toastkid.yobidashi.search.SearchCategory
  */
 internal class ActivityAdapter(
         context: Context,
-        relation: RxRelation<FavoriteSearch, *>,
+        private val repository: FavoriteSearchRepository,
         private val searchAction: (SearchCategory, String) -> Unit,
         private val toasterCallback: (Int) -> Unit
-) : OrmaRecyclerViewAdapter<FavoriteSearch, FavoriteSearchHolder>(context, relation) {
+) : RecyclerView.Adapter<FavoriteSearchHolder>() {
 
     /**
      * Layout inflater.
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    private val items = mutableListOf<FavoriteSearch>()
 
     override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -37,21 +43,41 @@ internal class ActivityAdapter(
     )
 
     override fun onBindViewHolder(holder: FavoriteSearchHolder, position: Int) {
-        bindViews(holder, relation.get(position))
+        bindViews(holder, items.get(position))
         holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
-    override fun getItemCount(): Int = relation.count()
+    override fun getItemCount(): Int = items.size
+
+    fun refresh(): Disposable {
+        return Maybe.fromCallable { repository.findAll() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            items.addAll(it)
+                            notifyDataSetChanged()
+                        },
+                        Timber::e
+                )
+    }
 
     /**
      * Remove item at position.
      *
      * @param position
      */
-    fun removeAt(position: Int) {
-        removeItemAsMaybe(relation.get(position))
+    fun deleteAt(position: Int): Disposable {
+        return delete(items.get(position))
+    }
+
+    private fun delete(favoriteSearch: FavoriteSearch): Disposable {
+        return Completable.fromAction { repository.delete(favoriteSearch) }
                 .subscribeOn(Schedulers.io())
-                .subscribe()
+                .subscribe(
+                        {},
+                        Timber::e
+                )
     }
 
     /**
@@ -70,7 +96,7 @@ internal class ActivityAdapter(
         holder.setClickAction(View.OnClickListener { searchAction(category, query) })
 
         holder.setRemoveAction(View.OnClickListener {
-            removeItemAsMaybe(favoriteSearch).subscribeOn(Schedulers.io()).subscribe()
+            delete(favoriteSearch)
             toasterCallback(R.string.settings_color_delete)
         })
 
@@ -78,5 +104,9 @@ internal class ActivityAdapter(
             BackgroundSearchAction(v, favoriteSearch.category, favoriteSearch.query).invoke()
             true
         })
+    }
+
+    fun clear() {
+        repository.deleteAll()
     }
 }
