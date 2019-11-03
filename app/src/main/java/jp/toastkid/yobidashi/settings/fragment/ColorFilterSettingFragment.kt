@@ -62,10 +62,8 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Switch color filter's visibility.
-
-     * @param v
      */
-    fun switchColorFilter(v: View) {
+    fun switchColorFilter() {
         activity?.let {
             binding.useColorFilterCheck.isChecked = colorFilter.switchState(it)
         }

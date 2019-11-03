@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_transparent"
-            android:onClick="@{fragment::switchColorFilter}"
+            android:onClick="@{view -> fragment.switchColorFilter()}"
             >
             <TextView
                 android:orientation="horizontal"
