@@ -7,13 +7,13 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import androidx.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
@@ -44,10 +44,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
             colorFilter = ColorFilter(it, binding.root)
         }
 
-        ColorFilterSettingInitializer(
-                binding,
-                { colorFilter.color(it) }
-        ).invoke()
+        ColorFilterSettingInitializer(binding) { colorFilter.color(it) }.invoke()
         binding.fragment = this
         return binding.root
     }
