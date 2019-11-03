@@ -53,7 +53,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         super.onResume()
         val filterColor = preferenceApplier.filterColor()
         binding.sample.setBackgroundColor(filterColor)
-        binding.alpha.setProgress(Color.alpha(filterColor))
+        binding.alpha.progress = Color.alpha(filterColor)
         binding.useColorFilterCheck.let {
             it.isChecked = preferenceApplier.useColorFilter()
             it.jumpDrawablesToCurrentState()
