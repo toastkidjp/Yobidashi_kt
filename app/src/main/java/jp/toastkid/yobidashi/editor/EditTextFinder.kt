@@ -44,7 +44,6 @@ class EditTextFinder(private val editText: EditText) {
      * Find text index in bound to upward.
      *
      * @param text finding text
-     * @param index or -1
      */
     private fun findBackwardIndex(text: String): Int {
         val index = lastIndex - text.length - 1
