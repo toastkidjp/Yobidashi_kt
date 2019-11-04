@@ -43,7 +43,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     private lateinit var binding: FragmentSettingBrowserBinding
 
     /**
-     * Preference wrappter.
+     * Preference wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
