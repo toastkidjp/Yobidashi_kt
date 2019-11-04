@@ -192,7 +192,7 @@
     <string name="right">Right</string>
     <string name="title_enable_javascript">Enable to use JavaScript</string>
     <string name="subhead_displaying">Displaying</string>
-    <string name="subhead_setting_browesr">Browser</string>
+    <string name="subhead_setting_browser">Browser</string>
     <string name="subhead_others">Others</string>
     <string name="subhead_notification">Notifications</string>
     <string name="prefix_loading">Loading: </string>

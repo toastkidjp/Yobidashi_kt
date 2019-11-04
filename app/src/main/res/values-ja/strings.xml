@@ -192,7 +192,7 @@
     <string name="right">右</string>
     <string name="title_enable_javascript">JavaScript を有効にする</string>
     <string name="subhead_displaying">表示</string>
-    <string name="subhead_setting_browesr">ブラウザ</string>
+    <string name="subhead_setting_browser">ブラウザ</string>
     <string name="subhead_others">その他</string>
     <string name="subhead_notification">通知</string>
     <string name="prefix_loading">ロード中: </string>
