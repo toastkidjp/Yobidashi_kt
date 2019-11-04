@@ -99,7 +99,7 @@ class PageSearcherModule(
             binding.root.animate().let {
                 it.cancel()
                 it.translationY(-height)
-                        .setDuration(PageSearcherModule.ANIMATION_DURATION)
+                        .setDuration(ANIMATION_DURATION)
                         .withStartAction { Inputs.hideKeyboard(editText) }
                         .withEndAction { switchVisibility(View.VISIBLE, View.GONE) }
                         .start()
