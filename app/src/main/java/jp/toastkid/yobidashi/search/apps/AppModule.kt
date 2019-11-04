@@ -7,8 +7,8 @@
  */
 package jp.toastkid.yobidashi.search.apps
 
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.text.TextUtils
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
