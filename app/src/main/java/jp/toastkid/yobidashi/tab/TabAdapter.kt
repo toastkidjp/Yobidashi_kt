@@ -90,7 +90,7 @@ class TabAdapter(
      * Save new thumbnail asynchronously.
      */
     fun saveNewThumbnailAsync() {
-        val currentTab = tabList.currentTab()
+        val currentTab = tabList.currentTab() ?: return
         makeDrawingCache(currentTab)?.let {
             Completable.fromAction {
                 val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
@@ -400,7 +400,7 @@ class TabAdapter(
      *
      * @return
      */
-    internal fun getTabByIndex(index: Int): Tab = tabList.get(index)
+    internal fun getTabByIndex(index: Int): Tab? = tabList.get(index)
 
     /**
      * Close specified index' tab.

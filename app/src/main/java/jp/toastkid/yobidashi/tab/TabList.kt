@@ -33,9 +33,9 @@ class TabList private constructor() {
     @Keep
     private var index: Int = 0
 
-    internal fun currentTab(): Tab {
-        if (invalidIndex(index)) {
-            return tabs[0]
+    internal fun currentTab(): Tab? {
+        if (tabs.isEmpty() || invalidIndex(index)) {
+            return null
         }
         return tabs[index]
     }
@@ -50,9 +50,9 @@ class TabList private constructor() {
     @Keep
     fun size(): Int = tabs.size
 
-    internal fun get(position: Int): Tab =
+    internal fun get(position: Int): Tab? =
             if (position < 0 || tabs.size <= position) {
-                tabs[0]
+                null
             } else {
                 tabs[position]
             }
@@ -132,7 +132,7 @@ class TabList private constructor() {
 
     fun swap(from: Int, to: Int) {
         if (inRange(from, to)) {
-            val currentTab = currentTab()
+            val currentTab = currentTab() ?: return
             Collections.swap(tabs, from, to)
             setIndex(tabs.indexOf(currentTab))
         }

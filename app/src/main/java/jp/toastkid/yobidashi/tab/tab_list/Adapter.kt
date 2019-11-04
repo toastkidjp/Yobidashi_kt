@@ -59,7 +59,7 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val tab = callback.getTabByIndexFromTabList(position)
+        val tab = callback.getTabByIndexFromTabList(position) ?: return
         holder.itemView.setOnClickListener {
             callback.replaceTabFromTabList(tab)
             callback.onCloseTabListDialogFragment()
