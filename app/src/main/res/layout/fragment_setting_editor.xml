@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"
                 >
                 <LinearLayout
-                    android:id="@+id/paletts"
+                    android:id="@+id/palettes"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_marginTop="5dp"
-                    android:layout_below="@id/paletts"
+                    android:layout_below="@id/palettes"
                     >
                     <Button
                         android:id="@+id/ok"
