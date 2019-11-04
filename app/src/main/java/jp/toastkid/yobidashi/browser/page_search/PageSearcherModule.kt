@@ -178,7 +178,7 @@ class PageSearcherModule(
     companion object {
 
         /**
-         * Animation duration [ms].
+         * Animation duration (ms).
          */
         private const val ANIMATION_DURATION = 250L
     }
