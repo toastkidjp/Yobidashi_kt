@@ -133,10 +133,10 @@ class MainActivity :
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         binding.toolbar.also { toolbar ->
-            toolbar.setTitle(TITLE_ID)
             setSupportActionBar(toolbar)
             toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
         }
+        binding.header.mainText.setText(TITLE_ID)
 
         browserFragment = BrowserFragment()
 
@@ -159,13 +159,13 @@ class MainActivity :
             if (title.isNullOrBlank()) {
                 return@Observer
             }
-            binding.toolbar.title = title
+            binding.header.mainText.text = title
         })
         headerViewModel.url.observe(this, Observer { url ->
             if (url.isNullOrBlank()) {
                 return@Observer
             }
-            binding.toolbar.subtitle = url
+            binding.header.subText.text = url
         })
     }
 
@@ -418,9 +418,9 @@ class MainActivity :
         transaction.commitAllowingStateLoss()
         binding.toolbar.let {
             if (fragment is CommonFragmentAction) {
-                it.setTitle(fragment.titleId())
+                binding.header.mainText.setText(fragment.titleId())
             }
-            it.subtitle = ""
+            binding.header.subText.text = ""
         }
     }
 
@@ -480,7 +480,13 @@ class MainActivity :
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
+        val colorPair = preferenceApplier.colorPair()
+        ToolbarColorApplier()(window, binding.toolbar, colorPair)
+
+        val fontColor = colorPair.fontColor()
+        binding.header.icon.setColorFilter(fontColor)
+        binding.header.mainText.setTextColor(fontColor)
+        binding.header.subText.setTextColor(fontColor)
 
         applyBackgrounds()
     }
