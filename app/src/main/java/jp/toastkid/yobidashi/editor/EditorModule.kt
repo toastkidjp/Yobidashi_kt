@@ -12,6 +12,7 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.widget.EditText
@@ -19,15 +20,20 @@ import android.widget.TextView
 import androidx.annotation.Dimension
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
+import jp.toastkid.yobidashi.databinding.ModuleEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.HeaderViewModel
 import okio.Okio
 import java.io.File
 import java.text.DateFormat
@@ -81,6 +87,10 @@ class EditorModule(
 
     private val selectedTextExtractor = SelectedTextExtractor(binding.editorInput)
 
+    private var menuBinding: ModuleEditorMenuBinding? = null
+
+    private var headerViewModel: HeaderViewModel? = null
+
     init {
         val context = binding.root.context
 
@@ -99,29 +109,42 @@ class EditorModule(
 
         })
         lastSavedTitle = context().getString(R.string.last_saved)
+
+        menuBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(context),
+                R.layout.module_editor_menu,
+                null,
+                false
+        )
+        menuBinding?.editorModule = this
+
+        (context as? FragmentActivity)?.let {
+            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+        }
     }
 
     /**
      * Apply color and font setting.
      */
     fun applySettings() {
+        val mb = menuBinding ?: return
         val colorPair = preferenceApplier.colorPair()
         applyButtonColor(
                 colorPair,
-                binding.save,
-                binding.saveAs,
-                binding.load,
-                binding.loadAs,
-                binding.lastSaved,
-                binding.counter,
-                binding.backup,
-                binding.pasteAsQuotation,
-                binding.clear
+                mb.save,
+                mb.saveAs,
+                mb.load,
+                mb.loadAs,
+                mb.lastSaved,
+                mb.counter,
+                mb.backup,
+                mb.pasteAsQuotation,
+                mb.clear
                 )
 
-        binding.editorMenu.setBackgroundColor(colorPair.bgColor())
+        mb.editorMenu.setBackgroundColor(colorPair.bgColor())
 
-        binding.background.setBackgroundColor(preferenceApplier.editorBackgroundColor())
+        binding.editorScroll.setBackgroundColor(preferenceApplier.editorBackgroundColor())
         binding.editorInput.setTextColor(preferenceApplier.editorFontColor())
         binding.editorInput.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
 
@@ -151,7 +174,7 @@ class EditorModule(
      * @param context Context
      */
     private fun setContentTextLengthCount(context: Context) {
-        binding.counter.text =
+        menuBinding?.counter?.text =
                 context.getString(R.string.message_character_count, content().length)
     }
 
@@ -366,7 +389,7 @@ class EditorModule(
     private fun setLastSaved(ms: Long) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = ms
-        binding.lastSaved.setText(lastSavedTitle + dateFormatHolder.get()?.format(calendar.time))
+        menuBinding?.lastSaved?.setText(lastSavedTitle + dateFormatHolder.get()?.format(calendar.time))
     }
 
     /**
@@ -375,7 +398,7 @@ class EditorModule(
     fun clearPath() {
         path = ""
         clearInput()
-        binding.lastSaved.setText("")
+        menuBinding?.lastSaved?.setText("")
     }
 
     /**
@@ -489,11 +512,18 @@ class EditorModule(
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
     }
 
+    override fun show() {
+        super.show()
+        val view = menuBinding?.root ?: return
+        headerViewModel?.replace(view)
+    }
+
     override fun hide() {
         super.hide()
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
+        headerViewModel?.reset()
     }
 
     companion object {

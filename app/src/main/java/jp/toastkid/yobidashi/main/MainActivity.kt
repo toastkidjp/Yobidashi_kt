@@ -167,6 +167,13 @@ class MainActivity :
             }
             binding.header.subText.text = url
         })
+        headerViewModel.content.observe(this, Observer { view ->
+            binding.toolbar.removeViewAt(0)
+            binding.toolbar.addView(
+                    view ?: binding.header.root,
+                    0
+            )
+        })
     }
 
     private fun initializeMenuViewModel() {

@@ -5,153 +5,23 @@
             type="jp.toastkid.yobidashi.editor.EditorModule" />
     </data>
 
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/background"
+        android:id="@+id/editor_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/soft_background"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/editor_scroll"
+        android:layout_height="wrap_content"
+        >
+        <EditText
+            android:id="@+id/editor_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            >
-            <EditText
-                android:id="@+id/editor_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:inputType="textMultiLine"
-                android:minLines="10"
-                android:hint="@string/hint_editor_input"
-                tools:ignore="Autofill"
-                />
-        </androidx.core.widget.NestedScrollView>
-
-        <HorizontalScrollView
-            android:id="@+id/editor_menu"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_gravity="top"
-            >
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                >
-                <Space
-                    android:id="@+id/left_space"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    />
-                <Button
-                    android:id="@+id/load"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/load"
-                    android:drawableTop="@drawable/ic_load"
-                    android:foreground="@drawable/ripple_transparent"
-                    android:onClick="@{view -> editorModule.load()}"
-                    android:onLongClick="@{editorModule::showName}"
-                    />
-                <Button
-                    android:id="@+id/save"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/save"
-                    android:drawableTop="@drawable/ic_save"
-                    android:foreground="@drawable/ripple_transparent"
-                    android:onClick="@{view -> editorModule.save()}"
-                    android:onLongClick="@{editorModule::showName}"
-                    />
-                <Button
-                    android:id="@+id/backup"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/save_backup"
-                    android:drawableTop="@drawable/ic_backup"
-                    android:foreground="@drawable/ripple_transparent"
-                    android:onClick="@{view -> editorModule.backup()}"
-                    android:onLongClick="@{editorModule::showName}"
-                    />
-                <Button
-                    android:id="@+id/save_as"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/save_as"
-                    android:drawableTop="@drawable/ic_save_as"
-                    android:foreground="@drawable/ripple_transparent"
-                    android:onClick="@{view -> editorModule.saveAs()}"
-                    android:onLongClick="@{editorModule::showName}"
-                    />
-                <Button
-                    android:id="@+id/paste_as_quotation"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/paste_as_quotation"
-                    android:drawableTop="@drawable/ic_quote"
-                    android:foreground="@drawable/ripple_transparent"
-                    android:onClick="@{view -> editorModule.pasteAsQuotation()}"
-                    android:onLongClick="@{editorModule::showName}"
-                    />
-                <Button
-                    android:id="@+id/load_as"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/load_as"
-                    android:drawableTop="@drawable/ic_load_as"
-                    android:foreground="@drawable/ripple_transparent"
-                    android:onClick="@{view -> editorModule.loadAs()}"
-                    android:onLongClick="@{editorModule::showName}"
-                    />
-                <TextView
-                    android:id="@+id/counter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:gravity="center_vertical"
-                    android:maxLines="2"
-                    android:textSize="14sp"
-                    tools:text="character count\n 444"
-                    />
-                <TextView
-                    android:id="@+id/last_saved"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:gravity="center_vertical"
-                    android:maxLines="2"
-                    android:textSize="14sp"
-                    tools:text="Last saved:\n 2017/12/22 11:18:19"
-                    />
-                <Button
-                    android:id="@+id/clear"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    style="?android:attr/buttonBarStyle"
-                    android:text="@string/clear_all"
-                    android:drawableTop="@drawable/ic_clear_form"
-                    android:foreground="@drawable/ripple_transparent"
-                    android:onClick="@{view -> editorModule.clear()}"
-                    android:onLongClick="@{editorModule::showName}"
-                    />
-            </LinearLayout>
-        </HorizontalScrollView>
-
-    </FrameLayout>
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:inputType="textMultiLine"
+            android:minLines="10"
+            android:hint="@string/hint_editor_input"
+            tools:ignore="Autofill"
+            />
+    </androidx.core.widget.NestedScrollView>
 </layout>

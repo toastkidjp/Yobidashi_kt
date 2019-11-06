@@ -421,11 +421,6 @@ class BrowserModule(
             it.visibility = View.GONE
         }
         stopLoading()
-
-        val mainActivity = context
-        if (mainActivity is MainActivity) {
-            mainActivity.hideToolbar()
-        }
     }
 
     /**

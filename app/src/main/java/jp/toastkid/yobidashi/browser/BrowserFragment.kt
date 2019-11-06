@@ -58,7 +58,6 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
@@ -585,10 +584,8 @@ class BrowserFragment : Fragment(),
 
     private fun switchToolbarVisibility() {
         val browserScreenMode = preferenceApplier.browserScreenMode()
-        val currentTab = tabs.currentTab()
         if (browserScreenMode == ScreenMode.FULL_SCREEN
-                || currentTab is EditorTab
-                || currentTab is PdfTab
+                //TODO|| tabs.currentTab() is PdfTab
         ) {
             hideHeader()
             return
