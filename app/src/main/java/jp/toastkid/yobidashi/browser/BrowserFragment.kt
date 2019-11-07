@@ -584,9 +584,7 @@ class BrowserFragment : Fragment(),
 
     private fun switchToolbarVisibility() {
         val browserScreenMode = preferenceApplier.browserScreenMode()
-        if (browserScreenMode == ScreenMode.FULL_SCREEN
-                //TODO|| tabs.currentTab() is PdfTab
-        ) {
+        if (browserScreenMode == ScreenMode.FULL_SCREEN) {
             hideHeader()
             return
         }
