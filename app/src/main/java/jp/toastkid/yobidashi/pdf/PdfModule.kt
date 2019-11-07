@@ -213,4 +213,9 @@ class PdfModule(
         super.show()
         headerViewModel?.replace(headerBinding.root)
     }
+
+    override fun hide() {
+        super.hide()
+        headerViewModel?.reset()
+    }
 }
