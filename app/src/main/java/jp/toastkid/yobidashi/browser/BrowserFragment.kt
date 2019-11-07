@@ -39,6 +39,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
+import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
@@ -128,6 +129,8 @@ class BrowserFragment : Fragment(),
      */
     private var binding: FragmentBrowserBinding? = null
 
+    private var headerBinding: ModuleBrowserHeaderBinding? = null
+
     /**
      * Toolbar action object.
      */
@@ -165,6 +168,8 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_browser_header, container, false)
+
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding?.fragment = this
 
@@ -219,6 +224,8 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
+        headerBinding?.root?.setOnClickListener { tapHeader() }
+
         return binding?.root
     }
 
@@ -237,6 +244,29 @@ class BrowserFragment : Fragment(),
                 { tabs.findDown(it) },
                 { tabs.findUp(it) }
         )
+
+        val headerViewModel =
+                ViewModelProviders.of(requireActivity()).get(HeaderViewModel::class.java)
+
+        val browserHeaderViewModel = ViewModelProviders.of(requireActivity())
+                .get(BrowserHeaderViewModel::class.java)
+        // TODO modify owner to activity
+        browserHeaderViewModel.title.observe(this, Observer { title ->
+            if (title.isNullOrBlank()) {
+                return@Observer
+            }
+            headerBinding?.mainText?.text = title
+        })
+        browserHeaderViewModel.url.observe(this, Observer { url ->
+            if (url.isNullOrBlank()) {
+                return@Observer
+            }
+            headerBinding?.subText?.text = url
+        })
+        browserHeaderViewModel.reset.observe(requireActivity(), Observer {
+            val headerView = headerBinding?.root ?: return@Observer
+            headerViewModel.replace(headerView)
+        })
     }
 
     private fun initializeHeaderViewModel() {
@@ -557,6 +587,14 @@ class BrowserFragment : Fragment(),
         val colorPair = colorPair()
         editorModule.applySettings()
 
+        val fontColor = colorPair.fontColor()
+
+        headerBinding?.also {
+            it.icon.setColorFilter(fontColor)
+            it.mainText.setTextColor(fontColor)
+            it.subText.setTextColor(fontColor)
+        }
+
         ClippingUrlOpener(binding?.root) { loadWithNewTab(it) }
 
         tabs.loadBackgroundTabsFromDirIfNeed()
@@ -606,7 +644,7 @@ class BrowserFragment : Fragment(),
 
     override fun pressBack(): Boolean = hideOption() || back()
 
-    override fun tapHeader() {
+    fun tapHeader() {
         val activityContext = context ?: return
         val currentUrl = browserModule.currentUrl()
         val inputText = if (preferenceApplier.enableSearchQueryExtract) {

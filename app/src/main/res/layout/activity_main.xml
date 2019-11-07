@@ -24,12 +24,9 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:foreground="@drawable/ripple_transparent"
                     app:popupTheme="@style/AppTheme.PopupOverlay"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    >
-                    <include android:id="@+id/header" layout="@layout/module_browser_header"/>
-                </androidx.appcompat.widget.Toolbar>
+                    />
             </com.google.android.material.appbar.AppBarLayout>
 
             <ImageView

@@ -64,6 +64,8 @@ class BrowserModule(
 
     private var headerViewModel: HeaderViewModel? = null
 
+    private var browserHeaderViewModel: BrowserHeaderViewModel? = null
+
     init {
         webViewPool = WebViewPool(
                 context,
@@ -98,8 +100,8 @@ class BrowserModule(
 
             try {
                 if (view == currentView()) {
-                    headerViewModel?.title?.postValue(title)
-                    headerViewModel?.url?.postValue(urlStr)
+                    browserHeaderViewModel?.nextTitle(title)
+                    browserHeaderViewModel?.nextUrl(urlStr)
                 }
             } catch (e: Exception) {
                 Timber.e(e)
@@ -224,8 +226,8 @@ class BrowserModule(
             try {
                 val progressTitle =
                         view.context.getString(R.string.prefix_loading) + newProgress + "%"
-                headerViewModel?.title?.postValue(progressTitle)
-                headerViewModel?.url?.postValue(view.url)
+                browserHeaderViewModel?.nextTitle(progressTitle)
+                browserHeaderViewModel?.nextUrl(view.url)
             } catch (e: Exception) {
                 Timber.e(e)
             }

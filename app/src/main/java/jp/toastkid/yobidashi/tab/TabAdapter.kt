@@ -16,10 +16,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.BrowserModule
-import jp.toastkid.yobidashi.browser.FaviconApplier
-import jp.toastkid.yobidashi.browser.ScreenMode
+import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
@@ -72,6 +69,8 @@ class TabAdapter(
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_up)
 
+    private var browserHeaderViewModel: BrowserHeaderViewModel? = null
+
     private var headerViewModel: HeaderViewModel? = null
 
     init {
@@ -80,7 +79,10 @@ class TabAdapter(
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
         if (viewContext is MainActivity) {
-            headerViewModel = ViewModelProviders.of(viewContext).get(HeaderViewModel::class.java)
+            browserHeaderViewModel =
+                    ViewModelProviders.of(viewContext).get(BrowserHeaderViewModel::class.java)
+            headerViewModel =
+                    ViewModelProviders.of(viewContext).get(HeaderViewModel::class.java)
         }
         setCurrentTabCount()
     }
@@ -250,8 +252,8 @@ class TabAdapter(
                 callLoadUrl(it.getUrl())
                 return@let
             }
-            headerViewModel?.title?.postValue(it.title())
-            headerViewModel?.url?.postValue(it.getUrl())
+            browserHeaderViewModel?.nextTitle(it.title())
+            browserHeaderViewModel?.nextUrl(it.getUrl())
         }
     }
 
@@ -275,6 +277,7 @@ class TabAdapter(
                 if (pdf.isVisible()) {
                     pdf.hide()
                 }
+                browserHeaderViewModel?.resetContent()
             }
             is EditorTab -> {
                 if (currentTab.path.isNotBlank()) {
@@ -309,8 +312,8 @@ class TabAdapter(
                         pdf.scrollTo(currentTab.getScrolled())
                         saveNewThumbnailAsync()
 
-                        headerViewModel?.title?.postValue(PDF_TAB_TITLE)
-                        headerViewModel?.url?.postValue(uri.lastPathSegment ?: url)
+                        browserHeaderViewModel?.nextTitle(PDF_TAB_TITLE)
+                        browserHeaderViewModel?.nextUrl(uri.lastPathSegment ?: url)
                     } catch (e: SecurityException) {
                         failRead(e)
                         return

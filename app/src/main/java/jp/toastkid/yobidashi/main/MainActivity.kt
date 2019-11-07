@@ -132,11 +132,7 @@ class MainActivity :
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.toolbar.also { toolbar ->
-            setSupportActionBar(toolbar)
-            toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
-        }
-        binding.header.mainText.setText(TITLE_ID)
+        binding.toolbar.also { setSupportActionBar(it) }
 
         browserFragment = BrowserFragment()
 
@@ -155,22 +151,13 @@ class MainActivity :
 
     private fun initializeHeaderViewModel() {
         val headerViewModel = ViewModelProviders.of(this).get(HeaderViewModel::class.java)
-        headerViewModel.title.observe(this, Observer { title ->
-            if (title.isNullOrBlank()) {
-                return@Observer
-            }
-            binding.header.mainText.text = title
-        })
-        headerViewModel.url.observe(this, Observer { url ->
-            if (url.isNullOrBlank()) {
-                return@Observer
-            }
-            binding.header.subText.text = url
-        })
         headerViewModel.content.observe(this, Observer { view ->
+            if (view == null) {
+                return@Observer
+            }
             binding.toolbar.removeViewAt(0)
             binding.toolbar.addView(
-                    view ?: binding.header.root,
+                    view,
                     0
             )
         })
@@ -423,12 +410,6 @@ class MainActivity :
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
-        binding.toolbar.let {
-            if (fragment is CommonFragmentAction) {
-                binding.header.mainText.setText(fragment.titleId())
-            }
-            binding.header.subText.text = ""
-        }
     }
 
     override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
@@ -489,11 +470,6 @@ class MainActivity :
     private fun refresh() {
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
-
-        val fontColor = colorPair.fontColor()
-        binding.header.icon.setColorFilter(fontColor)
-        binding.header.mainText.setTextColor(fontColor)
-        binding.header.subText.setTextColor(fontColor)
 
         applyBackgrounds()
     }

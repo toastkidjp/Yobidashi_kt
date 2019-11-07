@@ -19,10 +19,6 @@ import androidx.lifecycle.ViewModel
  */
 class HeaderViewModel : ViewModel() {
 
-    val title = MutableLiveData<String?>()
-
-    val url = MutableLiveData<String?>()
-
     val progress = MutableLiveData<Int>()
 
     val stopProgress = MutableLiveData<Boolean>()

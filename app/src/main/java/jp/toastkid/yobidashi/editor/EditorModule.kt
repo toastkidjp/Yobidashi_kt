@@ -523,7 +523,6 @@ class EditorModule(
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
-        headerViewModel?.reset()
     }
 
     companion object {

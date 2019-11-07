@@ -31,9 +31,4 @@ interface CommonFragmentAction {
      */
     fun pressBack(): Boolean = false
 
-    /**
-     * Header tap action.
-     */
-    fun tapHeader() = Unit
-
 }
