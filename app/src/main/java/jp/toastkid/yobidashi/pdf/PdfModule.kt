@@ -13,16 +13,20 @@ import android.view.animation.Animation
 import android.widget.SeekBar
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
+import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
 import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.PdfTab
 
@@ -39,12 +43,21 @@ class PdfModule(
         private val parent: ViewGroup
 ): BaseModule(parent) {
 
+    private val layoutInflater = LayoutInflater.from(context)
+
     /**
      * Data binding object.
      */
     private val binding = DataBindingUtil.inflate<ModulePdfBinding>(
-            LayoutInflater.from(context),
+            layoutInflater,
             R.layout.module_pdf,
+            parent,
+            false
+    )
+
+    private val headerBinding = DataBindingUtil.inflate<ModulePdfHeaderBinding>(
+            layoutInflater,
+            R.layout.module_pdf_header,
             parent,
             false
     )
@@ -64,15 +77,17 @@ class PdfModule(
      */
     private val screenshotDir: FilesDir by lazy { TabAdapter.makeNewScreenshotDir(context) }
 
+    private var headerViewModel: HeaderViewModel? = null
+
     init {
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
         PagerSnapHelper().attachToRecyclerView(binding.pdfImages)
 
-        binding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+        headerBinding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val progress = p0?.progress ?: 0
-                binding.input.setText((progress + 1).toString())
+                headerBinding.input.setText((progress + 1).toString())
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -80,7 +95,7 @@ class PdfModule(
             override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
         })
-        binding.input.addTextChangedListener(object: TextWatcher{
+        headerBinding.input.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) = Unit
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
@@ -102,6 +117,10 @@ class PdfModule(
             }
 
         })
+
+        (context as? FragmentActivity)?.let {
+            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+        }
     }
 
     /**
@@ -110,10 +129,10 @@ class PdfModule(
      * @param colorPair
      */
     fun applyColor(colorPair: ColorPair) {
-        binding.header.setBackgroundColor(colorPair.bgColor())
-        binding.seek.progressDrawable.colorFilter =
+        headerBinding.header.setBackgroundColor(colorPair.bgColor())
+        headerBinding.seek.progressDrawable.colorFilter =
                 PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
-        Colors.setEditTextColor(binding.input, colorPair.fontColor())
+        Colors.setEditTextColor(headerBinding.input, colorPair.fontColor())
     }
 
     /**
@@ -127,7 +146,7 @@ class PdfModule(
         }
         adapter.load(uri)
         binding.pdfImages.scheduleLayoutAnimation()
-        binding.seek.max = adapter.itemCount - 1
+        headerBinding.seek.max = adapter.itemCount - 1
     }
 
     /**
@@ -189,4 +208,9 @@ class PdfModule(
     }
 
     override fun isVisible() = binding.root.isVisible
+
+    override fun show() {
+        super.show()
+        headerViewModel?.replace(headerBinding.root)
+    }
 }
