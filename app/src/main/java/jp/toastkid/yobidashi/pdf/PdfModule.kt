@@ -163,7 +163,7 @@ class PdfModule(
      *
      * @param tab [PdfTab]
      */
-    fun makeThumbnail(): Bitmap {
+    fun makeThumbnail(): Bitmap? {
         binding.pdfImages.invalidate()
         binding.pdfImages.buildDrawingCache()
         return binding.pdfImages.drawingCache
