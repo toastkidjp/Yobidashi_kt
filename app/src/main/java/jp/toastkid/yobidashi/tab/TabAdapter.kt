@@ -84,7 +84,6 @@ class TabAdapter(
             headerViewModel =
                     ViewModelProviders.of(viewContext).get(HeaderViewModel::class.java)
         }
-        setCurrentTabCount()
     }
     /**
      * Save new thumbnail asynchronously.
@@ -179,7 +178,6 @@ class TabAdapter(
     internal fun openNewEditorTab() {
         val editorTab = EditorTab()
         tabList.add(editorTab)
-        setCurrentTabCount()
         setIndexByTab(editorTab)
     }
 
@@ -194,7 +192,6 @@ class TabAdapter(
             setPath(uri.toString())
         }
         tabList.add(pdfTab)
-        setCurrentTabCount()
         setIndexByTab(pdfTab)
     }
 
@@ -416,7 +413,6 @@ class TabAdapter(
         }
 
         tabList.closeTab(index)
-        setCurrentTabCount()
         if (tabList.isEmpty) {
             tabEmptyCallback()
         }
@@ -481,7 +477,6 @@ class TabAdapter(
 
     internal fun clear() {
         tabList.clear()
-        setCurrentTabCount()
     }
 
     internal fun indexOf(tab: Tab): Int = tabList.indexOf(tab)
@@ -524,11 +519,6 @@ class TabAdapter(
     internal fun currentTabId(): String = currentTab()?.id() ?: "-1"
 
     /**
-     * TODO remove.
-     */
-    private fun setCurrentTabCount() = Unit
-
-    /**
      * Update current tab state.
      */
     fun updateCurrentTab() {
@@ -552,7 +542,6 @@ class TabAdapter(
      */
     fun loadBackgroundTabsFromDirIfNeed() {
         tabList.loadBackgroundTabsFromDirIfNeed()
-        setCurrentTabCount()
     }
 
     fun makeCurrentPageInformation(): Bundle = browserModule.makeCurrentPageInformation()
