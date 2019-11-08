@@ -234,7 +234,8 @@ class BrowserFragment : Fragment(),
 
         initializeHeaderViewModel()
 
-        menuViewModel = ViewModelProviders.of(requireActivity())
+        val activity = requireActivity()
+        menuViewModel = ViewModelProviders.of(activity)
                 .get(MenuViewModel::class.java)
 
         pageSearchPresenter = PageSearcherModule(
@@ -245,25 +246,26 @@ class BrowserFragment : Fragment(),
                 { tabs.findUp(it) }
         )
 
-        val headerViewModel =
-                ViewModelProviders.of(requireActivity()).get(HeaderViewModel::class.java)
-
-        val browserHeaderViewModel = ViewModelProviders.of(requireActivity())
+        val browserHeaderViewModel = ViewModelProviders.of(activity)
                 .get(BrowserHeaderViewModel::class.java)
-        // TODO modify owner to activity
-        browserHeaderViewModel.title.observe(this, Observer { title ->
+
+        browserHeaderViewModel.title.observe(activity, Observer { title ->
             if (title.isNullOrBlank()) {
                 return@Observer
             }
             headerBinding?.mainText?.text = title
         })
-        browserHeaderViewModel.url.observe(this, Observer { url ->
+        browserHeaderViewModel.url.observe(activity, Observer { url ->
             if (url.isNullOrBlank()) {
                 return@Observer
             }
             headerBinding?.subText?.text = url
         })
-        browserHeaderViewModel.reset.observe(requireActivity(), Observer {
+
+        val headerViewModel =
+                ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+
+        browserHeaderViewModel.reset.observe(activity, Observer {
             val headerView = headerBinding?.root ?: return@Observer
             headerViewModel.replace(headerView)
         })
