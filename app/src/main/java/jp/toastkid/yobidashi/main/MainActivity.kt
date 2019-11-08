@@ -18,7 +18,6 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -677,12 +676,6 @@ class MainActivity :
          * Header hiding duration.
          */
         private const val HEADER_HIDING_DURATION = 75L
-
-        /**
-         * Title resource ID.
-         */
-        @StringRes
-        private const val TITLE_ID = R.string.app_name
 
         /**
          * Layout ID.
