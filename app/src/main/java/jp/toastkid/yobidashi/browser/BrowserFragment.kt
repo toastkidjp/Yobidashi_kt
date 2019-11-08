@@ -697,8 +697,6 @@ class BrowserFragment : Fragment(),
         tabs.saveNewThumbnailAsync()
     }
 
-    override fun titleId(): Int = R.string.title_browser
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (resultCode != Activity.RESULT_OK || intent == null) {
             return

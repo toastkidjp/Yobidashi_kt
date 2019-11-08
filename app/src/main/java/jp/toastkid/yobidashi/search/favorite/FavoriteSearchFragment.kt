@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -176,9 +175,6 @@ class FavoriteSearchFragment : Fragment(),
     }
 
     private fun colorPair() = preferenceApplier.colorPair()
-
-    @StringRes
-    override fun titleId() = R.string.title_favorite_search
 
     override fun onDetach() {
         super.onDetach()
