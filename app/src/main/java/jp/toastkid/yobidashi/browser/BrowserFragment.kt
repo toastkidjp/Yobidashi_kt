@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -232,8 +233,6 @@ class BrowserFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeHeaderViewModel()
-
         val activity = requireActivity()
         menuViewModel = ViewModelProviders.of(activity)
                 .get(MenuViewModel::class.java)
@@ -246,35 +245,12 @@ class BrowserFragment : Fragment(),
                 { tabs.findUp(it) }
         )
 
-        val browserHeaderViewModel = ViewModelProviders.of(activity)
-                .get(BrowserHeaderViewModel::class.java)
-
-        browserHeaderViewModel.title.observe(activity, Observer { title ->
-            if (title.isNullOrBlank()) {
-                return@Observer
-            }
-            headerBinding?.mainText?.text = title
-        })
-        browserHeaderViewModel.url.observe(activity, Observer { url ->
-            if (url.isNullOrBlank()) {
-                return@Observer
-            }
-            headerBinding?.subText?.text = url
-        })
-
-        val headerViewModel =
-                ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
-
-        browserHeaderViewModel.reset.observe(activity, Observer {
-            val headerView = headerBinding?.root ?: return@Observer
-            headerViewModel.replace(headerView)
-        })
+        initializeHeaderViewModels(activity)
     }
 
-    private fun initializeHeaderViewModel() {
-        val activity = activity ?: return
-
+    private fun initializeHeaderViewModels(activity: FragmentActivity) {
         val headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+
         headerViewModel.stopProgress.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
@@ -293,6 +269,28 @@ class BrowserFragment : Fragment(),
                 it.isVisible = true
                 it.progress = newProgress
             }
+        })
+
+        val browserHeaderViewModel = ViewModelProviders.of(activity)
+                .get(BrowserHeaderViewModel::class.java)
+
+        browserHeaderViewModel.title.observe(activity, Observer { title ->
+            if (title.isNullOrBlank()) {
+                return@Observer
+            }
+            headerBinding?.mainText?.text = title
+        })
+
+        browserHeaderViewModel.url.observe(activity, Observer { url ->
+            if (url.isNullOrBlank()) {
+                return@Observer
+            }
+            headerBinding?.subText?.text = url
+        })
+
+        browserHeaderViewModel.reset.observe(activity, Observer {
+            val headerView = headerBinding?.root ?: return@Observer
+            headerViewModel.replace(headerView)
         })
     }
 
