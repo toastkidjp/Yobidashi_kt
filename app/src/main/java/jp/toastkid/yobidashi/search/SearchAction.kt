@@ -2,11 +2,9 @@ package jp.toastkid.yobidashi.search
 
 import android.content.Context
 import android.net.Uri
-import android.os.Bundle
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.analytics.LogSender
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -35,11 +33,6 @@ class SearchAction(
 ) {
 
     /**
-     * Log sender.
-     */
-    private val logSender: LogSender = LogSender(activityContext)
-
-    /**
      * Preferences wrapper.
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(activityContext)
@@ -54,14 +47,6 @@ class SearchAction(
         } else {
             Disposables.empty()
         }
-
-        logSender.send(
-                "search",
-                Bundle().apply {
-                    putString("category", category)
-                    putString("query", query)
-                }
-        )
 
         val validUrl = Urls.isValidUrl(query)
 

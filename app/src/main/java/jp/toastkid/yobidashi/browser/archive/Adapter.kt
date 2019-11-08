@@ -1,11 +1,11 @@
 package jp.toastkid.yobidashi.browser.archive
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -81,7 +81,7 @@ internal class Adapter(
      * @param lastModifiedMs milliseconds
      */
     private fun toLastModifiedText(lastModifiedMs: Long): String
-            = DATE_FORMAT_HOLDER.get().format(Date(lastModifiedMs))
+            = DATE_FORMAT_HOLDER.get()?.format(Date(lastModifiedMs)) ?: ""
 
     /**
      * Convert file byte length to KB text.

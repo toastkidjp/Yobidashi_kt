@@ -21,8 +21,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
-import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
@@ -50,9 +48,6 @@ import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.translation.E2JTranslator
-import jp.toastkid.yobidashi.libs.translation.J2ETranslator
-import jp.toastkid.yobidashi.libs.translation.TranslationResultPopup
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
@@ -151,18 +146,10 @@ class BrowserFragment : Fragment(),
 
     private var menuViewModel: MenuViewModel? = null
 
-    private lateinit var translationResultPopup: TranslationResultPopup
-
     /**
      * Find-in-page module.
      */
     private lateinit var pageSearchPresenter: PageSearcherModule
-
-    private lateinit var j2ETranslator: J2ETranslator
-
-    private lateinit var e2JTranslator: E2JTranslator
-
-    private lateinit var languageIdentifier: FirebaseLanguageIdentification
 
     private lateinit var randomWikipedia: RandomWikipedia
 
@@ -172,11 +159,6 @@ class BrowserFragment : Fragment(),
         activity?.let {
             rxPermissions = RxPermissions(it)
         }
-
-        translationResultPopup = TranslationResultPopup(requireActivity())
-        j2ETranslator = J2ETranslator()
-        e2JTranslator = E2JTranslator()
-        languageIdentifier = FirebaseNaturalLanguage.getInstance().languageIdentification
     }
 
     override fun onCreateView(
@@ -474,7 +456,7 @@ class BrowserFragment : Fragment(),
             Menu.PDF-> {
                 openPdfTabFromStorage()
             }
-            //TODO else case
+            else -> Unit
         }
     }
     /**
@@ -951,36 +933,6 @@ class BrowserFragment : Fragment(),
         toolbarAction?.showToolbar()
         browserModule.dispose()
         pageSearchPresenter.dispose()
-    }
-
-    fun translate() {
-        val parent = binding?.root ?: return
-        tabs.currentSelectedText { text ->
-            languageIdentifier.identifyLanguage(text)
-                    .addOnSuccessListener {
-                        val translator = when (it) {
-                            "ja" -> j2ETranslator
-                            "en" -> e2JTranslator
-                            else -> e2JTranslator
-                        }
-
-                        translator.invoke(
-                                text,
-                                { result ->
-                                    result?.let { translationResultPopup.show(parent, result) }
-                                },
-                                { e ->
-                                    Timber.e(e)
-                                    Toaster.snackShort(
-                                            parent,
-                                            e.localizedMessage,
-                                            preferenceApplier.colorPair()
-                                    )
-                                }
-                        )
-                    }
-                    .addOnFailureListener { Timber.e(it) }
-        }
     }
 
     companion object {
