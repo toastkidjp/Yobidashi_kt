@@ -644,7 +644,7 @@ class BrowserFragment : Fragment(),
 
     override fun pressBack(): Boolean = hideOption() || back()
 
-    fun tapHeader() {
+    private fun tapHeader() {
         val activityContext = context ?: return
         val currentUrl = browserModule.currentUrl()
         val inputText = if (preferenceApplier.enableSearchQueryExtract) {
