@@ -41,7 +41,4 @@ class HeaderViewModel : ViewModel() {
         _content.postValue(view)
     }
 
-    fun reset() {
-        _content.postValue(null)
-    }
 }
