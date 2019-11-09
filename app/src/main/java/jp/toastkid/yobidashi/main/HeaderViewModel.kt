@@ -13,8 +13,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
- * TODO hide from external.
- *
  * @author toastkidjp
  */
 class HeaderViewModel : ViewModel() {
