@@ -77,7 +77,9 @@ class BrowserModule(
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
 
         if (context is MainActivity) {
-            headerViewModel = ViewModelProviders.of(context).get(HeaderViewModel::class.java)
+            val viewModelProvider = ViewModelProviders.of(context)
+            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+            browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
         }
     }
 
