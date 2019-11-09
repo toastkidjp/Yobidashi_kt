@@ -19,9 +19,19 @@ import androidx.lifecycle.ViewModel
  */
 class HeaderViewModel : ViewModel() {
 
-    val progress = MutableLiveData<Int>()
+    private val _progress = MutableLiveData<Int>()
+    val progress: LiveData<Int> = _progress
 
-    val stopProgress = MutableLiveData<Boolean>()
+    fun updateProgress(newProgress: Int) {
+        _progress.postValue(newProgress)
+    }
+
+    private val _stopProgress = MutableLiveData<Boolean>()
+    val stopProgress: LiveData<Boolean> = _stopProgress
+
+    fun stopProgress(stop: Boolean) {
+        _stopProgress.postValue(stop)
+    }
 
     private val _content = MutableLiveData<View>()
 

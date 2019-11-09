@@ -87,15 +87,15 @@ class BrowserModule(
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            headerViewModel?.progress?.postValue(0)
+            headerViewModel?.updateProgress(0)
             isLoadFinished = false
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
             isLoadFinished = true
-            headerViewModel?.progress?.postValue(100)
-            headerViewModel?.stopProgress?.postValue(true)
+            headerViewModel?.updateProgress(100)
+            headerViewModel?.stopProgress(true)
 
             val title = view.title ?: ""
             val urlStr = url ?: ""
@@ -133,8 +133,8 @@ class BrowserModule(
         override fun onReceivedError(
                 view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
-            headerViewModel?.progress?.postValue(100)
-            headerViewModel?.stopProgress?.postValue(true)
+            headerViewModel?.updateProgress(100)
+            headerViewModel?.stopProgress(true)
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
@@ -218,8 +218,8 @@ class BrowserModule(
         override fun onProgressChanged(view: WebView, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
 
-            headerViewModel?.progress?.postValue(newProgress)
-            headerViewModel?.stopProgress?.postValue(newProgress < 65)
+            headerViewModel?.updateProgress(newProgress)
+            headerViewModel?.stopProgress(newProgress < 65)
 
             if (isLoadFinished) {
                 return
