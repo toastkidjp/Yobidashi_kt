@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Maybe
@@ -83,28 +84,30 @@ class PageSearcherModule(
             })
         }
 
-        viewModel.upward.observe(fragment, Observer { keyword ->
-            findUp(keyword ?: editText.text.toString())
-        })
+        (context as? FragmentActivity)?.let { activity ->
+            viewModel.upward.observe(activity, Observer { keyword ->
+                findUp(keyword ?: editText.text.toString())
+            })
 
-        viewModel.downward.observe(fragment, Observer { keyword ->
-            findDown(keyword ?: editText.text.toString())
-        })
+            viewModel.downward.observe(activity, Observer { keyword ->
+                findDown(keyword ?: editText.text.toString())
+            })
 
-        viewModel.clear.observe(fragment, Observer {
-            editText.setText("")
-        })
+            viewModel.clear.observe(activity, Observer {
+                editText.setText("")
+            })
 
-        viewModel.close.observe(fragment, Observer {
-            binding.root.animate().let {
-                it.cancel()
-                it.translationY(-height)
-                        .setDuration(ANIMATION_DURATION)
-                        .withStartAction { Inputs.hideKeyboard(editText) }
-                        .withEndAction { switchVisibility(View.VISIBLE, View.GONE) }
-                        .start()
-            }
-        })
+            viewModel.close.observe(activity, Observer {
+                binding.root.animate().let {
+                    it.cancel()
+                    it.translationY(-height)
+                            .setDuration(ANIMATION_DURATION)
+                            .withStartAction { Inputs.hideKeyboard(editText) }
+                            .withEndAction { switchVisibility(View.VISIBLE, View.GONE) }
+                            .start()
+                }
+            })
+        }
 
         hide()
     }
