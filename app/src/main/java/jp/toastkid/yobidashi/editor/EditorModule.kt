@@ -390,8 +390,6 @@ class EditorModule(
         setLastSaved(file.lastModified())
     }
 
-    fun currentSelectedText() = selectedTextExtractor()
-
     /**
      * Set last modified time.
      *
