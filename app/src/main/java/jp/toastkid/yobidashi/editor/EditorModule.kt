@@ -85,8 +85,6 @@ class EditorModule(
      */
     private var finder: EditTextFinder
 
-    private val selectedTextExtractor = SelectedTextExtractor(binding.editorInput)
-
     private var menuBinding: ModuleEditorMenuBinding? = null
 
     private var headerViewModel: HeaderViewModel? = null
