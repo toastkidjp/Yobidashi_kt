@@ -47,7 +47,6 @@ import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.home.Command
 import jp.toastkid.yobidashi.home.FragmentReplaceAction
-import jp.toastkid.yobidashi.home.HomeFragment
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
@@ -89,11 +88,6 @@ class MainActivity :
      * Browser fragment.
      */
     private lateinit var browserFragment: BrowserFragment
-
-    /**
-     * Home fragment.
-     */
-    private val homeFragment by lazy { HomeFragment() }
 
     /**
      * Disposables.
@@ -259,9 +253,6 @@ class MainActivity :
         }
 
         when (preferenceApplier.startUp) {
-            StartUp.START -> {
-                replaceFragment(homeFragment)
-            }
             StartUp.APPS_LAUNCHER -> {
                 startActivity(LauncherActivity.makeIntent(this))
                 finishWithoutTransition()
@@ -269,7 +260,7 @@ class MainActivity :
             StartUp.BROWSER -> {
                 replaceWithBrowser(Uri.EMPTY)
             }
-            StartUp.SEARCH -> {
+            else -> {
                 startActivity(SearchActivity.makeIntent(this))
                 finishWithoutTransition()
             }
@@ -747,8 +738,9 @@ class MainActivity :
         /**
          * Make launcher intent.
          *
-         * @param context
-         * @param dayOfMonth
+         * @param context [Context]
+         * @param month Month
+         * @param dayOfMonth Day of month
          * @return [Intent]
          */
         fun makeIntent(context: Context, month: Int, dayOfMonth: Int) = makeIntent(context)

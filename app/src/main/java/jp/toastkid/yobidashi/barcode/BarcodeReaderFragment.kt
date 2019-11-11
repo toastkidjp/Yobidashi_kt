@@ -75,6 +75,8 @@ class BarcodeReaderFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
+        resultPopup = BarcodeReaderResultPopup(requireContext())
+
         return binding?.root
     }
 
@@ -100,15 +102,14 @@ class BarcodeReaderFragment : Fragment() {
         }
 
         val requireActivity = requireActivity()
-        resultPopup = BarcodeReaderResultPopup(requireActivity)
 
-        ViewModelProviders.of(this).get(BarcodeReaderResultPopupViewModel::class.java)
+        ViewModelProviders.of(requireActivity).get(BarcodeReaderResultPopupViewModel::class.java)
                 .also {
-                    it.clip.observe(this, Observer { text -> clip(text) })
-                    it.share.observe(this, Observer { text ->
+                    it.clip.observe(requireActivity, Observer { text -> clip(text) })
+                    it.share.observe(requireActivity, Observer { text ->
                         startActivity(IntentFactory.makeShare(text))
                     })
-                    it.open.observe(this, Observer { text ->
+                    it.open.observe(requireActivity, Observer { text ->
                         SearchAction(
                                 requireActivity,
                                 preferenceApplier.getDefaultSearchEngine(),

@@ -67,7 +67,7 @@ internal class ActivityAdapter(
         holder.setText(
                 viewHistory.title,
                 viewHistory.url,
-                dateFormat.get().format(viewHistory.lastViewed)
+                dateFormat.get()?.format(viewHistory.lastViewed) ?: ""
         )
         holder.itemView.setOnClickListener { onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->
