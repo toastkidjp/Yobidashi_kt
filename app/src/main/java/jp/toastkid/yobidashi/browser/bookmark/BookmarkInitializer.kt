@@ -2,7 +2,14 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
 import androidx.core.net.toUri
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -48,26 +55,40 @@ object BookmarkInitializer {
      *
      * @param context
      */
-    operator fun invoke(context: Context) {
+    operator fun invoke(context: Context, onComplete: () -> Unit = {}): Disposable {
         val favicons = FilesDir(context, "favicons")
+        val bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
 
-        DEFAULT_BOOKMARKS.forEach {
-            val parent = it.key
-            BookmarkInsertion(
-                    context = context,
-                    title = parent,
-                    parent = Bookmarks.ROOT_FOLDER_NAME,
-                    folder = true
-            ).insert()
-            it.value.entries.forEach {
-                BookmarkInsertion(
-                        context,
-                        it.key,
-                        it.value,
-                        favicons.assignNewFile("${it.value.toUri().host}.png").absolutePath,
-                        parent
-                ).insert()
+        return Completable.fromAction {
+            DEFAULT_BOOKMARKS.forEach {
+                val parent = it.key
+                bookmarkRepository.add(
+                        Bookmark().also {
+                            it.title = parent
+                            it.parent = Bookmarks.ROOT_FOLDER_NAME
+                            it.folder = true
+                        }
+                )
+                it.value.entries.forEach { entry ->
+                    bookmarkRepository.add(
+                            Bookmark().also {
+                                it.title = entry.key
+                                it.url = entry.value
+                                it.favicon =
+                                        favicons.assignNewFile("${entry.value.toUri().host}.png")
+                                                .absolutePath
+                                it.parent = parent
+                                it.folder = false
+                            }
+                    )
+                }
             }
         }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { onComplete() },
+                        Timber::e
+                )
     }
 }

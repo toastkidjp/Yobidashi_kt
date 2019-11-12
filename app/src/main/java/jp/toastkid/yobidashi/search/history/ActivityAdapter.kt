@@ -76,7 +76,11 @@ internal class ActivityAdapter(
      * @return [Disposable]
      */
     override fun removeAt(position: Int): Disposable =
-            Completable.fromAction { repository.delete(items.get(position)) }
+            Completable.fromAction {
+                val searchHistory = items[position]
+                repository.delete(searchHistory)
+                items.remove(searchHistory)
+            }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { notifyItemRemoved(position) }
@@ -88,7 +92,10 @@ internal class ActivityAdapter(
      * @return [Disposable]
      */
     fun clearAll(onComplete: () -> Unit): Disposable =
-            Completable.fromAction { repository.deleteAll() }
+            Completable.fromAction {
+                repository.deleteAll()
+                items.clear()
+            }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

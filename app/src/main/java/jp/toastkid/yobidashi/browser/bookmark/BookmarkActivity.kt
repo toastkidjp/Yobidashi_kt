@@ -250,8 +250,9 @@ class BookmarkActivity: AppCompatActivity(),
     }
 
     override fun onClickAddDefaultBookmark() {
-        BookmarkInitializer(this)
-        adapter.showRoot()
+        BookmarkInitializer(this) { adapter.showRoot() }
+                .addTo(disposables)
+
         Toaster.snackShort(binding.root, R.string.done_addition, preferenceApplier.colorPair())
     }
 
