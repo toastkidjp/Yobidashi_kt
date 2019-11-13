@@ -13,8 +13,10 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import android.webkit.ValueCallback
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -368,6 +370,19 @@ class BrowserFragment : Fragment(),
                 dialogFragment.show(
                         fragmentManager,
                         UserAgentDialogFragment::class.java.simpleName
+                )
+            }
+            Menu.READER_MODE -> {
+                browserModule.invokeContentExtraction(
+                        ValueCallback {
+                            val lineSeparator = System.getProperty("line.separator") ?: ""
+                            val replace = it.replace("\\n", lineSeparator)
+                            AlertDialog.Builder(requireContext())
+                                    .setTitle("Reader mode")
+                                    .setMessage(replace)
+                                    .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
+                                    .show()
+                        }
                 )
             }
             Menu.PAGE_INFORMATION-> {

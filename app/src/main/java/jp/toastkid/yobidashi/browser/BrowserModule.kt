@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
+import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
 import jp.toastkid.yobidashi.browser.screenshots.Screenshot
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
@@ -493,6 +494,12 @@ class BrowserModule(
 
     fun applyNewAlpha() {
         webViewPool.applyNewAlpha()
+    }
+
+    fun invokeContentExtraction(callback: ValueCallback<String>) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            ReaderModeUseCase()(currentView(), callback)
+        }
     }
 
 }
