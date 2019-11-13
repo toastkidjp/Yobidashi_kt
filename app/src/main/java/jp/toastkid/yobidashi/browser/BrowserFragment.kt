@@ -909,7 +909,7 @@ class BrowserFragment : Fragment(),
         if (TextUtils.isEmpty(primary)) {
             return
         }
-        editorModule.insert(Quotation(primary))
+        editorModule.insert(Quotation()(primary))
     }
 
     override fun onCloseTabListDialogFragment() = hideTabList()
