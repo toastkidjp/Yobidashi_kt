@@ -335,6 +335,8 @@ class BrowserModule(
         }
     }
 
+    fun canCurrentTabGoesBack() = currentView()?.canGoBack() == true
+
     /**
      * Save archive file.
      */
