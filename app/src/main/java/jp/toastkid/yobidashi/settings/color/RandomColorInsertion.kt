@@ -29,17 +29,17 @@ class RandomColorInsertion {
      */
     operator fun invoke(context: Context): Disposable {
         val bg = Color.argb(
-                random.nextInt(255),
-                random.nextInt(255),
-                random.nextInt(255),
-                random.nextInt(255)
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX)
         )
 
         val font = Color.argb(
-                random.nextInt(255),
-                random.nextInt(255),
-                random.nextInt(255),
-                random.nextInt(255)
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX)
         )
 
         return Completable.fromAction {
@@ -49,5 +49,9 @@ class RandomColorInsertion {
         }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
+    }
+
+    companion object {
+        private const val COLOR_CODE_MAX = 255
     }
 }
