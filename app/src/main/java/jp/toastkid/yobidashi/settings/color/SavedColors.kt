@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.settings.color
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import androidx.annotation.ColorInt
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -15,20 +14,6 @@ import java.util.*
  * @author toastkidjp
  */
 object SavedColors {
-
-    /**
-     * Make saved color.
-     *
-     * @param bgColor
-     * @param fontColor
-     */
-    internal fun makeSavedColor(
-            @ColorInt bgColor: Int,
-            @ColorInt fontColor: Int
-    ) = SavedColor().also {
-        it.bgColor = bgColor
-        it.fontColor = fontColor
-    }
 
     /**
      * Insert default colors.
@@ -74,7 +59,7 @@ object SavedColors {
         return Completable.fromAction {
             DatabaseFinder().invoke(context)
                     .savedColorRepository()
-                    .add(makeSavedColor(bg, font))
+                    .add(SavedColor.make(bg, font))
         }
                 .subscribeOn(Schedulers.io())
                 .subscribe()

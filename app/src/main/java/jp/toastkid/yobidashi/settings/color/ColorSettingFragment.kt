@@ -202,7 +202,7 @@ class ColorSettingFragment : Fragment(),
         commitNewColor(bgColor, fontColor)
 
         Completable.fromAction {
-            val savedColor = SavedColors.makeSavedColor(bgColor, fontColor)
+            val savedColor = SavedColor.make(bgColor, fontColor)
             repository.add(savedColor)
             adapter?.add(savedColor)
         }
