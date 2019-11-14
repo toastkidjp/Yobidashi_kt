@@ -75,7 +75,7 @@ internal object DefaultColors {
     fun insert(context: Context) {
         Completable.fromAction {
             val repository = DatabaseFinder().invoke(context).savedColorRepository()
-            DefaultColors.make(context).forEach { repository.add(it) }
+            make(context).forEach { repository.add(it) }
         }
                 .subscribeOn(Schedulers.io())
                 .subscribe(
