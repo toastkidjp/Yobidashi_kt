@@ -64,7 +64,7 @@ class ExtendedApplication : Application() {
         DefaultColorInsertion().insert(this)
         preferenceApplier.updateLastAd()
         BookmarkInitializer(this)
-        DefaultBackgroundImagePreparation(this).addTo(disposables)
+        DefaultBackgroundImagePreparation()(this).addTo(disposables)
     }
 
     override fun onTerminate() {
