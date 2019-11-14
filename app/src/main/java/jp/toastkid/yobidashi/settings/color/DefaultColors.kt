@@ -1,11 +1,16 @@
 package jp.toastkid.yobidashi.settings.color
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.collection.ArraySet
 import androidx.core.content.ContextCompat
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import timber.log.Timber
 
 /**
  * Default colors.
@@ -59,5 +64,23 @@ internal object DefaultColors {
     @ColorInt private fun fromRes(
             context: Context, @ColorRes colorId: Int): Int {
         return ContextCompat.getColor(context, colorId)
+    }
+
+    /**
+     * Insert default colors.
+     *
+     * @param context
+     */
+    @SuppressLint("CheckResult")
+    fun insert(context: Context) {
+        Completable.fromAction {
+            val repository = DatabaseFinder().invoke(context).savedColorRepository()
+            DefaultColors.make(context).forEach { repository.add(it) }
+        }
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {},
+                        Timber::e
+                )
     }
 }

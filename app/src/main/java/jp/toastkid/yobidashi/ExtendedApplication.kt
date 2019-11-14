@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
-import jp.toastkid.yobidashi.settings.color.SavedColors
+import jp.toastkid.yobidashi.settings.color.DefaultColors
 import timber.log.Timber
 
 /**
@@ -61,7 +61,7 @@ class ExtendedApplication : Application() {
             return
         }
 
-        SavedColors.insertDefaultColors(this)
+        DefaultColors.insert(this)
         preferenceApplier.updateLastAd()
         BookmarkInitializer(this)
         DefaultBackgroundImagePreparation(this).addTo(disposables)
