@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.settings.color
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
@@ -16,17 +15,6 @@ import java.util.*
  * @author toastkidjp
  */
 object SavedColors {
-
-    /**
-     * Set saved colors.
-     *
-     * @param tv
-     * @param color
-     */
-    internal fun setSaved(tv: TextView, color: SavedColor) {
-        tv.setBackgroundColor(color.bgColor)
-        tv.setTextColor(color.fontColor)
-    }
 
     /**
      * Make saved color.

@@ -162,7 +162,7 @@ class ColorSettingFragment : Fragment(),
      * @param color  [SavedColor] object
      */
     private fun bindView(holder: SavedColorHolder, color: SavedColor) {
-        SavedColors.setSaved(holder.textView, color)
+        color.setTo(holder.textView)
         holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
         holder.remove.setOnClickListener {
             Completable.fromAction {
