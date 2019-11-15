@@ -17,7 +17,7 @@ import java.util.*
  *
  * @author toastkidjp
  */
-object BookmarkInitializer {
+class BookmarkInitializer {
 
     /**
      * Default bookmarks.

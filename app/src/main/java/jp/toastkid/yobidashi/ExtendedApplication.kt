@@ -63,7 +63,7 @@ class ExtendedApplication : Application() {
 
         DefaultColorInsertion().insert(this)
         preferenceApplier.updateLastAd()
-        BookmarkInitializer(this)
+        BookmarkInitializer()(this).addTo(disposables)
         DefaultBackgroundImagePreparation()(this).addTo(disposables)
     }
 
