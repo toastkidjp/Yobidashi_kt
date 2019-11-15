@@ -2,11 +2,9 @@ package jp.toastkid.yobidashi.browser.screenshots
 
 import android.content.Context
 import android.graphics.Bitmap
-
-import java.io.File
-
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import java.io.File
 
 /**
  * Screen shot.
@@ -16,7 +14,7 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
 object Screenshot {
 
     /** Folder of screenshots.  */
-    internal val DIR = "screenshots"
+    internal const val DIR = "screenshots"
 
     /**
      * Save bitmap file to cache file.
