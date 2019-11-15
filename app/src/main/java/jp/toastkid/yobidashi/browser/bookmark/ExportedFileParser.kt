@@ -40,7 +40,9 @@ class ExportedFileParser {
         doc.select("dl")
                 .first()
                 .children()
-                .forEach { parseChild(it,  Bookmark.getRootFolderName())?.let { bookmarks.add(it) } }
+                .forEach { element ->
+                    parseChild(element,  Bookmark.getRootFolderName())?.let { bookmarks.add(it) }
+                }
         return bookmarks
     }
 
@@ -64,8 +66,8 @@ class ExportedFileParser {
                 childFolder.parent = folderName
                 childFolder.title  = it.text()
                 childFolder.folder = true
-                child.select("dl").first()?.children()?.forEach {
-                    parseChild(it, childFolder.title)?.let { bookmarks.add(it) }
+                child.select("dl").first()?.children()?.forEach { element ->
+                    parseChild(element, childFolder.title)?.let { bookmark -> bookmarks.add(bookmark) }
                 }
                 return childFolder
             }
