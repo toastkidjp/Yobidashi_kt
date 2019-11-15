@@ -8,24 +8,27 @@ import java.io.File
 
 /**
  * Screen shot.
-
+ *
  * @author toastkidjp
  */
 object Screenshot {
 
-    /** Folder of screenshots.  */
+    /**
+     * Folder of screenshots.
+     */
     internal const val DIR = "screenshots"
 
     /**
      * Save bitmap file to cache file.
-     * @param context
      *
+     * @param context
      * @param bitmap
      *
      * @return
      */
     fun save(context: Context, bitmap: Bitmap): File {
-        val file = FilesDir(context, DIR).assignNewFile(System.currentTimeMillis().toString() + ".png")
+        val file = FilesDir(context, DIR)
+                .assignNewFile(System.currentTimeMillis().toString() + ".png")
         Bitmaps.compress(bitmap, file)
         return file
     }
