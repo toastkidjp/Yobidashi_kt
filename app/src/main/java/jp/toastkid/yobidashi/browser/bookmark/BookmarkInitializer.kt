@@ -22,7 +22,7 @@ class BookmarkInitializer {
     /**
      * Default bookmarks.
      */
-    private val DEFAULT_BOOKMARKS: Map<String, Map<String, String>> = mapOf(
+    private val defaultBookmarks: Map<String, Map<String, String>> = mapOf(
             "Recommended" to mapOf(
                     "Google Translate" to "https://translate.google.com/",
                     "YouTube" to "https://www.youtube.com/",
@@ -60,7 +60,7 @@ class BookmarkInitializer {
         val bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
 
         return Completable.fromAction {
-            DEFAULT_BOOKMARKS.forEach {
+            defaultBookmarks.forEach {
                 val parent = it.key
                 bookmarkRepository.add(
                         Bookmark().also {
