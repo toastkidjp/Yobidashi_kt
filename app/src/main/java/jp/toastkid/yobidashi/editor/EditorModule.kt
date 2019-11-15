@@ -366,7 +366,7 @@ class EditorModule(
     private fun setLastSaved(ms: Long) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = ms
-        binding.lastSaved.setText(lastSavedTitle + dateFormatHolder.get().format(calendar.time))
+        binding.lastSaved.setText(lastSavedTitle + dateFormatHolder.get()?.format(calendar.time))
     }
 
     /**

@@ -41,7 +41,7 @@ object Colors {
         tv.setBackgroundColor(pair.bgColor())
         val fontColor = pair.fontColor()
         tv.setTextColor(fontColor)
-        tv.compoundDrawables?.forEach {
+        tv.compoundDrawables.forEach {
             it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
         }
     }

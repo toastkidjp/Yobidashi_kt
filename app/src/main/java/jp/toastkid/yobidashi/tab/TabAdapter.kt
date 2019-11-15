@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.tab
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -191,7 +190,7 @@ class TabAdapter(
      */
     internal fun openNewPdfTab(uri: Uri) {
         val pdfTab = PdfTab().apply {
-            setTitle(uri.path)
+            setTitle(uri.path ?: "")
             setPath(uri.toString())
         }
         tabList.add(pdfTab)
@@ -270,8 +269,7 @@ class TabAdapter(
      * @param withAnimation for suppress redundant animation.
      */
     fun replaceToCurrentTab(withAnimation: Boolean = true) {
-        val currentTab = tabList.currentTab()
-        when (currentTab) {
+        when (val currentTab = tabList.currentTab()) {
             is WebTab -> {
                 replaceWebView()
                 if (editor.isVisible()) {
@@ -516,7 +514,7 @@ class TabAdapter(
                 webViewContainer,
                 context.getString(R.string.message_done_added_bookmark),
                 R.string.open,
-                View.OnClickListener { _ -> callback()},
+                View.OnClickListener { callback() },
                 colorPair
         )
     }
@@ -560,25 +558,6 @@ class TabAdapter(
     fun makeCurrentPageInformation(): Bundle = browserModule.makeCurrentPageInformation()
 
     private fun currentWebView() = browserModule.getWebView(currentTabId())
-
-    fun currentSelectedText(callback: (String) -> Unit) {
-        val currentTab = currentTab()
-        when (currentTab) {
-            is WebTab -> {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    return
-                }
-                currentWebView()
-                        ?.evaluateJavascript(
-                                "(function(){return window.getSelection().toString()})()"
-                        ) { value -> callback(value) }
-            }
-            is EditorTab -> {
-                callback(editor.currentSelectedText())
-            }
-        }
-
-    }
 
     companion object {
 

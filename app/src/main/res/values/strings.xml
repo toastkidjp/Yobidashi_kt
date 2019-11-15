@@ -20,7 +20,6 @@
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
-    <string name="search_category_startpage">startpage</string>
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
     <string name="search_category_yahoo">Yahoo!</string>
@@ -137,7 +136,7 @@
     <string name="message_add_recommended_colors">Would you like to add recommended colors?</string>
     <string name="title_add_random">Random</string>
     <string name="title_go_google_play">Check update</string>
-    <string name="section_title_about_this_app">This app\'s informations</string>
+    <string name="section_title_about_this_app">This app\'s information</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="link_privacy_policy">https://tmblr.co/ZDG7Be2NVdctY</string>
     <string name="message_please_view_ad">Please could you bear to see interstitial ad...</string>
@@ -193,7 +192,7 @@
     <string name="right">Right</string>
     <string name="title_enable_javascript">Enable to use JavaScript</string>
     <string name="subhead_displaying">Displaying</string>
-    <string name="subhead_setting_browesr">Browser</string>
+    <string name="subhead_setting_browser">Browser</string>
     <string name="subhead_others">Others</string>
     <string name="subhead_notification">Notifications</string>
     <string name="prefix_loading">Loading: </string>
@@ -423,5 +422,7 @@
     <string name="menu_random_wikipedia">Random Wikipedia</string>
     <string name="message_open_random_wikipedia">Open Wikipedia article "%s".</string>
     <string name="tumblr">Tumblr</string>
+    <string name="search_category_open_street_map">OpenStreetMap</string>
+    <string name="search_category_quora">Quora</string>
 
 </resources>

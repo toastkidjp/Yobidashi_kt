@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.BitmapScaling
@@ -41,17 +42,21 @@ internal class LoadedAction (
 ) {
 
     /** Image file URI.  */
-    private val uri: Uri = data.data
+    private val uri: Uri? = data.data
 
     /**
      * Invoke action.
      */
     operator fun invoke(): Disposable {
+        if (uri == null) {
+            return Disposables.empty()
+        }
+
         val context = parent.context
 
         return Maybe.fromCallable {
             val image = ImageLoader.loadBitmap(context, uri)
-            image?.let { storeImageToFile(context, it) }
+            image?.let { storeImageToFile(context, it, uri) }
             image
         }
                 .subscribeOn(Schedulers.io())
@@ -77,7 +82,7 @@ internal class LoadedAction (
      * @throws FileNotFoundException
      */
     @Throws(FileNotFoundException::class)
-    private fun storeImageToFile(context: Context, image: Bitmap) {
+    private fun storeImageToFile(context: Context, image: Bitmap, uri: Uri) {
         val output = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR).assignNewFile(uri)
         PreferenceApplier(context).backgroundImagePath = output.path
         val size = Rect()

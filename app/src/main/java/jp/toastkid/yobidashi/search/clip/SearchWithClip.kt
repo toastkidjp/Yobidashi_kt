@@ -45,8 +45,8 @@ class SearchWithClip(
             }
             lastClipped = System.currentTimeMillis()
 
-            val firstItem = cm.primaryClip.getItemAt(0)
-            firstItem ?: return@OnPrimaryClipChangedListener
+            val firstItem = cm.primaryClip?.getItemAt(0)
+                    ?: return@OnPrimaryClipChangedListener
 
             val text = firstItem.text
             if (text == null || text.isEmpty() || LENGTH_LIMIT <= text.length) {

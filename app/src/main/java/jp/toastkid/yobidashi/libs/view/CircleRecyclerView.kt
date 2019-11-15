@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.libs.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Message
@@ -99,7 +100,7 @@ class CircleRecyclerView @JvmOverloads constructor(
         super.requestLayout()
 
         val layoutManager = layoutManager ?: return
-        val count = layoutManager.childCount ?: 0
+        val count = layoutManager.childCount
         for (i in 0 until count) {
             val v = getChildAt(i)
             if (v !== currentCenterChildView && centerItemClickListener != null) {
@@ -140,7 +141,7 @@ class CircleRecyclerView @JvmOverloads constructor(
     }
 
     override fun onScrollStateChanged(state: Int) {
-        if (state == RecyclerView.SCROLL_STATE_IDLE
+        if (state == SCROLL_STATE_IDLE
                 && needCenterForce
                 && !isForceCentering) {
             isForceCentering = true
@@ -154,6 +155,7 @@ class CircleRecyclerView @JvmOverloads constructor(
         onScrollListener?.onScrollStateChanged(state)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(e: MotionEvent): Boolean {
         removeCallbacks(centerRunnable)
         isForceCentering = false
@@ -226,7 +228,7 @@ class CircleRecyclerView @JvmOverloads constructor(
         fun onScrolled(dx: Int, dy: Int)
     }
 
-    override fun setAdapter(adapter: RecyclerView.Adapter<*>?) {
+    override fun setAdapter(adapter: Adapter<*>?) {
         super.setAdapter(adapter)
         if (firstSetAdapter) {
             firstSetAdapter = false

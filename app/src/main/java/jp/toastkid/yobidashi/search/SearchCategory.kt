@@ -94,6 +94,10 @@ enum class SearchCategory(
             R.drawable.ic_map,
             "https://www.google.co.jp/maps/place/"
     ),
+    OPEN_STREET_MAP(R.string.search_category_open_street_map,
+            R.drawable.ic_openstreetmap,
+            "https://www.openstreetmap.org/search?query="
+    ),
     OPEN_WEATHER_MAP(R.string.search_category_open_weather,
             R.drawable.ic_open_weather,
             "https://openweathermap.org/find?q="
@@ -118,6 +122,17 @@ enum class SearchCategory(
                     h + Uri.encode(q)
                 } else {
                     "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=" + Uri.encode(q)
+                }
+            }
+    ),
+    QUORA(R.string.search_category_quora,
+            R.drawable.ic_quora,
+            "https://www.quora.com/search?q=",
+            { l, h, q ->
+                if (Locale.JAPANESE.language == l) {
+                    "https://jp.quora.com/search?q=${Uri.encode(q)}"
+                } else {
+                    "$h${Uri.encode(q)}"
                 }
             }
     ),

@@ -24,7 +24,7 @@ import java.io.File
  *
  * @author toastkidjp
  */
-class ImagePreviewActivity(): AppCompatActivity() {
+class ImagePreviewActivity : AppCompatActivity() {
 
     /**
      * Image file's path.
@@ -100,11 +100,16 @@ class ImagePreviewActivity(): AppCompatActivity() {
         }
         intent?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                val takeFlags: Int = intent.getFlags() and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                contentResolver.takePersistableUriPermission(intent.data, takeFlags)
+                val takeFlags: Int = intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                intent.data?.let { uri ->
+                    contentResolver.takePersistableUriPermission(uri, takeFlags)
+                }
             }
-            ImageLoader.loadBitmap(this, Uri.parse(File(imagePath).toURI().toString()))
-                ?.compress(Bitmap.CompressFormat.PNG, 100, contentResolver.openOutputStream(it.data))
+
+            intent.data?.let { uri ->
+                ImageLoader.loadBitmap(this, Uri.parse(File(imagePath).toURI().toString()))
+                        ?.compress(Bitmap.CompressFormat.PNG, 100, contentResolver.openOutputStream(uri))
+            }
             showSnackbar(R.string.done_save)
         }
     }

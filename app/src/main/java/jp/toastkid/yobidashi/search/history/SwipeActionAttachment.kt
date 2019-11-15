@@ -57,7 +57,7 @@ object SwipeActionAttachment {
                         actionState: Int,
                         isCurrentlyActive: Boolean
                 ) {
-                    if (viewHolder?.adapterPosition == -1) {
+                    if (viewHolder.adapterPosition == -1) {
                         return
                     }
 

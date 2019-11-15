@@ -31,7 +31,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     /**
      * Scrolling value.
      */
-    var scrolling: Int = 0
+    private var scrolling: Int = 0
 
     private var nestedOffsetY: Float = 0f
 
@@ -49,8 +49,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         if (isMultiTap(motionEvent)) {
             return super.dispatchTouchEvent(motionEvent)
         }
-
-        var returnValue = false
 
         val event = MotionEvent.obtain(motionEvent)
         val action = event.actionMasked
@@ -72,7 +70,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 }
                 requestDisallowInterceptTouchEvent(true)
 
-                returnValue = super.dispatchTouchEvent(event)
+                val returnValue = super.dispatchTouchEvent(event)
 
                 // NestedScroll
                 if (dispatchNestedScroll(0, scrollOffset[1], 0, deltaY.toInt(), scrollOffset)) {
@@ -84,7 +82,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             }
             MotionEvent.ACTION_DOWN -> {
                 requestDisallowInterceptTouchEvent(true)
-                returnValue = super.dispatchTouchEvent(event)
+                val returnValue = super.dispatchTouchEvent(event)
                 lastY = eventY.toFloat()
                 // start NestedScroll
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
@@ -92,7 +90,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             }
             MotionEvent.ACTION_UP -> {
                 requestDisallowInterceptTouchEvent(false)
-                returnValue = super.dispatchTouchEvent(event)
+                val returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
                 // end NestedScroll
                 stopNestedScroll()
@@ -100,7 +98,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             }
             MotionEvent.ACTION_CANCEL -> {
                 requestDisallowInterceptTouchEvent(false)
-                returnValue = super.dispatchTouchEvent(event)
+                val returnValue = super.dispatchTouchEvent(event)
                 enablePullToRefresh = false
                 // end NestedScroll
                 stopNestedScroll()

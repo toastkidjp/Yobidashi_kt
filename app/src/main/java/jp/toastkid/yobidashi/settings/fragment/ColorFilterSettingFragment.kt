@@ -7,13 +7,13 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import androidx.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
@@ -44,10 +44,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
             colorFilter = ColorFilter(it, binding.root)
         }
 
-        ColorFilterSettingInitializer(
-                binding,
-                { colorFilter.color(it) }
-        ).invoke()
+        ColorFilterSettingInitializer(binding) { colorFilter.color(it) }.invoke()
         binding.fragment = this
         return binding.root
     }
@@ -56,7 +53,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         super.onResume()
         val filterColor = preferenceApplier.filterColor()
         binding.sample.setBackgroundColor(filterColor)
-        binding.alpha.setProgress(Color.alpha(filterColor))
+        binding.alpha.progress = Color.alpha(filterColor)
         binding.useColorFilterCheck.let {
             it.isChecked = preferenceApplier.useColorFilter()
             it.jumpDrawablesToCurrentState()
@@ -65,10 +62,8 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
 
     /**
      * Switch color filter's visibility.
-
-     * @param v
      */
-    fun switchColorFilter(v: View) {
+    fun switchColorFilter() {
         activity?.let {
             binding.useColorFilterCheck.isChecked = colorFilter.switchState(it)
         }

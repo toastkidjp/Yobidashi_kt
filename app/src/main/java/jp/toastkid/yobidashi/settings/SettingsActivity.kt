@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -36,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
 
         preferenceApplier = PreferenceApplier(this)
 
-        binding = DataBindingUtil.setContentView<ActivitySettingsBinding>(this, LAYOUT_ID)
+        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding.activity = this
         binding.toolbar.also { toolbar ->
             toolbar.setNavigationIcon(R.drawable.ic_back)
@@ -46,8 +47,8 @@ class SettingsActivity : AppCompatActivity() {
             toolbar.setOnMenuItemClickListener{ clickMenu(it) }
         }
 
-        supportFragmentManager?.let {
-            binding.container.adapter = PagerAdapter(it, { getString(it) })
+        supportFragmentManager?.let { fragmentManager ->
+            binding.container.adapter = PagerAdapter(fragmentManager) { getString(it) }
             binding.container.offscreenPageLimit = 3
         }
     }
@@ -91,7 +92,8 @@ class SettingsActivity : AppCompatActivity() {
         /**
          * Layout ID.
          */
-        private val LAYOUT_ID = R.layout.activity_settings
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.activity_settings
 
         /**
          * Make this activity's intent.

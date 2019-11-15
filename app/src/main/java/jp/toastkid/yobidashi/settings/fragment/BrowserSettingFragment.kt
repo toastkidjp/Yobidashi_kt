@@ -43,7 +43,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     private lateinit var binding: FragmentSettingBrowserBinding
 
     /**
-     * Preference wrappter.
+     * Preference wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -332,5 +332,5 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         binding.userAgentValue.text = userAgent.title()
     }
 
-    override fun titleId() = R.string.subhead_setting_browesr
+    override fun titleId() = R.string.subhead_setting_browser
 }
