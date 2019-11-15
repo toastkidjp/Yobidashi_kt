@@ -14,7 +14,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
-import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 
 /**
@@ -36,7 +35,7 @@ class AddBookmarkDialogFragment : DialogFragment() {
                         activityContext,
                         title,
                         url,
-                        Bookmarks.makeFaviconUrl(activityContext, url),
+                        Bookmark.makeFaviconUrl(activityContext, url),
                         Bookmark.getRootFolderName(),
                         false
                     ).insert()
