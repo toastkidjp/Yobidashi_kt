@@ -9,12 +9,13 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 
 /**
  * @author toastkidjp
@@ -36,7 +37,7 @@ class AddBookmarkDialogFragment : DialogFragment() {
                         title,
                         url,
                         Bookmarks.makeFaviconUrl(activityContext, url),
-                        Bookmarks.ROOT_FOLDER_NAME,
+                        Bookmark.getRootFolderName(),
                         false
                     ).insert()
                     d.dismiss()

@@ -115,7 +115,7 @@ internal class ActivityAdapter(
      */
     fun currentFolderName(): String =
             if (items.isEmpty() && folderHistory.isNotEmpty()) folderHistory.peek()
-            else if (items.isEmpty()) Bookmarks.ROOT_FOLDER_NAME
+            else if (items.isEmpty()) Bookmark.getRootFolderName()
             else items[0].parent
 
     /**
@@ -133,7 +133,7 @@ internal class ActivityAdapter(
      * Show root folder.
      */
     fun showRoot() {
-        query(Bookmarks.ROOT_FOLDER_NAME)
+        query(Bookmark.getRootFolderName())
     }
 
     /**

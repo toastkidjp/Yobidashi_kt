@@ -45,7 +45,7 @@ object ExportedFileParser {
         doc.select("dl")
                 .first()
                 .children()
-                .forEach { parseChild(it,  Bookmarks.ROOT_FOLDER_NAME)?.let { bookmarks.add(it) } }
+                .forEach { parseChild(it,  Bookmark.getRootFolderName())?.let { bookmarks.add(it) } }
         return bookmarks
     }
 

@@ -1,9 +1,11 @@
 package jp.toastkid.yobidashi.browser.bookmark.model
 
+import android.content.Context
+import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
+import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
  * Bookmark model.
@@ -22,7 +24,7 @@ class Bookmark {
 
     var favicon: String = ""
 
-    var parent: String = Bookmarks.ROOT_FOLDER_NAME
+    var parent: String = getRootFolderName()
 
     var folder: Boolean = false
 
@@ -34,5 +36,16 @@ class Bookmark {
         return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', parent='$parent', folder=$folder, viewCount=$viewCount, lastViewed=$lastViewed)"
     }
 
+    companion object {
+
+        private const val ROOT_FOLDER_NAME: String = "root"
+
+        fun getRootFolderName() = ROOT_FOLDER_NAME
+
+        fun makeFaviconUrl(context: Context, url: String): String {
+            val host = url.toUri().host ?: url
+            return FilesDir(context, "favicons").assignNewFile("$host.png").absolutePath
+        }
+    }
 
 }

@@ -65,7 +65,7 @@ class BookmarkInitializer {
                 bookmarkRepository.add(
                         Bookmark().also {
                             it.title = parent
-                            it.parent = Bookmarks.ROOT_FOLDER_NAME
+                            it.parent = Bookmark.getRootFolderName()
                             it.folder = true
                         }
                 )
