@@ -14,17 +14,12 @@ import java.io.InputStream
  *
  * @author toastkidjp
  */
-object ExportedFileParser {
+class ExportedFileParser {
 
     /**
      * Bookmark container.
      */
     private val bookmarks: MutableList<Bookmark> = mutableListOf()
-
-    /**
-     * Bookmark html encoding.
-     */
-    private const val ENCODE = "UTF-8"
 
     /**
      * Parse bookmark html file.
@@ -74,4 +69,12 @@ object ExportedFileParser {
                 }
                 return childFolder
             }
+
+    companion object {
+
+        /**
+         * Bookmark html encoding.
+         */
+        private const val ENCODE = "UTF-8"
+    }
 }

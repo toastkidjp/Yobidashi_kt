@@ -295,7 +295,7 @@ class BookmarkActivity: AppCompatActivity(),
     private fun importBookmark(uri: Uri) {
         Completable.fromAction {
             val inputStream = contentResolver.openInputStream(uri) ?: return@fromAction
-            ExportedFileParser(inputStream).forEach {
+            ExportedFileParser()(inputStream).forEach {
                 BookmarkInsertion(
                         this,
                         title  = it.title,
