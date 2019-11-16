@@ -148,7 +148,7 @@ class BrowserModule(
             }
 
             TlsErrorDialogFragment
-                    .make(SslErrorMessageGenerator.generate(context, error))
+                    .make(SslErrorMessageGenerator().invoke(context, error))
                     .show(
                             context.supportFragmentManager,
                             TlsErrorDialogFragment::class.java.simpleName

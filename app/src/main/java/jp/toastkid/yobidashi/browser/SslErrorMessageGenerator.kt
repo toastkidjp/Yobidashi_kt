@@ -10,9 +10,9 @@ import java.util.*
 /**
  * @author toastkidjp
  */
-internal object SslErrorMessageGenerator {
+class SslErrorMessageGenerator {
 
-    fun generate(context: Context, error: SslError?): String {
+    operator fun invoke(context: Context, error: SslError?): String {
         if (error == null) {
             return ""
         }
