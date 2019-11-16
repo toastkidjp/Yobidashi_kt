@@ -10,7 +10,7 @@ import java.util.*
 /**
  * @author toastkidjp
  */
-class SslErrorMessageGenerator {
+class TlsErrorMessageGenerator {
 
     private val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
 
