@@ -44,8 +44,6 @@ import jp.toastkid.yobidashi.browser.menu.MenuBinder
 import jp.toastkid.yobidashi.browser.menu.MenuViewModel
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
-import jp.toastkid.yobidashi.home.Command
-import jp.toastkid.yobidashi.home.FragmentReplaceAction
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
