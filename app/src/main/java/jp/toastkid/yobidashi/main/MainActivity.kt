@@ -18,7 +18,6 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -132,11 +131,7 @@ class MainActivity :
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        binding.toolbar.also { toolbar ->
-            toolbar.setTitle(TITLE_ID)
-            setSupportActionBar(toolbar)
-            toolbar.setOnClickListener { findCurrentFragment()?.tapHeader() }
-        }
+        binding.toolbar.also { setSupportActionBar(it) }
 
         browserFragment = BrowserFragment()
 
@@ -155,17 +150,15 @@ class MainActivity :
 
     private fun initializeHeaderViewModel() {
         val headerViewModel = ViewModelProviders.of(this).get(HeaderViewModel::class.java)
-        headerViewModel.title.observe(this, Observer { title ->
-            if (title.isNullOrBlank()) {
+        headerViewModel.content.observe(this, Observer { view ->
+            if (view == null) {
                 return@Observer
             }
-            binding.toolbar.title = title
-        })
-        headerViewModel.url.observe(this, Observer { url ->
-            if (url.isNullOrBlank()) {
-                return@Observer
-            }
-            binding.toolbar.subtitle = url
+            binding.toolbar.removeViewAt(0)
+            binding.toolbar.addView(
+                    view,
+                    0
+            )
         })
     }
 
@@ -406,7 +399,7 @@ class MainActivity :
         val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager.fragments
         if (fragments.size != 0) {
-            fragments.get(0)?.let {
+            fragments[0]?.let {
                 if (it == fragment) {
                     return
                 }
@@ -416,12 +409,6 @@ class MainActivity :
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
         transaction.commitAllowingStateLoss()
-        binding.toolbar.let {
-            if (fragment is CommonFragmentAction) {
-                it.setTitle(fragment.titleId())
-            }
-            it.subtitle = ""
-        }
     }
 
     override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
@@ -480,7 +467,8 @@ class MainActivity :
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
+        val colorPair = preferenceApplier.colorPair()
+        ToolbarColorApplier()(window, binding.toolbar, colorPair)
 
         applyBackgrounds()
     }
@@ -688,12 +676,6 @@ class MainActivity :
          * Header hiding duration.
          */
         private const val HEADER_HIDING_DURATION = 75L
-
-        /**
-         * Title resource ID.
-         */
-        @StringRes
-        private const val TITLE_ID = R.string.app_name
 
         /**
          * Layout ID.

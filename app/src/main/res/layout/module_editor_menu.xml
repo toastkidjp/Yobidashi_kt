@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="editorModule"
+            type="jp.toastkid.yobidashi.editor.EditorModule" />
+    </data>
+    <HorizontalScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/editor_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
+        tools:layout_height="60dp"
+        >
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
+            <Space
+                android:id="@+id/left_space"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                />
+            <Button
+                android:id="@+id/load"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                style="?android:attr/buttonBarStyle"
+                android:text="@string/load"
+                android:drawableTop="@drawable/ic_load"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> editorModule.load()}"
+                android:onLongClick="@{editorModule::showName}"
+                />
+            <Button
+                android:id="@+id/save"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                style="?android:attr/buttonBarStyle"
+                android:text="@string/save"
+                android:drawableTop="@drawable/ic_save"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> editorModule.save()}"
+                android:onLongClick="@{editorModule::showName}"
+                />
+            <Button
+                android:id="@+id/backup"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                style="?android:attr/buttonBarStyle"
+                android:text="@string/save_backup"
+                android:drawableTop="@drawable/ic_backup"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> editorModule.backup()}"
+                android:onLongClick="@{editorModule::showName}"
+                />
+            <Button
+                android:id="@+id/save_as"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                style="?android:attr/buttonBarStyle"
+                android:text="@string/save_as"
+                android:drawableTop="@drawable/ic_save_as"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> editorModule.saveAs()}"
+                android:onLongClick="@{editorModule::showName}"
+                />
+            <Button
+                android:id="@+id/paste_as_quotation"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                style="?android:attr/buttonBarStyle"
+                android:text="@string/paste_as_quotation"
+                android:maxLines="1"
+                android:drawableTop="@drawable/ic_quote"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> editorModule.pasteAsQuotation()}"
+                android:onLongClick="@{editorModule::showName}"
+                />
+            <Button
+                android:id="@+id/load_as"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                style="?android:attr/buttonBarStyle"
+                android:text="@string/load_as"
+                android:drawableTop="@drawable/ic_load_as"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> editorModule.loadAs()}"
+                android:onLongClick="@{editorModule::showName}"
+                />
+            <TextView
+                android:id="@+id/counter"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textSize="14sp"
+                tools:text="character count\n 444"
+                />
+            <TextView
+                android:id="@+id/last_saved"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textSize="14sp"
+                tools:text="Last saved:\n 2017/12/22 11:18:19"
+                />
+            <Button
+                android:id="@+id/clear"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                style="?android:attr/buttonBarStyle"
+                android:text="@string/clear_all"
+                android:drawableTop="@drawable/ic_clear_form"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> editorModule.clear()}"
+                android:onLongClick="@{editorModule::showName}"
+                />
+        </LinearLayout>
+    </HorizontalScrollView>
+</layout>

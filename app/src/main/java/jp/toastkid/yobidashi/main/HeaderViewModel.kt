@@ -7,20 +7,31 @@
  */
 package jp.toastkid.yobidashi.main
 
+import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
+ * TODO hide from external.
+ *
  * @author toastkidjp
  */
 class HeaderViewModel : ViewModel() {
-
-    val title = MutableLiveData<String?>()
-
-    val url = MutableLiveData<String?>()
 
     val progress = MutableLiveData<Int>()
 
     val stopProgress = MutableLiveData<Boolean>()
 
+    private val _content = MutableLiveData<View>()
+
+    val content: LiveData<View> = _content
+
+    fun replace(view: View) {
+        _content.postValue(view)
+    }
+
+    fun reset() {
+        _content.postValue(null)
+    }
 }

@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -39,6 +40,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
+import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.*
@@ -58,7 +60,6 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
@@ -129,6 +130,8 @@ class BrowserFragment : Fragment(),
      */
     private var binding: FragmentBrowserBinding? = null
 
+    private var headerBinding: ModuleBrowserHeaderBinding? = null
+
     /**
      * Toolbar action object.
      */
@@ -166,6 +169,8 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_browser_header, container, false)
+
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding?.fragment = this
 
@@ -220,15 +225,16 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
+        headerBinding?.root?.setOnClickListener { tapHeader() }
+
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeHeaderViewModel()
-
-        menuViewModel = ViewModelProviders.of(requireActivity())
+        val activity = requireActivity()
+        menuViewModel = ViewModelProviders.of(activity)
                 .get(MenuViewModel::class.java)
 
         pageSearchPresenter = PageSearcherModule(
@@ -238,12 +244,13 @@ class BrowserFragment : Fragment(),
                 { tabs.findDown(it) },
                 { tabs.findUp(it) }
         )
+
+        initializeHeaderViewModels(activity)
     }
 
-    private fun initializeHeaderViewModel() {
-        val activity = activity ?: return
-
+    private fun initializeHeaderViewModels(activity: FragmentActivity) {
         val headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+
         headerViewModel.stopProgress.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
@@ -262,6 +269,28 @@ class BrowserFragment : Fragment(),
                 it.isVisible = true
                 it.progress = newProgress
             }
+        })
+
+        val browserHeaderViewModel = ViewModelProviders.of(activity)
+                .get(BrowserHeaderViewModel::class.java)
+
+        browserHeaderViewModel.title.observe(activity, Observer { title ->
+            if (title.isNullOrBlank()) {
+                return@Observer
+            }
+            headerBinding?.mainText?.text = title
+        })
+
+        browserHeaderViewModel.url.observe(activity, Observer { url ->
+            if (url.isNullOrBlank()) {
+                return@Observer
+            }
+            headerBinding?.subText?.text = url
+        })
+
+        browserHeaderViewModel.reset.observe(activity, Observer {
+            val headerView = headerBinding?.root ?: return@Observer
+            headerViewModel.replace(headerView)
         })
     }
 
@@ -558,6 +587,14 @@ class BrowserFragment : Fragment(),
         val colorPair = colorPair()
         editorModule.applySettings()
 
+        val fontColor = colorPair.fontColor()
+
+        headerBinding?.also {
+            it.icon.setColorFilter(fontColor)
+            it.mainText.setTextColor(fontColor)
+            it.subText.setTextColor(fontColor)
+        }
+
         ClippingUrlOpener(binding?.root) { loadWithNewTab(it) }
 
         tabs.loadBackgroundTabsFromDirIfNeed()
@@ -585,11 +622,7 @@ class BrowserFragment : Fragment(),
 
     private fun switchToolbarVisibility() {
         val browserScreenMode = preferenceApplier.browserScreenMode()
-        val currentTab = tabs.currentTab()
-        if (browserScreenMode == ScreenMode.FULL_SCREEN
-                || currentTab is EditorTab
-                || currentTab is PdfTab
-        ) {
+        if (browserScreenMode == ScreenMode.FULL_SCREEN) {
             hideHeader()
             return
         }
@@ -611,7 +644,7 @@ class BrowserFragment : Fragment(),
 
     override fun pressBack(): Boolean = hideOption() || back()
 
-    override fun tapHeader() {
+    private fun tapHeader() {
         val activityContext = context ?: return
         val currentUrl = browserModule.currentUrl()
         val inputText = if (preferenceApplier.enableSearchQueryExtract) {
@@ -663,8 +696,6 @@ class BrowserFragment : Fragment(),
         tabs.deleteThumbnail(currentTab?.thumbnailPath)
         tabs.saveNewThumbnailAsync()
     }
-
-    override fun titleId(): Int = R.string.title_browser
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (resultCode != Activity.RESULT_OK || intent == null) {

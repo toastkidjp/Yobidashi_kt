@@ -23,8 +23,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/toolbar_height"
-                    android:foreground="@drawable/ripple_transparent"
+                    android:layout_height="48dp"
                     app:popupTheme="@style/AppTheme.PopupOverlay"
                     app:layout_scrollFlags="scroll|enterAlways"
                     />
