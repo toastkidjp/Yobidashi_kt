@@ -10,6 +10,7 @@ import android.os.ParcelFileDescriptor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -45,7 +46,7 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
     private val pdfImageFactory = PdfImageFactory()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_pdf_content, parent, false))
+            ViewHolder(DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         pdfRenderer?.let {
@@ -87,5 +88,12 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
     fun dispose() {
         pdfRenderer?.close()
         fileDescriptor?.close()
+    }
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.item_pdf_content
+
     }
 }
