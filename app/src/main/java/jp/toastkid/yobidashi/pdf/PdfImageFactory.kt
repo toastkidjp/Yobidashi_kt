@@ -10,7 +10,7 @@ import android.os.Build
  *
  * @author toastkidjp
  */
-object PdfImageFactory {
+class PdfImageFactory {
 
     /**
      * Invoke action.

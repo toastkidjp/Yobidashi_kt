@@ -42,12 +42,14 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
      */
     private var pdfRenderer: PdfRenderer? = null
 
+    private val pdfImageFactory = PdfImageFactory()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_pdf_content, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         pdfRenderer?.let {
-            val image: Bitmap = PdfImageFactory.invoke(it.openPage(position))
+            val image: Bitmap = pdfImageFactory.invoke(it.openPage(position))
             holder.setImage(image)
             holder.setIndicator(position + 1, itemCount)
             holder.setOnLongTap(
