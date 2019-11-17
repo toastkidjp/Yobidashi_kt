@@ -45,6 +45,8 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
 
     private val pdfImageFactory = PdfImageFactory()
 
+    private val imageCache = ImageCache()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false))
 
@@ -55,7 +57,7 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
             holder.setIndicator(position + 1, itemCount)
             holder.setOnLongTap(
                     View.OnLongClickListener { view ->
-                        val cachedBitmapFile: File = ImageCache.saveBitmap(context, image)
+                        val cachedBitmapFile: File = imageCache.saveBitmap(context, image)
                         context.startActivity(
                                 ImagePreviewActivity.makeIntent(context, cachedBitmapFile),
                                 ActivityOptionsFactory.makeScaleUpBundle(view).toBundle()

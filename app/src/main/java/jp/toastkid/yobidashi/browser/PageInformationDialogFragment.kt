@@ -42,6 +42,8 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
     private var url: String? = null
 
+    private val imageCache = ImageCache()
+
     private val disposables = CompositeDisposable()
 
     override fun setArguments(args: Bundle?) {
@@ -91,7 +93,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
             val uri = FileProvider.getUriForFile(
                     context,
                      "${BuildConfig.APPLICATION_ID}.fileprovider",
-                    ImageCache.saveBitmap(context, bitmap).absoluteFile
+                    imageCache.saveBitmap(context, bitmap).absoluteFile
             )
             try {
                 context.startActivity(IntentFactory.shareImage(uri))

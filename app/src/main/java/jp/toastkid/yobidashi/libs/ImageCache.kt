@@ -10,7 +10,7 @@ import java.io.File
 
  * @author toastkidjp
  */
-object ImageCache {
+class ImageCache {
 
     /**
      * Save bitmap file to cache file.

@@ -1,12 +1,12 @@
 package jp.toastkid.yobidashi.browser.screenshots
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
@@ -35,6 +35,8 @@ internal class Adapter(context: Context, private val onClick: (Bitmap) -> Unit)
      * Layout inflater.
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    private val imageCache = ImageCache()
 
     /**
      * For using snackbar.
@@ -72,7 +74,7 @@ internal class Adapter(context: Context, private val onClick: (Bitmap) -> Unit)
                         FileProvider.getUriForFile(
                                 holder.itemView.context,
                                 BuildConfig.APPLICATION_ID + ".fileprovider",
-                                ImageCache.saveBitmap(holder.itemView.context, bitmap).absoluteFile
+                                imageCache.saveBitmap(holder.itemView.context, bitmap).absoluteFile
                         )
                 )
         )
