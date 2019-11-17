@@ -443,7 +443,7 @@ class MainActivity :
     private fun findCurrentFragment(): CommonFragmentAction? {
         val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.content)
 
-        return if (fragment != null) fragment as CommonFragmentAction else null
+        return if (fragment != null) fragment as? CommonFragmentAction else null
     }
 
     /**
