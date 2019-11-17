@@ -7,21 +7,21 @@ import java.io.File
 
 /**
  * Image cache utilities.
-
+ *
  * @author toastkidjp
  */
 class ImageCache {
 
     /**
      * Save bitmap file to cache file.
-     * @param context
      *
+     * @param context
      * @param bitmap
      *
      * @return
      */
     fun saveBitmap(context: Context, bitmap: Bitmap): File {
-        val cacheDir = File(context.cacheDir, "/cache_images")
+        val cacheDir = File(context.cacheDir, CHILD_DIRECTORY)
         if (!cacheDir.exists()) {
             cacheDir.mkdirs()
         }
@@ -30,4 +30,8 @@ class ImageCache {
         return file
     }
 
+    companion object {
+
+        private const val CHILD_DIRECTORY = "/cache_images"
+    }
 }
