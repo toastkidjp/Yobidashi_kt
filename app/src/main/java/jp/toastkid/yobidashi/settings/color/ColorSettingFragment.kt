@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -23,7 +22,6 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -188,7 +186,7 @@ class ColorSettingFragment : Fragment(),
      * Refresh with current color.
      */
     private fun refresh() {
-        Colors.setColors(binding?.settingsColorOk as TextView, colorPair())
+        binding?.settingsColorOk?.also { colorPair().setTo(it) }
         adapter?.refresh()
     }
 

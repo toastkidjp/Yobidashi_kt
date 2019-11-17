@@ -24,7 +24,6 @@ import jp.toastkid.yobidashi.browser.menu.MenuPos
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -74,7 +73,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      */
     private fun setCurrentValues() {
         binding.let {
-            Colors.setColors(it.homeButton, preferenceApplier.colorPair())
+            preferenceApplier.colorPair().setTo(it.homeButton)
             it.homeInputLayout.editText?.setText(preferenceApplier.homeUrl)
 
             it.useInternalBrowserCheck.isChecked = preferenceApplier.useInternalBrowser()

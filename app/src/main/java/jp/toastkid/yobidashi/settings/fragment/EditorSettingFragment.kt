@@ -25,7 +25,6 @@ import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -93,14 +92,12 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                 picker.color = preferenceApplier.editorFontColor()
             }
             editorModule.fragment = this
-            Colors.setColors(
-                    binding.ok as TextView,
-                    ColorPair(backgroundColor, fontColor)
-            )
-            Colors.setColors(
-                    binding.prev as TextView,
-                    ColorPair(initialBgColor, initialFontColor)
-            )
+
+            ColorPair(backgroundColor, fontColor)
+                    .setTo(binding.ok as TextView)
+
+            ColorPair(initialBgColor, initialFontColor)
+                    .setTo(binding.prev as TextView)
 
             editorModule.fontSize.adapter = object : BaseAdapter() {
                 override fun getCount(): Int = EditorFontSize.values().size
@@ -151,7 +148,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         binding.fontPalette.color = fontColor
 
         val colorPair = ColorPair(backgroundColor, fontColor)
-        Colors.setColors(binding.ok as TextView, colorPair)
+        colorPair.setTo(binding.ok as TextView)
         Toaster.snackShort(binding.root, R.string.settings_color_done_commit, colorPair)
     }
 
@@ -165,7 +162,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         binding.backgroundPalette.color = initialBgColor
         binding.fontPalette.color = initialFontColor
 
-        Colors.setColors(binding.ok as TextView, ColorPair(initialBgColor, initialFontColor))
+        ColorPair(initialBgColor, initialFontColor).setTo(binding.ok as TextView)
 
         Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
     }

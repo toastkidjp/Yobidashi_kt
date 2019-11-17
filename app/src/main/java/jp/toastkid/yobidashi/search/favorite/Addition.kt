@@ -1,18 +1,17 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.content.Context
-import androidx.databinding.DataBindingUtil
-import androidx.annotation.LayoutRes
-import com.google.android.material.textfield.TextInputLayout
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import com.google.android.material.textfield.TextInputLayout
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FavoriteSearchAdditionDialogContentBinding
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -75,8 +74,8 @@ class Addition internal constructor(
      */
     internal operator fun invoke() {
         val colorPair = PreferenceApplier(context).colorPair()
-        Colors.setColors(binding.close, colorPair)
-        Colors.setColors(binding.add, colorPair)
+        colorPair.setTo(binding.close)
+        colorPair.setTo(binding.add)
         parent.visibility = View.VISIBLE
     }
 
