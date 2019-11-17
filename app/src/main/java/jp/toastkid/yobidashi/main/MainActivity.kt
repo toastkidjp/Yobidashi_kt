@@ -417,18 +417,18 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        val fragment: CommonFragmentAction? = findCurrentFragment()
-        if (fragment == null) {
-            confirmExit()
-            return
-        }
-
-        if (fragment.pressBack()) {
-            return
-        }
-
         if (binding.menusView.isVisible) {
             menuViewModel?.close()
+            return
+        }
+
+        if (findCurrentFragment()?.pressBack() == true) {
+            return
+        }
+
+        val backStackEntryCount = supportFragmentManager?.backStackEntryCount ?: 0
+        if (backStackEntryCount >= 1) {
+            supportFragmentManager?.popBackStack()
             return
         }
 

@@ -16,7 +16,7 @@ import android.view.*
 import android.webkit.ValueCallback
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -37,6 +37,8 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.menu.Menu
 import jp.toastkid.yobidashi.browser.menu.MenuViewModel
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.reader.ReaderFragment
+import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
@@ -376,12 +378,21 @@ class BrowserFragment : Fragment(),
                 browserModule.invokeContentExtraction(
                         ValueCallback {
                             val lineSeparator = System.getProperty("line.separator") ?: ""
-                            val replace = it.replace("\\n", lineSeparator)
-                            AlertDialog.Builder(requireContext())
-                                    .setTitle("Reader mode")
-                                    .setMessage(replace)
-                                    .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
-                                    .show()
+                            val replacedContent = it.replace("\\n", lineSeparator)
+                            val readerFragment =
+                                    ReaderFragment.withContent(browserModule.currentTitle(), replacedContent)
+
+                            ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
+                                    .close.observe(requireActivity(), Observer {
+                                activity?.supportFragmentManager?.popBackStack()
+                            })
+
+                            val transaction = fragmentManager?.beginTransaction()
+                            transaction?.setCustomAnimations(
+                                    R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
+                            transaction?.add(R.id.content, readerFragment, readerFragment::class.java.simpleName)
+                            transaction?.addToBackStack(readerFragment::class.java.simpleName)
+                            transaction?.commit()
                         }
                 )
             }
@@ -820,7 +831,7 @@ class BrowserFragment : Fragment(),
     }
 
     override fun openNewTab(url: String) {
-        tabs.openNewWebTab(url)
+        loadWithNewTab(url.toUri())
     }
 
     override fun openBackgroundTab(url: String) {
