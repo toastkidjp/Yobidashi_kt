@@ -28,7 +28,6 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.model.PdfTab
 
 /**
  * PDF Module.
@@ -160,8 +159,6 @@ class PdfModule(
 
     /**
      * Assign new thumbnail image.
-     *
-     * @param tab [PdfTab]
      */
     fun makeThumbnail(): Bitmap? {
         binding.pdfImages.invalidate()
