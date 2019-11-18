@@ -9,7 +9,7 @@ import androidx.core.graphics.ColorUtils
  *
  * @author toastkidjp
  */
-object Colors {
+class EditTextColorSetter {
 
     /**
      * Set specified color to passed EditText.
@@ -17,7 +17,7 @@ object Colors {
      * @param editText
      * @param fontColor
      */
-    fun setEditTextColor(editText: EditText, @ColorInt fontColor: Int) {
+    fun invoke(editText: EditText, @ColorInt fontColor: Int) {
         editText.apply {
             setTextColor(fontColor)
             setHintTextColor(fontColor)

@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
-import jp.toastkid.yobidashi.libs.Colors
+import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.storage.FilesDir
@@ -132,7 +132,7 @@ class PdfModule(
         headerBinding.header.setBackgroundColor(colorPair.bgColor())
         headerBinding.seek.progressDrawable.colorFilter =
                 PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
-        Colors.setEditTextColor(headerBinding.input, colorPair.fontColor())
+        EditTextColorSetter().invoke(headerBinding.input, colorPair.fontColor())
     }
 
     /**
