@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -31,7 +32,7 @@ class ReaderFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reader_mode, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         return binding.root
     }
 
@@ -46,6 +47,9 @@ class ReaderFragment : Fragment() {
     }
 
     companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_reader_mode
 
         private const val KEY_TITLE = "title"
 
