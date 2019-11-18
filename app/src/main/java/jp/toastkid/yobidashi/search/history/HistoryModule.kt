@@ -66,7 +66,7 @@ class HistoryModule(
         )
         binding.searchHistories.adapter = moduleAdapter
 
-        Completable.fromAction { SwipeActionAttachment.invoke(binding.searchHistories) }
+        Completable.fromAction { SwipeActionAttachment().invoke(binding.searchHistories) }
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe()
                 .addTo(disposables)

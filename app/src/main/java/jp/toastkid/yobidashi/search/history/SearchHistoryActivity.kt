@@ -57,7 +57,7 @@ class SearchHistoryActivity : AppCompatActivity(),
         )
         binding.historiesView.adapter = adapter
 
-        SwipeActionAttachment.invoke(binding.historiesView)
+        SwipeActionAttachment().invoke(binding.historiesView)
 
         binding.toolbar.also { toolbar ->
             toolbar.setNavigationIcon(R.drawable.ic_back)

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * @author toastkidjp
  */
-object SwipeActionAttachment {
+class SwipeActionAttachment {
 
     operator fun invoke(recyclerView: RecyclerView) {
         ItemTouchHelper(makeLeft(recyclerView)).attachToRecyclerView(recyclerView)
