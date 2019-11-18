@@ -18,10 +18,10 @@ class EditTextColorSetter {
      * @param fontColor color int
      */
     fun invoke(editText: EditText?, @ColorInt fontColor: Int) {
-        editText?.apply {
-            setTextColor(fontColor)
-            setHintTextColor(fontColor)
-            highlightColor = ColorUtils.setAlphaComponent(fontColor, 128)
+        editText?.also {
+            it.setTextColor(fontColor)
+            it.setHintTextColor(fontColor)
+            it.highlightColor = ColorUtils.setAlphaComponent(fontColor, 128)
         }
     }
 
