@@ -37,8 +37,8 @@ class ReaderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString("title")?.also { binding.title.text = it }
-        arguments?.getString("content")?.also { binding.content.text = it }
+        arguments?.getString(KEY_TITLE)?.also { binding.title.text = it }
+        arguments?.getString(KEY_CONTENT)?.also { binding.content.text = it }
 
         binding.close.setOnClickListener {
             ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()
@@ -47,11 +47,15 @@ class ReaderFragment : Fragment() {
 
     companion object {
 
+        private const val KEY_TITLE = "title"
+
+        private const val KEY_CONTENT = "content"
+
         fun withContent(title: String, content: String): ReaderFragment {
             val readerFragment = ReaderFragment()
             readerFragment.arguments = bundleOf(
-                    "title" to title,
-                    "content" to content
+                    KEY_TITLE to title,
+                    KEY_CONTENT to content
             )
             return readerFragment
         }
