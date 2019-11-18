@@ -5,7 +5,7 @@ import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 
 /**
- * Color utilities.
+ * Color setter for [EditText].
  *
  * @author toastkidjp
  */
