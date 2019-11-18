@@ -42,7 +42,6 @@ class ReaderFragment : Fragment() {
 
         binding.close.setOnClickListener {
             ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()
-            //fragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
     }
 
