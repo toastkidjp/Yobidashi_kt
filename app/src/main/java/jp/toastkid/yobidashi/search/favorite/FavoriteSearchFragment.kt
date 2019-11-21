@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -186,6 +187,7 @@ class FavoriteSearchFragment : Fragment(),
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_favorite_search
     }
 }

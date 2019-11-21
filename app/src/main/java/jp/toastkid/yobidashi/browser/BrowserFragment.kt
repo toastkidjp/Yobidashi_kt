@@ -259,7 +259,7 @@ class BrowserFragment : Fragment(),
             tabs.saveTabList()
         })
 
-        headerViewModel.progress.observe(this, Observer { newProgress ->
+        headerViewModel.progress.observe(activity, Observer { newProgress ->
             if (70 < newProgress) {
                 binding?.progress?.isVisible = false
                 refreshThumbnail()

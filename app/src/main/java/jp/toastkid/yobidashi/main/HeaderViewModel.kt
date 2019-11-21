@@ -13,15 +13,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
- * TODO hide from external.
- *
  * @author toastkidjp
  */
 class HeaderViewModel : ViewModel() {
 
-    val progress = MutableLiveData<Int>()
+    private val _progress = MutableLiveData<Int>()
+    val progress: LiveData<Int> = _progress
 
-    val stopProgress = MutableLiveData<Boolean>()
+    fun updateProgress(newProgress: Int) {
+        _progress.postValue(newProgress)
+    }
+
+    private val _stopProgress = MutableLiveData<Boolean>()
+    val stopProgress: LiveData<Boolean> = _stopProgress
+
+    fun stopProgress(stop: Boolean) {
+        _stopProgress.postValue(stop)
+    }
 
     private val _content = MutableLiveData<View>()
 
@@ -31,7 +39,4 @@ class HeaderViewModel : ViewModel() {
         _content.postValue(view)
     }
 
-    fun reset() {
-        _content.postValue(null)
-    }
 }
