@@ -60,6 +60,7 @@ import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.torch.Torch
+import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -221,6 +222,13 @@ class MainActivity :
         if (calledIntent.action == null) {
             // Add for re-creating activity.
             replaceFragment(browserFragment)
+            return
+        }
+
+        if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
+            RandomWikipedia().fetchWithAction { title, uri ->
+                browserFragment.loadWithNewTab(uri)
+            }
             return
         }
 
@@ -715,9 +723,16 @@ class MainActivity :
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
 
+        fun makeRandomWikipediaIntent(context: Context) = Intent(context, MainActivity::class.java)
+                .also {
+                    it.action = Intent.ACTION_VIEW
+                    it.putExtra("random_wikipedia", true)
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
+
         /**
          * Make launcher intent.
-         *
+         * TODO remove
          * @param context [Context]
          * @param month Month
          * @param dayOfMonth Day of month

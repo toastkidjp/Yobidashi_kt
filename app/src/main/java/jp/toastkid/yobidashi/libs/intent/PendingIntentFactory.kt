@@ -3,11 +3,15 @@ package jp.toastkid.yobidashi.libs.intent
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.core.net.toUri
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
+import jp.toastkid.yobidashi.settings.SettingsActivity
 
 /**
  * Factory of [PendingIntent].
@@ -44,6 +48,8 @@ object PendingIntentFactory {
 
     /**
      * Make calling calendar intent.
+     *
+     * TODO remove
      * @param context
      *
      * @param month
@@ -108,5 +114,26 @@ object PendingIntentFactory {
     fun barcode(context: Context): PendingIntent {
         val intent = BarcodeReaderActivity.makeIntent(context)
         return PendingIntent.getActivity(context, 8, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+    fun browser(context: Context): PendingIntent {
+        val intent =
+                MainActivity.makeBrowserIntent(context, PreferenceApplier(context).homeUrl.toUri())
+        return PendingIntent.getActivity(context, 9, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+    fun bookmark(context: Context): PendingIntent {
+        val intent = BookmarkActivity.makeIntent(context)
+        return PendingIntent.getActivity(context, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+    fun randomWikipedia(context: Context): PendingIntent {
+        val intent = MainActivity.makeRandomWikipediaIntent(context)
+        return PendingIntent.getActivity(context, 11, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+    fun setting(context: Context): PendingIntent {
+        val intent = SettingsActivity.makeIntent(context)
+        return PendingIntent.getActivity(context, 12, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 }

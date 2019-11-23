@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_height="56dp"
+    android:background="@color/colorPrimary"
+    >
+
+    <LinearLayout
+        android:id="@+id/random_wikipedia"
+        android:orientation="vertical"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_random_wikipedia"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:srcCompat="@drawable/ic_wikipedia_white"
+            android:contentDescription="@string/wikipedia"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/text_random_wikipedia"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="@string/wikipedia"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            android:textAlignment="center"
+            android:maxLines="1"
+            tools:ignore="SpUsage"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/divider1"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/bookmark"
+        android:orientation="vertical"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_bookmark"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:srcCompat="@drawable/ic_bookmark"
+            android:contentDescription="@string/wikipedia"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/text_bookmark"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:text="@string/title_bookmark"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            android:textAlignment="center"
+            android:maxLines="1"
+            tools:ignore="SpUsage"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/divider2"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/barcode_reader"
+        android:orientation="vertical"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_barcode_reader"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:srcCompat="@drawable/ic_barcode"
+            android:contentDescription="@string/title_code_reader"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/text_barcode_reader"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="@string/title_code_reader"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            android:textAlignment="center"
+            android:maxLines="1"
+            tools:ignore="SpUsage"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/divider3"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:orientation="vertical"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_search"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:srcCompat="@drawable/ic_search_white"
+            android:contentDescription="@string/search"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/text_search"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            android:textAlignment="center"
+            android:maxLines="1"
+            tools:ignore="SpUsage"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/divider4"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/browser"
+        android:orientation="vertical"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_browser"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:srcCompat="@drawable/ic_web"
+            android:contentDescription="@string/wikipedia"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/text_browser"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:text="@string/title_browser"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            android:textAlignment="center"
+            android:maxLines="1"
+            tools:ignore="SpUsage"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/divider5"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/launcher"
+        android:orientation="vertical"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_launcher"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:srcCompat="@drawable/ic_launcher"
+            android:contentDescription="@string/title_apps_launcher"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/text_launcher"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="@string/title_apps_launcher"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            android:textAlignment="center"
+            android:maxLines="1"
+            tools:ignore="SpUsage"
+            />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/divider6"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/setting"
+        android:orientation="vertical"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_setting"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:srcCompat="@drawable/ic_settings"
+            android:contentDescription="@string/wikipedia"
+            android:layout_gravity="center_horizontal"
+            />
+
+        <TextView
+            android:id="@+id/text_setting"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="@string/action_settings"
+            android:textColor="@color/white"
+            android:textSize="9dp"
+            android:textAlignment="center"
+            android:maxLines="1"
+            tools:ignore="SpUsage"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
