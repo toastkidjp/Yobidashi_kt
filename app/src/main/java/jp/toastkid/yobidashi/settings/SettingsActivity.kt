@@ -55,7 +55,13 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
+
+        val colorPair = preferenceApplier.colorPair()
+        ToolbarColorApplier()(window, binding.toolbar, colorPair)
+        binding.tabStrip.also {
+            it.setBackgroundColor(colorPair.bgColor())
+            it.setTextColor(colorPair.fontColor())
+        }
     }
 
     private fun clickMenu(item: MenuItem) = when (item.itemId) {
