@@ -42,7 +42,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.also { toolbar ->
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener { finish() }
-            toolbar.setTitle(titleId())
+            toolbar.setTitle(TITLE_ID)
             toolbar.inflateMenu(R.menu.settings_toolbar_menu)
             toolbar.setOnMenuItemClickListener{ clickMenu(it) }
         }
@@ -76,8 +76,6 @@ class SettingsActivity : AppCompatActivity() {
         else -> true
     }
 
-    @StringRes private fun titleId(): Int = R.string.title_settings
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ColorFilter.REQUEST_CODE) {
@@ -100,6 +98,9 @@ class SettingsActivity : AppCompatActivity() {
          */
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_settings
+
+        @StringRes
+        private const val TITLE_ID = R.string.title_settings
 
         /**
          * Make this activity's intent.
