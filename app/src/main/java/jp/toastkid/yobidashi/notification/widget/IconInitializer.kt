@@ -11,7 +11,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.widget.RemoteViews
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
 
 /**
@@ -19,7 +21,12 @@ import androidx.core.content.ContextCompat
  */
 class IconInitializer(private val context: Context) {
 
-    operator fun invoke(remoteViews: RemoteViews, fontColor: Int, iconResourceId: Int, viewId: Int) {
+    operator fun invoke(
+            remoteViews: RemoteViews,
+            @ColorInt fontColor: Int,
+            @DrawableRes iconResourceId: Int,
+            @IdRes viewId: Int
+    ) {
         val bitmap = vectorToBitmap(iconResourceId)
         remoteViews.setImageViewBitmap(viewId, bitmap)
         remoteViews.setInt(viewId, METHOD_NAME_SET_COLOR_FILTER, fontColor)
