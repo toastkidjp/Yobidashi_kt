@@ -5,7 +5,6 @@ import android.widget.RemoteViews
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.intent.PendingIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
@@ -53,7 +52,7 @@ internal object RemoteViewsFactory {
      */
     fun make(context: Context): RemoteViews {
         val remoteViews = RemoteViews(context.packageName, APPWIDGET_LAYOUT_ID)
-        setTapActions(context, remoteViews)
+        TapActionInitializer()(context, remoteViews)
 
         val preferenceApplier = PreferenceApplier(context)
 
@@ -101,29 +100,6 @@ internal object RemoteViewsFactory {
     ) {
         iconIds.forEach { remoteViews.setTextColor(it, fontColor) }
         dividerIds.forEach { remoteViews.setInt(it, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor) }
-    }
-
-    /**
-     * Set pending intents.
-     *
-     * @param context
-     * @param remoteViews
-     */
-    private fun setTapActions(context: Context, remoteViews: RemoteViews) {
-        remoteViews.setOnClickPendingIntent(
-                R.id.random_wikipedia, PendingIntentFactory.randomWikipedia(context))
-        remoteViews.setOnClickPendingIntent(
-                R.id.search, PendingIntentFactory.makeSearchLauncher(context))
-        remoteViews.setOnClickPendingIntent(
-                R.id.bookmark, PendingIntentFactory.bookmark(context))
-        remoteViews.setOnClickPendingIntent(
-                R.id.browser, PendingIntentFactory.browser(context))
-        remoteViews.setOnClickPendingIntent(
-                R.id.launcher, PendingIntentFactory.launcher(context))
-        remoteViews.setOnClickPendingIntent(
-                R.id.barcode_reader, PendingIntentFactory.barcode(context))
-        remoteViews.setOnClickPendingIntent(
-                R.id.setting, PendingIntentFactory.setting(context))
     }
 
 }
