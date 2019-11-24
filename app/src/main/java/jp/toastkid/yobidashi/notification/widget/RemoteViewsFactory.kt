@@ -1,13 +1,9 @@
 package jp.toastkid.yobidashi.notification.widget
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.widget.RemoteViews
 import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.intent.PendingIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -19,10 +15,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 internal object RemoteViewsFactory {
 
-    /**
-     * Method name.
-     */
-    private const val METHOD_NAME_SET_COLOR_FILTER: String = "setColorFilter"
 
     /**
      * Method name.
@@ -68,32 +60,15 @@ internal object RemoteViewsFactory {
     ) = remoteViews.setInt(R.id.background, METHOD_NAME_SET_BACKGROUND_COLOR, backgroundColor)
 
     private fun setIcons(remoteViews: RemoteViews, context: Context, fontColor: Int) {
-        setIcon(context, remoteViews, fontColor, R.drawable.ic_wikipedia_white, R.id.icon_random_wikipedia)
-        setIcon(context, remoteViews, fontColor, R.drawable.ic_bookmark, R.id.icon_bookmark)
-        setIcon(context, remoteViews, fontColor, R.drawable.ic_barcode, R.id.icon_barcode_reader)
-        setIcon(context, remoteViews, fontColor, R.drawable.ic_search_white, R.id.icon_search)
-        setIcon(context, remoteViews, fontColor, R.drawable.ic_web, R.id.icon_browser)
-        setIcon(context, remoteViews, fontColor, R.drawable.ic_launcher, R.id.icon_launcher)
-        setIcon(context, remoteViews, fontColor, R.drawable.ic_settings, R.id.icon_setting)
-    }
-
-    /**
-     * TODO: refactor with function object pattern.
-     */
-    private fun setIcon(context: Context, remoteViews: RemoteViews, fontColor: Int, iconResourceId: Int, viewId: Int) {
-        val bitmap = vectorToBitmap(context, iconResourceId)
-        remoteViews.setImageViewBitmap(viewId, bitmap)
-        remoteViews.setInt(viewId, METHOD_NAME_SET_COLOR_FILTER, fontColor)
-    }
-
-    private fun vectorToBitmap(context: Context, @DrawableRes resVector: Int): Bitmap {
-        val drawable = ContextCompat.getDrawable(context, resVector)
-        val b = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888)
-        val c = Canvas(b)
-        drawable.setBounds(0, 0, c.getWidth(), c.getHeight())
-        drawable.draw(c)
-        return b
+        IconInitializer(context).let {
+            it(remoteViews, fontColor, R.drawable.ic_wikipedia_white, R.id.icon_random_wikipedia)
+            it(remoteViews, fontColor, R.drawable.ic_bookmark, R.id.icon_bookmark)
+            it(remoteViews, fontColor, R.drawable.ic_barcode, R.id.icon_barcode_reader)
+            it(remoteViews, fontColor, R.drawable.ic_search_white, R.id.icon_search)
+            it(remoteViews, fontColor, R.drawable.ic_web, R.id.icon_browser)
+            it(remoteViews, fontColor, R.drawable.ic_launcher, R.id.icon_launcher)
+            it(remoteViews, fontColor, R.drawable.ic_settings, R.id.icon_setting)
+        }
     }
 
     /**
