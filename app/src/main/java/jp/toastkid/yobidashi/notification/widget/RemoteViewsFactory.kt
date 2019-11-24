@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.widget.RemoteViews
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.intent.PendingIntentFactory
@@ -31,6 +32,7 @@ internal object RemoteViewsFactory {
     /**
      * Layout ID.
      */
+    @LayoutRes
     private const val APPWIDGET_LAYOUT_ID: Int = R.layout.notification_functions
 
     /**
