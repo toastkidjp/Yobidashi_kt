@@ -15,7 +15,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 internal object RemoteViewsFactory {
 
-
     /**
      * Method name.
      */
@@ -26,6 +25,25 @@ internal object RemoteViewsFactory {
      */
     @LayoutRes
     private const val APPWIDGET_LAYOUT_ID: Int = R.layout.notification_functions
+
+    private val iconIds = arrayOf(
+            R.id.text_random_wikipedia,
+            R.id.text_bookmark,
+            R.id.text_barcode_reader,
+            R.id.text_search,
+            R.id.text_browser,
+            R.id.text_launcher,
+            R.id.text_setting
+    )
+
+    private val dividerIds = arrayOf(
+            R.id.divider1,
+            R.id.divider2,
+            R.id.divider3,
+            R.id.divider4,
+            R.id.divider5,
+            R.id.divider6
+    )
 
     /**
      * Make RemoteViews.
@@ -81,20 +99,8 @@ internal object RemoteViewsFactory {
             remoteViews: RemoteViews,
             @ColorInt fontColor: Int
     ) {
-        remoteViews.setTextColor(R.id.text_random_wikipedia, fontColor)
-        remoteViews.setTextColor(R.id.text_bookmark, fontColor)
-        remoteViews.setTextColor(R.id.text_barcode_reader, fontColor)
-        remoteViews.setTextColor(R.id.text_search, fontColor)
-        remoteViews.setTextColor(R.id.text_browser, fontColor)
-        remoteViews.setTextColor(R.id.text_launcher, fontColor)
-        remoteViews.setTextColor(R.id.text_setting, fontColor)
-
-        remoteViews.setInt(R.id.divider1, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor)
-        remoteViews.setInt(R.id.divider2, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor)
-        remoteViews.setInt(R.id.divider3, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor)
-        remoteViews.setInt(R.id.divider4, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor)
-        remoteViews.setInt(R.id.divider5, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor)
-        remoteViews.setInt(R.id.divider6, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor)
+        iconIds.forEach { remoteViews.setTextColor(it, fontColor) }
+        dividerIds.forEach { remoteViews.setInt(it, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor) }
     }
 
     /**
