@@ -71,6 +71,7 @@ internal object RemoteViewsFactory {
         setIcon(context, remoteViews, fontColor, R.drawable.ic_barcode, R.id.icon_barcode_reader)
         setIcon(context, remoteViews, fontColor, R.drawable.ic_search_white, R.id.icon_search)
         setIcon(context, remoteViews, fontColor, R.drawable.ic_web, R.id.icon_browser)
+        setIcon(context, remoteViews, fontColor, R.drawable.ic_launcher, R.id.icon_launcher)
         setIcon(context, remoteViews, fontColor, R.drawable.ic_settings, R.id.icon_setting)
     }
 
