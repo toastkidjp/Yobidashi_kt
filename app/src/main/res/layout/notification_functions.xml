@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background"
     android:orientation="horizontal"
@@ -23,7 +22,7 @@
             android:id="@+id/icon_random_wikipedia"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_wikipedia_white"
+            tools:srcCompat="@drawable/ic_wikipedia_white"
             android:contentDescription="@string/wikipedia"
             android:layout_gravity="center_horizontal"
             />
@@ -63,7 +62,7 @@
             android:id="@+id/icon_bookmark"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_bookmark"
+            tools:srcCompat="@drawable/ic_bookmark"
             android:contentDescription="@string/wikipedia"
             android:layout_gravity="center_horizontal"
             />
@@ -103,7 +102,7 @@
             android:id="@+id/icon_barcode_reader"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_barcode"
+            tools:srcCompat="@drawable/ic_barcode"
             android:contentDescription="@string/title_code_reader"
             android:layout_gravity="center_horizontal"
             />
@@ -143,7 +142,7 @@
             android:id="@+id/icon_search"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_search_white"
+            tools:srcCompat="@drawable/ic_search_white"
             android:contentDescription="@string/search"
             android:layout_gravity="center_horizontal"
             />
@@ -183,7 +182,7 @@
             android:id="@+id/icon_browser"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_web"
+            tools:srcCompat="@drawable/ic_web"
             android:contentDescription="@string/wikipedia"
             android:layout_gravity="center_horizontal"
             />
@@ -223,7 +222,7 @@
             android:id="@+id/icon_launcher"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_launcher"
+            tools:srcCompat="@drawable/ic_launcher"
             android:contentDescription="@string/title_apps_launcher"
             android:layout_gravity="center_horizontal"
             />
@@ -263,7 +262,7 @@
             android:id="@+id/icon_setting"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_settings"
+            tools:srcCompat="@drawable/ic_settings"
             android:contentDescription="@string/wikipedia"
             android:layout_gravity="center_horizontal"
             />
