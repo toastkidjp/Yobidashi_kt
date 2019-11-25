@@ -215,6 +215,8 @@ class TabAdapter(
     }
 
     private fun replaceWebView() {
+        browserHeaderViewModel?.resetContent()
+
         val currentWebView = currentWebView()
         if (webViewContainer.childCount != 0) {
             val previousView = webViewContainer[0]
@@ -277,7 +279,6 @@ class TabAdapter(
                 if (pdf.isVisible()) {
                     pdf.hide()
                 }
-                browserHeaderViewModel?.resetContent()
             }
             is EditorTab -> {
                 if (currentTab.path.isNotBlank()) {

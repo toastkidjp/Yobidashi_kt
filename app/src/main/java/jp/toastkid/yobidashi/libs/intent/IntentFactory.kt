@@ -20,10 +20,13 @@ object IntentFactory {
      * @param message
      * @return Intent
      */
-    fun makeShare(message: String): Intent = Intent().apply {
+    fun makeShare(message: String, subject: String? = null): Intent = Intent().apply {
         action = Intent.ACTION_SEND
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, message)
+        subject?.also { subject ->
+            putExtra(Intent.EXTRA_SUBJECT, subject);
+        }
     }
 
     /**

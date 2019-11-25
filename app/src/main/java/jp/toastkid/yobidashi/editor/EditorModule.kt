@@ -85,8 +85,6 @@ class EditorModule(
      */
     private var finder: EditTextFinder
 
-    private val selectedTextExtractor = SelectedTextExtractor(binding.editorInput)
-
     private var menuBinding: ModuleEditorMenuBinding? = null
 
     private var headerViewModel: HeaderViewModel? = null
@@ -135,6 +133,7 @@ class EditorModule(
                 mb.saveAs,
                 mb.load,
                 mb.loadAs,
+                mb.share,
                 mb.lastSaved,
                 mb.counter,
                 mb.backup,
@@ -273,6 +272,16 @@ class EditorModule(
     }
 
     /**
+     * Share current content.
+     */
+    fun share() {
+        val title =
+                if (path.contains("/")) path.substring(path.lastIndexOf("/") + 1)
+                else path
+        intentLauncher(IntentFactory.makeShare(content(), title), REQUEST_CODE_SHARE)
+    }
+
+    /**
      * Call from fragment's onPause().
      */
     fun saveIfNeed() {
@@ -378,8 +387,6 @@ class EditorModule(
 
         setLastSaved(file.lastModified())
     }
-
-    fun currentSelectedText() = selectedTextExtractor()
 
     /**
      * Set last modified time.
@@ -536,6 +543,11 @@ class EditorModule(
          * Request code for 'Load as'.
          */
         const val REQUEST_CODE_LOAD_AS: Int = 10112
+
+        /**
+         * Request code for 'Share'.
+         */
+        const val REQUEST_CODE_SHARE: Int = 10113
 
     }
 
