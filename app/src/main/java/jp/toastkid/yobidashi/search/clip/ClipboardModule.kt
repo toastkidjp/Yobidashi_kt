@@ -7,13 +7,18 @@
  */
 package jp.toastkid.yobidashi.search.clip
 
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchClipboardBinding
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.libs.facade.BaseModule
+import timber.log.Timber
 
 /**
  * Search module using clipboard content.
@@ -26,7 +31,7 @@ import jp.toastkid.yobidashi.libs.facade.BaseModule
 class ClipboardModule(
         private val binding: ModuleSearchClipboardBinding,
         onClick: (String) -> Unit
-) : BaseModule(binding.root) {
+) {
 
     /**
      * Link color.
@@ -39,6 +44,10 @@ class ClipboardModule(
      */
     @ColorInt
     private val textColor = ContextCompat.getColor(binding.root.context, R.color.black)
+
+    private var enable: Boolean = true
+
+    private val disposables = CompositeDisposable()
 
     init {
         binding.root.setOnClickListener {
@@ -67,6 +76,33 @@ class ClipboardModule(
     }
 
     /**
+     * Show this module.
+     */
+    fun show() {
+        if (binding.root.visibility == View.GONE && enable) {
+            runOnMainThread { binding.root.visibility = View.VISIBLE }
+                    .addTo(disposables)
+        }
+    }
+
+    /**
+     * Hide this module.
+     */
+    fun hide() {
+        if (binding.root.visibility == View.VISIBLE) {
+            runOnMainThread { binding.root.visibility = View.GONE }
+                    .addTo(disposables)
+        }
+    }
+
+    /**
+     * Is visible this module visible.
+     */
+    fun isVisible() = binding.root.visibility == View.VISIBLE
+
+    fun dispose() = disposables.clear()
+
+    /**
      * Set search query and icon.
      *
      * @param query Query string
@@ -87,6 +123,14 @@ class ClipboardModule(
         binding.text.text = link
         binding.text.setTextColor(linkColor)
     }
+
+    private fun runOnMainThread(action: () -> Unit) =
+            Completable.fromAction { action() }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {},
+                            Timber::e
+                    )
 
     companion object {
 

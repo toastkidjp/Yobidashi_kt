@@ -491,6 +491,7 @@ class SearchActivity : AppCompatActivity(),
         historyModule?.dispose()
         suggestionModule?.dispose()
         urlSuggestionModule?.dispose()
+        clipboardModule?.dispose()
         appModule?.dispose()
     }
 
