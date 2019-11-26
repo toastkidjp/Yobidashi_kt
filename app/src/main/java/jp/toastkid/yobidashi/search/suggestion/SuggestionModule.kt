@@ -1,8 +1,9 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.widget.EditText
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -14,7 +15,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
@@ -33,18 +33,18 @@ import java.util.*
  * @author toastkidjp
  */
 class SuggestionModule(
-        binding: ModuleSearchSuggestionBinding,
+        private val binding: ModuleSearchSuggestionBinding,
         searchInput: EditText,
         searchCallback: (String) -> Unit,
         searchBackgroundCallback: (String) -> Unit,
         onClick: () -> Unit
-) : BaseModule(binding.root) {
+) {
 
     /**
      * Suggest ModuleAdapter.
      */
     private val adapter: Adapter = Adapter(
-            LayoutInflater.from(context()),
+            LayoutInflater.from(binding.root.context),
             searchInput,
             searchCallback,
             searchBackgroundCallback
@@ -65,13 +65,15 @@ class SuggestionModule(
      */
     private var lastSubscription: Disposable? = null
 
+    var enable: Boolean = true
+
     /**
      * Composite disposables.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        binding.searchSuggestions.layoutManager = LinearLayoutManager(context())
+        binding.searchSuggestions.layoutManager = LinearLayoutManager(binding.root.context)
         binding.searchSuggestions.adapter = adapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
             onClick()
@@ -99,7 +101,7 @@ class SuggestionModule(
             return
         }
 
-        val context = context()
+        val context = binding.root.context
         if (NetworkChecker.isNotAvailable(context)) {
             return
         }
@@ -154,6 +156,34 @@ class SuggestionModule(
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe({}, Timber::e)
                     .addTo(disposables)
+
+    /**
+     * Show this module.
+     */
+    fun show() {
+        if (!binding.root.isVisible && enable) {
+            runOnMainThread { binding.root.isVisible = true }
+                    .addTo(disposables)
+        }
+    }
+
+    /**
+     * Hide this module.
+     */
+    fun hide() {
+        if (binding.root.isVisible) {
+            runOnMainThread { binding.root.isVisible = false }
+                    .addTo(disposables)
+        }
+    }
+
+    private fun runOnMainThread(action: () -> Unit) =
+            Completable.fromAction { action() }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {},
+                            Timber::e
+                    )
 
     /**
      * Dispose last subscription.
