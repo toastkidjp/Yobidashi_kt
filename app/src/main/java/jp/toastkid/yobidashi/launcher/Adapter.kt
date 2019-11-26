@@ -4,12 +4,12 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -79,7 +79,7 @@ internal class Adapter(private val context: Context, private val parent: View)
         holder.setPackageName(info.packageName)
         try {
             val packageInfo = packageManager.getPackageInfo(info.packageName, PackageManager.GET_META_DATA)
-            holder.setVersionInformation(packageInfo.versionName + "(" + packageInfo.versionCode + ")")
+            holder.setVersionInformation("${packageInfo.versionName} (${packageInfo.versionCode})")
             holder.setInstalledMs(packageInfo.firstInstallTime)
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.e(e)
