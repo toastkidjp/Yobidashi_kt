@@ -56,9 +56,9 @@ internal class Adapter(private val context: Context, private val parent: View)
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        this.master = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
-        this.installedApps = ArrayList(master)
-        this.preferenceApplier = PreferenceApplier(context)
+        master = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+        installedApps = ArrayList(master)
+        preferenceApplier = PreferenceApplier(context)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
