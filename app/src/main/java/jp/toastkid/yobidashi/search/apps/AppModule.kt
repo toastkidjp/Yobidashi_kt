@@ -8,14 +8,16 @@
 package jp.toastkid.yobidashi.search.apps
 
 import android.text.TextUtils
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.launcher.Adapter
-import jp.toastkid.yobidashi.libs.facade.BaseModule
 import timber.log.Timber
 
 /**
@@ -24,20 +26,24 @@ import timber.log.Timber
  * @param binding [ModuleSearchAppsBinding]
  * @author toastkidjp
  */
-class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
+class AppModule(private val binding: ModuleSearchAppsBinding) {
 
     /**
      * Suggest ModuleAdapter.
      */
-    private val adapter: Adapter = Adapter(context(), binding.root)
+    private val adapter: Adapter = Adapter(binding.root.context, binding.root)
 
     /**
      * Disposable of last query.
      */
     private var disposable: Disposable? = null
 
+    private val disposables = CompositeDisposable()
+
+    var enable = false
+
     init {
-        binding.searchApps.layoutManager = LinearLayoutManager(context())
+        binding.searchApps.layoutManager = LinearLayoutManager(binding.root.context)
         binding.searchApps.adapter = adapter
     }
 
@@ -71,6 +77,34 @@ class AppModule(binding: ModuleSearchAppsBinding) : BaseModule(binding.root) {
         }
         show()
     }
+
+    /**
+     * Show this module.
+     */
+    fun show() {
+        if (!binding.root.isVisible && enable) {
+            runOnMainThread { binding.root.isVisible = true }
+                    .addTo(disposables)
+        }
+    }
+
+    /**
+     * Hide this module.
+     */
+    fun hide() {
+        if (binding.root.isVisible) {
+            runOnMainThread { binding.root.isVisible = false }
+                    .addTo(disposables)
+        }
+    }
+
+    private fun runOnMainThread(action: () -> Unit) =
+            Completable.fromAction { action() }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {},
+                            Timber::e
+                    )
 
     /**
      * Dispose last query's disposable.
