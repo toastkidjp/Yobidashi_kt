@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -13,7 +15,6 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
 import timber.log.Timber
 
@@ -21,10 +22,10 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class UrlSuggestionModule(
-        binding: ModuleUrlSuggestionBinding,
+        private val binding: ModuleUrlSuggestionBinding,
         browseCallback: (String) -> Unit,
         browseBackgroundCallback: (String) -> Unit
-): BaseModule(binding.root) {
+) {
 
     /**
      * Adapter.
@@ -36,6 +37,8 @@ class UrlSuggestionModule(
             browseBackgroundCallback
             )
 
+    var enable = true
+
     /**
      * Use for disposing.
      */
@@ -45,12 +48,12 @@ class UrlSuggestionModule(
      * Database repository.
      */
     private val viewHistoryRepository: ViewHistoryRepository =
-            DatabaseFinder().invoke(context()).viewHistoryRepository()
+            DatabaseFinder().invoke(binding.root.context).viewHistoryRepository()
 
     init {
         binding.urlSuggestions.adapter = adapter
         binding.urlSuggestions.layoutManager =
-                LinearLayoutManager(context(), RecyclerView.VERTICAL, false)
+                LinearLayoutManager(binding.root.context, RecyclerView.VERTICAL, false)
         RightSwipeActionAttachment(
                 binding.urlSuggestions,
                 this::removeAt
@@ -93,6 +96,34 @@ class UrlSuggestionModule(
                 }
                 .subscribe(adapter::add, Timber::e)
     }
+
+    /**
+     * Show this module.
+     */
+    fun show() {
+        if (!binding.root.isVisible && enable) {
+            runOnMainThread { binding.root.isVisible = true }
+                    .addTo(disposables)
+        }
+    }
+
+    /**
+     * Hide this module.
+     */
+    fun hide() {
+        if (binding.root.isVisible) {
+            runOnMainThread { binding.root.isVisible = false }
+                    .addTo(disposables)
+        }
+    }
+
+    private fun runOnMainThread(action: () -> Unit) =
+            Completable.fromAction { action() }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {},
+                            Timber::e
+                    )
 
     /**
      * Clear disposables.
