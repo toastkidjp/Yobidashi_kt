@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * @author toastkidjp
  */
-object DragAttachment {
+class DragAttachment {
 
     /**
      * Invoke action.

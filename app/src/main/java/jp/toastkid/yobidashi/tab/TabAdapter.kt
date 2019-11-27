@@ -197,7 +197,24 @@ class TabAdapter(
         setIndexByTab(pdfTab)
     }
 
-    fun back() = browserModule.back()
+    fun back(): Boolean {
+        if (currentTab() is EditorTab || currentTab() is PdfTab) {
+            return false
+        }
+
+        if (browserModule.canCurrentTabGoesBack()) {
+            return browserModule.back()
+        }
+
+        tabList.closeTab(index())
+        if (isEmpty()) {
+            tabEmptyCallback()
+            return true
+        }
+
+        replaceToCurrentTab(true)
+        return true
+    }
 
     fun forward() = browserModule.forward()
 

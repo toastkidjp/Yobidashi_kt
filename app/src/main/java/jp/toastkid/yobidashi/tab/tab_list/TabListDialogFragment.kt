@@ -217,8 +217,11 @@ class TabListDialogFragment : DialogFragment() {
                             direction: Int
                     ) = (viewHolder as ViewHolder).close()
                 }).attachToRecyclerView(recyclerView)
-        rightTouchHelper = DragAttachment(recyclerView, ItemTouchHelper.RIGHT)
-        leftTouchHelper = DragAttachment(recyclerView, ItemTouchHelper.LEFT)
+
+        val dragAttachment = DragAttachment()
+        rightTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.RIGHT)
+        leftTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.LEFT)
+
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 
         recyclerView.adapter = adapter
