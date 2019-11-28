@@ -227,6 +227,11 @@ class MainActivity :
         if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
             RandomWikipedia().fetchWithAction { title, uri ->
                 browserFragment.loadWithNewTab(uri)
+                Toaster.snackShort(
+                        binding.root,
+                        getString(R.string.message_open_random_wikipedia, title),
+                        preferenceApplier.colorPair()
+                )
             }
             return
         }
