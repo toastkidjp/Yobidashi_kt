@@ -25,7 +25,7 @@ class PreferenceApplier(private val context: Context) {
     @SuppressWarnings("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
-        USE_DAILY_ALARM
+        USE_DAILY_ALARM, USE_INTERNAL_BROWSER
     }
 
     private enum class Key {
@@ -135,12 +135,6 @@ class PreferenceApplier(private val context: Context) {
 
     fun useNotificationWidget(): Boolean =
             preferences.getBoolean(Key.USE_NOTIFICATION_WIDGET.name, false)
-
-    fun setUseInternalBrowser(newState: Boolean) {
-        preferences.edit().putBoolean(Key.USE_INTERNAL_BROWSER.name, newState).apply()
-    }
-
-    fun useInternalBrowser(): Boolean = preferences.getBoolean(Key.USE_INTERNAL_BROWSER.name, true)
 
     fun setRetainTabs(newState: Boolean) {
         preferences.edit().putBoolean(Key.RETAIN_TABS.name, newState).apply()

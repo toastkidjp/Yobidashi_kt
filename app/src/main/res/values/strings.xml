@@ -168,14 +168,11 @@
     <string name="format_message_done_adding_favorite_search">It has added \"%s\" to favorite search.</string>
     <string name="title_browser">Browser</string>
     <string name="title_show_notification_widget">Show notification area app-widget</string>
-    <string name="title_use_internal_browser">Use internal Web browser</string>
     <string name="title_planning_poker">Planning Poker</string>
     <string name="message_confirm_back">Do you want to go back?</string>
     <string name="back">Back</string>
     <string name="message_done_showing_notification_widget">It has done!</string>
     <string name="message_remove_notification_widget">It has removed a notification widget.</string>
-    <string name="message_use_chrome">It would use Chrome.</string>
-    <string name="message_use_internal_browser">It would use internal browser.</string>
 
     <string name="title_menu_reload">Reload</string>
     <string name="title_menu_to_top">Go top</string>

@@ -76,9 +76,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             preferenceApplier.colorPair().setTo(it.homeButton)
             it.homeInputLayout.editText?.setText(preferenceApplier.homeUrl)
 
-            it.useInternalBrowserCheck.isChecked = preferenceApplier.useInternalBrowser()
-            it.useInternalBrowserCheck.jumpDrawablesToCurrentState()
-
             it.retainTabsCheck.isChecked = preferenceApplier.doesRetainTabs()
             it.retainTabsCheck.jumpDrawablesToCurrentState()
 
@@ -167,19 +164,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 }
             }
         }
-    }
-
-    /**
-     * Switch browser.
-     */
-    fun switchInternalBrowser() {
-        val newState = !preferenceApplier.useInternalBrowser()
-        preferenceApplier.setUseInternalBrowser(newState)
-        binding.useInternalBrowserCheck.isChecked = newState
-        @StringRes val messageId: Int
-                = if (newState) { R.string.message_use_internal_browser }
-        else { R.string.message_use_chrome }
-        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 
     /**
