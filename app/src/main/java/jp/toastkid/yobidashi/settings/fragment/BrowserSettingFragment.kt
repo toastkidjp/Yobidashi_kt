@@ -117,7 +117,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
                     val newSize = bar?.progress ?: 0
                     preferenceApplier.setWebViewBackgroundAlpha(newSize.toFloat() / 100f)
-                    it.textBackgroundAlpha.setText((newSize).toString())
+                    it.textBackgroundAlpha.setText(newSize.toString())
                 }
 
                 override fun onStartTrackingTouch(p0: SeekBar?) = Unit
