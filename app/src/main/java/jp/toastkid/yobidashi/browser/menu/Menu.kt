@@ -38,8 +38,6 @@ enum class Menu(
 
     WIFI_SETTING(R.string.title_settings_wifi, R.drawable.ic_wifi),
 
-    OTHER_BROWSER(R.string.title_open_other_browser, R.drawable.ic_open_with),
-
     FIND_IN_PAGE(R.string.title_find_in_page, R.drawable.ic_find_in_page),
 
     SCREENSHOT(R.string.title_screenshot, R.drawable.ic_camera),

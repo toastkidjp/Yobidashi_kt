@@ -235,7 +235,6 @@
     <string name="message_stop_color_filter">It has turn off color filter.</string>
     <string name="title_color_filter">Overlay Color Filter</string>
     <string name="title_site_search_by_google">Site Search by Google</string>
-    <string name="title_open_other_browser">Open with other browser</string>
     <string name="title_clear_form_data">Clear form data</string>
     <string name="title_voice_search">Voice Search</string>
     <string name="delete">Delete</string>

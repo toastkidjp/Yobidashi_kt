@@ -234,7 +234,6 @@
     <string name="message_stop_color_filter">カラーフィルタをオフにしました。</string>
     <string name="title_color_filter">カラーフィルタ</string>
     <string name="title_site_search_by_google">サイト内をGoogleで検索</string>
-    <string name="title_open_other_browser">別のブラウザで開く</string>
     <string name="title_clear_form_data">フォームデータを削除</string>
     <string name="title_voice_search">音声検索</string>
     <string name="delete">削除</string>

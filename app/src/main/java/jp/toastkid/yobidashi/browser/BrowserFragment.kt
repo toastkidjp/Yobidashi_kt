@@ -51,7 +51,6 @@ import jp.toastkid.yobidashi.editor.*
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
-import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
@@ -410,13 +409,6 @@ class BrowserFragment : Fragment(),
             }
             Menu.STOP_LOADING-> {
                 stopCurrentLoading()
-            }
-            Menu.OTHER_BROWSER-> {
-                browserModule.currentUrl()?.let {
-                    CustomTabsFactory.make(fragmentActivity, colorPair())
-                            .build()
-                            .launchUrl(fragmentActivity, Uri.parse(it))
-                }
             }
             Menu.ARCHIVE-> {
                 browserModule.saveArchive()
