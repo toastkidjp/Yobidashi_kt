@@ -48,7 +48,6 @@ import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -234,7 +233,7 @@ class MainActivity :
 
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
-                calledIntent.data?.let { loadUri(it, true) }
+                calledIntent.data?.let { loadUri(it) }
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {
@@ -363,21 +362,13 @@ class MainActivity :
      * Load Uri.
      *
      * @param uri
-     * @param shouldLoadInternal for avoiding infinite loop, default is false
      */
-    private fun loadUri(uri: Uri, shouldLoadInternal: Boolean = false) {
-        if (preferenceApplier.useInternalBrowser() || shouldLoadInternal) {
-            if (browserFragment.isVisible) {
-                browserFragment.loadWithNewTab(uri)
-                return
-            }
-            replaceWithBrowser(uri)
+    private fun loadUri(uri: Uri) {
+        if (browserFragment.isVisible) {
+            browserFragment.loadWithNewTab(uri)
             return
         }
-        CustomTabsFactory
-                .make(this, preferenceApplier.colorPair())
-                .build()
-                .launchUrl(this, uri)
+        replaceWithBrowser(uri)
     }
 
     /**
