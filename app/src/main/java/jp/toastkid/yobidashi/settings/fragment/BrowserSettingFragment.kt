@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.SeekBar
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -51,7 +52,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_browser, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         return binding.root
@@ -322,4 +323,11 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     }
 
     override fun titleId() = R.string.subhead_setting_browser
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_setting_browser
+
+    }
 }
