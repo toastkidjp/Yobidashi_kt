@@ -74,6 +74,12 @@ class PendingIntentFactory {
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
+    /**
+     * Make launching browser activity's [PendingIntent].
+     *
+     * @param context [Context]
+     * @return [PendingIntent]
+     */
     fun browser(context: Context): PendingIntent =
             PendingIntent.getActivity(
                     context,
@@ -82,6 +88,12 @@ class PendingIntentFactory {
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
+    /**
+     * Make launching bookmark activity's [PendingIntent].
+     *
+     * @param context [Context]
+     * @return [PendingIntent]
+     */
     fun bookmark(context: Context): PendingIntent =
             PendingIntent.getActivity(
                     context,
@@ -90,6 +102,12 @@ class PendingIntentFactory {
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
+    /**
+     * Make launching Random Wikipedia [PendingIntent].
+     *
+     * @param context [Context]
+     * @return [PendingIntent]
+     */
     fun randomWikipedia(context: Context): PendingIntent =
             PendingIntent.getActivity(
                     context,
@@ -98,6 +116,12 @@ class PendingIntentFactory {
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
+    /**
+     * Make Setting activity's [PendingIntent].
+     *
+     * @param context [Context]
+     * @return [PendingIntent]
+     */
     fun setting(context: Context): PendingIntent =
             PendingIntent.getActivity(
                     context,
