@@ -20,7 +20,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
-import jp.toastkid.yobidashi.browser.bookmark.Bookmarks
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.Bitmaps
 import jp.toastkid.yobidashi.libs.Toaster
@@ -523,7 +523,7 @@ class TabAdapter(
                 browserModule.currentTitle(),
                 url,
                 faviconApplier.makePath(url),
-                Bookmarks.ROOT_FOLDER_NAME
+                Bookmark.getRootFolderName()
         ).insert()
 
         Toaster.snackLong(

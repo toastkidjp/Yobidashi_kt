@@ -14,17 +14,12 @@ import java.io.InputStream
  *
  * @author toastkidjp
  */
-object ExportedFileParser {
+class ExportedFileParser {
 
     /**
      * Bookmark container.
      */
     private val bookmarks: MutableList<Bookmark> = mutableListOf()
-
-    /**
-     * Bookmark html encoding.
-     */
-    private const val ENCODE = "UTF-8"
 
     /**
      * Parse bookmark html file.
@@ -45,7 +40,9 @@ object ExportedFileParser {
         doc.select("dl")
                 .first()
                 .children()
-                .forEach { parseChild(it,  Bookmarks.ROOT_FOLDER_NAME)?.let { bookmarks.add(it) } }
+                .forEach { element ->
+                    parseChild(element,  Bookmark.getRootFolderName())?.let { bookmarks.add(it) }
+                }
         return bookmarks
     }
 
@@ -69,9 +66,17 @@ object ExportedFileParser {
                 childFolder.parent = folderName
                 childFolder.title  = it.text()
                 childFolder.folder = true
-                child.select("dl").first()?.children()?.forEach {
-                    parseChild(it, childFolder.title)?.let { bookmarks.add(it) }
+                child.select("dl").first()?.children()?.forEach { element ->
+                    parseChild(element, childFolder.title)?.let { bookmark -> bookmarks.add(bookmark) }
                 }
                 return childFolder
             }
+
+    companion object {
+
+        /**
+         * Bookmark html encoding.
+         */
+        private const val ENCODE = "UTF-8"
+    }
 }

@@ -44,8 +44,6 @@ import jp.toastkid.yobidashi.browser.menu.MenuBinder
 import jp.toastkid.yobidashi.browser.menu.MenuViewModel
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
-import jp.toastkid.yobidashi.home.Command
-import jp.toastkid.yobidashi.home.FragmentReplaceAction
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
@@ -419,18 +417,18 @@ class MainActivity :
     }
 
     override fun onBackPressed() {
-        val fragment: CommonFragmentAction? = findCurrentFragment()
-        if (fragment == null) {
-            confirmExit()
-            return
-        }
-
-        if (fragment.pressBack()) {
-            return
-        }
-
         if (binding.menusView.isVisible) {
             menuViewModel?.close()
+            return
+        }
+
+        if (findCurrentFragment()?.pressBack() == true) {
+            return
+        }
+
+        val backStackEntryCount = supportFragmentManager?.backStackEntryCount ?: 0
+        if (backStackEntryCount >= 1) {
+            supportFragmentManager?.popBackStack()
             return
         }
 
@@ -445,7 +443,7 @@ class MainActivity :
     private fun findCurrentFragment(): CommonFragmentAction? {
         val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.content)
 
-        return if (fragment != null) fragment as CommonFragmentAction else null
+        return if (fragment != null) fragment as? CommonFragmentAction else null
     }
 
     /**

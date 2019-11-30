@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.settings.color
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 
 /**
@@ -25,7 +25,7 @@ class RecommendColorDialogFragment : DialogFragment() {
                 .setTitle(R.string.title_add_recommended_colors)
                 .setMessage(R.string.message_add_recommended_colors)
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    SavedColors.insertDefaultColors(activityContext)
+                    DefaultColorInsertion().insert(activityContext)
                     d.dismiss()
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }

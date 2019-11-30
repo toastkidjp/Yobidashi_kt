@@ -10,29 +10,32 @@ import java.util.*
 /**
  * @author toastkidjp
  */
-internal object SslErrorMessageGenerator {
+class TlsErrorMessageGenerator {
 
-    fun generate(context: Context, error: SslError?): String {
+    private val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+
+    operator fun invoke(context: Context, error: SslError?): String {
         if (error == null) {
             return ""
         }
-        val cert: SslCertificate = error.certificate
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
 
-        val firstLine = context.getString(R.string.message_ssl_error_first_line)
+        val cert: SslCertificate = error.certificate
 
         val cause = when (error.primaryError) {
             SslError.SSL_EXPIRED ->
-                context.getString(R.string.message_ssl_error_expired) + dateFormat.format(cert.validNotAfterDate)
+                context.getString(R.string.message_ssl_error_expired) + dateToString(cert.validNotAfterDate)
             SslError.SSL_IDMISMATCH ->
                 context.getString(R.string.message_ssl_error_id_mismatch) + cert.issuedTo.cName
             SslError.SSL_NOTYETVALID ->
-                context.getString(R.string.message_ssl_error_not_yet_valid) + dateFormat.format(cert.validNotBeforeDate)
+                context.getString(R.string.message_ssl_error_not_yet_valid) + dateToString(cert.validNotBeforeDate)
             SslError.SSL_UNTRUSTED ->
                 context.getString(R.string.message_ssl_error_untrusted) + cert.issuedBy.dName
             else ->
                 context.getString(R.string.message_ssl_error_unknown)
         }
-        return firstLine + cause
+        return context.getString(R.string.message_ssl_error_first_line) + cause
     }
+
+    private fun dateToString(date: Date?) =
+            dateFormat.format(date)
 }

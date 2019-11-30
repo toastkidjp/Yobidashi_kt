@@ -7,7 +7,7 @@ import android.text.TextUtils
  *
  * @author toastkidjp
  */
-object Quotation {
+class Quotation {
 
     /**
      * Line separator.

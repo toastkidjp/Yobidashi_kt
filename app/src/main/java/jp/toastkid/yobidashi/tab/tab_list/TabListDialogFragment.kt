@@ -53,7 +53,7 @@ class TabListDialogFragment : DialogFragment() {
     /**
      * Callback of tab-list adapter and BrowserFragment.
      */
-    private var callback: TabListDialogFragment.Callback? = null
+    private var callback: Callback? = null
 
     /**
      * For showing [com.google.android.material.snackbar.Snackbar].
@@ -93,7 +93,7 @@ class TabListDialogFragment : DialogFragment() {
         colorPair = preferenceApplier.colorPair()
 
         val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
-        if (target is TabListDialogFragment.Callback) {
+        if (target is Callback) {
             callback = target
         } else {
             return super.onCreateDialog(savedInstanceState)
@@ -101,7 +101,7 @@ class TabListDialogFragment : DialogFragment() {
 
         initializeContentView(activityContext)
 
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
+        setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
 
         return AlertDialog.Builder(activityContext)
                 .setView(binding.root)

@@ -10,6 +10,7 @@ import android.os.ParcelFileDescriptor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -42,17 +43,21 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
      */
     private var pdfRenderer: PdfRenderer? = null
 
+    private val pdfImageFactory = PdfImageFactory()
+
+    private val imageCache = ImageCache()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_pdf_content, parent, false))
+            ViewHolder(DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         pdfRenderer?.let {
-            val image: Bitmap = PdfImageFactory.invoke(it.openPage(position))
+            val image: Bitmap = pdfImageFactory(it.openPage(position))
             holder.setImage(image)
             holder.setIndicator(position + 1, itemCount)
             holder.setOnLongTap(
                     View.OnLongClickListener { view ->
-                        val cachedBitmapFile: File = ImageCache.saveBitmap(context, image)
+                        val cachedBitmapFile: File = imageCache.saveBitmap(context, image)
                         context.startActivity(
                                 ImagePreviewActivity.makeIntent(context, cachedBitmapFile),
                                 ActivityOptionsFactory.makeScaleUpBundle(view).toBundle()
@@ -85,5 +90,12 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
     fun dispose() {
         pdfRenderer?.close()
         fileDescriptor?.close()
+    }
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.item_pdf_content
+
     }
 }

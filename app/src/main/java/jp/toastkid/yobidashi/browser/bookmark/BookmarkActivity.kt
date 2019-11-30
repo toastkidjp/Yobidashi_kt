@@ -250,7 +250,7 @@ class BookmarkActivity: AppCompatActivity(),
     }
 
     override fun onClickAddDefaultBookmark() {
-        BookmarkInitializer(this) { adapter.showRoot() }
+        BookmarkInitializer()(this) { adapter.showRoot() }
                 .addTo(disposables)
 
         Toaster.snackShort(binding.root, R.string.done_addition, preferenceApplier.colorPair())
@@ -295,7 +295,7 @@ class BookmarkActivity: AppCompatActivity(),
     private fun importBookmark(uri: Uri) {
         Completable.fromAction {
             val inputStream = contentResolver.openInputStream(uri) ?: return@fromAction
-            ExportedFileParser(inputStream).forEach {
+            ExportedFileParser()(inputStream).forEach {
                 BookmarkInsertion(
                         this,
                         title  = it.title,

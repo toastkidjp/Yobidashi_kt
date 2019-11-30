@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -23,7 +22,6 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -162,7 +160,7 @@ class ColorSettingFragment : Fragment(),
      * @param color  [SavedColor] object
      */
     private fun bindView(holder: SavedColorHolder, color: SavedColor) {
-        SavedColors.setSaved(holder.textView, color)
+        color.setTo(holder.textView)
         holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
         holder.remove.setOnClickListener {
             Completable.fromAction {
@@ -188,7 +186,7 @@ class ColorSettingFragment : Fragment(),
      * Refresh with current color.
      */
     private fun refresh() {
-        Colors.setColors(binding?.settingsColorOk as TextView, colorPair())
+        binding?.settingsColorOk?.also { colorPair().setTo(it) }
         adapter?.refresh()
     }
 
@@ -202,7 +200,7 @@ class ColorSettingFragment : Fragment(),
         commitNewColor(bgColor, fontColor)
 
         Completable.fromAction {
-            val savedColor = SavedColors.makeSavedColor(bgColor, fontColor)
+            val savedColor = SavedColor.make(bgColor, fontColor)
             repository.add(savedColor)
             adapter?.add(savedColor)
         }
@@ -266,7 +264,7 @@ class ColorSettingFragment : Fragment(),
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_random)
                     ?.setOnMenuItemClickListener {
                         val activityContext = context ?: return@setOnMenuItemClickListener true
-                        SavedColors.insertRandomColors(activityContext).addTo(disposables)
+                        RandomColorInsertion()(activityContext).addTo(disposables)
                         snackShort(R.string.done_addition)
                         true
                     }

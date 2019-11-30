@@ -11,7 +11,7 @@ import android.os.Build
 import android.view.Window
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.ColorUtils
-import jp.toastkid.yobidashi.libs.Colors
+import androidx.core.graphics.drawable.DrawableCompat
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
@@ -27,8 +27,8 @@ class ToolbarColorApplier {
             it.setTitleTextColor(fontColor)
             it.setSubtitleTextColor(fontColor)
 
-            Colors.applyTint(it.navigationIcon, fontColor)
-            Colors.applyTint(it.overflowIcon, fontColor)
+            it.navigationIcon?.let { DrawableCompat.setTint(it, fontColor) }
+            it.overflowIcon?.let { DrawableCompat.setTint(it, fontColor) }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

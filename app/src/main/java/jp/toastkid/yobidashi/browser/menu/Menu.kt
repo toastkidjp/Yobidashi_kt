@@ -30,6 +30,8 @@ enum class Menu(
 
     STOP_LOADING(R.string.title_stop_loading, R.drawable.ic_close),
 
+    READER_MODE(R.string.title_menu_reader_mode, R.drawable.ic_reader_mode),
+
     PAGE_INFORMATION(R.string.title_menu_page_information, R.drawable.ic_info),
 
     USER_AGENT(R.string.title_user_agent, R.drawable.ic_user_agent),

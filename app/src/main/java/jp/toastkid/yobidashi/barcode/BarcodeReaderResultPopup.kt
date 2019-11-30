@@ -22,7 +22,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupBarcodeResultBinding
-import jp.toastkid.yobidashi.libs.Colors
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
@@ -87,10 +86,10 @@ class BarcodeReaderResultPopup(context: Context) {
     fun onResume(colorPair: ColorPair) {
         binding.let {
             it.resultArea.setBackgroundColor(colorPair.bgColor())
-            Colors.setColors(it.clip, colorPair)
-            Colors.setColors(it.share, colorPair)
-            Colors.setColors(it.open, colorPair)
-            Colors.setColors(it.result, colorPair)
+            colorPair.setTo(it.clip)
+            colorPair.setTo(it.share)
+            colorPair.setTo(it.open)
+            colorPair.setTo(it.result)
         }
     }
 

@@ -17,12 +17,12 @@ import java.util.*
  *
  * @author toastkidjp
  */
-object BookmarkInitializer {
+class BookmarkInitializer {
 
     /**
      * Default bookmarks.
      */
-    private val DEFAULT_BOOKMARKS: Map<String, Map<String, String>> = mapOf(
+    private val defaultBookmarks: Map<String, Map<String, String>> = mapOf(
             "Recommended" to mapOf(
                     "Google Translate" to "https://translate.google.com/",
                     "YouTube" to "https://www.youtube.com/",
@@ -60,12 +60,12 @@ object BookmarkInitializer {
         val bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
 
         return Completable.fromAction {
-            DEFAULT_BOOKMARKS.forEach {
+            defaultBookmarks.forEach {
                 val parent = it.key
                 bookmarkRepository.add(
                         Bookmark().also {
                             it.title = parent
-                            it.parent = Bookmarks.ROOT_FOLDER_NAME
+                            it.parent = Bookmark.getRootFolderName()
                             it.folder = true
                         }
                 )
