@@ -16,7 +16,7 @@ import jp.toastkid.yobidashi.settings.SettingsActivity
  *
  * @author toastkidjp
  */
-object PendingIntentFactory {
+class PendingIntentFactory {
 
     /**
      * Make launch search intent.

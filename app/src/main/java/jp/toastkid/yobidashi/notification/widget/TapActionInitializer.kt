@@ -24,19 +24,20 @@ class TapActionInitializer {
      * @param remoteViews
      */
     operator fun invoke(context: Context, remoteViews: RemoteViews) {
+        val pendingIntentFactory = PendingIntentFactory()
         remoteViews.setOnClickPendingIntent(
-                R.id.random_wikipedia, PendingIntentFactory.randomWikipedia(context))
+                R.id.random_wikipedia, pendingIntentFactory.randomWikipedia(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.search, PendingIntentFactory.makeSearchLauncher(context))
+                R.id.search, pendingIntentFactory.makeSearchLauncher(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.bookmark, PendingIntentFactory.bookmark(context))
+                R.id.bookmark, pendingIntentFactory.bookmark(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.browser, PendingIntentFactory.browser(context))
+                R.id.browser, pendingIntentFactory.browser(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.launcher, PendingIntentFactory.launcher(context))
+                R.id.launcher, pendingIntentFactory.launcher(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.barcode_reader, PendingIntentFactory.barcode(context))
+                R.id.barcode_reader, pendingIntentFactory.barcode(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.setting, PendingIntentFactory.setting(context))
+                R.id.setting, pendingIntentFactory.setting(context))
     }
 }
