@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.libs.intent
 
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
@@ -10,7 +9,6 @@ import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.SearchActivity
-import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.SettingsActivity
 
 /**
@@ -60,27 +58,6 @@ object PendingIntentFactory {
                 LauncherActivity.makeIntent(context),
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
-    }
-
-    /**
-     * Make adding favorite search intent.
-     * @param context
-     *
-     * @param category
-     *
-     * @param query
-     *
-     * @return [AddingFavoriteSearchService]'s pending intent
-     */
-    fun favoriteSearchAdding(
-            context: Context,
-            category: String,
-            query: String
-    ): PendingIntent {
-        val intent = Intent(context, AddingFavoriteSearchService::class.java)
-        intent.putExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY, category)
-        intent.putExtra(AddingFavoriteSearchService.EXTRA_KEY_QUERY, query)
-        return PendingIntent.getService(context, 7, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     /**
