@@ -686,16 +686,6 @@ class MainActivity :
         private const val LAYOUT_ID = R.layout.activity_main
 
         /**
-         * For using daily alarm.
-         */
-        private const val KEY_EXTRA_MONTH = "month"
-
-        /**
-         * For using daily alarm.
-         */
-        private const val KEY_EXTRA_DOM = "dom"
-
-        /**
          * Make launcher intent.
          *
          * @param context
@@ -724,20 +714,6 @@ class MainActivity :
                     it.action = Intent.ACTION_VIEW
                     it.putExtra("random_wikipedia", true)
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                }
-
-        /**
-         * Make launcher intent.
-         * TODO remove
-         * @param context [Context]
-         * @param month Month
-         * @param dayOfMonth Day of month
-         * @return [Intent]
-         */
-        fun makeIntent(context: Context, month: Int, dayOfMonth: Int) = makeIntent(context)
-                .also {
-                    it.putExtra(KEY_EXTRA_MONTH, month)
-                    it.putExtra(KEY_EXTRA_DOM, dayOfMonth)
                 }
 
     }
