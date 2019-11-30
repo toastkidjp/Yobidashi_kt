@@ -25,8 +25,6 @@ import jp.toastkid.yobidashi.settings.SettingsActivity
 /**
  * App Launcher.
  *
- * TODO Fix header behavior.
- *
  * @author toastkidjp
  */
 class LauncherActivity : AppCompatActivity() {
