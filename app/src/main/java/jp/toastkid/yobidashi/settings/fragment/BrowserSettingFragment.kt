@@ -46,7 +46,11 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_browser, container, false)
         val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
@@ -113,7 +117,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             })
             it.poolSizeValue.progress = preferenceApplier.poolSize - 1
 
-            it.valueBackgroundAlpha.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            it.valueBackgroundAlpha.setOnSeekBarChangeListener(
+                    object: SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
                     val newSize = bar?.progress ?: 0
                     preferenceApplier.setWebViewBackgroundAlpha(newSize.toFloat() / 100f)
@@ -125,7 +130,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
             })
-            it.valueBackgroundAlpha.progress = (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
+            it.valueBackgroundAlpha.progress =
+                    (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
         }
 
         binding.browserExpand.screenMode?.let {
