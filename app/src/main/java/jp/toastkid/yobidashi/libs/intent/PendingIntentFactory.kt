@@ -47,28 +47,6 @@ object PendingIntentFactory {
     }
 
     /**
-     * Make calling calendar intent.
-     *
-     * TODO remove
-     * @param context
-     *
-     * @param month
-     *
-     * @param dayOfMonth
-     *
-     * @return
-     */
-    fun calendar(
-            context: Context, month: Int, dayOfMonth: Int): PendingIntent {
-        return PendingIntent.getActivity(
-                context,
-                5,
-                MainActivity.makeIntent(context, month, dayOfMonth),
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-
-    /**
      * Return Launcher Intent of Launcher Activity.
 
      * @param context
