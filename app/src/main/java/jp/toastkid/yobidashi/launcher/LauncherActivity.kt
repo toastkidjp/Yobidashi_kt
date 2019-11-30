@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.MenuItem
 import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -154,6 +155,7 @@ class LauncherActivity : AppCompatActivity() {
         /**
          * Layout ID.
          */
+        @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.activity_launcher
 
         /**
