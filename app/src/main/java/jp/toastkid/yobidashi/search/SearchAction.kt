@@ -39,17 +39,20 @@ class SearchAction(
      * Invoke action.
      */
     operator fun invoke(): Disposable {
-
-        val disposable = if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
-            SearchHistoryInsertion.make(activityContext, category, query).insert()
-        } else {
-            Disposables.empty()
-        }
+        val disposable = insertToSearchHistory()
 
         val validUrl = Urls.isValidUrl(query)
 
         withInternalBrowser(validUrl)
         return disposable
+    }
+
+    private fun insertToSearchHistory(): Disposable {
+        return if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
+            SearchHistoryInsertion.make(activityContext, category, query).insert()
+        } else {
+            Disposables.empty()
+        }
     }
 
     /**
