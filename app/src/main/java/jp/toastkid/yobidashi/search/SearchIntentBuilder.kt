@@ -7,7 +7,7 @@ import jp.toastkid.yobidashi.main.MainActivity
 /**
  * @author toastkidjp
  */
-internal class SearchIntentBuilder(private val context: Context) : SearchIntentLauncher {
+internal class SearchIntentBuilder(private val context: Context) {
 
     private var category: String = ""
 
@@ -30,7 +30,7 @@ internal class SearchIntentBuilder(private val context: Context) : SearchIntentL
         return this
     }
 
-    override fun invoke() {
+    fun invoke() {
         context.startActivity(
                 MainActivity.makeBrowserIntent(
                         context,
