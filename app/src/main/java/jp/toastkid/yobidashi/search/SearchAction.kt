@@ -41,9 +41,9 @@ class SearchAction(
     operator fun invoke(): Disposable {
         val disposable = insertToSearchHistory()
 
-        val validUrl = Urls.isValidUrl(query)
+        val validatedUrl = Urls.isValidUrl(query)
 
-        withInternalBrowser(validUrl)
+        withInternalBrowser(validatedUrl)
         return disposable
     }
 
@@ -64,10 +64,10 @@ class SearchAction(
     /**
      * Action with internal browser.
      *
-     * @param validUrl passed query is URL.
+     * @param validatedUrl passed query is URL.
      */
-    private fun withInternalBrowser(validUrl: Boolean) {
-        if (validUrl) {
+    private fun withInternalBrowser(validatedUrl: Boolean) {
+        if (validatedUrl) {
             activityContext.startActivity(
                     MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
             return
