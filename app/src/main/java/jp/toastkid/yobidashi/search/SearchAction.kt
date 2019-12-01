@@ -81,7 +81,7 @@ class SearchAction(
             return
         }
 
-        InternalSearchIntentLauncher(activityContext)
+        SearchIntentBuilder(activityContext)
                 .setCategory(category)
                 .setQuery(query)
                 .setCurrentUrl(currentUrl)

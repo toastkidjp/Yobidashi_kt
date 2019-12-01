@@ -7,7 +7,7 @@ import jp.toastkid.yobidashi.main.MainActivity
 /**
  * @author toastkidjp
  */
-internal class InternalSearchIntentLauncher(private val context: Context) : SearchIntentLauncher {
+internal class SearchIntentBuilder(private val context: Context) : SearchIntentLauncher {
 
     private var category: String = ""
 
@@ -15,17 +15,17 @@ internal class InternalSearchIntentLauncher(private val context: Context) : Sear
 
     private var currentUrl: String? = null
 
-    fun setCategory(category: String): InternalSearchIntentLauncher {
+    fun setCategory(category: String): SearchIntentBuilder {
         this.category = category
         return this
     }
 
-    fun setQuery(query: String): InternalSearchIntentLauncher {
+    fun setQuery(query: String): SearchIntentBuilder {
         this.query = query
         return this
     }
 
-    fun setCurrentUrl(currentUrl: String?): InternalSearchIntentLauncher {
+    fun setCurrentUrl(currentUrl: String?): SearchIntentBuilder {
         this.currentUrl = currentUrl
         return this
     }
