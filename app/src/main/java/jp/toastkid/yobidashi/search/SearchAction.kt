@@ -47,13 +47,12 @@ class SearchAction(
         return disposable
     }
 
-    private fun insertToSearchHistory(): Disposable {
-        return if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
-            SearchHistoryInsertion.make(activityContext, category, query).insert()
-        } else {
-            Disposables.empty()
-        }
-    }
+    private fun insertToSearchHistory(): Disposable =
+            if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
+                SearchHistoryInsertion.make(activityContext, category, query).insert()
+            } else {
+                Disposables.empty()
+            }
 
     /**
      * Check passed query is not URL.
