@@ -52,7 +52,7 @@ class SearchAction(
             if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
                 SearchHistoryInsertion.make(activityContext, category, query).insert()
             } else {
-                Disposables.empty()
+                Disposables.disposed()
             }
 
     /**
