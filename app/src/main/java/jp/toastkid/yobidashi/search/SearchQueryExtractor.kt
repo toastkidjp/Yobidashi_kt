@@ -6,7 +6,7 @@ import androidx.core.net.toUri
 /**
  * @author toastkidjp
  */
-object SearchQueryExtractor {
+class SearchQueryExtractor {
 
     private val commonQueryParameterNames = setOf("q", "query", "text", "word")
 

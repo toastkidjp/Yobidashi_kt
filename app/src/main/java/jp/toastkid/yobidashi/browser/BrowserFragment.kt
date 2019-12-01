@@ -573,7 +573,7 @@ class BrowserFragment : Fragment(),
     private fun search(option: ActivityOptions) {
         context?.let {
             val currentUrl = browserModule.currentUrl()
-            val query = SearchQueryExtractor.invoke(currentUrl)
+            val query = SearchQueryExtractor().invoke(currentUrl)
             val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
                 SearchActivity.makeIntent(it, currentUrl)
             } else {
@@ -666,7 +666,7 @@ class BrowserFragment : Fragment(),
         val activityContext = context ?: return
         val currentUrl = browserModule.currentUrl()
         val inputText = if (preferenceApplier.enableSearchQueryExtract) {
-            SearchQueryExtractor(currentUrl) ?: currentUrl
+            SearchQueryExtractor()(currentUrl) ?: currentUrl
         } else {
             currentUrl
         }
