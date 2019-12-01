@@ -81,11 +81,13 @@ class SearchAction(
             return
         }
 
-        SearchIntentBuilder(activityContext)
-                .setCategory(category)
-                .setQuery(query)
-                .setCurrentUrl(currentUrl)
-                .invoke()
+        activityContext.startActivity(
+                SearchIntentBuilder(activityContext)
+                        .setCategory(category)
+                        .setQuery(query)
+                        .setCurrentUrl(currentUrl)
+                        .invoke()
+        )
     }
 
 }

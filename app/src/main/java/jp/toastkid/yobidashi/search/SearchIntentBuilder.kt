@@ -30,12 +30,9 @@ internal class SearchIntentBuilder(private val context: Context) {
         return this
     }
 
-    fun invoke() {
-        context.startActivity(
-                MainActivity.makeBrowserIntent(
-                        context,
-                        UrlFactory.make(context, category, query, currentUrl)
-                )
-        )
-    }
+    operator fun invoke() =
+            MainActivity.makeBrowserIntent(
+                    context,
+                    UrlFactory.make(context, category, query, currentUrl)
+            )
 }
