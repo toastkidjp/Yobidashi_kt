@@ -17,6 +17,7 @@ import jp.toastkid.yobidashi.tab.BackgroundTabQueue
  * @param activityContext Activity's context
  * @param category Search Category
  * @param query Search query (or URL)
+ * @param currentUrl Current URL for site-search
  * @param onBackground
  * @param saveHistory
  * @author toastkidjp
