@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityLauncherBinding
-import jp.toastkid.yobidashi.libs.Colors
+import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -106,7 +106,7 @@ class LauncherActivity : AppCompatActivity() {
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
         val fontColor = colorPair.fontColor()
-        Colors.setEditTextColor(binding.filter, fontColor)
+        EditTextColorSetter().invoke(binding.filter, fontColor)
         binding.inputBorder.setBackgroundColor(fontColor)
         ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }

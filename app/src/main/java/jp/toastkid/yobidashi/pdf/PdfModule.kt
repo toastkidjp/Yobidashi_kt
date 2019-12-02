@@ -21,14 +21,13 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
-import jp.toastkid.yobidashi.libs.Colors
+import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.model.PdfTab
 
 /**
  * PDF Module.
@@ -132,7 +131,7 @@ class PdfModule(
         headerBinding.header.setBackgroundColor(colorPair.bgColor())
         headerBinding.seek.progressDrawable.colorFilter =
                 PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
-        Colors.setEditTextColor(headerBinding.input, colorPair.fontColor())
+        EditTextColorSetter().invoke(headerBinding.input, colorPair.fontColor())
     }
 
     /**
@@ -160,8 +159,6 @@ class PdfModule(
 
     /**
      * Assign new thumbnail image.
-     *
-     * @param tab [PdfTab]
      */
     fun makeThumbnail(): Bitmap? {
         binding.pdfImages.invalidate()

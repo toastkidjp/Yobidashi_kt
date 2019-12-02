@@ -28,7 +28,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.*
-import jp.toastkid.yobidashi.libs.Colors
+import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -361,7 +361,7 @@ class SearchActivity : AppCompatActivity(),
         val colorPair : ColorPair = preferenceApplier.colorPair()
         @ColorInt val bgColor:   Int = colorPair.bgColor()
         @ColorInt val fontColor: Int = colorPair.fontColor()
-        Colors.setEditTextColor(binding?.searchInput as EditText, fontColor)
+        EditTextColorSetter().invoke(binding?.searchInput, fontColor)
 
         binding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))

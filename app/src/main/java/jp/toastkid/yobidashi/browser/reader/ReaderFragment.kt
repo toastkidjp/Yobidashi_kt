@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -31,28 +32,34 @@ class ReaderFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reader_mode, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString("title")?.also { binding.title.text = it }
-        arguments?.getString("content")?.also { binding.content.text = it }
+        arguments?.getString(KEY_TITLE)?.also { binding.title.text = it }
+        arguments?.getString(KEY_CONTENT)?.also { binding.content.text = it }
 
         binding.close.setOnClickListener {
             ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()
-            //fragmentManager?.beginTransaction()?.remove(this)?.commit()
         }
     }
 
     companion object {
 
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_reader_mode
+
+        private const val KEY_TITLE = "title"
+
+        private const val KEY_CONTENT = "content"
+
         fun withContent(title: String, content: String): ReaderFragment {
             val readerFragment = ReaderFragment()
             readerFragment.arguments = bundleOf(
-                    "title" to title,
-                    "content" to content
+                    KEY_TITLE to title,
+                    KEY_CONTENT to content
             )
             return readerFragment
         }
