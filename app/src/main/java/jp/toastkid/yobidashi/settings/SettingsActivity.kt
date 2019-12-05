@@ -42,7 +42,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.also { toolbar ->
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener { finish() }
-            toolbar.setTitle(titleId())
+            toolbar.setTitle(TITLE_ID)
             toolbar.inflateMenu(R.menu.settings_toolbar_menu)
             toolbar.setOnMenuItemClickListener{ clickMenu(it) }
         }
@@ -55,7 +55,13 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
+
+        val colorPair = preferenceApplier.colorPair()
+        ToolbarColorApplier()(window, binding.toolbar, colorPair)
+        binding.tabStrip.also {
+            it.setBackgroundColor(colorPair.bgColor())
+            it.setTextColor(colorPair.fontColor())
+        }
     }
 
     private fun clickMenu(item: MenuItem) = when (item.itemId) {
@@ -69,8 +75,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         else -> true
     }
-
-    @StringRes private fun titleId(): Int = R.string.title_settings
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -94,6 +98,9 @@ class SettingsActivity : AppCompatActivity() {
          */
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_settings
+
+        @StringRes
+        private const val TITLE_ID = R.string.title_settings
 
         /**
          * Make this activity's intent.
