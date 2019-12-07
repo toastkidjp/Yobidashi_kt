@@ -11,8 +11,9 @@
 
     <FrameLayout
         android:id="@+id/random_wikipedia"
-        android:layout_width="52dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/ripple_transparent"
         >
 
@@ -43,8 +44,9 @@
 
     <FrameLayout
         android:id="@+id/bookmark"
-        android:layout_width="52dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/ripple_transparent"
         >
 
@@ -75,8 +77,9 @@
 
     <FrameLayout
         android:id="@+id/barcode_reader"
-        android:layout_width="52dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/ripple_transparent"
         >
 
@@ -107,8 +110,9 @@
 
     <FrameLayout
         android:id="@+id/search"
-        android:layout_width="52dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/ripple_transparent"
         >
 
@@ -139,8 +143,9 @@
 
     <FrameLayout
         android:id="@+id/browser"
-        android:layout_width="52dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/ripple_transparent"
         >
 
@@ -171,8 +176,9 @@
 
     <FrameLayout
         android:id="@+id/launcher"
-        android:layout_width="52dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/ripple_transparent"
         >
 
@@ -203,8 +209,9 @@
 
     <FrameLayout
         android:id="@+id/setting"
-        android:layout_width="52dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@drawable/ripple_transparent"
         >
 
