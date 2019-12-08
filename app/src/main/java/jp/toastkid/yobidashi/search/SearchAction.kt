@@ -73,20 +73,18 @@ class SearchAction(
                     MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
             return
         }
+
+        val searchUri = UrlFactory.make(activityContext, category, query, currentUrl)
+
         if (onBackground) {
             BackgroundTabQueue.add(
                     activityContext.getString(R.string.title_tab_background_search, query),
-                    UrlFactory.make(activityContext, category, query, currentUrl)
+                    searchUri
             )
             return
         }
 
-        activityContext.startActivity(
-                MainActivity.makeBrowserIntent(
-                        activityContext,
-                        UrlFactory.make(activityContext, category, query, currentUrl)
-                )
-        )
+        activityContext.startActivity(MainActivity.makeBrowserIntent(activityContext, searchUri))
     }
 
 }
