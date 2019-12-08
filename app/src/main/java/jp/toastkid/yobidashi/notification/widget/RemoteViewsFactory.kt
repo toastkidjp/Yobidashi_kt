@@ -39,7 +39,7 @@ class RemoteViewsFactory {
      * @param context
      * @return RemoteViews
      */
-    fun make(context: Context): RemoteViews {
+    operator fun invoke(context: Context): RemoteViews {
         val remoteViews = RemoteViews(context.packageName, APPWIDGET_LAYOUT_ID)
         TapActionInitializer()(context, remoteViews)
 
