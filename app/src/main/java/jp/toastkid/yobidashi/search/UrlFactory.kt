@@ -16,7 +16,7 @@ class UrlFactory {
      * @param query
      * @param currentUrl
      */
-    fun make(context: Context, category: String, query: String, currentUrl: String? = null): Uri =
+    operator fun invoke(context: Context, category: String, query: String, currentUrl: String? = null): Uri =
             Uri.parse(SearchCategory.findByCategory(category).make(context, query, currentUrl))
 
 }

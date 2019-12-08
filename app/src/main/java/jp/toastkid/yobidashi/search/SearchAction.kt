@@ -76,7 +76,7 @@ class SearchAction(
             return
         }
 
-        val searchUri = urlFactory.make(activityContext, category, query, currentUrl)
+        val searchUri = urlFactory(activityContext, category, query, currentUrl)
 
         if (onBackground) {
             BackgroundTabQueue.add(

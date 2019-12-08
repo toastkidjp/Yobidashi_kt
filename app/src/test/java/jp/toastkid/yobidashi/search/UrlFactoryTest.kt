@@ -22,11 +22,11 @@ class UrlFactoryTest {
         val urlFactory = UrlFactory()
         assertEquals(
                 "https://www.google.com/search?q=tomato",
-                urlFactory.make(RuntimeEnvironment.application, "GOOGLE", "tomato").toString()
+                urlFactory(RuntimeEnvironment.application, "GOOGLE", "tomato").toString()
         )
         assertEquals(
                 "https://www.google.com/search?q=tomato",
-                urlFactory.make(RuntimeEnvironment.application, "tomato", "tomato").toString()
+                urlFactory(RuntimeEnvironment.application, "tomato", "tomato").toString()
         )
     }
 
