@@ -61,7 +61,7 @@ object NotificationWidget {
     private fun makeNotification(context: Context): Notification {
         return NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_search_white)
-                .setCustomContentView(RemoteViewsFactory.make(context))
+                .setCustomContentView(RemoteViewsFactory().make(context))
                 .setOngoing(true)
                 .setAutoCancel(false)
                 .build()

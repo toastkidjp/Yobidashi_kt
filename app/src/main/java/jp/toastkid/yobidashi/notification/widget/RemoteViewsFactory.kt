@@ -12,18 +12,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-internal object RemoteViewsFactory {
-
-    /**
-     * Method name.
-     */
-    private const val METHOD_NAME_SET_BACKGROUND_COLOR: String = "setBackgroundColor"
-
-    /**
-     * Layout ID.
-     */
-    @LayoutRes
-    private const val APPWIDGET_LAYOUT_ID: Int = R.layout.notification_functions
+class RemoteViewsFactory {
 
     private val iconIds = arrayOf(
             R.id.text_random_wikipedia,
@@ -102,4 +91,17 @@ internal object RemoteViewsFactory {
         dividerIds.forEach { remoteViews.setInt(it, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor) }
     }
 
+    companion object {
+
+        /**
+         * Method name.
+         */
+        private const val METHOD_NAME_SET_BACKGROUND_COLOR: String = "setBackgroundColor"
+
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private const val APPWIDGET_LAYOUT_ID: Int = R.layout.notification_functions
+    }
 }
