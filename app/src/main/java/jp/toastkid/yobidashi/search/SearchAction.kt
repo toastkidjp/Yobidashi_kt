@@ -36,6 +36,8 @@ class SearchAction(
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(activityContext)
 
+    private val urlFactory = UrlFactory()
+
     /**
      * Invoke action.
      */
@@ -74,7 +76,7 @@ class SearchAction(
             return
         }
 
-        val searchUri = UrlFactory().make(activityContext, category, query, currentUrl)
+        val searchUri = urlFactory.make(activityContext, category, query, currentUrl)
 
         if (onBackground) {
             BackgroundTabQueue.add(
