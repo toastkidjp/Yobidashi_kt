@@ -14,25 +14,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 class RemoteViewsFactory {
 
-    private val iconIds = arrayOf(
-            R.id.text_random_wikipedia,
-            R.id.text_bookmark,
-            R.id.text_barcode_reader,
-            R.id.text_search,
-            R.id.text_browser,
-            R.id.text_launcher,
-            R.id.text_setting
-    )
-
-    private val dividerIds = arrayOf(
-            R.id.divider1,
-            R.id.divider2,
-            R.id.divider3,
-            R.id.divider4,
-            R.id.divider5,
-            R.id.divider6
-    )
-
     /**
      * Make RemoteViews.
      *
@@ -103,5 +84,25 @@ class RemoteViewsFactory {
          */
         @LayoutRes
         private const val APPWIDGET_LAYOUT_ID: Int = R.layout.notification_functions
+
+        private val iconIds = arrayOf(
+                R.id.text_random_wikipedia,
+                R.id.text_bookmark,
+                R.id.text_barcode_reader,
+                R.id.text_search,
+                R.id.text_browser,
+                R.id.text_launcher,
+                R.id.text_setting
+        )
+
+        private val dividerIds = arrayOf(
+                R.id.divider1,
+                R.id.divider2,
+                R.id.divider3,
+                R.id.divider4,
+                R.id.divider5,
+                R.id.divider6
+        )
+
     }
 }
