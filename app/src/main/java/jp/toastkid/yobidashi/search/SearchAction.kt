@@ -82,11 +82,10 @@ class SearchAction(
         }
 
         activityContext.startActivity(
-                SearchIntentBuilder(activityContext)
-                        .setCategory(category)
-                        .setQuery(query)
-                        .setCurrentUrl(currentUrl)
-                        .invoke()
+                MainActivity.makeBrowserIntent(
+                        activityContext,
+                        UrlFactory.make(activityContext, category, query, currentUrl)
+                )
         )
     }
 
