@@ -128,7 +128,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                             if (TextUtils.equals("Web search", item?.title)) {
                                 SelectedTextExtractor.withAction(this@CustomWebView) { word ->
                                     context?.let {
-                                        val url = UrlFactory.make(
+                                        val url = UrlFactory().make(
                                                 it,
                                                 PreferenceApplier(it).getDefaultSearchEngine(),
                                                 word

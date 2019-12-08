@@ -6,7 +6,7 @@ import android.net.Uri
 /**
  * @author toastkidjp
  */
-internal object UrlFactory {
+class UrlFactory {
 
     /**
      * Make search [Uri].
