@@ -630,14 +630,9 @@ class BrowserFragment : Fragment(),
     }
 
     private fun switchToolbarVisibility() {
-        val browserScreenMode = preferenceApplier.browserScreenMode()
-        if (browserScreenMode == ScreenMode.FULL_SCREEN) {
-            headerViewModel?.hide()
-            return
-        }
-        if (browserScreenMode == ScreenMode.EXPANDABLE
-                || browserScreenMode == ScreenMode.FIXED) {
-            headerViewModel?.show()
+        when (preferenceApplier.browserScreenMode()) {
+            ScreenMode.FULL_SCREEN -> headerViewModel?.hide()
+            ScreenMode.EXPANDABLE, ScreenMode.FIXED -> headerViewModel?.show()
         }
     }
 
