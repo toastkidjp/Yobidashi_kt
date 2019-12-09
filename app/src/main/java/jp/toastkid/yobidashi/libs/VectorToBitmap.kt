@@ -18,12 +18,15 @@ import androidx.core.content.ContextCompat
  */
 class VectorToBitmap(private val context: Context) {
 
-    operator fun invoke(@DrawableRes resVector: Int): Bitmap {
-        val drawable = ContextCompat.getDrawable(context, resVector)
-        val b = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888)
+    operator fun invoke(@DrawableRes resVector: Int): Bitmap? {
+        val drawable = ContextCompat.getDrawable(context, resVector) ?: return null
+        val b = Bitmap.createBitmap(
+                drawable.intrinsicWidth,
+                drawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+        )
         val c = Canvas(b)
-        drawable.setBounds(0, 0, c.getWidth(), c.getHeight())
+        drawable.setBounds(0, 0, c.width, c.height)
         drawable.draw(c)
         return b
     }
