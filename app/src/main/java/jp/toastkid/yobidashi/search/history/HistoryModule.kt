@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.search.history
 
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.facade.BaseModule
+import timber.log.Timber
 
 /**
  * Search history module.
@@ -32,12 +33,14 @@ class HistoryModule(
         private val binding: ModuleSearchHistoryBinding,
         searchCallback: (SearchHistory) -> Unit,
         onClickAdd: (SearchHistory) -> Unit
-) : BaseModule(binding.root) {
+) {
 
     /**
      * RecyclerView's moduleAdapter.
      */
     private val moduleAdapter: ModuleAdapter
+
+    var enable: Boolean = true
 
     /**
      * Last subscription.
@@ -52,13 +55,14 @@ class HistoryModule(
     init {
         binding.module = this
 
+        val context = binding.root.context
         binding.searchHistories.layoutManager =
-                LinearLayoutManager(context(), RecyclerView.VERTICAL, false)
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        val repository = DatabaseFinder().invoke(context()).searchHistoryRepository()
+        val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
 
         moduleAdapter = ModuleAdapter(
-                context(),
+                context,
                 repository,
                 searchCallback,
                 { visible -> if (visible) { show() } else { hide() } },
@@ -86,7 +90,7 @@ class HistoryModule(
      * Clear search history.
      */
     fun confirmClear() {
-        val activityContext = context()
+        val activityContext = binding.root.context
         if (activityContext is FragmentActivity) {
             ClearSearchHistoryDialogFragment().show(
                     activityContext.supportFragmentManager,
@@ -99,6 +103,34 @@ class HistoryModule(
         moduleAdapter.clear()
         hide()
     }
+
+    /**
+     * Show this module.
+     */
+    fun show() {
+        if (!binding.root.isVisible && enable) {
+            runOnMainThread { binding.root.isVisible = true }
+                    .addTo(disposables)
+        }
+    }
+
+    /**
+     * Hide this module.
+     */
+    fun hide() {
+        if (binding.root.isVisible) {
+            runOnMainThread { binding.root.isVisible = false }
+                    .addTo(disposables)
+        }
+    }
+
+    private fun runOnMainThread(action: () -> Unit) =
+            Completable.fromAction { action() }
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {},
+                            Timber::e
+                    )
 
     /**
      * Dispose last subscription.

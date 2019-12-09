@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bitmap
+<layer-list
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:gravity="center"
-    android:src="@mipmap/splash"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    />
+    android:opacity="translucent"
+    >
+    <item android:drawable="@color/filter_white_aa"/>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/splash"
+            />
+    </item>
+</layer-list>

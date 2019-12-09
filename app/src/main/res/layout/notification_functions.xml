@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    tools:background="@color/colorPrimary"
+    >
+
+    <FrameLayout
+        android:id="@+id/random_wikipedia"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_random_wikipedia"
+            style="@style/FunctionsNotificationImageStyle"
+            tools:srcCompat="@drawable/ic_wikipedia_white"
+            android:contentDescription="@string/wikipedia"
+            />
+
+        <TextView
+            android:id="@+id/text_random_wikipedia"
+            android:text="@string/wikipedia"
+            style="@style/FunctionsNotificationTextStyle"
+            tools:textColor="@color/white"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/divider1"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <FrameLayout
+        android:id="@+id/bookmark"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_bookmark"
+            style="@style/FunctionsNotificationImageStyle"
+            tools:srcCompat="@drawable/ic_bookmark"
+            android:contentDescription="@string/wikipedia"
+            />
+
+        <TextView
+            android:id="@+id/text_bookmark"
+            android:text="@string/title_bookmark"
+            style="@style/FunctionsNotificationTextStyle"
+            tools:textColor="@color/white"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/divider2"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <FrameLayout
+        android:id="@+id/barcode_reader"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_barcode_reader"
+            style="@style/FunctionsNotificationImageStyle"
+            tools:srcCompat="@drawable/ic_barcode"
+            android:contentDescription="@string/title_code_reader"
+            />
+
+        <TextView
+            android:id="@+id/text_barcode_reader"
+            android:text="@string/barcode"
+            style="@style/FunctionsNotificationTextStyle"
+            tools:textColor="@color/white"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/divider3"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <FrameLayout
+        android:id="@+id/search"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_search"
+            style="@style/FunctionsNotificationImageStyle"
+            tools:srcCompat="@drawable/ic_search_white"
+            android:contentDescription="@string/search"
+            />
+
+        <TextView
+            android:id="@+id/text_search"
+            android:text="@string/search"
+            style="@style/FunctionsNotificationTextStyle"
+            tools:textColor="@color/white"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/divider4"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <FrameLayout
+        android:id="@+id/browser"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_browser"
+            style="@style/FunctionsNotificationImageStyle"
+            tools:srcCompat="@drawable/ic_web"
+            android:contentDescription="@string/wikipedia"
+            />
+
+        <TextView
+            android:id="@+id/text_browser"
+            android:text="@string/title_browser"
+            style="@style/FunctionsNotificationTextStyle"
+            tools:textColor="@color/white"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/divider5"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <FrameLayout
+        android:id="@+id/launcher"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_launcher"
+            style="@style/FunctionsNotificationImageStyle"
+            tools:srcCompat="@drawable/ic_launcher"
+            android:contentDescription="@string/title_apps_launcher"
+            />
+
+        <TextView
+            android:id="@+id/text_launcher"
+            android:text="@string/launcher"
+            style="@style/FunctionsNotificationTextStyle"
+            tools:textColor="@color/white"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/divider6"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/white"
+        />
+
+    <FrameLayout
+        android:id="@+id/setting"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_transparent"
+        >
+
+        <ImageView
+            android:id="@+id/icon_setting"
+            style="@style/FunctionsNotificationImageStyle"
+            tools:srcCompat="@drawable/ic_settings"
+            android:contentDescription="@string/wikipedia"
+            />
+
+        <TextView
+            android:id="@+id/text_setting"
+            android:text="@string/action_settings"
+            style="@style/FunctionsNotificationTextStyle"
+            tools:textColor="@color/white"
+            />
+
+    </FrameLayout>
+
+</LinearLayout>
