@@ -70,10 +70,7 @@ import kotlin.math.min
  *
  * @author toastkidjp
  */
-class MainActivity :
-        AppCompatActivity(),
-        FragmentReplaceAction
-{
+class MainActivity : AppCompatActivity() {
 
     /**
      * Data binding object.
@@ -533,19 +530,6 @@ class MainActivity :
                 else -> fabPosition.second
             }
             it.animate().x(x).y(y).setDuration(10).start()
-        }
-    }
-
-    override fun action(c: Command) {
-        when (c) {
-            Command.OPEN_BROWSER -> {
-                replaceWithBrowser()
-                return
-            }
-            Command.OPEN_SEARCH -> {
-                startActivity(SearchActivity.makeIntent(this))
-                return
-            }
         }
     }
 
