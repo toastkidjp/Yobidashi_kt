@@ -72,8 +72,7 @@ import kotlin.math.min
  */
 class MainActivity :
         AppCompatActivity(),
-        FragmentReplaceAction,
-        ToolbarAction
+        FragmentReplaceAction
 {
 
     /**
@@ -157,6 +156,10 @@ class MainActivity :
                     view,
                     0
             )
+        })
+
+        headerViewModel.visibility.observe(this, Observer { isVisible ->
+            if (isVisible) showToolbar() else hideToolbar()
         })
     }
 
@@ -546,7 +549,7 @@ class MainActivity :
         }
     }
 
-    override fun hideToolbar() {
+    private fun hideToolbar() {
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> Unit
             ScreenMode.FULL_SCREEN -> {
@@ -567,7 +570,7 @@ class MainActivity :
         }
     }
 
-    override fun showToolbar() {
+    private fun showToolbar() {
         when (preferenceApplier.browserScreenMode()) {
             ScreenMode.FIXED -> {
                 binding.toolbar.visibility = View.VISIBLE
