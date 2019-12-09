@@ -5,6 +5,7 @@ import android.widget.RemoteViews
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.VectorToBitmap
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
@@ -47,7 +48,7 @@ class RemoteViewsFactory {
     ) = remoteViews.setInt(R.id.background, METHOD_NAME_SET_BACKGROUND_COLOR, backgroundColor)
 
     private fun setIcons(remoteViews: RemoteViews, context: Context, fontColor: Int) {
-        IconInitializer(context).let {
+        IconInitializer(VectorToBitmap(context)).let {
             it(remoteViews, fontColor, R.drawable.ic_wikipedia_white, R.id.icon_random_wikipedia)
             it(remoteViews, fontColor, R.drawable.ic_bookmark, R.id.icon_bookmark)
             it(remoteViews, fontColor, R.drawable.ic_barcode, R.id.icon_barcode_reader)
