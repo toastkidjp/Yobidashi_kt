@@ -1,9 +1,8 @@
 package jp.toastkid.yobidashi.appwidget.search
 
 import android.content.Context
-import androidx.annotation.ColorInt
 import android.widget.RemoteViews
-
+import androidx.annotation.ColorInt
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.intent.PendingIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -89,12 +88,13 @@ internal object RemoteViewsFactory {
      * @param remoteViews
      */
     private fun setTapActions(context: Context, remoteViews: RemoteViews) {
+        val pendingIntentFactory = PendingIntentFactory()
         remoteViews.setOnClickPendingIntent(
-                R.id.widget_search, PendingIntentFactory.makeSearchLauncher(context))
+                R.id.widget_search, pendingIntentFactory.makeSearchLauncher(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.widget_launcher, PendingIntentFactory.launcher(context))
+                R.id.widget_launcher, pendingIntentFactory.launcher(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.widget_barcode_reader, PendingIntentFactory.barcode(context))
+                R.id.widget_barcode_reader, pendingIntentFactory.barcode(context))
     }
 
 }

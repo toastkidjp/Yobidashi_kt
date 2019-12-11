@@ -6,8 +6,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
-import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
@@ -50,11 +48,7 @@ class SearchAction(
 
         val validUrl = Urls.isValidUrl(query)
 
-        if (preferenceApplier.useInternalBrowser()) {
-            withInternalBrowser(validUrl)
-        } else {
-            withChromeTabs(validUrl)
-        }
+        withInternalBrowser(validUrl)
         return disposable
     }
 
@@ -88,28 +82,6 @@ class SearchAction(
                 .setCategory(category)
                 .setQuery(query)
                 .setCurrentUrl(currentUrl)
-                .invoke()
-    }
-
-    /**
-     * Action with custom chrome tabs.
-     *
-     * @param validUrl passed query is URL.
-     */
-    private fun withChromeTabs(validUrl: Boolean) {
-        val colorPair: ColorPair = preferenceApplier.colorPair()
-
-        if (validUrl) {
-            CustomTabsFactory.make(activityContext, colorPair)
-                    .build()
-                    .launchUrl(activityContext, Uri.parse(query))
-            return
-        }
-        ChromeTabsSearchIntentLauncher(activityContext)
-                .setBackgroundColor(colorPair.bgColor())
-                .setFontColor(colorPair.fontColor())
-                .setCategory(category)
-                .setQuery(query)
                 .invoke()
     }
 

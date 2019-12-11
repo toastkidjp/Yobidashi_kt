@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.SeekBar
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -46,8 +47,12 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_browser, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         return binding.root
@@ -75,9 +80,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         binding.let {
             preferenceApplier.colorPair().setTo(it.homeButton)
             it.homeInputLayout.editText?.setText(preferenceApplier.homeUrl)
-
-            it.useInternalBrowserCheck.isChecked = preferenceApplier.useInternalBrowser()
-            it.useInternalBrowserCheck.jumpDrawablesToCurrentState()
 
             it.retainTabsCheck.isChecked = preferenceApplier.doesRetainTabs()
             it.retainTabsCheck.jumpDrawablesToCurrentState()
@@ -116,11 +118,12 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             })
             it.poolSizeValue.progress = preferenceApplier.poolSize - 1
 
-            it.valueBackgroundAlpha.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            it.valueBackgroundAlpha.setOnSeekBarChangeListener(
+                    object: SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
                     val newSize = bar?.progress ?: 0
                     preferenceApplier.setWebViewBackgroundAlpha(newSize.toFloat() / 100f)
-                    it.textBackgroundAlpha.setText((newSize).toString())
+                    it.textBackgroundAlpha.setText(newSize.toString())
                 }
 
                 override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -128,7 +131,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
             })
-            it.valueBackgroundAlpha.progress = (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
+            it.valueBackgroundAlpha.progress =
+                    (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
         }
 
         binding.browserExpand.screenMode?.let {
@@ -167,19 +171,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 }
             }
         }
-    }
-
-    /**
-     * Switch browser.
-     */
-    fun switchInternalBrowser() {
-        val newState = !preferenceApplier.useInternalBrowser()
-        preferenceApplier.setUseInternalBrowser(newState)
-        binding.useInternalBrowserCheck.isChecked = newState
-        @StringRes val messageId: Int
-                = if (newState) { R.string.message_use_internal_browser }
-        else { R.string.message_use_chrome }
-        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
     }
 
     /**
@@ -332,4 +323,11 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
     }
 
     override fun titleId() = R.string.subhead_setting_browser
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_setting_browser
+
+    }
 }

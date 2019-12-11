@@ -2,21 +2,21 @@ package jp.toastkid.yobidashi.about
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityAboutBinding
-import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
+import jp.toastkid.yobidashi.main.MainActivity
 
 /**
  * About this app.
@@ -75,9 +75,12 @@ class AboutThisAppActivity : AppCompatActivity() {
     }
 
     fun privacyPolicy() {
-        CustomTabsFactory.make(this, preferenceApplier.colorPair())
-                .build()
-                .launchUrl(this, Uri.parse(getString(R.string.link_privacy_policy)))
+        startActivity(
+                MainActivity.makeBrowserIntent(
+                        this,
+                        getString(R.string.link_privacy_policy).toUri()
+                )
+        )
     }
 
     fun aboutAuthorApp() {

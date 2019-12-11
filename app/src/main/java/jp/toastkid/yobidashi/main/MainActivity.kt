@@ -48,7 +48,6 @@ import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.libs.intent.CustomTabsFactory
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -228,13 +227,18 @@ class MainActivity :
         if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
             RandomWikipedia().fetchWithAction { title, uri ->
                 browserFragment.loadWithNewTab(uri)
+                Toaster.snackShort(
+                        binding.root,
+                        getString(R.string.message_open_random_wikipedia, title),
+                        preferenceApplier.colorPair()
+                )
             }
             return
         }
 
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
-                calledIntent.data?.let { loadUri(it, true) }
+                calledIntent.data?.let { loadUri(it) }
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {
@@ -363,21 +367,13 @@ class MainActivity :
      * Load Uri.
      *
      * @param uri
-     * @param shouldLoadInternal for avoiding infinite loop, default is false
      */
-    private fun loadUri(uri: Uri, shouldLoadInternal: Boolean = false) {
-        if (preferenceApplier.useInternalBrowser() || shouldLoadInternal) {
-            if (browserFragment.isVisible) {
-                browserFragment.loadWithNewTab(uri)
-                return
-            }
-            replaceWithBrowser(uri)
+    private fun loadUri(uri: Uri) {
+        if (browserFragment.isVisible) {
+            browserFragment.loadWithNewTab(uri)
             return
         }
-        CustomTabsFactory
-                .make(this, preferenceApplier.colorPair())
-                .build()
-                .launchUrl(this, uri)
+        replaceWithBrowser(uri)
     }
 
     /**
@@ -690,16 +686,6 @@ class MainActivity :
         private const val LAYOUT_ID = R.layout.activity_main
 
         /**
-         * For using daily alarm.
-         */
-        private const val KEY_EXTRA_MONTH = "month"
-
-        /**
-         * For using daily alarm.
-         */
-        private const val KEY_EXTRA_DOM = "dom"
-
-        /**
          * Make launcher intent.
          *
          * @param context
@@ -728,20 +714,6 @@ class MainActivity :
                     it.action = Intent.ACTION_VIEW
                     it.putExtra("random_wikipedia", true)
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                }
-
-        /**
-         * Make launcher intent.
-         * TODO remove
-         * @param context [Context]
-         * @param month Month
-         * @param dayOfMonth Day of month
-         * @return [Intent]
-         */
-        fun makeIntent(context: Context, month: Int, dayOfMonth: Int) = makeIntent(context)
-                .also {
-                    it.putExtra(KEY_EXTRA_MONTH, month)
-                    it.putExtra(KEY_EXTRA_DOM, dayOfMonth)
                 }
 
     }
