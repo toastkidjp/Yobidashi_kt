@@ -28,10 +28,8 @@ import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.HeaderViewModel
-import jp.toastkid.yobidashi.tab.TabAdapter
 import timber.log.Timber
 
 /**
@@ -75,11 +73,6 @@ class PdfModule(
      * LayoutManager.
      */
     private val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-    /**
-     * Use for save tab's thumbnail.
-     */
-    private val screenshotDir: FilesDir by lazy { TabAdapter.makeNewScreenshotDir(context) }
 
     private val disposables = CompositeDisposable()
 
