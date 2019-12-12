@@ -968,6 +968,7 @@ class BrowserFragment : Fragment(),
         headerViewModel?.show()
         browserModule.dispose()
         pageSearchPresenter.dispose()
+        pdfModule.dispose()
     }
 
     companion object {
