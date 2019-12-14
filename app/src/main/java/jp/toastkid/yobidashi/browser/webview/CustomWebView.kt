@@ -41,6 +41,10 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private val scrollConsumed = IntArray(2)
 
+    private val urlFactory = UrlFactory()
+
+    private val selectedTextExtractor = SelectedTextExtractor()
+
     override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
         if (motionEvent?.action == MotionEvent.ACTION_UP) {
             scrolling = 0
@@ -124,11 +128,10 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode =
             super.startActionMode(
                     object : ActionMode.Callback {
-                        private val urlFactory = UrlFactory()
 
                         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                             if (TextUtils.equals("Web search", item?.title)) {
-                                SelectedTextExtractor().withAction(this@CustomWebView) { word ->
+                                selectedTextExtractor.withAction(this@CustomWebView) { word ->
                                     context?.let {
                                         val url = urlFactory(
                                                 it,
