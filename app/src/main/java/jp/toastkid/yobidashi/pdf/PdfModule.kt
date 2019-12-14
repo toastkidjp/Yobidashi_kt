@@ -217,6 +217,15 @@ class PdfModule(
         headerViewModel?.replace(headerBinding.root)
     }
 
+    fun hide() {
+        if (binding.root.visibility == View.VISIBLE) {
+            Completable.fromAction {
+                binding.root.visibility = View.GONE
+            }.subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe({}, Timber::e)
+        }
+    }
+
     fun dispose() {
         disposables.clear()
     }
