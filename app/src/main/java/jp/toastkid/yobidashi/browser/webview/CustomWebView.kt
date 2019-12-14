@@ -128,7 +128,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
                         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                             if (TextUtils.equals("Web search", item?.title)) {
-                                SelectedTextExtractor.withAction(this@CustomWebView) { word ->
+                                SelectedTextExtractor().withAction(this@CustomWebView) { word ->
                                     context?.let {
                                         val url = urlFactory(
                                                 it,

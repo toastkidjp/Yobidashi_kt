@@ -6,13 +6,15 @@ import android.webkit.WebView
 /**
  * @author toastkidjp
  */
-object SelectedTextExtractor {
-
-    private const val SCRIPT = "(function(){ return document.getSelection().toString(); })()"
+class SelectedTextExtractor {
 
     fun withAction(webView: WebView, callback: (String) -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             webView.evaluateJavascript(SCRIPT) { callback(it) }
         }
+    }
+
+    companion object {
+        private const val SCRIPT = "(function(){ return document.getSelection().toString(); })()"
     }
 }
