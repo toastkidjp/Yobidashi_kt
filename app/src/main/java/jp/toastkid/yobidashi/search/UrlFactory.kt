@@ -6,7 +6,7 @@ import android.net.Uri
 /**
  * @author toastkidjp
  */
-internal object UrlFactory {
+class UrlFactory {
 
     /**
      * Make search [Uri].
@@ -16,7 +16,7 @@ internal object UrlFactory {
      * @param query
      * @param currentUrl
      */
-    fun make(context: Context, category: String, query: String, currentUrl: String? = null): Uri =
+    operator fun invoke(context: Context, category: String, query: String, currentUrl: String? = null): Uri =
             Uri.parse(SearchCategory.findByCategory(category).make(context, query, currentUrl))
 
 }

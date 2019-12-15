@@ -17,6 +17,7 @@ import jp.toastkid.yobidashi.tab.BackgroundTabQueue
  * @param activityContext Activity's context
  * @param category Search Category
  * @param query Search query (or URL)
+ * @param currentUrl Current URL for site-search
  * @param onBackground
  * @param saveHistory
  * @author toastkidjp
@@ -35,22 +36,26 @@ class SearchAction(
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(activityContext)
 
+    private val urlFactory = UrlFactory()
+
     /**
      * Invoke action.
      */
     operator fun invoke(): Disposable {
+        val disposable = insertToSearchHistory()
 
-        val disposable = if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
-            SearchHistoryInsertion.make(activityContext, category, query).insert()
-        } else {
-            Disposables.empty()
-        }
+        val validatedUrl = Urls.isValidUrl(query)
 
-        val validUrl = Urls.isValidUrl(query)
-
-        withInternalBrowser(validUrl)
+        withInternalBrowser(validatedUrl)
         return disposable
     }
+
+    private fun insertToSearchHistory(): Disposable =
+            if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
+                SearchHistoryInsertion.make(activityContext, category, query).insert()
+            } else {
+                Disposables.disposed()
+            }
 
     /**
      * Check passed query is not URL.
@@ -62,27 +67,26 @@ class SearchAction(
     /**
      * Action with internal browser.
      *
-     * @param validUrl passed query is URL.
+     * @param validatedUrl passed query is URL.
      */
-    private fun withInternalBrowser(validUrl: Boolean) {
-        if (validUrl) {
+    private fun withInternalBrowser(validatedUrl: Boolean) {
+        if (validatedUrl) {
             activityContext.startActivity(
                     MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
             return
         }
+
+        val searchUri = urlFactory(activityContext, category, query, currentUrl)
+
         if (onBackground) {
             BackgroundTabQueue.add(
                     activityContext.getString(R.string.title_tab_background_search, query),
-                    UrlFactory.make(activityContext, category, query, currentUrl)
+                    searchUri
             )
             return
         }
 
-        InternalSearchIntentLauncher(activityContext)
-                .setCategory(category)
-                .setQuery(query)
-                .setCurrentUrl(currentUrl)
-                .invoke()
+        activityContext.startActivity(MainActivity.makeBrowserIntent(activityContext, searchUri))
     }
 
 }

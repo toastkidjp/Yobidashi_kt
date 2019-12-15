@@ -12,37 +12,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-internal object RemoteViewsFactory {
-
-    /**
-     * Method name.
-     */
-    private const val METHOD_NAME_SET_BACKGROUND_COLOR: String = "setBackgroundColor"
-
-    /**
-     * Layout ID.
-     */
-    @LayoutRes
-    private const val APPWIDGET_LAYOUT_ID: Int = R.layout.notification_functions
-
-    private val iconIds = arrayOf(
-            R.id.text_random_wikipedia,
-            R.id.text_bookmark,
-            R.id.text_barcode_reader,
-            R.id.text_search,
-            R.id.text_browser,
-            R.id.text_launcher,
-            R.id.text_setting
-    )
-
-    private val dividerIds = arrayOf(
-            R.id.divider1,
-            R.id.divider2,
-            R.id.divider3,
-            R.id.divider4,
-            R.id.divider5,
-            R.id.divider6
-    )
+class RemoteViewsFactory {
 
     /**
      * Make RemoteViews.
@@ -50,7 +20,7 @@ internal object RemoteViewsFactory {
      * @param context
      * @return RemoteViews
      */
-    fun make(context: Context): RemoteViews {
+    operator fun invoke(context: Context): RemoteViews {
         val remoteViews = RemoteViews(context.packageName, APPWIDGET_LAYOUT_ID)
         TapActionInitializer()(context, remoteViews)
 
@@ -102,4 +72,37 @@ internal object RemoteViewsFactory {
         dividerIds.forEach { remoteViews.setInt(it, METHOD_NAME_SET_BACKGROUND_COLOR, fontColor) }
     }
 
+    companion object {
+
+        /**
+         * Method name.
+         */
+        private const val METHOD_NAME_SET_BACKGROUND_COLOR: String = "setBackgroundColor"
+
+        /**
+         * Layout ID.
+         */
+        @LayoutRes
+        private const val APPWIDGET_LAYOUT_ID: Int = R.layout.notification_functions
+
+        private val iconIds = arrayOf(
+                R.id.text_random_wikipedia,
+                R.id.text_bookmark,
+                R.id.text_barcode_reader,
+                R.id.text_search,
+                R.id.text_browser,
+                R.id.text_launcher,
+                R.id.text_setting
+        )
+
+        private val dividerIds = arrayOf(
+                R.id.divider1,
+                R.id.divider2,
+                R.id.divider3,
+                R.id.divider4,
+                R.id.divider5,
+                R.id.divider6
+        )
+
+    }
 }
