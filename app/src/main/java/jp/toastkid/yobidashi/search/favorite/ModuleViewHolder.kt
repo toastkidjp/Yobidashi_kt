@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.search.favorite
 
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
-import android.view.View
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 
 /**
@@ -24,9 +24,9 @@ internal class ModuleViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun setOnClickAdd(history: FavoriteSearch, onClickAdd: (FavoriteSearch) -> Unit) {
-        binding.searchHistoryAdd.setOnClickListener ({ _ ->
+        binding.searchHistoryAdd.setOnClickListener { _ ->
             onClickAdd(history)
-        })
+        }
     }
 
     fun switchDividerVisibility(visible: Boolean) {
