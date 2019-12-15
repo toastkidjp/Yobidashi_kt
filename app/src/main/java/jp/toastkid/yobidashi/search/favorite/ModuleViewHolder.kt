@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.view.View
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 
@@ -30,7 +31,7 @@ internal class ModuleViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
+        binding.divider.isVisible = visible
     }
 
     fun setAddIcon(@DrawableRes addIcon: Int) {
