@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.core.view.get
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 
 import io.reactivex.Completable
@@ -255,10 +256,10 @@ class TabAdapter(
             it.onResume()
             webViewContainer.addView(it)
 
-            val mainActivity = webViewContainer.context
-            if (mainActivity is MainActivity
+            val activity = webViewContainer.context
+            if (activity is FragmentActivity
                     && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
-                mainActivity.showToolbar()
+                ViewModelProviders.of(activity).get(HeaderViewModel::class.java).show()
             }
             browserModule.animate(slideUpFromBottom)
         }

@@ -54,7 +54,6 @@ import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
-import jp.toastkid.yobidashi.main.ToolbarAction
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
@@ -135,11 +134,6 @@ class BrowserFragment : Fragment(),
 
     private var headerBinding: ModuleBrowserHeaderBinding? = null
 
-    /**
-     * Toolbar action object.
-     */
-    private var toolbarAction: ToolbarAction? = null
-
     private val searchQueryExtractor = SearchQueryExtractor()
 
     /**
@@ -154,6 +148,8 @@ class BrowserFragment : Fragment(),
 
     private var menuViewModel: MenuViewModel? = null
 
+    private var headerViewModel: HeaderViewModel? = null
+
     /**
      * Find-in-page module.
      */
@@ -163,7 +159,6 @@ class BrowserFragment : Fragment(),
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        toolbarAction = context as ToolbarAction?
         activity?.let {
             rxPermissions = RxPermissions(it)
         }
@@ -254,9 +249,9 @@ class BrowserFragment : Fragment(),
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
-        val headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+        headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
 
-        headerViewModel.stopProgress.observe(activity, Observer { stop ->
+        headerViewModel?.stopProgress?.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
             }
@@ -264,7 +259,7 @@ class BrowserFragment : Fragment(),
             tabs.saveTabList()
         })
 
-        headerViewModel.progress.observe(activity, Observer { newProgress ->
+        headerViewModel?.progress?.observe(activity, Observer { newProgress ->
             if (70 < newProgress) {
                 binding?.progress?.isVisible = false
                 refreshThumbnail()
@@ -295,7 +290,7 @@ class BrowserFragment : Fragment(),
 
         browserHeaderViewModel.reset.observe(activity, Observer {
             val headerView = headerBinding?.root ?: return@Observer
-            headerViewModel.replace(headerView)
+            headerViewModel?.replace(headerView)
         })
     }
 
@@ -508,12 +503,6 @@ class BrowserFragment : Fragment(),
             else -> Unit
         }
     }
-    /**
-     * Hide footer with animation.
-     */
-    private fun hideHeader() {
-        toolbarAction?.hideToolbar()
-    }
 
     /**
      * Stop current tab's loading.
@@ -641,14 +630,9 @@ class BrowserFragment : Fragment(),
     }
 
     private fun switchToolbarVisibility() {
-        val browserScreenMode = preferenceApplier.browserScreenMode()
-        if (browserScreenMode == ScreenMode.FULL_SCREEN) {
-            hideHeader()
-            return
-        }
-        if (browserScreenMode == ScreenMode.EXPANDABLE
-                || browserScreenMode == ScreenMode.FIXED) {
-            toolbarAction?.showToolbar()
+        when (preferenceApplier.browserScreenMode()) {
+            ScreenMode.FULL_SCREEN -> headerViewModel?.hide()
+            ScreenMode.EXPANDABLE, ScreenMode.FIXED -> headerViewModel?.show()
         }
     }
 
@@ -981,7 +965,7 @@ class BrowserFragment : Fragment(),
         tabs.dispose()
         disposables.clear()
         searchWithClip.dispose()
-        toolbarAction?.showToolbar()
+        headerViewModel?.show()
         browserModule.dispose()
         pageSearchPresenter.dispose()
     }

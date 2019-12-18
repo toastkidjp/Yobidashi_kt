@@ -7,19 +7,16 @@
  */
 package jp.toastkid.yobidashi.notification.widget
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.widget.RemoteViews
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
-import androidx.core.content.ContextCompat
+import jp.toastkid.yobidashi.libs.VectorToBitmap
 
 /**
  * @author toastkidjp
  */
-class IconInitializer(private val context: Context) {
+class IconInitializer(private val vectorToBitmap: VectorToBitmap) {
 
     operator fun invoke(
             remoteViews: RemoteViews,
@@ -30,16 +27,6 @@ class IconInitializer(private val context: Context) {
         val bitmap = vectorToBitmap(iconResourceId)
         remoteViews.setImageViewBitmap(viewId, bitmap)
         remoteViews.setInt(viewId, METHOD_NAME_SET_COLOR_FILTER, fontColor)
-    }
-
-    private fun vectorToBitmap(@DrawableRes resVector: Int): Bitmap {
-        val drawable = ContextCompat.getDrawable(context, resVector)
-        val b = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888)
-        val c = Canvas(b)
-        drawable.setBounds(0, 0, c.getWidth(), c.getHeight())
-        drawable.draw(c)
-        return b
     }
 
     companion object {

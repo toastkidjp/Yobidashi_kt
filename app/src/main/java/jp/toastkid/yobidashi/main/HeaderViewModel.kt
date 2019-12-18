@@ -39,4 +39,12 @@ class HeaderViewModel : ViewModel() {
         _content.postValue(view)
     }
 
+    private val _visibility = MutableLiveData<Boolean>()
+
+    val visibility: LiveData<Boolean> = _visibility
+
+    fun show() = _visibility.postValue(true)
+
+    fun hide() = _visibility.postValue(false)
+
 }
