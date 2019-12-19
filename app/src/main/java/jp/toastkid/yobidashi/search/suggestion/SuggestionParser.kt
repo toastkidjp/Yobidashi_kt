@@ -8,7 +8,7 @@ import java.util.regex.Pattern
  *
  * @author toastkidjp
  */
-internal object SuggestionParser {
+internal class SuggestionParser {
 
     /**
      * For extracting suggested word.
