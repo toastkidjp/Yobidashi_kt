@@ -11,11 +11,6 @@ import java.util.regex.Pattern
 internal class SuggestionParser {
 
     /**
-     * For extracting suggested word.
-     */
-    private val PATTERN: Pattern = Pattern.compile("<suggestion data=\"(.+?)\"/>", Pattern.DOTALL)
-
-    /**
      * Parse response xml.
      * @param response
      *
@@ -33,4 +28,12 @@ internal class SuggestionParser {
         return suggestions
     }
 
+    companion object {
+
+        /**
+         * For extracting suggested word.
+         */
+        private val PATTERN: Pattern = Pattern.compile("<suggestion data=\"(.+?)\"/>", Pattern.DOTALL)
+
+    }
 }
