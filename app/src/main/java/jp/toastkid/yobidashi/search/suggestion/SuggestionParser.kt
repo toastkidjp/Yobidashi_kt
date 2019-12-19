@@ -16,7 +16,7 @@ internal class SuggestionParser {
      *
      * @return suggest words
      */
-    fun parse(response: String): List<String> {
+    operator fun invoke(response: String): List<String> {
         val split = response.split("</CompleteSuggestion>").dropLastWhile { it.isEmpty() }.toTypedArray()
         val suggestions = ArrayList<String>(split.size)
         for (line in split) {

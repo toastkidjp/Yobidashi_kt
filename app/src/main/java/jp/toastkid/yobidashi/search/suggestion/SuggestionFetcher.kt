@@ -44,7 +44,7 @@ class SuggestionFetcher {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body()?.string() ?: return
-                listCallback(suggestionParser.parse(body))
+                listCallback(suggestionParser(body))
             }
         })
     }
