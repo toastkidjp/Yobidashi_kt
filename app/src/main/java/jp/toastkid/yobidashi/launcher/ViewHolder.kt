@@ -1,8 +1,8 @@
 package jp.toastkid.yobidashi.launcher
 
 import android.graphics.drawable.Drawable
-import androidx.recyclerview.widget.RecyclerView
 import android.text.format.DateFormat
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
 import jp.toastkid.yobidashi.libs.HtmlCompat
@@ -44,7 +44,7 @@ internal class ViewHolder(private val binding: AppLauncherItemBinding)
      * @param targetSdkVersion
      */
     fun setTargetSdk(targetSdkVersion: Int) {
-        binding.appTargetSdk.text = HtmlCompat.fromHtml("<b>Target SDK</b>: " + targetSdkVersion)
+        binding.appTargetSdk.text = HtmlCompat.fromHtml("<b>Target SDK</b>: $targetSdkVersion")
     }
 
     /**
@@ -53,7 +53,7 @@ internal class ViewHolder(private val binding: AppLauncherItemBinding)
      * @param packageName
      */
     fun setPackageName(packageName: String) {
-        binding.appPackageName.text = HtmlCompat.fromHtml("<b>Package Name</b>: " + packageName)
+        binding.appPackageName.text = HtmlCompat.fromHtml("<b>Package Name</b>: $packageName")
     }
 
     /**
@@ -72,6 +72,6 @@ internal class ViewHolder(private val binding: AppLauncherItemBinding)
      * @param versionText
      */
     fun setVersionInformation(versionText: String) {
-        binding.appVersion.text = HtmlCompat.fromHtml("<b>Version</b>: " + versionText)
+        binding.appVersion.text = HtmlCompat.fromHtml("<b>Version</b>: $versionText")
     }
 }

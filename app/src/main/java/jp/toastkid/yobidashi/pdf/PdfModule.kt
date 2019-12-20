@@ -8,6 +8,7 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
@@ -18,16 +19,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
-import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.HeaderViewModel
-import jp.toastkid.yobidashi.tab.TabAdapter
+import timber.log.Timber
 
 /**
  * PDF Module.
@@ -40,7 +43,7 @@ import jp.toastkid.yobidashi.tab.TabAdapter
 class PdfModule(
         private val context: Context,
         private val parent: ViewGroup
-): BaseModule(parent) {
+) {
 
     private val layoutInflater = LayoutInflater.from(context)
 
@@ -71,10 +74,7 @@ class PdfModule(
      */
     private val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-    /**
-     * Use for save tab's thumbnail.
-     */
-    private val screenshotDir: FilesDir by lazy { TabAdapter.makeNewScreenshotDir(context) }
+    private val disposables = CompositeDisposable()
 
     private var headerViewModel: HeaderViewModel? = null
 
@@ -204,11 +204,21 @@ class PdfModule(
         RecyclerViewScroller.toBottom(binding.pdfImages, adapter.itemCount)
     }
 
-    override fun isVisible() = binding.root.isVisible
+    fun isVisible() = binding.root.isVisible
 
-    override fun show() {
-        super.show()
+    fun show() {
+        if (binding.root.visibility == View.GONE) {
+            Completable.fromAction {
+                binding.root.visibility = View.VISIBLE
+            }.subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe({}, Timber::e)
+                    .addTo(disposables)
+        }
         headerViewModel?.replace(headerBinding.root)
+    }
+
+    fun dispose() {
+        disposables.clear()
     }
 
 }

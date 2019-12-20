@@ -24,17 +24,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.facade.BaseModule
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import okio.Okio
+import timber.log.Timber
 import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -53,7 +55,7 @@ class EditorModule(
         private val binding: ModuleEditorBinding,
         private val intentLauncher: (Intent, Int) -> Unit,
         private val saveTabCallback: (File) -> Unit
-): BaseModule(binding.root) {
+) {
 
     /**
      * Preferences wrapper.
@@ -106,7 +108,7 @@ class EditorModule(
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         })
-        lastSavedTitle = context().getString(R.string.last_saved)
+        lastSavedTitle = context.getString(R.string.last_saved)
 
         menuBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
@@ -254,14 +256,14 @@ class EditorModule(
             return
         }
 
-        InputNameDialogFragment.show(context())
+        InputNameDialogFragment.show(binding.root.context)
     }
 
     /**
      * Save current text as other file.
      */
     fun saveAs() {
-        InputNameDialogFragment.show(context())
+        InputNameDialogFragment.show(binding.root.context)
     }
 
     /**
@@ -341,7 +343,7 @@ class EditorModule(
                 arrayOf(filePath),
                 null
         ) { _, _ ->  }
-        snackText("${context().getString(R.string.done_save)}: $filePath")
+        snackText("${context.getString(R.string.done_save)}: $filePath")
         setLastSaved(file.lastModified())
     }
 
@@ -457,7 +459,7 @@ class EditorModule(
      * @param fileName
      */
     fun assignNewFile(fileName: String) {
-        val context = context()
+        val context = binding.root.context
         var newFile = assignFile(context, fileName)
         while (newFile.exists()) {
             newFile = assignFile(
@@ -519,14 +521,24 @@ class EditorModule(
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
     }
 
-    override fun show() {
-        super.show()
+    fun show() {
+        if (binding.root.visibility == View.GONE) {
+            Completable.fromAction {
+                binding.root.visibility = View.VISIBLE
+            }.subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe({}, Timber::e)
+        }
         val view = menuBinding?.root ?: return
         headerViewModel?.replace(view)
     }
 
-    override fun hide() {
-        super.hide()
+    fun hide() {
+        if (binding.root.visibility == View.VISIBLE) {
+            Completable.fromAction {
+                binding.root.visibility = View.GONE
+            }.subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe({}, Timber::e)
+        }
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
