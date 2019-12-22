@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.R
@@ -66,6 +67,7 @@ class FavoriteSearchActivity : AppCompatActivity() {
         else -> true
     }
 
+    @StringRes
     private fun titleId(): Int = R.string.title_favorite_search
 
     companion object {
