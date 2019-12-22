@@ -13,5 +13,5 @@ class MultiByteCharacterInspector {
      * @param str
      * @return If passed 'str' contains multi byte character, return true.
      */
-    fun containsMultiByte(str: String): Boolean = str.length != str.toByteArray().size
+    operator fun invoke(str: String): Boolean = str.length != str.toByteArray().size
 }

@@ -68,7 +68,7 @@ class SuggestionFetcher {
      * @return language (ex: "ja", "en")
      */
     private fun findHl(query: String): String {
-        return if (multiByteCharacterInspector.containsMultiByte(query)) "ja" else Locale.getDefault().language
+        return if (multiByteCharacterInspector(query)) "ja" else Locale.getDefault().language
     }
 
     companion object {

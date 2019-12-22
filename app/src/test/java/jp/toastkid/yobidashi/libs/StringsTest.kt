@@ -17,15 +17,15 @@ class StringsTest {
     private val multiByteCharacterInspector = MultiByteCharacterInspector()
 
     /**
-     * Test of [MultiByteCharacterInspector.containsMultiByte].
+     * Test of [MultiByteCharacterInspector.invoke].
      */
     @Test
     fun test_containsMultiByte() {
-        assertTrue(multiByteCharacterInspector.containsMultiByte("おはよう"))
-        assertTrue(multiByteCharacterInspector.containsMultiByte("それはB"))
-        assertTrue(multiByteCharacterInspector.containsMultiByte("ＩＴ"))
-        assertFalse(multiByteCharacterInspector.containsMultiByte("abc"))
-        assertFalse(multiByteCharacterInspector.containsMultiByte("123"))
-        assertFalse(multiByteCharacterInspector.containsMultiByte("1b3"))
+        assertTrue(multiByteCharacterInspector("おはよう"))
+        assertTrue(multiByteCharacterInspector("それはB"))
+        assertTrue(multiByteCharacterInspector("ＩＴ"))
+        assertFalse(multiByteCharacterInspector("abc"))
+        assertFalse(multiByteCharacterInspector("123"))
+        assertFalse(multiByteCharacterInspector("1b3"))
     }
 }
