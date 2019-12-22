@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.search.suggestion
 
 import android.net.Uri
-import jp.toastkid.yobidashi.libs.Strings
+import jp.toastkid.yobidashi.libs.MultiByteCharacterInspector
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import okhttp3.Call
 import okhttp3.Callback
@@ -66,7 +66,7 @@ class SuggestionFetcher {
      * @return language (ex: "ja", "en")
      */
     private fun findHl(query: String): String {
-        return if (Strings.containsMultiByte(query)) "ja" else Locale.getDefault().language
+        return if (MultiByteCharacterInspector.containsMultiByte(query)) "ja" else Locale.getDefault().language
     }
 
     companion object {

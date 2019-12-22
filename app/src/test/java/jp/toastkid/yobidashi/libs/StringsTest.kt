@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 /**
- * [Strings]' test cases.
+ * [MultiByteCharacterInspector]' test cases.
  *
  * @author toastkidjp
  */
@@ -15,15 +15,15 @@ import org.robolectric.RobolectricTestRunner
 class StringsTest {
 
     /**
-     * Test of [Strings.containsMultiByte].
+     * Test of [MultiByteCharacterInspector.containsMultiByte].
      */
     @Test
     fun test_containsMultiByte() {
-        assertTrue(Strings.containsMultiByte("おはよう"))
-        assertTrue(Strings.containsMultiByte("それはB"))
-        assertTrue(Strings.containsMultiByte("ＩＴ"))
-        assertFalse(Strings.containsMultiByte("abc"))
-        assertFalse(Strings.containsMultiByte("123"))
-        assertFalse(Strings.containsMultiByte("1b3"))
+        assertTrue(MultiByteCharacterInspector.containsMultiByte("おはよう"))
+        assertTrue(MultiByteCharacterInspector.containsMultiByte("それはB"))
+        assertTrue(MultiByteCharacterInspector.containsMultiByte("ＩＴ"))
+        assertFalse(MultiByteCharacterInspector.containsMultiByte("abc"))
+        assertFalse(MultiByteCharacterInspector.containsMultiByte("123"))
+        assertFalse(MultiByteCharacterInspector.containsMultiByte("1b3"))
     }
 }
