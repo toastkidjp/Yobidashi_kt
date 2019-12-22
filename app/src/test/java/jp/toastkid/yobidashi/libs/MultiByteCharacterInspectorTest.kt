@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner
  * @author toastkidjp
  */
 @RunWith(RobolectricTestRunner::class)
-class StringsTest {
+class MultiByteCharacterInspectorTest {
 
     private val multiByteCharacterInspector = MultiByteCharacterInspector()
 
