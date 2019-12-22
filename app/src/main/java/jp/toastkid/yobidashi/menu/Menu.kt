@@ -40,8 +40,6 @@ enum class Menu(
 
     FIND_IN_PAGE(R.string.title_find_in_page, R.drawable.ic_find_in_page),
 
-    SCREENSHOT(R.string.title_screenshot, R.drawable.ic_camera),
-
     ARCHIVE(R.string.title_archive, R.drawable.ic_archive),
 
     VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
