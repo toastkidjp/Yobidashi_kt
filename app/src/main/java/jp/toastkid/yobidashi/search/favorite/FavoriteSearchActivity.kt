@@ -36,7 +36,7 @@ class FavoriteSearchActivity : AppCompatActivity() {
         binding.toolbar.also { toolbar ->
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener { finish() }
-            toolbar.setTitle(titleId())
+            toolbar.setTitle(titleId)
             toolbar.inflateMenu(R.menu.settings_toolbar_menu)
             toolbar.setOnMenuItemClickListener{ clickMenu(it) }
         }
@@ -67,13 +67,13 @@ class FavoriteSearchActivity : AppCompatActivity() {
         else -> true
     }
 
-    @StringRes
-    private fun titleId(): Int = R.string.title_favorite_search
-
     companion object {
 
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.activity_empty
+
+        @StringRes
+        private const val titleId: Int = R.string.title_favorite_search
 
         fun makeIntent(context: Context) =
                 Intent(context, FavoriteSearchActivity::class.java)
