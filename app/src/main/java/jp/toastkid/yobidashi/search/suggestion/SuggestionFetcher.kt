@@ -28,6 +28,8 @@ class SuggestionFetcher {
      */
     private val suggestionParser = SuggestionParser()
 
+    private val multiByteCharacterInspector = MultiByteCharacterInspector()
+
     /**
      * Fetch Web API result asynchronously.
      *
@@ -66,7 +68,7 @@ class SuggestionFetcher {
      * @return language (ex: "ja", "en")
      */
     private fun findHl(query: String): String {
-        return if (MultiByteCharacterInspector.containsMultiByte(query)) "ja" else Locale.getDefault().language
+        return if (multiByteCharacterInspector.containsMultiByte(query)) "ja" else Locale.getDefault().language
     }
 
     companion object {

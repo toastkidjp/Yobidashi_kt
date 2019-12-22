@@ -14,16 +14,18 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class StringsTest {
 
+    private val multiByteCharacterInspector = MultiByteCharacterInspector()
+
     /**
      * Test of [MultiByteCharacterInspector.containsMultiByte].
      */
     @Test
     fun test_containsMultiByte() {
-        assertTrue(MultiByteCharacterInspector.containsMultiByte("おはよう"))
-        assertTrue(MultiByteCharacterInspector.containsMultiByte("それはB"))
-        assertTrue(MultiByteCharacterInspector.containsMultiByte("ＩＴ"))
-        assertFalse(MultiByteCharacterInspector.containsMultiByte("abc"))
-        assertFalse(MultiByteCharacterInspector.containsMultiByte("123"))
-        assertFalse(MultiByteCharacterInspector.containsMultiByte("1b3"))
+        assertTrue(multiByteCharacterInspector.containsMultiByte("おはよう"))
+        assertTrue(multiByteCharacterInspector.containsMultiByte("それはB"))
+        assertTrue(multiByteCharacterInspector.containsMultiByte("ＩＴ"))
+        assertFalse(multiByteCharacterInspector.containsMultiByte("abc"))
+        assertFalse(multiByteCharacterInspector.containsMultiByte("123"))
+        assertFalse(multiByteCharacterInspector.containsMultiByte("1b3"))
     }
 }

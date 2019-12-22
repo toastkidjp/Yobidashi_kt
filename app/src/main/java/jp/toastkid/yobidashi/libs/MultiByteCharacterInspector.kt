@@ -5,7 +5,7 @@ package jp.toastkid.yobidashi.libs
  *
  * @author toastkidjp
  */
-object MultiByteCharacterInspector {
+class MultiByteCharacterInspector {
 
     /**
      * Return containing multi byte.
