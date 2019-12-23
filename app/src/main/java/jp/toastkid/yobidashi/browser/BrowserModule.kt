@@ -26,7 +26,6 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
-import jp.toastkid.yobidashi.browser.screenshots.Screenshot
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
@@ -384,14 +383,6 @@ class BrowserModule(
                 .filter { settings?.userAgentString != it }
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe { resetUserAgent(it) }
-    }
-
-    fun currentSnap() {
-        currentView()?.let {
-            it.invalidate()
-            it.buildDrawingCache()
-            Screenshot.save(it.context, it.drawingCache)
-        }
     }
 
     fun resetUserAgent(userAgentText: String) {

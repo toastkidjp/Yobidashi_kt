@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.annotation.Dimension
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -543,6 +544,8 @@ class EditorModule(
             saveToFile(path)
         }
     }
+
+    fun isVisible() = binding.root.isVisible
 
     companion object {
 

@@ -351,10 +351,6 @@ class BrowserFragment : Fragment(),
                 }
                 pageSearchPresenter.show(fragmentActivity)
             }
-            Menu.SCREENSHOT-> {
-                browserModule.currentSnap()
-                Toaster.snackShort(snackbarParent, R.string.message_done_save, colorPair())
-            }
             Menu.SHARE-> {
                 startActivity(
                         IntentFactory.makeShare(browserModule.currentTitle()
