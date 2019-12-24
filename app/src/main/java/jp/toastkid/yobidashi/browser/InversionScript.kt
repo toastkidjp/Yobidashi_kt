@@ -16,7 +16,7 @@ class InversionScript {
      * @param webView [WebView]
      */
     operator fun invoke(webView: WebView) {
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             webView.evaluateJavascript(SCRIPT, null)
         }
     }
