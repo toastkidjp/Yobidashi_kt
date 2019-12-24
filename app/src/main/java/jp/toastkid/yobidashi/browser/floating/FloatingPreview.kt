@@ -9,25 +9,25 @@ package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.core.view.isEmpty
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
+import timber.log.Timber
 
 /**
  * Floating preview.
@@ -40,12 +40,37 @@ class FloatingPreview(context: Context) {
 
     private val binding: PopupFloatingPreviewBinding
 
+    private var viewModel: FloatingPreviewViewModel? = null
+
     init {
         val layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_floating_preview, null, false)
         binding.preview = this
 
         popupWindow.contentView = binding.root
+
+        (context as? FragmentActivity)?.also {
+            viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
+
+            viewModel?.title?.observe(context, Observer {
+                Timber.i("title $it")
+                binding.title.text = it
+            })
+
+            viewModel?.icon?.observe(context, Observer {
+                binding.icon.setImageBitmap(it)
+            })
+
+            viewModel?.url?.observe(context, Observer {
+                Timber.i("url $it")
+                binding.url.text = it
+            })
+
+            viewModel?.open?.observe(context, Observer {
+                Timber.i("open $it")
+                openNewTabWithUrl(it)
+            })
+        }
 
         popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
 
@@ -81,7 +106,7 @@ class FloatingPreview(context: Context) {
         webView.isEnabled = true
         webView.onResume()
 
-        initializeWebView(webView, url)
+        WebViewInitializer()(webView, url)
 
         binding.previewContainer.addView(webView)
 
@@ -116,41 +141,12 @@ class FloatingPreview(context: Context) {
     fun openCurrentWithNewTab() {
         extractWebView()?.also {
             openNewTabWithUrl(it.url)
-            hide()
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
         binding.header.setOnTouchListener(SlidingTouchListener(binding.contentPanel))
-    }
-
-    /**
-     * Initialize WebView.
-     *
-     * @param webView [WebView]
-     * @param url URL string
-     */
-    private fun initializeWebView(webView: WebView, url: String) {
-        binding.url.text = url
-
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                openNewTabWithUrl(url)
-                return false
-            }
-        }
-        webView.webChromeClient = object : WebChromeClient() {
-            override fun onReceivedTitle(view: WebView?, title: String?) {
-                super.onReceivedTitle(view, title)
-                title?.let { binding.title.text = it }
-            }
-
-            override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
-                super.onReceivedIcon(view, icon)
-                icon?.let { binding.icon.setImageBitmap(icon) }
-            }
-        }
     }
 
     /**
@@ -164,6 +160,7 @@ class FloatingPreview(context: Context) {
             binding.previewBackground.visibility = View.GONE
             binding.previewContainer.removeAllViews()
         }
+        hide()
     }
 
     private fun extractWebView(): WebView? {
