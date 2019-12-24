@@ -157,8 +157,6 @@ class FloatingPreview(context: Context) {
     private fun openNewTabWithUrl(url: String) {
         binding.root.context?.let {
             it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
-            binding.previewBackground.visibility = View.GONE
-            binding.previewContainer.removeAllViews()
         }
         hide()
     }
