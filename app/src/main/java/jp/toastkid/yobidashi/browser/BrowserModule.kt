@@ -126,7 +126,7 @@ class BrowserModule(
             }
 
             if (preferenceApplier.useInversion) {
-                InversionScript(view)
+                InversionScript()(view)
             }
         }
 
