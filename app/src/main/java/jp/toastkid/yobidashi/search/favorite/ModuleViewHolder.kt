@@ -1,8 +1,9 @@
 package jp.toastkid.yobidashi.search.favorite
 
-import androidx.annotation.DrawableRes
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 
 /**
@@ -24,13 +25,13 @@ internal class ModuleViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun setOnClickAdd(history: FavoriteSearch, onClickAdd: (FavoriteSearch) -> Unit) {
-        binding.searchHistoryAdd.setOnClickListener ({ _ ->
+        binding.searchHistoryAdd.setOnClickListener { _ ->
             onClickAdd(history)
-        })
+        }
     }
 
     fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
+        binding.divider.isVisible = visible
     }
 
     fun setAddIcon(@DrawableRes addIcon: Int) {

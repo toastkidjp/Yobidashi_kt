@@ -111,6 +111,7 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
      */
     fun dispose() {
         disposable?.dispose()
+        disposables.clear()
     }
 
 }

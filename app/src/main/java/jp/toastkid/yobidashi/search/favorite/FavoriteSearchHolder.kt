@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.search.favorite
 import android.graphics.BitmapFactory
 import android.view.View
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemFavoriteSearchBinding
 
@@ -33,6 +34,6 @@ internal class FavoriteSearchHolder(private val binding: ItemFavoriteSearchBindi
     }
 
     fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
+        binding.divider.isVisible = visible
     }
 }
