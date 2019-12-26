@@ -34,8 +34,6 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.menu.Menu
-import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
@@ -54,6 +52,8 @@ import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.menu.Menu
+import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
@@ -924,11 +924,17 @@ class BrowserFragment : Fragment(),
 
     override fun currentTabIdFromTabList() = tabs.currentTabId()
 
-    override fun replaceTabFromTabList(tab: Tab) = tabs.replace(tab)
+    override fun replaceTabFromTabList(tab: Tab) {
+        tabs.replace(tab)
+        binding?.swipeRefresher?.isRefreshing = false
+    }
 
     override fun getTabByIndexFromTabList(position: Int): Tab? = tabs.getTabByIndex(position)
 
-    override fun closeTabFromTabList(position: Int) = tabs.closeTab(position)
+    override fun closeTabFromTabList(position: Int) {
+        tabs.closeTab(position)
+        binding?.swipeRefresher?.isRefreshing = false
+    }
 
     override fun getTabAdapterSizeFromTabList(): Int = tabs.size()
 
@@ -939,6 +945,7 @@ class BrowserFragment : Fragment(),
     override fun onPause() {
         super.onPause()
         editorModule.saveIfNeed()
+        binding?.swipeRefresher?.isRefreshing = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
