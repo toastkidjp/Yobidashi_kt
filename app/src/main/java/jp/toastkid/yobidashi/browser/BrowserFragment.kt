@@ -255,7 +255,7 @@ class BrowserFragment : Fragment(),
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
             }
-            binding?.swipeRefresher?.isRefreshing = false
+            stopSwipeRefresherLoading()
             tabs.saveTabList()
         })
 
@@ -926,14 +926,14 @@ class BrowserFragment : Fragment(),
 
     override fun replaceTabFromTabList(tab: Tab) {
         tabs.replace(tab)
-        binding?.swipeRefresher?.isRefreshing = false
+        stopSwipeRefresherLoading()
     }
 
     override fun getTabByIndexFromTabList(position: Int): Tab? = tabs.getTabByIndex(position)
 
     override fun closeTabFromTabList(position: Int) {
         tabs.closeTab(position)
-        binding?.swipeRefresher?.isRefreshing = false
+        stopSwipeRefresherLoading()
     }
 
     override fun getTabAdapterSizeFromTabList(): Int = tabs.size()
@@ -942,10 +942,14 @@ class BrowserFragment : Fragment(),
 
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
+    private fun stopSwipeRefresherLoading() {
+        binding?.swipeRefresher?.isRefreshing = false
+    }
+
     override fun onPause() {
         super.onPause()
         editorModule.saveIfNeed()
-        binding?.swipeRefresher?.isRefreshing = false
+        stopSwipeRefresherLoading()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
