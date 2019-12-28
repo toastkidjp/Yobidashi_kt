@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -77,6 +78,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier {
         )
     }
 
+    @StringRes
     override fun titleId() = R.string.title_settings_display
 
     companion object {
