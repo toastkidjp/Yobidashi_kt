@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.menu
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -14,21 +15,39 @@ import androidx.lifecycle.ViewModel
  * @author toastkidjp
  */
 class MenuViewModel : ViewModel() {
-    val click = MutableLiveData<Menu>()
-    val longClick = MutableLiveData<Menu>()
-    val visibility = MutableLiveData<Boolean>()
-    val tabCount = MutableLiveData<Int>()
-    val onResume = MutableLiveData<Unit>()
+    private val _click = MutableLiveData<Menu>()
+    private val _longClick = MutableLiveData<Menu>()
+    private val _visibility = MutableLiveData<Boolean>()
+    private val _tabCount = MutableLiveData<Int>()
+    private val _onResume = MutableLiveData<Unit>()
+
+    val click: LiveData<Menu> = _click
+    val longClick: LiveData<Menu> = _longClick
+    val visibility: LiveData<Boolean> = _visibility
+    val tabCount: LiveData<Int> = _tabCount
+    val onResume: LiveData<Unit> = _onResume
+
+    fun click(menu: Menu) {
+        _click.postValue(menu)
+    }
+
+    fun longClick(menu: Menu) {
+        _longClick.postValue(menu)
+    }
 
     fun tabCount(count: Int) {
-        this.tabCount.postValue(count)
+        _tabCount.postValue(count)
     }
 
     fun onResume() {
-        onResume.postValue(Unit)
+        _onResume.postValue(Unit)
+    }
+
+    fun switchVisibility(state: Boolean) {
+        _visibility.postValue(state)
     }
 
     fun close() {
-        visibility.postValue(false)
+        _visibility.postValue(false)
     }
 }
