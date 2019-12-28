@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.menu.MenuPos
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
@@ -29,6 +28,7 @@ import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.menu.MenuPos
 
 /**
  * Setting fragment of WEB browser.

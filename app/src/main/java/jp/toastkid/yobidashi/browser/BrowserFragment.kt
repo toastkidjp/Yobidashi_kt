@@ -157,6 +157,8 @@ class BrowserFragment : Fragment(),
 
     private lateinit var randomWikipedia: RandomWikipedia
 
+    private val activityOptionsFactory = ActivityOptionsFactory()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity?.let {
@@ -440,7 +442,7 @@ class BrowserFragment : Fragment(),
                         .addTo(disposables)
             }
             Menu.WEB_SEARCH-> {
-                search(ActivityOptionsFactory.makeScaleUpBundle(binding?.root as View))
+                search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
             }
             Menu.VOICE_SEARCH-> {
                 try {
@@ -487,7 +489,7 @@ class BrowserFragment : Fragment(),
             }
             Menu.ADD_BOOKMARK-> {
                 tabs.addBookmark {
-                    bookmark(ActivityOptionsFactory.makeScaleUpBundle(binding?.root as View))
+                    bookmark(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
                 }
             }
             Menu.EDITOR-> {
