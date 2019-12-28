@@ -50,6 +50,8 @@ internal class Adapter(private val context: Context, private val parent: View)
      */
     private val packageManager: PackageManager = context.packageManager
 
+    private val layoutInflater = LayoutInflater.from(context)
+
     /**
      * Disposables.
      */
@@ -63,7 +65,7 @@ internal class Adapter(private val context: Context, private val parent: View)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding = DataBindingUtil.inflate<AppLauncherItemBinding>(
-                LayoutInflater.from(parent.context),
+                layoutInflater,
                 R.layout.app_launcher_item,
                 parent,
                 false
