@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -69,5 +70,6 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         }
     }
 
+    @StringRes
     override fun titleId() = R.string.title_color_filter
 }
