@@ -69,12 +69,12 @@ class FavoriteSearchActivity : AppCompatActivity() {
     private fun titleId(): Int = R.string.title_favorite_search
 
     companion object {
-        @LayoutRes const val LAYOUT_ID: Int = R.layout.activity_empty
 
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, FavoriteSearchActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
+        @LayoutRes
+        private const val LAYOUT_ID: Int = R.layout.activity_empty
+
+        fun makeIntent(context: Context) =
+                Intent(context, FavoriteSearchActivity::class.java)
+                    .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
     }
 }

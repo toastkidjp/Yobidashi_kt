@@ -8,12 +8,7 @@ import java.util.regex.Pattern
  *
  * @author toastkidjp
  */
-internal object SuggestionParser {
-
-    /**
-     * For extracting suggested word.
-     */
-    private val PATTERN: Pattern = Pattern.compile("<suggestion data=\"(.+?)\"/>", Pattern.DOTALL)
+internal class SuggestionParser {
 
     /**
      * Parse response xml.
@@ -21,7 +16,7 @@ internal object SuggestionParser {
      *
      * @return suggest words
      */
-    fun parse(response: String): List<String> {
+    operator fun invoke(response: String): List<String> {
         val split = response.split("</CompleteSuggestion>").dropLastWhile { it.isEmpty() }.toTypedArray()
         val suggestions = ArrayList<String>(split.size)
         for (line in split) {
@@ -33,4 +28,12 @@ internal object SuggestionParser {
         return suggestions
     }
 
+    companion object {
+
+        /**
+         * For extracting suggested word.
+         */
+        private val PATTERN: Pattern = Pattern.compile("<suggestion data=\"(.+?)\"/>", Pattern.DOTALL)
+
+    }
 }

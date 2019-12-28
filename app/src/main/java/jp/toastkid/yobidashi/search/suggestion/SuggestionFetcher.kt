@@ -24,6 +24,11 @@ class SuggestionFetcher {
     private val httpClient = HttpClientFactory.withTimeout(3L)
 
     /**
+     * Response parser.
+     */
+    private val suggestionParser = SuggestionParser()
+
+    /**
      * Fetch Web API result asynchronously.
      *
      * @param query
@@ -39,7 +44,7 @@ class SuggestionFetcher {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body()?.string() ?: return
-                listCallback(SuggestionParser.parse(body))
+                listCallback(suggestionParser(body))
             }
         })
     }
