@@ -7,14 +7,14 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.annotation.StringRes
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -152,6 +152,7 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         binding.useAppSearchCheck.isChecked = newState
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_search
 
 }
