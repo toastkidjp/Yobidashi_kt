@@ -322,6 +322,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         binding.userAgentValue.text = userAgent.title()
     }
 
+    @StringRes
     override fun titleId() = R.string.subhead_setting_browser
 
     companion object {
