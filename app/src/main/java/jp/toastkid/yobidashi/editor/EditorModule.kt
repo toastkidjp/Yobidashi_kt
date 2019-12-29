@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
+import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -62,6 +63,8 @@ class EditorModule(
      * Preferences wrapper.
      */
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(binding.root.context)
+
+    private val thumbnailGenerator = ThumbnailGenerator()
 
     /**
      * Default date format holder.
@@ -448,11 +451,7 @@ class EditorModule(
      * @return Bitmap or null
      */
     @MainThread
-    fun makeThumbnail(): Bitmap? = binding.root.run {
-        invalidate()
-        buildDrawingCache()
-        return drawingCache
-    }
+    fun makeThumbnail(): Bitmap? = thumbnailGenerator(binding.root)
 
     /**
      * Assign new file object.

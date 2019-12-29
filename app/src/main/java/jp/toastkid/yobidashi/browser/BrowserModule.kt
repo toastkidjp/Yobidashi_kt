@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
 import jp.toastkid.yobidashi.libs.BitmapCompressor
+import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -51,6 +52,8 @@ class BrowserModule(
     private val preferenceApplier = PreferenceApplier(context)
 
     private val faviconApplier: FaviconApplier = FaviconApplier(context)
+
+    private val thumbnailGenerator = ThumbnailGenerator()
 
     /**
      * Loading flag.
@@ -288,11 +291,7 @@ class BrowserModule(
         currentView()?.findAllAsync(text)
     }
 
-    fun makeDrawingCache(): Bitmap? = currentView()?.let {
-        it.invalidate()
-        it.buildDrawingCache()
-        it.drawingCache
-    }
+    fun makeDrawingCache(): Bitmap? = thumbnailGenerator(currentView())
 
     /**
      * Simple delegation to [WebView].

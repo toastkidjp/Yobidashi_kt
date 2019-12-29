@@ -27,6 +27,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModulePdfBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
+import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.HeaderViewModel
@@ -73,6 +74,8 @@ class PdfModule(
      * LayoutManager.
      */
     private val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+    private val thumbnailGenerator = ThumbnailGenerator()
 
     private val disposables = CompositeDisposable()
 
@@ -161,9 +164,7 @@ class PdfModule(
      * Assign new thumbnail image.
      */
     fun makeThumbnail(): Bitmap? {
-        binding.pdfImages.invalidate()
-        binding.pdfImages.buildDrawingCache()
-        return binding.pdfImages.drawingCache
+        return thumbnailGenerator(binding.pdfImages)
     }
 
     /**
