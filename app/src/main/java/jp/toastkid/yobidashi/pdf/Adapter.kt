@@ -13,8 +13,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
-import jp.toastkid.yobidashi.libs.ImageCache
 
 /**
  * PDF Viewer's adapter.
@@ -41,10 +39,6 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
     private var pdfRenderer: PdfRenderer? = null
 
     private val pdfImageFactory = PdfImageFactory()
-
-    private val imageCache = ImageCache()
-
-    private val activityOptionsFactory = ActivityOptionsFactory()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false))
