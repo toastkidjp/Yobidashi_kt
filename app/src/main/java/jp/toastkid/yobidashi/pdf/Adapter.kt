@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.pdf
 
 import android.annotation.TargetApi
 import android.content.ContentResolver
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
@@ -18,7 +17,8 @@ import jp.toastkid.yobidashi.R
 /**
  * PDF Viewer's adapter.
  *
- * @param context [Context]
+ * @param layoutInflater Use for inflating item views
+ * @param contentResolver Use for loading PDF content
  * @author toastkidjp
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
