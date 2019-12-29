@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.annotation.TargetApi
+import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
@@ -21,12 +22,10 @@ import jp.toastkid.yobidashi.R
  * @author toastkidjp
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() {
-
-    /**
-     * Layout inflater.
-     */
-    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
+class Adapter(
+        private val layoutInflater: LayoutInflater,
+        private val contentResolver: ContentResolver
+): RecyclerView.Adapter<ViewHolder>() {
 
     /**
      * File descriptor.
@@ -60,7 +59,6 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
      * @throws SecurityException
      */
     fun load(uri: Uri) {
-        val contentResolver = context.contentResolver
         fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
         pdfRenderer?.close()
         pdfRenderer = fileDescriptor?.let { PdfRenderer(it) }

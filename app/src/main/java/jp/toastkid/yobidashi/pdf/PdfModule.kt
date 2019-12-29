@@ -67,7 +67,7 @@ class PdfModule(
     /**
      * Adapter.
      */
-    private val adapter = Adapter(context)
+    private val adapter = Adapter(LayoutInflater.from(context), context.contentResolver)
 
     /**
      * LayoutManager.
