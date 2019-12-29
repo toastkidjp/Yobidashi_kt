@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -16,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.ImageCache
-import jp.toastkid.yobidashi.libs.ImagePreviewActivity
-import java.io.File
 
 /**
  * PDF Viewer's adapter.
@@ -57,16 +54,6 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
             val image: Bitmap = pdfImageFactory(it.openPage(position))
             holder.setImage(image)
             holder.setIndicator(position + 1, itemCount)
-            holder.setOnLongTap(
-                    View.OnLongClickListener { view ->
-                        val cachedBitmapFile: File = imageCache.saveBitmap(context, image)
-                        context.startActivity(
-                                ImagePreviewActivity.makeIntent(context, cachedBitmapFile),
-                                activityOptionsFactory.makeScaleUpBundle(view).toBundle()
-                        )
-                        true
-                    }
-            )
         }
     }
 
