@@ -25,7 +25,7 @@ class ImageCache {
         if (!cacheDir.exists()) {
             cacheDir.mkdirs()
         }
-        val file = File(cacheDir, System.currentTimeMillis().toString() + ".png")
+        val file = File(cacheDir, System.currentTimeMillis().toString() + FILE_EXTENSION)
         Bitmaps.compress(bitmap, file)
         return file
     }
@@ -33,5 +33,8 @@ class ImageCache {
     companion object {
 
         private const val CHILD_DIRECTORY = "/cache_images"
+
+        private const val FILE_EXTENSION = ".png"
+
     }
 }
