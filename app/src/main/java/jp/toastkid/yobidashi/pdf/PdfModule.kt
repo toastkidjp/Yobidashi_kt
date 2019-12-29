@@ -218,10 +218,9 @@ class PdfModule(
     }
 
     fun hide() {
-        if (binding.root.visibility == View.VISIBLE) {
-            Completable.fromAction {
-                binding.root.visibility = View.GONE
-            }.subscribeOn(AndroidSchedulers.mainThread())
+        if (binding.root.isVisible) {
+            Completable.fromAction { binding.root.isVisible = false }
+                    .subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe({}, Timber::e)
                     .addTo(disposables)
         }
