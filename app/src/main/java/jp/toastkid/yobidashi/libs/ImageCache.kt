@@ -11,6 +11,8 @@ import java.io.File
  */
 class ImageCache {
 
+    private val bitmapCompressor = BitmapCompressor()
+
     /**
      * Save bitmap file to cache file.
      *
@@ -25,7 +27,7 @@ class ImageCache {
             cacheDir.mkdirs()
         }
         val file = File(cacheDir, System.currentTimeMillis().toString() + FILE_EXTENSION)
-        Bitmaps.compress(bitmap, file)
+        bitmapCompressor(bitmap, file)
         return file
     }
 

@@ -22,7 +22,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.editor.EditorModule
-import jp.toastkid.yobidashi.libs.Bitmaps
+import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -74,6 +74,8 @@ class TabAdapter(
 
     private var headerViewModel: HeaderViewModel? = null
 
+    private val bitmapCompressor = BitmapCompressor()
+
     init {
         val viewContext = webViewContainer.context
         tabsScreenshots = makeNewScreenshotDir(viewContext)
@@ -94,7 +96,7 @@ class TabAdapter(
         makeDrawingCache(currentTab)?.let {
             Completable.fromAction {
                 val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
-                Bitmaps.compress(it, file)
+                bitmapCompressor(it, file)
                 currentTab.thumbnailPath = file.absolutePath
             }.subscribeOn(Schedulers.io())
                     .subscribe({}, Timber::e)

@@ -29,7 +29,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
-import jp.toastkid.yobidashi.libs.Bitmaps
+import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -215,6 +215,9 @@ class BrowserModule(
     }
 
     private fun makeWebChromeClient(): WebChromeClient = object : WebChromeClient() {
+
+        private val bitmapCompressor = BitmapCompressor()
+
         override fun onProgressChanged(view: WebView, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
 
@@ -238,7 +241,7 @@ class BrowserModule(
         override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
             super.onReceivedIcon(view, favicon)
             if (view?.url != null && favicon != null) {
-                Bitmaps.compress(favicon, faviconApplier.assignFile(view.url))
+                bitmapCompressor(favicon, faviconApplier.assignFile(view.url))
             }
         }
 
