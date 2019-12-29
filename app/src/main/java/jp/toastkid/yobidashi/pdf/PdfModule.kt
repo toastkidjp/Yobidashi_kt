@@ -223,6 +223,7 @@ class PdfModule(
                 binding.root.visibility = View.GONE
             }.subscribeOn(AndroidSchedulers.mainThread())
                     .subscribe({}, Timber::e)
+                    .addTo(disposables)
         }
     }
 
