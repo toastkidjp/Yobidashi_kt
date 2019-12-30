@@ -15,6 +15,7 @@ import android.view.View
  */
 class ThumbnailGenerator {
 
+    @Suppress("DEPRECATION")
     operator fun invoke(view: View?): Bitmap? {
         view?.invalidate()
         view?.buildDrawingCache()
