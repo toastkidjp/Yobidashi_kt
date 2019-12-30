@@ -19,7 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -27,6 +27,8 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.list.Adapter
 import timber.log.Timber
@@ -60,10 +62,17 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
         binding.rssList.adapter = adapter
         binding.rssList.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        Maybe.fromCallable {
-            RssReaderApi().invoke("https://github.com/toastkidjp.private.atom?token=ADZ5PO4BMWEOOCACE6U6WEV4CXZK2")
+        val readRssReaderTargets = PreferenceApplier(fragmentActivity).readRssReaderTargets()
+
+        if (readRssReaderTargets.isEmpty()) {
+            Toaster.tShort(fragmentActivity, R.string.message_rss_reader_launch_failed)
+            activity?.supportFragmentManager?.popBackStack()
+            return
         }
+
+        Observable.fromIterable(readRssReaderTargets)
                 .subscribeOn(Schedulers.io())
+                .map { RssReaderApi().invoke(it) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { adapter.addAll(it?.items) },

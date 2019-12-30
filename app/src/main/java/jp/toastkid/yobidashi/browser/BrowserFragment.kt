@@ -319,6 +319,29 @@ class BrowserFragment : Fragment(),
                 startActivity(SettingsActivity.makeIntent(requireContext()))
                 return true
             }
+            R.id.add_rss -> {
+                browserModule.invokeAlternativeLinkExtraction(ValueCallback { urlsCsv ->
+                    val snackbarParent = binding?.root ?: return@ValueCallback
+                    val colorPair = colorPair()
+
+                    if (urlsCsv.contains(",")) {
+                        val split = urlsCsv.split(",")
+                        val first = split.first { Urls.isValidUrl(it) }
+                        preferenceApplier.saveNewRssReaderTargets(first)
+                        Toaster.snackShort(snackbarParent, "Added $first", colorPair)
+                        return@ValueCallback
+                    }
+
+                    if (Urls.isValidUrl(urlsCsv)) {
+                        preferenceApplier.saveNewRssReaderTargets(urlsCsv)
+                        Toaster.snackShort(snackbarParent, "Added $urlsCsv", colorPair)
+                        return@ValueCallback
+                    }
+
+                    Toaster.snackShort(snackbarParent, R.string.message_failure_extracting_rss, colorPair)
+                })
+                return true
+            }
             R.id.stop_loading -> {
                 stopCurrentLoading()
                 return true

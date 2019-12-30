@@ -7,9 +7,9 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.menu.MenuPos
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
+import jp.toastkid.yobidashi.menu.MenuPos
 import jp.toastkid.yobidashi.search.SearchCategory
 import java.io.File
 import java.util.*
@@ -40,7 +40,7 @@ class PreferenceApplier(private val context: Context) {
         EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_CURSOR_COLOR, EDITOR_HIGHLIGHT_COLOR,
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
-        WEB_VIEW_BACKGROUND_ALPHA
+        WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS
     }
 
     private val preferences: SharedPreferences =
@@ -368,6 +368,17 @@ class PreferenceApplier(private val context: Context) {
 
     fun getWebViewBackgroundAlpha(): Float {
         return preferences.getFloat(Key.WEB_VIEW_BACKGROUND_ALPHA.name, 0f)
+    }
+
+    fun readRssReaderTargets(): MutableSet<String> {
+        return preferences.getStringSet(Key.RSS_READER_TARGETS.name, mutableSetOf())
+                ?: mutableSetOf()
+    }
+
+    fun saveNewRssReaderTargets(url: String) {
+        val targets = readRssReaderTargets()
+        targets.add(url)
+        preferences.edit().putStringSet(Key.RSS_READER_TARGETS.name, targets).apply()
     }
 
     fun clear() {
