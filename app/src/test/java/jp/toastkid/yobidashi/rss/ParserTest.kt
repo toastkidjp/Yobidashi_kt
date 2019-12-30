@@ -55,4 +55,24 @@ class ParserTest {
         assertEquals("MWGuy starred Turaiiao/crush", item.title)
         assertEquals("https://github.com/Turaiiao/crush", item.link)
     }
+
+    @Test
+    fun testRdf() {
+        val stream = javaClass.classLoader?.getResourceAsStream("rss/sample.rdf")
+        if (stream == null) {
+            fail()
+            return
+        }
+        val rssText = Okio.buffer(Okio.source(stream)).readUtf8()
+
+        val rss = Parser().parse(rssText.split("\n"))
+        assertEquals("なんJ（まとめては）いかんのか？", rss.title)
+        assertEquals(3, rss.items.size)
+
+        val item = rss.items[0]
+        assertEquals("ヤクルト・塩見、ダーツを破壊ｗｗｗｗ", item.title)
+        assertEquals("http://blog.livedoor.jp/livejupiter2/archives/9541826.html", item.link)
+        println(item.content)
+    }
+
 }
