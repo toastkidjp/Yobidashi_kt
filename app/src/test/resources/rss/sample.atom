@@ -1,0 +1,1831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
+    <id>tag:github.com,2008:/toastkidjp</id>
+    <link type="text/html" rel="alternate" href="https://github.com/toastkidjp"/>
+    <link type="application/atom+xml" rel="self" href="https://github.com/toastkidjp.private.atom?token=ADZ5PO4BMWEOOCACE6U6WEV4CXZK2"/>
+    <title>Private Feed for toastkidjp</title>
+    <updated>2019-12-28T11:18:36Z</updated>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11170122479</id>
+        <published>2019-12-28T11:18:36Z</published>
+        <updated>2019-12-28T11:18:36Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/Turaiiao/crush"/>
+        <title type="html">MWGuy starred Turaiiao/crush</title>
+        <author>
+            <name>MWGuy</name>
+            <email>yousan4ik@gmail.com</email>
+            <uri>https://github.com/MWGuy</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars1.githubusercontent.com/u/29715808?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars2.githubusercontent.com/u/29715808?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MWGuy&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;MWGuy&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/Turaiiao/crush&quot; rel=&quot;noreferrer&quot;&gt;Turaiiao/crush&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-28T11:18:36Z&quot; class=&quot;no-wrap&quot;&gt;Dec 28, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/Turaiiao/crush&quot; rel=&quot;noreferrer&quot;&gt;Turaiiao/crush&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;The Crush Programming Language&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #dea584&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Rust&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/Turaiiao/crush/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;3&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 29&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11169989946</id>
+        <published>2019-12-28T10:15:37Z</published>
+        <updated>2019-12-28T10:15:37Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/angelabauer"/>
+        <title type="html">evanhutomo started following angelabauer</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/angelabauer&quot; rel=&quot;noreferrer&quot;&gt;angelabauer&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-28T10:15:37Z&quot; class=&quot;no-wrap&quot;&gt;Dec 28, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;angelabauer&quot; href=&quot;/angelabauer&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;angelabauer&quot; src=&quot;https://avatars2.githubusercontent.com/u/8798027?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/angelabauer&quot; rel=&quot;noreferrer&quot;&gt;Angela Yu&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/angelabauer&quot; rel=&quot;noreferrer&quot;&gt;angelabauer&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;Medical doctor. iOS Developer. Founder of the App Brewery. Teaching 250,000 students how to code.&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/angelabauer?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;17 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/angelabauer?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;1.3k followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11164018690</id>
+        <published>2019-12-27T02:28:24Z</published>
+        <updated>2019-12-27T02:28:24Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/colder-is-better"/>
+        <title type="html">MItsutoshiNAKANO started following colder-is-better</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/colder-is-better&quot; rel=&quot;noreferrer&quot;&gt;colder-is-better&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-27T02:28:24Z&quot; class=&quot;no-wrap&quot;&gt;Dec 27, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;colder-is-better&quot; href=&quot;/colder-is-better&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;colder-is-better&quot; src=&quot;https://avatars2.githubusercontent.com/u/20104288?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/colder-is-better&quot; rel=&quot;noreferrer&quot;&gt;Christos Varelas&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/colder-is-better&quot; rel=&quot;noreferrer&quot;&gt;colder-is-better&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;QA Engineer for Software Maintenance &lt;a class=&quot;user-mention&quot; data-hovercard-type=&quot;organization&quot; data-hovercard-url=&quot;/orgs/SUSE/hovercard&quot; href=&quot;https://github.com/SUSE&quot; rel=&quot;noreferrer&quot;&gt;@SUSE&lt;/a&gt; &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/colder-is-better?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;11 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/colder-is-better?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;13 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11164018403</id>
+        <published>2019-12-27T02:28:19Z</published>
+        <updated>2019-12-27T02:28:19Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/colder-is-better/vagrant"/>
+        <title type="html">MItsutoshiNAKANO starred colder-is-better/vagrant</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/colder-is-better/vagrant&quot; rel=&quot;noreferrer&quot;&gt;colder-is-better/vagrant&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-27T02:28:19Z&quot; class=&quot;no-wrap&quot;&gt;Dec 27, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/colder-is-better/vagrant&quot; rel=&quot;noreferrer&quot;&gt;colder-is-better/vagrant&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;openSUSE for Vagrant&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #89e051&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Shell&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/colder-is-better/vagrant/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;1&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 27&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11160996739</id>
+        <published>2019-12-26T11:56:08Z</published>
+        <updated>2019-12-26T11:56:08Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/OpenEmu/OpenEmu"/>
+        <title type="html">evanhutomo starred OpenEmu/OpenEmu</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/OpenEmu/OpenEmu&quot; rel=&quot;noreferrer&quot;&gt;OpenEmu/OpenEmu&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-26T11:56:08Z&quot; class=&quot;no-wrap&quot;&gt;Dec 26, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/OpenEmu/OpenEmu&quot; rel=&quot;noreferrer&quot;&gt;OpenEmu/OpenEmu&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;
+            &lt;g-emoji class=&quot;g-emoji&quot; alias=&quot;joystick&quot; fallback-src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f579.png&quot;&gt;🕹&lt;/g-emoji&gt; Retro video game emulation for macOS&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #438eff&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Objective-C&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/OpenEmu/OpenEmu/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;10.9k&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 29&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11159253320</id>
+        <published>2019-12-26T04:10:39Z</published>
+        <updated>2019-12-26T04:10:39Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/davidzchen"/>
+        <title type="html">evanhutomo started following davidzchen</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/davidzchen&quot; rel=&quot;noreferrer&quot;&gt;davidzchen&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-26T04:10:39Z&quot; class=&quot;no-wrap&quot;&gt;Dec 26, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;davidzchen&quot; href=&quot;/davidzchen&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;davidzchen&quot; src=&quot;https://avatars1.githubusercontent.com/u/5283042?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/davidzchen&quot; rel=&quot;noreferrer&quot;&gt;David Z. Chen&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/davidzchen&quot; rel=&quot;noreferrer&quot;&gt;davidzchen&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/davidzchen?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;95 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/davidzchen?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;197 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11155847206</id>
+        <published>2019-12-25T03:06:00Z</published>
+        <updated>2019-12-25T03:06:00Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/rpurdie"/>
+        <title type="html">evanhutomo started following rpurdie</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/rpurdie&quot; rel=&quot;noreferrer&quot;&gt;rpurdie&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-25T03:06:00Z&quot; class=&quot;no-wrap&quot;&gt;Dec 25, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;rpurdie&quot; href=&quot;/rpurdie&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;rpurdie&quot; src=&quot;https://avatars3.githubusercontent.com/u/1184070?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/rpurdie&quot; rel=&quot;noreferrer&quot;&gt;Richard Purdie&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/rpurdie&quot; rel=&quot;noreferrer&quot;&gt;rpurdie&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/rpurdie?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;5 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/rpurdie?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;22 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11155773311</id>
+        <published>2019-12-25T02:34:24Z</published>
+        <updated>2019-12-25T02:34:24Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/devspace/awesome-github-templates"/>
+        <title type="html">evanhutomo starred devspace/awesome-github-templates</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/devspace/awesome-github-templates&quot; rel=&quot;noreferrer&quot;&gt;devspace/awesome-github-templates&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-25T02:34:24Z&quot; class=&quot;no-wrap&quot;&gt;Dec 25, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/devspace/awesome-github-templates&quot; rel=&quot;noreferrer&quot;&gt;devspace/awesome-github-templates&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;
+            &lt;img class=&quot;emoji&quot; title=&quot;:octocat:&quot; alt=&quot;:octocat:&quot; src=&quot;https://github.githubassets.com/images/icons/emoji/octocat.png&quot; height=&quot;20&quot; width=&quot;20&quot; align=&quot;absmiddle&quot;&gt; Curated list of GitHub Issues and Pull Requests templates&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/devspace/awesome-github-templates/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;916&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 28&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11155676391</id>
+        <published>2019-12-25T01:51:57Z</published>
+        <updated>2019-12-25T01:51:57Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/muesli"/>
+        <title type="html">evanhutomo started following muesli</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/muesli&quot; rel=&quot;noreferrer&quot;&gt;muesli&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-25T01:51:57Z&quot; class=&quot;no-wrap&quot;&gt;Dec 25, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;muesli&quot; href=&quot;/muesli&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;muesli&quot; src=&quot;https://avatars2.githubusercontent.com/u/146378?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/muesli&quot; rel=&quot;noreferrer&quot;&gt;Christian Muehlhaeuser&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/muesli&quot; rel=&quot;noreferrer&quot;&gt;muesli&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;#Gopher who works on Beehive, smartcrop, gopass, elvish, Knoxite, Tomahawk and KDE. Last.fm, Amarok, Hatchet &amp;amp; Nokia Alumnus.&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/muesli?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;250 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/muesli?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;573 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11153123803</id>
+        <published>2019-12-24T10:55:44Z</published>
+        <updated>2019-12-24T10:55:44Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/beryx/badass-jlink-plugin"/>
+        <title type="html">MWGuy starred beryx/badass-jlink-plugin</title>
+        <author>
+            <name>MWGuy</name>
+            <email>yousan4ik@gmail.com</email>
+            <uri>https://github.com/MWGuy</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars1.githubusercontent.com/u/29715808?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars2.githubusercontent.com/u/29715808?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MWGuy&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;MWGuy&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/beryx/badass-jlink-plugin&quot; rel=&quot;noreferrer&quot;&gt;beryx/badass-jlink-plugin&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-24T10:55:44Z&quot; class=&quot;no-wrap&quot;&gt;Dec 24, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/beryx/badass-jlink-plugin&quot; rel=&quot;noreferrer&quot;&gt;beryx/badass-jlink-plugin&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;Create a custom runtime image of your modular application&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #e69f56&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Groovy&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/beryx/badass-jlink-plugin/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;111&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 27&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11152467521</id>
+        <published>2019-12-24T08:45:46Z</published>
+        <updated>2019-12-24T08:45:46Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/ffwff/lilith"/>
+        <title type="html">MWGuy starred ffwff/lilith</title>
+        <author>
+            <name>MWGuy</name>
+            <email>yousan4ik@gmail.com</email>
+            <uri>https://github.com/MWGuy</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars1.githubusercontent.com/u/29715808?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars2.githubusercontent.com/u/29715808?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MWGuy&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;MWGuy&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/ffwff/lilith&quot; rel=&quot;noreferrer&quot;&gt;ffwff/lilith&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-24T08:45:46Z&quot; class=&quot;no-wrap&quot;&gt;Dec 24, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/ffwff/lilith&quot; rel=&quot;noreferrer&quot;&gt;ffwff/lilith&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;x86-64 os made in crystal&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #000100&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Crystal&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/ffwff/lilith/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;827&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 29&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11150651596</id>
+        <published>2019-12-23T23:50:06Z</published>
+        <updated>2019-12-23T23:50:06Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/masahir0y"/>
+        <title type="html">evanhutomo started following masahir0y</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/masahir0y&quot; rel=&quot;noreferrer&quot;&gt;masahir0y&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-23T23:50:06Z&quot; class=&quot;no-wrap&quot;&gt;Dec 24, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;masahir0y&quot; href=&quot;/masahir0y&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;masahir0y&quot; src=&quot;https://avatars0.githubusercontent.com/u/781636?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/masahir0y&quot; rel=&quot;noreferrer&quot;&gt;Masahiro Yamada&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/masahir0y&quot; rel=&quot;noreferrer&quot;&gt;masahir0y&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;Embedded Linux Developer&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/masahir0y?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;11 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/masahir0y?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;74 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:CreateEvent/11145090555</id>
+        <published>2019-12-23T05:04:35Z</published>
+        <updated>2019-12-23T05:04:35Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/victwise/arkitFirst//"/>
+        <title type="html">victwise created a repository victwise/arkitFirst</title>
+        <author>
+            <name>victwise</name>
+            <email>victor.m.diniz@gmail.com</email>
+            <uri>https://github.com/victwise</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/7249585?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;repo&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- create --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/victwise&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/7249585?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@victwise&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/victwise&quot; rel=&quot;noreferrer&quot;&gt;victwise&lt;/a&gt;
+
+            created a
+            repository
+
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/victwise/arkitFirst&quot; rel=&quot;noreferrer&quot;&gt;victwise/arkitFirst&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-23T05:04:35Z&quot; class=&quot;no-wrap&quot;&gt;Dec 23, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/victwise/arkitFirst&quot; rel=&quot;noreferrer&quot;&gt;victwise/arkitFirst&lt;/a&gt;
+            &lt;/div&gt;
+
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span&gt;Updated Dec 23&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11145089569</id>
+        <published>2019-12-23T05:04:18Z</published>
+        <updated>2019-12-23T05:04:18Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/mattn"/>
+        <title type="html">evanhutomo started following mattn</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/mattn&quot; rel=&quot;noreferrer&quot;&gt;mattn&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-23T05:04:18Z&quot; class=&quot;no-wrap&quot;&gt;Dec 23, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;mattn&quot; href=&quot;/mattn&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;mattn&quot; src=&quot;https://avatars0.githubusercontent.com/u/10111?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/mattn&quot; rel=&quot;noreferrer&quot;&gt;mattn&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/mattn&quot; rel=&quot;noreferrer&quot;&gt;mattn&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;Long-time Go user &amp;amp; contributor, and author of many Go tools, database drivers including go-sqlite3, go-oci8 etc. Also vim plugin author of emmet-vim or etc.&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/mattn?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;1495 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/mattn?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;5.5k followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11145085158</id>
+        <published>2019-12-23T05:02:56Z</published>
+        <updated>2019-12-23T05:02:56Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/kazukazuinaina/Weather.vim"/>
+        <title type="html">evanhutomo starred kazukazuinaina/Weather.vim</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/kazukazuinaina/Weather.vim&quot; rel=&quot;noreferrer&quot;&gt;kazukazuinaina/Weather.vim&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-23T05:02:56Z&quot; class=&quot;no-wrap&quot;&gt;Dec 23, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/kazukazuinaina/Weather.vim&quot; rel=&quot;noreferrer&quot;&gt;kazukazuinaina/Weather.vim&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;This is a Vim plugin to know the weather with Vim.&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #199f4b&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Vim script&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/kazukazuinaina/Weather.vim/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;8&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 25&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11144429691</id>
+        <published>2019-12-23T01:28:56Z</published>
+        <updated>2019-12-23T01:28:56Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/imrenagi"/>
+        <title type="html">evanhutomo started following imrenagi</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/imrenagi&quot; rel=&quot;noreferrer&quot;&gt;imrenagi&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-23T01:28:56Z&quot; class=&quot;no-wrap&quot;&gt;Dec 23, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;imrenagi&quot; href=&quot;/imrenagi&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;imrenagi&quot; src=&quot;https://avatars1.githubusercontent.com/u/5112284?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/imrenagi&quot; rel=&quot;noreferrer&quot;&gt;Imre Nagi&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/imrenagi&quot; rel=&quot;noreferrer&quot;&gt;imrenagi&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/imrenagi?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;64 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/imrenagi?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;73 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11144425980</id>
+        <published>2019-12-23T01:27:35Z</published>
+        <updated>2019-12-23T01:27:35Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/abhijithvijayan/web-extension-starter"/>
+        <title type="html">evanhutomo starred abhijithvijayan/web-extension-starter</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/abhijithvijayan/web-extension-starter&quot; rel=&quot;noreferrer&quot;&gt;abhijithvijayan/web-extension-starter&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-23T01:27:35Z&quot; class=&quot;no-wrap&quot;&gt;Dec 23, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/abhijithvijayan/web-extension-starter&quot; rel=&quot;noreferrer&quot;&gt;abhijithvijayan/web-extension-starter&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;
+            &lt;g-emoji class=&quot;g-emoji&quot; alias=&quot;desktop_computer&quot; fallback-src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f5a5.png&quot;&gt;🖥&lt;/g-emoji&gt;&lt;g-emoji class=&quot;g-emoji&quot; alias=&quot;bulb&quot; fallback-src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png&quot;&gt;💡&lt;/g-emoji&gt; Web Extension starter to build &quot;Write Once Write on any Browser&quot; extension&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #f1e05a&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;JavaScript&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/abhijithvijayan/web-extension-starter/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;512&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/abhijithvijayan/web-extension-starter/issues?q=label%3A%22help+wanted%22+is%3Aopen+is%3Aissue&quot; rel=&quot;noreferrer&quot;&gt;1 issue needs help&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;span&gt;Updated Dec 29&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11143469072</id>
+        <published>2019-12-22T17:40:32Z</published>
+        <updated>2019-12-22T17:40:32Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/meizuosc"/>
+        <title type="html">MWGuy started following meizuosc</title>
+        <author>
+            <name>MWGuy</name>
+            <email>yousan4ik@gmail.com</email>
+            <uri>https://github.com/MWGuy</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars1.githubusercontent.com/u/29715808?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars2.githubusercontent.com/u/29715808?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MWGuy&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;MWGuy&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/meizuosc&quot; rel=&quot;noreferrer&quot;&gt;meizuosc&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-22T17:40:32Z&quot; class=&quot;no-wrap&quot;&gt;Dec 23, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;meizuosc&quot; href=&quot;/meizuosc&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;meizuosc&quot; src=&quot;https://avatars0.githubusercontent.com/u/5274918?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/meizuosc&quot; rel=&quot;noreferrer&quot;&gt;MEIZU&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/meizuosc&quot; rel=&quot;noreferrer&quot;&gt;meizuosc&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/meizuosc?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;15 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/meizuosc?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;394 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11142862988</id>
+        <published>2019-12-22T13:21:11Z</published>
+        <updated>2019-12-22T13:21:11Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/ditanh97"/>
+        <title type="html">evanhutomo started following ditanh97</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/ditanh97&quot; rel=&quot;noreferrer&quot;&gt;ditanh97&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-22T13:21:11Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;ditanh97&quot; href=&quot;/ditanh97&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;ditanh97&quot; src=&quot;https://avatars0.githubusercontent.com/u/51126784?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/ditanh97&quot; rel=&quot;noreferrer&quot;&gt;Dita Nurhalimah&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/ditanh97&quot; rel=&quot;noreferrer&quot;&gt;ditanh97&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/ditanh97?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;8 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/ditanh97?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;11 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11142555507</id>
+        <published>2019-12-22T10:51:12Z</published>
+        <updated>2019-12-22T10:51:12Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/rhinstaller/anaconda"/>
+        <title type="html">MItsutoshiNAKANO starred rhinstaller/anaconda</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/rhinstaller/anaconda&quot; rel=&quot;noreferrer&quot;&gt;rhinstaller/anaconda&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-22T10:51:12Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/rhinstaller/anaconda&quot; rel=&quot;noreferrer&quot;&gt;rhinstaller/anaconda&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;Graphical system installer&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #3572A5&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Python&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/rhinstaller/anaconda/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;257&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 22&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11142228450</id>
+        <published>2019-12-22T07:51:03Z</published>
+        <updated>2019-12-22T07:51:03Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/fgrehm/vagrant-lxc"/>
+        <title type="html">MItsutoshiNAKANO starred fgrehm/vagrant-lxc</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/fgrehm/vagrant-lxc&quot; rel=&quot;noreferrer&quot;&gt;fgrehm/vagrant-lxc&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-22T07:51:03Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/fgrehm/vagrant-lxc&quot; rel=&quot;noreferrer&quot;&gt;fgrehm/vagrant-lxc&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;LXC provider for Vagrant&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #701516&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Ruby&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/fgrehm/vagrant-lxc/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;1.2k&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 22&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:ForkEvent/11141472143</id>
+        <published>2019-12-21T23:08:41Z</published>
+        <updated>2019-12-21T23:08:41Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/MItsutoshiNAKANO/packer-centos"/>
+        <title type="html">MItsutoshiNAKANO forked MItsutoshiNAKANO/packer-centos from SkypLabs/packer-centos</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;fork&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- fork --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+
+            forked
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; title=&quot;MItsutoshiNAKANO/packer-centos&quot; href=&quot;/MItsutoshiNAKANO/packer-centos&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO/packer-centos&lt;/a&gt;
+            from
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/SkypLabs/packer-centos&quot; rel=&quot;noreferrer&quot;&gt;SkypLabs/packer-centos&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T23:08:41Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/SkypLabs/packer-centos&quot; rel=&quot;noreferrer&quot;&gt;SkypLabs/packer-centos&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 repo-description&quot;&gt;
+            &lt;p&gt;Create CentOS images for different hypervisors with Packer&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #89e051&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Shell&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/SkypLabs/packer-centos/stargazers&quot; rel=&quot;noreferrer&quot;&gt;
+            &lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;13
+            &lt;/a&gt;              &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 22&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11141447817</id>
+        <published>2019-12-21T22:54:26Z</published>
+        <updated>2019-12-21T22:54:26Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/SkypLabs/packer-centos"/>
+        <title type="html">MItsutoshiNAKANO starred SkypLabs/packer-centos</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/SkypLabs/packer-centos&quot; rel=&quot;noreferrer&quot;&gt;SkypLabs/packer-centos&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T22:54:26Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/SkypLabs/packer-centos&quot; rel=&quot;noreferrer&quot;&gt;SkypLabs/packer-centos&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;Create CentOS images for different hypervisors with Packer&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #89e051&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Shell&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/SkypLabs/packer-centos/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;13&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 22&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11141447710</id>
+        <published>2019-12-21T22:54:22Z</published>
+        <updated>2019-12-21T22:54:22Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/geerlingguy/packer-boxes"/>
+        <title type="html">MItsutoshiNAKANO starred geerlingguy/packer-boxes</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/geerlingguy/packer-boxes&quot; rel=&quot;noreferrer&quot;&gt;geerlingguy/packer-boxes&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T22:54:22Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/geerlingguy/packer-boxes&quot; rel=&quot;noreferrer&quot;&gt;geerlingguy/packer-boxes&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;Jeff Geerling&#39;s Packer build configurations for Vagrant boxes.&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #89e051&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Shell&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/geerlingguy/packer-boxes/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;256&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 25&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11141445104</id>
+        <published>2019-12-21T22:53:01Z</published>
+        <updated>2019-12-21T22:53:01Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/geerlingguy"/>
+        <title type="html">MItsutoshiNAKANO started following geerlingguy</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/geerlingguy&quot; rel=&quot;noreferrer&quot;&gt;geerlingguy&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T22:53:01Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;geerlingguy&quot; href=&quot;/geerlingguy&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;geerlingguy&quot; src=&quot;https://avatars1.githubusercontent.com/u/481677?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/geerlingguy&quot; rel=&quot;noreferrer&quot;&gt;Jeff Geerling&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/geerlingguy&quot; rel=&quot;noreferrer&quot;&gt;geerlingguy&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;Catholic dad and husband. I write, build, and tinker on a Mac. #stl #drupal #ansible #k8s #crohns&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/geerlingguy?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;236 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/geerlingguy?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;4.3k followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11140957590</id>
+        <published>2019-12-21T18:26:30Z</published>
+        <updated>2019-12-21T18:26:30Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/VenityStudio/vgit-frontend"/>
+        <title type="html">MWGuy starred VenityStudio/vgit-frontend</title>
+        <author>
+            <name>MWGuy</name>
+            <email>yousan4ik@gmail.com</email>
+            <uri>https://github.com/MWGuy</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars1.githubusercontent.com/u/29715808?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars2.githubusercontent.com/u/29715808?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MWGuy&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;MWGuy&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/VenityStudio/vgit-frontend&quot; rel=&quot;noreferrer&quot;&gt;VenityStudio/vgit-frontend&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T18:26:30Z&quot; class=&quot;no-wrap&quot;&gt;Dec 22, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/VenityStudio/vgit-frontend&quot; rel=&quot;noreferrer&quot;&gt;VenityStudio/vgit-frontend&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;VGit Frontend&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #2b7489&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;TypeScript&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/VenityStudio/vgit-frontend/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;1&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 22&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11139955055</id>
+        <published>2019-12-21T10:11:38Z</published>
+        <updated>2019-12-21T10:11:38Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/apivovarov/openssh-java"/>
+        <title type="html">MWGuy starred apivovarov/openssh-java</title>
+        <author>
+            <name>MWGuy</name>
+            <email>yousan4ik@gmail.com</email>
+            <uri>https://github.com/MWGuy</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars1.githubusercontent.com/u/29715808?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars2.githubusercontent.com/u/29715808?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MWGuy&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MWGuy&quot; rel=&quot;noreferrer&quot;&gt;MWGuy&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/apivovarov/openssh-java&quot; rel=&quot;noreferrer&quot;&gt;apivovarov/openssh-java&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T10:11:38Z&quot; class=&quot;no-wrap&quot;&gt;Dec 21, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/apivovarov/openssh-java&quot; rel=&quot;noreferrer&quot;&gt;apivovarov/openssh-java&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;Support for reading OpenSSH RSA keys on the JVM.&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #b07219&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Java&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/apivovarov/openssh-java/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;1&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 21&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:FollowEvent/11139601151</id>
+        <published>2019-12-21T06:51:27Z</published>
+        <updated>2019-12-21T06:51:27Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/paul-j-lucas"/>
+        <title type="html">MItsutoshiNAKANO started following paul-j-lucas</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;follow&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- follow --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            started following
+            &lt;a class=&quot;link-gray-dark text-bold&quot; href=&quot;/paul-j-lucas&quot; rel=&quot;noreferrer&quot;&gt;paul-j-lucas&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T06:51:27Z&quot; class=&quot;no-wrap&quot;&gt;Dec 21, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div class=&quot;d-flex&quot;&gt;
+            &lt;a title=&quot;paul-j-lucas&quot; href=&quot;/paul-j-lucas&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar mr-2&quot; alt=&quot;paul-j-lucas&quot; src=&quot;https://avatars1.githubusercontent.com/u/7366785?v=4&quot; width=&quot;40&quot; height=&quot;40&quot;&gt;&lt;/a&gt;
+            &lt;div class=&quot;width-full ml-1&quot;&gt;
+            &lt;span class=&quot;lh-condensed text-gray-dark&quot;&gt;
+
+            &lt;span class=&quot;mr-1&quot;&gt;
+            &lt;a class=&quot;f4 text-bold link-gray-dark no-underline&quot; href=&quot;/paul-j-lucas&quot; rel=&quot;noreferrer&quot;&gt;Paul J. Lucas&lt;/a&gt;
+            &lt;a class=&quot;f5 link-gray no-underline&quot; href=&quot;/paul-j-lucas&quot; rel=&quot;noreferrer&quot;&gt;paul-j-lucas&lt;/a&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;div class=&quot;dashboard-break-word lh-condensed mb-2 mt-1 bio&quot;&gt;
+            &lt;div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray m-0&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/paul-j-lucas?tab=repositories&quot; rel=&quot;noreferrer&quot;&gt;10 repositories&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/paul-j-lucas?tab=followers&quot; rel=&quot;noreferrer&quot;&gt;7 followers&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11139601028</id>
+        <published>2019-12-21T06:51:22Z</published>
+        <updated>2019-12-21T06:51:22Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/paul-j-lucas/cdecl"/>
+        <title type="html">MItsutoshiNAKANO starred paul-j-lucas/cdecl</title>
+        <author>
+            <name>MItsutoshiNAKANO</name>
+            <email>ItSANgo@gmail.com</email>
+            <uri>https://github.com/MItsutoshiNAKANO</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars0.githubusercontent.com/u/5351418?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars3.githubusercontent.com/u/5351418?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@MItsutoshiNAKANO&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/MItsutoshiNAKANO&quot; rel=&quot;noreferrer&quot;&gt;MItsutoshiNAKANO&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/paul-j-lucas/cdecl&quot; rel=&quot;noreferrer&quot;&gt;paul-j-lucas/cdecl&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-21T06:51:22Z&quot; class=&quot;no-wrap&quot;&gt;Dec 21, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/paul-j-lucas/cdecl&quot; rel=&quot;noreferrer&quot;&gt;paul-j-lucas/cdecl&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;Composing and deciphering C (or C++) declarations or casts, aka ‘‘gibberish.’’ &lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #555555&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;C&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/paul-j-lucas/cdecl/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;12&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 27&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+    <entry>
+        <id>tag:github.com,2008:WatchEvent/11133035960</id>
+        <published>2019-12-20T08:26:21Z</published>
+        <updated>2019-12-20T08:26:21Z</updated>
+        <link type="text/html" rel="alternate" href="https://github.com/jroimartin/gocui"/>
+        <title type="html">evanhutomo starred jroimartin/gocui</title>
+        <author>
+            <name>evanhutomo</name>
+            <uri>https://github.com/evanhutomo</uri>
+        </author>
+        <media:thumbnail height="30" width="30" url="https://avatars2.githubusercontent.com/u/1161615?s=30&amp;v=4"/>
+        <content type="html">&lt;div class=&quot;watch_started&quot;&gt;&lt;div class=&quot;body&quot;&gt;
+            &lt;!-- watch --&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline border-bottom border-gray py-3&quot;&gt;
+            &lt;span class=&quot;mr-3&quot;&gt;&lt;a class=&quot;d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;&lt;img class=&quot;avatar&quot; src=&quot;https://avatars1.githubusercontent.com/u/1161615?s=64&amp;amp;v=4&quot; width=&quot;32&quot; height=&quot;32&quot; alt=&quot;@evanhutomo&quot;&gt;&lt;/a&gt;&lt;/span&gt;
+
+            &lt;div class=&quot;d-flex flex-column width-full&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;d-flex flex-items-baseline&quot;&gt;
+            &lt;div&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/evanhutomo&quot; rel=&quot;noreferrer&quot;&gt;evanhutomo&lt;/a&gt;
+            starred
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/jroimartin/gocui&quot; rel=&quot;noreferrer&quot;&gt;jroimartin/gocui&lt;/a&gt;
+            &lt;span class=&quot;f6 text-gray-light no-wrap ml-1&quot;&gt;
+            &lt;relative-time datetime=&quot;2019-12-20T08:26:21Z&quot; class=&quot;no-wrap&quot;&gt;Dec 20, 2019&lt;/relative-time&gt;
+            &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;Box p-3 mt-2&quot;&gt;
+            &lt;div&gt;
+            &lt;div class=&quot;f4 lh-condensed text-bold text-gray-dark&quot;&gt;
+            &lt;a class=&quot;link-gray-dark no-underline text-bold wb-break-all d-inline-block&quot; href=&quot;/jroimartin/gocui&quot; rel=&quot;noreferrer&quot;&gt;jroimartin/gocui&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;dashboard-break-word text-gray mt-1 mb-0 repo-description&quot;&gt;
+            &lt;p&gt;Minimalist Go package aimed at creating Console User Interfaces.&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;f6 text-gray mt-2 mb-0&quot;&gt;
+            &lt;span class=&quot;d-inline-block text-gray mr-3&quot;&gt;
+            &lt;span class=&quot;ml-0&quot;&gt;
+            &lt;span class=&quot;repo-language-color&quot; style=&quot;background-color: #00ADD8&quot;&gt;&lt;/span&gt;
+            &lt;span itemprop=&quot;programmingLanguage&quot;&gt;Go&lt;/span&gt;
+            &lt;/span&gt;
+
+            &lt;/span&gt;
+
+            &lt;span class=&quot;d-inline-block mr-3&quot;&gt;
+            &lt;a class=&quot;muted-link&quot; href=&quot;/jroimartin/gocui/stargazers&quot; rel=&quot;noreferrer&quot;&gt;&lt;svg class=&quot;octicon octicon-star mr-1&quot; viewBox=&quot;0 0 14 16&quot; version=&quot;1.1&quot; width=&quot;14&quot; height=&quot;16&quot; aria-hidden=&quot;true&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74L14 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;5.8k&lt;/a&gt;
+            &lt;/span&gt;
+
+
+            &lt;span&gt;Updated Dec 28&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;/div&gt;&lt;/div&gt;</content>
+    </entry>
+</feed>
