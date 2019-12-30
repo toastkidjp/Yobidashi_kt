@@ -80,6 +80,8 @@ enum class Menu(
 
     APP_LAUNCHER(R.string.title_apps_launcher, R.drawable.ic_launcher),
 
+    RSS_READER(R.string.title_rss_reader, R.drawable.ic_rss_feed),
+
     OVERLAY_COLOR_FILTER(R.string.title_filter_color, R.drawable.ic_color_filter),
 
     ABOUT(R.string.title_about_this_app, R.drawable.ic_yobidashi),

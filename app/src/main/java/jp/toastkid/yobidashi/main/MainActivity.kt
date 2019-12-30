@@ -39,9 +39,6 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.menu.Menu
-import jp.toastkid.yobidashi.menu.MenuBinder
-import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
@@ -53,7 +50,11 @@ import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
+import jp.toastkid.yobidashi.menu.Menu
+import jp.toastkid.yobidashi.menu.MenuBinder
+import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
+import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
@@ -81,6 +82,8 @@ class MainActivity : AppCompatActivity() {
      * Browser fragment.
      */
     private lateinit var browserFragment: BrowserFragment
+
+    private val rssReaderFragment by lazy { RssReaderFragment() }
 
     /**
      * Disposables.
@@ -318,6 +321,9 @@ class MainActivity : AppCompatActivity() {
             Menu.APP_LAUNCHER-> {
                 startActivity(LauncherActivity.makeIntent(this))
             }
+            Menu.RSS_READER -> {
+                replaceFragment(rssReaderFragment)
+            }
             Menu.ABOUT-> {
                 startActivity(AboutThisAppActivity.makeIntent(this))
             }
@@ -410,6 +416,11 @@ class MainActivity : AppCompatActivity() {
         }
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
         transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
+
+        // TODO fix it
+        if (fragment !is BrowserFragment) {
+            transaction.addToBackStack(fragment::class.java.simpleName)
+        }
         transaction.commitAllowingStateLoss()
     }
 
