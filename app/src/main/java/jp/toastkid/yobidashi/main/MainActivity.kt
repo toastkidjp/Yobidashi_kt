@@ -50,11 +50,14 @@ import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
+import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.rss.RssReaderFragment
+import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
@@ -85,6 +88,8 @@ class MainActivity : AppCompatActivity() {
 
     private val rssReaderFragment by lazy { RssReaderFragment() }
 
+    private val rssReaderSettingFragment by lazy { RssSettingFragment() }
+
     /**
      * Disposables.
      */
@@ -108,6 +113,8 @@ class MainActivity : AppCompatActivity() {
      * Menu's view model.
      */
     private var menuViewModel: MenuViewModel? = null
+
+    private var contentViewModel: ContentViewModel? = null
 
     /**
      * Rx permission.
@@ -141,6 +148,16 @@ class MainActivity : AppCompatActivity() {
         initializeHeaderViewModel()
         setFabListener()
         initializeMenuViewModel()
+
+        contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
+        contentViewModel?.content?.observe(this, Observer {
+            when (it) {
+                ContentSwitchOrder.RSS_SETTING -> {
+                    replaceFragment(rssReaderSettingFragment)
+                }
+                null -> Unit
+            }
+        })
 
         processShortcut(intent)
     }
@@ -668,6 +685,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         disposables.clear()
         torch.dispose()
+        contentViewModel?.content?.removeObservers(this)
     }
 
     companion object {

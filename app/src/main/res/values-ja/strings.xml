@@ -422,5 +422,6 @@
     <string name="title_add_to_rss_reader">RSS リーダーに追加</string>
     <string name="message_rss_reader_launch_failed">You should add any RSS link via header\'s menu if you want to use this function.</string>
     <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
+    <string name="title_rss_setting">RSS 設定</string>
 
 </resources>

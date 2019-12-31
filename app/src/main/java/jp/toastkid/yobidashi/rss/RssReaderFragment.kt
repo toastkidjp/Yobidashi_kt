@@ -8,9 +8,7 @@
 package jp.toastkid.yobidashi.rss
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,6 +28,8 @@ import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.list.Adapter
 import timber.log.Timber
 
@@ -47,6 +47,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_rss_reader, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -91,6 +92,20 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
                 viewModel?.itemClick?.removeObserver(this)
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.rss_reader, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_rss_setting) {
+            ViewModelProviders.of(requireActivity())
+                    .get(ContentViewModel::class.java)
+                    .nextContent(ContentSwitchOrder.RSS_SETTING)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun pressBack(): Boolean {
