@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.rss
 
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -46,7 +47,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_rss_reader, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -118,4 +119,8 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
         disposables.clear()
     }
 
+    companion object {
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_rss_reader
+    }
 }
