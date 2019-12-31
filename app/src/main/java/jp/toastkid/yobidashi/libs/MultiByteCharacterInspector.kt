@@ -5,7 +5,7 @@ package jp.toastkid.yobidashi.libs
  *
  * @author toastkidjp
  */
-object Strings {
+class MultiByteCharacterInspector {
 
     /**
      * Return containing multi byte.
@@ -13,5 +13,5 @@ object Strings {
      * @param str
      * @return If passed 'str' contains multi byte character, return true.
      */
-    fun containsMultiByte(str: String): Boolean = str.length != str.toByteArray().size
+    operator fun invoke(str: String): Boolean = str.length != str.toByteArray().size
 }

@@ -17,10 +17,11 @@ internal class SuggestionParser {
      * @return suggest words
      */
     operator fun invoke(response: String): List<String> {
-        val split = response.split("</CompleteSuggestion>").dropLastWhile { it.isEmpty() }.toTypedArray()
+        val split = response.split("</CompleteSuggestion>").dropLastWhile { it.isEmpty() }
         val suggestions = ArrayList<String>(split.size)
-        for (line in split) {
-            val matcher = PATTERN.matcher(line)
+
+        split.forEach {
+            val matcher = PATTERN.matcher(it)
             if (matcher.find()) {
                 suggestions.add(matcher.group(1))
             }
