@@ -381,6 +381,12 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putStringSet(Key.RSS_READER_TARGETS.name, targets).apply()
     }
 
+    fun removeFromRssReaderTargets(url: String) {
+        val targets = readRssReaderTargets()
+        targets.remove(url)
+        preferences.edit().putStringSet(Key.RSS_READER_TARGETS.name, targets).apply()
+    }
+
     fun clear() {
         preferences.edit().clear().apply()
     }
