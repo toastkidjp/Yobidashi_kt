@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.search.history
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.yobidashi.libs.view.SwipeViewHolder
 
 /**
  * @author toastkidjp
@@ -29,7 +30,7 @@ class SwipeActionAttachment {
                         viewHolder: RecyclerView.ViewHolder,
                         direction: Int
                 ) {
-                    val holder = viewHolder as ViewHolder
+                    val holder = viewHolder as SwipeViewHolder
                     if (holder.isButtonVisible()) {
                         return
                     }
@@ -45,7 +46,7 @@ class SwipeActionAttachment {
                         viewHolder: RecyclerView.ViewHolder
                 ) {
                     super.clearView(recyclerView, viewHolder)
-                    getDefaultUIUtil().clearView((viewHolder as ViewHolder).getFrontView())
+                    getDefaultUIUtil().clearView((viewHolder as SwipeViewHolder).getFrontView())
                 }
 
                 override fun onChildDraw(
@@ -61,7 +62,7 @@ class SwipeActionAttachment {
                         return
                     }
 
-                    val holder = viewHolder as ViewHolder
+                    val holder = viewHolder as SwipeViewHolder
                     if (!holder.isButtonVisible()) {
                         holder.showButton()
                     }
@@ -84,7 +85,7 @@ class SwipeActionAttachment {
                         recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder
                 ): Int {
-                    val holder = viewHolder as ViewHolder
+                    val holder = viewHolder as SwipeViewHolder
                     if (!holder.isButtonVisible()) {
                         return makeFlag(ItemTouchHelper.ACTION_STATE_SWIPE, 0)
                     }
@@ -103,7 +104,7 @@ class SwipeActionAttachment {
                         recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder
                 ) {
-                    getDefaultUIUtil().clearView((viewHolder as ViewHolder).getFrontView())
+                    getDefaultUIUtil().clearView((viewHolder as SwipeViewHolder).getFrontView())
                 }
 
                 override fun onChildDraw(
@@ -115,7 +116,7 @@ class SwipeActionAttachment {
                         actionState: Int,
                         isCurrentlyActive: Boolean
                 ) {
-                    val holder = viewHolder as ViewHolder
+                    val holder = viewHolder as SwipeViewHolder
                     if (holder.isButtonVisible()) {
                         holder.hideButton()
                     }
