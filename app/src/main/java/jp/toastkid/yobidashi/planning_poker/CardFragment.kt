@@ -9,7 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.CardItemBinding
+import jp.toastkid.yobidashi.databinding.ItemPlanningPokerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
@@ -23,7 +23,7 @@ class CardFragment : Fragment() {
     /**
      * DataBinding object.
      */
-    private lateinit var binding: CardItemBinding
+    private lateinit var binding: ItemPlanningPokerBinding
 
     override fun onCreateView(
             inflater: LayoutInflater,

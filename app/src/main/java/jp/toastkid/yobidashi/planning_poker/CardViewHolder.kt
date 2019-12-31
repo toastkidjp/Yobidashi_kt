@@ -1,14 +1,14 @@
 package jp.toastkid.yobidashi.planning_poker
 
-import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
-
-import jp.toastkid.yobidashi.databinding.CardItemBinding
+import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.yobidashi.databinding.ItemPlanningPokerBinding
 
 /**
  * @author toastkidjp
  */
-internal class CardViewHolder(private val binding: CardItemBinding) : RecyclerView.ViewHolder(binding.root) {
+internal class CardViewHolder(private val binding: ItemPlanningPokerBinding)
+    : RecyclerView.ViewHolder(binding.root) {
 
     fun setText(text: String) {
         binding.cardText.text = text
