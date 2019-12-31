@@ -67,7 +67,7 @@ class CardFragment : Fragment() {
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.card_item
+        private const val LAYOUT_ID: Int = R.layout.item_planning_poker
     }
 
 }
