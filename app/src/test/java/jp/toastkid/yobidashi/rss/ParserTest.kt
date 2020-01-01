@@ -22,7 +22,7 @@ class ParserTest {
 
     @Test
     fun test() {
-        val rssText = Okio.buffer(Okio.source(readStream())).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.xml"))).readUtf8()
         val rss = parser.parse(rssText.split("\n"))
         assertNull(rss.creator)
         assertEquals("Sat, 21 Jan 2017 19:32:11 +0900", rss.date)
@@ -44,7 +44,7 @@ class ParserTest {
 
     @Test
     fun testAtom() {
-        val rssText = Okio.buffer(Okio.source(readStream())).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.atom"))).readUtf8()
 
         val rss = parser.parse(rssText.split("\n"))
         assertEquals("Private Feed for toastkidjp", rss.title)
@@ -57,7 +57,7 @@ class ParserTest {
 
     @Test
     fun testRdf() {
-        val rssText = Okio.buffer(Okio.source(readStream())).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.rdf"))).readUtf8()
 
         val rss = parser.parse(rssText.split("\n"))
         assertEquals("なんJ（まとめては）いかんのか？", rss.title)
@@ -69,7 +69,7 @@ class ParserTest {
         println(item.content)
     }
 
-    private fun readStream(): InputStream =
-            javaClass.classLoader?.getResourceAsStream("rss/sample.xml")
+    private fun readStream(filePath: String): InputStream =
+            javaClass.classLoader?.getResourceAsStream(filePath)
                     ?: throw RuntimeException()
 }
