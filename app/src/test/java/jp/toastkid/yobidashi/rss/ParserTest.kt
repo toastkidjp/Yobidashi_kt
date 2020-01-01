@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.rss
 import okio.Okio
 import org.junit.Assert.*
 import org.junit.Test
+import java.io.InputStream
 
 /**
  * TODO clean up code.
@@ -13,12 +14,7 @@ class ParserTest {
 
     @Test
     fun test() {
-        val stream = javaClass.classLoader?.getResourceAsStream("rss/sample.xml")
-        if (stream == null) {
-            fail()
-            return
-        }
-        val rssText = Okio.buffer(Okio.source(stream)).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream())).readUtf8()
         val rss = Parser().parse(rssText.split("\n"))
         assertNull(rss.creator)
         assertEquals("Sat, 21 Jan 2017 19:32:11 +0900", rss.date)
@@ -40,12 +36,7 @@ class ParserTest {
 
     @Test
     fun testAtom() {
-        val stream = javaClass.classLoader?.getResourceAsStream("rss/sample.atom")
-        if (stream == null) {
-            fail()
-            return
-        }
-        val rssText = Okio.buffer(Okio.source(stream)).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream())).readUtf8()
 
         val rss = Parser().parse(rssText.split("\n"))
         assertEquals("Private Feed for toastkidjp", rss.title)
@@ -58,12 +49,7 @@ class ParserTest {
 
     @Test
     fun testRdf() {
-        val stream = javaClass.classLoader?.getResourceAsStream("rss/sample.rdf")
-        if (stream == null) {
-            fail()
-            return
-        }
-        val rssText = Okio.buffer(Okio.source(stream)).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream())).readUtf8()
 
         val rss = Parser().parse(rssText.split("\n"))
         assertEquals("なんJ（まとめては）いかんのか？", rss.title)
@@ -75,4 +61,7 @@ class ParserTest {
         println(item.content)
     }
 
+    private fun readStream(): InputStream =
+            javaClass.classLoader?.getResourceAsStream("rss/sample.xml")
+                    ?: throw RuntimeException()
 }
