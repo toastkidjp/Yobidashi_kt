@@ -321,15 +321,27 @@ class BrowserFragment : Fragment(),
                 return true
             }
             R.id.add_rss -> {
-                browserModule.invokeAlternativeLinkExtraction(ValueCallback { urlsCsv ->
-                    val snackbarParent = binding?.root ?: return@ValueCallback
-                    val colorPair = colorPair()
-                    val urlValidator = RssUrlValidator()
+                val urlValidator = RssUrlValidator()
+                val snackbarParent = binding?.root ?: return true
+                val colorPair = colorPair()
 
+                val currentUrl = browserModule.currentUrl()
+                if (currentUrl?.isNotBlank() == true && urlValidator(currentUrl)) {
+                    preferenceApplier.saveNewRssReaderTargets(currentUrl)
+                    Toaster.snackShort(snackbarParent, "Added $currentUrl", colorPair)
+                    return true
+                }
+
+                browserModule.invokeAlternativeLinkExtraction(ValueCallback { urlsCsv ->
                     if (urlsCsv.contains(",")) {
-                        val first = urlsCsv.split(",").first { urlValidator(it) }
-                        preferenceApplier.saveNewRssReaderTargets(first)
-                        Toaster.snackShort(snackbarParent, "Added $first", colorPair)
+                        urlsCsv.split(",")
+                                .firstOrNull { urlValidator(it) }
+                                ?.let {
+                                    preferenceApplier.saveNewRssReaderTargets(it)
+                                    Toaster.snackShort(snackbarParent, "Added $it", colorPair)
+                                    return@ValueCallback
+                                }
+                        Toaster.snackShort(snackbarParent, R.string.message_failure_extracting_rss, colorPair)
                         return@ValueCallback
                     }
 

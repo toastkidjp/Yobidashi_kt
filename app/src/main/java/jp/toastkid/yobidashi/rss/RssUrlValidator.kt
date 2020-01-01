@@ -15,11 +15,14 @@ import jp.toastkid.yobidashi.libs.Urls
 class RssUrlValidator {
 
     operator fun invoke(url: String?): Boolean {
-        if (url.isNullOrBlank()) {
+        if (url.isNullOrBlank() || Urls.isInvalidUrl(url)) {
             return false
         }
 
-        return Urls.isValidUrl(url)
-                && (url.contains(".xml") || url.contains(".atom") || url.contains(".rdf"))
+        if (url.contains("rss") && url.contains("xml")) {
+            return true
+        }
+
+        return (url.contains(".xml") || url.contains(".atom") || url.contains(".rdf"))
     }
 }
