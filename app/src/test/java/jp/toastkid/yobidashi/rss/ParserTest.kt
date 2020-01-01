@@ -7,8 +7,6 @@ import org.junit.Test
 import java.io.InputStream
 
 /**
- * TODO clean up code.
- *
  * @author toastkidjp
  */
 class ParserTest {
@@ -23,7 +21,9 @@ class ParserTest {
     @Test
     fun test() {
         val rssText = Okio.buffer(Okio.source(readStream("rss/sample.xml"))).readUtf8()
+
         val rss = parser.parse(rssText.split("\n"))
+
         assertNull(rss.creator)
         assertEquals("Sat, 21 Jan 2017 19:32:11 +0900", rss.date)
         assertEquals("This instance has only 1 item.", rss.description)
@@ -47,6 +47,7 @@ class ParserTest {
         val rssText = Okio.buffer(Okio.source(readStream("rss/sample.atom"))).readUtf8()
 
         val rss = parser.parse(rssText.split("\n"))
+
         assertEquals("Private Feed for toastkidjp", rss.title)
         assertEquals(30, rss.items.size)
 
@@ -60,6 +61,7 @@ class ParserTest {
         val rssText = Okio.buffer(Okio.source(readStream("rss/sample.rdf"))).readUtf8()
 
         val rss = parser.parse(rssText.split("\n"))
+
         assertEquals("なんJ（まとめては）いかんのか？", rss.title)
         assertEquals(3, rss.items.size)
 
