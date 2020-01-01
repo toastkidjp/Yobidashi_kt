@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.rss.list
 
 import androidx.annotation.ColorInt
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemRssListBinding
 
@@ -29,10 +30,12 @@ class ViewHolder(private val binding: ItemRssListBinding) : RecyclerView.ViewHol
     }
 
     fun setContent(content: String) {
+        binding.content.isVisible = content.isNotBlank()
         binding.content.text = content
     }
 
     fun setDate(date: String) {
+        binding.time.isVisible = date.isNotBlank()
         binding.time.text = date
     }
 
