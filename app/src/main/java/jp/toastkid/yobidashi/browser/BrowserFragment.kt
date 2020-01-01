@@ -55,6 +55,7 @@ import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfModule
+import jp.toastkid.yobidashi.rss.RssUrlValidator
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -323,16 +324,16 @@ class BrowserFragment : Fragment(),
                 browserModule.invokeAlternativeLinkExtraction(ValueCallback { urlsCsv ->
                     val snackbarParent = binding?.root ?: return@ValueCallback
                     val colorPair = colorPair()
+                    val urlValidator = RssUrlValidator()
 
                     if (urlsCsv.contains(",")) {
-                        val split = urlsCsv.split(",")
-                        val first = split.first { Urls.isValidUrl(it) }
+                        val first = urlsCsv.split(",").first { urlValidator(it) }
                         preferenceApplier.saveNewRssReaderTargets(first)
                         Toaster.snackShort(snackbarParent, "Added $first", colorPair)
                         return@ValueCallback
                     }
 
-                    if (Urls.isValidUrl(urlsCsv)) {
+                    if (urlValidator(urlsCsv)) {
                         preferenceApplier.saveNewRssReaderTargets(urlsCsv)
                         Toaster.snackShort(snackbarParent, "Added $urlsCsv", colorPair)
                         return@ValueCallback
