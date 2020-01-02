@@ -15,6 +15,7 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 
@@ -44,16 +45,23 @@ class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
                 .map { RssUrlExtractor()(it.body()?.string()) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { urls ->
-                            urls?.firstOrNull { urlValidator(it) }
-                                    ?.let {
-                                        preferenceApplier.saveNewRssReaderTargets(it)
-                                        Toaster.snackShort(snackbarParent, "Added $it", colorPair)
-                                        return@subscribe
-                                    }
-                            Toaster.snackShort(snackbarParent, R.string.message_failure_extracting_rss, colorPair)
-                        },
+                        { storeToPreferences(it, snackbarParent, colorPair) },
                         Timber::e
                 )
+    }
+
+    private fun storeToPreferences(
+            urls: List<String>?,
+            snackbarParent: View,
+            colorPair: ColorPair
+    ) {
+        urls?.firstOrNull { urlValidator(it) }
+                ?.let {
+                    preferenceApplier.saveNewRssReaderTargets(it)
+                    Toaster.snackShort(snackbarParent, "Added $it", colorPair)
+                    return
+                }
+
+        Toaster.snackShort(snackbarParent, R.string.message_failure_extracting_rss, colorPair)
     }
 }
