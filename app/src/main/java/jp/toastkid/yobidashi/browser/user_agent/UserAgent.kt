@@ -22,11 +22,7 @@ enum class UserAgent constructor(private val title: String, private val text: St
     companion object {
 
         fun titles(): Array<String> {
-            val titles = ArrayList<String>(values().size)
-            for (element in values()) {
-                titles.add(element.title)
-            }
-            return titles.toArray(arrayOf<String>())
+            return values().map { it.title }.toTypedArray()
         }
 
         fun findCurrentIndex(name: String): Int {

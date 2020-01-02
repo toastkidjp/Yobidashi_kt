@@ -13,6 +13,12 @@ import org.junit.Test
 class UserAgentTest {
 
     @Test
+    fun testTitles() {
+        val titles = UserAgent.titles()
+        assertEquals(titles.javaClass, Array<String>::class.java)
+    }
+
+    @Test
     fun test() {
         assertEquals("Android", UserAgent.ANDROID.title())
         assertTrue(UserAgent.ANDROID.text().isNotEmpty())
