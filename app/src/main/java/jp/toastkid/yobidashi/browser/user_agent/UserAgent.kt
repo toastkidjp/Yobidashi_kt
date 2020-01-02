@@ -26,9 +26,9 @@ enum class UserAgent constructor(private val title: String, private val text: St
         }
 
         fun findCurrentIndex(name: String): Int {
-            for (i in 0 until values().size) {
-                if (values()[i].name == name) {
-                    return i
+            values().forEachIndexed { index, userAgent ->
+                if (userAgent.name == name) {
+                    return index
                 }
             }
             return 0

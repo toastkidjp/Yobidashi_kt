@@ -19,6 +19,13 @@ class UserAgentTest {
     }
 
     @Test
+    fun testFindIndex() {
+        assertEquals(0, UserAgent.findCurrentIndex("tomato"))
+        assertEquals(0, UserAgent.findCurrentIndex("Default"))
+        assertEquals(4, UserAgent.findCurrentIndex("PC"))
+    }
+
+    @Test
     fun test() {
         assertEquals("Android", UserAgent.ANDROID.title())
         assertTrue(UserAgent.ANDROID.text().isNotEmpty())
