@@ -59,8 +59,8 @@ import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfModule
-import jp.toastkid.yobidashi.rss.RssUrlExtractor
-import jp.toastkid.yobidashi.rss.RssUrlValidator
+import jp.toastkid.yobidashi.rss.extractor.RssUrlExtractor
+import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
