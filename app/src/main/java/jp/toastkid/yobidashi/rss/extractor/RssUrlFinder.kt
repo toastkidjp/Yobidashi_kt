@@ -14,11 +14,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import okhttp3.Request
 import timber.log.Timber
 
 /**
@@ -41,16 +38,7 @@ class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
             return Disposables.disposed()
         }
 
-        return Maybe.fromCallable {
-            HttpClientFactory.withTimeout(3)
-                    .newCall(
-                            Request.Builder()
-                                    .url(currentUrl)
-                                    .header("User-Agent", UserAgent.PC.text())
-                                    .build()
-                    )
-                    .execute()
-        }
+        return Maybe.fromCallable { HtmlApi().invoke(currentUrl) }
                 .subscribeOn(Schedulers.io())
                 .filter { it.isSuccessful }
                 .map { RssUrlExtractor()(it.body()?.string()) }

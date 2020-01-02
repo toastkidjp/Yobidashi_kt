@@ -12,6 +12,7 @@ object Urls {
 
     /**
      * Return passed url is invalid.
+     * TODO use kotlin function
      * @param url
      *
      * @return
