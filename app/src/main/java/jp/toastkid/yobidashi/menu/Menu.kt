@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser.menu
+package jp.toastkid.yobidashi.menu
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -39,8 +39,6 @@ enum class Menu(
     WIFI_SETTING(R.string.title_settings_wifi, R.drawable.ic_wifi),
 
     FIND_IN_PAGE(R.string.title_find_in_page, R.drawable.ic_find_in_page),
-
-    SCREENSHOT(R.string.title_screenshot, R.drawable.ic_camera),
 
     ARCHIVE(R.string.title_archive, R.drawable.ic_archive),
 

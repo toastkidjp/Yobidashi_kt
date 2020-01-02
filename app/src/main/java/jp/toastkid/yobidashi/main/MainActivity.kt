@@ -39,9 +39,9 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.browser.menu.Menu
-import jp.toastkid.yobidashi.browser.menu.MenuBinder
-import jp.toastkid.yobidashi.browser.menu.MenuViewModel
+import jp.toastkid.yobidashi.menu.Menu
+import jp.toastkid.yobidashi.menu.MenuBinder
+import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity

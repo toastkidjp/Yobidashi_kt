@@ -7,7 +7,7 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ScreenMode
-import jp.toastkid.yobidashi.browser.menu.MenuPos
+import jp.toastkid.yobidashi.menu.MenuPos
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.search.SearchCategory
