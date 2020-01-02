@@ -25,12 +25,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -53,14 +50,12 @@ import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfModule
-import jp.toastkid.yobidashi.rss.extractor.RssUrlExtractor
-import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
+import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -72,7 +67,6 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
-import okhttp3.Request
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -327,44 +321,7 @@ class BrowserFragment : Fragment(),
                 return true
             }
             R.id.add_rss -> {
-                val urlValidator = RssUrlValidator()
-                val snackbarParent = binding?.root ?: return true
-                val colorPair = colorPair()
-
-                val currentUrl = browserModule.currentUrl()
-                if (currentUrl?.isNotBlank() == true && urlValidator(currentUrl)) {
-                    preferenceApplier.saveNewRssReaderTargets(currentUrl)
-                    Toaster.snackShort(snackbarParent, "Added $currentUrl", colorPair)
-                    return true
-                }
-
-                Maybe.fromCallable {
-                    HttpClientFactory.withTimeout(3)
-                            .newCall(
-                                    Request.Builder()
-                                            .url(currentUrl)
-                                            .header("User-Agent", UserAgent.PC.text())
-                                            .build()
-                            )
-                            .execute()
-                }
-                        .subscribeOn(Schedulers.io())
-                        .filter { it.isSuccessful }
-                        .map { RssUrlExtractor()(it.body()?.string()) }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                {
-                                    it?.firstOrNull { urlValidator(it) }
-                                        ?.let {
-                                            preferenceApplier.saveNewRssReaderTargets(it)
-                                            Toaster.snackShort(snackbarParent, "Added $it", colorPair)
-                                            return@subscribe
-                                        }
-                                    Toaster.snackShort(snackbarParent, R.string.message_failure_extracting_rss, colorPair)
-                                },
-                                Timber::e
-                        )
-                        .addTo(disposables)
+                RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { binding?.root }
                 return true
             }
             R.id.stop_loading -> {
