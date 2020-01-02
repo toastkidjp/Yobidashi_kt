@@ -495,24 +495,4 @@ class BrowserModule(
         }
     }
 
-    fun invokeAlternativeLinkExtraction(callback: ValueCallback<String>) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            currentView()?.evaluateJavascript("""
-                var links = document.getElementsByTagName('link');
-                var extracted = "";
-                for (var i = 0; i < links.length; i++) {
-                    if (links[i].getAttribute('rel') != 'alternate') {
-                        continue;
-                    }
-                    var link = links[i].getAttribute('href');
-                    if (extracted.length != 0) {
-                        extracted = extracted + ',';
-                    }
-                    extracted = extracted + link;
-                }
-                extracted;
-            """, callback)
-        }
-    }
-
 }
