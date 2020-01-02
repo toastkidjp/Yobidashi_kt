@@ -44,8 +44,8 @@ class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
                 .map { RssUrlExtractor()(it.body()?.string()) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {
-                            it?.firstOrNull { urlValidator(it) }
+                        { urls ->
+                            urls?.firstOrNull { urlValidator(it) }
                                     ?.let {
                                         preferenceApplier.saveNewRssReaderTargets(it)
                                         Toaster.snackShort(snackbarParent, "Added $it", colorPair)
