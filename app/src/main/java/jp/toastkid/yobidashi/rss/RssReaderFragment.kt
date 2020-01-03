@@ -94,9 +94,9 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
                 if (t == null) {
                     return
                 }
+                activity?.supportFragmentManager?.popBackStack()
                 val intent = MainActivity.makeBrowserIntent(fragmentActivity, t.toUri())
                 fragmentActivity.startActivity(intent)
-                viewModel?.itemClick?.removeObserver(this)
             }
         })
     }
