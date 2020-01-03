@@ -125,7 +125,7 @@ class BrowserModule(
                                 urlStr,
                                 faviconApplier.makePath(urlStr)
                         )
-                        .insert()
+                        .invoke()
             }
 
             if (preferenceApplier.useInversion) {

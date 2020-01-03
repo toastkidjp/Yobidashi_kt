@@ -20,7 +20,7 @@ class ViewHistoryInsertion private constructor(
         private val faviconPath: String
 ) {
 
-    fun insert(): Disposable =
+    operator fun invoke(): Disposable =
             if (title.isEmpty() || url.isEmpty()) Disposables.disposed()
             else insert(makeItem(title, url, faviconPath))
 
