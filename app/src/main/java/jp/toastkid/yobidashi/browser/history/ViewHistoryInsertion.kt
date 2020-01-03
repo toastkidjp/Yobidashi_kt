@@ -53,8 +53,6 @@ class ViewHistoryInsertion private constructor(
                 title: String,
                 url: String,
                 faviconPath: String
-        ): ViewHistoryInsertion {
-            return ViewHistoryInsertion(context, title, url, faviconPath)
-        }
+        ) = ViewHistoryInsertion(context, title, url, faviconPath)
     }
 }
