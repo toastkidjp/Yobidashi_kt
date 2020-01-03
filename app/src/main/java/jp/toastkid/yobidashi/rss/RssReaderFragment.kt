@@ -89,15 +89,14 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
     }
 
     private fun observeViewModelEvent(fragmentActivity: FragmentActivity) {
-        viewModel?.itemClick?.observe(this, object : Observer<String> {
-            override fun onChanged(t: String?) {
-                if (t == null) {
-                    return
-                }
-                activity?.supportFragmentManager?.popBackStack()
-                val intent = MainActivity.makeBrowserIntent(fragmentActivity, t.toUri())
-                fragmentActivity.startActivity(intent)
+        viewModel?.itemClick?.observe(this, Observer<String> {
+            if (it == null) {
+                return@Observer
             }
+
+            activity?.supportFragmentManager?.popBackStack()
+            val intent = MainActivity.makeBrowserIntent(fragmentActivity, it.toUri())
+            fragmentActivity.startActivity(intent)
         })
     }
 
