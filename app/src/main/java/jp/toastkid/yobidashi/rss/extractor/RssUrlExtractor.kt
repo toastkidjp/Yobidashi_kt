@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.rss.extractor
 import java.util.regex.Pattern
 
 /**
- * TODO write test.
  * @author toastkidjp
  */
 class RssUrlExtractor {
