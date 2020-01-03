@@ -17,7 +17,6 @@ import jp.toastkid.yobidashi.databinding.ItemRssListBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.rss.Item
 import jp.toastkid.yobidashi.rss.RssReaderFragmentViewModel
-import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -47,7 +46,6 @@ class Adapter(
         holder.setContent(item.content.toString())
         holder.setDate(item.date)
         holder.itemView.setOnClickListener {
-            Timber.i("rss Click: ${item.link}")
             viewModel?.itemClick(item.link)
         }
     }
