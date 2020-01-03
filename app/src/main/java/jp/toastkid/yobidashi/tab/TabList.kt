@@ -103,7 +103,12 @@ class TabList private constructor() {
         get() = tabs.isEmpty()
 
     internal fun add(newTab: Tab) {
-        tabs.add(newTab)
+        val newIndex = index + 1
+        if (inRange(newIndex)) {
+            tabs.add(newIndex, newTab)
+        } else {
+            tabs.add(newTab)
+        }
     }
 
     internal fun closeTab(index: Int) {
