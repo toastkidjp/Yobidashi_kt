@@ -26,7 +26,7 @@
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@string/clipboard"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
@@ -36,7 +36,7 @@
                 />
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="40dp"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="4dp"
@@ -50,7 +50,7 @@
             <TextView
                 android:id="@+id/text"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:gravity="center_vertical"
                 tools:text="@string/sample_long_text"
                 android:maxLines="3"
@@ -58,7 +58,21 @@
                 app:layout_constraintTop_toTopOf="@id/image"
                 app:layout_constraintBottom_toBottomOf="@id/image"
                 app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintEnd_toStartOf="@id/close"
+                android:background="@drawable/ripple_transparent"
+                />
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="32dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_close_black"
+                android:contentDescription="@null"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/text"
+                app:layout_constraintBottom_toBottomOf="@id/text"
+                android:adjustViewBounds="true"
+                android:background="@drawable/ripple_transparent"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
