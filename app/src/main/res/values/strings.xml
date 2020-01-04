@@ -429,5 +429,6 @@
     <string name="message_failure_extracting_rss">This site doesn\'t contains any RSS feeds.</string>
     <string name="title_rss_setting">RSS setting</string>
     <string name="clipboard">Clipboard</string>
+    <string name="message_add_rss_target">Would you add this RSS?</string>
 
 </resources>

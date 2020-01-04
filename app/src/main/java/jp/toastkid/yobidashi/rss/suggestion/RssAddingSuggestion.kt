@@ -38,7 +38,7 @@ class RssAddingSuggestion(private val preferenceApplier: PreferenceApplier) {
     private fun toast(view: View, url: String) {
         Toaster.snackLong(
                 view,
-                "Would you add this RSS?",
+                R.string.message_add_rss_target,
                 R.string.title_add,
                 View.OnClickListener {
                     preferenceApplier.saveNewRssReaderTargets(url)
