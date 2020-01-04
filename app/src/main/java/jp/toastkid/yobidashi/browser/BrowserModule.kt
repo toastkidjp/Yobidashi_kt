@@ -37,6 +37,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
 import timber.log.Timber
 
 /**
@@ -92,6 +93,18 @@ class BrowserModule(
             super.onPageStarted(view, url, favicon)
             headerViewModel?.updateProgress(0)
             isLoadFinished = false
+
+            if (RssUrlValidator().invoke(url)) {
+                Toaster.snackLong(
+                        view,
+                        "Would you add this RSS?",
+                        R.string.title_add,
+                        View.OnClickListener {
+                            preferenceApplier.saveNewRssReaderTargets(url)
+                        },
+                        preferenceApplier.colorPair()
+                )
+            }
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
