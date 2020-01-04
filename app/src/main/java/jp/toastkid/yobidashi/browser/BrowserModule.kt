@@ -37,7 +37,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
+import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import timber.log.Timber
 
 /**
@@ -51,6 +51,8 @@ class BrowserModule(
     private val webViewPool: WebViewPool
 
     private val preferenceApplier = PreferenceApplier(context)
+
+    private val rssAddingSuggestion = RssAddingSuggestion(preferenceApplier)
 
     private val faviconApplier: FaviconApplier = FaviconApplier(context)
 
@@ -94,16 +96,8 @@ class BrowserModule(
             headerViewModel?.updateProgress(0)
             isLoadFinished = false
 
-            if (RssUrlValidator().invoke(url)) {
-                Toaster.snackLong(
-                        view,
-                        "Would you add this RSS?",
-                        R.string.title_add,
-                        View.OnClickListener {
-                            preferenceApplier.saveNewRssReaderTargets(url)
-                        },
-                        preferenceApplier.colorPair()
-                )
+            if (rssAddingSuggestion.shouldShow(url)) {
+                rssAddingSuggestion(view, url)
             }
         }
 
