@@ -109,7 +109,7 @@ class ClipboardModule(
      */
     private fun setSearch(query: String) {
         binding.image.setImageResource(R.drawable.ic_search)
-        binding.text.text = query
+        binding.text.text = query.trim()
         binding.text.setTextColor(textColor)
     }
 
