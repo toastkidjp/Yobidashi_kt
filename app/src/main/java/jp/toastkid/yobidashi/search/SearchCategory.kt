@@ -243,13 +243,12 @@ enum class SearchCategory(
          * @return [SearchCategory]
          */
         fun findByCategory(category: String): SearchCategory {
-            for (f in SearchCategory.values()) {
+            for (f in values()) {
                 if (f.name == category.toUpperCase()) {
                     return f
                 }
             }
-            return SearchCategory
-                    .values()
+            return values()
                     .find { it.name == category.toUpperCase() } ?: GOOGLE
         }
 
