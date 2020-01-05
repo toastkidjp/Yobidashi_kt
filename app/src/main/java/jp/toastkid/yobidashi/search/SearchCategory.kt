@@ -245,13 +245,8 @@ enum class SearchCategory(
          * @return [SearchCategory]
          */
         fun findByCategory(category: String): SearchCategory {
-            for (f in values()) {
-                if (f.name == category.toUpperCase(locale)) {
-                    return f
-                }
-            }
-            return values()
-                    .find { it.name == category.toUpperCase(locale) } ?: GOOGLE
+            val target = category.toUpperCase(locale)
+            return values().find { it.name == target } ?: GOOGLE
         }
 
         /**
