@@ -4,12 +4,14 @@ import android.content.Context
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.LocaleWrapper
 import java.util.*
 
 /**
  * Web search category.
+ * TODO Clean up code.
  *
  * @author toastkidjp
  */
@@ -223,6 +225,20 @@ enum class SearchCategory(
     private fun generate(l: String, h: String, q: String): String = generator(l, h, q)
 
     companion object {
+
+        private val hostAndCategories =
+                values()
+                        .filter { it != SITE_SEARCH }
+                        .map { it.host.toUri().host to it }
+                        .toMap()
+
+        fun findByHostOrNull(host: String?): SearchCategory? {
+            if (host.isNullOrBlank()) {
+                return null
+            }
+
+            return hostAndCategories.get(host)
+        }
 
         /**
          * Find [SearchCategory] by search category.
