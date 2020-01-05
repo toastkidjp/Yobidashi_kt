@@ -11,7 +11,6 @@ import java.util.*
 
 /**
  * Web search category.
- * TODO Clean up code.
  *
  * @author toastkidjp
  */
@@ -246,7 +245,7 @@ enum class SearchCategory(
          */
         fun findByCategory(category: String): SearchCategory {
             val target = category.toUpperCase(locale)
-            return values().find { it.name == target } ?: GOOGLE
+            return values().find { it.name == target } ?: getDefault()
         }
 
         /**
