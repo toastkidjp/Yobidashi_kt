@@ -232,13 +232,9 @@ enum class SearchCategory(
                         .map { it.host.toUri().host to it }
                         .toMap()
 
-        fun findByHostOrNull(host: String?): SearchCategory? {
-            if (host.isNullOrBlank()) {
-                return null
-            }
-
-            return hostAndCategories.get(host)
-        }
+        fun findByHostOrNull(host: String?): SearchCategory? =
+                if (host.isNullOrBlank()) null
+                else hostAndCategories.get(host)
 
         /**
          * Find [SearchCategory] by search category.
