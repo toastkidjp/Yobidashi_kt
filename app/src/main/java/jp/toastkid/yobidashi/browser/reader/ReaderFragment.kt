@@ -38,8 +38,11 @@ class ReaderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString(KEY_TITLE)?.also { binding.title.text = it }
-        arguments?.getString(KEY_CONTENT)?.also { binding.content.text = it }
+        arguments?.let { arguments ->
+            arguments.getString(KEY_TITLE)?.also { binding.title.text = it }
+            arguments.getString(KEY_CONTENT)?.also { binding.content.text = it }
+        }
+
 
         binding.close.setOnClickListener {
             ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()

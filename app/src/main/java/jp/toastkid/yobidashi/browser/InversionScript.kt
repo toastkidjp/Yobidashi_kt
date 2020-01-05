@@ -8,12 +8,25 @@ import android.webkit.WebView
  *
  * @author toastkidjp
  */
-object InversionScript {
+class InversionScript {
 
     /**
-     * JavaScript.
+     * Invoke action.
+     *
+     * @param webView [WebView]
      */
-    private const val SCRIPT: String = """
+    operator fun invoke(webView: WebView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView.evaluateJavascript(SCRIPT, null)
+        }
+    }
+
+    companion object {
+
+        /**
+         * JavaScript.
+         */
+        private const val SCRIPT: String = """
 (function () {
     var newStyle = document.createElement('style');
     newStyle.type = "text/css";
@@ -26,15 +39,5 @@ object InversionScript {
     document.getElementsByTagName('head').item(0).appendChild(newStyle);
 }());
             """
-
-    /**
-     * Invoke action.
-     *
-     * @param webView [WebView]
-     */
-    operator fun invoke(webView: WebView) {
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript(SCRIPT, null)
-        }
     }
 }
