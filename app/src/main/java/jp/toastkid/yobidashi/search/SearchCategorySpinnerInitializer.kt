@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.search
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +20,11 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 object SearchCategorySpinnerInitializer {
 
     operator fun invoke(spinner: Spinner, category: SearchCategory? = null) {
-        spinner.adapter = makeBaseAdapter(spinner)
+        spinner.adapter = makeBaseAdapter(spinner.context)
         spinner.setSelection(findIndex(category, spinner))
     }
 
-    private fun makeBaseAdapter(spinner: Spinner): BaseAdapter {
+    private fun makeBaseAdapter(context: Context): BaseAdapter {
         val searchCategories = SearchCategory.values()
 
         return object : BaseAdapter() {
@@ -36,7 +37,6 @@ object SearchCategorySpinnerInitializer {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val searchCategory = searchCategories[position]
 
-                val context = spinner.context
                 val inflater = LayoutInflater.from(context)
                 val view = inflater.inflate(R.layout.item_spinner_search_category, parent, false)
                 val imageView = view.findViewById<ImageView>(R.id.search_category_image)
