@@ -44,10 +44,10 @@ object SearchCategorySpinnerInitializer {
                 val searchCategory = searchCategories[position]
 
                 val view = inflater.inflate(LAYOUT_ID, parent, false)
-                val imageView = view.findViewById<ImageView>(R.id.search_category_image)
-                imageView.setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
-                val textView = view.findViewById<TextView>(R.id.search_category_text)
-                textView.setText(searchCategory.id)
+                view.findViewById<ImageView>(R.id.search_category_image)
+                        .setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
+                view.findViewById<TextView>(R.id.search_category_text)
+                        .setText(searchCategory.id)
                 return view
             }
         }
