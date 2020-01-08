@@ -19,16 +19,19 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 object SearchCategorySpinnerInitializer {
 
     operator fun invoke(spinner: Spinner, category: SearchCategory? = null) {
+        spinner.adapter = makeBaseAdapter(spinner)
+        spinner.setSelection(findIndex(category, spinner))
+    }
+
+    private fun makeBaseAdapter(spinner: Spinner): BaseAdapter {
         val searchCategories = SearchCategory.values()
 
-        spinner.adapter = object : BaseAdapter() {
+        return object : BaseAdapter() {
             override fun getCount(): Int = searchCategories.size
 
-            override fun getItem(position: Int): SearchCategory
-                    = searchCategories[position]
+            override fun getItem(position: Int): SearchCategory = searchCategories[position]
 
-            override fun getItemId(position: Int): Long
-                    = searchCategories[position].id.toLong()
+            override fun getItemId(position: Int): Long = searchCategories[position].id.toLong()
 
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val searchCategory = searchCategories[position]
@@ -43,9 +46,8 @@ object SearchCategorySpinnerInitializer {
                 return view
             }
         }
-
-        spinner.setSelection(findIndex(category, spinner))
     }
+
 
     private fun findIndex(category: SearchCategory?, spinner: Spinner): Int =
             SearchCategory.findIndex(
