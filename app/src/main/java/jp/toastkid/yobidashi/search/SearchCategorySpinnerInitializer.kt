@@ -18,7 +18,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 object SearchCategorySpinnerInitializer {
 
-    fun invoke(spinner: Spinner, category: SearchCategory? = null) {
+    operator fun invoke(spinner: Spinner, category: SearchCategory? = null) {
         val searchCategories = SearchCategory.values()
 
         spinner.adapter = object : BaseAdapter() {
