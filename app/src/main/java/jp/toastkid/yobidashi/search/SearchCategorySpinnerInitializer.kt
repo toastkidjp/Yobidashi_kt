@@ -8,6 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import androidx.appcompat.content.res.AppCompatResources
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -18,6 +19,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * @author toastkidjp
  */
 object SearchCategorySpinnerInitializer {
+
+    @LayoutRes
+    private const val LAYOUT_ID = R.layout.item_spinner_search_category
 
     operator fun invoke(spinner: Spinner, category: SearchCategory? = null) {
         spinner.adapter = makeBaseAdapter(spinner.context)
@@ -38,7 +42,7 @@ object SearchCategorySpinnerInitializer {
                 val searchCategory = searchCategories[position]
 
                 val inflater = LayoutInflater.from(context)
-                val view = inflater.inflate(R.layout.item_spinner_search_category, parent, false)
+                val view = inflater.inflate(LAYOUT_ID, parent, false)
                 val imageView = view.findViewById<ImageView>(R.id.search_category_image)
                 imageView.setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
                 val textView = view.findViewById<TextView>(R.id.search_category_text)
