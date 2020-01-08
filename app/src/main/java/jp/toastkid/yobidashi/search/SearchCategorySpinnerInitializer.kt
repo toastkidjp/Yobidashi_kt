@@ -44,11 +44,13 @@ object SearchCategorySpinnerInitializer {
             }
         }
 
-        val index = SearchCategory.findIndex(
-                category?.name
-                        ?: PreferenceApplier(spinner.context).getDefaultSearchEngine()
-        )
-        spinner.setSelection(index)
+        spinner.setSelection(findIndex(category, spinner))
     }
+
+    private fun findIndex(category: SearchCategory?, spinner: Spinner): Int =
+            SearchCategory.findIndex(
+                    category?.name
+                            ?: PreferenceApplier(spinner.context).getDefaultSearchEngine()
+            )
 
 }
