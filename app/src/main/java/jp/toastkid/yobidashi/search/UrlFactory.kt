@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 
 /**
  * @author toastkidjp
@@ -17,6 +18,6 @@ class UrlFactory {
      * @param currentUrl
      */
     operator fun invoke(context: Context, category: String, query: String, currentUrl: String? = null): Uri =
-            Uri.parse(SearchCategory.findByCategory(category).make(context, query, currentUrl))
+            SearchCategory.findByCategory(category).make(context, query, currentUrl).toUri()
 
 }
