@@ -29,6 +29,8 @@ object SearchCategorySpinnerInitializer {
     }
 
     private fun makeBaseAdapter(context: Context): BaseAdapter {
+        val inflater = LayoutInflater.from(context)
+
         val searchCategories = SearchCategory.values()
 
         return object : BaseAdapter() {
@@ -41,7 +43,6 @@ object SearchCategorySpinnerInitializer {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val searchCategory = searchCategories[position]
 
-                val inflater = LayoutInflater.from(context)
                 val view = inflater.inflate(LAYOUT_ID, parent, false)
                 val imageView = view.findViewById<ImageView>(R.id.search_category_image)
                 imageView.setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
