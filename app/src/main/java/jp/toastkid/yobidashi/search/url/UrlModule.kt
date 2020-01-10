@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.search.url
 
-import android.content.Intent
 import android.view.View
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,6 +16,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 
@@ -45,15 +45,7 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
     }
 
     fun shareUrl(view: View) {
-        val share = Intent(Intent.ACTION_SEND)
-        share.type = "text/plain"
-        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        share.putExtra(Intent.EXTRA_SUBJECT, "Share link")
-        val currentText = getCurrentText()
-        share.putExtra(Intent.EXTRA_TEXT, currentText)
-
-        val makeShare = Intent.createChooser(share, "Share link $currentText")
-        view.context.startActivity(makeShare)
+        view.context.startActivity(IntentFactory.makeShareUrl(getCurrentText()))
     }
 
     /**
