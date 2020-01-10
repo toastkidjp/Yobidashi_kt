@@ -425,5 +425,6 @@
     <string name="title_rss_setting">RSS 設定</string>
     <string name="clipboard">クリップボード</string>
     <string name="message_add_rss_target">この RSS を追加しますか?</string>
+    <string name="title_current_page">現在のページ</string>
 
 </resources>

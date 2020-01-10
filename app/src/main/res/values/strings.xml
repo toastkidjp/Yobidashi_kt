@@ -430,5 +430,6 @@
     <string name="title_rss_setting">RSS setting</string>
     <string name="clipboard">Clipboard</string>
     <string name="message_add_rss_target">Would you add this RSS?</string>
+    <string name="title_current_page">Current Page</string>
 
 </resources>

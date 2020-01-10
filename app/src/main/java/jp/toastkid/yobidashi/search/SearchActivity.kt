@@ -46,6 +46,7 @@ import jp.toastkid.yobidashi.search.history.ClearSearchHistoryDialogFragment
 import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
+import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -146,6 +147,16 @@ class SearchActivity : AppCompatActivity(),
             } else {
                 search(binding?.searchCategories?.selectedItem.toString(), clipped)
             }
+        }
+
+        val urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding)
+
+        val url = currentUrl
+        if (url.isNullOrBlank()) {
+            urlModule.hide().addTo(disposables)
+        } else {
+            urlModule.setLink(url)
+            urlModule.show().addTo(disposables)
         }
 
         suggestionModule = SuggestionModule(

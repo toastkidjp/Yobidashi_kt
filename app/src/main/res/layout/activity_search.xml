@@ -32,6 +32,9 @@
                 <include android:id="@+id/clipboard_module"
                     layout="@layout/module_search_clipboard" />
 
+                <include android:id="@+id/url_module"
+                    layout="@layout/module_search_url" />
+
                 <include android:id="@+id/url_suggestion_module"
                     layout="@layout/module_url_suggestion" />
 
