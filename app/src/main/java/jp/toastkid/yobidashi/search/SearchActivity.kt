@@ -309,6 +309,10 @@ class SearchActivity : AppCompatActivity(),
 
         clipboardModule?.switch()
 
+        switchUrlModule()
+    }
+
+    private fun switchUrlModule() {
         val url = currentUrl
         if (url.isNullOrBlank() || urlModule?.enable == false) {
             urlModule?.hide()?.addTo(disposables)
