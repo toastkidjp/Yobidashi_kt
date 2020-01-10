@@ -31,27 +31,35 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
 
     init {
         binding.share.setOnClickListener {
-            val share = Intent(Intent.ACTION_SEND)
-            share.type = "text/plain"
-            share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            share.putExtra(Intent.EXTRA_SUBJECT, "Share link")
-            val currentText = getCurrentText()
-            share.putExtra(Intent.EXTRA_TEXT, currentText)
-
-            val makeShare = Intent.createChooser(share, "Share link $currentText")
-            it.context.startActivity(makeShare)
+            shareUrl(it)
         }
 
         binding.clip.setOnClickListener {
-            val text = getCurrentText()
-            val context = it.context
-            Clipboard.clip(context, text)
-            Toaster.snackShort(
-                    it,
-                    context.getString(R.string.message_clip_to, text),
-                    preferenceApplier.colorPair()
-            )
+            clipUrl(it)
         }
+    }
+
+    fun clipUrl(view: View) {
+        val text = getCurrentText()
+        val context = view.context
+        Clipboard.clip(context, text)
+        Toaster.snackShort(
+                view,
+                context.getString(R.string.message_clip_to, text),
+                preferenceApplier.colorPair()
+        )
+    }
+
+    fun shareUrl(view: View) {
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        share.putExtra(Intent.EXTRA_SUBJECT, "Share link")
+        val currentText = getCurrentText()
+        share.putExtra(Intent.EXTRA_TEXT, currentText)
+
+        val makeShare = Intent.createChooser(share, "Share link $currentText")
+        view.context.startActivity(makeShare)
     }
 
     /**
