@@ -30,7 +30,7 @@ class PreferenceApplier(private val context: Context) {
 
     private enum class Key {
         BG_COLOR, FONT_COLOR,
-        ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY,
+        ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
         ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH,
         BG_IMAGE, LAST_AD_DATE,
         USE_NOTIFICATION_WIDGET, USE_INTERNAL_BROWSER, RETAIN_TABS, USE_JS, MENU_POS,
@@ -87,6 +87,15 @@ class PreferenceApplier(private val context: Context) {
 
     fun switchEnableViewHistory() {
         preferences.edit().putBoolean(Key.ENABLE_VIEW_HISTORY.name, !isEnableViewHistory)
+                .apply()
+    }
+
+    fun isEnableUrlModule(): Boolean {
+        return preferences.getBoolean(Key.ENABLE_URL_MODULE.name, true)
+    }
+
+    fun switchEnableUrlModule() {
+        preferences.edit().putBoolean(Key.ENABLE_URL_MODULE.name, !isEnableUrlModule())
                 .apply()
     }
 

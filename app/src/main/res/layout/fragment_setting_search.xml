@@ -213,6 +213,33 @@
                 </FrameLayout>
 
                 <FrameLayout
+                    android:id="@+id/use_url_module"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{view -> fragment.switchUseUrlModule()}"
+                    >
+                    <TextView
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_web_black"
+                        android:text="@string/title_url_module"
+                        />
+                    <CheckBox
+                        android:id="@+id/use_url_module_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_gravity="end"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <FrameLayout
                     android:id="@+id/use_app_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

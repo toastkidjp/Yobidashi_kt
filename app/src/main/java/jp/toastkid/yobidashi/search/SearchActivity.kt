@@ -90,6 +90,11 @@ class SearchActivity : AppCompatActivity(),
     private var suggestionModule: SuggestionModule? = null
 
     /**
+     * Current URL module.
+     */
+    private var urlModule: UrlModule? = null
+
+    /**
      * Suggestion module.
      */
     private var urlSuggestionModule: UrlSuggestionModule? = null
@@ -149,15 +154,7 @@ class SearchActivity : AppCompatActivity(),
             }
         }
 
-        val urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding)
-
-        val url = currentUrl
-        if (url.isNullOrBlank()) {
-            urlModule.hide().addTo(disposables)
-        } else {
-            urlModule.setLink(url)
-            urlModule.show().addTo(disposables)
-        }
+        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding)
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -306,10 +303,19 @@ class SearchActivity : AppCompatActivity(),
         suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         historyModule?.enable = preferenceApplier.isEnableSearchHistory
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
+        urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
         clipboardModule?.switch()
+
+        val url = currentUrl
+        if (url.isNullOrBlank() || urlModule?.enable == false) {
+            urlModule?.hide()?.addTo(disposables)
+        } else {
+            urlModule?.setLink(url)
+            urlModule?.show()?.addTo(disposables)
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
 
     private val preferenceApplier = PreferenceApplier(binding.root.context)
 
-    private var enable: Boolean = true
+    var enable: Boolean = true
 
     init {
         binding.module = this
