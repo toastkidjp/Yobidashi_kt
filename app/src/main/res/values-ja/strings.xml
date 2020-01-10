@@ -426,5 +426,6 @@
     <string name="clipboard">クリップボード</string>
     <string name="message_add_rss_target">この RSS を追加しますか?</string>
     <string name="title_current_page">現在のページ</string>
+    <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
 
 </resources>

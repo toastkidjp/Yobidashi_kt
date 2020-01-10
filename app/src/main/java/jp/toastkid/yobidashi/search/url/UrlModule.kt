@@ -13,14 +13,19 @@ import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 
 /**
  * @author toastkidjp
  */
 class UrlModule(private val binding: ModuleSearchUrlBinding) {
+
+    private val preferenceApplier = PreferenceApplier(binding.root.context)
 
     private var enable: Boolean = true
 
@@ -38,8 +43,14 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         }
 
         binding.clip.setOnClickListener {
-            Clipboard.clip(it.context, getCurrentText())
-            // TODO Add snackbar feedback.
+            val text = getCurrentText()
+            val context = it.context
+            Clipboard.clip(context, text)
+            Toaster.snackShort(
+                    it,
+                    context.getString(R.string.message_clip_to, text),
+                    preferenceApplier.colorPair()
+            )
         }
     }
 

@@ -431,5 +431,6 @@
     <string name="clipboard">Clipboard</string>
     <string name="message_add_rss_target">Would you add this RSS?</string>
     <string name="title_current_page">Current Page</string>
+    <string name="message_clip_to">Clip \'%s\'.</string>
 
 </resources>
