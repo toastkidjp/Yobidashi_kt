@@ -30,13 +30,7 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
     private var enable: Boolean = true
 
     init {
-        binding.share.setOnClickListener {
-            shareUrl(it)
-        }
-
-        binding.clip.setOnClickListener {
-            clipUrl(it)
-        }
+        binding.module = this
     }
 
     fun clipUrl(view: View) {

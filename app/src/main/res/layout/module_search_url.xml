@@ -74,6 +74,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/text"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
+                android:onClick="@{module::shareUrl}"
                 />
             <ImageView
                 android:id="@+id/clip"
@@ -87,6 +88,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/text"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
+                android:onClick="@{module::clipUrl}"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
