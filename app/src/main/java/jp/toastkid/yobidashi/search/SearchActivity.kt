@@ -526,9 +526,13 @@ class SearchActivity : AppCompatActivity(),
         private const val LAYOUT_ID = R.layout.activity_search
 
         /**
-         * Extra key.
+         * Extra key of query.
          */
         private const val EXTRA_KEY_QUERY = "query"
+
+        /**
+         * Extra key of URL.
+         */
         private const val EXTRA_KEY_URL = "url"
 
         /**
