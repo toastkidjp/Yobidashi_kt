@@ -33,6 +33,11 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         binding.module = this
     }
 
+    /**
+     * This function is called from data-binding.
+     *
+     * @param view [View]
+     */
     fun clipUrl(view: View) {
         val text = getCurrentText()
         val context = view.context
@@ -44,6 +49,11 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         )
     }
 
+    /**
+     * This function is called from data-binding.
+     *
+     * @param view [View]
+     */
     fun shareUrl(view: View) {
         view.context.startActivity(IntentFactory.makeShareUrl(getCurrentText()))
     }
