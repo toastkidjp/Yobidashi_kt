@@ -60,7 +60,7 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
     /**
      * Show this module.
      */
-    fun show(): Disposable {
+    private fun show(): Disposable {
         if (binding.root.visibility == View.GONE && enable) {
             return runOnMainThread { binding.root.visibility = View.VISIBLE }
         }
@@ -70,7 +70,7 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
     /**
      * Hide this module.
      */
-    fun hide(): Disposable {
+    private fun hide(): Disposable {
         if (binding.root.visibility == View.VISIBLE) {
             return runOnMainThread { binding.root.visibility = View.GONE }
         }
