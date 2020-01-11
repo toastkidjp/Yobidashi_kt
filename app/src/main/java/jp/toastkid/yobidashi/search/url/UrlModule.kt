@@ -48,14 +48,13 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         view.context.startActivity(IntentFactory.makeShareUrl(getCurrentText()))
     }
 
-    fun switch(url: String?): Disposable {
-        return if (url.isNullOrBlank() || !enable) {
-            hide()
-        } else {
-            setLink(url)
-            show()
-        }
-    }
+    fun switch(url: String?): Disposable =
+            if (url.isNullOrBlank() || !enable) {
+                hide()
+            } else {
+                setLink(url)
+                show()
+            }
 
     /**
      * Show this module.
