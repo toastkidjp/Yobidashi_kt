@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                />
+                android:contentDescription="@string/content_description_background" />
 
             <FrameLayout
                 android:id="@+id/content"
@@ -58,7 +58,7 @@
                 android:layout_width="@dimen/menu_button_size"
                 android:layout_height="@dimen/menu_button_size"
                 android:layout_gravity="right|bottom"
-                android:src="@drawable/ic_menu_cycle"
+                app:srcCompat="@drawable/ic_menu_cycle"
                 app:backgroundTint="@color/soft_background"
                 android:background="@drawable/ripple_transparent"
                 app:rippleColor="@color/aw_ripple"
