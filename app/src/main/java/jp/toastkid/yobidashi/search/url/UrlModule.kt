@@ -88,7 +88,7 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
      *
      * @param link Link URL(string)
      */
-    fun setLink(link: String) {
+    private fun setLink(link: String) {
         binding.text.text = link
     }
 
