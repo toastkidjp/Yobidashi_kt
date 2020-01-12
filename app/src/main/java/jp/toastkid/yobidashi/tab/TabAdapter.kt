@@ -65,7 +65,7 @@ class TabAdapter(
 
     private val preferenceApplier: PreferenceApplier
 
-    private val autoArchive = AutoArchive(webViewContainer.context)
+    private val autoArchive = AutoArchive.make(webViewContainer.context)
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 

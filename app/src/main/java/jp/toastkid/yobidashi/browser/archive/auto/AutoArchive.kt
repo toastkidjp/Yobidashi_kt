@@ -11,13 +11,12 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.WebView
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.libs.storage.StorageWrapper
 
 /**
  * @author toastkidjp
  */
-class AutoArchive(context: Context) {
-
-    private val filesDir = FilesDir(context, FOLDER)
+class AutoArchive(private val filesDir: StorageWrapper) {
 
     fun save(webView: WebView?, tabId: String) {
         webView?.saveWebArchive(filesDir.assignNewFile("$tabId$EXTENSION").absolutePath)
@@ -39,5 +38,7 @@ class AutoArchive(context: Context) {
         private const val FOLDER = "auto_archives"
 
         private const val EXTENSION = ".mht"
+
+        fun make(context: Context) = AutoArchive(FilesDir(context, FOLDER))
     }
 }

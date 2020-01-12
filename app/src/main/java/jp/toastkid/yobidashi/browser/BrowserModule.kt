@@ -71,7 +71,7 @@ class BrowserModule(
     private val adRemover: AdRemover =
             AdRemover(context.assets.open("ad_hosts.txt"))
 
-    private val autoArchive = AutoArchive(context)
+    private val autoArchive = AutoArchive.make(context)
 
     private var headerViewModel: HeaderViewModel? = null
 
