@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.libs.storage
 
 import android.content.Context
 import android.net.Uri
+import timber.log.Timber
 
 import java.io.File
 import java.util.regex.Pattern
@@ -57,6 +58,16 @@ sealed class StorageWrapper(context: Context, dirName: String) {
             return false
         }
         return listFiles()[index].delete()
+    }
+
+    fun findByName(name: String): File? = listFiles().firstOrNull { it.name.equals(name) }
+
+    fun delete(name: String) {
+        assignNewFile(name).delete()
+        // TODO delete
+        listFiles().forEach {
+            Timber.i(it.absolutePath)
+        }
     }
 
     /**
