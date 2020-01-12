@@ -79,8 +79,6 @@ class TabAdapter(
 
     private var headerViewModel: HeaderViewModel? = null
 
-    private var loadingViewModel: LoadingViewModel? = null
-
     private val bitmapCompressor = BitmapCompressor()
 
     init {
@@ -89,16 +87,16 @@ class TabAdapter(
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
         if (viewContext is MainActivity) {
-            browserHeaderViewModel =
-                    ViewModelProviders.of(viewContext).get(BrowserHeaderViewModel::class.java)
-            headerViewModel =
-                    ViewModelProviders.of(viewContext).get(HeaderViewModel::class.java)
-            loadingViewModel =
-                    ViewModelProviders.of(viewContext).get(LoadingViewModel::class.java)
-// TODO Extract
-            loadingViewModel?.onPageFinished?.observe(viewContext, Observer {
-                browserModule.saveArchiveForAutoArchive(currentTabId())
-            })
+            val viewModelProvider = ViewModelProviders.of(viewContext)
+            browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
+            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+
+            viewModelProvider.get(LoadingViewModel::class.java)
+                    .onPageFinished
+                    .observe(
+                            viewContext,
+                            Observer { browserModule.saveArchiveForAutoArchive(currentTabId()) }
+                    )
         }
     }
     /**
