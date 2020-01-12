@@ -10,8 +10,6 @@ package jp.toastkid.yobidashi.browser.archive.auto
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebView
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 
 /**
@@ -29,11 +27,11 @@ class AutoArchive(context: Context) {
         filesDir.delete("$tabId$EXTENSION")
     }
 
-    fun load(webView: WebView?, tabId: String) {
+    fun load(webView: WebView?, tabId: String, callback: () -> Unit) {
         val file = filesDir.findByName("$tabId$EXTENSION") ?: return
         webView?.let {
             it.loadUrl(Uri.fromFile(file).toString())
-            Toaster.snackShort(it, "Load archive.", PreferenceApplier(it.context).colorPair())
+            callback()
         }
     }
 

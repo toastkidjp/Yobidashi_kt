@@ -281,7 +281,9 @@ class TabAdapter(
         currentTab()?.let {
             if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
                 if (NetworkChecker.isNotAvailable(webViewContainer.context)) {
-                    autoArchive.load(currentWebView(), it.id())
+                    autoArchive.load(currentWebView(), it.id()) {
+                        Toaster.snackShort(webViewContainer, "Load archive.", colorPair)
+                    }
                     return@let
                 }
                 callLoadUrl(it.getUrl())
