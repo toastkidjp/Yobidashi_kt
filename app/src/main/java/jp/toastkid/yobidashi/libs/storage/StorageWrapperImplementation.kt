@@ -19,10 +19,9 @@ sealed class StorageWrapperImplementation(context: Context, dirName: String) : S
     /**
      * Directory object.
      */
-    private val dir: File
+    private val dir = File(getDir(context), dirName)
 
     init {
-        dir = File(getDir(context), dirName)
         if (!dir.exists()) {
             dir.mkdirs()
         }
