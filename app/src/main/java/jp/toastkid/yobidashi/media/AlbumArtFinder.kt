@@ -20,7 +20,6 @@ import java.io.FileNotFoundException
 class AlbumArtFinder(private val contentResolver: ContentResolver) {
 
     operator fun invoke(id: Long): Bitmap? {
-        val albumArtUri = "content://media/external/audio/albumart".toUri()
         val album1Uri = ContentUris.withAppendedId(albumArtUri, id)
         try {
             return BitmapFactory.decodeStream(contentResolver.openInputStream(album1Uri))
@@ -28,5 +27,9 @@ class AlbumArtFinder(private val contentResolver: ContentResolver) {
             err.printStackTrace()
         }
         return null
+    }
+
+    companion object {
+        private val albumArtUri = "content://media/external/audio/albumart".toUri()
     }
 }
