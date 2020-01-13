@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.media
 import android.Manifest
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,32 +90,9 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
     private fun readAll() {
         adapter?.clear()
 
-        val sortOrder = MediaStore.Audio.AudioColumns.ALBUM + " ASC"
-        val contentResolver = context?.contentResolver ?: return
-        val cursor = contentResolver.query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                null,
-                null,
-                null,
-                sortOrder
-        )
-
-        while (cursor?.moveToNext() == true) {
-            val audio = Audio(
-                    id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
-                    title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                    artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                    albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
-                    album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
-                    date = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED)),
-                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
-            )
-
-            adapter?.add(audio)
-        }
+        AudioFileFinder()(context?.contentResolver) { adapter?.add(it) }
 
         activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
-        cursor?.close()
     }
 
     override fun pressBack(): Boolean {
