@@ -24,6 +24,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentMediaPlayerBinding
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 
@@ -78,7 +79,11 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
                         {
                             if (it) {
                                 readAll()
+                                return@subscribe
                             }
+
+                            Toaster.snackShort(binding.root, "Audio file is not found.", colorPair)
+                            activity?.supportFragmentManager?.popBackStack()
                         },
                         {
                             Timber.e(it)
