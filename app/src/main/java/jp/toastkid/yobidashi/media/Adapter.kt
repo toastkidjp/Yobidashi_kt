@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.media
 
-import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,7 @@ class Adapter(
 
     private val items = mutableListOf<Audio>()
 
-    private val mediaPlayer = MediaPlayer();
+    private val mediaController = MediaController()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_media_list, parent, false)
@@ -51,10 +50,7 @@ class Adapter(
             holder.setIcon(albumArtOrNull)
         }
         holder.setOnClickListener(View.OnClickListener {
-            mediaPlayer.reset()
-            mediaPlayer.setDataSource(binding.root.context, item.path?.toUri())
-            mediaPlayer.prepare()
-            mediaPlayer.start()
+            mediaController.playNew(binding.root.context, item.path?.toUri())
         })
     }
 
@@ -68,27 +64,16 @@ class Adapter(
         items.clear()
     }
 
-    /**
-     *
-     * @return displayStop
-     */
     fun switch(): Boolean {
-        return if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-            false
-        } else {
-            mediaPlayer.start()
-            true
-        }
+        return mediaController.switch()
     }
 
     fun reset() {
-        mediaPlayer.reset()
+        mediaController.reset()
     }
 
     fun dispose() {
-        mediaPlayer.stop()
-        mediaPlayer.release()
+        mediaController.dispose()
     }
 
 }
