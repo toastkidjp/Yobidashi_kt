@@ -7,9 +7,6 @@
  */
 package jp.toastkid.yobidashi.media
 
-import android.content.ContentUris
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import java.io.FileNotFoundException
 
 /**
  * @author toastkidjp
@@ -32,19 +28,22 @@ class Adapter(
 
     private lateinit var binding: ItemMediaListBinding
 
+    private lateinit var albumArtFinder: AlbumArtFinder
+
     private val items = mutableListOf<Audio>()
 
     private val mediaPlayer = MediaPlayer();
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_media_list, parent, false)
+        albumArtFinder = AlbumArtFinder(binding.root.context.contentResolver)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items.get(position)
         holder.bindText(item)
-        val albumArtOrNull = extractAlbumArt(item.albumId ?: 0L)
+        val albumArtOrNull = albumArtFinder(item.albumId ?: 0L)
         if (albumArtOrNull == null) {
             holder.setIconColor(preferenceApplier.colorPair().bgColor())
             holder.setIconId(R.drawable.ic_music)
@@ -92,15 +91,4 @@ class Adapter(
         mediaPlayer.release()
     }
 
-    private fun extractAlbumArt(id: Long): Bitmap? {
-        val albumArtUri = "content://media/external/audio/albumart".toUri()
-        val album1Uri = ContentUris.withAppendedId(albumArtUri, id)
-        try {
-            val contentResolver = binding.root.context.contentResolver
-            return BitmapFactory.decodeStream(contentResolver.openInputStream(album1Uri))
-        } catch (err: FileNotFoundException) {
-            err.printStackTrace()
-        }
-        return null
-    }
 }
