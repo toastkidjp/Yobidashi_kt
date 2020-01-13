@@ -12,6 +12,7 @@ import android.content.ContentUris
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.net.toUri
+import timber.log.Timber
 import java.io.FileNotFoundException
 
 /**
@@ -24,7 +25,7 @@ class AlbumArtFinder(private val contentResolver: ContentResolver) {
         try {
             return BitmapFactory.decodeStream(contentResolver.openInputStream(album1Uri))
         } catch (e: FileNotFoundException) {
-            e.printStackTrace()
+            Timber.e(e)
         }
         return null
     }
