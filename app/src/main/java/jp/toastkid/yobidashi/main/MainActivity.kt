@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.yobidashi.media.MediaPlayerFragment
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -89,6 +90,8 @@ class MainActivity : AppCompatActivity() {
     private val rssReaderFragment by lazy { RssReaderFragment() }
 
     private val rssReaderSettingFragment by lazy { RssSettingFragment() }
+
+    private val mediaPlayerFragment by lazy { MediaPlayerFragment() }
 
     /**
      * Disposables.
@@ -340,6 +343,9 @@ class MainActivity : AppCompatActivity() {
             }
             Menu.RSS_READER -> {
                 replaceFragment(rssReaderFragment)
+            }
+            Menu.AUDIO -> {
+                replaceFragment(mediaPlayerFragment)
             }
             Menu.ABOUT-> {
                 startActivity(AboutThisAppActivity.makeIntent(this))

@@ -433,5 +433,6 @@
     <string name="title_current_page">Current Page</string>
     <string name="message_clip_to">Clip \'%s\'.</string>
     <string name="title_url_module">Use URL module</string>
+    <string name="title_audio_player">Audio player</string>
 
 </resources>
