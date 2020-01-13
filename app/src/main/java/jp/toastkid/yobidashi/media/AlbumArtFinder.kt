@@ -23,8 +23,8 @@ class AlbumArtFinder(private val contentResolver: ContentResolver) {
         val album1Uri = ContentUris.withAppendedId(albumArtUri, id)
         try {
             return BitmapFactory.decodeStream(contentResolver.openInputStream(album1Uri))
-        } catch (err: FileNotFoundException) {
-            err.printStackTrace()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
         }
         return null
     }
