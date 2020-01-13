@@ -47,18 +47,20 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val preferenceApplier = PreferenceApplier(view.context)
-        adapter = Adapter(LayoutInflater.from(view.context), preferenceApplier)
+        val context = view.context
+
+        val preferenceApplier = PreferenceApplier(context)
+        adapter = Adapter(LayoutInflater.from(context), preferenceApplier)
 
         binding.mediaList.adapter = adapter
-        binding.mediaList.layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
+        binding.mediaList.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         binding.reset.setOnClickListener {
             adapter?.reset()
         }
 
-        val stopBitmap = BitmapFactory.decodeResource(view.context.resources, R.drawable.ic_stop)
-        val playBitmap = BitmapFactory.decodeResource(view.context.resources, R.drawable.ic_play)
+        val stopBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_stop)
+        val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play)
 
         val colorPair = preferenceApplier.colorPair()
 
