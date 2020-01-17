@@ -39,7 +39,11 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
 
     private val disposables = CompositeDisposable()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_media_player, container, false)
         return binding.root
     }
@@ -53,7 +57,8 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
         adapter = Adapter(LayoutInflater.from(context), preferenceApplier)
 
         binding.mediaList.adapter = adapter
-        binding.mediaList.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.mediaList.layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         binding.reset.setOnClickListener {
             adapter?.reset()
