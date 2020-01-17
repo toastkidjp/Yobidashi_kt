@@ -46,6 +46,7 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
             savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        binding.fragment = this
         return binding.root
     }
 
@@ -60,10 +61,6 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
         binding.mediaList.adapter = adapter
         binding.mediaList.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        binding.reset.setOnClickListener {
-            adapter?.reset()
-        }
 
         val stopBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_stop)
         val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play)
@@ -98,6 +95,10 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
                         }
                 )
                 .addTo(disposables)
+    }
+
+    fun reset() {
+        adapter?.reset()
     }
 
     private fun readAll() {

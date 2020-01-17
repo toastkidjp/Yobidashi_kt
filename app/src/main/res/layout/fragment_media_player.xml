@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable name="fragment"
+            type="jp.toastkid.yobidashi.media.MediaPlayerFragment" />
+    </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,6 +30,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 app:srcCompat="@drawable/ic_reset"
+                android:onClick="@{view -> fragment.reset()}"
                 />
             <ImageView
                 android:id="@+id/play_switch"
