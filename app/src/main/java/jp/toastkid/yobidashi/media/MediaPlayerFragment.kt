@@ -87,7 +87,7 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
                                 return@subscribe
                             }
 
-                            Toaster.snackShort(binding.root, "Audio file is not found.", colorPair)
+                            Toaster.snackShort(binding.root, R.string.message_audio_file_is_not_found, colorPair)
                             activity?.supportFragmentManager?.popBackStack()
                         },
                         Timber::e
