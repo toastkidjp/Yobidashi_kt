@@ -19,13 +19,13 @@ class AudioFileFinder {
         if (contentResolver == null) {
             return
         }
-        val sortOrder = MediaStore.Audio.AudioColumns.ALBUM + " ASC"
+
         val cursor = contentResolver.query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 null,
                 null,
                 null,
-                sortOrder
+                SORT_ORDER
         )
 
         while (cursor?.moveToNext() == true) {
@@ -42,5 +42,9 @@ class AudioFileFinder {
         }
 
         cursor?.close()
+    }
+
+    companion object {
+        private const val SORT_ORDER = "${MediaStore.Audio.AudioColumns.ALBUM} ASC"
     }
 }
