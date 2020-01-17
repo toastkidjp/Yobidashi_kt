@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,7 +45,7 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_media_player, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         return binding.root
     }
 
@@ -116,5 +117,11 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
         super.onDetach()
         disposables.clear()
         adapter?.dispose()
+    }
+
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_media_player
     }
 }
