@@ -32,15 +32,14 @@ class MediaController {
      *
      * @return displayStop
      */
-    fun switch(): Boolean {
-        return if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-            false
-        } else {
-            mediaPlayer.start()
-            true
-        }
-    }
+    fun switch(): Boolean =
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                false
+            } else {
+                mediaPlayer.start()
+                true
+            }
 
     fun reset() {
         mediaPlayer.reset()
