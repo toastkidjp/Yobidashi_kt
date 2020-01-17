@@ -90,9 +90,7 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
                             Toaster.snackShort(binding.root, "Audio file is not found.", colorPair)
                             activity?.supportFragmentManager?.popBackStack()
                         },
-                        {
-                            Timber.e(it)
-                        }
+                        Timber::e
                 )
                 .addTo(disposables)
     }
