@@ -31,6 +31,7 @@
                 android:layout_marginStart="8dp"
                 app:srcCompat="@drawable/ic_reset"
                 android:onClick="@{view -> fragment.reset()}"
+                android:contentDescription="@string/settings_color_reset"
                 />
             <ImageView
                 android:id="@+id/play_switch"
@@ -39,6 +40,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 app:srcCompat="@drawable/ic_play"
+                android:contentDescription="@string/description_play_switch"
                 />
             <TextView
                 android:id="@+id/info_playing"
