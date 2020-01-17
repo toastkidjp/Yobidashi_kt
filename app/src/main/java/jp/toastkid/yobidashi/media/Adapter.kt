@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.media
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +35,7 @@ class Adapter(
     private val mediaController = MediaController()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_media_list, parent, false)
+        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false)
         albumArtFinder = AlbumArtFinder(binding.root.context.contentResolver)
         return ViewHolder(binding)
     }
@@ -76,4 +77,10 @@ class Adapter(
         mediaController.dispose()
     }
 
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.item_media_list
+
+    }
 }
