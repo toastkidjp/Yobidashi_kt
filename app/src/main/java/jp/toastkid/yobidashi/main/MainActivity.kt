@@ -48,6 +48,7 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.cleaner.ProcessCleaner
+import jp.toastkid.yobidashi.cleaner.UsageStatsPermissionChecker
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
@@ -348,10 +349,8 @@ class MainActivity : AppCompatActivity() {
                     return
                 }
 
-                val appOps = getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager
-                val uid = android.os.Process.myUid()
-                val mode = appOps?.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, uid, packageName)
-                if (mode != AppOpsManager.MODE_ALLOWED) {
+                if (UsageStatsPermissionChecker()
+                                .invoke(getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager, packageName)) {
                     Toaster.withAction(
                             binding.root,
                             R.string.message_require_usage_stats_permission,
