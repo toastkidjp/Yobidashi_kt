@@ -825,8 +825,8 @@ class BrowserFragment : Fragment(),
         loadWithNewTab(url.toUri())
     }
 
-    override fun openBackgroundTab(url: String) {
-        tabs.openBackgroundTab(url)
+    override fun openBackgroundTab(title: String, url: String) {
+        tabs.openBackgroundTab(title, url)
     }
 
     override fun openCurrent(url: String) {

@@ -177,10 +177,15 @@ class TabAdapter(
     /**
      * Open background tab with URL string.
      *
-     * @param url
+     * @param title Tab's title
+     * @param url Tab's URL
      */
-    fun openBackgroundTab(url: String) {
-        tabList.add(WebTab.makeBackground(webViewContainer.context.getString(R.string.new_tab), url))
+    fun openBackgroundTab(title: String, url: String) {
+        val tabTitle =
+                if (title.isNotBlank()) title
+                else webViewContainer.context.getString(R.string.new_tab)
+
+        tabList.add(WebTab.makeBackground(tabTitle, url))
         tabList.save()
         Toaster.snackShort(
                 webViewContainer,

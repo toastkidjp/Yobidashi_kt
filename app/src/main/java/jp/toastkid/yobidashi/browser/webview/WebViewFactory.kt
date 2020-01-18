@@ -34,9 +34,12 @@ internal object WebViewFactory {
      * Use for only extract anchor URL.
      */
     private val handler = Handler(Handler.Callback { message ->
+        message?.data?.get("title")?.toString()?.let { title = it }
         message?.data?.get("url")?.toString()?.let { anchor = it }
         true
     })
+
+    private var title: String = ""
 
     /**
      * Extracted anchor URL.
@@ -90,10 +93,24 @@ internal object WebViewFactory {
                     true
                 }
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
+                    webView.requestFocusNodeHref(handler.obtainMessage())
+
                     val url = hitResult.extra ?: return@setOnLongClickListener false
                     if (context is FragmentActivity) {
+                        if (TextUtils.isEmpty(title)) {
+                            handler.postDelayed(
+                                    {
+                                        showDialogFragment(
+                                                AnchorTypeLongTapDialogFragment.make(title, url),
+                                                context.supportFragmentManager
+                                        )
+                                    },
+                                    300L
+                            )
+                            return@setOnLongClickListener true
+                        }
                         showDialogFragment(
-                                AnchorTypeLongTapDialogFragment.make(url),
+                                AnchorTypeLongTapDialogFragment.make(title, url),
                                 context.supportFragmentManager
                         )
                     }
@@ -134,7 +151,7 @@ internal object WebViewFactory {
      * @param fragmentActivity [FragmentActivity]
      */
     private fun showImageAnchorDialog(url: String, fragmentActivity: FragmentActivity) {
-        val dialogFragment = ImageAnchorTypeLongTapDialogFragment.make(url, anchor)
+        val dialogFragment = ImageAnchorTypeLongTapDialogFragment.make(title, url, anchor)
         showDialogFragment(
                 dialogFragment,
                 fragmentActivity.supportFragmentManager
