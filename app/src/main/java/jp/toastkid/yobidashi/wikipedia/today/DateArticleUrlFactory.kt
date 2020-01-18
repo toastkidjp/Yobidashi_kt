@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.wikipedia.today
 
 import android.content.Context
+import androidx.annotation.StringRes
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.LocaleWrapper
 import java.text.MessageFormat
@@ -41,6 +42,7 @@ class DateArticleUrlFactory {
         /**
          * Format resource ID.
          */
+        @StringRes
         private const val FORMAT_ID = R.string.format_date_link
 
     }
