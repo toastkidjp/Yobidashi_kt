@@ -103,6 +103,7 @@ class BackgroundSettingActivity : AppCompatActivity(), ClearImagesDialogFragment
         binding?.toolbar?.let { ToolbarColorApplier()(window, it, preferenceApplier.colorPair()) }
     }
 
+    // TODO clean up
     private fun clickMenu(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
