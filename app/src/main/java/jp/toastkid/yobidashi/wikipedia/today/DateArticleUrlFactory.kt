@@ -19,10 +19,12 @@ import java.text.MessageFormat
 class DateArticleUrlFactory {
 
     /**
-     g* Make Wikipedia article's url.
+     * Make Wikipedia article's url.
+     *
      * @param context context
-     * @param month 0-11
+     * @param month <b>0</b>-11
      * @param dayOfMonth 1-31
+     *
      * @return Wikipedia article's url
      */
     operator fun invoke(context: Context, month: Int, dayOfMonth: Int): String {
