@@ -21,7 +21,6 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -47,6 +46,7 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.cleaner.CleanerResultDialogFragment
 import jp.toastkid.yobidashi.cleaner.ProcessCleaner
 import jp.toastkid.yobidashi.cleaner.UsageStatsPermissionChecker
 import jp.toastkid.yobidashi.color_filter.ColorFilter
@@ -374,11 +374,12 @@ class MainActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {
-                                    val message = if (it.isBlank()) "Failed." else it
-                                    AlertDialog.Builder(this)
-                                            .setTitle("Cleaned")
-                                            .setMessage(message)
-                                            .show()
+                                    CleanerResultDialogFragment
+                                            .withMessage(if (it.isBlank()) "Failed." else it)
+                                            .show(
+                                                    supportFragmentManager,
+                                                    CleanerResultDialogFragment::class.java.simpleName
+                                            )
                                 },
                                 Timber::e
                         )
