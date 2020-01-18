@@ -97,9 +97,12 @@ class ProcessCleaner {
 
     companion object {
 
-        private val intent = Intent(Intent.ACTION_MAIN).also { it.addCategory(Intent.CATEGORY_HOME) }
+        private val intent =
+                Intent(Intent.ACTION_MAIN).also { it.addCategory(Intent.CATEGORY_HOME) }
 
-        private val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PackageManager.MATCH_ALL else 0
+        private val flag =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PackageManager.MATCH_ALL
+                else 0
 
         private val primaryFlag = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_PERSISTENT
 
