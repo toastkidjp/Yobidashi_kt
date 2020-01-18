@@ -357,7 +357,7 @@ class MainActivity : AppCompatActivity() {
                             R.string.message_require_usage_stats_permission,
                             R.string.action_settings,
                             View.OnClickListener {
-                                startActivity(Intent("android.settings.USAGE_ACCESS_SETTINGS"))
+                                startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
                             },
                             preferenceApplier.colorPair(),
                             Snackbar.LENGTH_INDEFINITE
