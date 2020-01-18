@@ -34,9 +34,12 @@ class DateArticleUrlFactory {
         if (dayOfMonth <= 0 || dayOfMonth >= 31) {
             return ""
         }
-        return if (LocaleWrapper.isJa(context.getResources().getConfiguration())) {
-            MessageFormat.format(context.getString(FORMAT_ID), month + 1, dayOfMonth)
-        } else MessageFormat.format(context.getString(FORMAT_ID), Month().get(month), dayOfMonth)
+
+        val monthString =
+                if (LocaleWrapper.isJa(context.getResources().getConfiguration())) "${month + 1}"
+                else Month().get(month)
+
+        return MessageFormat.format(context.getString(FORMAT_ID), monthString, dayOfMonth)
     }
 
     companion object {
