@@ -342,7 +342,7 @@ class MainActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                     Toaster.snackShort(
                             binding.root,
-                            "This function can be used on Android 5 and over.",
+                            R.string.message_cannot_use_under_l,
                             preferenceApplier.colorPair()
                     )
                     return
@@ -354,7 +354,7 @@ class MainActivity : AppCompatActivity() {
                 if (mode != AppOpsManager.MODE_ALLOWED) {
                     Toaster.withAction(
                             binding.root,
-                            "If you use this function, You should allow permission.",
+                            R.string.message_require_usage_stats_permission,
                             R.string.action_settings,
                             View.OnClickListener {
                                 startActivity(Intent("android.settings.USAGE_ACCESS_SETTINGS"))
