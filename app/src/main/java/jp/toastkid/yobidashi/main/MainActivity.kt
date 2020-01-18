@@ -3,7 +3,10 @@ package jp.toastkid.yobidashi.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
+import android.app.AppOpsManager
 import android.app.SearchManager
+import android.app.usage.UsageStatsManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -18,18 +21,23 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.journeyapps.barcodescanner.camera.CameraManager
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
@@ -39,6 +47,7 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.cleaner.ProcessCleaner
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
@@ -328,6 +337,53 @@ class MainActivity : AppCompatActivity() {
             Menu.OVERLAY_COLOR_FILTER-> {
                 val rootView = binding.root
                 ColorFilter(this, rootView).switchState(this)
+            }
+            Menu.MEMORY_CLEANER -> {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    Toaster.snackShort(
+                            binding.root,
+                            "This function can be used on Android 5 and over.",
+                            preferenceApplier.colorPair()
+                    )
+                    return
+                }
+
+                val appOps = getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager
+                val uid = android.os.Process.myUid()
+                val mode = appOps?.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, uid, packageName)
+                if (mode != AppOpsManager.MODE_ALLOWED) {
+                    Toaster.withAction(
+                            binding.root,
+                            "If you use this function, You should allow permission.",
+                            R.string.action_settings,
+                            View.OnClickListener {
+                                startActivity(Intent("android.settings.USAGE_ACCESS_SETTINGS"))
+                            },
+                            preferenceApplier.colorPair(),
+                            Snackbar.LENGTH_INDEFINITE
+                    )
+                    return
+                }
+                Single.fromCallable {
+                    ProcessCleaner().invoke(
+                            packageManager,
+                            getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager,
+                            getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager
+                    )
+                }
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                {
+                                    val message = if (it.isBlank()) "Failed." else it
+                                    AlertDialog.Builder(this)
+                                            .setTitle("Cleaned")
+                                            .setMessage(message)
+                                            .show()
+                                },
+                                Timber::e
+                        )
+                        .addTo(disposables)
             }
             Menu.PLANNING_POKER-> {
                 startActivity(PlanningPokerActivity.makeIntent(this))
