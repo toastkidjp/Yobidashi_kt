@@ -12,17 +12,18 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.LocaleWrapper
 import java.text.MessageFormat
 
-
 /**
  * @author toastkidjp
  */
 class DateArticleUrlFactory {
 
-    /** Format resource ID. TODO clean up */
+    /**
+     * Format resource ID.
+     */
     private val FORMAT_ID = R.string.format_date_link
 
     /**
-     * Make Wikipedia article's url.
+     g* Make Wikipedia article's url.
      * @param context context
      * @param month 0-11
      * @param dayOfMonth 1-31
