@@ -15,7 +15,6 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -43,34 +42,36 @@ class ProcessCleaner {
                 .map { it.activityInfo.packageName }
 
         val runningAppProcesses = getRunningProcesses(usageStatsManager)
-        Timber.i("runningAppProcesses")
-        runningAppProcesses.forEach { Timber.i("Process ${it}") }
-
         if (runningAppProcesses.isEmpty()) {
             return ""
         }
 
         val killingTargetProcesses = runningAppProcesses
                 .filter { !homeApp.contains(it) && installedApplications.contains(it) }
+
+        if (killingTargetProcesses.isEmpty()) {
+            return "Target processes are not found."
+        }
+
         killingTargetProcesses
                 .forEach {
                     activityManager.killBackgroundProcesses(it)
-                    Timber.i("Process Killed $it")
                 }
+
+        val targets = killingTargetProcesses.reduce { base, item -> "$base$lineSeparator$item" }
 
         val postInformation = getMemoryInformation(activityManager)
         val availableMemories = (postInformation.availMem / 1024 / 1024).toInt()
-        val lowMemory = postInformation.lowMemory
 
-        return "${preAvailableMemories - availableMemories} [MB], low memory: $lowMemory"
+        return "Get ${availableMemories - preAvailableMemories} [MB],$lineSeparator$targets$lineSeparator"
     }
 
     @SuppressLint("NewApi")
-    private fun getRunningProcesses(usageStatsManager: UsageStatsManager): List<String> {
+    private fun getRunningProcesses(usageStatsManager: UsageStatsManager): Set<String> {
         val currentTimeMillis = System.currentTimeMillis()
         val usageEvents = usageStatsManager.queryEvents(currentTimeMillis - 600_000L, currentTimeMillis);
 
-        val processes = mutableListOf<String>()
+        val processes = mutableSetOf<String>()
 
         while (usageEvents.hasNextEvent()) {
             val event = UsageEvents.Event()
@@ -118,5 +119,7 @@ class ProcessCleaner {
                 "jp.toastkid.yobidashi.d",
                 "jp.toastkid.yobidashi"
         )
+
+        private val lineSeparator = System.getProperty("line.separator")
     }
 }
