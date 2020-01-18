@@ -18,11 +18,6 @@ import java.text.MessageFormat
 class DateArticleUrlFactory {
 
     /**
-     * Format resource ID.
-     */
-    private val FORMAT_ID = R.string.format_date_link
-
-    /**
      g* Make Wikipedia article's url.
      * @param context context
      * @param month 0-11
@@ -39,5 +34,14 @@ class DateArticleUrlFactory {
         return if (LocaleWrapper.isJa(context.getResources().getConfiguration())) {
             MessageFormat.format(context.getString(FORMAT_ID), month + 1, dayOfMonth)
         } else MessageFormat.format(context.getString(FORMAT_ID), Month().get(month), dayOfMonth)
+    }
+
+    companion object {
+
+        /**
+         * Format resource ID.
+         */
+        private const val FORMAT_ID = R.string.format_date_link
+
     }
 }
