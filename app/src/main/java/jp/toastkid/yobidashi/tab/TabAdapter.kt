@@ -75,6 +75,9 @@ class TabAdapter(
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_up)
 
+    private val slideDown
+            = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_down)
+
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
     private var headerViewModel: HeaderViewModel? = null
@@ -446,6 +449,7 @@ class TabAdapter(
         }
         val tab = tabList.get(index)
         if (tab is WebTab) {
+            browserModule.animate(slideDown)
             deleteThumbnail(tab.thumbnailPath)
             autoArchive.delete(tab.id())
             if (index == this.index()) {
