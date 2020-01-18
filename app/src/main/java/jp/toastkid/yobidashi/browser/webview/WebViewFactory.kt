@@ -34,8 +34,10 @@ internal object WebViewFactory {
      * Use for only extract anchor URL.
      */
     private val handler = Handler(Handler.Callback { message ->
-        message?.data?.get("title")?.toString()?.let { title = it }
-        message?.data?.get("url")?.toString()?.let { anchor = it }
+        message?.data?.let { bundle ->
+            title = bundle.get("title")?.toString() ?: ""
+            anchor = bundle.get("url")?.toString() ?: ""
+        }
         true
     })
 
