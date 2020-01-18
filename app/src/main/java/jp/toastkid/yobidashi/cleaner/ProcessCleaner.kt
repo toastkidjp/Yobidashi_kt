@@ -22,25 +22,6 @@ import timber.log.Timber
  */
 class ProcessCleaner {
 
-    private val intent = Intent(Intent.ACTION_MAIN).also { it.addCategory(Intent.CATEGORY_HOME) }
-
-    private val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PackageManager.MATCH_ALL else 0
-
-    private val primaryFlag = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_PERSISTENT
-
-    private val ignoreProcesses = setOf(
-            "system",
-            "com.android.phone",
-            "android.process.acore",
-            "android.process.media",
-            "com.android.inputmethod",
-            "com.android.bluetooth",
-            "com.android.smspush",
-            "com.android.chrome",
-            "jp.toastkid.yobidashi.d",
-            "jp.toastkid.yobidashi"
-    )
-
     operator fun invoke(
             packageManager: PackageManager,
             activityManager: ActivityManager?,
@@ -112,5 +93,27 @@ class ProcessCleaner {
         }
         return !ignoreProcesses.contains(applicationInfo.packageName)
 
+    }
+
+    companion object {
+
+        private val intent = Intent(Intent.ACTION_MAIN).also { it.addCategory(Intent.CATEGORY_HOME) }
+
+        private val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PackageManager.MATCH_ALL else 0
+
+        private val primaryFlag = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_PERSISTENT
+
+        private val ignoreProcesses = setOf(
+                "system",
+                "com.android.phone",
+                "android.process.acore",
+                "android.process.media",
+                "com.android.inputmethod",
+                "com.android.bluetooth",
+                "com.android.smspush",
+                "com.android.chrome",
+                "jp.toastkid.yobidashi.d",
+                "jp.toastkid.yobidashi"
+        )
     }
 }
