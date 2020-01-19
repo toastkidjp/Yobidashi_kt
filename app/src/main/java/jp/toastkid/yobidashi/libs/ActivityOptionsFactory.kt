@@ -8,7 +8,7 @@ import android.view.View
  *
  * @author toastkidjp
  */
-object ActivityOptionsFactory {
+class ActivityOptionsFactory {
 
     /**
      * Make ActivityOptions by view.

@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -35,7 +37,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
     private lateinit var colorFilter: ColorFilter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting_color_filter, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
@@ -69,5 +71,11 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         }
     }
 
+    @StringRes
     override fun titleId() = R.string.title_color_filter
+
+    companion object {
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_setting_color_filter
+    }
 }

@@ -95,7 +95,7 @@ class MenuBinder(
                     menuSwitch.postDelayed({ ripple.state = IntArray(0) }, 200)
                 }
             }
-            menuViewModel?.visibility?.postValue(recyclerView?.isVisible == false)
+            menuViewModel?.switchVisibility(recyclerView?.isVisible == false)
         }
     }
 

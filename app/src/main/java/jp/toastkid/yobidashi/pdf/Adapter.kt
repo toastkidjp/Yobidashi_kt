@@ -47,6 +47,8 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
 
     private val imageCache = ImageCache()
 
+    private val activityOptionsFactory = ActivityOptionsFactory()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false))
 
@@ -60,7 +62,7 @@ class Adapter(private val context: Context): RecyclerView.Adapter<ViewHolder>() 
                         val cachedBitmapFile: File = imageCache.saveBitmap(context, image)
                         context.startActivity(
                                 ImagePreviewActivity.makeIntent(context, cachedBitmapFile),
-                                ActivityOptionsFactory.makeScaleUpBundle(view).toBundle()
+                                activityOptionsFactory.makeScaleUpBundle(view).toBundle()
                         )
                         true
                     }
