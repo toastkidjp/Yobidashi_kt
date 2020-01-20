@@ -89,7 +89,7 @@ class ProcessCleaner {
     }
 
     private fun isTarget(applicationInfo: ApplicationInfo): Boolean {
-        if (applicationInfo.flags and primaryFlag == primaryFlag) {
+        if (applicationInfo.flags and PRIMARY_FLAG == PRIMARY_FLAG) {
             return false
         }
         return !ignoreProcesses.contains(applicationInfo.packageName)
@@ -105,7 +105,7 @@ class ProcessCleaner {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PackageManager.MATCH_ALL
                 else 0
 
-        private val primaryFlag = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_PERSISTENT
+        private const val PRIMARY_FLAG = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_PERSISTENT
 
         private val ignoreProcesses = setOf(
                 "system",
