@@ -69,7 +69,7 @@ class ProcessCleaner {
     @SuppressLint("NewApi")
     private fun getRunningProcesses(usageStatsManager: UsageStatsManager): Set<String> {
         val currentTimeMillis = System.currentTimeMillis()
-        val usageEvents = usageStatsManager.queryEvents(currentTimeMillis - 600_000L, currentTimeMillis);
+        val usageEvents = usageStatsManager.queryEvents(currentTimeMillis - 600_000L, currentTimeMillis)
 
         val processes = mutableSetOf<String>()
 
