@@ -440,5 +440,6 @@
     <string name="title_memory_cleaner">Memory cleaner</string>
     <string name="message_cannot_use_under_l">This function can be used on Android 5.x and over.</string>
     <string name="message_require_usage_stats_permission">If you use this function, You should allow permission.</string>
+    <string name="search_category_ask_com">Ask.com</string>
 
 </resources>
