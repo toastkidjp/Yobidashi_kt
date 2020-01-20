@@ -114,6 +114,7 @@ class ProcessCleaner {
                 "android.process.media",
                 "com.android.inputmethod",
                 "com.android.bluetooth",
+                "com.android.systemui",
                 "com.android.smspush",
                 "com.android.chrome",
                 "jp.toastkid.yobidashi.d",
