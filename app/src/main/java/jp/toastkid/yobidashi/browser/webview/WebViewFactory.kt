@@ -35,18 +35,13 @@ internal object WebViewFactory {
      */
     private val handler = Handler(Handler.Callback { message ->
         message?.data?.let { bundle ->
-            title = bundle.get("title")?.toString() ?: ""
-            anchor = bundle.get("url")?.toString() ?: ""
+            longTapItemHolder.title = bundle.get("title")?.toString() ?: ""
+            longTapItemHolder.anchor = bundle.get("url")?.toString() ?: ""
         }
         true
     })
 
-    private var title: String = ""
-
-    /**
-     * Extracted anchor URL.
-     */
-    private var anchor: String = ""
+    private val longTapItemHolder = LongTapItemHolder()
 
     /**
      * Color alpha converter.
@@ -76,7 +71,7 @@ internal object WebViewFactory {
                     val url = hitResult.extra ?: return@setOnLongClickListener false
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (context is FragmentActivity) {
-                        if (TextUtils.isEmpty(anchor)) {
+                        if (TextUtils.isEmpty(longTapItemHolder.anchor)) {
                             handler.postDelayed({ showImageAnchorDialog(url, context) }, 300L)
                             return@setOnLongClickListener true
                         }
@@ -97,24 +92,19 @@ internal object WebViewFactory {
                 WebView.HitTestResult.SRC_ANCHOR_TYPE -> {
                     webView.requestFocusNodeHref(handler.obtainMessage())
 
-                    val url = hitResult.extra ?: return@setOnLongClickListener false
                     if (context is FragmentActivity) {
-                        if (TextUtils.isEmpty(title)) {
-                            handler.postDelayed(
-                                    {
-                                        showDialogFragment(
-                                                AnchorTypeLongTapDialogFragment.make(title, url),
-                                                context.supportFragmentManager
-                                        )
-                                    },
-                                    300L
-                            )
-                            return@setOnLongClickListener true
-                        }
-                        showDialogFragment(
-                                AnchorTypeLongTapDialogFragment.make(title, url),
-                                context.supportFragmentManager
+                        handler.postDelayed(
+                                {
+                                    showDialogFragment(
+                                            AnchorTypeLongTapDialogFragment
+                                                    .make(longTapItemHolder.title, longTapItemHolder.anchor),
+                                            context.supportFragmentManager
+                                    )
+                                    longTapItemHolder.reset()
+                                },
+                                300L
                         )
+                        return@setOnLongClickListener true
                     }
                     false
                 }
@@ -153,7 +143,12 @@ internal object WebViewFactory {
      * @param fragmentActivity [FragmentActivity]
      */
     private fun showImageAnchorDialog(url: String, fragmentActivity: FragmentActivity) {
-        val dialogFragment = ImageAnchorTypeLongTapDialogFragment.make(title, url, anchor)
+        val dialogFragment = ImageAnchorTypeLongTapDialogFragment.make(
+                longTapItemHolder.title,
+                url,
+                longTapItemHolder.anchor
+        )
+
         showDialogFragment(
                 dialogFragment,
                 fragmentActivity.supportFragmentManager
