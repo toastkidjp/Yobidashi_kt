@@ -29,6 +29,8 @@ object ImageDownloader {
      */
     private val HTTP_CLIENT by lazy { HttpClientFactory.make() }
 
+    private val bitmapCompressor = BitmapCompressor()
+
     /**
      * Store image to file.
      *
@@ -54,7 +56,7 @@ object ImageDownloader {
                 .map {
                     val storeroom = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
                     val file = storeroom.assignNewFile(Uri.parse(url))
-                    Bitmaps.compress(BitmapFactory.decodeStream(it.body()?.byteStream()), file)
+                    bitmapCompressor(BitmapFactory.decodeStream(it.body()?.byteStream()), file)
                     file
                 }
                 .observeOn(Schedulers.computation())

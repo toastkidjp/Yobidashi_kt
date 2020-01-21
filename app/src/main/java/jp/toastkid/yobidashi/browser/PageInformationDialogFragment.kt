@@ -93,7 +93,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
             val uri = FileProvider.getUriForFile(
                     context,
                      "${BuildConfig.APPLICATION_ID}.fileprovider",
-                    imageCache.saveBitmap(context, bitmap).absoluteFile
+                    imageCache.saveBitmap(context.cacheDir, bitmap).absoluteFile
             )
             try {
                 context.startActivity(IntentFactory.shareImage(uri))

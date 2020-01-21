@@ -8,11 +8,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 /**
- * Bitmap utilities.
+ * This class is used for compressing bitmap to file.
  *
  * @author toastkidjp
  */
-object Bitmaps {
+class BitmapCompressor {
 
     /**
      * Save bitmap to PNG file.
@@ -20,7 +20,7 @@ object Bitmaps {
      * @param bitmap
      * @param file
      */
-    fun compress(bitmap: Bitmap, file: File) {
+    operator fun invoke(bitmap: Bitmap, file: File) {
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
