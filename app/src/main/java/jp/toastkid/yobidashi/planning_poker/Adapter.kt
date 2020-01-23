@@ -17,7 +17,7 @@ internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
             CardViewHolder(
                     DataBindingUtil.inflate(
                             LayoutInflater.from(parent.context),
-                            R.layout.card_item,
+                            R.layout.item_planning_poker,
                             parent,
                             false
                     )

@@ -5,20 +5,20 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.yobidashi.libs.view
 
-import android.graphics.Bitmap
 import android.view.View
 
 /**
  * @author toastkidjp
  */
-class ThumbnailGenerator {
+interface SwipeViewHolder {
 
-    @Suppress("DEPRECATION")
-    operator fun invoke(view: View?): Bitmap? {
-        view?.invalidate()
-        view?.buildDrawingCache()
-        return view?.drawingCache
-    }
+    fun isButtonVisible(): Boolean
+
+    fun showButton()
+
+    fun hideButton()
+
+    fun getFrontView(): View
 }

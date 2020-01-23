@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://purl.org/rss/1.0/"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:syn="http://purl.org/rss/1.0/modules/syndication/"
+    xmlns:admin="http://webns.net/mvcb/"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+>
+    <channel rdf:about="http://blog.livedoor.jp/livejupiter2/">
+        <title>なんJ（まとめては）いかんのか？</title>
+        <link>http://blog.livedoor.jp/livejupiter2/</link>
+        <description>２ちゃんねる・なんJ・プロ野球ニュースを中心とした2chまとめサイト
+        </description>
+        <dc:language>ja</dc:language>
+        <admin:generatorAgent rdf:resource="http://blog.livedoor.com/?v=2.0" />
+        <atom:link rel="hub" href="http://pubsubhubbub.appspot.com" />
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541826.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541813.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541804.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541778.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541755.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541717.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541548.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541512.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541281.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541273.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541137.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541090.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541046.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541016.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9541006.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540926.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540899.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540882.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540793.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540673.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540631.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540528.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540518.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540513.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540440.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540328.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540300.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540249.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540108.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540086.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9540053.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539937.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539847.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539843.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539681.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539678.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539676.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539598.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539490.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539510.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539429.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539384.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539357.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539330.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539327.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539199.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539175.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539101.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539042.html" />
+                <rdf:li rdf:resource="http://blog.livedoor.jp/livejupiter2/archives/9539012.html" />
+            </rdf:Seq>
+        </items>
+    </channel>
+    <item rdf:about="http://blog.livedoor.jp/livejupiter2/archives/9541826.html">
+        <title>ヤクルト・塩見、ダーツを破壊ｗｗｗｗ</title>
+        <link>http://blog.livedoor.jp/livejupiter2/archives/9541826.html</link>
+        <description>158: 風吹けば名無し  2019/12/30(月) 20:36:00.98 ID:3q3zUm7K0
+            こわした
+
+
+
+
+
+            173: 風吹けば名無し  2019/12/30(月) 20:36:02.80 ID:Y19P4oPk0
+            えぇ・・・
+        </description>
+        <dc:creator>livejupiter2</dc:creator>
+        <dc:date>2019-12-30T21:17:13+09:00</dc:date>
+        <dc:subject>ヤクルト</dc:subject>
+        <content:encoded><![CDATA[<dl><dt><span  style="font-size: 90%;">158: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/30(月) 20:36:00.98 ID:3q3zUm7K0</span><br /></dt>
+<dd><b><span  style="font-size: 150%; color: rgb(153, 0, 0);"> こわした </span></b>
+<br /><a  target="_blank" title="2019_1230_211423_804" href="https://livedoor.blogimg.jp/livejupiter2/imgs/d/8/d863d0f6.jpg"><img  class="pict" hspace="5" alt="2019_1230_211423_804" border="0" height="360" width="640" src="https://livedoor.blogimg.jp/livejupiter2/imgs/d/8/d863d0f6-s.jpg"></a><br /><br /><br /><br /></dd></dl>
+
+
+
+
+<dl><dt><span  style="font-size: 90%;">173: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/30(月) 20:36:02.80 ID:Y19P4oPk0</span><br /></dt>
+<dd><span  style="font-size: 150%; color: rgb(0, 0, 153);"><b> えぇ・・・ </b>
+<br /></span><br /></dd></dl>
+<a href="http://blog.livedoor.jp/livejupiter2/archives/9541826.html">続きを読む</a>
+<img src="https://counter2.blog.livedoor.com/c?ro=1&act=rss&output=no&id=4732048&name=livejupiter2&pid=9541826" width="1" height="1" />
+]]>
+        </content:encoded>
+    </item>
+    <item rdf:about="http://blog.livedoor.jp/livejupiter2/archives/9541813.html">
+        <title>ソフトバンク・周東、10ｍ走でまさかの最下位ｗｗｗｗｗｗ</title>
+        <link>http://blog.livedoor.jp/livejupiter2/archives/9541813.html</link>
+        <description>33: 風吹けば名無し  2019/12/30(月) 19:18:47.30 ID:sphw/xbw0
+            周東ｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ
+
+
+
+
+
+            286: 風吹けば名無し  2019/12/30(月) 19:19:54.73 ID:M13QccTf0
+            さっき大食いしたからしゃーない
+
+
+
+
+            299: 風吹けば名無し  2019/12/30(月) 19:20:00.91 I...</description>
+        <dc:creator>livejupiter2</dc:creator>
+        <dc:date>2019-12-30T20:24:42+09:00</dc:date>
+        <dc:subject>ソフトバンク</dc:subject>
+        <content:encoded><![CDATA[<dl><dt><span  style="font-size: 90%;">33: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/30(月) 19:18:47.30 ID:sphw/xbw0</span><br /></dt>
+<dd><b><span  style="font-size: 150%; color: rgb(153, 0, 0);"> 周東ｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗｗ </span></b>
+<br /><a  href="https://livedoor.blogimg.jp/livejupiter2/imgs/3/7/372b2bb0.jpg" title="2019_1230_201038_692" target="_blank"><img  src="https://livedoor.blogimg.jp/livejupiter2/imgs/3/7/372b2bb0-s.jpg" width="640" height="360" border="0" alt="2019_1230_201038_692" hspace="5" class="pict"></a><br /><br /><br /><br /></dd></dl>
+
+
+
+
+<dl><dt><span  style="font-size: 90%;">286: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/30(月) 19:19:54.73 ID:M13QccTf0</span><br /></dt>
+<dd><b><span  style="font-size: 150%; color: rgb(255, 51, 0);"> さっき大食いしたからしゃーない </span></b>
+<br /><br /><br /><br /></dd></dl>
+
+
+
+<dl><dt><span  style="font-size: 90%;">299: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/30(月) 19:20:00.91 ID:yOH9m0tGd</span><br /></dt>
+<dd><span  style="font-size: 150%; color: rgb(0, 0, 153);"><b> 周東はラーメン食べすぎやったな </b>
+<br /></span><br /></dd></dl>
+<a href="http://blog.livedoor.jp/livejupiter2/archives/9541813.html">続きを読む</a>
+<img src="https://counter2.blog.livedoor.com/c?ro=1&act=rss&output=no&id=4732048&name=livejupiter2&pid=9541813" width="1" height="1" />
+]]>
+        </content:encoded>
+    </item>
+    <item rdf:about="http://blog.livedoor.jp/livejupiter2/archives/9539012.html">
+        <title>栗山監督「清宮は来年3割30本間違いなく打つ。打てなかったら大批判してもらっていい」</title>
+        <link>http://blog.livedoor.jp/livejupiter2/archives/9539012.html</link>
+        <description>1: 風吹けば名無し  2019/12/23(月) 09:57:49.82 ID:iWVw0uTSa
+
+
+            栗山監督断言　清宮は「来年は3割、30本、間違いなく打ちます」
+
+            　日本ハムの栗山監督が、高卒2年目の今季も昨季同様に7本塁打だった清宮の覚醒を予言した。
+
+            　自宅のある北海道栗山町でトークショーに登場...</description>
+        <dc:creator>livejupiter2</dc:creator>
+        <dc:date>2019-12-23T16:30:11+09:00</dc:date>
+        <dc:subject>清宮</dc:subject>
+        <content:encoded><![CDATA[<dl><dt><span  style="font-size: 90%;">1: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/23(月) 09:57:49.82 ID:iWVw0uTSa</span><br /></dt>
+<blockquote>
+<span  style="font-size: 125%;"><b>
+栗山監督断言　清宮は「来年は3割、30本、間違いなく打ちます」</b>
+
+</span><br /><br />　日本ハムの栗山監督が、高卒2年目の今季も昨季同様に7本塁打だった清宮の覚醒を予言した。<br /><br />
+
+　自宅のある北海道栗山町でトークショーに登場してシーズン中の秘話も明かしながら盛り上げ、最後は<b><span  style="color: rgb(0, 0, 153);">「来年は3割、30本、間違いなく打ちます。打てなければ大批判してもらっていい」と断言。「結果が出なかったら来年はここにいない」</span></b>とまで言い切った。ただ特別扱いはしない方針で、清宮を含めた成長途上の若手に対しては「打てなければ2軍。わめこうが、泣こうが、言うことは言う」と厳しく接する意向だ。<br /><br /><a  href="https://livedoor.blogimg.jp/livejupiter2/imgs/2/7/27634294.jpg" title="20191223-00000061-spnannex-000-2-view" target="_blank"><img  src="https://livedoor.blogimg.jp/livejupiter2/imgs/2/7/27634294-s.jpg" width="322" height="449" border="0" alt="20191223-00000061-spnannex-000-2-view" hspace="5" class="pict"></a><br /><br />（スポニチ）<br />
+
+
+<a  href="https://headlines.yahoo.co.jp/hl?a=20191223-00000061-spnannex-base" target="_blank">https://headlines.yahoo.co.jp/hl?a=20191223-00000061-spnannex-base</a></blockquote>
+<br /><br /><br /><br /></dl>
+
+
+<dl><dt><span  style="font-size: 90%;">170: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/23(月) 10:38:06.42 ID:PdWDtAGx0</span><br /></dt>
+<dd><span  style="font-size: 150%; color: rgb(153, 0, 0);"><b> こいつ清宮にはやたら厳しくね </b>
+<br /></span><br /><br /><br /></dd></dl>
+
+
+<dl><dt><span  style="font-size: 90%;">154: <span  style="font-weight: bold; color: rgb(0, 128, 0);">風吹けば名無し</span>  2019/12/23(月) 10:34:44.54 ID:gBKJ0Svs0</span><br /></dt>
+<dd><b><span  style="font-size: 150%; color: rgb(153, 0, 51);"> ガッフェ好みの顔じゃないからしゃあない </span></b>
+<br /><br /></dd></dl>
+<a href="http://blog.livedoor.jp/livejupiter2/archives/9539012.html">続きを読む</a>
+<img src="https://counter2.blog.livedoor.com/c?ro=1&act=rss&output=no&id=4732048&name=livejupiter2&pid=9539012" width="1" height="1" />
+]]>
+        </content:encoded>
+    </item>
+
+</rdf:RDF>

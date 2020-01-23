@@ -5,20 +5,17 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.yobidashi.rss
 
-import android.graphics.Bitmap
-import android.view.View
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Url
 
 /**
  * @author toastkidjp
  */
-class ThumbnailGenerator {
+interface RssService {
 
-    @Suppress("DEPRECATION")
-    operator fun invoke(view: View?): Bitmap? {
-        view?.invalidate()
-        view?.buildDrawingCache()
-        return view?.drawingCache
-    }
+    @GET
+    fun call(@Url url: String): Call<Rss?>
 }

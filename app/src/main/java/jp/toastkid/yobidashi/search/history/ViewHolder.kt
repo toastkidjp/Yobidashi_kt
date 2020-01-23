@@ -8,13 +8,14 @@ import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
+import jp.toastkid.yobidashi.libs.view.SwipeViewHolder
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchInsertion
 
 /**
  * @author toastkidjp
  */
 internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
-    : RecyclerView.ViewHolder(binding.root) {
+    : RecyclerView.ViewHolder(binding.root), SwipeViewHolder {
 
     private val buttonMargin = binding.root.context.resources
             .getDimensionPixelSize(R.dimen.button_margin)
@@ -57,16 +58,16 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.searchHistoryAdd.visibility = View.GONE
     }
 
-    fun getFrontView(): View = binding.front
+    override fun getFrontView(): View = binding.front
 
-    fun isButtonVisible(): Boolean = binding.delete.isVisible
+    override fun isButtonVisible(): Boolean = binding.delete.isVisible
 
-    fun showButton() {
+    override fun showButton() {
         binding.delete.visibility = View.VISIBLE
         updateRightMargin(buttonMargin)
     }
 
-    fun hideButton() {
+    override fun hideButton() {
         binding.delete.visibility = View.INVISIBLE
         updateRightMargin(0)
     }
