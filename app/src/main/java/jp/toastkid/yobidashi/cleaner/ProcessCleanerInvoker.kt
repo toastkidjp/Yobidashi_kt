@@ -46,16 +46,7 @@ class ProcessCleanerInvoker {
 
         if (UsageStatsPermissionChecker()
                         .invoke(context.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager, context.packageName)) {
-            Toaster.withAction(
-                    snackbarParent,
-                    R.string.message_require_usage_stats_permission,
-                    R.string.action_settings,
-                    View.OnClickListener {
-                        context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-                    },
-                    preferenceApplier.colorPair(),
-                    Snackbar.LENGTH_INDEFINITE
-            )
+            snackConfirmRequirePermission(snackbarParent, preferenceApplier)
             return Disposables.disposed()
         }
 
@@ -88,5 +79,21 @@ class ProcessCleanerInvoker {
                         },
                         Timber::e
                 )
+    }
+
+    private fun snackConfirmRequirePermission(
+            snackbarParent: View,
+            preferenceApplier: PreferenceApplier
+    ) {
+        Toaster.withAction(
+                snackbarParent,
+                R.string.message_require_usage_stats_permission,
+                R.string.action_settings,
+                View.OnClickListener {
+                    snackbarParent.context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+                },
+                preferenceApplier.colorPair(),
+                Snackbar.LENGTH_INDEFINITE
+        )
     }
 }
