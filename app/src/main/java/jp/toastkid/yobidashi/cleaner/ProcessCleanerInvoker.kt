@@ -45,7 +45,10 @@ class ProcessCleanerInvoker {
         }
 
         if (UsageStatsPermissionChecker()
-                        .invoke(context.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager, context.packageName)) {
+                        .invoke(
+                                context.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager,
+                                context.packageName)
+        ) {
             snackConfirmRequirePermission(snackbarParent, preferenceApplier)
             return Disposables.disposed()
         }
