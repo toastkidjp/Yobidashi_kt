@@ -82,7 +82,7 @@ class FavoriteSearchModule(
             }
         }
         uiThreadHandler.post {
-            RightSwipeActionAttachment(binding.searchFavorites) {
+            RightSwipeActionAttachment()(binding.searchFavorites) {
                 moduleAdapter.removeAt(it).addTo(disposables)
             }
         }

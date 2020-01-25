@@ -54,7 +54,7 @@ class UrlSuggestionModule(
         binding.urlSuggestions.adapter = adapter
         binding.urlSuggestions.layoutManager =
                 LinearLayoutManager(binding.root.context, RecyclerView.VERTICAL, false)
-        RightSwipeActionAttachment(
+        RightSwipeActionAttachment()(
                 binding.urlSuggestions,
                 this::removeAt
         )
