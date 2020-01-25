@@ -15,6 +15,7 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.view.View
+import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,6 +32,7 @@ import timber.log.Timber
  */
 class ProcessCleanerInvoker {
     
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     operator fun invoke(snackbarParent: View): Disposable {
         val context = snackbarParent.context
         val preferenceApplier = PreferenceApplier(context)
@@ -91,6 +93,7 @@ class ProcessCleanerInvoker {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun snackConfirmRequirePermission(
             snackbarParent: View,
             preferenceApplier: PreferenceApplier
