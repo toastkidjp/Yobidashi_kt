@@ -74,7 +74,7 @@ import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.torch.Torch
-import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

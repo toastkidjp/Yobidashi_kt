@@ -5,21 +5,11 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.wikipedia
-
-import java.util.*
+package jp.toastkid.yobidashi.wikipedia.random.model
 
 /**
- * Generator for Wikipedia domain.
- *
  * @author toastkidjp
  */
-class UrlDecider {
-
-    /**
-     * Generate Wikipedia domain.
-     *
-     * @return Wikipedia domain
-     */
-    operator fun invoke() = "https://${Locale.getDefault().language}.wikipedia.org/"
+class Query {
+    var random: Array<Article>? = null
 }
