@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
  */
 object RecyclerViewScroller {
 
+    private const val THRESHOLD = 30
+
     fun toTop(recyclerView: RecyclerView, itemCount: Int) {
-        if (itemCount > 30) {
+        if (itemCount > THRESHOLD) {
             recyclerView.scrollToPosition(0)
             return
         }
@@ -16,7 +18,7 @@ object RecyclerViewScroller {
     }
 
     fun toBottom(recyclerView: RecyclerView, itemCount: Int) {
-        if (itemCount > 30) {
+        if (itemCount > THRESHOLD) {
             recyclerView.scrollToPosition(itemCount - 1)
             return
         }
