@@ -3,10 +3,7 @@ package jp.toastkid.yobidashi.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ActivityManager
-import android.app.AppOpsManager
 import android.app.SearchManager
-import android.app.usage.UsageStatsManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -27,16 +24,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.journeyapps.barcodescanner.camera.CameraManager
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
@@ -46,8 +39,7 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.cleaner.ProcessCleaner
-import jp.toastkid.yobidashi.cleaner.UsageStatsPermissionChecker
+import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
@@ -339,58 +331,7 @@ class MainActivity : AppCompatActivity() {
                 ColorFilter(this, rootView).switchState(this)
             }
             Menu.MEMORY_CLEANER -> {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    Toaster.snackShort(
-                            binding.root,
-                            R.string.message_cannot_use_under_l,
-                            preferenceApplier.colorPair()
-                    )
-                    return
-                }
-
-                if (UsageStatsPermissionChecker()
-                                .invoke(getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager, packageName)) {
-                    Toaster.withAction(
-                            binding.root,
-                            R.string.message_require_usage_stats_permission,
-                            R.string.action_settings,
-                            View.OnClickListener {
-                                startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-                            },
-                            preferenceApplier.colorPair(),
-                            Snackbar.LENGTH_INDEFINITE
-                    )
-                    return
-                }
-                var snackbar: Snackbar? = null
-                Single.fromCallable {
-                    snackbar = Toaster.snackIndefinite(
-                            binding.root,
-                            "Start cleaning...",
-                            preferenceApplier.colorPair()
-                    )
-                    snackbar?.view
-                    ProcessCleaner().invoke(
-                            packageManager,
-                            getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager,
-                            getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager
-                    )
-                }
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                {
-                                    snackbar?.dismiss()
-                                    Toaster.snack(
-                                            binding.root,
-                                            if (it.isBlank()) "Failed." else it,
-                                            preferenceApplier.colorPair(),
-                                            Snackbar.LENGTH_LONG
-                                    )
-                                },
-                                Timber::e
-                        )
-                        .addTo(disposables)
+                ProcessCleanerInvoker()(binding.root).addTo(disposables)
             }
             Menu.PLANNING_POKER-> {
                 startActivity(PlanningPokerActivity.makeIntent(this))
