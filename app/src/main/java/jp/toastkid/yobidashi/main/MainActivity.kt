@@ -46,7 +46,6 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.cleaner.CleanerResultDialogFragment
 import jp.toastkid.yobidashi.cleaner.ProcessCleaner
 import jp.toastkid.yobidashi.cleaner.UsageStatsPermissionChecker
 import jp.toastkid.yobidashi.color_filter.ColorFilter
@@ -363,7 +362,14 @@ class MainActivity : AppCompatActivity() {
                     )
                     return
                 }
+                var snackbar: Snackbar? = null
                 Single.fromCallable {
+                    snackbar = Toaster.snackIndefinite(
+                            binding.root,
+                            "Start cleaning...",
+                            preferenceApplier.colorPair()
+                    )
+                    snackbar?.view
                     ProcessCleaner().invoke(
                             packageManager,
                             getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager,
@@ -374,12 +380,13 @@ class MainActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {
-                                    CleanerResultDialogFragment
-                                            .withMessage(if (it.isBlank()) "Failed." else it)
-                                            .show(
-                                                    supportFragmentManager,
-                                                    CleanerResultDialogFragment::class.java.simpleName
-                                            )
+                                    snackbar?.dismiss()
+                                    Toaster.snack(
+                                            binding.root,
+                                            if (it.isBlank()) "Failed." else it,
+                                            preferenceApplier.colorPair(),
+                                            Snackbar.LENGTH_LONG
+                                    )
                                 },
                                 Timber::e
                         )
