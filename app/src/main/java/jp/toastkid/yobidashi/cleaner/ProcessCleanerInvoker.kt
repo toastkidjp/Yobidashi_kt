@@ -61,7 +61,6 @@ class ProcessCleanerInvoker {
                     "Start cleaning...",
                     preferenceApplier.colorPair()
             )
-            snackbar?.view
             ProcessCleaner().invoke(
                     context.packageManager,
                     context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager,
