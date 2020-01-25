@@ -72,15 +72,23 @@ class ProcessCleanerInvoker {
                 .subscribe(
                         {
                             snackbar?.dismiss()
-                            Toaster.snack(
-                                    snackbarParent,
-                                    if (it.isBlank()) "Failed." else it,
-                                    preferenceApplier.colorPair(),
-                                    Snackbar.LENGTH_LONG
-                            )
+                            onSuccess(snackbarParent, it, preferenceApplier)
                         },
                         Timber::e
                 )
+    }
+
+    private fun onSuccess(
+            snackbarParent: View,
+            it: String,
+            preferenceApplier: PreferenceApplier
+    ) {
+        Toaster.snack(
+                snackbarParent,
+                if (it.isBlank()) "Failed." else it,
+                preferenceApplier.colorPair(),
+                Snackbar.LENGTH_LONG
+        )
     }
 
     private fun snackConfirmRequirePermission(
