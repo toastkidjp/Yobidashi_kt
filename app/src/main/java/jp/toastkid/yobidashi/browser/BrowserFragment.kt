@@ -195,7 +195,7 @@ class BrowserFragment : Fragment(),
                 cm,
                 binding?.root as View,
                 colorPair
-        ) { tabs.openNewWebTab() }
+        ) { preview(it) }
         searchWithClip.invoke()
 
         editorModule = EditorModule(

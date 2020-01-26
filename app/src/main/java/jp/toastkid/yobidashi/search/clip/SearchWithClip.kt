@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.UrlFactory
 
 /**
  * Search action with clipboard text.
@@ -49,7 +49,7 @@ class SearchWithClip(
                     ?: return@OnPrimaryClipChangedListener
 
             val text = firstItem.text
-            if (text == null || text.isEmpty() || LENGTH_LIMIT <= text.length) {
+            if (text.isNullOrEmpty() || (Urls.isInvalidUrl(text.toString()) && LENGTH_LIMIT <= text.length)) {
                 return@OnPrimaryClipChangedListener
             }
 
@@ -58,7 +58,7 @@ class SearchWithClip(
                     parent,
                     context.getString(R.string.message_clip_search, text),
                     R.string.title_search_action,
-                    View.OnClickListener { disposable = searchOrBrowse(context, text) },
+                    View.OnClickListener { searchOrBrowse(context, text) },
                     colorPair
             )
         }
@@ -77,6 +77,7 @@ class SearchWithClip(
 
     /**
      * Disposable object.
+     * TODO delete it.
      */
     private var disposable: Disposable = Disposables.empty()
 
@@ -93,13 +94,13 @@ class SearchWithClip(
      * @param context
      * @param text
      */
-    private fun searchOrBrowse(context: Context, text: CharSequence): Disposable {
+    private fun searchOrBrowse(context: Context, text: CharSequence) {
         val query = text.toString()
-        if (Urls.isValidUrl(query)) {
-            browseCallback(query)
-            return Disposables.empty()
-        }
-        return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), query).invoke()
+
+        val url =
+                if (Urls.isValidUrl(query)) query
+                else UrlFactory()(context, PreferenceApplier(context).getDefaultSearchEngine(), query).toString()
+        browseCallback(url)
     }
 
     /**
