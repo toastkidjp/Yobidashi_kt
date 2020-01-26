@@ -16,10 +16,13 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.notification.morning.DailyNotification
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**
@@ -77,6 +80,12 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
             R.string.message_remove_notification_widget
         }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+    }
+
+    fun switchDailyNotification() {
+        Completable.fromAction { DailyNotification().show(requireContext()) }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
     @StringRes
