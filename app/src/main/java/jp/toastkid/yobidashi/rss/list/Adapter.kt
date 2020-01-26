@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.rss.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -33,7 +34,7 @@ class Adapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         preferenceApplier = PreferenceApplier(parent.context)
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_rss_list, parent, false)
+        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false)
         return ViewHolder(binding)
     }
 
@@ -58,4 +59,8 @@ class Adapter(
         }
     }
 
+    companion object {
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.item_rss_list
+    }
 }

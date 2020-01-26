@@ -2,24 +2,28 @@ package jp.toastkid.yobidashi.rss
 
 import okio.Okio
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
+import java.io.InputStream
 
 /**
- * TODO clean up code.
- *
  * @author toastkidjp
  */
 class ParserTest {
 
+    private lateinit var parser: Parser
+
+    @Before
+    fun setUp() {
+        parser = Parser()
+    }
+
     @Test
     fun test() {
-        val stream = javaClass.classLoader?.getResourceAsStream("rss/sample.xml")
-        if (stream == null) {
-            fail()
-            return
-        }
-        val rssText = Okio.buffer(Okio.source(stream)).readUtf8()
-        val rss = Parser().parse(rssText.split("\n"))
+        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.xml"))).readUtf8()
+
+        val rss = parser.parse(rssText.split("\n"))
+
         assertNull(rss.creator)
         assertEquals("Sat, 21 Jan 2017 19:32:11 +0900", rss.date)
         assertEquals("This instance has only 1 item.", rss.description)
@@ -40,14 +44,10 @@ class ParserTest {
 
     @Test
     fun testAtom() {
-        val stream = javaClass.classLoader?.getResourceAsStream("rss/sample.atom")
-        if (stream == null) {
-            fail()
-            return
-        }
-        val rssText = Okio.buffer(Okio.source(stream)).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.atom"))).readUtf8()
 
-        val rss = Parser().parse(rssText.split("\n"))
+        val rss = parser.parse(rssText.split("\n"))
+
         assertEquals("Private Feed for toastkidjp", rss.title)
         assertEquals(30, rss.items.size)
 
@@ -58,14 +58,10 @@ class ParserTest {
 
     @Test
     fun testRdf() {
-        val stream = javaClass.classLoader?.getResourceAsStream("rss/sample.rdf")
-        if (stream == null) {
-            fail()
-            return
-        }
-        val rssText = Okio.buffer(Okio.source(stream)).readUtf8()
+        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.rdf"))).readUtf8()
 
-        val rss = Parser().parse(rssText.split("\n"))
+        val rss = parser.parse(rssText.split("\n"))
+
         assertEquals("なんJ（まとめては）いかんのか？", rss.title)
         assertEquals(3, rss.items.size)
 
@@ -75,4 +71,7 @@ class ParserTest {
         println(item.content)
     }
 
+    private fun readStream(filePath: String): InputStream =
+            javaClass.classLoader?.getResourceAsStream(filePath)
+                    ?: throw RuntimeException()
 }

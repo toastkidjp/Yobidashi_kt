@@ -45,7 +45,11 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
 
     private val disposables = CompositeDisposable()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         setHasOptionsMenu(true)
@@ -62,7 +66,8 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
 
         val adapter = Adapter(LayoutInflater.from(context), viewModel)
         binding.rssList.adapter = adapter
-        binding.rssList.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.rssList.layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         val readRssReaderTargets = PreferenceApplier(fragmentActivity).readRssReaderTargets()
 
@@ -89,7 +94,8 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
                 if (t == null) {
                     return
                 }
-                fragmentActivity.startActivity(MainActivity.makeBrowserIntent(fragmentActivity, t.toUri()))
+                val intent = MainActivity.makeBrowserIntent(fragmentActivity, t.toUri())
+                fragmentActivity.startActivity(intent)
                 viewModel?.itemClick?.removeObserver(this)
             }
         })
