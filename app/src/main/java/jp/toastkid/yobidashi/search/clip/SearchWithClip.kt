@@ -3,8 +3,6 @@ package jp.toastkid.yobidashi.search.clip
 import android.content.ClipboardManager
 import android.content.Context
 import android.view.View
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -76,12 +74,6 @@ class SearchWithClip(
     }
 
     /**
-     * Disposable object.
-     * TODO delete it.
-     */
-    private var disposable: Disposable = Disposables.empty()
-
-    /**
      * Invoke action.
      */
     operator fun invoke() {
@@ -104,11 +96,10 @@ class SearchWithClip(
     }
 
     /**
-     * Dispose last subscription.
+     * Unregister listener.
      */
     fun dispose() {
         cm.removePrimaryClipChangedListener(listener)
-        disposable.dispose()
     }
 
     companion object {
