@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.notification.morning
 
 import android.app.PendingIntent
 import android.content.Context
+import android.net.Uri
 import android.widget.RemoteViews
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
@@ -36,7 +37,6 @@ class RemoteViewsFactory {
     operator fun invoke(context: Context): RemoteViews {
         val remoteViews = RemoteViews(context.packageName, APPWIDGET_LAYOUT_ID)
 
-        val calendar = Calendar.getInstance()
         remoteViews.setOnClickPendingIntent(
                 R.id.what_happened,
                 PendingIntent.getActivity(
@@ -44,11 +44,7 @@ class RemoteViewsFactory {
                         0,
                         MainActivity.makeBrowserIntent(
                                 context,
-                                dateArticleUrlFactory(
-                                        context,
-                                        calendar.get(Calendar.MONTH),
-                                        calendar.get(Calendar.DAY_OF_MONTH)
-                                ).toUri()
+                                makeArticleUri(context)
                         ),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 )
@@ -72,6 +68,16 @@ class RemoteViewsFactory {
         countDownLatch.await(30, TimeUnit.SECONDS)
 
         return remoteViews
+    }
+
+    private fun makeArticleUri(context: Context): Uri {
+        val calendar = Calendar.getInstance()
+
+        return dateArticleUrlFactory(
+                context,
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        ).toUri()
     }
 
     companion object {
