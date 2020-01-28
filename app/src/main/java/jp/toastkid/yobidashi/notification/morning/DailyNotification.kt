@@ -36,7 +36,7 @@ class DailyNotification {
     @TargetApi(Build.VERSION_CODES.O)
     private fun makeNotificationChannel(name: String) =
             NotificationChannel(
-                    "daily",
+                    CHANNEL_ID,
                     name,
                     NotificationManager.IMPORTANCE_HIGH
             )
@@ -47,11 +47,15 @@ class DailyNotification {
      * @param context
      */
     private fun makeNotification(context: Context, contentView: RemoteViews): Notification {
-        return NotificationCompat.Builder(context, "daily")
+        return NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_search_white)
                 .setCustomContentView(contentView)
                 .setAutoCancel(false)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build()
+    }
+
+    companion object {
+        private const val CHANNEL_ID = "daily"
     }
 }
