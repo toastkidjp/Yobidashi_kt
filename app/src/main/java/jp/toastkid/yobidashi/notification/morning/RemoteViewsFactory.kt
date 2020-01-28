@@ -39,28 +39,18 @@ class RemoteViewsFactory {
 
         remoteViews.setOnClickPendingIntent(
                 R.id.what_happened,
-                PendingIntent.getActivity(
-                        context,
-                        0,
-                        MainActivity.makeBrowserIntent(
-                                context,
-                                makeArticleUri(context)
-                        ),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                )
+                makeWhatHappenedPendingIntent(context)
         )
 
         val countDownLatch = CountDownLatch(1)
         RandomWikipedia().fetchWithAction { title, uri ->
-            remoteViews.setTextViewText(R.id.today_wikipedia1, "Today's Wikipedia article - '$title'")
+            remoteViews.setTextViewText(
+                    R.id.today_wikipedia1,
+                    "Today's Wikipedia article - '$title'"
+            )
             remoteViews.setOnClickPendingIntent(
                     R.id.today_wikipedia1,
-                    PendingIntent.getActivity(
-                            context,
-                            1,
-                            MainActivity.makeBrowserIntent(context, uri),
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    )
+                    makeArticleLinkPendingIntent(context, uri)
             )
             countDownLatch.countDown()
         }
@@ -69,6 +59,22 @@ class RemoteViewsFactory {
 
         return remoteViews
     }
+
+    private fun makeWhatHappenedPendingIntent(context: Context): PendingIntent =
+            PendingIntent.getActivity(
+                    context,
+                    0,
+                    MainActivity.makeBrowserIntent(context, makeArticleUri(context)),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+    private fun makeArticleLinkPendingIntent(context: Context, uri: Uri): PendingIntent =
+            PendingIntent.getActivity(
+                    context,
+                    1,
+                    MainActivity.makeBrowserIntent(context, uri),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
     private fun makeArticleUri(context: Context): Uri {
         val calendar = Calendar.getInstance()
