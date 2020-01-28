@@ -33,7 +33,7 @@ class PreferenceApplier(private val context: Context) {
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
         ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH,
         BG_IMAGE, LAST_AD_DATE,
-        USE_NOTIFICATION_WIDGET, RETAIN_TABS, USE_JS, MENU_POS,
+        USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS, MENU_POS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
@@ -144,6 +144,13 @@ class PreferenceApplier(private val context: Context) {
 
     fun useNotificationWidget(): Boolean =
             preferences.getBoolean(Key.USE_NOTIFICATION_WIDGET.name, false)
+
+    fun setUseDailyNotification(newState: Boolean) {
+        preferences.edit().putBoolean(Key.USE_DAILY_NOTIFICATION.name, newState).apply()
+    }
+
+    fun useDailyNotification(): Boolean =
+            preferences.getBoolean(Key.USE_DAILY_NOTIFICATION.name, false)
 
     fun setRetainTabs(newState: Boolean) {
         preferences.edit().putBoolean(Key.RETAIN_TABS.name, newState).apply()
