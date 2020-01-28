@@ -27,7 +27,7 @@ class DailyNotification {
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
                         ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.getString(R.string.title_show_notification_widget)
+            val name = context.getString(R.string.title_show_daily_notification)
             notificationManager.createNotificationChannel(makeNotificationChannel(name))
         }
         notificationManager.notify(2, makeNotification(context, RemoteViewsFactory().invoke(context)))

@@ -437,5 +437,6 @@
     <string name="message_require_usage_stats_permission">If you use this function, You should allow permission.</string>
     <string name="search_category_ask_com">Ask.com</string>
     <string name="title_show_morning_notification">Show morning notification</string>
+    <string name="title_show_daily_notification">Report daily information.</string>
 
 </resources>
