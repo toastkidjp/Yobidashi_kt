@@ -16,7 +16,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -57,7 +56,6 @@ class RemoteViewsFactory {
 
         val countDownLatch = CountDownLatch(1)
         RandomWikipedia().fetchWithAction { title, uri ->
-            Timber.i("random $title, $uri")
             remoteViews.setTextViewText(R.id.today_wikipedia1, "Today's Wikipedia article - '$title'")
             remoteViews.setOnClickPendingIntent(
                     R.id.today_wikipedia1,
