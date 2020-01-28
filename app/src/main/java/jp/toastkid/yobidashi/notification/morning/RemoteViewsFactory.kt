@@ -26,6 +26,8 @@ import java.util.concurrent.TimeUnit
  */
 class RemoteViewsFactory {
 
+    private val dateArticleUrlFactory = DateArticleUrlFactory()
+
     /**
      * Make RemoteViews.
      *
@@ -43,7 +45,11 @@ class RemoteViewsFactory {
                         0,
                         MainActivity.makeBrowserIntent(
                                 context,
-                                DateArticleUrlFactory()(context, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).toUri()
+                                dateArticleUrlFactory(
+                                        context,
+                                        calendar.get(Calendar.MONTH),
+                                        calendar.get(Calendar.DAY_OF_MONTH)
+                                ).toUri()
                         ),
                         PendingIntent.FLAG_UPDATE_CURRENT
                 )
