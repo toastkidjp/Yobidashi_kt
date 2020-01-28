@@ -35,7 +35,11 @@
             android:background="@drawable/ripple_transparent"
             />
 
-        <include layout="@layout/primary_dark_divider"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorPrimaryDark"
+            />
 
         <TextView
             android:id="@+id/today_wikipedia1"
@@ -47,7 +51,11 @@
             android:background="@drawable/ripple_transparent"
             />
 
-        <include layout="@layout/primary_dark_divider"/>
-        
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorPrimaryDark"
+            />
+
     </LinearLayout>
 </FrameLayout>
