@@ -89,7 +89,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
 
         @StringRes val messageId =
                 if (newState) {
-                    R.string.message_done_showing_notification_widget
+                    R.string.message_stay_tuned
                 } else {
                     R.string.message_remove_notification_widget
                 }
