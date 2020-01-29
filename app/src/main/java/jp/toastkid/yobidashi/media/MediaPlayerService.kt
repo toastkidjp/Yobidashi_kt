@@ -45,6 +45,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private lateinit var albumArtFinder: AlbumArtFinder
+
     private val mediaPlayer = MediaPlayer();
 
     private val audioNoisyFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
@@ -164,6 +166,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         preferenceApplier = PreferenceApplier(this)
+        albumArtFinder = AlbumArtFinder(contentResolver)
         notificationManager = NotificationManagerCompat.from(baseContext)
 
         // TODO rewrite with also.
@@ -209,6 +212,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             createNotificationChannel()
         }
         val currentDescription = mediaSession.controller.metadata.description
+        val bitmap = currentDescription.iconUri?.let { albumArtFinder(it) }
         val notificationBuilder = NotificationCompat.Builder(baseContext, CHANNEL_ID)
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSession.sessionToken)
@@ -216,7 +220,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 )
                 .setColor(preferenceApplier.color)
                 .setSmallIcon(R.drawable.ic_music)
-                .setLargeIcon(currentDescription.iconBitmap)
+                .setLargeIcon(bitmap)
                 .setContentTitle(currentDescription.title)
                 .setContentText(currentDescription.subtitle)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

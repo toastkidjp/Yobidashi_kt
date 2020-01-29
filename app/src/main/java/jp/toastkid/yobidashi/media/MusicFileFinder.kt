@@ -17,8 +17,6 @@ import androidx.core.net.toUri
  */
 class MusicFileFinder(private val contentResolver: ContentResolver) {
 
-    private val albumArtFinder = AlbumArtFinder(contentResolver)
-
     operator fun invoke(): MutableList<MediaMetadataCompat> {
         val cursor = contentResolver.query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -48,10 +46,6 @@ class MusicFileFinder(private val contentResolver: ContentResolver) {
                             MediaMetadataCompat.METADATA_KEY_ALBUM,
                             cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
                     )
-                    /*.putString(
-                            MediaMetadataCompat.METADATA_KEY_DATE,
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED)).toString()
-                    )*/
                     .putString(
                             MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
                             "content://media/external/audio/albumart".toUri().buildUpon().appendEncodedPath(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)).toString()).build().toString()
@@ -59,10 +53,6 @@ class MusicFileFinder(private val contentResolver: ContentResolver) {
                     .putString(
                             MediaMetadataCompat.METADATA_KEY_MEDIA_URI,
                             cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
-                    )
-                    .putBitmap(
-                            MediaMetadataCompat.METADATA_KEY_ART,
-                            albumArtFinder(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)))
                     )
                     .build()
 

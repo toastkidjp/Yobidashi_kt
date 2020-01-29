@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.media
 
-import android.graphics.BitmapFactory
 import android.support.v4.media.MediaBrowserCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import timber.log.Timber
-import java.io.FileNotFoundException
 
 /**
  * @author toastkidjp
@@ -46,12 +43,7 @@ class Adapter(
         val item = items.get(position)
         holder.bindText(item.description)
 
-        val albumArtOrNull = try {
-            BitmapFactory.decodeStream(binding.root.context.contentResolver.openInputStream(item.description.iconUri))
-        } catch (e: FileNotFoundException) {
-            Timber.w(e)
-            null
-        }
+        val albumArtOrNull = item.description.iconUri?.let { albumArtFinder(it) }
         if (albumArtOrNull == null) {
             holder.setIconColor(preferenceApplier.colorPair().bgColor())
             holder.setIconId(R.drawable.ic_music)

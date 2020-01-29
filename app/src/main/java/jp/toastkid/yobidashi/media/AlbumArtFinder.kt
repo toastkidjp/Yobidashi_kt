@@ -8,10 +8,9 @@
 package jp.toastkid.yobidashi.media
 
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.core.net.toUri
+import android.net.Uri
 import timber.log.Timber
 import java.io.FileNotFoundException
 
@@ -20,8 +19,7 @@ import java.io.FileNotFoundException
  */
 class AlbumArtFinder(private val contentResolver: ContentResolver) {
 
-    operator fun invoke(id: Long): Bitmap? {
-        val album1Uri = ContentUris.withAppendedId(albumArtUri, id)
+    operator fun invoke(album1Uri: Uri): Bitmap? {
         try {
             return BitmapFactory.decodeStream(contentResolver.openInputStream(album1Uri))
         } catch (e: FileNotFoundException) {
@@ -30,7 +28,4 @@ class AlbumArtFinder(private val contentResolver: ContentResolver) {
         return null
     }
 
-    companion object {
-        private val albumArtUri = "content://media/external/audio/albumart".toUri()
-    }
 }
