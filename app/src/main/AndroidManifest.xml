@@ -179,6 +179,20 @@
             android:permission="android.permission.BIND_JOB_SERVICE"
             />
 
+        <service android:name=".media.MediaPlayerService"
+            android:exported="false"
+            >
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
         <receiver android:name=".appwidget.search.Provider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
