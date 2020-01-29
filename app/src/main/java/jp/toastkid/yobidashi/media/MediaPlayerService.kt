@@ -26,10 +26,10 @@ import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
 import androidx.media.session.MediaButtonReceiver
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 
 /**
@@ -42,6 +42,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     private lateinit var notificationManager: NotificationManagerCompat
 
     private lateinit var mediaSession: MediaSessionCompat
+
+    private lateinit var preferenceApplier: PreferenceApplier
 
     private val mediaPlayer = MediaPlayer();
 
@@ -71,7 +73,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaPlayer.prepare()
 
             mediaSession.setMetadata(
-                    MusicFileFinder().invoke(contentResolver).firstOrNull { it.description?.mediaUri == uri }
+                    MusicFileFinder(contentResolver).invoke().firstOrNull { it.description?.mediaUri == uri }
             )
             mediaSession.isActive = true
 
@@ -160,6 +162,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     override fun onCreate() {
         super.onCreate()
+
+        preferenceApplier = PreferenceApplier(this)
         notificationManager = NotificationManagerCompat.from(baseContext)
 
         // TODO rewrite with also.
@@ -194,7 +198,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
         result.sendResult(
-                MusicFileFinder().invoke(contentResolver)
+                MusicFileFinder(contentResolver).invoke()
                         .map { MediaBrowserCompat.MediaItem(it.description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE) }
                         .toMutableList()
         )
@@ -210,7 +214,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                         .setMediaSession(mediaSession.sessionToken)
                         .setShowActionsInCompactView(0)
                 )
-                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setColor(preferenceApplier.color)
                 .setSmallIcon(R.drawable.ic_music)
                 .setLargeIcon(currentDescription.iconBitmap)
                 .setContentTitle(currentDescription.title)
