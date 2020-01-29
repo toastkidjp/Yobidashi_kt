@@ -120,7 +120,6 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
 
         binding.playSwitch.setOnClickListener {
             val mediaController = MediaControllerCompat.getMediaController(requireActivity())
-            Timber.i("mediaController.playbackState.state  ${mediaController.playbackState.state }")
             val icon = if (mediaController.playbackState.state == PlaybackState.STATE_PLAYING) {
                 mediaController.transportControls.pause()
                 playBitmap
