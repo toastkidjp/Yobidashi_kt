@@ -118,11 +118,6 @@
             android:launchMode="singleTop"
             />
         <activity
-            android:name=".browser.screenshots.ScreenshotsActivity"
-            android:label="@string/title_screenshots"
-            android:theme="@style/AppTheme.Translucent"
-            />
-        <activity
             android:name=".browser.archive.ArchivesActivity"
             android:label="@string/title_archives"
             android:theme="@style/AppTheme.Translucent"
