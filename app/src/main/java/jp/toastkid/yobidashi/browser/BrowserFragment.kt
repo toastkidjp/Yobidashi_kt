@@ -55,7 +55,7 @@ import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfModule
-import jp.toastkid.yobidashi.rss.RssUrlValidator
+import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -321,38 +321,7 @@ class BrowserFragment : Fragment(),
                 return true
             }
             R.id.add_rss -> {
-                val urlValidator = RssUrlValidator()
-                val snackbarParent = binding?.root ?: return true
-                val colorPair = colorPair()
-
-                val currentUrl = browserModule.currentUrl()
-                if (currentUrl?.isNotBlank() == true && urlValidator(currentUrl)) {
-                    preferenceApplier.saveNewRssReaderTargets(currentUrl)
-                    Toaster.snackShort(snackbarParent, "Added $currentUrl", colorPair)
-                    return true
-                }
-
-                browserModule.invokeAlternativeLinkExtraction(ValueCallback { urlsCsv ->
-                    if (urlsCsv.contains(",")) {
-                        urlsCsv.split(",")
-                                .firstOrNull { urlValidator(it) }
-                                ?.let {
-                                    preferenceApplier.saveNewRssReaderTargets(it)
-                                    Toaster.snackShort(snackbarParent, "Added $it", colorPair)
-                                    return@ValueCallback
-                                }
-                        Toaster.snackShort(snackbarParent, R.string.message_failure_extracting_rss, colorPair)
-                        return@ValueCallback
-                    }
-
-                    if (urlValidator(urlsCsv)) {
-                        preferenceApplier.saveNewRssReaderTargets(urlsCsv)
-                        Toaster.snackShort(snackbarParent, "Added $urlsCsv", colorPair)
-                        return@ValueCallback
-                    }
-
-                    Toaster.snackShort(snackbarParent, R.string.message_failure_extracting_rss, colorPair)
-                })
+                RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { binding?.root }
                 return true
             }
             R.id.stop_loading -> {

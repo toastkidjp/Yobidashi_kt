@@ -127,7 +127,7 @@ class BrowserModule(
                                 urlStr,
                                 faviconApplier.makePath(urlStr)
                         )
-                        .insert()
+                        .invoke()
             }
 
             if (preferenceApplier.useInversion) {
@@ -496,26 +496,6 @@ class BrowserModule(
     fun invokeContentExtraction(callback: ValueCallback<String>) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             ReaderModeUseCase()(currentView(), callback)
-        }
-    }
-
-    fun invokeAlternativeLinkExtraction(callback: ValueCallback<String>) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            currentView()?.evaluateJavascript("""
-                var links = document.getElementsByTagName('link');
-                var extracted = "";
-                for (var i = 0; i < links.length; i++) {
-                    if (links[i].getAttribute('rel') != 'alternate') {
-                        continue;
-                    }
-                    var link = links[i].getAttribute('href');
-                    if (extracted.length != 0) {
-                        extracted = extracted + ',';
-                    }
-                    extracted = extracted + link;
-                }
-                extracted;
-            """, callback)
         }
     }
 

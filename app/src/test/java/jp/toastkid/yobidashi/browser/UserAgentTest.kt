@@ -13,6 +13,19 @@ import org.junit.Test
 class UserAgentTest {
 
     @Test
+    fun testTitles() {
+        val titles = UserAgent.titles()
+        assertEquals(titles.javaClass, Array<String>::class.java)
+    }
+
+    @Test
+    fun testFindIndex() {
+        assertEquals(0, UserAgent.findCurrentIndex("tomato"))
+        assertEquals(0, UserAgent.findCurrentIndex("Default"))
+        assertEquals(4, UserAgent.findCurrentIndex("PC"))
+    }
+
+    @Test
     fun test() {
         assertEquals("Android", UserAgent.ANDROID.title())
         assertTrue(UserAgent.ANDROID.text().isNotEmpty())

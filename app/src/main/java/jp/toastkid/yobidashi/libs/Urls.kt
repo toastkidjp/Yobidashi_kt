@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.libs
 
-import android.text.TextUtils
 import android.webkit.URLUtil
 
 /**
@@ -12,12 +11,12 @@ object Urls {
 
     /**
      * Return passed url is invalid.
-     * @param url
      *
+     * @param url
      * @return
      */
     fun isInvalidUrl(url: String?): Boolean =
-            TextUtils.isEmpty(url) || !URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url)
+            url.isNullOrBlank() || (!URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url))
 
     /**
      * Return passed url is valid.
