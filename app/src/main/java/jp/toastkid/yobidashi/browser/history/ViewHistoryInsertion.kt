@@ -9,8 +9,6 @@ import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import timber.log.Timber
 
 /**
- * TODO clean up code.
- *
  * @author toastkidjp
  */
 class ViewHistoryInsertion private constructor(
