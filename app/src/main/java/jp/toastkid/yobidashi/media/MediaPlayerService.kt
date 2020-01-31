@@ -172,8 +172,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             it.setCallback(callback)
             setSessionToken(sessionToken)
             it.setFlags(
-                    MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-                            or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+                    MEDIA_SESSION_FLAG
             )
         }
     }
@@ -203,5 +202,9 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         private const val ROOT_ID = "media-root"
 
         private const val NOTIFICATION_ID = 46
+
+        private const val MEDIA_SESSION_FLAG =
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
+                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
     }
 }
