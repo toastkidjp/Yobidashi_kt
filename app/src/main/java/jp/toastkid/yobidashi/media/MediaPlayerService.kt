@@ -7,9 +7,6 @@
  */
 package jp.toastkid.yobidashi.media
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,19 +14,15 @@ import android.content.IntentFilter
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.media.MediaBrowserServiceCompat
-import androidx.media.session.MediaButtonReceiver
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.media.notification.NotificationFactory
 import timber.log.Timber
 
 /**
@@ -45,7 +38,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private lateinit var albumArtFinder: AlbumArtFinder
+    private lateinit var notificationFactory: NotificationFactory
 
     private val mediaPlayer = MediaPlayer();
 
@@ -82,8 +75,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaPlayer.start()
             setNewState(PlaybackStateCompat.STATE_PLAYING)
             startService(Intent(baseContext, MediaPlayerService::class.java))
-            notificationManager.notify(1, buildNotification())
-            startForeground(1, buildNotification())
+            notificationManager.notify(1, notificationFactory())
+            startForeground(1, notificationFactory())
         }
 
         override fun onPlay() {
@@ -92,8 +85,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.isActive = true
             mediaPlayer.start()
             setNewState(PlaybackStateCompat.STATE_PLAYING)
-            notificationManager.notify(1, buildNotification())
-            startForeground(1, buildNotification())
+            notificationManager.notify(1, notificationFactory())
+            startForeground(1, notificationFactory())
         }
 
         override fun onPause() {
@@ -102,7 +95,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.isActive = false
             mediaPlayer.pause()
             setNewState(PlaybackStateCompat.STATE_PAUSED)
-            notificationManager.notify(1, buildNotification())
+            notificationManager.notify(1, notificationFactory())
             stopForeground(false)
         }
 
@@ -164,8 +157,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         preferenceApplier = PreferenceApplier(this)
-        albumArtFinder = AlbumArtFinder(contentResolver)
         notificationManager = NotificationManagerCompat.from(baseContext)
+        notificationFactory = NotificationFactory(this) { mediaSession }
 
         // TODO rewrite with also.
         mediaSession = MediaSessionCompat(this, javaClass.simpleName).apply {
@@ -205,63 +198,4 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         )
     }
 
-    private fun buildNotification(): Notification {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel()
-        }
-        val currentDescription = mediaSession.controller.metadata.description
-        val bitmap = currentDescription.iconUri?.let { albumArtFinder(it) }
-        val notificationBuilder = NotificationCompat.Builder(baseContext, CHANNEL_ID)
-                .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
-                        .setMediaSession(mediaSession.sessionToken)
-                        .setShowActionsInCompactView(0)
-                )
-                .setColor(preferenceApplier.color)
-                .setSmallIcon(R.drawable.ic_music)
-                .setLargeIcon(bitmap)
-                .setContentTitle(currentDescription.title)
-                .setContentText(currentDescription.subtitle)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setDeleteIntent(
-                        MediaButtonReceiver.buildMediaButtonPendingIntent(
-                                this,
-                                PlaybackStateCompat.ACTION_STOP
-                        )
-                )
-
-        val action = if (mediaSession.controller.playbackState.state == PlaybackStateCompat.STATE_PLAYING) {
-            NotificationCompat.Action(
-                    R.drawable.ic_pause,
-                    getString(R.string.action_pause),
-                    MediaButtonReceiver.buildMediaButtonPendingIntent(baseContext, PlaybackStateCompat.ACTION_PAUSE)
-            )
-        } else {
-            NotificationCompat.Action(
-                    R.drawable.ic_play_media,
-                    getString(R.string.action_play),
-                    MediaButtonReceiver.buildMediaButtonPendingIntent(baseContext, PlaybackStateCompat.ACTION_PLAY)
-            )
-        }
-        notificationBuilder.addAction(action)
-        return notificationBuilder.build()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel() {
-        val manager = getSystemService(NotificationManager::class.java)
-        if (manager.getNotificationChannel(CHANNEL_ID) == null) {
-            val channel = NotificationChannel(
-                    CHANNEL_ID,
-                    getString(R.string.title_audio_player),
-                    NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = getString(R.string.title_audio_player)
-            }
-            manager.createNotificationChannel(channel)
-        }
-    }
-
-    companion object {
-        private const val CHANNEL_ID = "music"
-    }
 }
