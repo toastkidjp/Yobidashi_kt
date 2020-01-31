@@ -160,6 +160,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         notificationManager = NotificationManagerCompat.from(baseContext)
         notificationFactory = NotificationFactory(this) { mediaSession }
 
+        mediaPlayer.isLooping = true
+
         mediaSession = MediaSessionCompat(this, javaClass.simpleName).also {
             stateBuilder = PlaybackStateCompat.Builder()
             stateBuilder.setActions(
