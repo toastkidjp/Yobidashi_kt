@@ -40,7 +40,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     private lateinit var notificationFactory: NotificationFactory
 
-    private val mediaPlayer = MediaPlayer();
+    private val mediaPlayer = MediaPlayer()
 
     private val audioNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
