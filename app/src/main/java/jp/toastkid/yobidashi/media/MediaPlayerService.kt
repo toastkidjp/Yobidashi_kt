@@ -158,8 +158,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         notificationManager = NotificationManagerCompat.from(baseContext)
         notificationFactory = NotificationFactory(this) { mediaSession }
 
-        // TODO rewrite with also.
-        mediaSession = MediaSessionCompat(this, javaClass.simpleName).apply {
+        mediaSession = MediaSessionCompat(this, javaClass.simpleName).also {
             stateBuilder = PlaybackStateCompat.Builder()
             stateBuilder.setActions(
                     PlaybackStateCompat.ACTION_PLAY
@@ -167,10 +166,10 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                             or PlaybackStateCompat.ACTION_PLAY_PAUSE
                             or PlaybackStateCompat.ACTION_STOP
             )
-            setPlaybackState(stateBuilder.build())
-            setCallback(callback)
+            it.setPlaybackState(stateBuilder.build())
+            it.setCallback(callback)
             setSessionToken(sessionToken)
-            setFlags(
+            it.setFlags(
                     MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
                             or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
             )
