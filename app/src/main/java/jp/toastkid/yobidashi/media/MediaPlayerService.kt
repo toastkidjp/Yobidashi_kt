@@ -75,8 +75,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaPlayer.start()
             setNewState(PlaybackStateCompat.STATE_PLAYING)
             startService(Intent(baseContext, MediaPlayerService::class.java))
-            notificationManager.notify(1, notificationFactory())
-            startForeground(1, notificationFactory())
+            notificationManager.notify(NOTIFICATION_ID, notificationFactory())
+            startForeground(NOTIFICATION_ID, notificationFactory())
         }
 
         override fun onPlay() {
@@ -85,8 +85,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.isActive = true
             mediaPlayer.start()
             setNewState(PlaybackStateCompat.STATE_PLAYING)
-            notificationManager.notify(1, notificationFactory())
-            startForeground(1, notificationFactory())
+            notificationManager.notify(NOTIFICATION_ID, notificationFactory())
+            startForeground(NOTIFICATION_ID, notificationFactory())
         }
 
         override fun onPause() {
@@ -95,7 +95,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.isActive = false
             mediaPlayer.pause()
             setNewState(PlaybackStateCompat.STATE_PAUSED)
-            notificationManager.notify(1, notificationFactory())
+            notificationManager.notify(NOTIFICATION_ID, notificationFactory())
             stopForeground(false)
         }
 
@@ -202,5 +202,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         private const val ROOT_ID = "media-root"
 
+        private const val NOTIFICATION_ID = 46
     }
 }
