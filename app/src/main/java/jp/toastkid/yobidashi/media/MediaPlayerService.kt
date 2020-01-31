@@ -42,8 +42,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     private val mediaPlayer = MediaPlayer();
 
-    private val audioNoisyFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
-
     private val audioNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             mediaSession.controller.transportControls.pause()
@@ -198,4 +196,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         )
     }
 
+    companion object {
+        private val audioNoisyFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+    }
 }
