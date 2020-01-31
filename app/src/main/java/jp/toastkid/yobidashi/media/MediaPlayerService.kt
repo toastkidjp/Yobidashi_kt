@@ -183,7 +183,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             clientUid: Int,
             rootHints: Bundle?
     ): BrowserRoot? {
-        return BrowserRoot("media-root", null)
+        return BrowserRoot(ROOT_ID, null)
     }
 
     override fun onLoadChildren(
@@ -199,5 +199,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
     companion object {
         private val audioNoisyFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+
+        private const val ROOT_ID = "media-root"
+
     }
 }
