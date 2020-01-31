@@ -22,7 +22,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -105,11 +104,6 @@ class MediaPlayerPopup(private val context: Context) {
             }
         }
     }
-
-    /**
-     * Animation of slide up bottom.
-     */
-    private val slideUpBottom by lazy { AnimationUtils.loadAnimation(context, R.anim.slide_up) }
 
     private val disposables = CompositeDisposable()
 
