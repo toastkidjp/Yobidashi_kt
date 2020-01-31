@@ -172,7 +172,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             )
             it.setPlaybackState(stateBuilder.build())
             it.setCallback(callback)
-            setSessionToken(sessionToken)
+            setSessionToken(it.sessionToken)
             it.setFlags(
                     MEDIA_SESSION_FLAG
             )
