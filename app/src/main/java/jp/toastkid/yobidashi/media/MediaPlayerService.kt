@@ -116,8 +116,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.isActive = false
             mediaPlayer.stop()
             setNewState(PlaybackStateCompat.STATE_STOPPED)
-            notificationManager.notify(1, buildNotification())
-            stopForeground(false)
         }
 
         override fun onSetRepeatMode(repeatMode: Int) {
