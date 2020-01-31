@@ -62,7 +62,9 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             registerReceiver(audioNoisyReceiver, audioNoisyFilter)
 
             mediaPlayer.reset()
-            mediaPlayer.setDataSource(this@MediaPlayerService, uri)
+            if (uri != null) {
+                mediaPlayer.setDataSource(this@MediaPlayerService, uri)
+            }
             mediaPlayer.prepare()
 
             mediaSession.setMetadata(
