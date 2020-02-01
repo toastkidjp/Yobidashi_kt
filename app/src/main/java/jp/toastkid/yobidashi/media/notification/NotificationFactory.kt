@@ -69,7 +69,7 @@ class NotificationFactory(
                         )
                 )
 
-        val action = if (mediaSessionSupplier().controller.playbackState.state == PlaybackStateCompat.STATE_PLAYING) {
+        val action = if (isPlaying()) {
             pauseAction
         } else {
             playAction
@@ -77,6 +77,9 @@ class NotificationFactory(
         notificationBuilder.addAction(action)
         return notificationBuilder.build()
     }
+
+    private fun isPlaying() =
+            mediaSessionSupplier().controller.playbackState.state == PlaybackStateCompat.STATE_PLAYING
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
