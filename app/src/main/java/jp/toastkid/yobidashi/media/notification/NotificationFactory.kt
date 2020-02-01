@@ -33,6 +33,18 @@ class NotificationFactory(
 
     private val albumArtFinder = AlbumArtFinder(context.contentResolver)
 
+    private val pauseAction = NotificationCompat.Action(
+            R.drawable.ic_pause,
+            context.getString(R.string.action_pause),
+            MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PAUSE)
+    )
+
+    private val playAction = NotificationCompat.Action(
+            R.drawable.ic_play_media,
+            context.getString(R.string.action_play),
+            MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY)
+    )
+
     operator fun invoke(): Notification {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
@@ -58,17 +70,9 @@ class NotificationFactory(
                 )
 
         val action = if (mediaSessionSupplier().controller.playbackState.state == PlaybackStateCompat.STATE_PLAYING) {
-            NotificationCompat.Action(
-                    R.drawable.ic_pause,
-                    context.getString(R.string.action_pause),
-                    MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PAUSE)
-            )
+            pauseAction
         } else {
-            NotificationCompat.Action(
-                    R.drawable.ic_play_media,
-                    context.getString(R.string.action_play),
-                    MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY)
-            )
+            playAction
         }
         notificationBuilder.addAction(action)
         return notificationBuilder.build()
