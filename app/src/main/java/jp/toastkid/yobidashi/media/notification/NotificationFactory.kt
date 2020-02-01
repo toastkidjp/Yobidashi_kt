@@ -49,8 +49,9 @@ class NotificationFactory(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
+
         val currentDescription = mediaSessionSupplier().controller.metadata.description
-        val bitmap = currentDescription.iconUri?.let { albumArtFinder(it) }
+
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSessionSupplier().sessionToken)
@@ -58,7 +59,7 @@ class NotificationFactory(
                 )
                 .setColor(preferenceApplier.color)
                 .setSmallIcon(R.drawable.ic_music)
-                .setLargeIcon(bitmap)
+                .setLargeIcon(currentDescription.iconUri?.let { albumArtFinder(it) })
                 .setContentTitle(currentDescription.title)
                 .setContentText(currentDescription.subtitle)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
