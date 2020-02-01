@@ -61,6 +61,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         app:srcCompat="@drawable/ic_play"
+                        android:onClick="@{view -> popup.switchState()}"
                         android:contentDescription="@string/description_play_switch"
                         />
                     <TextView

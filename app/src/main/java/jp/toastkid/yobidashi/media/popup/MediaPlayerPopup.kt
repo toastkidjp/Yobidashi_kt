@@ -59,11 +59,17 @@ class MediaPlayerPopup(private val context: Context) {
 
     private lateinit var mediaBrowser: MediaBrowserCompat
 
+    private val preferenceApplier = PreferenceApplier(context)
+
     private val heightPixels = context.resources.displayMetrics.heightPixels
 
     private val headerHeight = context.resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
 
     private val swipeLimit = heightPixels - headerHeight
+
+    private val stopBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_stop)
+
+    private val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play)
 
     private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
@@ -117,7 +123,6 @@ class MediaPlayerPopup(private val context: Context) {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_media_player, null, false)
         binding.popup = this
 
-        val preferenceApplier = PreferenceApplier(context)
         adapter = Adapter(LayoutInflater.from(context), preferenceApplier) {
             attemptMediaController()
                     ?.transportControls
@@ -128,25 +133,7 @@ class MediaPlayerPopup(private val context: Context) {
         binding.mediaList.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        val stopBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_stop)
-        val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play)
-
         val colorPair = preferenceApplier.colorPair()
-
-        binding.playSwitch.setOnClickListener {
-            val mediaController = attemptMediaController() ?: return@setOnClickListener
-            val icon = if (mediaController.playbackState.state == PlaybackState.STATE_PLAYING) {
-                mediaController.transportControls.pause()
-                playBitmap
-            } else if (mediaController.playbackState.state == PlaybackState.STATE_PAUSED) {
-                mediaController.transportControls.play()
-                stopBitmap
-            } else {
-                playBitmap
-            }
-            binding.playSwitch.setImageBitmap(icon)
-            binding.playSwitch.setColorFilter(colorPair.fontColor())
-        }
 
         binding.control.setBackgroundColor(colorPair.bgColor())
         binding.reset.setColorFilter(colorPair.fontColor())
@@ -173,6 +160,21 @@ class MediaPlayerPopup(private val context: Context) {
             popupViewModel =
                     ViewModelProviders.of(context).get(BarcodeReaderResultPopupViewModel::class.java)
         }*/
+    }
+
+    fun switchState() {
+        val mediaController = attemptMediaController() ?: return
+        val icon = if (mediaController.playbackState.state == PlaybackState.STATE_PLAYING) {
+            mediaController.transportControls.pause()
+            playBitmap
+        } else if (mediaController.playbackState.state == PlaybackState.STATE_PAUSED) {
+            mediaController.transportControls.play()
+            stopBitmap
+        } else {
+            playBitmap
+        }
+        binding.playSwitch.setImageBitmap(icon)
+        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
     }
 
     @SuppressLint("ClickableViewAccessibility")
