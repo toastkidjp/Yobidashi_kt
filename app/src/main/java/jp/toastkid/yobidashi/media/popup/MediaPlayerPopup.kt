@@ -240,7 +240,4 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun attemptExtractActivity() = (context as? Activity)
 
-    companion object {
-        private const val DURATION_MS = 200L
-    }
 }
