@@ -69,12 +69,7 @@ class NotificationFactory(
                         )
                 )
 
-        val action = if (isPlaying()) {
-            pauseAction
-        } else {
-            playAction
-        }
-        notificationBuilder.addAction(action)
+        notificationBuilder.addAction(if (isPlaying()) pauseAction else playAction)
         return notificationBuilder.build()
     }
 
