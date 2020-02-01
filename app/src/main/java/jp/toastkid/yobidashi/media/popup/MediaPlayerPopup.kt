@@ -33,7 +33,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.floating.SlidingTouchListener
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -59,6 +58,12 @@ class MediaPlayerPopup(private val context: Context) {
     private var adapter: Adapter? = null
 
     private lateinit var mediaBrowser: MediaBrowserCompat
+
+    private val heightPixels = context.resources.displayMetrics.heightPixels
+
+    private val headerHeight = context.resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
+
+    private val swipeLimit = heightPixels - headerHeight
 
     private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
@@ -151,8 +156,7 @@ class MediaPlayerPopup(private val context: Context) {
 
         popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
 
-        popupWindow.isOutsideTouchable = true
-        popupWindow.isFocusable = true
+        popupWindow.isClippingEnabled = false
 
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
@@ -173,16 +177,25 @@ class MediaPlayerPopup(private val context: Context) {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        binding.header.setOnTouchListener(SlidingTouchListener(binding.contentPanel))
+        val slidingTouchListener = SlidingTouchListener(binding.contentPanel)
+        slidingTouchListener.setCallback(object : SlidingTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                if (y > swipeLimit) {
+                    return
+                }
+                popupWindow.update(-1, -y.toInt(), -1, -1)
+            }
+        })
+        binding.header.setOnTouchListener(slidingTouchListener)
     }
 
     fun show(parent: View) {
         if (popupWindow.isShowing) {
             popupWindow.dismiss()
+            return
         }
 
-        startEnterAnimation()
-        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
 
         val attemptExtractActivity = attemptExtractActivity() ?: return
         RxPermissions(attemptExtractActivity)
@@ -220,20 +233,6 @@ class MediaPlayerPopup(private val context: Context) {
 
     fun reset() {
         attemptMediaController()?.transportControls?.stop()
-    }
-
-    private fun startEnterAnimation() {
-        val heightPixels = binding.contentPanel.context.resources.displayMetrics.heightPixels
-
-        binding.contentPanel.animate()
-                .y(heightPixels.toFloat())
-                .setDuration(0)
-                .start()
-
-        binding.contentPanel.animate()
-                .y(heightPixels * 0.5f)
-                .setDuration(DURATION_MS)
-                .start()
     }
 
     private fun attemptMediaController() =
