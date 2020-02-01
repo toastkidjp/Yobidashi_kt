@@ -80,6 +80,10 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
 
         override fun onPlay() {
+            if (mediaSession.controller.metadata == null) {
+                return
+            }
+
             registerReceiver(audioNoisyReceiver, audioNoisyFilter)
 
             mediaSession.isActive = true

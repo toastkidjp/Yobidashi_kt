@@ -164,6 +164,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     fun switchState() {
         val mediaController = attemptMediaController() ?: return
+        mediaController.metadata ?: return
         val icon = if (mediaController.playbackState.state == PlaybackState.STATE_PLAYING) {
             mediaController.transportControls.pause()
             playBitmap
