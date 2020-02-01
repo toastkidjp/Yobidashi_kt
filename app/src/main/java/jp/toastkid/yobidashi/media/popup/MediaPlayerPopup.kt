@@ -67,9 +67,9 @@ class MediaPlayerPopup(private val context: Context) {
 
     private val swipeLimit = heightPixels - headerHeight
 
-    private val stopBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_stop)
+    private val pauseBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_pause)
 
-    private val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play)
+    private val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play_media)
 
     private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
@@ -99,19 +99,17 @@ class MediaPlayerPopup(private val context: Context) {
             }
 
             mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
+            attemptMediaController()?.registerCallback(controllerCallback)
         }
     }
 
     private val controllerCallback = object : MediaControllerCompat.Callback() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            when (state?.state) {
-                PlaybackStateCompat.STATE_PLAYING -> {
-                    //binding.play.setImageResource(R.drawable.ic_pause)
-                }
-                else -> {
-                    //binding.play.setImageResource(R.drawable.ic_play_media)
-                }
+            when (attemptMediaController()?.playbackState?.state) {
+                PlaybackState.STATE_PLAYING -> setPlayIcon()
+                PlaybackState.STATE_PAUSED -> setPauseIcon()
+                else -> Unit
             }
         }
     }
@@ -165,16 +163,38 @@ class MediaPlayerPopup(private val context: Context) {
     fun switchState() {
         val mediaController = attemptMediaController() ?: return
         mediaController.metadata ?: return
-        val icon = if (mediaController.playbackState.state == PlaybackState.STATE_PLAYING) {
-            mediaController.transportControls.pause()
-            playBitmap
-        } else if (mediaController.playbackState.state == PlaybackState.STATE_PAUSED) {
-            mediaController.transportControls.play()
-            stopBitmap
-        } else {
-            playBitmap
+        when (mediaController.playbackState.state) {
+            PlaybackState.STATE_PLAYING -> pause()
+            PlaybackState.STATE_PAUSED -> play()
+            else -> Unit
         }
-        binding.playSwitch.setImageBitmap(icon)
+    }
+
+    private fun play() {
+        val mediaController = attemptMediaController() ?: return
+        mediaController.metadata ?: return
+
+        mediaController.transportControls.play()
+
+        setPlayIcon()
+    }
+
+    private fun setPlayIcon() {
+        binding.playSwitch.setImageBitmap(pauseBitmap)
+        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+    }
+
+    private fun pause() {
+        val mediaController = attemptMediaController() ?: return
+        mediaController.metadata ?: return
+
+        mediaController.transportControls.pause()
+
+        setPauseIcon()
+    }
+
+    private fun setPauseIcon() {
+        binding.playSwitch.setImageBitmap(playBitmap)
         binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
     }
 

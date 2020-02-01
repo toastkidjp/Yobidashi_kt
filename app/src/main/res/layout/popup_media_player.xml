@@ -50,6 +50,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
+                        android:adjustViewBounds="true"
                         app:srcCompat="@drawable/ic_reset"
                         android:onClick="@{view -> popup.reset()}"
                         android:contentDescription="@string/settings_color_reset"
@@ -60,7 +61,9 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
-                        app:srcCompat="@drawable/ic_play"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/ic_play_media"
                         android:onClick="@{view -> popup.switchState()}"
                         android:contentDescription="@string/description_play_switch"
                         />
