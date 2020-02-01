@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi.databinding.ModuleEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -143,6 +144,7 @@ class EditorModule(
                 mb.lastSaved,
                 mb.counter,
                 mb.backup,
+                mb.insertAsPlain,
                 mb.pasteAsQuotation,
                 mb.clear
                 )
@@ -197,6 +199,14 @@ class EditorModule(
 
     fun clear() {
         ClearTextDialogFragment.show(binding.root.context)
+    }
+
+    fun insertAsPlain() {
+        val primary = Clipboard.getPrimary(binding.root.context)
+        if (TextUtils.isEmpty(primary)) {
+            return
+        }
+        insert(primary)
     }
 
     /**

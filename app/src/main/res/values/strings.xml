@@ -446,5 +446,6 @@
     <string name="message_stay_tuned">Stay tuned!</string>
     <string name="action_pause">Pause</string>
     <string name="action_play">Play</string>
+    <string name="insert_as_plain">Insert as plain</string>
 
 </resources>
