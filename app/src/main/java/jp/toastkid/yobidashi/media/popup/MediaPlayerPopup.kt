@@ -109,6 +109,7 @@ class MediaPlayerPopup(private val context: Context) {
             when (attemptMediaController()?.playbackState?.state) {
                 PlaybackState.STATE_PLAYING -> setPlayIcon()
                 PlaybackState.STATE_PAUSED -> setPauseIcon()
+                PlaybackState.STATE_STOPPED -> setPlayIcon()
                 else -> Unit
             }
         }

@@ -65,6 +65,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             if (uri != null) {
                 mediaPlayer.setDataSource(this@MediaPlayerService, uri)
             }
+            mediaPlayer.isLooping = true
             mediaPlayer.prepare()
 
             mediaSession.setMetadata(
@@ -119,10 +120,10 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaSession.setRepeatMode(repeatMode)
             when (repeatMode) {
                 PlaybackStateCompat.REPEAT_MODE_ONE -> {
-                    mediaPlayer.isLooping = true
+                    //mediaPlayer.isLooping = true
                 }
                 else -> {
-                    mediaPlayer.isLooping = false
+                    //mediaPlayer.isLooping = false
                 }
             }
         }
@@ -163,8 +164,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         preferenceApplier = PreferenceApplier(this)
         notificationManager = NotificationManagerCompat.from(baseContext)
         notificationFactory = NotificationFactory(this) { mediaSession }
-
-        mediaPlayer.isLooping = true
 
         mediaSession = MediaSessionCompat(this, javaClass.simpleName).also {
             stateBuilder = PlaybackStateCompat.Builder()
