@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import java.util.*
 
 /**
  * @author toastkidjp
@@ -65,6 +66,8 @@ class Adapter(
     fun clear() {
         items.clear()
     }
+
+    fun random() = items[Random().nextInt(itemCount)]
 
     companion object {
 

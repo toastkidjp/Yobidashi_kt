@@ -137,6 +137,7 @@ class MediaPlayerPopup(private val context: Context) {
         binding.control.setBackgroundColor(colorPair.bgColor())
         binding.reset.setColorFilter(colorPair.fontColor())
         binding.playSwitch.setColorFilter(colorPair.fontColor())
+        binding.shuffle.setColorFilter(colorPair.fontColor())
 
         popupWindow.contentView = binding.root
 
@@ -197,6 +198,12 @@ class MediaPlayerPopup(private val context: Context) {
     private fun setPauseIcon() {
         binding.playSwitch.setImageBitmap(playBitmap)
         binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+    }
+
+    fun shuffle() {
+        attemptMediaController()
+                ?.transportControls
+                ?.playFromUri(adapter?.random()?.description?.mediaUri, bundleOf())
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -447,5 +447,6 @@
     <string name="action_pause">Pause</string>
     <string name="action_play">Play</string>
     <string name="insert_as_plain">Insert as plain</string>
+    <string name="action_shuffle">Shuffle</string>
 
 </resources>

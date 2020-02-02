@@ -67,11 +67,17 @@
                         android:onClick="@{view -> popup.switchState()}"
                         android:contentDescription="@string/description_play_switch"
                         />
-                    <TextView
-                        android:id="@+id/info_playing"
-                        android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/shuffle"
+                        android:layout_width="44dp"
                         android:layout_height="match_parent"
-                        android:textSize="16sp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:scaleType="centerInside"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/ic_shuffle"
+                        android:onClick="@{view -> popup.shuffle()}"
+                        android:contentDescription="@string/action_shuffle"
                         />
                     <ImageView
                         android:layout_width="44dp"
