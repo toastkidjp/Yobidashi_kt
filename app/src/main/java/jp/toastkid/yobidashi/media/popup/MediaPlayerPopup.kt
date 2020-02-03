@@ -159,12 +159,13 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun applyColors() {
         val colorPair = preferenceApplier.colorPair()
-
         binding.control.setBackgroundColor(colorPair.bgColor())
-        binding.reset.setColorFilter(colorPair.fontColor())
-        binding.playSwitch.setColorFilter(colorPair.fontColor())
-        binding.shuffle.setColorFilter(colorPair.fontColor())
-        binding.hide.setColorFilter(colorPair.fontColor())
+
+        val fontColor = colorPair.fontColor()
+        binding.reset.setColorFilter(fontColor)
+        binding.playSwitch.setColorFilter(fontColor)
+        binding.shuffle.setColorFilter(fontColor)
+        binding.hide.setColorFilter(fontColor)
     }
 
     fun switchState() {
