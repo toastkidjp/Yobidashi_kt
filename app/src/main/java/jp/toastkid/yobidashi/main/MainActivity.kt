@@ -54,7 +54,6 @@ import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
-import jp.toastkid.yobidashi.media.MediaPlayerFragment
 import jp.toastkid.yobidashi.media.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
