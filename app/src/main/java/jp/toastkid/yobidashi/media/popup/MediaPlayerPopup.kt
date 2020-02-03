@@ -138,6 +138,7 @@ class MediaPlayerPopup(private val context: Context) {
         binding.reset.setColorFilter(colorPair.fontColor())
         binding.playSwitch.setColorFilter(colorPair.fontColor())
         binding.shuffle.setColorFilter(colorPair.fontColor())
+        binding.hide.setColorFilter(colorPair.fontColor())
 
         popupWindow.contentView = binding.root
 
