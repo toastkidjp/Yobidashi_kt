@@ -149,12 +149,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             mediaState = newState
             stateBuilder = PlaybackStateCompat.Builder()
             stateBuilder
-                    .setActions(
-                            PlaybackStateCompat.ACTION_PLAY
-                                    or PlaybackStateCompat.ACTION_PAUSE
-                                    or PlaybackStateCompat.ACTION_PLAY_PAUSE
-                                    or PlaybackStateCompat.ACTION_STOP
-                    )
+                    .setActions(PLAYBACK_ACTION)
                     .setState(newState, mediaPlayer.currentPosition.toLong(), 1.0f)
             mediaSession.setPlaybackState(stateBuilder.build())
         }
@@ -169,12 +164,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         mediaSession = MediaSessionCompat(this, javaClass.simpleName).also {
             stateBuilder = PlaybackStateCompat.Builder()
-            stateBuilder.setActions(
-                    PlaybackStateCompat.ACTION_PLAY
-                            or PlaybackStateCompat.ACTION_PAUSE
-                            or PlaybackStateCompat.ACTION_PLAY_PAUSE
-                            or PlaybackStateCompat.ACTION_STOP
-            )
+            stateBuilder.setActions(PLAYBACK_ACTION)
             it.setPlaybackState(stateBuilder.build())
             it.setCallback(callback)
             setSessionToken(it.sessionToken)
@@ -213,5 +203,11 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         private const val MEDIA_SESSION_FLAG =
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                         MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+
+        private const val PLAYBACK_ACTION = (PlaybackStateCompat.ACTION_PLAY
+                or PlaybackStateCompat.ACTION_PAUSE
+                or PlaybackStateCompat.ACTION_PLAY_PAUSE
+                or PlaybackStateCompat.ACTION_STOP)
+
     }
 }
