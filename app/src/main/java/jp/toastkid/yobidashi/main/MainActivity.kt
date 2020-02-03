@@ -19,6 +19,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -264,6 +265,12 @@ class MainActivity : AppCompatActivity() {
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
                 calledIntent.data?.let { loadUri(it) }
+                return
+            }
+            Intent.ACTION_SEND -> {
+                calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
+                    loadUri(it.toString().toUri())
+                }
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {
