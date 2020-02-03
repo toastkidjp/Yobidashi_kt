@@ -338,7 +338,9 @@ class MainActivity : AppCompatActivity() {
                 ColorFilter(this, rootView).switchState(this)
             }
             Menu.MEMORY_CLEANER -> {
-                ProcessCleanerInvoker()(binding.root).addTo(disposables)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    ProcessCleanerInvoker()(binding.root).addTo(disposables)
+                }
             }
             Menu.PLANNING_POKER-> {
                 startActivity(PlanningPokerActivity.makeIntent(this))
