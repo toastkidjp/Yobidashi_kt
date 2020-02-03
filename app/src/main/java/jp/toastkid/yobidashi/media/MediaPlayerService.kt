@@ -95,7 +95,9 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
 
         override fun onPause() {
-            unregisterReceiver(audioNoisyReceiver)
+            if (audioNoisyReceiver.isOrderedBroadcast) {
+                unregisterReceiver(audioNoisyReceiver)
+            }
 
             mediaSession.isActive = false
             mediaPlayer.pause()
