@@ -132,13 +132,7 @@ class MediaPlayerPopup(private val context: Context) {
         binding.mediaList.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        val colorPair = preferenceApplier.colorPair()
-
-        binding.control.setBackgroundColor(colorPair.bgColor())
-        binding.reset.setColorFilter(colorPair.fontColor())
-        binding.playSwitch.setColorFilter(colorPair.fontColor())
-        binding.shuffle.setColorFilter(colorPair.fontColor())
-        binding.hide.setColorFilter(colorPair.fontColor())
+        applyColors()
 
         popupWindow.contentView = binding.root
 
@@ -161,6 +155,16 @@ class MediaPlayerPopup(private val context: Context) {
             popupViewModel =
                     ViewModelProviders.of(context).get(BarcodeReaderResultPopupViewModel::class.java)
         }*/
+    }
+
+    private fun applyColors() {
+        val colorPair = preferenceApplier.colorPair()
+
+        binding.control.setBackgroundColor(colorPair.bgColor())
+        binding.reset.setColorFilter(colorPair.fontColor())
+        binding.playSwitch.setColorFilter(colorPair.fontColor())
+        binding.shuffle.setColorFilter(colorPair.fontColor())
+        binding.hide.setColorFilter(colorPair.fontColor())
     }
 
     fun switchState() {
