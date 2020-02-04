@@ -36,6 +36,8 @@
                     android:layout_width="@dimen/floating_preview_header_height"
                     android:layout_height="match_parent"
                     android:layout_margin="4dp"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
                     android:contentDescription="@string/image"
                     />
                 <LinearLayout
