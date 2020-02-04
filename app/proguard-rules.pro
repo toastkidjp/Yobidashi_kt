@@ -81,3 +81,11 @@
 -keepnames @kotlin.Metadata class jp.toastkid.yobidashi.wikipedia.**
 -keep class jp.toastkid.yobidashi.wikipedia.** { *; }
 -keepclassmembers class jp.toastkid.yobidashi.wikipedia.** { *; }
+
+# For Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
