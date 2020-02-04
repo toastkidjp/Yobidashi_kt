@@ -387,6 +387,8 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putStringSet(Key.RSS_READER_TARGETS.name, targets).apply()
     }
 
+    fun containsRssTarget(url: String) = readRssReaderTargets().contains(url)
+
     fun clear() {
         preferences.edit().clear().apply()
     }

@@ -20,7 +20,9 @@ import androidx.lifecycle.ViewModelProviders
 
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.block.AdRemover
@@ -39,6 +41,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import timber.log.Timber
 
 /**
@@ -52,6 +55,8 @@ class BrowserModule(
     private val webViewPool: WebViewPool
 
     private val preferenceApplier = PreferenceApplier(context)
+
+    private val rssAddingSuggestion = RssAddingSuggestion(preferenceApplier)
 
     private val faviconApplier: FaviconApplier = FaviconApplier(context)
 
@@ -70,6 +75,8 @@ class BrowserModule(
     private var headerViewModel: HeaderViewModel? = null
 
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
+
+    private val disposables = CompositeDisposable()
 
     init {
         webViewPool = WebViewPool(
@@ -94,6 +101,8 @@ class BrowserModule(
             super.onPageStarted(view, url, favicon)
             headerViewModel?.updateProgress(0)
             isLoadFinished = false
+
+            rssAddingSuggestion(view, url).addTo(disposables)
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
@@ -412,6 +421,7 @@ class BrowserModule(
      */
     fun dispose() {
         webViewPool.dispose()
+        disposables.clear()
     }
 
     /**

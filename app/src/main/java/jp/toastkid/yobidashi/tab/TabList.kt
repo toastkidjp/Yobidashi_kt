@@ -62,7 +62,9 @@ class TabList private constructor() {
         tabs[target] = currentTab
     }
 
-    private fun invalidIndex(newIndex: Int) = newIndex < 0 || tabs.size < newIndex
+    private fun invalidIndex(newIndex: Int): Boolean {
+        return !inRange(newIndex)
+    }
 
     /**
      * Save current state to file.
@@ -112,7 +114,7 @@ class TabList private constructor() {
     }
 
     internal fun closeTab(index: Int) {
-        if (index <= this.index && index != 0) {
+        if (index <= this.index && this.index != 0) {
             this.index--
         }
         val tab: Tab = tabs[index]

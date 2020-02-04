@@ -50,10 +50,15 @@ class ClipboardModule(
     private val disposables = CompositeDisposable()
 
     init {
-        binding.root.setOnClickListener {
+        binding.text.setOnClickListener {
             val activityContext = it.context
             onClick(binding.text.text.toString())
             Clipboard.clip(activityContext, "")
+        }
+
+        binding.close.setOnClickListener {
+            Clipboard.clip(it.context, "")
+            hide()
         }
     }
 
@@ -109,7 +114,7 @@ class ClipboardModule(
      */
     private fun setSearch(query: String) {
         binding.image.setImageResource(R.drawable.ic_search)
-        binding.text.text = query
+        binding.text.text = query.trim()
         binding.text.setTextColor(textColor)
     }
 
