@@ -122,7 +122,11 @@ class MediaPlayerPopup(private val context: Context) {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_media_player, null, false)
         binding.popup = this
 
-        adapter = Adapter(LayoutInflater.from(context), preferenceApplier) {
+        adapter = Adapter(
+                LayoutInflater.from(context),
+                preferenceApplier,
+                context.resources
+        ) {
             attemptMediaController()
                     ?.transportControls
                     ?.playFromUri(it.description.mediaUri, bundleOf())
