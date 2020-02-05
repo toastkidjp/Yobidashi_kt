@@ -34,7 +34,7 @@ class Adapter(
         private val layoutInflater: LayoutInflater,
         private val preferenceApplier: PreferenceApplier,
         resources: Resources,
-        private val onClickItem: (MediaBrowserCompat.MediaItem) -> Unit
+        private val viewModel: MediaPlayerPopupViewModel?
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private lateinit var binding: ItemMediaListBinding
@@ -71,7 +71,7 @@ class Adapter(
                 .addTo(disposables)
 
         holder.setOnClickListener(View.OnClickListener {
-            onClickItem(item)
+            viewModel?.clickItem(item)
         })
     }
 
