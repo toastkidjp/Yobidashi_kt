@@ -1,13 +1,16 @@
 package jp.toastkid.yobidashi.search
 
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 /**
  * [SearchCategory]'s test.
  *
  * @author toastkidjp
  */
+@RunWith(RobolectricTestRunner::class)
 class SearchCategoryTest {
 
     @Test
@@ -32,4 +35,16 @@ class SearchCategoryTest {
         assertEquals("18", "${SearchCategory.findIndex("github")}")
         assertEquals("0", "${SearchCategory.findIndex("none")}")
     }
+
+    @Test
+    fun testFindByHostOrNull() {
+        assertNull(SearchCategory.findByHostOrNull(null))
+        assertNull(SearchCategory.findByHostOrNull(""))
+        assertNull(SearchCategory.findByHostOrNull(" "))
+        assertNull(SearchCategory.findByHostOrNull("www.yahoo.co.jp"))
+        assertSame(SearchCategory.GOOGLE, SearchCategory.findByHostOrNull("www.google.com"))
+        assertSame(SearchCategory.YAHOO_JAPAN, SearchCategory.findByHostOrNull("search.yahoo.co.jp"))
+        assertSame(SearchCategory.FLICKR, SearchCategory.findByHostOrNull("www.flickr.com"))
+    }
+
 }

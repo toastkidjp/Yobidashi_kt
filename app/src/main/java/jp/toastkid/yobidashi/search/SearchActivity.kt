@@ -14,7 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -117,12 +116,19 @@ class SearchActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
 
+        currentUrl = intent.getStringExtra(EXTRA_KEY_URL)
+
         preferenceApplier = PreferenceApplier(this)
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding?.activity = this
         binding?.searchClear?.setOnClickListener { binding?.searchInput?.setText("") }
-        SearchCategorySpinnerInitializer.invoke(binding?.searchCategories as Spinner)
+        binding?.searchCategories?.let {
+            SearchCategorySpinnerInitializer.invoke(
+                    it,
+                    SearchCategory.findByHostOrNull(currentUrl?.toUri()?.host)
+            )
+        }
 
         initFavoriteModule()
 
@@ -177,8 +183,6 @@ class SearchActivity : AppCompatActivity(),
 
             setQuery()
         }
-
-        currentUrl = intent.getStringExtra(EXTRA_KEY_URL)
 
         Toaster.snackShort(
                 binding?.background as View,

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.main.LocaleWrapper
 import java.util.*
@@ -224,6 +225,18 @@ enum class SearchCategory(
 
     companion object {
 
+        private val locale = Locale.getDefault()
+
+        private val hostAndCategories =
+                values()
+                        .filter { it != SITE_SEARCH }
+                        .map { it.host.toUri().host to it }
+                        .toMap()
+
+        fun findByHostOrNull(host: String?): SearchCategory? =
+                if (host.isNullOrBlank()) null
+                else hostAndCategories.get(host)
+
         /**
          * Find [SearchCategory] by search category.
          *
@@ -231,14 +244,8 @@ enum class SearchCategory(
          * @return [SearchCategory]
          */
         fun findByCategory(category: String): SearchCategory {
-            for (f in SearchCategory.values()) {
-                if (f.name == category.toUpperCase()) {
-                    return f
-                }
-            }
-            return SearchCategory
-                    .values()
-                    .find { it.name == category.toUpperCase() } ?: GOOGLE
+            val target = category.toUpperCase(locale)
+            return values().find { it.name == target } ?: getDefault()
         }
 
         /**
@@ -249,7 +256,7 @@ enum class SearchCategory(
          * @return index
          */
         fun findIndex(category: String): Int =
-                values().find { it.name == category.toUpperCase() } ?.ordinal ?: 0
+                values().find { it.name == category.toUpperCase(locale) } ?.ordinal ?: 0
 
         /**
          * Get default object.
