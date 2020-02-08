@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.media
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.v4.media.MediaDescriptionCompat
@@ -16,27 +15,15 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * @author toastkidjp
  */
 class ViewHolder(private val binding: ItemMediaListBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    private val dateFormatHolder = object : ThreadLocal<DateFormat>() {
-        @SuppressLint("SimpleDateFormat")
-        override fun initialValue(): DateFormat? {
-            return SimpleDateFormat("yyyy/MM/dd(E)HH:mm:ss")
-        }
-    }
-
     fun bindText(description: MediaDescriptionCompat) {
         binding.title.text = description.title
-        /*binding.time.text = dateFormatHolder.get()
-                ?.format(Date().also { it.time = (audio.date ?: 0) * 1000L })*/
-        binding.artist.setText("${description.description} ${description.mediaDescription}")
+        binding.artist.setText(description.subtitle)
     }
 
     fun setIconColor(@ColorInt color: Int) {
