@@ -48,7 +48,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val activityContext = context
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val path = arguments?.getString("image")
+        val path = arguments?.getString(KEY_IMAGE)
                 ?: return super.onCreateDialog(savedInstanceState)
 
         binding = DataBindingUtil.inflate(
@@ -126,9 +126,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     companion object {
 
+        private const val KEY_IMAGE = "image"
+
         fun withImage(image: Image): ImagePreviewDialogFragment {
             return ImagePreviewDialogFragment().also {
-                it.arguments = bundleOf("image" to image.path)
+                it.arguments = bundleOf(KEY_IMAGE to image.path)
             }
         }
     }
