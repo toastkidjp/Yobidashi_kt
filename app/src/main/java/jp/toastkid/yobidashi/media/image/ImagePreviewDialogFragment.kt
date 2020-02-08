@@ -128,11 +128,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         private const val KEY_IMAGE = "image"
 
-        fun withImage(image: Image): ImagePreviewDialogFragment {
-            return ImagePreviewDialogFragment().also {
-                it.arguments = bundleOf(KEY_IMAGE to image.path)
-            }
-        }
+        fun withImage(image: Image) =
+                ImagePreviewDialogFragment()
+                        .also {
+                            it.arguments = bundleOf(KEY_IMAGE to image.path)
+                        }
     }
 
 }
