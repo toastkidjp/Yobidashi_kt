@@ -96,10 +96,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 }
     }
 
-    private val horizontalMatrix = Matrix().also {
-        it.preScale(-1f, 1f)
-    }
-
     fun reverse() {
         val current = binding.photo.drawable.toBitmap()
         val horizontalFlipped = Bitmap.createBitmap(
@@ -127,6 +123,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     companion object {
 
         private const val KEY_IMAGE = "image"
+
+        private val horizontalMatrix = Matrix().also { it.preScale(-1f, 1f) }
 
         fun withImage(image: Image) =
                 ImagePreviewDialogFragment()
