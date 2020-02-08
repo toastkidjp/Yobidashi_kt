@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.media.image
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
@@ -23,6 +24,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
@@ -36,6 +39,8 @@ import java.io.File
 class ImagePreviewDialogFragment  : DialogFragment() {
 
     private lateinit var binding: DialogImagePreviewBinding
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
@@ -75,6 +80,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                         },
                         Timber::e
                 )
+                .addTo(disposables)
 
         binding.photo.maximumScale = 100f
 
@@ -106,6 +112,16 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 false
         )
         binding.photo.setImageBitmap(horizontalFlipped)
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        disposables.clear()
+    }
+
+    override fun onCancel(dialog: DialogInterface?) {
+        super.onCancel(dialog)
+        disposables.dispose()
     }
 
     companion object {
