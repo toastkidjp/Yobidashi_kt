@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.media.image
 
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -66,6 +67,23 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         layoutParams.height = displayMetrics.heightPixels
         binding.photo.layoutParams = layoutParams
 
+        loadImageAsync(activityContext, path)
+
+        binding.photo.maximumScale = 100f
+
+        return AlertDialog.Builder(activityContext)
+                .setView(binding.root)
+                .create()
+                .also {
+                    it.window?.also { window ->
+                        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT)
+                    }
+                }
+    }
+
+    private fun loadImageAsync(activityContext: Context, path: String) {
         Maybe.fromCallable {
             ImageLoader.loadBitmap(
                     activityContext,
@@ -81,19 +99,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                         Timber::e
                 )
                 .addTo(disposables)
-
-        binding.photo.maximumScale = 100f
-
-        return AlertDialog.Builder(activityContext)
-                .setView(binding.root)
-                .create()
-                .also {
-                    it.window?.also { window ->
-                        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT)
-                    }
-                }
     }
 
     fun reverse() {
