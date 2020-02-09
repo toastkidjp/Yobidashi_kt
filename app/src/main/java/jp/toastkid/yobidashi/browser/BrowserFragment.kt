@@ -153,6 +153,8 @@ class BrowserFragment : Fragment(),
 
     private var headerViewModel: HeaderViewModel? = null
 
+    private var browserViewModel: BrowserViewModel? = null
+
     /**
      * Find-in-page module.
      */
@@ -241,6 +243,11 @@ class BrowserFragment : Fragment(),
         val activity = requireActivity()
         menuViewModel = ViewModelProviders.of(activity)
                 .get(MenuViewModel::class.java)
+
+        browserViewModel = ViewModelProviders.of(activity).get(BrowserViewModel::class.java)
+        browserViewModel?.preview?.observe(activity, Observer {
+            preview(it.toString())
+        })
 
         pageSearchPresenter = PageSearcherModule(
                 this,

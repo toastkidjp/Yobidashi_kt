@@ -7,8 +7,21 @@
  */
 package jp.toastkid.yobidashi.browser
 
+import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+
 /**
  * @author toastkidjp
  */
-class BrowserViewModel {
+class BrowserViewModel : ViewModel() {
+
+    private val _preview =  MutableLiveData<Uri>()
+
+    val preview: LiveData<Uri> = _preview
+
+    fun preview(uri: Uri) {
+        _preview.postValue(uri)
+    }
 }
