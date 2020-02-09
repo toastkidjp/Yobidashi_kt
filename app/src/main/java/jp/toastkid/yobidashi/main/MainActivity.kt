@@ -363,6 +363,7 @@ class MainActivity : AppCompatActivity() {
             }
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(binding.root)
+                menuViewModel?.close()
             }
             Menu.ABOUT-> {
                 startActivity(AboutThisAppActivity.makeIntent(this))
