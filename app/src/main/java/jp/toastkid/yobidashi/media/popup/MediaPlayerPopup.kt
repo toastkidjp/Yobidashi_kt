@@ -24,6 +24,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -36,6 +37,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -105,10 +107,15 @@ class MediaPlayerPopup(private val context: Context) {
             mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
             attemptMediaController()?.registerCallback(controllerCallback)
 
-            viewModel?.clickItem?.observe(attemptExtractActivity() as FragmentActivity, Observer {
+            val fragmentActivity = attemptExtractActivity() as FragmentActivity
+            viewModel?.clickItem?.observe(fragmentActivity, Observer {
                 attemptMediaController()
                         ?.transportControls
                         ?.playFromUri(it.description.mediaUri, bundleOf())
+            })
+
+            viewModel?.clickLyrics?.observe(fragmentActivity, Observer {
+                browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
             })
         }
     }
@@ -127,6 +134,8 @@ class MediaPlayerPopup(private val context: Context) {
 
     private var viewModel: MediaPlayerPopupViewModel?
 
+    private var browserViewModel: BrowserViewModel? = null
+
     private val disposables = CompositeDisposable()
 
     init {
@@ -134,8 +143,13 @@ class MediaPlayerPopup(private val context: Context) {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_media_player, null, false)
         binding.popup = this
 
-        viewModel = (attemptExtractActivity() as? FragmentActivity)?.let {
+        val fragmentActivity = attemptExtractActivity() as? FragmentActivity
+        viewModel = fragmentActivity?.let {
             ViewModelProviders.of(it).get(MediaPlayerPopupViewModel::class.java)
+        }
+
+        browserViewModel = fragmentActivity?.let {
+            ViewModelProviders.of(it).get(BrowserViewModel::class.java)
         }
 
         adapter = Adapter(
@@ -279,6 +293,7 @@ class MediaPlayerPopup(private val context: Context) {
         }
 
         viewModel?.clickItem?.removeObservers(attemptExtractActivity() as FragmentActivity)
+        viewModel?.clickLyrics?.removeObservers(attemptExtractActivity() as FragmentActivity)
 
         disposables.clear()
     }

@@ -24,4 +24,12 @@ class MediaPlayerPopupViewModel : ViewModel() {
     fun clickItem(item: MediaBrowserCompat.MediaItem) {
         _clickItem.postValue(item)
     }
+
+    private val _lyrics = MutableLiveData<String>()
+
+    val clickLyrics: LiveData<String> = _lyrics
+
+    fun clickLyrics(name: CharSequence?) {
+        name?.also { _lyrics.postValue(it.toString()) }
+    }
 }

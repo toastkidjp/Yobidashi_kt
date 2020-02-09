@@ -39,7 +39,7 @@
                 android:textSize="18sp"
                 tools:text="@string/sample_long_text"
                 app:layout_constraintStart_toEndOf="@id/icon"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/lyrics"
                 app:layout_constraintTop_toTopOf="parent"
                 />
             <TextView
@@ -70,6 +70,19 @@
                 app:layout_constraintTop_toBottomOf="@id/artist"
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintEnd_toEndOf="@id/title"
+                />
+
+            <ImageView
+                android:id="@+id/lyrics"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_lyrics"
+                app:layout_constraintStart_toEndOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 />
 
             <View

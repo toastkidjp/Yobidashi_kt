@@ -57,6 +57,9 @@ class Adapter(
         val item = items.get(position)
         holder.bindText(item.description)
 
+        val iconColor = preferenceApplier.colorPair().bgColor()
+        holder.setLyricsIconColor(iconColor)
+
         Maybe.fromCallable { item.description.iconUri?.let { albumArtFinder(it) } ?: throw RuntimeException() }
                 .subscribeOn(Schedulers.io())
                 .map { BitmapScaling(it, iconWidth, iconWidth) }
@@ -64,7 +67,7 @@ class Adapter(
                 .subscribe(
                         holder::setIcon,
                         {
-                            holder.setIconColor(preferenceApplier.colorPair().bgColor())
+                            holder.setIconColor(iconColor)
                             holder.setIconId(R.drawable.ic_music)
                         }
                 )
@@ -72,6 +75,10 @@ class Adapter(
 
         holder.setOnClickListener(View.OnClickListener {
             viewModel?.clickItem(item)
+        })
+
+        holder.setOnLyricsClickListener(View.OnClickListener {
+            viewModel?.clickLyrics(item.description.title)
         })
     }
 

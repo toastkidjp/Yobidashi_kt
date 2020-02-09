@@ -26,12 +26,20 @@ class ViewHolder(private val binding: ItemMediaListBinding) : RecyclerView.ViewH
         binding.artist.setText(description.subtitle)
     }
 
+    fun setLyricsIconColor(@ColorInt color: Int) {
+        binding.lyrics.setColorFilter(color)
+    }
+
     fun setIconColor(@ColorInt color: Int) {
         binding.icon.setColorFilter(color)
     }
 
     fun setOnClickListener(onClickListener: View.OnClickListener) {
         binding.root.setOnClickListener(onClickListener)
+    }
+
+    fun setOnLyricsClickListener(onClickListener: View.OnClickListener) {
+        binding.lyrics.setOnClickListener(onClickListener)
     }
 
     fun setIcon(albumArtOrNull: Bitmap) {
