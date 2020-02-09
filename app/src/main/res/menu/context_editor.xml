@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/context_edit_insert_as_plain"
+        android:title="@string/insert_as_plain"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/context_edit_paste_as_quotation"
         android:title="@string/paste_as_quotation"
         android:orderInCategory="100"

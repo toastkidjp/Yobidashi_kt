@@ -123,6 +123,11 @@ class EditorModule(
 
                 override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
                     when (menu?.itemId) {
+                        R.id.context_edit_insert_as_plain -> {
+                            insertAsPlain()
+                            actionMode?.finish()
+                            return true
+                        }
                         R.id.context_edit_paste_as_quotation -> {
                             pasteAsQuotation()
                             actionMode?.finish()
