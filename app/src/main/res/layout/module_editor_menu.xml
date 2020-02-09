@@ -70,30 +70,6 @@
                 android:onLongClick="@{editorModule::showName}"
                 />
             <Button
-                android:id="@+id/insert_as_plain"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
-                android:text="@string/insert_as_plain"
-                android:maxLines="1"
-                android:drawableTop="@drawable/ic_insert_plain"
-                android:foreground="@drawable/ripple_transparent"
-                android:onClick="@{view -> editorModule.insertAsPlain()}"
-                android:onLongClick="@{editorModule::showName}"
-                />
-            <Button
-                android:id="@+id/paste_as_quotation"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
-                android:text="@string/paste_as_quotation"
-                android:maxLines="1"
-                android:drawableTop="@drawable/ic_quote"
-                android:foreground="@drawable/ripple_transparent"
-                android:onClick="@{view -> editorModule.pasteAsQuotation()}"
-                android:onLongClick="@{editorModule::showName}"
-                />
-            <Button
                 android:id="@+id/load_as"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"

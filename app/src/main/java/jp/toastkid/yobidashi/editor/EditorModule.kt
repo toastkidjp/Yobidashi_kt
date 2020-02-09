@@ -172,8 +172,6 @@ class EditorModule(
                 mb.lastSaved,
                 mb.counter,
                 mb.backup,
-                mb.insertAsPlain,
-                mb.pasteAsQuotation,
                 mb.clear
                 )
 
