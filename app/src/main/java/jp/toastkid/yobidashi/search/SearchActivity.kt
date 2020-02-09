@@ -46,6 +46,7 @@ import jp.toastkid.yobidashi.search.history.ClearSearchHistoryDialogFragment
 import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
+import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -87,6 +88,11 @@ class SearchActivity : AppCompatActivity(),
      * Suggestion module.
      */
     private var suggestionModule: SuggestionModule? = null
+
+    /**
+     * Current URL module.
+     */
+    private var urlModule: UrlModule? = null
 
     /**
      * Suggestion module.
@@ -147,6 +153,8 @@ class SearchActivity : AppCompatActivity(),
                 search(binding?.searchCategories?.selectedItem.toString(), clipped)
             }
         }
+
+        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding)
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -295,10 +303,13 @@ class SearchActivity : AppCompatActivity(),
         suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         historyModule?.enable = preferenceApplier.isEnableSearchHistory
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
+        urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
         clipboardModule?.switch()
+
+        urlModule?.switch(currentUrl)?.addTo(disposables)
     }
 
     /**
@@ -515,9 +526,13 @@ class SearchActivity : AppCompatActivity(),
         private const val LAYOUT_ID = R.layout.activity_search
 
         /**
-         * Extra key.
+         * Extra key of query.
          */
         private const val EXTRA_KEY_QUERY = "query"
+
+        /**
+         * Extra key of URL.
+         */
         private const val EXTRA_KEY_URL = "url"
 
         /**

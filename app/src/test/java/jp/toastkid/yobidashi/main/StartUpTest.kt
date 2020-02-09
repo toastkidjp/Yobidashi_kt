@@ -15,15 +15,17 @@ class StartUpTest {
      * Check of [StartUp#find].
      */
     @Test
-    fun getTitleId() {
-        assertEquals(StartUp.BROWSER, StartUp.findByName("BROWSER"))
+    fun testGetTitleId() {
+        assertEquals(StartUp.BROWSER, StartUp.findByName(null))
+        assertEquals(StartUp.BROWSER, StartUp.findByName(""))
+        assertEquals(StartUp.SEARCH, StartUp.findByName("SEARCH"))
     }
 
     /**
      * Check of [StartUp#findById].
      */
     @Test
-    fun getRadioButtonId() {
+    fun testGetRadioButtonId() {
         assertEquals(StartUp.BROWSER, StartUp.findById(R.id.start_up_browser))
     }
 

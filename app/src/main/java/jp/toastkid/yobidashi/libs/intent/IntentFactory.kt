@@ -143,4 +143,18 @@ object IntentFactory {
      * Make dial intent.
      */
     fun mailTo(uri: Uri): Intent = Intent(Intent.ACTION_SENDTO, uri)
+
+    /**
+     * Make sharing URL intent.
+     *
+     * @param url URL
+     */
+    fun makeShareUrl(url: String): Intent {
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        share.putExtra(Intent.EXTRA_SUBJECT, "Share link")
+        share.putExtra(Intent.EXTRA_TEXT, url)
+        return Intent.createChooser(share, "Share link $url")
+    }
 }

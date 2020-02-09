@@ -73,6 +73,8 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         binding.useFavoriteCheck.jumpDrawablesToCurrentState()
         binding.useViewHistoryCheck.isChecked = preferenceApplier.isEnableViewHistory
         binding.useViewHistoryCheck.jumpDrawablesToCurrentState()
+        binding.useUrlModuleCheck.isChecked = preferenceApplier.isEnableUrlModule()
+        binding.useUrlModuleCheck.jumpDrawablesToCurrentState()
         binding.useAppSearchCheck.isChecked = preferenceApplier.isEnableAppSearch()
         binding.useAppSearchCheck.jumpDrawablesToCurrentState()
     }
@@ -142,6 +144,15 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         val newState = !preferenceApplier.isEnableViewHistory
         preferenceApplier.switchEnableViewHistory()
         binding.useViewHistoryCheck.isChecked = newState
+    }
+
+    /**
+     * Switch state of using view history suggestion.
+     */
+    fun switchUseUrlModule() {
+        val newState = !preferenceApplier.isEnableUrlModule()
+        preferenceApplier.switchEnableUrlModule()
+        binding.useUrlModuleCheck.isChecked = newState
     }
 
     /**
