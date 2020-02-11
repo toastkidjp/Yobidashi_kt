@@ -149,14 +149,7 @@ class MediaPlayerPopup(private val context: Context) {
 
         applyColors()
 
-        popupWindow.contentView = binding.root
-
-        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
-
-        popupWindow.isClippingEnabled = false
-
-        popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
-        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+        initializePopupWindow()
 
         setSlidingListener()
 
@@ -190,6 +183,17 @@ class MediaPlayerPopup(private val context: Context) {
         binding.playSwitch.setColorFilter(fontColor)
         binding.shuffle.setColorFilter(fontColor)
         binding.hide.setColorFilter(fontColor)
+    }
+
+    private fun initializePopupWindow() {
+        popupWindow.contentView = binding.root
+
+        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
+
+        popupWindow.isClippingEnabled = false
+
+        popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
+        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
     }
 
     fun switchState() {
