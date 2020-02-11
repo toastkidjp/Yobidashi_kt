@@ -23,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -129,7 +130,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     init {
         val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_media_player, null, false)
+        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.popup = this
 
         initializeViewModels()
@@ -312,4 +313,10 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun attemptExtractActivity() = (context as? Activity)
 
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.popup_media_player
+
+    }
 }
