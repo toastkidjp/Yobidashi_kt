@@ -111,7 +111,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val bitmap = binding.photo.drawable.toBitmap()
         applyMatrix(
                 bitmap,
-                Matrix().also { it.setRotate(270f, bitmap.width.toFloat() / 2f, bitmap.height.toFloat() / 2f) }
+                makeRotateMatrix(270f, bitmap.width.toFloat(), bitmap.height.toFloat())
         )
     }
 
@@ -119,9 +119,12 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val bitmap = binding.photo.drawable.toBitmap()
         applyMatrix(
                 bitmap,
-                Matrix().also { it.setRotate(90f, bitmap.width.toFloat() / 2f, bitmap.height.toFloat() / 2f) }
+                makeRotateMatrix(90f, bitmap.width.toFloat(), bitmap.height.toFloat())
         )
     }
+
+    private fun makeRotateMatrix(degrees: Float, width: Float, height: Float) =
+            Matrix().also { it.setRotate(degrees, width / 2f, height / 2f) }
 
     fun reverse() {
         applyMatrix(binding.photo.drawable.toBitmap(), horizontalMatrix)
