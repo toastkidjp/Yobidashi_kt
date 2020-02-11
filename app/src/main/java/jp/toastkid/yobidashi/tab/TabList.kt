@@ -124,6 +124,7 @@ class TabList private constructor() {
     internal fun remove(tab: Tab) {
         File(itemsDir, tab.id() + ".json").delete()
         tabs.remove(tab)
+        tab.deleteLastThumbnail()
     }
 
     internal fun clear() {

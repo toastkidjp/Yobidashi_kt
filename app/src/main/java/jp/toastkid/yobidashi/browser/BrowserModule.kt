@@ -25,6 +25,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
+import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
@@ -72,9 +73,13 @@ class BrowserModule(
     private val adRemover: AdRemover =
             AdRemover(context.assets.open("ad_hosts.txt"))
 
+    private val autoArchive = AutoArchive.make(context)
+
     private var headerViewModel: HeaderViewModel? = null
 
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
+
+    private var loadingViewModel: LoadingViewModel? = null
 
     private val disposables = CompositeDisposable()
 
@@ -92,6 +97,7 @@ class BrowserModule(
             val viewModelProvider = ViewModelProviders.of(context)
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
+            loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
         }
     }
 
@@ -108,6 +114,9 @@ class BrowserModule(
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
             isLoadFinished = true
+
+            loadingViewModel?.finished()
+
             headerViewModel?.updateProgress(100)
             headerViewModel?.stopProgress(true)
 
@@ -364,6 +373,17 @@ class BrowserModule(
             return
         }
         Archive.save(currentView)
+    }
+
+    /**
+     * Save archive file.
+     */
+    fun saveArchiveForAutoArchive(tabId: String) {
+        if (Archive.cannotUseArchive()) {
+            return
+        }
+
+        autoArchive.save(currentView(), tabId)
     }
 
     /**

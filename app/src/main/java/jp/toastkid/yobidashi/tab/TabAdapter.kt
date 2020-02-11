@@ -11,6 +11,7 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import io.reactivex.Completable
@@ -20,12 +21,14 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.Archive
+import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
@@ -63,6 +66,8 @@ class TabAdapter(
 
     private val preferenceApplier: PreferenceApplier
 
+    private val autoArchive = AutoArchive.make(webViewContainer.context)
+
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
@@ -83,10 +88,16 @@ class TabAdapter(
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
         if (viewContext is MainActivity) {
-            browserHeaderViewModel =
-                    ViewModelProviders.of(viewContext).get(BrowserHeaderViewModel::class.java)
-            headerViewModel =
-                    ViewModelProviders.of(viewContext).get(HeaderViewModel::class.java)
+            val viewModelProvider = ViewModelProviders.of(viewContext)
+            browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
+            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+
+            viewModelProvider.get(LoadingViewModel::class.java)
+                    .onPageFinished
+                    .observe(
+                            viewContext,
+                            Observer { browserModule.saveArchiveForAutoArchive(currentTabId()) }
+                    )
         }
     }
     /**
@@ -201,7 +212,8 @@ class TabAdapter(
     }
 
     fun back(): Boolean {
-        if (currentTab() is EditorTab || currentTab() is PdfTab) {
+        val currentTab = currentTab()
+        if (currentTab is EditorTab || currentTab is PdfTab || currentTab == null) {
             return false
         }
 
@@ -209,7 +221,7 @@ class TabAdapter(
             return browserModule.back()
         }
 
-        tabList.closeTab(index())
+        closeTab(index())
         if (isEmpty()) {
             tabEmptyCallback()
             return true
@@ -271,6 +283,12 @@ class TabAdapter(
         browserModule.onViewStateRestored(currentTabId())
         currentTab()?.let {
             if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
+                if (NetworkChecker.isNotAvailable(webViewContainer.context)) {
+                    autoArchive.load(currentWebView(), it.id()) {
+                        Toaster.snackShort(webViewContainer, "Load archive.", colorPair)
+                    }
+                    return@let
+                }
                 callLoadUrl(it.getUrl())
                 return@let
             }
@@ -430,10 +448,13 @@ class TabAdapter(
             return
         }
         val tab = tabList.get(index)
-        if (tab is WebTab && index == this.index()) {
+        if (tab is WebTab) {
             deleteThumbnail(tab.thumbnailPath)
-            browserModule.disableWebView()
-            browserModule.detachWebView(tab.id())
+            autoArchive.delete(tab.id())
+            if (index == this.index()) {
+                browserModule.disableWebView()
+                browserModule.detachWebView(tab.id())
+            }
         }
 
         tabList.closeTab(index)
