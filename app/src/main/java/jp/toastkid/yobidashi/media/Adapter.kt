@@ -65,13 +65,10 @@ class Adapter(
                 .subscribeOn(Schedulers.io())
                 .map { BitmapScaling(it, iconWidth, iconWidth) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        holder::setIcon,
-                        {
-                            holder.setIconColor(iconColor)
-                            holder.setIconId(R.drawable.ic_music)
-                        }
-                )
+                .subscribe(holder::setIcon) {
+                    holder.setIconColor(iconColor)
+                    holder.setIconId(R.drawable.ic_music)
+                }
                 .addTo(disposables)
 
         holder.setOnClickListener(View.OnClickListener {
