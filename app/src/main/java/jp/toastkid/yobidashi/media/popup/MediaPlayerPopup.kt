@@ -28,6 +28,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +42,7 @@ import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.Adapter
+import jp.toastkid.yobidashi.media.MediaPlayerPopupViewModel
 import jp.toastkid.yobidashi.media.MediaPlayerService
 import timber.log.Timber
 
@@ -119,6 +121,8 @@ class MediaPlayerPopup(private val context: Context) {
         }
     }
 
+    private var mediaPlayerPopupViewModel: MediaPlayerPopupViewModel? = null
+
     private var browserViewModel: BrowserViewModel? = null
 
     private val disposables = CompositeDisposable()
@@ -128,19 +132,25 @@ class MediaPlayerPopup(private val context: Context) {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_media_player, null, false)
         binding.popup = this
 
+        initializeViewModels()
+
         adapter = Adapter(
                 LayoutInflater.from(context),
                 preferenceApplier,
                 context.resources,
-                {
-                    attemptMediaController()
-                            ?.transportControls
-                            ?.playFromUri(it.description.mediaUri, bundleOf())
-                },
-                {
-                    browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
-                }
+                mediaPlayerPopupViewModel
         )
+
+        (attemptExtractActivity() as? FragmentActivity)?.also {
+            mediaPlayerPopupViewModel?.clickItem?.observe(it, Observer {
+                attemptMediaController()
+                        ?.transportControls
+                        ?.playFromUri(it.description.mediaUri, bundleOf())
+            })
+            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, Observer {
+                browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
+            })
+        }
 
         binding.mediaList.adapter = adapter
         binding.mediaList.layoutManager =
@@ -251,8 +261,6 @@ class MediaPlayerPopup(private val context: Context) {
                 .subscribe(
                         {
                             if (it) {
-                                initializeViewModels()
-
                                 mediaBrowser.connect()
                                 return@subscribe
                             }
@@ -273,6 +281,7 @@ class MediaPlayerPopup(private val context: Context) {
         val viewModelProvider = (attemptExtractActivity() as? FragmentActivity)
                 ?.let { owner -> ViewModelProviders.of(owner) }
         browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
+        mediaPlayerPopupViewModel = viewModelProvider?.get(MediaPlayerPopupViewModel::class.java)
     }
 
     fun hide() {

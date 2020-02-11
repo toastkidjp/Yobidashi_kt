@@ -34,8 +34,7 @@ class Adapter(
         private val layoutInflater: LayoutInflater,
         private val preferenceApplier: PreferenceApplier,
         resources: Resources,
-        private val onClickItem: (MediaBrowserCompat.MediaItem) -> Unit,
-        private val onClickLyrics: (String) -> Unit
+        private val mediaPlayerPopupViewModel: MediaPlayerPopupViewModel?
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private lateinit var binding: ItemMediaListBinding
@@ -72,11 +71,13 @@ class Adapter(
                 .addTo(disposables)
 
         holder.setOnClickListener(View.OnClickListener {
-            onClickItem(item)
+            mediaPlayerPopupViewModel?.clickItem(item)
         })
 
         holder.setOnLyricsClickListener(View.OnClickListener {
-            item.description.title?.also { lyrics -> onClickLyrics(lyrics.toString()) }
+            item.description.title?.also { lyrics ->
+                mediaPlayerPopupViewModel?.clickLyrics(lyrics.toString())
+            }
         })
     }
 
