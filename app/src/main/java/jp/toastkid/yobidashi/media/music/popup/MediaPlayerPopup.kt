@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.popup
+package jp.toastkid.yobidashi.media.music.popup
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -42,9 +42,9 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.media.Adapter
-import jp.toastkid.yobidashi.media.MediaPlayerPopupViewModel
-import jp.toastkid.yobidashi.media.MediaPlayerService
+import jp.toastkid.yobidashi.media.music.Adapter
+import jp.toastkid.yobidashi.media.music.MediaPlayerPopupViewModel
+import jp.toastkid.yobidashi.media.music.MediaPlayerService
 import timber.log.Timber
 
 /**
