@@ -195,6 +195,8 @@ class MediaPlayerPopup(private val context: Context) {
 
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        popupWindow.animationStyle = R.style.PopupWindowVisibilityAnimation
     }
 
     fun switchState() {
