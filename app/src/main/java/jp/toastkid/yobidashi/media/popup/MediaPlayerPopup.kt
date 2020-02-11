@@ -141,16 +141,7 @@ class MediaPlayerPopup(private val context: Context) {
                 mediaPlayerPopupViewModel
         )
 
-        (attemptExtractActivity() as? FragmentActivity)?.also {
-            mediaPlayerPopupViewModel?.clickItem?.observe(it, Observer {
-                attemptMediaController()
-                        ?.transportControls
-                        ?.playFromUri(it.description.mediaUri, bundleOf())
-            })
-            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, Observer {
-                browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
-            })
-        }
+        observeViewModels()
 
         binding.mediaList.adapter = adapter
         binding.mediaList.layoutManager =
@@ -175,6 +166,19 @@ class MediaPlayerPopup(private val context: Context) {
                 connectionCallback,
                 null
         )
+    }
+
+    private fun observeViewModels() {
+        (attemptExtractActivity() as? FragmentActivity)?.also {
+            mediaPlayerPopupViewModel?.clickItem?.observe(it, Observer {
+                attemptMediaController()
+                        ?.transportControls
+                        ?.playFromUri(it.description.mediaUri, bundleOf())
+            })
+            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, Observer {
+                browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
+            })
+        }
     }
 
     private fun applyColors() {
