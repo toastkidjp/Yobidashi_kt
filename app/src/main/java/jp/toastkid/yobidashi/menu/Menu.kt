@@ -82,6 +82,8 @@ enum class Menu(
 
     RSS_READER(R.string.title_rss_reader, R.drawable.ic_rss_feed),
 
+    AUDIO(R.string.title_audio_player, R.drawable.ic_music),
+
     OVERLAY_COLOR_FILTER(R.string.title_filter_color, R.drawable.ic_color_filter),
 
     ABOUT(R.string.title_about_this_app, R.drawable.ic_yobidashi),

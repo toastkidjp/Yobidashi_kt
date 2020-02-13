@@ -428,5 +428,8 @@
     <string name="title_current_page">現在のページ</string>
     <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
     <string name="title_url_module">URL モジュールを使う</string>
+    <string name="title_audio_player">Audio player</string>
+    <string name="description_play_switch">Switch playing state</string>
+    <string name="message_audio_file_is_not_found">音楽ファイルが見つかりませんでした。</string>
 
 </resources>
