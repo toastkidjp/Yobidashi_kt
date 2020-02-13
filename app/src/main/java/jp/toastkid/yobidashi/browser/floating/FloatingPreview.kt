@@ -27,7 +27,6 @@ import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
-import timber.log.Timber
 
 /**
  * Floating preview.
@@ -53,7 +52,6 @@ class FloatingPreview(context: Context) {
             viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
 
             viewModel?.title?.observe(context, Observer {
-                Timber.i("title $it")
                 binding.title.text = it
             })
 
@@ -62,12 +60,10 @@ class FloatingPreview(context: Context) {
             })
 
             viewModel?.url?.observe(context, Observer {
-                Timber.i("url $it")
                 binding.url.text = it
             })
 
             viewModel?.open?.observe(context, Observer {
-                Timber.i("open $it")
                 openNewTabWithUrl(it)
             })
         }
