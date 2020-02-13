@@ -16,6 +16,7 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.PopupWindow
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
@@ -43,7 +44,7 @@ class FloatingPreview(context: Context) {
 
     init {
         val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_floating_preview, null, false)
+        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.preview = this
 
         popupWindow.contentView = binding.root
@@ -168,6 +169,10 @@ class FloatingPreview(context: Context) {
     fun isVisible() = popupWindow.isShowing
 
     companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.popup_floating_preview
+
         private const val DURATION_MS = 200L
 
         private const val SPECIAL_WEB_VIEW_ID = "preview"
