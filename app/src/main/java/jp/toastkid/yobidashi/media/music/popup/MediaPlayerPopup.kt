@@ -13,6 +13,7 @@ import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.session.PlaybackState
 import android.support.v4.media.MediaBrowserCompat
@@ -24,7 +25,6 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -189,7 +189,7 @@ class MediaPlayerPopup(private val context: Context) {
     private fun initializePopupWindow() {
         popupWindow.contentView = binding.root
 
-        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
+        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         popupWindow.isClippingEnabled = false
 
