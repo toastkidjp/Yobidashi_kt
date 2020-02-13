@@ -41,12 +41,4 @@ class FloatingPreviewViewModel : ViewModel() {
         url?.let { _url.postValue(it) }
     }
 
-    private val _open = MutableLiveData<String>()
-
-    val open: LiveData<String> = _open
-
-    fun openUrl(url: String?) {
-        url?.let { _open.postValue(it) }
-    }
-
 }

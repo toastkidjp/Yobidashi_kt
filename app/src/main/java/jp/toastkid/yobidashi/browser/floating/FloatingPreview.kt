@@ -63,10 +63,6 @@ class FloatingPreview(context: Context) {
             viewModel?.url?.observe(context, Observer {
                 binding.url.text = it
             })
-
-            viewModel?.open?.observe(context, Observer {
-                openNewTabWithUrl(it)
-            })
         }
 
         popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
