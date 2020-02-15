@@ -68,11 +68,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         binding.dialog = this
 
-        val displayMetrics = resources.displayMetrics
-        val layoutParams = binding.photo.layoutParams
-        layoutParams.width = displayMetrics.widthPixels
-        layoutParams.height = displayMetrics.heightPixels
-        binding.photo.layoutParams = layoutParams
+        fitPhotoView()
 
         applyColorToButtons()
 
@@ -90,6 +86,14 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                                 ViewGroup.LayoutParams.MATCH_PARENT)
                     }
                 }
+    }
+
+    private fun fitPhotoView() {
+        val displayMetrics = resources.displayMetrics
+        val layoutParams = binding.photo.layoutParams
+        layoutParams.width = displayMetrics.widthPixels
+        layoutParams.height = displayMetrics.heightPixels
+        binding.photo.layoutParams = layoutParams
     }
 
     private fun applyColorToButtons() {
