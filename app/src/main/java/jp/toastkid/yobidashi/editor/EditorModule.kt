@@ -187,10 +187,9 @@ class EditorModule(
             }
 
             private fun extractSelectedText(): String {
-                val text = binding.editorInput.text
+                return binding.editorInput.text
                         .subSequence(binding.editorInput.selectionStart, binding.editorInput.selectionEnd)
                         .toString()
-                return text
             }
 
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
