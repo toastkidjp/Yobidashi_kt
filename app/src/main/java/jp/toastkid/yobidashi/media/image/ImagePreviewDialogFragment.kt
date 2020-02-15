@@ -175,8 +175,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 bitmap,
                 0,
                 0,
-                bitmap.getWidth(),
-                bitmap.getHeight(),
+                bitmap.width,
+                bitmap.height,
                 matrix,
                 false
         )
