@@ -12,7 +12,7 @@ package jp.toastkid.yobidashi.browser.webview.dialog
  */
 interface AnchorDialogCallback {
     fun openNewTab(url: String)
-    fun openBackgroundTab(url: String)
+    fun openBackgroundTab(title: String, url: String)
     fun openCurrent(url: String)
     fun preview(url: String)
 }

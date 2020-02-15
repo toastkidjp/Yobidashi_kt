@@ -9,9 +9,9 @@ package jp.toastkid.yobidashi.browser.webview.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
@@ -28,17 +28,19 @@ class AnchorTypeLongTapDialogFragment : DialogFragment() {
         val url = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
+        val title = arguments?.getString(KEY_TITLE) ?: ""
+
         val target = targetFragment
         if (target is AnchorDialogCallback) {
             onClick = target
         }
 
         return AlertDialog.Builder(activityContext)
-                .setTitle("URL: $url")
+                .setTitle("Title: $title URL: $url")
                 .setItems(R.array.url_menu, { _, which ->
                     when (which) {
                         0 -> onClick?.openNewTab(url)
-                        1 -> onClick?.openBackgroundTab(url)
+                        1 -> onClick?.openBackgroundTab(title, url)
                         2 -> onClick?.openCurrent(url)
                         3 -> onClick?.preview(url)
                         4 -> Clipboard.clip(activityContext, url)
@@ -50,10 +52,17 @@ class AnchorTypeLongTapDialogFragment : DialogFragment() {
 
     companion object {
 
+        private const val KEY_TITLE = "title"
+
         private const val KEY_EXTRA = "extra"
 
-        fun make(extra: String) =
+        fun make(title: String, extra: String) =
                 AnchorTypeLongTapDialogFragment()
-                        .also { it.arguments = bundleOf(KEY_EXTRA to extra) }
+                        .also {
+                            it.arguments = bundleOf(
+                                    KEY_TITLE to title,
+                                    KEY_EXTRA to extra
+                            )
+                        }
     }
 }

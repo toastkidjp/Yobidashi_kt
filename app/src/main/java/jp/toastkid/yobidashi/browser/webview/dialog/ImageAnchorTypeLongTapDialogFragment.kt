@@ -27,6 +27,8 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
+        val title = arguments?.getString(KEY_TITLE) ?: ""
+
         val url = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
@@ -46,7 +48,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
                 .setItems(R.array.image_anchor_menu) { _, which ->
                     when (which) {
                         0 -> onClickAnchor?.openNewTab(anchor)
-                        1 -> onClickAnchor?.openBackgroundTab(anchor)
+                        1 -> onClickAnchor?.openBackgroundTab(title, anchor)
                         2 -> onClickAnchor?.openCurrent(anchor)
                         3 -> onClickImage?.onClickImageSearch(url)
                         4 -> onClickImage?.onClickSetBackground(url)
@@ -61,14 +63,17 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
 
     companion object {
 
+        private const val KEY_TITLE = "title"
+
         private const val KEY_ANCHOR = "anchor"
 
         private const val KEY_EXTRA = "extra"
 
-        fun make(extra: String, anchor: String) =
+        fun make(title: String, extra: String, anchor: String) =
                 ImageAnchorTypeLongTapDialogFragment()
                         .also {
                             it.arguments = bundleOf(
+                                    KEY_TITLE to title,
                                     KEY_EXTRA to extra,
                                     KEY_ANCHOR to anchor
                             )

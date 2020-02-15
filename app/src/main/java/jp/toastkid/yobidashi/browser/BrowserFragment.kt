@@ -67,9 +67,11 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
+import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.util.*
 
 /**
  * Internal browser fragment.
@@ -446,6 +448,14 @@ class BrowserFragment : Fragment(),
                         }
                         .addTo(disposables)
             }
+            Menu.WHAT_HAPPENED_TODAY -> {
+                val calendar = Calendar.getInstance()
+                val url = DateArticleUrlFactory()(requireContext(), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+                if (Urls.isInvalidUrl(url)) {
+                    return
+                }
+                loadWithNewTab(url.toUri())
+            }
             Menu.WEB_SEARCH-> {
                 search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
             }
@@ -815,8 +825,8 @@ class BrowserFragment : Fragment(),
         loadWithNewTab(url.toUri())
     }
 
-    override fun openBackgroundTab(url: String) {
-        tabs.openBackgroundTab(url)
+    override fun openBackgroundTab(title: String, url: String) {
+        tabs.openBackgroundTab(title, url)
     }
 
     override fun openCurrent(url: String) {

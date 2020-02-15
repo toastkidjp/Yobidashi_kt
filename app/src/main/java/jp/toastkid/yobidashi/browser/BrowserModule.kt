@@ -324,8 +324,8 @@ class BrowserModule(
         currentView()?.reload()
     }
 
-    fun animate(slideUpFromBottom: Animation?) {
-        slideUpFromBottom?.let { currentView()?.startAnimation(it) }
+    fun animate(animation: Animation?) {
+        animation?.let { currentView()?.startAnimation(it) }
     }
 
     fun findUp() {

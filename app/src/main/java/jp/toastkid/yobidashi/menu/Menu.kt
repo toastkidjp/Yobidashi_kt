@@ -62,6 +62,8 @@ enum class Menu(
 
     RANDOM_WIKIPEDIA(R.string.menu_random_wikipedia, R.drawable.ic_wikipedia_white),
 
+    WHAT_HAPPENED_TODAY(R.string.menu_what_happened_today, R.drawable.ic_what_happened_today),
+
     SETTING(R.string.title_settings, R.drawable.ic_settings),
 
     EDITOR(R.string.title_editor, R.drawable.ic_edit),

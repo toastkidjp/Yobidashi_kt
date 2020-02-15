@@ -76,6 +76,9 @@ class TabAdapter(
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_up)
 
+    private val slideDown
+            = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_down)
+
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
     private var headerViewModel: HeaderViewModel? = null
@@ -176,10 +179,15 @@ class TabAdapter(
     /**
      * Open background tab with URL string.
      *
-     * @param url
+     * @param title Tab's title
+     * @param url Tab's URL
      */
-    fun openBackgroundTab(url: String) {
-        tabList.add(WebTab.makeBackground(webViewContainer.context.getString(R.string.new_tab), url))
+    fun openBackgroundTab(title: String, url: String) {
+        val tabTitle =
+                if (title.isNotBlank()) title
+                else webViewContainer.context.getString(R.string.new_tab)
+
+        tabList.add(WebTab.makeBackground(tabTitle, url))
         tabList.save()
         Toaster.snackShort(
                 webViewContainer,
@@ -449,6 +457,7 @@ class TabAdapter(
         }
         val tab = tabList.get(index)
         if (tab is WebTab) {
+            browserModule.animate(slideDown)
             deleteThumbnail(tab.thumbnailPath)
             autoArchive.delete(tab.id())
             if (index == this.index()) {
