@@ -52,6 +52,16 @@
                 app:srcCompat="@drawable/ic_rotate_right"
                 android:onClick="@{view -> dialog.rotateRight()}"
                 />
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginLeft="12dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_brush"
+                android:onClick="@{view -> dialog.edit()}"
+                />
         </LinearLayout>
     </FrameLayout>
 </layout>

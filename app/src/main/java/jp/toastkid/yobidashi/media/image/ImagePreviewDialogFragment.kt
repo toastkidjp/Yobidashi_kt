@@ -8,8 +8,10 @@
 package jp.toastkid.yobidashi.media.image
 
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
@@ -19,6 +21,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -28,9 +31,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 import java.io.File
@@ -42,6 +47,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private lateinit var binding: DialogImagePreviewBinding
 
+    private var path: String? = null
+
     private val disposables = CompositeDisposable()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -50,7 +57,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val activityContext = context
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val path = arguments?.getString(KEY_IMAGE)
+        path = arguments?.getString(KEY_IMAGE)
                 ?: return super.onCreateDialog(savedInstanceState)
 
         binding = DataBindingUtil.inflate(
@@ -72,6 +79,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         binding.reverse.setColorFilter(colorPair.fontColor())
         binding.rotateLeft.setColorFilter(colorPair.fontColor())
         binding.rotateRight.setColorFilter(colorPair.fontColor())
+        binding.edit.setColorFilter(colorPair.fontColor())
 
         loadImageAsync(activityContext, path)
 
@@ -89,7 +97,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 }
     }
 
-    private fun loadImageAsync(activityContext: Context, path: String) {
+    private fun loadImageAsync(activityContext: Context, path: String?) {
+        if (path == null) {
+            return
+        }
+
         Maybe.fromCallable {
             ImageLoader.loadBitmap(
                     activityContext,
@@ -105,6 +117,38 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                         Timber::e
                 )
                 .addTo(disposables)
+    }
+
+    fun edit() {
+        if (path == null) {
+            Toaster.snackShort(
+                    binding.root,
+                    R.string.message_cannot_launch_app,
+                    PreferenceApplier(binding.root.context).colorPair()
+            )
+            return
+        }
+
+        val intent = Intent(Intent.ACTION_EDIT)
+        val context = requireContext()
+        val uriForFile = FileProvider.getUriForFile(
+                context,
+                "${BuildConfig.APPLICATION_ID}.fileprovider",
+                File(path)
+        )
+        intent.setDataAndType(uriForFile, "image/*")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+
+        try {
+            context.startActivity(Intent.createChooser(intent, "File edit"))
+        } catch (e: ActivityNotFoundException) {
+            Timber.w(e)
+            Toaster.snackShort(
+                    binding.root,
+                    R.string.message_cannot_launch_app,
+                    PreferenceApplier(binding.root.context).colorPair()
+            )
+        }
     }
 
     fun rotateLeft() {
