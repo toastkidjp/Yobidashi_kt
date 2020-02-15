@@ -24,4 +24,20 @@ class BrowserViewModel : ViewModel() {
     fun preview(uri: Uri) {
         _preview.postValue(uri)
     }
+
+    private val _open = MutableLiveData<Uri>()
+
+    val open: LiveData<Uri> = _open
+
+    fun open(uri: Uri) {
+        _open.postValue(uri)
+    }
+
+    private val _openBackground = MutableLiveData<Uri>()
+
+    val openBackground: LiveData<Uri> = _openBackground
+
+    fun openBackground(uri: Uri) {
+        _openBackground.postValue(uri)
+    }
 }
