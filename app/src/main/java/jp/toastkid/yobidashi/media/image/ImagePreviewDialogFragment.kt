@@ -19,6 +19,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
@@ -63,7 +64,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         binding = DataBindingUtil.inflate(
                 LayoutInflater.from(activityContext),
-                R.layout.dialog_image_preview,
+                LAYOUT_ID,
                 null,
                 false
         )
@@ -194,6 +195,9 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.dialog_image_preview
 
         private const val KEY_IMAGE = "image"
 
