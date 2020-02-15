@@ -46,6 +46,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private var path: String? = null
 
+    private val imageEditChooserFactory = ImageEditChooserFactory()
+
     private val disposables = CompositeDisposable()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -127,7 +129,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         }
 
         try {
-            binding.root.context.startActivity(ImageEditChooserFactory().invoke(requireContext(), path))
+            binding.root.context.startActivity(imageEditChooserFactory(requireContext(), path))
         } catch (e: ActivityNotFoundException) {
             Timber.w(e)
             Toaster.snackShort(
