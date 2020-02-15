@@ -11,7 +11,6 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
@@ -21,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -31,7 +29,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -129,18 +126,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
             return
         }
 
-        val intent = Intent(Intent.ACTION_EDIT)
-        val context = requireContext()
-        val uriForFile = FileProvider.getUriForFile(
-                context,
-                "${BuildConfig.APPLICATION_ID}.fileprovider",
-                File(path)
-        )
-        intent.setDataAndType(uriForFile, "image/*")
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-
         try {
-            context.startActivity(Intent.createChooser(intent, "File edit"))
+            binding.root.context.startActivity(ImageEditChooserFactory().invoke(requireContext(), path))
         } catch (e: ActivityNotFoundException) {
             Timber.w(e)
             Toaster.snackShort(
