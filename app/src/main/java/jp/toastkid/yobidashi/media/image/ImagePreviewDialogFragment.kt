@@ -74,11 +74,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         layoutParams.height = displayMetrics.heightPixels
         binding.photo.layoutParams = layoutParams
 
-        val fontColor = PreferenceApplier(binding.root.context).fontColor
-        binding.reverse.setColorFilter(fontColor)
-        binding.rotateLeft.setColorFilter(fontColor)
-        binding.rotateRight.setColorFilter(fontColor)
-        binding.edit.setColorFilter(fontColor)
+        applyColorToButtons()
 
         loadImageAsync(activityContext, path)
 
@@ -94,6 +90,14 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                                 ViewGroup.LayoutParams.MATCH_PARENT)
                     }
                 }
+    }
+
+    private fun applyColorToButtons() {
+        val fontColor = PreferenceApplier(binding.root.context).fontColor
+        binding.reverse.setColorFilter(fontColor)
+        binding.rotateLeft.setColorFilter(fontColor)
+        binding.rotateRight.setColorFilter(fontColor)
+        binding.edit.setColorFilter(fontColor)
     }
 
     private fun loadImageAsync(activityContext: Context, path: String?) {
