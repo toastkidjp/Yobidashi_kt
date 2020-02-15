@@ -154,7 +154,10 @@ class SearchActivity : AppCompatActivity(),
             }
         }
 
-        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding)
+        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding) {
+            // TODO attempt to use method reference
+            setTextAndMoveCursorToEnd(it)
+        }
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -259,16 +262,19 @@ class SearchActivity : AppCompatActivity(),
                     binding?.favoriteModule as ModuleSearchFavoriteBinding,
                     { fav -> search(fav.category as String, fav.query as String) },
                     this::hideKeyboard,
-                    { fav ->
-                        binding?.searchInput?.setText("${fav.query} ")
-                        binding?.searchInput?.setSelection(
-                                binding?.searchInput?.text.toString().length)
+                    { fav -> // TODO Clean it.
+                        setTextAndMoveCursorToEnd("${fav.query} ")
                     }
             )
         }
                 .subscribeOn(Schedulers.newThread())
                 .subscribe( { favoriteModule?.query("") }, { Timber.e(it) })
                 .addTo(disposables)
+    }
+
+    private fun setTextAndMoveCursorToEnd(text: String) {
+        binding?.searchInput?.setText(text)
+        binding?.searchInput?.setSelection(text.length)
     }
 
     /**

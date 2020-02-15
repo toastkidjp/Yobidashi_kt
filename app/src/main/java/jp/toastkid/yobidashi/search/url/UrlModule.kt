@@ -23,7 +23,10 @@ import timber.log.Timber
 /**
  * @author toastkidjp
  */
-class UrlModule(private val binding: ModuleSearchUrlBinding) {
+class UrlModule(
+        private val binding: ModuleSearchUrlBinding,
+        private val insert: (String) -> Unit
+) {
 
     private val preferenceApplier = PreferenceApplier(binding.root.context)
 
@@ -49,6 +52,10 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         )
     }
 
+    fun edit() {
+        insert(binding.text.text.toString())
+    }
+
     /**
      * This function is called from data-binding.
      *
@@ -58,6 +65,9 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         view.context.startActivity(IntentFactory.makeShareUrl(getCurrentText()))
     }
 
+    /**
+     * TODO add title.
+     */
     fun switch(url: String?): Disposable =
             if (url.isNullOrBlank() || !enable) {
                 hide()
