@@ -48,6 +48,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
 
+    private val rotateMatrixFactory = RotateMatrixFactory()
+
     private val disposables = CompositeDisposable()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -152,7 +154,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val bitmap = binding.photo.drawable.toBitmap()
         applyMatrix(
                 bitmap,
-                makeRotateMatrix(270f, bitmap.width.toFloat(), bitmap.height.toFloat())
+                rotateMatrixFactory(270f, bitmap.width.toFloat(), bitmap.height.toFloat())
         )
     }
 
@@ -160,12 +162,9 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val bitmap = binding.photo.drawable.toBitmap()
         applyMatrix(
                 bitmap,
-                makeRotateMatrix(90f, bitmap.width.toFloat(), bitmap.height.toFloat())
+                rotateMatrixFactory(90f, bitmap.width.toFloat(), bitmap.height.toFloat())
         )
     }
-
-    private fun makeRotateMatrix(degrees: Float, width: Float, height: Float) =
-            Matrix().also { it.setRotate(degrees, width / 2f, height / 2f) }
 
     fun reverse() {
         applyMatrix(binding.photo.drawable.toBitmap(), horizontalMatrix)
