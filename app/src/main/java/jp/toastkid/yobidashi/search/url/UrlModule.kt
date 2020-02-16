@@ -66,12 +66,18 @@ class UrlModule(
     }
 
     /**
-     * TODO add title.
+     * Switch visibility and content.
+     *
+     * @param title site's title
+     * @param url URL
+     * @return [Disposable]
      */
-    fun switch(url: String?): Disposable =
+    fun switch(title: String?, url: String?): Disposable =
             if (url.isNullOrBlank() || !enable) {
+                clearContent()
                 hide()
             } else {
+                setTitle(title)
                 setLink(url)
                 show()
             }
@@ -103,6 +109,10 @@ class UrlModule(
 
     private fun getCurrentText() = binding.text.text.toString()
 
+    private fun setTitle(title: String?) {
+        binding.title.text = title
+    }
+
     /**
      * Set open link and icon.
      *
@@ -110,6 +120,11 @@ class UrlModule(
      */
     private fun setLink(link: String) {
         binding.text.text = link
+    }
+
+    private fun clearContent() {
+        binding.title.text = ""
+        binding.text.text = ""
     }
 
     private fun runOnMainThread(action: () -> Unit) =

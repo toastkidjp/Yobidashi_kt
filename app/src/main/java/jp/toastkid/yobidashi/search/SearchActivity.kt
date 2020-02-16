@@ -116,12 +116,15 @@ class SearchActivity : AppCompatActivity(),
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var currentTitle: String? = null
+
     private var currentUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
 
+        currentTitle = intent.getStringExtra(EXTRA_KEY_TITLE)
         currentUrl = intent.getStringExtra(EXTRA_KEY_URL)
 
         preferenceApplier = PreferenceApplier(this)
@@ -313,7 +316,7 @@ class SearchActivity : AppCompatActivity(),
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
-        urlModule?.switch(currentUrl)?.addTo(disposables)
+        urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
     }
 
     /**
@@ -545,6 +548,11 @@ class SearchActivity : AppCompatActivity(),
         private const val EXTRA_KEY_QUERY = "query"
 
         /**
+         * Extra key of title.
+         */
+        private const val EXTRA_KEY_TITLE = "title"
+
+        /**
          * Extra key of URL.
          */
         private const val EXTRA_KEY_URL = "url"
@@ -554,10 +562,13 @@ class SearchActivity : AppCompatActivity(),
          *
          * @param context [Context]
          */
-        fun makeIntent(context: Context, url: String? = null) =
+        fun makeIntent(context: Context, title: String? = null, url: String? = null) =
                 Intent(context, SearchActivity::class.java)
                         .apply {
                             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            title?.let {
+                                putExtra(EXTRA_KEY_TITLE, it)
+                            }
                             url?.let {
                                 putExtra(EXTRA_KEY_URL, it)
                             }
@@ -565,12 +576,12 @@ class SearchActivity : AppCompatActivity(),
 
         /**
          * Make launcher [Intent] with query.
-         *
+         *TODO comment
          * @param context [Context]
          * @param query Query
          */
-        fun makeIntentWithQuery(context: Context, query: String, url: String? = null): Intent =
-                makeIntent(context, url).apply { putExtra(EXTRA_KEY_QUERY, query) }
+        fun makeIntentWithQuery(context: Context, query: String, title: String?, url: String? = null): Intent =
+                makeIntent(context, title, url).apply { putExtra(EXTRA_KEY_QUERY, query) }
 
     }
 }
