@@ -31,10 +31,6 @@ import java.io.File
 internal class ViewHolder(private val binding: ItemImageThumbnailsBinding)
     : RecyclerView.ViewHolder(binding.root) {
 
-    private val width = binding.image.layoutParams.width.toDouble()
-
-    private val height = binding.image.layoutParams.height.toDouble()
-
     /**
      * Apply file content.
      *
