@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <variable name="dialog" type="jp.toastkid.yobidashi.media.image.ImagePreviewDialogFragment" />
+        <variable name="dialog" type="jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment" />
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
