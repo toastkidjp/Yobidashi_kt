@@ -576,9 +576,11 @@ class SearchActivity : AppCompatActivity(),
 
         /**
          * Make launcher [Intent] with query.
-         *TODO comment
+         *
          * @param context [Context]
          * @param query Query
+         * @param title Title
+         * @param url URL
          */
         fun makeIntentWithQuery(context: Context, query: String, title: String?, url: String? = null): Intent =
                 makeIntent(context, title, url).apply { putExtra(EXTRA_KEY_QUERY, query) }
