@@ -5,10 +5,10 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.wikipedia
+package jp.toastkid.yobidashi.wikipedia.random
 
 import androidx.annotation.WorkerThread
-import jp.toastkid.yobidashi.wikipedia.model.Article
+import jp.toastkid.yobidashi.wikipedia.random.model.Article
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 

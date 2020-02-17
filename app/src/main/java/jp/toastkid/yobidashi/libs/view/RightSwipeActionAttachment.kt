@@ -8,12 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * @author toastkidjp
  */
-object RightSwipeActionAttachment {
-
-    /**
-     * For minimize usage.
-     */
-    private const val RIGHT = ItemTouchHelper.RIGHT
+class RightSwipeActionAttachment {
 
     /**
      * Attach action to passed [RecyclerView].
@@ -40,6 +35,15 @@ object RightSwipeActionAttachment {
                         onSwipedAction(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(recyclerView)
+
+    }
+
+    companion object {
+
+        /**
+         * For minimize usage.
+         */
+        private const val RIGHT = ItemTouchHelper.RIGHT
 
     }
 }

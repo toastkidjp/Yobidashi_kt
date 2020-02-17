@@ -5,13 +5,11 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.wikipedia.model
+package jp.toastkid.yobidashi.wikipedia.random.model
 
 /**
  * @author toastkidjp
  */
-data class Article(
-        val id: Long,
-        val ns: Int,
-        val title: String
-)
+class Query {
+    var random: Array<Article>? = null
+}

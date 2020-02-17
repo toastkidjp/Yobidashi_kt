@@ -209,6 +209,7 @@ class BrowserModule(
                         "market", "intent" -> {
                             try {
                                 context?.startActivity(Intent.parseUri(url, Intent.URI_INTENT_SCHEME))
+                                true
                             } catch (e: ActivityNotFoundException) {
                                 Timber.w(e)
                                 view?.let {
@@ -217,8 +218,8 @@ class BrowserModule(
                                             preferenceApplier.colorPair()
                                     )
                                 }
+                                true
                             }
-                            true
                         }
                         "tel" -> {
                             context?.startActivity(IntentFactory.dial(uri))

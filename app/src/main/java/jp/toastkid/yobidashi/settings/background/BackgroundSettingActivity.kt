@@ -107,11 +107,11 @@ class BackgroundSettingActivity : AppCompatActivity(), ClearImagesDialogFragment
         return when (item.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
                 binding?.fab?.let { launchAdding() }
-                return true
+                true
             }
             R.id.background_settings_toolbar_menu_clear -> {
                 clearImages()
-                return true
+                true
             }
             R.id.menu_exit -> {
                 moveTaskToBack(true)

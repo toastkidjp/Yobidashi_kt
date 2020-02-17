@@ -50,6 +50,11 @@ enum class SearchCategory(
             R.drawable.ic_yahoo_japan_logo,
             "https://search.yahoo.co.jp/search?p="
     ),
+    ASK_COM(
+            R.string.search_category_ask_com,
+            R.drawable.ic_ask_com,
+            "https://www.ask.com/web?q="
+    ),
     BAIDU(R.string.baidu,
             R.drawable.ic_baidu,
             "https://www.baidu.com/s?wd="

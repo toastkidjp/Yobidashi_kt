@@ -44,6 +44,8 @@ internal class LoadedAction (
     /** Image file URI.  */
     private val uri: Uri? = data.data
 
+    private val rotatedImageFixing = RotatedImageFixing()
+
     /**
      * Invoke action.
      */
@@ -56,8 +58,9 @@ internal class LoadedAction (
 
         return Maybe.fromCallable {
             val image = ImageLoader.loadBitmap(context, uri)
-            image?.let { storeImageToFile(context, it, uri) }
-            image
+            val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
+            fixedImage?.let { storeImageToFile(context, it, uri) }
+            fixedImage
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

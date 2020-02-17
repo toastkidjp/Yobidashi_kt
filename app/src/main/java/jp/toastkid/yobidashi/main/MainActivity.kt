@@ -39,6 +39,7 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
@@ -64,7 +65,7 @@ import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.torch.Torch
-import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -328,6 +329,9 @@ class MainActivity : AppCompatActivity() {
             Menu.OVERLAY_COLOR_FILTER-> {
                 val rootView = binding.root
                 ColorFilter(this, rootView).switchState(this)
+            }
+            Menu.MEMORY_CLEANER -> {
+                ProcessCleanerInvoker()(binding.root).addTo(disposables)
             }
             Menu.PLANNING_POKER-> {
                 startActivity(PlanningPokerActivity.makeIntent(this))

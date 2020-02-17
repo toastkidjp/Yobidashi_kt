@@ -66,7 +66,7 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
-import jp.toastkid.yobidashi.wikipedia.RandomWikipedia
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import timber.log.Timber
 import java.io.File
@@ -195,7 +195,7 @@ class BrowserFragment : Fragment(),
                 cm,
                 binding?.root as View,
                 colorPair
-        ) { tabs.openNewWebTab() }
+        ) { preview(it) }
         searchWithClip.invoke()
 
         editorModule = EditorModule(
