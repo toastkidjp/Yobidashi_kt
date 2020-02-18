@@ -11,7 +11,12 @@ package jp.toastkid.yobidashi.media.image
  * @author toastkidjp
  */
 data class Image(val path: String, val name: String, val isBucket: Boolean) {
+
+    fun makeExcludingId() = if (isBucket) parentExtractor(path) else path
+
     companion object {
-        fun makeBucket(bucketName: String) = Image("", bucketName, true)
+        private val parentExtractor = ParentExtractor()
+
+        fun makeBucket(bucketName: String, path: String) = Image(path, bucketName, true)
     }
 }
