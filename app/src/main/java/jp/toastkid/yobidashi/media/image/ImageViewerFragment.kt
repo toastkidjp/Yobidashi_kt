@@ -140,16 +140,17 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
             bucketLoader()
                     .filter { excludedItemFilter(parentExtractor(it.path)) }
                     .forEach { adapter?.add(it) }
-            activity?.runOnUiThread {
-                adapter?.notifyDataSetChanged()
-                RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
-            }
+            refreshContent()
             return
         }
 
         imageLoader(bucket)
                 .filter { excludedItemFilter(it.path) }
                 .forEach { adapter?.add(it) }
+        refreshContent()
+    }
+
+    private fun refreshContent() {
         activity?.runOnUiThread {
             adapter?.notifyDataSetChanged()
             RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
