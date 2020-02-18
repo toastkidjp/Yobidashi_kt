@@ -40,7 +40,7 @@ class PreferenceApplier(private val context: Context) {
         EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_CURSOR_COLOR, EDITOR_HIGHLIGHT_COLOR,
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
-        WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS
+        WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS
     }
 
     private val preferences: SharedPreferences =
@@ -409,4 +409,14 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().clear().apply()
     }
 
+    fun addExcludeItem(path: String) {
+        preferences.edit().putStringSet(
+                Key.IMAGE_VIEWER_EXCLUDED_PATHS.name,
+                mutableSetOf(path).also { it.addAll(excludedItems()) }
+        )
+                .apply()
+    }
+
+    fun excludedItems() =
+            preferences.getStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, emptySet())
 }
