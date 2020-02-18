@@ -131,15 +131,14 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
     private fun loadImages(bucket: String? = null) {
         adapter?.clear()
 
-        val excludedItems = preferenceApplier.excludedItems()
+        val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
+
         val parentExtractor = ParentExtractor()
 
         // TODO clean up it.
         if (bucket.isNullOrBlank()) {
             bucketLoader()
-                    .filter {
-                        excludedItems.isNullOrEmpty() || !excludedItems.contains(parentExtractor(it.path))
-                    }
+                    .filter { excludedItemFilter(parentExtractor(it.path)) }
                     .forEach { adapter?.add(it) }
             activity?.runOnUiThread {
                 adapter?.notifyDataSetChanged()
@@ -149,7 +148,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
         }
 
         imageLoader(bucket)
-                .filter { excludedItems.isNullOrEmpty() || !excludedItems.contains(it.path) }
+                .filter { excludedItemFilter(it.path) }
                 .forEach { adapter?.add(it) }
         activity?.runOnUiThread {
             adapter?.notifyDataSetChanged()
