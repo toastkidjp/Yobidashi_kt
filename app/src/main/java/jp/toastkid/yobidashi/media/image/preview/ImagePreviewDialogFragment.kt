@@ -122,9 +122,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {
-                            binding.photo.setImageBitmap(it)
-                        },
+                        binding.photo::setImageBitmap,
                         Timber::e
                 )
                 .addTo(disposables)
