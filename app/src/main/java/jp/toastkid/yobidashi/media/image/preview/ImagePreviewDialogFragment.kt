@@ -171,7 +171,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     private fun applyMatrix(bitmap: Bitmap, matrix: Matrix) {
-        val horizontalFlipped = Bitmap.createBitmap(
+        val appliedBitmap = Bitmap.createBitmap(
                 bitmap,
                 0,
                 0,
@@ -180,7 +180,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 matrix,
                 false
         )
-        binding.photo.setImageBitmap(horizontalFlipped)
+        binding.photo.setImageBitmap(appliedBitmap)
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
