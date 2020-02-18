@@ -135,17 +135,11 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
 
         val parentExtractor = ParentExtractor()
 
-        // TODO clean up it.
         if (bucket.isNullOrBlank()) {
-            bucketLoader()
-                    .filter { excludedItemFilter(parentExtractor(it.path)) }
-                    .forEach { adapter?.add(it) }
-            refreshContent()
-            return
+            bucketLoader().filter { excludedItemFilter(parentExtractor(it.path)) }
+        } else {
+            imageLoader(bucket).filter { excludedItemFilter(it.path) }
         }
-
-        imageLoader(bucket)
-                .filter { excludedItemFilter(it.path) }
                 .forEach { adapter?.add(it) }
         refreshContent()
     }
