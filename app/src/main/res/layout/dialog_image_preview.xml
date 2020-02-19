@@ -39,7 +39,7 @@
                 android:layout_marginLeft="12dp"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_skip_previous"
+                app:srcCompat="@drawable/ic_flip"
                 android:onClick="@{view -> dialog.reverse()}"
                 />
             <ImageView
