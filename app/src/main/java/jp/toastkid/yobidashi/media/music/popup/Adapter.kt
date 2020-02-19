@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.music
+package jp.toastkid.yobidashi.media.music.popup
 
 import android.content.res.Resources
 import android.support.v4.media.MediaBrowserCompat
@@ -25,6 +25,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.media.music.AlbumArtFinder
 import java.util.*
 
 /**

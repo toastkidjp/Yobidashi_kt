@@ -42,8 +42,6 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.media.music.Adapter
-import jp.toastkid.yobidashi.media.music.MediaPlayerPopupViewModel
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
 import timber.log.Timber
 
