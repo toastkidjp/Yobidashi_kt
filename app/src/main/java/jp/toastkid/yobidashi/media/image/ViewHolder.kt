@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemImageThumbnailsBinding
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.settings.background.RotatedImageFixing
 import timber.log.Timber
 import java.io.File
 
@@ -30,6 +31,10 @@ import java.io.File
  */
 internal class ViewHolder(private val binding: ItemImageThumbnailsBinding)
     : RecyclerView.ViewHolder(binding.root) {
+
+    private val contentResolver = binding.root.context.contentResolver
+
+    private val rotatedImageFixing = RotatedImageFixing()
 
     /**
      * Apply file content.
@@ -50,14 +55,13 @@ internal class ViewHolder(private val binding: ItemImageThumbnailsBinding)
             return
         }
 
-        Maybe.fromCallable {
-            ImageLoader.loadBitmap(
-                    iv.context,
-                    File(imagePath).toURI().toString().toUri()
-            )
-        }
+        val uri = File(imagePath).toURI().toString().toUri()
+        Maybe.fromCallable { ImageLoader.loadBitmap(iv.context, uri) }
                 .subscribeOn(Schedulers.io())
-                .map { BitmapScaling(it, 300.0, 300.0) }
+                .map {
+                    val bitmap = BitmapScaling(it, 300.0, 300.0)
+                    rotatedImageFixing.invoke(contentResolver, bitmap, uri)
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         iv::setImageBitmap,
