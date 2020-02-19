@@ -170,7 +170,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
-        disposables.dispose()
+        disposables.clear()
     }
 
     companion object {
