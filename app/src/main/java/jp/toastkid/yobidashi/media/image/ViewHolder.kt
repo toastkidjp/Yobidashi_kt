@@ -7,9 +7,9 @@
  */
 package jp.toastkid.yobidashi.media.image
 
-import android.net.Uri
 import android.text.TextUtils
 import android.widget.ImageView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,7 +53,7 @@ internal class ViewHolder(private val binding: ItemImageThumbnailsBinding)
         Maybe.fromCallable {
             ImageLoader.loadBitmap(
                     iv.context,
-                    Uri.parse(File(imagePath).toURI().toString())
+                    File(imagePath).toURI().toString().toUri()
             )
         }
                 .subscribeOn(Schedulers.io())
