@@ -20,6 +20,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.notification.morning.DailyNotificationWorker
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**
@@ -56,6 +57,8 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
         super.onResume()
         binding.useNotificationWidgetCheck.isChecked = preferenceApplier.useNotificationWidget()
         binding.useNotificationWidgetCheck.jumpDrawablesToCurrentState()
+        binding.useDailyNotificationCheck.isChecked = preferenceApplier.useDailyNotification()
+        binding.useDailyNotificationCheck.jumpDrawablesToCurrentState()
     }
 
     /**
@@ -77,6 +80,27 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
             R.string.message_remove_notification_widget
         }
         Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+    }
+
+    fun switchDailyNotification() {
+        val newState = !preferenceApplier.useDailyNotification()
+        preferenceApplier.setUseDailyNotification(newState)
+        binding.useDailyNotificationCheck.isChecked = newState
+
+        @StringRes val messageId =
+                if (newState) {
+                    R.string.message_stay_tuned
+                } else {
+                    R.string.message_remove_notification_widget
+                }
+        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+
+        val context = context ?: return
+        if (preferenceApplier.useDailyNotification()) {
+            DailyNotificationWorker.enqueueNextWork(context)
+        } else {
+            DailyNotificationWorker.cancelAllWork(context)
+        }
     }
 
     @StringRes

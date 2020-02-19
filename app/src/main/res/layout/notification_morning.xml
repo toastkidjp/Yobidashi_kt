@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_height="200dp"
+    >
+
+    <ImageView
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:layout_gravity="center_vertical"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/title_show_morning_notification"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        >
+
+        <TextView
+            android:id="@+id/what_happened"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/menu_what_happened_today"
+            android:textSize="14sp"
+            android:background="@drawable/ripple_transparent"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorPrimaryDark"
+            />
+
+        <TextView
+            android:id="@+id/today_wikipedia1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            tools:text="Today's Wikipedia article"
+            android:textSize="14sp"
+            android:background="@drawable/ripple_transparent"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorPrimaryDark"
+            />
+
+    </LinearLayout>
+</FrameLayout>
