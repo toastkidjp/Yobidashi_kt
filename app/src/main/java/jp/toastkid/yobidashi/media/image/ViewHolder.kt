@@ -50,8 +50,8 @@ internal class ViewHolder(private val binding: ItemImageThumbnailsBinding)
     }
 
     private fun setImageTo(iv: ImageView, imagePath: String) {
+        iv.setImageResource(R.drawable.ic_image_search)
         if (TextUtils.isEmpty(imagePath)) {
-            iv.setImageResource(R.drawable.ic_image_search)
             return
         }
 
