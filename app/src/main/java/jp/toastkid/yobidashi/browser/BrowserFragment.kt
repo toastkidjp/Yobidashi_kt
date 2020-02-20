@@ -809,10 +809,7 @@ class BrowserFragment : Fragment(),
      */
     private fun openEditorTab() {
         rxPermissions
-                ?.request(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
+                ?.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 ?.subscribe(
                         { granted ->
                             if (!granted) {
