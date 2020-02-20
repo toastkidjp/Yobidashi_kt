@@ -390,9 +390,7 @@ class BrowserFragment : Fragment(),
             }
             Menu.READER_MODE -> {
                 browserModule.invokeContentExtraction(
-                        ValueCallback {
-                            showReaderFragment(it)
-                        }
+                        ValueCallback(this::showReaderFragment)
                 )
             }
             Menu.HTML_SOURCE -> {
