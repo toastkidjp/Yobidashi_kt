@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
 /**
@@ -83,11 +84,24 @@ class ReaderFragment : Fragment() {
 
         }
 
+        // TODO use data binding.
         binding.close.setOnClickListener {
             ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()
         }
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val preferenceApplier = PreferenceApplier(binding.root.context)
+        binding.background.setBackgroundColor(preferenceApplier.editorBackgroundColor())
+
+        val editorFontColor = preferenceApplier.editorFontColor()
+        binding.title.setTextColor(editorFontColor)
+        binding.content.setTextColor(editorFontColor)
+        binding.close.setColorFilter(editorFontColor)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
