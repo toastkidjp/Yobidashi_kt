@@ -47,6 +47,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
 
     private var adapter: Adapter? = null
 
+    private val parentExtractor = ParentExtractor()
+
     private val disposables = CompositeDisposable()
 
     override fun onCreateView(
@@ -132,8 +134,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
         adapter?.clear()
 
         val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
-
-        val parentExtractor = ParentExtractor()
 
         if (bucket.isNullOrBlank()) {
             bucketLoader().filter { excludedItemFilter(parentExtractor(it.path)) }
