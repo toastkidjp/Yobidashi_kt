@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.media.image.preview
 
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
@@ -34,6 +35,7 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.image.Image
+import jp.toastkid.yobidashi.settings.background.RotatedImageFixing
 import timber.log.Timber
 import java.io.File
 
@@ -44,11 +46,15 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private lateinit var binding: DialogImagePreviewBinding
 
+    private lateinit var contentResolver: ContentResolver
+
     private var path: String? = null
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
 
     private val rotatedBitmapFactory = RotatedBitmapFactory()
+
+    private val rotatedImageFixing = RotatedImageFixing()
 
     private val disposables = CompositeDisposable()
 
@@ -74,6 +80,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         applyColorToButtons()
 
+        contentResolver = binding.root.context.contentResolver
         loadImageAsync(activityContext, path)
 
         binding.photo.maximumScale = 100f
@@ -111,13 +118,15 @@ class ImagePreviewDialogFragment  : DialogFragment() {
             return
         }
 
+        val uri = Uri.parse(File(path).toURI().toString())
         Maybe.fromCallable {
             ImageLoader.loadBitmap(
                     activityContext,
-                    Uri.parse(File(path).toURI().toString())
+                    uri
             )
         }
                 .subscribeOn(Schedulers.io())
+                .map { rotatedImageFixing(contentResolver, it, uri) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         binding.photo::setImageBitmap,
