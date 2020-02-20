@@ -61,6 +61,8 @@ class BrowserModule(
 
     private val thumbnailGenerator = ThumbnailGenerator()
 
+    private val readerModeUseCase by lazy { ReaderModeUseCase() }
+
     private val htmlSourceExtractionUseCase by lazy { HtmlSourceExtractionUseCase() }
 
     /**
@@ -524,7 +526,7 @@ class BrowserModule(
 
     fun invokeContentExtraction(callback: ValueCallback<String>) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            ReaderModeUseCase()(currentView(), callback)
+            readerModeUseCase(currentView(), callback)
         }
     }
 
