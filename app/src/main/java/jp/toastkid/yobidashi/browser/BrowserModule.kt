@@ -526,4 +526,9 @@ class BrowserModule(
         }
     }
 
+    fun invokeHtmlSourceExtraction(callback: ValueCallback<String>) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            HtmlSourceExtractionUseCase()(currentView(), callback)
+        }
+    }
 }

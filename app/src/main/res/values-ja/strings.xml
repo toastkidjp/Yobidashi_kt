@@ -416,6 +416,7 @@
     <string name="search_category_open_street_map">OpenStreetMap</string>
     <string name="search_category_quora">Quora</string>
     <string name="title_menu_reader_mode">リーダーモード</string>
+    <string name="title_menu_html_source">HTML source</string>
     <string name="launcher">アプリ起動</string>
     <string name="barcode">バーコード</string>
     <string name="title_rss_reader">RSS リーダー</string>

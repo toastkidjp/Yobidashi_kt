@@ -32,6 +32,8 @@ enum class Menu(
 
     READER_MODE(R.string.title_menu_reader_mode, R.drawable.ic_reader_mode),
 
+    HTML_SOURCE(R.string.title_menu_html_source, R.drawable.ic_code),
+
     PAGE_INFORMATION(R.string.title_menu_page_information, R.drawable.ic_info),
 
     USER_AGENT(R.string.title_user_agent, R.drawable.ic_user_agent),

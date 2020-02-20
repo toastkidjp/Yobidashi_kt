@@ -391,22 +391,14 @@ class BrowserFragment : Fragment(),
             Menu.READER_MODE -> {
                 browserModule.invokeContentExtraction(
                         ValueCallback {
-                            val lineSeparator = System.getProperty("line.separator") ?: ""
-                            val replacedContent = it.replace("\\n", lineSeparator)
-                            val readerFragment =
-                                    ReaderFragment.withContent(browserModule.currentTitle(), replacedContent)
-
-                            ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
-                                    .close.observe(requireActivity(), Observer {
-                                activity?.supportFragmentManager?.popBackStack()
-                            })
-
-                            val transaction = fragmentManager?.beginTransaction()
-                            transaction?.setCustomAnimations(
-                                    R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-                            transaction?.add(R.id.content, readerFragment, readerFragment::class.java.simpleName)
-                            transaction?.addToBackStack(readerFragment::class.java.simpleName)
-                            transaction?.commit()
+                            showReaderFragment(it)
+                        }
+                )
+            }
+            Menu.HTML_SOURCE -> {
+                browserModule.invokeHtmlSourceExtraction(
+                        ValueCallback {
+                            showReaderFragment(it.replace("\\u003C", "<"))
                         }
                 )
             }
@@ -528,6 +520,25 @@ class BrowserFragment : Fragment(),
             }
             else -> Unit
         }
+    }
+
+    private fun showReaderFragment(content: String) {
+        val lineSeparator = System.getProperty("line.separator") ?: ""
+        val replacedContent = content.replace("\\n", lineSeparator)
+        val readerFragment =
+                ReaderFragment.withContent(browserModule.currentTitle(), replacedContent)
+
+        ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
+                .close.observe(requireActivity(), Observer {
+            activity?.supportFragmentManager?.popBackStack()
+        })
+
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.setCustomAnimations(
+                R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
+        transaction?.add(R.id.content, readerFragment, readerFragment::class.java.simpleName)
+        transaction?.addToBackStack(readerFragment::class.java.simpleName)
+        transaction?.commit()
     }
 
     /**
