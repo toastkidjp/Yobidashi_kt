@@ -177,9 +177,8 @@ class MediaPlayerPopup(private val context: Context) {
         binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) = Unit
 
-            // TODO Fix argument names.
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val speed = PlayingSpeed.findById(p3).speed
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val speed = PlayingSpeed.findById(id).speed
                 val intent = MediaPlayerService.makeSpeedIntent(speed)
                 context.sendBroadcast(intent)
             }
