@@ -147,18 +147,7 @@ class MediaPlayerPopup(private val context: Context) {
         binding.mediaList.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        PlayingSpeedSpinnerInitializer().invoke(binding.playingSpeed)
-        binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
-
-            // TODO Fix argument names.
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val speed = PlayingSpeed.findById(p3).speed
-                val intent = MediaPlayerService.makeSpeedIntent(speed)
-                context.sendBroadcast(intent)
-            }
-        }
-        // TODO hide this control on under m device.
+        initializePlaybackSpeedChanger()
 
         applyColors()
 
@@ -172,6 +161,20 @@ class MediaPlayerPopup(private val context: Context) {
                 connectionCallback,
                 null
         )
+    }
+
+    private fun initializePlaybackSpeedChanger() {
+        PlayingSpeedSpinnerInitializer().invoke(binding.playingSpeed)
+        binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+
+            // TODO Fix argument names.
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val speed = PlayingSpeed.findById(p3).speed
+                val intent = MediaPlayerService.makeSpeedIntent(speed)
+                context.sendBroadcast(intent)
+            }
+        }
     }
 
     private fun observeViewModels() {
