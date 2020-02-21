@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.session.PlaybackState
+import android.os.Build
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -28,6 +29,7 @@ import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -164,6 +166,13 @@ class MediaPlayerPopup(private val context: Context) {
     }
 
     private fun initializePlaybackSpeedChanger() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            binding.playingSpeed.isVisible = false
+            return
+        }
+
+        binding.playingSpeed.isVisible = true
+
         PlayingSpeedSpinnerInitializer().invoke(binding.playingSpeed)
         binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) = Unit
