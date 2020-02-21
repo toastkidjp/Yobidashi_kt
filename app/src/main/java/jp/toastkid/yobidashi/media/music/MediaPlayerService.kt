@@ -225,10 +225,11 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                         MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
 
-        private const val PLAYBACK_ACTION = (PlaybackStateCompat.ACTION_PLAY
-                or PlaybackStateCompat.ACTION_PAUSE
-                or PlaybackStateCompat.ACTION_PLAY_PAUSE
-                or PlaybackStateCompat.ACTION_STOP)
+        private const val PLAYBACK_ACTION =
+                PlaybackStateCompat.ACTION_PLAY or
+                        PlaybackStateCompat.ACTION_PAUSE or
+                        PlaybackStateCompat.ACTION_PLAY_PAUSE or
+                        PlaybackStateCompat.ACTION_STOP
 
         fun makeSpeedIntent(speed: Float) =
                 Intent(ACTION_CHANGE_SPEED)
