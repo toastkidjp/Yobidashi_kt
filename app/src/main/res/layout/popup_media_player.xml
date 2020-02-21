@@ -90,6 +90,7 @@
                         android:layout_height="match_parent"
                         app:srcCompat="@drawable/ic_close"
                         android:onClick="@{view -> popup.hide()}"
+                        android:contentDescription="@string/close"
                         />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
