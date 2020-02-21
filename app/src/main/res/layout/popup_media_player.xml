@@ -81,7 +81,7 @@
                         />
                     <Spinner
                         android:id="@+id/playing_speed"
-                        android:layout_width="44dp"
+                        android:layout_width="88sp"
                         android:layout_height="match_parent"
                         />
                     <ImageView

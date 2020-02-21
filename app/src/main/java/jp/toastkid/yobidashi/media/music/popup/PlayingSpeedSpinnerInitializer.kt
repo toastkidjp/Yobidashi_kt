@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -40,8 +42,13 @@ class PlayingSpeedSpinnerInitializer {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val playingSpeed = playingSpeeds[position]
 
-                val view = inflater.inflate(android.R.layout.simple_spinner_item, parent, false)
-                view.findViewById<TextView>(android.R.id.text1).setText(playingSpeed.textId)
+                val view = inflater.inflate(R.layout.item_playback_speed_spinner, parent, false)
+                view.findViewById<TextView>(R.id.text).also {
+                    it.setText(playingSpeed.textId)
+                    val colorPair = PreferenceApplier(it.context).colorPair()
+                    it.setBackgroundColor(colorPair.bgColor())
+                    it.setTextColor(colorPair.fontColor())
+                }
                 return view
             }
         }
