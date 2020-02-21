@@ -84,7 +84,6 @@ class ReaderFragment : Fragment() {
 
         }
 
-        // TODO use data binding.
         binding.close.setOnClickListener {
             close()
         }
@@ -92,7 +91,7 @@ class ReaderFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    private fun close() {
+    fun close() {
         ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()
     }
 
