@@ -175,7 +175,7 @@ class MediaPlayerPopup(private val context: Context) {
 
         PlayingSpeedSpinnerInitializer().invoke(binding.playingSpeed)
         binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val speed = PlayingSpeed.findById(id).speed
