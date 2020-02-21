@@ -230,10 +230,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 or PlaybackStateCompat.ACTION_PLAY_PAUSE
                 or PlaybackStateCompat.ACTION_STOP)
 
-        fun makeSpeedIntent(speed: Float): Intent {
-            return Intent(ACTION_CHANGE_SPEED).also {
-                it.putExtra(KEY_EXTRA_SPEED, speed)
-            }
-        }
+        fun makeSpeedIntent(speed: Float) =
+                Intent(ACTION_CHANGE_SPEED)
+                        .also { it.putExtra(KEY_EXTRA_SPEED, speed) }
     }
 }
