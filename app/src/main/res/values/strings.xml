@@ -451,4 +451,16 @@
     <string name="action_shuffle">Shuffle</string>
     <string name="title_image_viewer">Image Viewer</string>
 
+    <string name="title_playing_speed_0_5">x0.5</string>
+    <string name="title_playing_speed_0_7">x0.7</string>
+    <string name="title_playing_speed_0_8">x0.8</string>
+    <string name="title_playing_speed_0_9">x0.9</string>
+    <string name="title_playing_speed_1">x1</string>
+    <string name="title_playing_speed_1_1">x1.1</string>
+    <string name="title_playing_speed_1_2">x1.2</string>
+    <string name="title_playing_speed_1_5">x1.5</string>
+    <string name="title_playing_speed_2">x2</string>
+    <string name="title_playing_speed_3">x3</string>
+    <string name="title_playing_speed_5">x5</string>
+
 </resources>
