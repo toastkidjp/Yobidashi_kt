@@ -52,10 +52,10 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     }
 
     private val playbackSpeedReceiver = object : BroadcastReceiver() {
+
         override fun onReceive(context: Context, intent: Intent) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // TODO Extract key
-                val speed = intent.getFloatExtra("speed", 1f)
+                val speed = intent.getFloatExtra(KEY_EXTRA_SPEED, 1f)
                 mediaPlayer.playbackParams = PlaybackParams().setSpeed(speed)
             }
         }
@@ -219,6 +219,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         private const val NOTIFICATION_ID = 46
 
+        private const val KEY_EXTRA_SPEED = "speed"
+
         private const val MEDIA_SESSION_FLAG =
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                         MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
@@ -230,7 +232,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         fun makeSpeedIntent(speed: Float): Intent {
             return Intent(ACTION_CHANGE_SPEED).also {
-                it.putExtra("speed", speed)
+                it.putExtra(KEY_EXTRA_SPEED, speed)
             }
         }
     }
