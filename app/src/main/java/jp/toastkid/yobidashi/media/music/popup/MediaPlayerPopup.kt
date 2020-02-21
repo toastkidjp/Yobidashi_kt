@@ -69,15 +69,17 @@ class MediaPlayerPopup(private val context: Context) {
 
     private val preferenceApplier = PreferenceApplier(context)
 
-    private val heightPixels = context.resources.displayMetrics.heightPixels
+    private val resources = context.resources
 
-    private val headerHeight = context.resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
+    private val heightPixels = resources.displayMetrics.heightPixels
+
+    private val headerHeight = resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
 
     private val swipeLimit = heightPixels - headerHeight
 
-    private val pauseBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_pause)
+    private val pauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_pause)
 
-    private val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play_media)
+    private val playBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_play_media)
 
     private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
@@ -139,7 +141,7 @@ class MediaPlayerPopup(private val context: Context) {
         adapter = Adapter(
                 LayoutInflater.from(context),
                 preferenceApplier,
-                context.resources,
+                resources,
                 mediaPlayerPopupViewModel
         )
 
