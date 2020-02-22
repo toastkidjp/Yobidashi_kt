@@ -157,10 +157,10 @@ class SearchActivity : AppCompatActivity(),
             }
         }
 
-        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding) {
-            // TODO attempt to use method reference
-            setTextAndMoveCursorToEnd(it)
-        }
+        urlModule = UrlModule(
+                binding?.urlModule as ModuleSearchUrlBinding,
+                this::setTextAndMoveCursorToEnd
+        )
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
