@@ -8,14 +8,17 @@
 package jp.toastkid.yobidashi.media.image
 
 /**
- * TODO extract last delimiter.
  * @author toastkidjp
  */
 class ParentExtractor {
 
     operator fun invoke(path: String?): String? =
             when {
-                path.isNullOrBlank() || !path.contains("/") -> path
-                else -> path.substring(0, path.lastIndexOf("/"))
+                path.isNullOrBlank() || !path.contains(SEPARATOR) -> path
+                else -> path.substring(0, path.lastIndexOf(SEPARATOR))
             }
+
+    companion object {
+        private const val SEPARATOR = "/"
+    }
 }
