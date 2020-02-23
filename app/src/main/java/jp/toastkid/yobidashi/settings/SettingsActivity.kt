@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -43,8 +45,7 @@ class SettingsActivity : AppCompatActivity() {
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener { finish() }
             toolbar.setTitle(TITLE_ID)
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
+            setSupportActionBar(toolbar)
         }
 
         supportFragmentManager?.let { fragmentManager ->
@@ -64,7 +65,33 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun clickMenu(item: MenuItem) = when (item.itemId) {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        MenuInflater(this).inflate(R.menu.setting_tab_shortcut, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.menu_search -> {
+            binding.container.currentItem = 2
+            true
+        }
+        R.id.menu_browser -> {
+            binding.container.currentItem = 3
+            true
+        }
+        R.id.menu_editor -> {
+            binding.container.currentItem = 4
+            true
+        }
+        R.id.menu_notification -> {
+            binding.container.currentItem = 6
+            true
+        }
+        R.id.menu_other -> {
+            binding.container.currentItem = 7
+            true
+        }
         R.id.menu_exit -> {
             moveTaskToBack(true)
             true

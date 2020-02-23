@@ -307,9 +307,17 @@ class SearchActivity : AppCompatActivity(),
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
-        clipboardModule?.switch()
-
         urlModule?.switch(currentUrl)?.addTo(disposables)
+    }
+
+    /**
+     * For Android 10 and later.
+     *
+     * @param hasFocus
+     */
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        clipboardModule?.switch()
     }
 
     /**

@@ -439,5 +439,9 @@
     <string name="title_show_morning_notification">Show morning notification</string>
     <string name="title_show_daily_notification">Report daily information.</string>
     <string name="message_stay_tuned">お楽しみに！</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_play">Play</string>
+    <string name="insert_as_plain">Insert as plain</string>
+    <string name="action_shuffle">Shuffle</string>
 
 </resources>

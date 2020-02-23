@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.media.MediaPlayerFragment
+import jp.toastkid.yobidashi.media.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -92,8 +93,6 @@ class MainActivity : AppCompatActivity() {
 
     private val rssReaderSettingFragment by lazy { RssSettingFragment() }
 
-    private val mediaPlayerFragment by lazy { MediaPlayerFragment() }
-
     /**
      * Disposables.
      */
@@ -129,6 +128,8 @@ class MainActivity : AppCompatActivity() {
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private val mediaPlayerPopup by lazy { MediaPlayerPopup(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -349,7 +350,7 @@ class MainActivity : AppCompatActivity() {
                 replaceFragment(rssReaderFragment)
             }
             Menu.AUDIO -> {
-                replaceFragment(mediaPlayerFragment)
+                mediaPlayerPopup.show(binding.root)
             }
             Menu.ABOUT-> {
                 startActivity(AboutThisAppActivity.makeIntent(this))

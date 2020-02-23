@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.media
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.support.v4.media.MediaDescriptionCompat
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
@@ -31,11 +32,11 @@ class ViewHolder(private val binding: ItemMediaListBinding) : RecyclerView.ViewH
         }
     }
 
-    fun bindText(audio: Audio) {
-        binding.title.text = audio.title
-        binding.time.text = dateFormatHolder.get()
-                ?.format(Date().also { it.time = (audio.date ?: 0) * 1000L })
-        binding.artist.setText("${audio.artist} / ${audio.album}")
+    fun bindText(description: MediaDescriptionCompat) {
+        binding.title.text = description.title
+        /*binding.time.text = dateFormatHolder.get()
+                ?.format(Date().also { it.time = (audio.date ?: 0) * 1000L })*/
+        binding.artist.setText("${description.description} ${description.mediaDescription}")
     }
 
     fun setIconColor(@ColorInt color: Int) {

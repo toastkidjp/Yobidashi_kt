@@ -8,12 +8,18 @@
 package jp.toastkid.yobidashi.media
 
 import android.Manifest
+import android.content.ComponentName
 import android.graphics.BitmapFactory
+import android.media.session.PlaybackState
 import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +44,48 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
 
     private var adapter: Adapter? = null
 
+    private lateinit var mediaBrowser: MediaBrowserCompat
+
+    private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
+
+        override fun onChildrenLoaded(
+                parentId: String,
+                children: MutableList<MediaBrowserCompat.MediaItem>
+        ) {
+            adapter?.clear()
+
+            MediaControllerCompat.getMediaController(requireActivity())?.transportControls?.prepare()
+            children.forEach { adapter?.add(it) }
+
+            activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
+        }
+    }
+
+    private val connectionCallback = object : MediaBrowserCompat.ConnectionCallback() {
+
+        override fun onConnected() {
+            MediaControllerCompat.setMediaController(
+                    requireActivity(),
+                    MediaControllerCompat(context, mediaBrowser.sessionToken)
+            )
+            mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
+        }
+    }
+
+    private val controllerCallback = object : MediaControllerCompat.Callback() {
+
+        override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+            when (state?.state) {
+                PlaybackStateCompat.STATE_PLAYING -> {
+                    //binding.play.setImageResource(R.drawable.ic_pause)
+                }
+                else -> {
+                    //binding.play.setImageResource(R.drawable.ic_play_media)
+                }
+            }
+        }
+    }
+
     private val disposables = CompositeDisposable()
 
     override fun onCreateView(
@@ -56,7 +104,10 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
         val context = view.context
 
         val preferenceApplier = PreferenceApplier(context)
-        adapter = Adapter(LayoutInflater.from(context), preferenceApplier)
+        adapter = Adapter(LayoutInflater.from(context), preferenceApplier) {
+            val mediaController = MediaControllerCompat.getMediaController(requireActivity())
+            mediaController.transportControls.playFromUri(it.description.mediaUri, bundleOf())
+        }
 
         binding.mediaList.adapter = adapter
         binding.mediaList.layoutManager =
@@ -68,43 +119,27 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
         val colorPair = preferenceApplier.colorPair()
 
         binding.playSwitch.setOnClickListener {
-            val displayStop = adapter?.switch() ?: false
-            binding.playSwitch.setImageBitmap(if (displayStop) stopBitmap else playBitmap)
+            val mediaController = MediaControllerCompat.getMediaController(requireActivity())
+            val icon = if (mediaController.playbackState.state == PlaybackState.STATE_PLAYING) {
+                mediaController.transportControls.pause()
+                playBitmap
+            } else if (mediaController.playbackState.state == PlaybackState.STATE_PAUSED) {
+                mediaController.transportControls.play()
+                stopBitmap
+            } else {
+                playBitmap
+            }
+            binding.playSwitch.setImageBitmap(icon)
             binding.playSwitch.setColorFilter(colorPair.fontColor())
         }
 
         binding.control.setBackgroundColor(colorPair.bgColor())
         binding.reset.setColorFilter(colorPair.fontColor())
         binding.playSwitch.setColorFilter(colorPair.fontColor())
-
-        RxPermissions(requireActivity())
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .observeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            if (it) {
-                                readAll()
-                                return@subscribe
-                            }
-
-                            Toaster.snackShort(binding.root, R.string.message_audio_file_is_not_found, colorPair)
-                            activity?.supportFragmentManager?.popBackStack()
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
     }
 
     fun reset() {
-        adapter?.reset()
-    }
-
-    private fun readAll() {
-        adapter?.clear()
-
-        AudioFileFinder()(context?.contentResolver) { adapter?.add(it) }
-
-        activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
+        MediaControllerCompat.getMediaController(requireActivity()).transportControls.stop()
     }
 
     override fun pressBack(): Boolean {
@@ -112,10 +147,51 @@ class MediaPlayerFragment : Fragment(), CommonFragmentAction {
         return true
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mediaBrowser = MediaBrowserCompat(
+                context,
+                ComponentName(requireContext(), MediaPlayerService::class.java),
+                connectionCallback,
+                null
+        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        RxPermissions(requireActivity())
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .observeOn(Schedulers.io())
+                .subscribe(
+                        {
+                            if (it) {
+                                mediaBrowser.connect()
+                                return@subscribe
+                            }
+
+                            Toaster.snackShort(
+                                    binding.root,
+                                    R.string.message_audio_file_is_not_found,
+                                    PreferenceApplier(binding.root.context).colorPair()
+                            )
+                            activity?.supportFragmentManager?.popBackStack()
+                        },
+                        Timber::e
+                )
+                .addTo(disposables)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        MediaControllerCompat.getMediaController(requireActivity())?.unregisterCallback(controllerCallback)
+        mediaBrowser.disconnect()
+    }
+
     override fun onDetach() {
         super.onDetach()
         disposables.clear()
-        adapter?.dispose()
+        //adapter?.dispose()
     }
 
     companion object {
