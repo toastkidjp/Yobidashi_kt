@@ -11,14 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.TextView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 
 /**
  * @author toastkidjp
  */
-class PlaybackSpeedAdapter(private val layoutInflater: LayoutInflater) : BaseAdapter() {
+class PlaybackSpeedAdapter(
+        private val layoutInflater: LayoutInflater,
+        private val colorPair: ColorPair
+) : BaseAdapter() {
 
     private val playingSpeeds = PlayingSpeed.values()
 
@@ -31,13 +33,22 @@ class PlaybackSpeedAdapter(private val layoutInflater: LayoutInflater) : BaseAda
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val playingSpeed = playingSpeeds[position]
 
-        val view = layoutInflater.inflate(R.layout.item_playback_speed_spinner, parent, false)
-        view.findViewById<TextView>(R.id.text).also {
-            it.setText(playingSpeed.textId)
-            val colorPair = PreferenceApplier(it.context).colorPair()
-            it.setBackgroundColor(colorPair.bgColor())
-            it.setTextColor(colorPair.fontColor())
+        if (convertView == null) {
+            val view = layoutInflater.inflate(
+                    R.layout.item_playback_speed_spinner,
+                    parent,
+                    false
+            )
+
+            val viewHolder = ViewHolder(view.findViewById(R.id.text))
+            view.tag = viewHolder
+            viewHolder.bind(playingSpeed, colorPair)
+            return view
         }
-        return view
+
+        val viewHolder = convertView.tag as ViewHolder
+        viewHolder.bind(playingSpeed, colorPair)
+        return convertView
     }
+
 }
