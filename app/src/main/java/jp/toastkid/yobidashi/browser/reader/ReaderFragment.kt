@@ -110,12 +110,21 @@ class ReaderFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.reader, menu)
+        inflater?.inflate(R.menu.list_scrolling, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_speech -> {
                 speechMaker.invoke("${binding.title.text}$lineSeparator${binding.content.text}")
+                return true
+            }
+            R.id.list_to_top -> {
+                binding.scroll.smoothScrollTo(0, 0)
+                return true
+            }
+            R.id.list_to_bottom -> {
+                binding.scroll.smoothScrollTo(0, binding.content.measuredHeight)
                 return true
             }
         }
