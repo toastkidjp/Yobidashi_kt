@@ -34,6 +34,8 @@ object SearchCategorySpinnerInitializer {
         val searchCategories = SearchCategory.values()
 
         return object : BaseAdapter() {
+            inner class ViewHolder(val icon: ImageView, val text: TextView)
+
             override fun getCount(): Int = searchCategories.size
 
             override fun getItem(position: Int): SearchCategory = searchCategories[position]
@@ -43,12 +45,25 @@ object SearchCategorySpinnerInitializer {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val searchCategory = searchCategories[position]
 
-                val view = inflater.inflate(LAYOUT_ID, parent, false)
-                view.findViewById<ImageView>(R.id.search_category_image)
+                if (convertView == null) {
+                    val view = inflater.inflate(LAYOUT_ID, parent, false)
+                    val icon = view.findViewById<ImageView>(R.id.search_category_image)
+                    val text = view.findViewById<TextView>(R.id.search_category_text)
+                    val viewHolder = ViewHolder(icon, text)
+                    view.tag = viewHolder
+                    bindItem(viewHolder, searchCategory)
+                    return view
+                }
+
+                val viewHolder = (convertView.tag as ViewHolder)
+                bindItem(viewHolder, searchCategory)
+                return convertView
+            }
+
+            private fun bindItem(viewHolder: ViewHolder, searchCategory: SearchCategory) {
+                viewHolder.icon
                         .setImageDrawable(AppCompatResources.getDrawable(context, searchCategory.iconId))
-                view.findViewById<TextView>(R.id.search_category_text)
-                        .setText(searchCategory.id)
-                return view
+                viewHolder.text.setText(searchCategory.id)
             }
         }
     }
