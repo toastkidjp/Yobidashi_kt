@@ -29,6 +29,8 @@ class ReaderFragment : Fragment() {
 
     private lateinit var speechMaker: SpeechMaker
 
+    private var viewModel: ReaderFragmentViewModel? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -36,6 +38,7 @@ class ReaderFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        binding.fragment = this
         speechMaker = SpeechMaker(binding.root.context)
         return binding.root
     }
@@ -46,6 +49,8 @@ class ReaderFragment : Fragment() {
             arguments.getString(KEY_TITLE)?.also { binding.title.text = it }
             arguments.getString(KEY_CONTENT)?.also { binding.content.text = it }
         }
+
+        viewModel = ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
 
         binding.content.customSelectionActionModeCallback = object : ActionMode.Callback {
 
@@ -84,15 +89,11 @@ class ReaderFragment : Fragment() {
 
         }
 
-        binding.close.setOnClickListener {
-            close()
-        }
-
         setHasOptionsMenu(true)
     }
 
     fun close() {
-        ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()
+        viewModel?.close()
     }
 
     override fun onResume() {
