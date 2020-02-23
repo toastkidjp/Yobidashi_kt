@@ -523,19 +523,21 @@ class BrowserFragment : Fragment(),
     private fun showReaderFragment(content: String) {
         val lineSeparator = System.getProperty("line.separator") ?: ""
         val replacedContent = content.replace("\\n", lineSeparator)
-        val readerFragment =
-                ReaderFragment.withContent(browserModule.currentTitle(), replacedContent)
 
         ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
                 .close.observe(requireActivity(), Observer {
-            activity?.supportFragmentManager?.popBackStack()
+            fragmentManager?.popBackStack()
         })
+
+        val readerFragment =
+                fragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
+                        ?: ReaderFragment.withContent(browserModule.currentTitle(), replacedContent)
 
         val transaction = fragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(
                 R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-        transaction?.add(R.id.content, readerFragment, readerFragment::class.java.simpleName)
-        transaction?.addToBackStack(readerFragment::class.java.simpleName)
+        transaction?.add(R.id.content, readerFragment, readerFragment::class.java.canonicalName)
+        transaction?.addToBackStack(readerFragment::class.java.canonicalName)
         transaction?.commit()
     }
 
