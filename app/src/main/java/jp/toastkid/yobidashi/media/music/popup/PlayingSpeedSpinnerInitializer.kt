@@ -16,6 +16,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed
 
 /**
  * @author toastkidjp

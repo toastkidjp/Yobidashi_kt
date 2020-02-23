@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.music.popup
+package jp.toastkid.yobidashi.media.music.popup.playback.speed
 
 import androidx.annotation.Keep
 import androidx.annotation.StringRes
