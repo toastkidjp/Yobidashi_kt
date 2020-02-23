@@ -24,7 +24,7 @@ class PlayingSpeedSpinnerInitializer {
 
     operator fun invoke(spinner: Spinner, category: PlayingSpeed = PlayingSpeed.getDefault()) {
         spinner.adapter = makeBaseAdapter(spinner.context)
-        spinner.setSelection(category.findIndex() ?: 0)
+        spinner.setSelection(category.findIndex())
     }
 
     private fun makeBaseAdapter(context: Context): BaseAdapter {
