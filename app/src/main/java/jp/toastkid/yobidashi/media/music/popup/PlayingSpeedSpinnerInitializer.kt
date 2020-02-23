@@ -22,7 +22,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  */
 class PlayingSpeedSpinnerInitializer {
 
-    operator fun invoke(spinner: Spinner, category: PlayingSpeed? = null) {
+    operator fun invoke(spinner: Spinner, category: PlayingSpeed = PlayingSpeed.getDefault()) {
         spinner.adapter = makeBaseAdapter(spinner.context)
         spinner.setSelection(category?.findIndex() ?: 0)
     }
