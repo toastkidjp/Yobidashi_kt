@@ -177,7 +177,6 @@ class MediaPlayerPopup(private val context: Context) {
 
         binding.playingSpeed.isVisible = true
 
-        PlayingSpeedSpinnerInitializer().invoke(binding.playingSpeed)
         binding.playingSpeed.adapter = PlaybackSpeedAdapter(LayoutInflater.from(binding.root.context))
         binding.playingSpeed.setSelection(PlayingSpeed.getDefault().findIndex())
         binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
