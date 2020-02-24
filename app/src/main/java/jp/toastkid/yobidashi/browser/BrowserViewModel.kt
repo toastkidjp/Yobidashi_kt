@@ -40,4 +40,13 @@ class BrowserViewModel : ViewModel() {
     fun openBackground(uri: Uri) {
         _openBackground.postValue(uri)
     }
+
+    // TODO: Use appropriate data class.
+    private val _openBackgroundWithTitle = MutableLiveData<Pair<String, Uri>>()
+
+    val openBackgroundWithTitle: LiveData<Pair<String, Uri>> = _openBackgroundWithTitle
+
+    fun openBackground(title: String, uri: Uri) {
+        _openBackgroundWithTitle.postValue(title to uri)
+    }
 }

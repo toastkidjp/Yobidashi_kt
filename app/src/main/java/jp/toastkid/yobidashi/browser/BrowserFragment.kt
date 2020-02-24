@@ -254,6 +254,9 @@ class BrowserFragment : Fragment(),
         browserViewModel?.openBackground?.observe(activity, Observer {
             tabs.openBackgroundTab(it.toString(), it.toString())
         })
+        browserViewModel?.openBackgroundWithTitle?.observe(activity, Observer {
+            tabs.openBackgroundTab(it.first, it.second.toString())
+        })
 
         pageSearchPresenter = PageSearcherModule(
                 this,
