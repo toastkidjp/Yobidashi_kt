@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
@@ -30,7 +31,7 @@ object ClippingUrlOpener {
      * @param onClick callback
      */
     operator fun invoke(view: View?, onClick: (Uri) -> Unit) {
-        if (view == null) {
+        if (view == null || NetworkChecker.isNotAvailable(view.context)) {
             return
         }
 

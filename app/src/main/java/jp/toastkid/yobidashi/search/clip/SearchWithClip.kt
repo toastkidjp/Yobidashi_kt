@@ -6,6 +6,7 @@ import android.view.View
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.UrlFactory
@@ -38,7 +39,7 @@ class SearchWithClip(
      */
     private val listener: ClipboardManager.OnPrimaryClipChangedListener by lazy {
         ClipboardManager.OnPrimaryClipChangedListener{
-            if (isInvalidCondition()) {
+            if (isInvalidCondition() || NetworkChecker.isNotAvailable(parent.context)) {
                 return@OnPrimaryClipChangedListener
             }
             lastClipped = System.currentTimeMillis()

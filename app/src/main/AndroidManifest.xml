@@ -50,7 +50,8 @@
         <activity-alias
             android:name=".browser.BrowserActivity"
             android:targetActivity=".main.MainActivity"
-            android:label="@string/title_search"
+            android:label="@string/title_open_url"
+            android:enabled="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -59,6 +60,11 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="http"/>
                 <data android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST"/>

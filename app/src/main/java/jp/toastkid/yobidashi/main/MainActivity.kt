@@ -19,6 +19,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -53,7 +54,6 @@ import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
-import jp.toastkid.yobidashi.media.MediaPlayerFragment
 import jp.toastkid.yobidashi.media.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
@@ -266,6 +266,12 @@ class MainActivity : AppCompatActivity() {
                 calledIntent.data?.let { loadUri(it) }
                 return
             }
+            Intent.ACTION_SEND -> {
+                calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
+                    loadUri(it.toString().toUri())
+                }
+                return
+            }
             Intent.ACTION_WEB_SEARCH -> {
                 val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
@@ -332,7 +338,9 @@ class MainActivity : AppCompatActivity() {
                 ColorFilter(this, rootView).switchState(this)
             }
             Menu.MEMORY_CLEANER -> {
-                ProcessCleanerInvoker()(binding.root).addTo(disposables)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    ProcessCleanerInvoker()(binding.root).addTo(disposables)
+                }
             }
             Menu.PLANNING_POKER-> {
                 startActivity(PlanningPokerActivity.makeIntent(this))
