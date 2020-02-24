@@ -3,17 +3,12 @@
     <array name="image_anchor_menu">
         <item name="open_article">Open new tab</item>
         <item name="add_schedule">Open background tab</item>
-        <item name="open">Open this tab</item>
         <item name="image_search">Image search</item>
-        <item name="set_bg">Set to background.</item>
-        <item name="save_bg">Save for app\'s background</item>
         <item name="download">Download this image file</item>
         <item name="copy">Copy URL</item>
     </array>
     <array name="image_menu">
         <item name="image_search">Image search</item>
-        <item name="set_bg">Set to background.</item>
-        <item name="save_bg">Save for app\'s background</item>
         <item name="download">Download this image file</item>
     </array>
     <array name="url_menu">

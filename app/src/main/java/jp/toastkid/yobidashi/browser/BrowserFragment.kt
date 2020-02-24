@@ -891,6 +891,7 @@ class BrowserFragment : Fragment(),
     
     private fun colorPair() = preferenceApplier.colorPair()
 
+    // TODO Delete
     override fun onClickImageSearch(url: String) {
         tabs.openNewWebTab("https://www.google.co.jp/searchbyimage?image_url=$url")
     }
