@@ -15,7 +15,8 @@ import jp.toastkid.yobidashi.databinding.FavoriteSearchAdditionDialogContentBind
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
+import jp.toastkid.yobidashi.search.SearchCategory
+import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import java.text.MessageFormat
 
 /**
@@ -87,7 +88,11 @@ class Addition internal constructor(
      */
     private fun initSpinner(content: View): Spinner {
         val categorySelector = content.findViewById<Spinner>(R.id.favorite_search_addition_categories)
-        SearchCategorySpinnerInitializer.invoke(categorySelector)
+        categorySelector.adapter = SearchCategoryAdapter(context)
+        val index = SearchCategory.findIndex(
+                PreferenceApplier(context).getDefaultSearchEngine()
+        )
+        categorySelector.setSelection(index)
         return categorySelector
     }
 
