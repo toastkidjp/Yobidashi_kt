@@ -65,11 +65,11 @@ class ClearTextDialogFragment : DialogFragment() {
             if (context is FragmentActivity) {
                 val supportFragmentManager = context.supportFragmentManager
                 val target = supportFragmentManager
-                        .findFragmentByTag(BrowserFragment::class.java.simpleName)
+                        .findFragmentByTag(BrowserFragment::class.java.canonicalName)
                 dialogFragment.setTargetFragment(target, 1)
                 dialogFragment.show(
                         supportFragmentManager,
-                        dialogFragment::class.java.simpleName
+                        dialogFragment::class.java.canonicalName
                 )
             }
         }
