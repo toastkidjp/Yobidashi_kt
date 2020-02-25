@@ -55,11 +55,11 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
         fun show(fragmentManager: FragmentManager, targetClass: Class<out Fragment>) {
             val dialogFragment = ClearFavoriteSearchDialogFragment()
-            val target = fragmentManager.findFragmentByTag(targetClass.simpleName) ?: return
+            val target = fragmentManager.findFragmentByTag(targetClass.canonicalName) ?: return
             dialogFragment.setTargetFragment(target, 1)
             dialogFragment.show(
                     fragmentManager,
-                    ClearFavoriteSearchDialogFragment::class.java.simpleName
+                    ClearFavoriteSearchDialogFragment::class.java.canonicalName
             )
         }
     }
