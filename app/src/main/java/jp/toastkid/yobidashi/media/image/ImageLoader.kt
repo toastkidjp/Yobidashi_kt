@@ -15,17 +15,11 @@ import android.provider.MediaStore
  */
 class ImageLoader(private val contentResolver: ContentResolver) {
 
-    // TODO Extract array
     operator fun invoke(bucket: String): List<Image> {
         val cursor = MediaStore.Images.Media.query(
                 contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                arrayOf(
-                        MediaStore.Images.Media.DATA,
-                        MediaStore.Images.Media.DISPLAY_NAME,
-                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-                        MediaStore.Images.Media.DATE_TAKEN
-                ),
+                columns,
                 "bucket_display_name = ?",
                 arrayOf(bucket),
                 "datetaken DESC"
@@ -46,5 +40,14 @@ class ImageLoader(private val contentResolver: ContentResolver) {
             )
         }
         return images
+    }
+
+    companion object {
+        private val columns = arrayOf(
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.DATE_TAKEN
+        )
     }
 }
