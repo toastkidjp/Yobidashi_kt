@@ -14,16 +14,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
-import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.music.AlbumArtFinder
 import java.util.*
@@ -44,14 +40,18 @@ class Adapter(
 
     private val items = mutableListOf<MediaBrowserCompat.MediaItem>()
 
-    private val iconWidth = resources.getDimension(ICON_WIDTH_ID).toDouble()
-
-    private val disposables = CompositeDisposable()
+    private val iconWidth = resources.getDimensionPixelSize(ICON_WIDTH_ID)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false)
         albumArtFinder = AlbumArtFinder(binding.root.context.contentResolver)
-        return ViewHolder(binding)
+
+        val placeholder = ContextCompat.getDrawable(binding.root.context, R.drawable.ic_music)
+        if (placeholder != null) {
+            DrawableCompat.setTint(placeholder, preferenceApplier.colorPair().bgColor())
+        }
+
+        return ViewHolder(binding, placeholder)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -61,16 +61,9 @@ class Adapter(
         val iconColor = preferenceApplier.colorPair().bgColor()
         holder.setLyricsIconColor(iconColor)
 
-        setDefaultIcon(holder, iconColor)
-        Maybe.fromCallable { item.description.iconUri?.let { albumArtFinder(it) } ?: throw RuntimeException() }
-                .subscribeOn(Schedulers.io())
-                .map { BitmapScaling(it, iconWidth, iconWidth) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(holder::setIcon) {
-                    setDefaultIcon(holder, iconColor)
-                }
-                .addTo(disposables)
+        holder.loadIcon(item.description.iconUri, iconWidth)
 
+        // TODO Use data binding
         holder.setOnClickListener(View.OnClickListener {
             mediaPlayerPopupViewModel?.clickItem(item)
         })
@@ -80,11 +73,6 @@ class Adapter(
                 mediaPlayerPopupViewModel?.clickLyrics(lyrics.toString())
             }
         })
-    }
-
-    private fun setDefaultIcon(holder: ViewHolder, iconColor: Int) {
-        holder.setIconColor(iconColor)
-        holder.setIconId(R.drawable.ic_music)
     }
 
     override fun getItemCount() = items.size
