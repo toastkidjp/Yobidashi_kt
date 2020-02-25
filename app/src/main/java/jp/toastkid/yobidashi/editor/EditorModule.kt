@@ -136,7 +136,7 @@ class EditorModule(
                             return true
                         }
                         R.id.context_edit_paste_as_quotation -> {
-                            pasteAsQuotation()
+                            PasteAsConfirmationDialogFragment.show(binding.root.context)
                             actionMode?.finish()
                             return true
                         }
@@ -308,13 +308,6 @@ class EditorModule(
             return
         }
         insert(primary)
-    }
-
-    /**
-     * Paste clipped text as Markdown's quotation style.
-     */
-    fun pasteAsQuotation() {
-        PasteAsConfirmationDialogFragment.show(binding.root.context)
     }
 
     /**
