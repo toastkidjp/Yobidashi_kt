@@ -186,12 +186,12 @@ class TabListDialogFragment : DialogFragment() {
                 if (context is FragmentActivity) {
                     val fragmentManager = context.supportFragmentManager
                     val targetFragment =
-                            fragmentManager.findFragmentByTag(BrowserFragment::class.java.simpleName)
+                            fragmentManager.findFragmentByTag(BrowserFragment::class.java.canonicalName)
                     val dialogFragment = TabListClearDialogFragment()
                     dialogFragment.setTargetFragment(targetFragment, 1)
                     dialogFragment.show(
                             fragmentManager,
-                            TabListClearDialogFragment::class.java.simpleName
+                            TabListClearDialogFragment::class.java.canonicalName
                     )
                 }
             }
