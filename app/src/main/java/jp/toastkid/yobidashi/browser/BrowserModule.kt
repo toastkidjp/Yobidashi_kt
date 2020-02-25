@@ -524,6 +524,8 @@ class BrowserModule(
         webViewPool.applyNewAlpha()
     }
 
+    fun makeShareMessage() = "${currentTitle()}$lineSeparator${currentUrl()}"
+
     fun invokeContentExtraction(callback: ValueCallback<String>) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             readerModeUseCase(currentView(), callback)
@@ -534,5 +536,9 @@ class BrowserModule(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             htmlSourceExtractionUseCase(currentView(), callback)
         }
+    }
+
+    companion object {
+        private val lineSeparator = System.getProperty("line.separator")
     }
 }

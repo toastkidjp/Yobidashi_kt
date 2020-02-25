@@ -245,10 +245,8 @@ class TabAdapter(
     fun share() {
         when (tabList.currentTab()) {
             is WebTab -> {
-                val message = (browserModule.currentTitle()
-                        + System.getProperty("line.separator") + browserModule.currentUrl())
                 webViewContainer.context.startActivity(
-                        IntentFactory.makeShare(message)
+                        IntentFactory.makeShare(browserModule.makeShareMessage())
                 )
             }
             is EditorTab -> {
