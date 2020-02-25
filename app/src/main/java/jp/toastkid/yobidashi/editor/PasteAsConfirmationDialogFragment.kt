@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 
 /**
  * Show confirmation of "Paste as".
+ * Paste clipped text as Markdown's quotation style.
  *
  * @author toastkidjp
  */
