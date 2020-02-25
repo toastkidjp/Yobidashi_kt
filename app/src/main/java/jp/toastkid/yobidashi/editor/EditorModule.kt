@@ -243,7 +243,6 @@ class EditorModule(
                 mb.saveAs,
                 mb.load,
                 mb.loadAs,
-                mb.share,
                 mb.lastSaved,
                 mb.counter,
                 mb.backup,

@@ -80,17 +80,6 @@
                 android:onClick="@{view -> editorModule.loadAs()}"
                 android:onLongClick="@{editorModule::showName}"
                 />
-            <Button
-                android:id="@+id/share"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
-                android:text="@string/share"
-                android:drawableTop="@drawable/ic_share"
-                android:foreground="@drawable/ripple_transparent"
-                android:onClick="@{view -> editorModule.share()}"
-                android:onLongClick="@{editorModule::showName}"
-                />
             <TextView
                 android:id="@+id/counter"
                 android:layout_width="wrap_content"

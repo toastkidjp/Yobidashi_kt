@@ -29,6 +29,7 @@ import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -240,6 +241,20 @@ class TabAdapter(
     }
 
     fun forward() = browserModule.forward()
+
+    fun share() {
+        when (tabList.currentTab()) {
+            is WebTab -> {
+                webViewContainer.context.startActivity(
+                        IntentFactory.makeShare(browserModule.currentTitle()
+                                + System.getProperty("line.separator") + browserModule.currentUrl())
+                )
+            }
+            is EditorTab -> {
+                editor.share()
+            }
+        }
+    }
 
     /**
      *
