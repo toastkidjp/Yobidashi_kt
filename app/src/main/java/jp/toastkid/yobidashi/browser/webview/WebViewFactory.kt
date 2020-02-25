@@ -166,7 +166,7 @@ internal object WebViewFactory {
             supportFragmentManager: FragmentManager?
     ) {
         dialogFragment.setTargetFragment(
-                supportFragmentManager?.findFragmentByTag(BrowserFragment::class.java.simpleName),
+                supportFragmentManager?.findFragmentByTag(BrowserFragment::class.java.canonicalName),
                 1
         )
         val fragmentManager = supportFragmentManager ?: return
