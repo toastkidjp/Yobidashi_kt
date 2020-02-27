@@ -44,9 +44,8 @@ import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
-import jp.toastkid.yobidashi.editor.*
+import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.*
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
@@ -82,9 +81,6 @@ class BrowserFragment : Fragment(),
         AnchorDialogCallback,
         TabListClearDialogFragment.Callback,
         UserAgentDialogFragment.Callback,
-        ClearTextDialogFragment.Callback,
-        InputNameDialogFragment.Callback,
-        PasteAsConfirmationDialogFragment.Callback,
         TabListDialogFragment.Callback
 {
 
@@ -627,7 +623,6 @@ class BrowserFragment : Fragment(),
         switchToolbarVisibility()
 
         val colorPair = colorPair()
-        editorModule.applySettings()
 
         val fontColor = colorPair.fontColor()
 
@@ -902,23 +897,6 @@ class BrowserFragment : Fragment(),
         )
     }
 
-    override fun onClickClearInput() {
-        editorModule.clearInput()
-    }
-
-    override fun onClickInputName(fileName: String) {
-        editorModule.assignNewFile(fileName)
-    }
-
-    override fun onClickPasteAs() {
-        val activityContext = context ?: return
-        val primary = Clipboard.getPrimary(activityContext)
-        if (TextUtils.isEmpty(primary)) {
-            return
-        }
-        editorModule.insert(Quotation()(primary))
-    }
-
     override fun onCloseTabListDialogFragment() = hideTabList()
 
     override fun onOpenEditor() = openEditorTab()
@@ -955,7 +933,6 @@ class BrowserFragment : Fragment(),
 
     override fun onPause() {
         super.onPause()
-        editorModule.saveIfNeed()
         stopSwipeRefresherLoading()
     }
 

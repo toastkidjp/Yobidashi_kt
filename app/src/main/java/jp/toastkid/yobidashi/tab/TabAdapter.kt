@@ -208,17 +208,17 @@ class TabAdapter(
 
     /**
      * Open new PDF tab with [Uri].
-     *
+     * TODO
      * @param uri
      */
-    internal fun openNewPdfTab(uri: Uri) {
+    /*internal fun openNewPdfTab(uri: Uri) {
         val pdfTab = PdfTab().apply {
             setTitle(uri.path ?: "")
             setPath(uri.toString())
         }
         tabList.add(pdfTab)
         setIndexByTab(pdfTab)
-    }
+    }*/
 
     fun back(): Boolean {
         val currentTab = currentTab()

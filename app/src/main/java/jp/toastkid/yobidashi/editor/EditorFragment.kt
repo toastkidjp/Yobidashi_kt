@@ -62,7 +62,12 @@ tabs.saveTabList()
 }
  * @author toastkidjp
  */
-class EditorFragment : Fragment() {
+class EditorFragment :
+        Fragment(),
+        PasteAsConfirmationDialogFragment.Callback,
+        ClearTextDialogFragment.Callback,
+        InputNameDialogFragment.Callback
+{
 
     private lateinit var binding: FragmentEditorBinding
 
@@ -248,6 +253,11 @@ class EditorFragment : Fragment() {
         applySettings()
         val view = menuBinding.root
         headerViewModel?.replace(view)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveIfNeed()
     }
 
     override fun onDetach() {
@@ -649,6 +659,23 @@ class EditorFragment : Fragment() {
      */
     fun insert(text: CharSequence?) {
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
+    }
+
+    override fun onClickPasteAs() {
+        val activityContext = context ?: return
+        val primary = Clipboard.getPrimary(activityContext)
+        if (TextUtils.isEmpty(primary)) {
+            return
+        }
+        insert(Quotation()(primary))
+    }
+
+    override fun onClickClearInput() {
+        clearInput()
+    }
+
+    override fun onClickInputName(fileName: String) {
+        assignNewFile(fileName)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
