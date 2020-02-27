@@ -1,10 +1,17 @@
+/*
+ * Copyright (c) 2019 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 package jp.toastkid.yobidashi.pdf
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,68 +19,45 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.HeaderViewModel
-import timber.log.Timber
 
 /**
- * PDF Module.
- *
- * @param context
- * @param parent
- *
  * @author toastkidjp
  */
-class PdfModule(
-        private val context: Context,
-        private val parent: ViewGroup
-) {
-
-    private val layoutInflater = LayoutInflater.from(context)
+class PdfViewerFragment : Fragment() {
 
     /**
      * Data binding object.
      */
-    private val binding = DataBindingUtil.inflate<FragmentPdfViewerBinding>(
-            layoutInflater,
-            R.layout.fragment_pdf_viewer,
-            parent,
-            false
-    )
+    private lateinit var binding: FragmentPdfViewerBinding
 
-    private val headerBinding = DataBindingUtil.inflate<ModulePdfHeaderBinding>(
-            layoutInflater,
-            R.layout.module_pdf_header,
-            parent,
-            false
-    )
+    private lateinit var headerBinding: ModulePdfHeaderBinding
 
     /**
      * Adapter.
      */
-    private val adapter = Adapter(LayoutInflater.from(context), context.contentResolver)
+    private lateinit var adapter: Adapter
 
     /**
      * LayoutManager.
      */
-    private val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    private lateinit var layoutManager: LinearLayoutManager
 
     private val thumbnailGenerator = ThumbnailGenerator()
 
@@ -81,7 +65,29 @@ class PdfModule(
 
     private var headerViewModel: HeaderViewModel? = null
 
-    init {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        binding = DataBindingUtil.inflate<FragmentPdfViewerBinding>(
+                inflater,
+                R.layout.fragment_pdf_viewer,
+                container,
+                false
+        )
+        headerBinding = DataBindingUtil.inflate<ModulePdfHeaderBinding>(
+                inflater,
+                R.layout.module_pdf_header,
+                container,
+                false
+        )
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = Adapter(LayoutInflater.from(context), context?.contentResolver)
+        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
         binding.pdfImages.adapter = adapter
         binding.pdfImages.layoutManager = layoutManager
         PagerSnapHelper().attachToRecyclerView(binding.pdfImages)
@@ -97,7 +103,7 @@ class PdfModule(
             override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
         })
-        headerBinding.input.addTextChangedListener(object: TextWatcher{
+        headerBinding.input.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(p0: Editable?) = Unit
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
@@ -123,18 +129,8 @@ class PdfModule(
         (context as? FragmentActivity)?.let {
             headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
         }
-    }
 
-    /**
-     * Apply color to views.
-     *
-     * @param colorPair
-     */
-    fun applyColor(colorPair: ColorPair) {
-        headerBinding.header.setBackgroundColor(colorPair.bgColor())
-        headerBinding.seek.progressDrawable.colorFilter =
-                PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
-        EditTextColorSetter().invoke(headerBinding.input, colorPair.fontColor())
+        arguments?.getParcelable<Uri>("uri")?.also { load(it) }
     }
 
     /**
@@ -142,10 +138,7 @@ class PdfModule(
      *
      * @param uri
      */
-    fun load(uri: Uri) {
-        if (parent.childCount == 0) {
-            parent.addView(binding.root)
-        }
+    private fun load(uri: Uri) {
         adapter.load(uri)
         binding.pdfImages.scheduleLayoutAnimation()
         headerBinding.seek.max = adapter.itemCount - 1
@@ -192,43 +185,41 @@ class PdfModule(
     }
 
     /**
+     * TODO Enable.
      * Move to first page.
      */
-    internal fun pageUp() {
+    fun pageUp() {
         RecyclerViewScroller.toTop(binding.pdfImages, adapter.itemCount)
     }
 
     /**
+     * TODO Enable.
      * Move to last page.
      */
-    internal fun pageDown() {
+    fun pageDown() {
         RecyclerViewScroller.toBottom(binding.pdfImages, adapter.itemCount)
     }
 
-    fun isVisible() = binding.root.isVisible
-
-    fun show() {
-        if (binding.root.visibility == View.GONE) {
-            Completable.fromAction {
-                binding.root.visibility = View.VISIBLE
-            }.subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe({}, Timber::e)
-                    .addTo(disposables)
-        }
+    override fun onResume() {
+        super.onResume()
         headerViewModel?.replace(headerBinding.root)
+        applyColor(PreferenceApplier(requireContext()).colorPair())
     }
 
-    fun hide() {
-        if (binding.root.isVisible) {
-            Completable.fromAction { binding.root.isVisible = false }
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe({}, Timber::e)
-                    .addTo(disposables)
-        }
+    /**
+     * Apply color to views.
+     *
+     * @param colorPair
+     */
+    private fun applyColor(colorPair: ColorPair) {
+        headerBinding.header.setBackgroundColor(colorPair.bgColor())
+        headerBinding.seek.progressDrawable.colorFilter =
+                PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
+        EditTextColorSetter().invoke(headerBinding.input, colorPair.fontColor())
     }
 
-    fun dispose() {
+    override fun onDetach() {
+        super.onDetach()
         disposables.clear()
     }
-
 }

@@ -24,7 +24,7 @@ import jp.toastkid.yobidashi.R
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class Adapter(
         private val layoutInflater: LayoutInflater,
-        private val contentResolver: ContentResolver
+        private val contentResolver: ContentResolver?
 ): RecyclerView.Adapter<ViewHolder>() {
 
     /**
@@ -59,7 +59,7 @@ class Adapter(
      * @throws SecurityException
      */
     fun load(uri: Uri) {
-        fileDescriptor = contentResolver.openFileDescriptor(uri, "r")
+        fileDescriptor = contentResolver?.openFileDescriptor(uri, "r")
         pdfRenderer?.close()
         pdfRenderer = fileDescriptor?.let { PdfRenderer(it) }
         notifyDataSetChanged()
