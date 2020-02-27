@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_height="56dp"
+        tools:layout_height="52dp"
         android:layout_margin="4dp"
         app:cardElevation="4dp"
         app:cardBackgroundColor="#33FFFFFF"
@@ -18,7 +18,7 @@
             >
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="44dp"
+                android:layout_width="36dp"
                 android:layout_height="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,7 @@
                 android:id="@+id/sub_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/main_text"
+                android:layout_marginBottom="4dp"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:ellipsize="end"
