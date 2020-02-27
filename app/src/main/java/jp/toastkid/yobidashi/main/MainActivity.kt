@@ -20,6 +20,7 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -62,6 +63,7 @@ import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuViewModel
+import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
@@ -372,6 +374,9 @@ class MainActivity : AppCompatActivity() {
             Menu.IMAGE_VIEWER -> {
                 replaceFragment(obtainFragment(ImageViewerFragment::class.java))
             }
+            Menu.PDF-> {
+                openPdfTabFromStorage()
+            }
             else -> {
                 (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
                         ?.onMenuClick(menu)
@@ -571,6 +576,26 @@ class MainActivity : AppCompatActivity() {
         binding.background.setImageDrawable(background)
     }
 
+    /**
+     * Open PDF from storage.
+     */
+    private fun openPdfTabFromStorage() {
+        rxPermissions
+                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                ?.subscribe(
+                        { granted ->
+                            if (!granted) {
+                                return@subscribe
+                            }
+                            startActivityForResult(
+                                    IntentFactory.makeOpenDocument("application/pdf"),
+                                    REQUEST_CODE_OPEN_PDF
+                            )
+                        },
+                        Timber::e
+                )?.addTo(disposables)
+    }
+
     private fun setFabPosition() {
         binding.menuSwitch.let {
             val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
@@ -711,6 +736,20 @@ class MainActivity : AppCompatActivity() {
                         preferenceApplier.colorPair()
                 )
             }
+            REQUEST_CODE_OPEN_PDF -> {
+                val uri = data.data ?: return
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    val takeFlags: Int = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    contentResolver?.takePersistableUriPermission(uri, takeFlags)
+                }
+
+                (obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment)?.let {
+                    it.arguments = bundleOf("uri" to uri)
+                    replaceFragment(it)
+                }
+
+                //TODO tabs.openNewPdfTab(uri)
+            }
         }
     }
 
@@ -733,6 +772,11 @@ class MainActivity : AppCompatActivity() {
          */
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_main
+
+        /**
+         * Request code of opening PDF.
+         */
+        private const val REQUEST_CODE_OPEN_PDF: Int = 7
 
         /**
          * Make launcher intent.
