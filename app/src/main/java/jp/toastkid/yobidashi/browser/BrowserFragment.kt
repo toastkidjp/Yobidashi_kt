@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -49,7 +48,6 @@ import jp.toastkid.yobidashi.editor.*
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.menu.Menu
@@ -513,9 +511,6 @@ class BrowserFragment : Fragment(),
             Menu.EDITOR-> {
                 openEditorTab()
             }
-            Menu.PDF-> {
-                openPdfTabFromStorage()
-            }
             else -> Unit
         }
     }
@@ -761,49 +756,12 @@ class BrowserFragment : Fragment(),
                     VoiceSearch.processResult(it, intent).addTo(disposables)
                 }
             }
-            REQUEST_CODE_OPEN_PDF -> {
-                val uri = intent.data ?: return
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val takeFlags: Int = intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
-                }
-                tabs.openNewPdfTab(uri)
-            }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 intent.data?.let {
                     tabs.openNewWebTab(it.toString())
                 }
             }
-            EditorModule.REQUEST_CODE_LOAD -> {
-                intent.data?.let { editorModule.readFromFileUri(it) }
-            }
-            EditorModule.REQUEST_CODE_LOAD_AS -> {
-                intent.data?.let {
-                    editorModule.readFromFileUri(it)
-                    editorModule.saveAs()
-                }
-            }
         }
-    }
-
-    /**
-     * Open PDF from storage.
-     */
-    private fun openPdfTabFromStorage() {
-        rxPermissions
-                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                ?.subscribe(
-                        { granted ->
-                            if (!granted) {
-                                return@subscribe
-                            }
-                            startActivityForResult(
-                                    IntentFactory.makeOpenDocument("application/pdf"),
-                                    REQUEST_CODE_OPEN_PDF
-                            )
-                        },
-                        Timber::e
-                )?.addTo(disposables)
     }
 
     /**
@@ -965,7 +923,7 @@ class BrowserFragment : Fragment(),
 
     override fun onOpenEditor() = openEditorTab()
 
-    override fun onOpenPdf() = openPdfTabFromStorage()
+    //TODO override fun onOpenPdf() = openPdfTabFromStorage()
 
     override fun openNewTabFromTabList() = tabs.openNewWebTab()
 
@@ -1028,11 +986,6 @@ class BrowserFragment : Fragment(),
     }
 
     companion object {
-
-        /**
-         * Request code of opening PDF.
-         */
-        private const val REQUEST_CODE_OPEN_PDF: Int = 3
 
         /**
          * Layout ID.
