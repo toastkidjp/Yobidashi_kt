@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -41,7 +40,6 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
-import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -118,10 +116,6 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
         binding.toolbar.also { setSupportActionBar(it) }
-
-        if (preferenceApplier.useColorFilter()) {
-            ColorFilter(this, binding.root).start()
-        }
 
         rxPermissions = RxPermissions(this)
 
@@ -614,17 +608,6 @@ class MainActivity : AppCompatActivity() {
                     Timber.e(error)
                     System.gc()
                 }
-            }
-            ColorFilter.REQUEST_CODE -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-                    Toaster.snackShort(
-                            binding.root,
-                            R.string.message_cannot_draw_overlay,
-                            preferenceApplier.colorPair()
-                    )
-                    return
-                }
-                ColorFilter(this, binding.root).switchState(this)
             }
             IntentIntegrator.REQUEST_CODE -> {
                 val result: IntentResult? =
