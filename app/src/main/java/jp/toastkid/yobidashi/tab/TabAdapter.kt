@@ -394,7 +394,7 @@ class TabAdapter(
         }
     }
 
-    fun callLoadUrl(url: String) {
+    private fun callLoadUrl(url: String) {
         browserModule.loadUrl(url)
         if (editor.isVisible()) {
             editor.hide()
