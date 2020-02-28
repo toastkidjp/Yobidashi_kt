@@ -134,21 +134,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        menuUseCase = MenuUseCase(
-                { this },
-                { findCurrentFragment() },
-                { replaceFragment(it) },
-                {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        ProcessCleanerInvoker()(binding.root).addTo(disposables)
-                    }
-                },
-                { obtainFragment(it) },
-                { openPdfTabFromStorage() },
-                { useCameraPermission(it) },
-                { menuViewModel?.close() }
-        )
-
         processShortcut(intent)
     }
 
@@ -182,6 +167,21 @@ class MainActivity : AppCompatActivity() {
                 menuViewModel,
                 binding.menusView,
                 binding.menuSwitch
+        )
+
+        menuUseCase = MenuUseCase(
+                { this },
+                { findCurrentFragment() },
+                { replaceFragment(it) },
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        ProcessCleanerInvoker()(binding.root).addTo(disposables)
+                    }
+                },
+                { obtainFragment(it) },
+                { openPdfTabFromStorage() },
+                { useCameraPermission(it) },
+                { menuViewModel?.close() }
         )
 
         menuViewModel?.click?.observe(this, Observer(menuUseCase::onMenuClick))
