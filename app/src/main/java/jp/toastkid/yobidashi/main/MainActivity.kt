@@ -321,6 +321,18 @@ class MainActivity : AppCompatActivity() {
     private fun onMenuClick(menu: Menu) {
         val fragmentActivity = this
         when (menu) {
+            Menu.TOP-> {
+                val currentFragment = findCurrentFragment()
+                if (currentFragment is ContentScrollable) {
+                    currentFragment.toTop()
+                }
+            }
+            Menu.BOTTOM-> {
+                val currentFragment = findCurrentFragment()
+                if (currentFragment is ContentScrollable) {
+                    currentFragment.toBottom()
+                }
+            }
             Menu.SETTING-> {
                 startActivity(SettingsActivity.makeIntent(fragmentActivity))
             }
