@@ -53,7 +53,6 @@ import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
-import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -191,12 +190,13 @@ class MainActivity : AppCompatActivity() {
                 binding.menuSwitch
         )
 
+        // TODO use it.
         menuViewModel?.click?.observe(this, Observer { menu ->
             menuUseCase.onMenuClick(menu)
         })
 
         menuViewModel?.longClick?.observe(this, Observer { menu ->
-            onMenuLongClick(menu)
+            menuUseCase.onMenuLongClick(menu)
         })
     }
 
@@ -307,23 +307,6 @@ class MainActivity : AppCompatActivity() {
     private fun finishWithoutTransition() {
         overridePendingTransition(0, 0)
         finish()
-    }
-
-    /**
-     * Callback method on long clicked menu.
-     *
-     * @param menu
-     * @return true
-     */
-    private fun onMenuLongClick(menu: Menu): Boolean {
-        Toaster.snackLong(
-                binding.root,
-                menu.titleId,
-                R.string.run,
-                View.OnClickListener { menuUseCase.onMenuClick(menu) },
-                preferenceApplier.colorPair()
-        )
-        return true
     }
 
     /**

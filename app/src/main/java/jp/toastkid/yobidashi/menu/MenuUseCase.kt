@@ -9,10 +9,12 @@ package jp.toastkid.yobidashi.menu
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.journeyapps.barcodescanner.camera.CameraManager
 import jp.toastkid.yobidashi.CommonFragmentAction
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -135,6 +137,24 @@ class MenuUseCase(
                         ?.onMenuClick(menu)
             }
         }
+    }
+
+    /**
+     * Callback method on long clicked menu.
+     *
+     * @param menu
+     * @return true
+     */
+    fun onMenuLongClick(menu: Menu): Boolean {
+        Toaster.snackLong(
+                // TODO extract to function.
+                activitySupplier().findViewById(android.R.id.content),
+                menu.titleId,
+                R.string.run,
+                View.OnClickListener { onMenuClick(menu) },
+                preferenceApplier.colorPair()
+        )
+        return true
     }
 
     private fun startActivity(intent: Intent) {
