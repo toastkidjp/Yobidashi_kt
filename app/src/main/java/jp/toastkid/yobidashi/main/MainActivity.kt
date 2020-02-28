@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
@@ -28,7 +27,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import com.journeyapps.barcodescanner.camera.CameraManager
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,8 +35,6 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppActivity
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -52,26 +48,20 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
-import jp.toastkid.yobidashi.media.image.ImageViewerFragment
-import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
+import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
-import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
-import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
-import jp.toastkid.yobidashi.settings.SettingsActivity
-import jp.toastkid.yobidashi.torch.Torch
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
@@ -101,15 +91,6 @@ class MainActivity : AppCompatActivity() {
     private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     /**
-     * Torch API facade.
-     */
-    private val torch by lazy {
-        Torch(CameraManager(this)) {
-            Toaster.snackShort(binding.root, it, preferenceApplier.colorPair())
-        }
-    }
-
-    /**
      * Menu's view model.
      */
     private var menuViewModel: MenuViewModel? = null
@@ -126,7 +107,7 @@ class MainActivity : AppCompatActivity() {
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private val mediaPlayerPopup by lazy { MediaPlayerPopup(this) }
+    private lateinit var menuUseCase: MenuUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,6 +140,21 @@ class MainActivity : AppCompatActivity() {
                 null -> Unit
             }
         })
+
+        menuUseCase = MenuUseCase(
+                { this },
+                { findCurrentFragment() },
+                { replaceFragment(it) },
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        ProcessCleanerInvoker()(binding.root).addTo(disposables)
+                    }
+                },
+                { obtainFragment(it) },
+                { openPdfTabFromStorage() },
+                { useCameraPermission(it) },
+                { menuViewModel?.close() }
+        )
 
         processShortcut(intent)
     }
@@ -196,7 +192,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         menuViewModel?.click?.observe(this, Observer { menu ->
-            onMenuClick(menu)
+            menuUseCase.onMenuClick(menu)
         })
 
         menuViewModel?.longClick?.observe(this, Observer { menu ->
@@ -314,89 +310,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Menu action.
-     *
-     * @param menu [Menu]
-     */
-    private fun onMenuClick(menu: Menu) {
-        val fragmentActivity = this
-        when (menu) {
-            Menu.TOP-> {
-                val currentFragment = findCurrentFragment()
-                if (currentFragment is ContentScrollable) {
-                    currentFragment.toTop()
-                }
-            }
-            Menu.BOTTOM-> {
-                val currentFragment = findCurrentFragment()
-                if (currentFragment is ContentScrollable) {
-                    currentFragment.toBottom()
-                }
-            }
-            Menu.SETTING-> {
-                startActivity(SettingsActivity.makeIntent(fragmentActivity))
-            }
-            Menu.WIFI_SETTING-> {
-                startActivity(SettingsIntentFactory.wifi())
-            }
-            Menu.CODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(fragmentActivity))
-            }
-            Menu.SCHEDULE-> {
-                try {
-                    startActivity(IntentFactory.makeCalendar())
-                } catch (e: ActivityNotFoundException) {
-                    Timber.w(e)
-                }
-            }
-            Menu.OVERLAY_COLOR_FILTER-> {
-                val rootView = binding.root
-                ColorFilter(this, rootView).switchState(this)
-            }
-            Menu.MEMORY_CLEANER -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    ProcessCleanerInvoker()(binding.root).addTo(disposables)
-                }
-            }
-            Menu.PLANNING_POKER-> {
-                startActivity(PlanningPokerActivity.makeIntent(this))
-            }
-            Menu.CAMERA-> {
-                useCameraPermission { startActivity(IntentFactory.camera()) }
-            }
-            Menu.TORCH-> {
-                useCameraPermission { torch.switch() }
-            }
-            Menu.APP_LAUNCHER-> {
-                startActivity(LauncherActivity.makeIntent(this))
-            }
-            Menu.RSS_READER -> {
-                replaceFragment(obtainFragment(RssReaderFragment::class.java))
-            }
-            Menu.AUDIO -> {
-                mediaPlayerPopup.show(binding.root)
-                menuViewModel?.close()
-            }
-            Menu.ABOUT-> {
-                startActivity(AboutThisAppActivity.makeIntent(this))
-            }
-            Menu.EXIT-> {
-                moveTaskToBack(true)
-            }
-            Menu.IMAGE_VIEWER -> {
-                replaceFragment(obtainFragment(ImageViewerFragment::class.java))
-            }
-            Menu.PDF-> {
-                openPdfTabFromStorage()
-            }
-            else -> {
-                (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
-                        ?.onMenuClick(menu)
-            }
-        }
-    }
-
-    /**
      * Callback method on long clicked menu.
      *
      * @param menu
@@ -407,7 +320,7 @@ class MainActivity : AppCompatActivity() {
                 binding.root,
                 menu.titleId,
                 R.string.run,
-                View.OnClickListener { onMenuClick(menu) },
+                View.OnClickListener { menuUseCase.onMenuClick(menu) },
                 preferenceApplier.colorPair()
         )
         return true
@@ -768,7 +681,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
-        torch.dispose()
+        menuUseCase.dispose()
         contentViewModel?.content?.removeObservers(this)
     }
 

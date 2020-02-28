@@ -90,7 +90,7 @@ enum class Menu(
 
     IMAGE_VIEWER(R.string.title_image_viewer, R.drawable.ic_photo),
 
-    OVERLAY_COLOR_FILTER(R.string.title_filter_color, R.drawable.ic_color_filter),
+    //TODO remove OVERLAY_COLOR_FILTER(R.string.title_filter_color, R.drawable.ic_color_filter),
 
     MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),
 
