@@ -190,11 +190,10 @@ class MainActivity : AppCompatActivity() {
                 binding.menuSwitch
         )
 
-        // TODO use it.
         menuViewModel?.click?.observe(this, Observer(menuUseCase::onMenuClick))
 
-        menuViewModel?.longClick?.observe(this, Observer { menu ->
-            menuUseCase.onMenuLongClick(menu)
+        menuViewModel?.longClick?.observe(this, Observer {
+            menuUseCase.onMenuLongClick(it)
         })
     }
 
