@@ -25,7 +25,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -38,14 +37,16 @@ import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
-import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.editor.InputNameDialogFragment
-import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
@@ -78,7 +79,6 @@ import java.util.*
  */
 class BrowserFragment : Fragment(),
         CommonFragmentAction,
-        ImageDialogCallback,
         TabListClearDialogFragment.Callback,
         UserAgentDialogFragment.Callback,
         TabListDialogFragment.Callback,
@@ -841,48 +841,6 @@ class BrowserFragment : Fragment(),
     }
     
     private fun colorPair() = preferenceApplier.colorPair()
-
-    // TODO Delete
-    override fun onClickImageSearch(url: String) {
-        tabs.openNewWebTab("https://www.google.co.jp/searchbyimage?image_url=$url")
-    }
-
-    override fun onClickSetBackground(url: String) {
-        val activityContext = context ?: return
-        ImageDownloader(url, { activityContext }, Consumer { file ->
-            preferenceApplier.backgroundImagePath = file.absolutePath
-            Toaster.snackShort(
-                    binding?.root as View,
-                    R.string.message_change_background_image,
-                    preferenceApplier.colorPair()
-            )
-        }).addTo(disposables)
-    }
-
-    override fun onClickSaveForBackground(url: String) {
-        val activityContext = context ?: return
-        ImageDownloader(url, { activityContext }, Consumer { file ->
-            Toaster.snackShort(
-                    binding?.root as View,
-                    getString(R.string.message_done_save) + file.name,
-                    preferenceApplier.colorPair()
-            )
-        }).addTo(disposables)
-    }
-
-    override fun onClickDownloadImage(url: String) {
-        val activityContext = context ?: return
-        if (Urls.isInvalidUrl(url)) {
-            Toaster.snackShort(
-                    binding?.root as View,
-                    activityContext.getString(R.string.message_cannot_downloading_image),
-                    PreferenceApplier(activityContext).colorPair()
-            )
-            return
-        }
-
-        ImageDownloadActionDialogFragment.show(activityContext, url)
-    }
 
     override fun onClickClear() {
         tabs.clear()
