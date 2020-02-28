@@ -191,9 +191,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         // TODO use it.
-        menuViewModel?.click?.observe(this, Observer { menu ->
-            menuUseCase.onMenuClick(menu)
-        })
+        menuViewModel?.click?.observe(this, Observer(menuUseCase::onMenuClick))
 
         menuViewModel?.longClick?.observe(this, Observer { menu ->
             menuUseCase.onMenuLongClick(menu)
