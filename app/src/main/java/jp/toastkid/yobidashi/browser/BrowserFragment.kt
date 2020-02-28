@@ -38,16 +38,17 @@ import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
-import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorModule
+import jp.toastkid.yobidashi.editor.InputNameDialogFragment
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -78,10 +79,11 @@ import java.util.*
 class BrowserFragment : Fragment(),
         CommonFragmentAction,
         ImageDialogCallback,
-        AnchorDialogCallback,
         TabListClearDialogFragment.Callback,
         UserAgentDialogFragment.Callback,
-        TabListDialogFragment.Callback
+        TabListDialogFragment.Callback,
+        InputNameDialogFragment.Callback,
+        ContentScrollable
 {
 
     /**
@@ -231,6 +233,10 @@ class BrowserFragment : Fragment(),
         return binding?.root
     }
 
+    override fun onClickInputName(fileName: String) {
+        editorModule.assignNewFile(fileName)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -356,12 +362,6 @@ class BrowserFragment : Fragment(),
             }
             Menu.FORWARD-> {
                 forward()
-            }
-            Menu.TOP-> {
-                toTop()
-            }
-            Menu.BOTTOM-> {
-                toBottom()
             }
             Menu.FIND_IN_PAGE-> {
                 if (pageSearchPresenter.isVisible()) {
@@ -606,14 +606,14 @@ class BrowserFragment : Fragment(),
     /**
      * Go to bottom.
      */
-    private fun toBottom() {
+    override fun toBottom() {
         tabs.pageDown()
     }
 
     /**
      * Go to top.
      */
-    private fun toTop() {
+    override fun toTop() {
         tabs.pageUp()
     }
 
@@ -638,6 +638,10 @@ class BrowserFragment : Fragment(),
 
         if (pdfModule.isVisible()) {
             pdfModule.applyColor(colorPair)
+        }
+
+        if (editorModule.isVisible()) {
+            editorModule.applySettings()
         }
 
         if (tabs.isNotEmpty()) {
@@ -756,6 +760,15 @@ class BrowserFragment : Fragment(),
                     tabs.openNewWebTab(it.toString())
                 }
             }
+            EditorModule.REQUEST_CODE_LOAD -> {
+                intent.data?.let { editorModule.readFromFileUri(it) }
+            }
+            EditorModule.REQUEST_CODE_LOAD_AS -> {
+                intent.data?.let {
+                    editorModule.readFromFileUri(it)
+                    editorModule.saveAs()
+                }
+            }
         }
     }
 
@@ -805,19 +818,7 @@ class BrowserFragment : Fragment(),
         tabs.openNewWebTab(uri.toString())
     }
 
-    override fun openNewTab(url: String) {
-        loadWithNewTab(url.toUri())
-    }
-
-    override fun openBackgroundTab(title: String, url: String) {
-        tabs.openBackgroundTab(title, url)
-    }
-
-    override fun openCurrent(url: String) {
-        tabs.callLoadUrl(url)
-    }
-
-    override fun preview(url: String) {
+    private fun preview(url: String) {
         val webView = browserModule.getWebView(FloatingPreview.getSpecialId())
         if (webView == null) {
             Toaster.snackLong(
