@@ -67,7 +67,9 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
-        MenuInflater(this).inflate(R.menu.setting_tab_shortcut, menu)
+        val menuInflater = MenuInflater(this)
+        menuInflater.inflate(R.menu.settings_toolbar_menu, menu)
+        menuInflater.inflate(R.menu.setting_tab_shortcut, menu)
         return true
     }
 
