@@ -383,7 +383,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun getWebViewBackgroundAlpha(): Float {
-        return preferences.getFloat(Key.WEB_VIEW_BACKGROUND_ALPHA.name, 0f)
+        return preferences.getFloat(Key.WEB_VIEW_BACKGROUND_ALPHA.name, 1f)
     }
 
     fun readRssReaderTargets(): MutableSet<String> {
