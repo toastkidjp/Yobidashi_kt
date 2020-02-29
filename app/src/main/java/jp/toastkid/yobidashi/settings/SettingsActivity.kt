@@ -42,10 +42,10 @@ class SettingsActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding.activity = this
         binding.toolbar.also { toolbar ->
+            setSupportActionBar(toolbar)
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener { finish() }
             toolbar.setTitle(TITLE_ID)
-            setSupportActionBar(toolbar)
         }
 
         supportFragmentManager?.let { fragmentManager ->
