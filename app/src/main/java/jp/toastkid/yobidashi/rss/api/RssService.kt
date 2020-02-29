@@ -7,7 +7,7 @@
  */
 package jp.toastkid.yobidashi.rss.api
 
-import jp.toastkid.yobidashi.rss.Rss
+import jp.toastkid.yobidashi.rss.model.Rss
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Url

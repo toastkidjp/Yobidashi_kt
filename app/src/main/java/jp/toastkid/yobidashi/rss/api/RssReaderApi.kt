@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi.rss.api
 
 import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.rss.Rss
+import jp.toastkid.yobidashi.rss.model.Rss
 import retrofit2.Retrofit
 
 /**

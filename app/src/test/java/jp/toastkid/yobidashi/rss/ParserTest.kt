@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.rss
 
+import jp.toastkid.yobidashi.rss.model.Parser
 import okio.Okio
 import org.junit.Assert.*
 import org.junit.Before

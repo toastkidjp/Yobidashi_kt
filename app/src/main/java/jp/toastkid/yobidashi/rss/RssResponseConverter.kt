@@ -7,6 +7,8 @@
  */
 package jp.toastkid.yobidashi.rss
 
+import jp.toastkid.yobidashi.rss.model.Parser
+import jp.toastkid.yobidashi.rss.model.Rss
 import okhttp3.ResponseBody
 import retrofit2.Converter
 
