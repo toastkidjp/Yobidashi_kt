@@ -90,16 +90,7 @@ class MenuUseCase(
                 startActivity(SettingsActivity.makeIntent(activitySupplier()))
             }
             Menu.SHARE-> {
-                /*TODO when (tabList.currentTab()) {
-                    is WebTab -> {
-                        startActivity(
-                                IntentFactory.makeShare(browserModule.makeShareMessage())
-                        )
-                    }
-                    is EditorTab -> {
-                        editor.share()
-                    }
-                }*/
+                findCurrentFragment()?.share()
             }
             Menu.WIFI_SETTING-> {
                 startActivity(SettingsIntentFactory.wifi())

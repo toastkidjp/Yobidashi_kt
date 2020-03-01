@@ -21,4 +21,6 @@ interface CommonFragmentAction {
      */
     fun pressBack(): Boolean = false
 
+    fun share() = Unit
+
 }

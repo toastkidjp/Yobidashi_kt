@@ -41,6 +41,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
+import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
@@ -540,6 +541,12 @@ class BrowserFragment : Fragment(),
     }
 
     override fun pressBack(): Boolean = hideOption() || back()
+
+    override fun share() {
+        startActivity(
+                IntentFactory.makeShare(browserModule.makeShareMessage())
+        )
+    }
 
     private fun tapHeader() {
         val activityContext = context ?: return

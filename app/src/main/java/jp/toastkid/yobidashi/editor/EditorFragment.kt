@@ -32,6 +32,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
@@ -67,7 +68,8 @@ class EditorFragment :
         Fragment(),
         PasteAsConfirmationDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
-        InputNameDialogFragment.Callback
+        InputNameDialogFragment.Callback,
+        CommonFragmentAction
 {
 
     private lateinit var binding: FragmentEditorBinding
@@ -421,7 +423,7 @@ class EditorFragment :
     /**
      * Share current content.
      */
-    fun share() {
+    override fun share() {
         val title =
                 if (path.contains("/")) path.substring(path.lastIndexOf("/") + 1)
                 else path
