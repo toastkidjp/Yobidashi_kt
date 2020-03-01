@@ -150,7 +150,8 @@ class TabListDialogFragment : DialogFragment() {
 
         initClearTabs(binding.clearTabs)
 
-        //TODO binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
+        // TODO use data binding
+        binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
 
         binding.recyclerView.layoutManager?.scrollToPosition(index)
         binding.recyclerView.scheduleLayoutAnimation()
