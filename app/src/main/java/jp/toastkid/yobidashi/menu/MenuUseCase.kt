@@ -10,16 +10,20 @@ package jp.toastkid.yobidashi.menu
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.view.View
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import com.journeyapps.barcodescanner.camera.CameraManager
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -30,7 +34,9 @@ import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.torch.Torch
+import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import timber.log.Timber
+import java.util.*
 
 /**
  * @author toastkidjp
@@ -42,6 +48,8 @@ class MenuUseCase(
         private val cleanProcess: () -> Unit,
         private val obtainFragment: (Class<out Fragment>) -> Fragment,
         private val openPdfTabFromStorage: () -> Unit,
+        private val openEditorTab: () -> Unit,
+        private val switchTabList: () -> Unit,
         private val useCameraPermission: (() -> Unit) -> Unit,
         private val close: () -> Unit
 ) {
@@ -80,6 +88,18 @@ class MenuUseCase(
             }
             Menu.SETTING-> {
                 startActivity(SettingsActivity.makeIntent(activitySupplier()))
+            }
+            Menu.SHARE-> {
+                /*TODO when (tabList.currentTab()) {
+                    is WebTab -> {
+                        startActivity(
+                                IntentFactory.makeShare(browserModule.makeShareMessage())
+                        )
+                    }
+                    is EditorTab -> {
+                        editor.share()
+                    }
+                }*/
             }
             Menu.WIFI_SETTING-> {
                 startActivity(SettingsIntentFactory.wifi())
@@ -129,8 +149,32 @@ class MenuUseCase(
             Menu.IMAGE_VIEWER -> {
                 replaceFragment(obtainFragment(ImageViewerFragment::class.java))
             }
+            Menu.LOAD_HOME-> {
+                ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
+                        .open(preferenceApplier.homeUrl.toUri())
+            }
+            Menu.EDITOR-> {
+                openEditorTab()
+            }
             Menu.PDF-> {
                 openPdfTabFromStorage()
+            }
+            Menu.WHAT_HAPPENED_TODAY -> {
+                val calendar = Calendar.getInstance()
+                val url = DateArticleUrlFactory()(
+                        activitySupplier(),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)
+                )
+                if (Urls.isInvalidUrl(url)) {
+                    return
+                }
+
+                ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
+                        .open(url.toUri())
+            }
+            Menu.TAB_LIST-> {
+                switchTabList()
             }
             else -> {
                 (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)

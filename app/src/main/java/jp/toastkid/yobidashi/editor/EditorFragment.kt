@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.editor
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.media.MediaScannerConnection
@@ -26,7 +25,6 @@ import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.Dimension
-import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
@@ -38,7 +36,10 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleFragmentEditorMenuBinding
-import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.libs.FileExtractorFromUri
+import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -77,8 +78,6 @@ class EditorFragment :
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
-
-    private val thumbnailGenerator = ThumbnailGenerator()
 
     /**
      * Default date format holder.
@@ -245,6 +244,10 @@ class EditorFragment :
 
         (context as? FragmentActivity)?.let {
             headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+        }
+
+        arguments?.getString("path")?.let {
+            readFromFile(File(it))
         }
     }
 
@@ -485,7 +488,11 @@ class EditorFragment :
                 arrayOf(filePath),
                 null
         ) { _, _ ->  }
-        snackText("${context.getString(R.string.done_save)}: $filePath")
+
+        if (isVisible) {
+            snackText("${context.getString(R.string.done_save)}: $filePath")
+        }
+
         setLastSaved(file.lastModified())
     }
 
@@ -586,14 +593,6 @@ class EditorFragment :
     }
 
     /**
-     * Make thumbnail.
-     *
-     * @return Bitmap or null
-     */
-    @MainThread
-    fun makeThumbnail(): Bitmap? = thumbnailGenerator(binding.root)
-
-    /**
      * Assign new file object.
      *
      * @param fileName
@@ -620,7 +619,7 @@ class EditorFragment :
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
-                    binding.editorInput,
+                    binding.root,
                     view.text.toString(),
                     R.string.run,
                     View.OnClickListener { view.performClick() },
@@ -637,7 +636,7 @@ class EditorFragment :
      * @param id
      */
     private fun snackText(@StringRes id: Int) {
-        Toaster.snackShort(binding.editorInput, id, preferenceApplier.colorPair())
+        Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
     }
 
     /**
@@ -647,7 +646,7 @@ class EditorFragment :
      */
     private fun snackText(message: String) {
         Toaster.snackShort(
-                binding.editorInput,
+                binding.root,
                 message,
                 preferenceApplier.colorPair()
         )

@@ -133,6 +133,7 @@ class PdfViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable {
         }
 
         arguments?.getParcelable<Uri>("uri")?.also { load(it) }
+        arguments?.getInt("scrollY")?.also { scrollTo(it) }
     }
 
     /**

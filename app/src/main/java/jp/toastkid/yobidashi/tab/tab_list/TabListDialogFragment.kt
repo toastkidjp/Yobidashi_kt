@@ -72,7 +72,7 @@ class TabListDialogFragment : DialogFragment() {
     interface Callback {
         fun onCloseTabListDialogFragment()
         fun onOpenEditor()
-        //TODO fun onOpenPdf()
+        fun onOpenPdf()
         fun openNewTabFromTabList()
         fun tabIndexFromTabList(): Int
         fun currentTabIdFromTabList(): String
@@ -92,7 +92,7 @@ class TabListDialogFragment : DialogFragment() {
         val preferenceApplier = PreferenceApplier(activityContext)
         colorPair = preferenceApplier.colorPair()
 
-        val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
+        val target = activity ?: return super.onCreateDialog(savedInstanceState)
         if (target is Callback) {
             callback = target
         } else {
@@ -256,12 +256,11 @@ class TabListDialogFragment : DialogFragment() {
 
         /**
          * Make this DialogFragment instance.
-         *
+         * TODO delete it.
          * @param target target [Fragment]
          */
         fun make(target: Fragment): TabListDialogFragment {
             val tabListDialogFragment = TabListDialogFragment()
-            tabListDialogFragment.setTargetFragment(target, 1)
             return tabListDialogFragment
         }
     }

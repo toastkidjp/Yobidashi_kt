@@ -21,6 +21,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -35,14 +36,16 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
-import jp.toastkid.yobidashi.launcher.LauncherActivity
+import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -57,8 +60,14 @@ import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
+import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.model.EditorTab
+import jp.toastkid.yobidashi.tab.model.PdfTab
+import jp.toastkid.yobidashi.tab.model.Tab
+import jp.toastkid.yobidashi.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
+import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
@@ -70,7 +79,10 @@ import kotlin.math.min
  *
  * @author toastkidjp
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+        TabListClearDialogFragment.Callback,
+        TabListDialogFragment.Callback
+{
 
     /**
      * Data binding object.
@@ -88,6 +100,11 @@ class MainActivity : AppCompatActivity() {
     private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     /**
+     * Tab list dialog fragment.
+     */
+    private var tabListDialogFragment: DialogFragment? = null
+
+    /**
      * Menu's view model.
      */
     private var menuViewModel: MenuViewModel? = null
@@ -95,9 +112,18 @@ class MainActivity : AppCompatActivity() {
     private var contentViewModel: ContentViewModel? = null
 
     /**
+     * Archive folder.
+     */
+    private lateinit var tabs: TabAdapter
+
+    private var browserViewModel: BrowserViewModel? = null
+
+    /**
      * Rx permission.
      */
     private var rxPermissions: RxPermissions? = null
+
+    private val thumbnailGenerator = ThumbnailGenerator()
 
     /**
      * Preferences wrapper.
@@ -115,6 +141,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
+        // TODO     Use    setSupportActionBar(binding.toolbar)
         binding.toolbar.also { setSupportActionBar(it) }
 
         rxPermissions = RxPermissions(this)
@@ -133,6 +160,33 @@ class MainActivity : AppCompatActivity() {
                 null -> Unit
             }
         })
+
+        browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
+        browserViewModel?.preview?.observe(this, Observer {
+            (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)?.preview(it.toString())
+        })
+        browserViewModel?.open?.observe(this, Observer {
+            tabs.openNewWebTab(it.toString())
+            replaceToCurrentTab(true)
+        })
+        browserViewModel?.openBackground?.observe(this, Observer {
+            tabs.openBackgroundTab(it.toString(), it.toString())
+            Toaster.snackShort(
+                    binding.content,
+                    getString(R.string.message_tab_open_background, it.toString()),
+                    preferenceApplier.colorPair()
+            )
+        })
+        browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
+            tabs.openBackgroundTab(it.first, it.second.toString())
+            Toaster.snackShort(
+                    binding.content,
+                    getString(R.string.message_tab_open_background, it.first),
+                    preferenceApplier.colorPair()
+            )
+        })
+
+        tabs = TabAdapter({ this }, this::onEmptyTabs)
 
         processShortcut(intent)
     }
@@ -180,6 +234,8 @@ class MainActivity : AppCompatActivity() {
                 },
                 { obtainFragment(it) },
                 { openPdfTabFromStorage() },
+                { openEditorTab() },
+                { switchTabList() },
                 { useCameraPermission(it) },
                 { menuViewModel?.close() }
         )
@@ -232,17 +288,13 @@ class MainActivity : AppCompatActivity() {
     private fun processShortcut(calledIntent: Intent) {
         if (calledIntent.action == null) {
             // Add for re-creating activity.
-            val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
-                    ?: return
-            replaceFragment(browserFragment)
+            replaceToCurrentTab()
             return
         }
 
         if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
             RandomWikipedia().fetchWithAction { title, uri ->
-                val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
-                        ?: return@fetchWithAction
-                browserFragment.loadWithNewTab(uri)
+                openNewWebTab(uri)
                 Toaster.snackShort(
                         binding.root,
                         getString(R.string.message_open_random_wikipedia, title),
@@ -276,20 +328,11 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
+    }
 
-        when (preferenceApplier.startUp) {
-            StartUp.APPS_LAUNCHER -> {
-                startActivity(LauncherActivity.makeIntent(this))
-                finishWithoutTransition()
-            }
-            StartUp.BROWSER -> {
-                replaceWithBrowser(Uri.EMPTY)
-            }
-            else -> {
-                startActivity(SearchActivity.makeIntent(this))
-                finishWithoutTransition()
-            }
-        }
+    private fun openNewWebTab(uri: Uri) {
+        tabs.openNewWebTab(uri.toString())
+        replaceToCurrentTab(true)
     }
 
     /**
@@ -322,25 +365,8 @@ class MainActivity : AppCompatActivity() {
      * @param uri
      */
     private fun loadUri(uri: Uri) {
-        val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
-        if (browserFragment.isVisible) {
-            browserFragment.loadWithNewTab(uri)
-            return
-        }
-        replaceWithBrowser(uri)
-    }
-
-    /**
-     * Replace with [BrowserFragment].
-     *
-     * @param uri default empty.
-     */
-    private fun replaceWithBrowser(uri: Uri = Uri.EMPTY) {
-        val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
-        replaceFragment(browserFragment)
-        if (uri != Uri.EMPTY) {
-            uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
-        }
+        tabs.openNewWebTab(uri.toString())
+        replaceToCurrentTab()
     }
 
     /**
@@ -348,29 +374,101 @@ class MainActivity : AppCompatActivity() {
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: Fragment) {
-        if (fragment.isVisible) {
-            return
-        }
-
+    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = false) {
         val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager.fragments
         if (fragments.size != 0) {
-            fragments[0]?.let {
-                if (it == fragment) {
-                    return
-                }
-                transaction.remove(it)
+            if (fragments.contains(fragment)) {
+                fragments.remove(fragment)
             }
         }
-        transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-        transaction.add(R.id.content, fragment, fragment::class.java.canonicalName)
+        transaction.setCustomAnimations(
+                if (withAnimation) R.anim.slide_up else R.anim.slide_in_right,
+                0,
+                0,
+                if (withAnimation) R.anim.slide_down else android.R.anim.slide_out_right
+        )
+
+        transaction.replace(R.id.content, fragment, fragment::class.java.canonicalName)
 
         // TODO fix it
-        if (fragment !is BrowserFragment) {
+        if (fragment !is BrowserFragment && fragment !is EditorFragment) {
             transaction.addToBackStack(fragment::class.java.canonicalName)
         }
         transaction.commitAllowingStateLoss()
+    }
+
+    /**
+     * Replace visibilities for current tab.
+     *
+     * @param withAnimation for suppress redundant animation.
+     */
+    private fun replaceToCurrentTab(withAnimation: Boolean = true) {
+        when (val currentTab = tabs.currentTab()) {
+            is WebTab -> {
+                val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
+                replaceFragment(browserFragment)
+                (supportFragmentManager.findFragmentByTag(BrowserFragment::class.java.canonicalName) as? BrowserFragment)
+                        ?.loadWithNewTab(currentTab.getUrl().toUri(), currentTab.id())
+            }
+            is EditorTab -> {
+                val editorFragment =
+                        obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
+                editorFragment.arguments = bundleOf("path" to currentTab.path)
+                replaceFragment(editorFragment, withAnimation)
+
+                // TODO browserModule.disableWebView()
+                tabs.saveTabList()
+            }
+            is PdfTab -> {
+                val url: String = currentTab.getUrl()
+                if (url.isNotEmpty()) {
+                    try {
+                        val uri = Uri.parse(url)
+
+                        val pdfViewerFragment =
+                                obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment ?: return
+                        pdfViewerFragment.arguments = bundleOf("uri" to uri, "scrollY" to currentTab.getScrolled())
+                        replaceFragment(pdfViewerFragment, withAnimation)
+
+                    } catch (e: SecurityException) {
+                        Timber.e(e)
+                        return
+                    } catch (e: IllegalStateException) {
+                        Timber.e(e)
+                        return
+                    }
+                }
+
+                //TODO browserModule.disableWebView()
+                tabs.saveTabList()
+            }
+        }
+        tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
+    }
+
+    /**
+     * Hide tab list.
+     */
+    private fun hideTabList() {
+        tabListDialogFragment?.dismiss()
+        replaceToCurrentTab()
+        menuViewModel?.tabCount(tabs.size())
+    }
+
+    /**
+     * Show tab list.
+     */
+    private fun showTabList() {
+        refreshThumbnail()
+        val fragmentManager = supportFragmentManager ?: return
+        tabListDialogFragment?.show(fragmentManager, "")
+    }
+
+    private fun refreshThumbnail() {
+        val currentTab = tabs.currentTab()
+        tabs.deleteThumbnail(currentTab?.thumbnailPath)
+        tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
     }
 
     override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
@@ -381,12 +479,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        if (tabListDialogFragment?.isVisible == true) {
+            hideTabList()
+            return
+        }
+
         if (binding.menusView.isVisible) {
             menuViewModel?.close()
             return
         }
 
-        if (findCurrentFragment()?.pressBack() == true) {
+        val findCurrentFragment = findCurrentFragment()
+        if (findCurrentFragment?.pressBack() == true) {
+            return
+        }
+
+        if (findCurrentFragment is BrowserFragment) {
+            tabs.closeTab(tabs.index())
+            if (tabs.isEmpty()) {
+                onEmptyTabs()
+                return
+            }
+            replaceToCurrentTab(true)
             return
         }
 
@@ -418,11 +532,24 @@ class MainActivity : AppCompatActivity() {
                 .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        if (tabs.isEmpty()) {
+            tabs.openNewWebTab(preferenceApplier.homeUrl)
+        }
+
+        replaceToCurrentTab(false)
+    }
+
     override fun onResume() {
         super.onResume()
         refresh()
         menuViewModel?.onResume()
         setFabPosition()
+        tabs.loadBackgroundTabsFromDirIfNeed()
+
+        menuViewModel?.tabCount(tabs.size())
     }
 
     /**
@@ -495,6 +622,26 @@ class MainActivity : AppCompatActivity() {
                 )?.addTo(disposables)
     }
 
+    /**
+     * Open Editor tab.
+     */
+    private fun openEditorTab(path: String? = null) {
+        rxPermissions
+                ?.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ?.subscribe(
+                        { granted ->
+                            if (!granted) {
+                                Toaster.tShort(this, R.string.message_requires_permission_storage)
+                                return@subscribe
+                            }
+                            tabs.openNewEditorTab(path)
+                            replaceToCurrentTab()
+                        },
+                        Timber::e
+                )
+                ?.addTo(disposables)
+    }
+
     private fun setFabPosition() {
         binding.menuSwitch.let {
             val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
@@ -555,6 +702,72 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Switch tab list visibility.
+     */
+    private fun switchTabList() {
+        initTabListIfNeed()
+        if (tabListDialogFragment?.isVisible == true) {
+            hideTabList()
+        } else {
+            showTabList()
+        }
+    }
+
+    /**
+     * Initialize tab list.
+     */
+    private fun initTabListIfNeed() {
+        tabListDialogFragment = TabListDialogFragment()
+    }
+
+    /**
+     * Action on empty tabs.
+     */
+    private fun onEmptyTabs() {
+        tabListDialogFragment?.dismiss()
+        tabs.openNewWebTab()
+        replaceToCurrentTab(true)
+    }
+
+    override fun onClickClear() {
+        tabs.clear()
+        onEmptyTabs()
+    }
+
+    override fun onCloseTabListDialogFragment() = hideTabList()
+
+    override fun onOpenEditor() = openEditorTab()
+
+    override fun onOpenPdf() = openPdfTabFromStorage()
+
+    override fun openNewTabFromTabList() {
+        tabs.openNewWebTab()
+        replaceToCurrentTab(true)
+    }
+
+    override fun tabIndexFromTabList() = tabs.index()
+
+    override fun currentTabIdFromTabList() = tabs.currentTabId()
+
+    override fun replaceTabFromTabList(tab: Tab) {
+        tabs.replace(tab)
+        (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)?.stopSwipeRefresherLoading()
+    }
+
+    override fun getTabByIndexFromTabList(position: Int): Tab? = tabs.getTabByIndex(position)
+
+    override fun closeTabFromTabList(position: Int) {
+        tabs.closeTab(position)
+        (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)?.stopSwipeRefresherLoading()
+    }
+
+    override fun getTabAdapterSizeFromTabList(): Int = tabs.size()
+
+    override fun swapTabsFromTabList(from: Int, to: Int) = tabs.swap(from, to)
+
+    override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
+
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
         menuInflater.also {
             it.inflate(R.menu.settings_toolbar_menu, menu)
@@ -564,6 +777,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.open_tabs -> {
+            switchTabList()
+            true
+        }
         R.id.menu_exit -> {
             moveTaskToBack(true)
             true
@@ -594,14 +811,15 @@ class MainActivity : AppCompatActivity() {
             }
             ArchivesActivity.REQUEST_CODE -> {
                 try {
-                    replaceWithBrowser()
+                    /*TODO
+                       replaceWithBrowser()
                     uiThreadHandler.postDelayed(
                             {
                                 (obtainFragment(BrowserFragment::class.java) as BrowserFragment)
                                     .loadArchive(ArchivesActivity.extractFile(intent))
                             },
                             200L
-                    )
+                    )*/
                 } catch (e: IOException) {
                     Timber.e(e)
                 } catch (error: OutOfMemoryError) {
@@ -631,18 +849,24 @@ class MainActivity : AppCompatActivity() {
                     contentResolver?.takePersistableUriPermission(uri, takeFlags)
                 }
 
+                tabs.openNewPdfTab(uri)
+
                 (obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment)?.let {
                     it.arguments = bundleOf("uri" to uri)
                     replaceFragment(it)
                 }
-
-                //TODO tabs.openNewPdfTab(uri)
             }
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        tabs.saveTabList()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        tabs.dispose()
         disposables.clear()
         menuUseCase.dispose()
         contentViewModel?.content?.removeObservers(this)
