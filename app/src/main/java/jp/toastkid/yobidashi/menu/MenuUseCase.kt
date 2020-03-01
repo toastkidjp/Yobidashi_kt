@@ -32,6 +32,7 @@ import jp.toastkid.yobidashi.media.image.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.rss.RssReaderFragment
+import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.torch.Torch
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
@@ -149,6 +150,14 @@ class MenuUseCase(
             }
             Menu.PDF-> {
                 openPdfTabFromStorage()
+            }
+            Menu.WEB_SEARCH -> {
+                when (val fragment = findCurrentFragment()) {
+                    is BrowserFragment ->
+                        fragment.onMenuClick(menu)
+                    else ->
+                        startActivity(SearchActivity.makeIntent(activitySupplier()))
+                }
             }
             Menu.WHAT_HAPPENED_TODAY -> {
                 val calendar = Calendar.getInstance()
