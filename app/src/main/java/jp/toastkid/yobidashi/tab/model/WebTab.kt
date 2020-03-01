@@ -12,9 +12,7 @@ import java.util.*
  */
 internal class WebTab: Tab {
 
-    internal val histories: MutableList<History> = mutableListOf()
-
-    private var index: Int = -1
+    private val histories: MutableList<History> = mutableListOf()
 
     private val id: String = UUID.randomUUID().toString()
 
@@ -23,55 +21,36 @@ internal class WebTab: Tab {
     @Transient var background = false
 
     @Synchronized override fun back(): String {
-        val nextIndex = if (index == 0) index else index - 1
-        if (nextIndex < 0) {
-            return ""
-        }
-        val sameIndex = nextIndex == index
-        index = nextIndex
-        return if (sameIndex) "" else histories[nextIndex].url()
+        return histories[0].url()
     }
 
     @Synchronized override fun forward(): String {
-        val nextIndex = if (index == histories.size - 1) index else index + 1
-        val sameIndex = nextIndex == index
-        index = nextIndex
-        return if (sameIndex) "" else histories[nextIndex].url()
+        return histories[0].url()
     }
 
-    internal fun moveAndGet(newIndex: Int): String {
-        if (newIndex < 0 || histories.size <= newIndex) {
-            return ""
-        }
-        index = newIndex
-        return histories[index].url()
-    }
-
-    fun addHistory(history: History) {
-        if (TextUtils.equals(history.url(), "about:blank")
-                || histories.contains(history)) {
+    fun addHistory(history: History?) {
+        if (history == null
+                || TextUtils.equals(history.url(), "about:blank")
+                || histories.contains(history)
+        ) {
             return
         }
 
-        histories.add(history)
+        if (histories.isEmpty()) histories.add(history) else histories.set(0, history)
 
         if (background) {
             histories.removeAt(0)
             background = false
-            return
         }
-        index++
     }
 
     val latest: History
         get() {
-            if (index < 0) {
+            if (histories.isEmpty()) {
                 return History.EMPTY
             }
-            return histories[histories.size - 1]
+            return histories[0]
         }
-
-    internal fun currentIndex() : Int = index
 
     override fun id(): String = id
 
@@ -93,6 +72,10 @@ internal class WebTab: Tab {
     override fun title(): String = latest.title()
 
     companion object {
+
+        fun make(title: String, url: String): WebTab = WebTab().apply {
+            addHistory(History.make(title, url))
+        }
 
         /**
          * Make [WebTab] for opening by background.

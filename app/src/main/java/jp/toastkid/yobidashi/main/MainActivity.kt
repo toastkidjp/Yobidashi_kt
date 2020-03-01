@@ -35,10 +35,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
-import jp.toastkid.yobidashi.browser.BrowserViewModel
-import jp.toastkid.yobidashi.browser.ScreenMode
+import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -188,6 +185,13 @@ class MainActivity : AppCompatActivity(),
                     preferenceApplier.colorPair()
             )
         })
+
+        ViewModelProviders.of(this).get(LoadingViewModel::class.java)
+                .onPageFinished
+                .observe(
+                        this,
+                        Observer { tabs.updateWebTab(it) }
+                )
 
         browserFragmentViewModel = ViewModelProviders.of(this).get(BrowserFragmentViewModel::class.java)
 
@@ -417,14 +421,12 @@ class MainActivity : AppCompatActivity(),
                         ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
             }
             is EditorTab -> {
-                Timber.i("replaceWebView to ${currentTab::class.java.simpleName}")
                 val editorFragment =
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
             }
             is PdfTab -> {
-                Timber.i("replaceWebView to ${currentTab::class.java.simpleName}")
                 val url: String = currentTab.getUrl()
                 if (url.isNotEmpty()) {
                     try {

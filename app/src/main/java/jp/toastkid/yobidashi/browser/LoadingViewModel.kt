@@ -10,15 +10,16 @@ package jp.toastkid.yobidashi.browser
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.yobidashi.tab.History
 
 /**
  * @author toastkidjp
  */
 class LoadingViewModel : ViewModel() {
 
-    private val _onPageFinished = MutableLiveData<Unit>()
+    private val _onPageFinished = MutableLiveData<Pair<String, History>>()
 
-    val onPageFinished: LiveData<Unit> = _onPageFinished
+    val onPageFinished: LiveData<Pair<String, History>> = _onPageFinished
 
-    fun finished() = _onPageFinished.postValue(Unit)
+    fun finished(history: Pair<String, History>) = _onPageFinished.postValue(history)
 }

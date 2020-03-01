@@ -14,7 +14,6 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.libs.BitmapCompressor
-import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
@@ -103,10 +102,7 @@ class TabAdapter(
      * TODO remove withLoad.
      */
     fun openNewWebTab(url: String = preferenceApplier.homeUrl, withLoad: Boolean = true) {
-        val newTab = WebTab()
-        if (Urls.isValidUrl(url)) {
-            newTab.histories.add(0, History("New tab: $url", url))
-        }
+        val newTab = WebTab.make("New tab: $url", url)
         tabList.add(newTab)
         setIndexByTab(newTab)
     }
@@ -271,6 +267,15 @@ class TabAdapter(
      */
     fun loadBackgroundTabsFromDirIfNeed() {
         tabList.loadBackgroundTabsFromDirIfNeed()
+    }
+
+    fun updateWebTab(idAndHistory: Pair<String, History>?) {
+        val id = idAndHistory?.first
+        if (currentTabId() != id) {
+            return
+        }
+
+        tabList.updateWithIdAndHistory(idAndHistory)
     }
 
     companion object {

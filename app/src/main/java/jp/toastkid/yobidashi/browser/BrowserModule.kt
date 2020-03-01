@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.yobidashi.tab.History
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -96,6 +97,8 @@ class BrowserModule(
     private val slideDown
             = AnimationUtils.loadAnimation(context, R.anim.slide_down)
 
+    private var lastId = ""
+
     private val disposables = CompositeDisposable()
 
     init {
@@ -130,7 +133,7 @@ class BrowserModule(
             super.onPageFinished(view, url)
             isLoadFinished = true
 
-            loadingViewModel?.finished()
+            loadingViewModel?.finished(lastId to History.make(view.title, view.url))
 
             headerViewModel?.updateProgress(100)
             headerViewModel?.stopProgress(true)
@@ -311,6 +314,7 @@ class BrowserModule(
     }
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
+        lastId = tabId
         if (replaceWebView(tabId)) {
             loadUrl(uri.toString())
         }
@@ -341,7 +345,6 @@ class BrowserModule(
     }
 
     private fun replaceWebView(tabId: String): Boolean {
-        Timber.i("replaceWebView $tabId")
         browserHeaderViewModel?.resetContent()
 
         val currentWebView = getWebView(tabId)
