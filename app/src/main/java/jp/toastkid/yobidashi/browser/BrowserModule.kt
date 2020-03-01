@@ -366,7 +366,7 @@ class BrowserModule(
         }
 
         reloadWebViewSettings().addTo(disposables)
-        return true
+        return currentWebView?.url.isNullOrBlank()
     }
 
     /**
