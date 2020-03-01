@@ -54,6 +54,7 @@ import java.util.*
  *
  * @author toastkidjp
  */
+@Deprecated("This module should be deleted.")
 class EditorModule(
         private val binding: ModuleEditorBinding,
         private val intentLauncher: (Intent, Int) -> Unit,
@@ -298,7 +299,7 @@ class EditorModule(
     }
 
     fun clear() {
-        ClearTextDialogFragment.show(binding.root.context)
+        //ClearTextDialogFragment.show(this)
     }
 
     fun insertAsPlain() {
@@ -363,14 +364,14 @@ class EditorModule(
             return
         }
 
-        InputNameDialogFragment.show(binding.root.context)
+        //InputNameDialogFragment.show(binding.root.context)
     }
 
     /**
      * Save current text as other file.
      */
     fun saveAs() {
-        InputNameDialogFragment.show(binding.root.context)
+        //InputNameDialogFragment.show(binding.root.context)
     }
 
     /**

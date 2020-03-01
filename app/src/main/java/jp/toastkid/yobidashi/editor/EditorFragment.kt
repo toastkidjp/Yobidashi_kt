@@ -338,7 +338,7 @@ class EditorFragment :
     }
 
     fun clear() {
-        ClearTextDialogFragment.show(binding.root.context)
+        ClearTextDialogFragment.show(this)
     }
 
     fun insertAsPlain() {
@@ -403,14 +403,14 @@ class EditorFragment :
             return
         }
 
-        InputNameDialogFragment.show(binding.root.context)
+        InputNameDialogFragment.show(this)
     }
 
     /**
      * Save current text as other file.
      */
     fun saveAs() {
-        InputNameDialogFragment.show(binding.root.context)
+        InputNameDialogFragment.show(this)
     }
 
     /**
@@ -686,11 +686,11 @@ class EditorFragment :
             return
         }
 
-        when (resultCode) {
-            EditorModule.REQUEST_CODE_LOAD -> {
+        when (requestCode) {
+            REQUEST_CODE_LOAD -> {
                 intent.data?.let { readFromFileUri(it) }
             }
-            EditorModule.REQUEST_CODE_LOAD_AS -> {
+            REQUEST_CODE_LOAD_AS -> {
                 intent.data?.let {
                     readFromFileUri(it)
                     saveAs()
