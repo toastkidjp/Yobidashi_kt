@@ -416,9 +416,6 @@ class MainActivity : AppCompatActivity(),
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
-
-                // TODO browserModule.disableWebView()
-                tabs.saveTabList()
             }
             is PdfTab -> {
                 val url: String = currentTab.getUrl()
@@ -439,11 +436,9 @@ class MainActivity : AppCompatActivity(),
                         return
                     }
                 }
-
-                //TODO browserModule.disableWebView()
-                tabs.saveTabList()
             }
         }
+        tabs.saveTabList()
         tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
     }
 
