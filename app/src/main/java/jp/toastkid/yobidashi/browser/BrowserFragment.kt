@@ -7,7 +7,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -243,6 +242,12 @@ class BrowserFragment : Fragment(),
                         activity,
                         Observer { browserModule.saveArchiveForAutoArchive() }
                 )
+
+        ViewModelProviders.of(activity).get(BrowserFragmentViewModel::class.java)
+                .loadWithNewTab
+                .observe(activity, Observer {
+                    browserModule.loadWithNewTab(it.first, it.second)
+                })
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
@@ -615,15 +620,6 @@ class BrowserFragment : Fragment(),
             Timber.e(error)
             System.gc()
         }
-    }
-
-    /**
-     * Load with opening new tab.
-     *
-     * @param uri [Uri]
-     */
-    fun loadWithNewTab(uri: Uri, currentTabId: String) {
-        browserModule.loadWithNewTab(uri, currentTabId)
     }
 
     fun preview(url: String) {

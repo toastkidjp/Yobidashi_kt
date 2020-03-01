@@ -36,6 +36,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
@@ -118,6 +119,8 @@ class MainActivity : AppCompatActivity(),
 
     private var browserViewModel: BrowserViewModel? = null
 
+    private var browserFragmentViewModel: BrowserFragmentViewModel? = null
+
     /**
      * Rx permission.
      */
@@ -185,6 +188,8 @@ class MainActivity : AppCompatActivity(),
                     preferenceApplier.colorPair()
             )
         })
+
+        browserFragmentViewModel = ViewModelProviders.of(this).get(BrowserFragmentViewModel::class.java)
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
@@ -408,16 +413,18 @@ class MainActivity : AppCompatActivity(),
             is WebTab -> {
                 val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment)
-                (supportFragmentManager.findFragmentByTag(BrowserFragment::class.java.canonicalName) as? BrowserFragment)
-                        ?.loadWithNewTab(currentTab.getUrl().toUri(), currentTab.id())
+                browserFragmentViewModel
+                        ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
             }
             is EditorTab -> {
+                Timber.i("replaceWebView to ${currentTab::class.java.simpleName}")
                 val editorFragment =
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
             }
             is PdfTab -> {
+                Timber.i("replaceWebView to ${currentTab::class.java.simpleName}")
                 val url: String = currentTab.getUrl()
                 if (url.isNotEmpty()) {
                     try {
@@ -438,17 +445,9 @@ class MainActivity : AppCompatActivity(),
                 }
             }
         }
+
         tabs.saveTabList()
         tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
-    }
-
-    /**
-     * Hide tab list.
-     */
-    private fun hideTabList() {
-        tabListDialogFragment?.dismiss()
-        replaceToCurrentTab()
-        menuViewModel?.tabCount(tabs.size())
     }
 
     /**
@@ -475,7 +474,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         if (tabListDialogFragment?.isVisible == true) {
-            hideTabList()
+            tabListDialogFragment?.dismiss()
             return
         }
 
@@ -703,7 +702,7 @@ class MainActivity : AppCompatActivity(),
     private fun switchTabList() {
         initTabListIfNeed()
         if (tabListDialogFragment?.isVisible == true) {
-            hideTabList()
+            tabListDialogFragment?.dismiss()
         } else {
             showTabList()
         }
@@ -730,7 +729,14 @@ class MainActivity : AppCompatActivity(),
         onEmptyTabs()
     }
 
-    override fun onCloseTabListDialogFragment() = hideTabList()
+    override fun onCloseOnly() {
+        tabListDialogFragment?.dismiss()
+    }
+
+    override fun onCloseTabListDialogFragment() {
+        replaceToCurrentTab()
+        menuViewModel?.tabCount(tabs.size())
+    }
 
     override fun onOpenEditor() = openEditorTab()
 

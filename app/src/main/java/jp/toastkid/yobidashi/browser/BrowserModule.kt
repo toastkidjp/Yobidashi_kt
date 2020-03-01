@@ -317,6 +317,7 @@ class BrowserModule(
     }
 
     private fun loadUrl(url: String) {
+        Timber.i("tab load $url")
         if (url.isEmpty()) {
             return
         }
@@ -340,6 +341,7 @@ class BrowserModule(
     }
 
     private fun replaceWebView(tabId: String): Boolean {
+        Timber.i("replaceWebView $tabId")
         browserHeaderViewModel?.resetContent()
 
         val currentWebView = getWebView(tabId)

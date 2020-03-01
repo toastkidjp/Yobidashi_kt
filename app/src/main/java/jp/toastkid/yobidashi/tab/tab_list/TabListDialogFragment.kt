@@ -70,6 +70,7 @@ class TabListDialogFragment : DialogFragment() {
     private var leftTouchHelper: ItemTouchHelper? = null
 
     interface Callback {
+        fun onCloseOnly()
         fun onCloseTabListDialogFragment()
         fun onOpenEditor()
         fun onOpenPdf()
