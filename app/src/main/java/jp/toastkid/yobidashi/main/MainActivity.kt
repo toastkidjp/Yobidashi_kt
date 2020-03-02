@@ -212,6 +212,7 @@ class MainActivity : AppCompatActivity(),
                 return@Observer
             }
             binding.toolbar.removeViewAt(0)
+            binding.toolbar.layoutParams.height = view.layoutParams.height
             binding.toolbar.addView(
                     view,
                     0
