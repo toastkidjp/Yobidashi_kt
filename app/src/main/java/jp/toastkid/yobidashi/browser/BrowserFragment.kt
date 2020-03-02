@@ -166,7 +166,7 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
-        headerBinding?.root?.setOnClickListener { tapHeader() }
+        headerBinding?.urlBox?.setOnClickListener { tapHeader() }
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
 
