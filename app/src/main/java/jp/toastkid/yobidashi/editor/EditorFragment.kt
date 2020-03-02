@@ -46,6 +46,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
+import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import okio.Okio
 import java.io.File
@@ -69,7 +70,8 @@ class EditorFragment :
         PasteAsConfirmationDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
-        CommonFragmentAction
+        CommonFragmentAction,
+        ContentScrollable
 {
 
     private lateinit var binding: FragmentEditorBinding
@@ -352,14 +354,14 @@ class EditorFragment :
     /**
      * Go to top.
      */
-    fun pageUp() {
+    override fun toTop() {
         moveToIndex(0)
     }
 
     /**
      * Go to bottom.
      */
-    fun pageDown() {
+    override fun toBottom() {
         moveToIndex(binding.editorInput.length())
     }
 
