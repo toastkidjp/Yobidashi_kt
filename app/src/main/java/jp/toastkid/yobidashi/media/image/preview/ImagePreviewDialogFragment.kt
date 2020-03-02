@@ -111,6 +111,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         binding.rotateLeft.setColorFilter(fontColor)
         binding.rotateRight.setColorFilter(fontColor)
         binding.edit.setColorFilter(fontColor)
+        binding.close.setColorFilter(fontColor)
     }
 
     private fun loadImageAsync(activityContext: Context, path: String?) {

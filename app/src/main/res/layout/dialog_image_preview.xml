@@ -16,6 +16,18 @@
             android:layout_height="match_parent"
             android:scaleType="centerInside"
             />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="top|right"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/ic_close"
+            android:onClick="@{view -> dialog.dismiss()}"
+            />
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
