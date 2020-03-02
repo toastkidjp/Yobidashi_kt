@@ -448,5 +448,6 @@
     <string name="action_play">Play</string>
     <string name="insert_as_plain">Insert as plain</string>
     <string name="action_shuffle">Shuffle</string>
+    <string name="title_image_viewer">Image Viewer</string>
 
 </resources>
