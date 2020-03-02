@@ -94,8 +94,6 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
                     preferenceApplier.clear()
-                    //TODO colorFilter.stop()
-                    //TODO setCurrentValues()
                     Updater.update(fragmentActivity)
                     Toaster.snackShort(v, R.string.done_clear, preferenceApplier.colorPair())
                     d.dismiss()
