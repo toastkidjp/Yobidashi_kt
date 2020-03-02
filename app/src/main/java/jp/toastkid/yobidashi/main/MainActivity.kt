@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
@@ -554,6 +555,7 @@ class MainActivity : AppCompatActivity(),
     private fun refresh() {
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
+        binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
 
         applyBackgrounds()
     }
