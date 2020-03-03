@@ -303,9 +303,7 @@ class BrowserFragment : Fragment(),
                 )
             }
             Menu.READER_MODE -> {
-                browserModule.invokeContentExtraction(
-                        ValueCallback(this::showReaderFragment)
-                )
+                openReaderMode()
             }
             Menu.HTML_SOURCE -> {
                 browserModule.invokeHtmlSourceExtraction(
@@ -414,6 +412,10 @@ class BrowserFragment : Fragment(),
             }
             else -> Unit
         }
+    }
+
+    fun openReaderMode() {
+        browserModule.invokeContentExtraction(ValueCallback(this::showReaderFragment))
     }
 
     private fun showReaderFragment(content: String) {
