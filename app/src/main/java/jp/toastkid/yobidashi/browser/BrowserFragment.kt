@@ -384,14 +384,6 @@ class BrowserFragment : Fragment(),
                         ViewHistoryActivity.REQUEST_CODE
                 )
             }
-            Menu.BOOKMARK-> {
-                context?.let {
-                    startActivityForResult(
-                            BookmarkActivity.makeIntent(it),
-                            BookmarkActivity.REQUEST_CODE
-                    )
-                }
-            }
             Menu.ADD_BOOKMARK-> {
                 /* TODO
                 tabs.addBookmark {
@@ -626,7 +618,7 @@ class BrowserFragment : Fragment(),
                     VoiceSearch.processResult(it, intent).addTo(disposables)
                 }
             }
-            BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
+            ViewHistoryActivity.REQUEST_CODE -> {
                 intent.data?.let {
                     browserViewModel?.open(it)
                 }
