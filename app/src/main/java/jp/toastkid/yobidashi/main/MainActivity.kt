@@ -816,15 +816,8 @@ class MainActivity : AppCompatActivity(),
             }
             ArchivesActivity.REQUEST_CODE -> {
                 try {
-                    /*TODO
-                       replaceWithBrowser()
-                    uiThreadHandler.postDelayed(
-                            {
-                                (obtainFragment(BrowserFragment::class.java) as BrowserFragment)
-                                    .loadArchive(ArchivesActivity.extractFile(intent))
-                            },
-                            200L
-                    )*/
+                    tabs.openNewWebTab(ArchivesActivity.extractFileUrl(data))
+                    replaceToCurrentTab()
                 } catch (e: IOException) {
                     Timber.e(e)
                 } catch (error: OutOfMemoryError) {

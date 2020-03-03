@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -172,6 +173,14 @@ class MenuUseCase(
 
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
                         .open(url.toUri())
+            }
+            Menu.VIEW_ARCHIVE -> {
+                activitySupplier().also {
+                    it.startActivityForResult(
+                        ArchivesActivity.makeIntent(it),
+                        ArchivesActivity.REQUEST_CODE
+                    )
+                }
             }
             Menu.TAB_LIST-> {
                 switchTabList()

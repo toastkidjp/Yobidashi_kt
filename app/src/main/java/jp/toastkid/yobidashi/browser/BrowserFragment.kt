@@ -317,12 +317,6 @@ class BrowserFragment : Fragment(),
             Menu.ARCHIVE-> {
                 browserModule.saveArchive()
             }
-            Menu.VIEW_ARCHIVE -> {
-                startActivityForResult(
-                        ArchivesActivity.makeIntent(fragmentActivity),
-                        ArchivesActivity.REQUEST_CODE
-                )
-            }
             Menu.RANDOM_WIKIPEDIA -> {
                 if (preferenceApplier.wifiOnly &&
                         WifiConnectionChecker.isNotConnecting(requireContext())) {
