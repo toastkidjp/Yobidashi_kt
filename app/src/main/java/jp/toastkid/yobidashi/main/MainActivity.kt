@@ -142,8 +142,7 @@ class MainActivity : AppCompatActivity(),
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        // TODO     Use    setSupportActionBar(binding.toolbar)
-        binding.toolbar.also { setSupportActionBar(it) }
+        setSupportActionBar(binding.toolbar)
 
         rxPermissions = RxPermissions(this)
 
