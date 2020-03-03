@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
@@ -135,12 +136,13 @@ class BrowserFragment : Fragment(),
             savedInstanceState: Bundle?
     ): View? {
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_browser_header, container, false)
+        headerBinding?.fragment = this
 
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding?.fragment = this
 
         binding?.swipeRefresher?.let {
-            it.setOnRefreshListener { browserModule.reload() }
+            it.setOnRefreshListener { reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
             it.setDistanceToTriggerSync(5000)
         }
@@ -278,10 +280,10 @@ class BrowserFragment : Fragment(),
         val snackbarParent = binding?.root as View
         when (menu) {
             Menu.RELOAD -> {
-                browserModule.reload()
+                reload()
             }
             Menu.BACK -> {
-                browserModule.back()
+                back()
             }
             Menu.FORWARD-> {
                 forward()
@@ -294,13 +296,7 @@ class BrowserFragment : Fragment(),
                 pageSearchPresenter.show(fragmentActivity)
             }
             Menu.USER_AGENT-> {
-                val fragmentManager = fragmentManager ?: return
-                val dialogFragment = UserAgentDialogFragment()
-                dialogFragment.setTargetFragment(this, 1)
-                dialogFragment.show(
-                        fragmentManager,
-                        UserAgentDialogFragment::class.java.simpleName
-                )
+                showUserAgentSetting()
             }
             Menu.READER_MODE -> {
                 openReaderMode()
@@ -313,13 +309,7 @@ class BrowserFragment : Fragment(),
                 )
             }
             Menu.PAGE_INFORMATION-> {
-                val fragmentManager = fragmentManager ?: return
-                PageInformationDialogFragment()
-                        .also { it.arguments = browserModule.makeCurrentPageInformation() }
-                        .show(
-                                fragmentManager,
-                                PageInformationDialogFragment::class.java.simpleName
-                        )
+                showPageInformation()
             }
             Menu.STOP_LOADING-> {
                 stopCurrentLoading()
@@ -414,8 +404,18 @@ class BrowserFragment : Fragment(),
         }
     }
 
+    fun reload() {
+        browserModule.reload()
+    }
+
     fun openReaderMode() {
         browserModule.invokeContentExtraction(ValueCallback(this::showReaderFragment))
+    }
+
+    // TODO should implement view model.
+    fun tabList() {
+        val mainActivity = activity as? MainActivity
+        mainActivity?.switchTabList()
     }
 
     private fun showReaderFragment(content: String) {
@@ -434,9 +434,29 @@ class BrowserFragment : Fragment(),
         val transaction = fragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(
                 R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-        transaction?.add(R.id.content, readerFragment, readerFragment::class.java.canonicalName)
+        transaction?.replace(R.id.content, readerFragment, readerFragment::class.java.canonicalName)
         transaction?.addToBackStack(readerFragment::class.java.canonicalName)
         transaction?.commit()
+    }
+
+    fun showUserAgentSetting() {
+        val fragmentManager = fragmentManager ?: return
+        val dialogFragment = UserAgentDialogFragment()
+        dialogFragment.setTargetFragment(this, 1)
+        dialogFragment.show(
+                fragmentManager,
+                UserAgentDialogFragment::class.java.simpleName
+        )
+    }
+
+    fun showPageInformation() {
+        val fragmentManager = fragmentManager ?: return
+        PageInformationDialogFragment()
+                .also { it.arguments = browserModule.makeCurrentPageInformation() }
+                .show(
+                        fragmentManager,
+                        PageInformationDialogFragment::class.java.simpleName
+                )
     }
 
     /**
@@ -450,12 +470,12 @@ class BrowserFragment : Fragment(),
     /**
      * Do browser back action.
      */
-    private fun back(): Boolean = browserModule.back()
+    fun back(): Boolean = browserModule.back()
 
     /**
      * Do browser forward action.
      */
-    private fun forward() = browserModule.forward()
+    fun forward() = browserModule.forward()
 
     /**
      * Show bookmark activity.

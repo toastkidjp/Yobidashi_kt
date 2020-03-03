@@ -460,7 +460,7 @@ class MainActivity : AppCompatActivity(),
     private fun showTabList() {
         refreshThumbnail()
         val fragmentManager = supportFragmentManager ?: return
-        tabListDialogFragment?.show(fragmentManager, "")
+        tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
     }
 
     private fun refreshThumbnail() {
@@ -704,7 +704,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * Switch tab list visibility.
      */
-    private fun switchTabList() {
+    fun switchTabList() {
         initTabListIfNeed()
         if (tabListDialogFragment?.isVisible == true) {
             tabListDialogFragment?.dismiss()

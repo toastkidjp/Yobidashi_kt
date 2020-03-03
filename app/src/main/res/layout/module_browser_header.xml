@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/back"
+            android:onClick="@{view -> fragment.tabList()}"
             >
             <LinearLayout
                 android:id="@+id/url_box"
@@ -87,12 +88,13 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.reload()}"
                 />
         </FrameLayout>
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="32dp"
+            android:layout_width="48dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
@@ -104,6 +106,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.back()}"
             />
         <ImageView
             android:id="@+id/forward"
@@ -119,6 +122,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/back"
             android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.forward()}"
             />
         <FrameLayout
             android:id="@+id/tab_list"
@@ -132,6 +136,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/forward"
             android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.tabList()}"
             >
             <ImageView
                 android:id="@+id/tab_icon"
@@ -171,6 +176,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tab_list"
             android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.showUserAgentSetting()}"
             />
         <ImageView
             android:id="@+id/page_information"
@@ -186,6 +192,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/user_agent"
             android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.showPageInformation()}"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
