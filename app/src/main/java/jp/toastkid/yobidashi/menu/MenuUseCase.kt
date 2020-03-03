@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
+import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -142,6 +143,14 @@ class MenuUseCase(
                     it.startActivityForResult(
                             BookmarkActivity.makeIntent(it),
                             BookmarkActivity.REQUEST_CODE
+                    )
+                }
+            }
+            Menu.VIEW_HISTORY-> {
+                activitySupplier().also {
+                    it.startActivityForResult(
+                            ViewHistoryActivity.makeIntent(it),
+                            ViewHistoryActivity.REQUEST_CODE
                     )
                 }
             }

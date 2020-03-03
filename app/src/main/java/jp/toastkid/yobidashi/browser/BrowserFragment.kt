@@ -378,12 +378,6 @@ class BrowserFragment : Fragment(),
                     )
                 }
             }
-            Menu.VIEW_HISTORY-> {
-                startActivityForResult(
-                        ViewHistoryActivity.makeIntent(fragmentActivity),
-                        ViewHistoryActivity.REQUEST_CODE
-                )
-            }
             Menu.ADD_BOOKMARK-> {
                 /* TODO
                 tabs.addBookmark {
@@ -557,7 +551,7 @@ class BrowserFragment : Fragment(),
 
     override fun pressLongBack(): Boolean {
         activity?.let {
-            startActivityForResult(
+            it.startActivityForResult(
                 ViewHistoryActivity.makeIntent(it),
                 ViewHistoryActivity.REQUEST_CODE
             )
@@ -616,11 +610,6 @@ class BrowserFragment : Fragment(),
             VoiceSearch.REQUEST_CODE -> {
                 activity?.let {
                     VoiceSearch.processResult(it, intent).addTo(disposables)
-                }
-            }
-            ViewHistoryActivity.REQUEST_CODE -> {
-                intent.data?.let {
-                    browserViewModel?.open(it)
                 }
             }
         }
