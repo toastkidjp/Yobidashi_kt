@@ -111,14 +111,13 @@ class MainActivity : AppCompatActivity(),
 
     private var contentViewModel: ContentViewModel? = null
 
-    /**
-     * Archive folder.
-     */
-    private lateinit var tabs: TabAdapter
+    private var tabListViewModel: TabListViewModel? = null
 
     private var browserViewModel: BrowserViewModel? = null
 
     private var browserFragmentViewModel: BrowserFragmentViewModel? = null
+
+    private lateinit var tabs: TabAdapter
 
     /**
      * Rx permission.
@@ -194,9 +193,10 @@ class MainActivity : AppCompatActivity(),
                         Observer { tabs.updateWebTab(it) }
                 )
 
-        ViewModelProviders.of(this).get(TabListViewModel::class.java)
-                .saveEditorTab
-                .observe(
+        tabListViewModel = ViewModelProviders.of(this).get(TabListViewModel::class.java)
+        tabListViewModel
+                ?.saveEditorTab
+                ?.observe(
                         this,
                         Observer {
                             val currentTab = tabs.currentTab() as? EditorTab ?: return@Observer
@@ -559,6 +559,7 @@ class MainActivity : AppCompatActivity(),
         tabs.loadBackgroundTabsFromDirIfNeed()
 
         menuViewModel?.tabCount(tabs.size())
+        tabListViewModel?.tabCount(tabs.size())
     }
 
     /**
@@ -752,6 +753,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCloseTabListDialogFragment() {
         replaceToCurrentTab()
         menuViewModel?.tabCount(tabs.size())
+        tabListViewModel?.tabCount(tabs.size())
     }
 
     override fun onOpenEditor() = openEditorTab()

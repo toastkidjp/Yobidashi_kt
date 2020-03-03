@@ -53,6 +53,7 @@ import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
@@ -250,6 +251,10 @@ class BrowserFragment : Fragment(),
                 .observe(activity, Observer {
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
+
+        ViewModelProviders.of(activity).get(TabListViewModel::class.java)
+                .tabCount
+                .observe(activity, Observer { headerBinding?.tabCount?.setText(it.toString()) })
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {

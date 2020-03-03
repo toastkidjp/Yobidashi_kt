@@ -33,4 +33,12 @@ internal class TabListViewModel : ViewModel() {
         _saveEditorTab.postValue(nextFile)
     }
 
+    private val _tabCount = MutableLiveData<Int>()
+
+    val tabCount: LiveData<Int> = _tabCount
+
+    fun tabCount(count: Int) {
+        _tabCount.postValue(count)
+    }
+
 }
