@@ -48,6 +48,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import java.io.File
 import java.text.DateFormat
@@ -55,14 +56,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * saveTabCallback
- * { file ->
-val currentTab = tabs.currentTab()
-if (currentTab is EditorTab) {
-currentTab.setFileInformation(file)
-tabs.saveTabList()
-}
-}
+ *
  * @author toastkidjp
  */
 class EditorFragment :
@@ -111,6 +105,8 @@ class EditorFragment :
     private lateinit var finder: EditTextFinder
 
     private var headerViewModel: HeaderViewModel? = null
+
+    private var tabListViewModel: TabListViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -248,6 +244,7 @@ class EditorFragment :
 
         (context as? FragmentActivity)?.let {
             headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+            tabListViewModel = ViewModelProviders.of(it).get(TabListViewModel::class.java)
         }
 
         arguments?.getString("path")?.let {
@@ -540,7 +537,7 @@ class EditorFragment :
         setContentText(text)
         snackText(R.string.done_load)
         path = file.absolutePath
-        //TODO saveTabCallback(file)
+        tabListViewModel?.saveEditorTab(file)
 
         setLastSaved(file.lastModified())
     }
@@ -611,7 +608,7 @@ class EditorFragment :
             )
         }
         path = newFile.absolutePath
-        //TODO saveTabCallback(newFile)
+        tabListViewModel?.saveEditorTab(newFile)
         saveToFile(path)
     }
 

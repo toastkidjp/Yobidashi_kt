@@ -67,6 +67,7 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
@@ -191,6 +192,17 @@ class MainActivity : AppCompatActivity(),
                 .observe(
                         this,
                         Observer { tabs.updateWebTab(it) }
+                )
+
+        ViewModelProviders.of(this).get(TabListViewModel::class.java)
+                .saveEditorTab
+                .observe(
+                        this,
+                        Observer {
+                            val currentTab = tabs.currentTab() as? EditorTab ?: return@Observer
+                            currentTab.setFileInformation(it)
+                            tabs.saveTabList()
+                        }
                 )
 
         browserFragmentViewModel = ViewModelProviders.of(this).get(BrowserFragmentViewModel::class.java)
