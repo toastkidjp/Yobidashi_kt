@@ -23,7 +23,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -604,9 +603,6 @@ class BrowserFragment : Fragment(),
             return
         }
         when (requestCode) {
-            ArchivesActivity.REQUEST_CODE -> {
-                loadArchive(ArchivesActivity.extractFile(intent))
-            }
             VoiceSearch.REQUEST_CODE -> {
                 activity?.let {
                     VoiceSearch.processResult(it, intent).addTo(disposables)
