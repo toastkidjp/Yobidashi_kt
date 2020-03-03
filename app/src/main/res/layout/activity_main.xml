@@ -28,6 +28,14 @@
                 android:layout_height="match_parent"
                 />
 
+            <include
+                android:id="@+id/sip"
+                layout="@layout/module_searcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                />
+
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"

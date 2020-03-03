@@ -40,8 +40,10 @@ import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
@@ -105,6 +107,11 @@ class MainActivity : AppCompatActivity(),
     private var tabListDialogFragment: DialogFragment? = null
 
     /**
+     * Find-in-page module.
+     */
+    private lateinit var pageSearchPresenter: PageSearcherModule
+
+    /**
      * Menu's view model.
      */
     private var menuViewModel: MenuViewModel? = null
@@ -148,6 +155,12 @@ class MainActivity : AppCompatActivity(),
 
         initializeHeaderViewModel()
         setFabListener()
+
+        pageSearchPresenter = PageSearcherModule(
+                this,
+                binding.sip as ModuleSearcherBinding
+        )
+
         initializeMenuViewModel()
 
         contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
@@ -258,6 +271,7 @@ class MainActivity : AppCompatActivity(),
                 { openPdfTabFromStorage() },
                 { openEditorTab() },
                 { switchTabList() },
+                { pageSearchPresenter.switch() },
                 { useCameraPermission(it) },
                 { menuViewModel?.close() }
         )
@@ -495,6 +509,11 @@ class MainActivity : AppCompatActivity(),
 
         if (binding.menusView.isVisible) {
             menuViewModel?.close()
+            return
+        }
+
+        if (pageSearchPresenter.isVisible()) {
+            pageSearchPresenter.hide()
             return
         }
 
@@ -877,11 +896,12 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         tabs.dispose()
         disposables.clear()
         menuUseCase.dispose()
         contentViewModel?.content?.removeObservers(this)
+        pageSearchPresenter.dispose()
+        super.onDestroy()
     }
 
     companion object {

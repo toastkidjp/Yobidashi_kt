@@ -26,14 +26,13 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -112,11 +111,6 @@ class BrowserFragment : Fragment(),
 
     private var headerViewModel: HeaderViewModel? = null
 
-    /**
-     * Find-in-page module.
-     */
-    private lateinit var pageSearchPresenter: PageSearcherModule
-
     private lateinit var randomWikipedia: RandomWikipedia
 
     private var browserViewModel: BrowserViewModel? = null
@@ -182,14 +176,6 @@ class BrowserFragment : Fragment(),
         menuViewModel = ViewModelProviders.of(activity)
                 .get(MenuViewModel::class.java)
 
-        pageSearchPresenter = PageSearcherModule(
-                this,
-                binding?.sip as ModuleSearcherBinding,
-                { /*TODO browserModule.find(it)*/ },
-                { browserModule.findDown() },
-                { browserModule.findUp() }
-        )
-
         initializeHeaderViewModels(activity)
     }
 
@@ -254,6 +240,21 @@ class BrowserFragment : Fragment(),
         ViewModelProviders.of(activity).get(TabListViewModel::class.java)
                 .tabCount
                 .observe(activity, Observer { headerBinding?.tabCount?.setText(it.toString()) })
+
+        (ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)).let { viewModel ->
+            viewModel.find.observe(activity, Observer {
+                browserModule.find(it)
+            })
+
+            viewModel.upward.observe(activity, Observer {
+                browserModule.findUp()
+            })
+
+            viewModel.downward.observe(activity, Observer { 
+                browserModule.findDown()
+            })
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
@@ -291,13 +292,6 @@ class BrowserFragment : Fragment(),
             }
             Menu.FORWARD-> {
                 forward()
-            }
-            Menu.FIND_IN_PAGE-> {
-                if (pageSearchPresenter.isVisible()) {
-                    pageSearchPresenter.hide()
-                    return
-                }
-                pageSearchPresenter.show(fragmentActivity)
             }
             Menu.USER_AGENT-> {
                 showUserAgentSetting()
@@ -587,14 +581,10 @@ class BrowserFragment : Fragment(),
     }
 
     /**
+     * TODO delete it.
      * Hide option menus.
      */
     private fun hideOption(): Boolean {
-        if (pageSearchPresenter.isVisible()) {
-            pageSearchPresenter.hide()
-            return true
-        }
-
         return false
     }
 
@@ -685,7 +675,6 @@ class BrowserFragment : Fragment(),
         searchWithClip.dispose()
         headerViewModel?.show()
         browserModule.dispose()
-        pageSearchPresenter.dispose()
     }
 
     companion object {

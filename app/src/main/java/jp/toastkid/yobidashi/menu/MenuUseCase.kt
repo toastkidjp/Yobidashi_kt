@@ -54,6 +54,7 @@ class MenuUseCase(
         private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
         private val switchTabList: () -> Unit,
+        private val switchPageSearcher: () -> Unit,
         private val useCameraPermission: (() -> Unit) -> Unit,
         private val close: () -> Unit
 ) {
@@ -199,6 +200,9 @@ class MenuUseCase(
                         ArchivesActivity.REQUEST_CODE
                     )
                 }
+            }
+            Menu.FIND_IN_PAGE-> {
+                switchPageSearcher()
             }
             Menu.TAB_LIST-> {
                 switchTabList()

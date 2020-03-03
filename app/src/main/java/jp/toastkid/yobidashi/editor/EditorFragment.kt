@@ -30,11 +30,13 @@ import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleFragmentEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
@@ -54,6 +56,7 @@ import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  *
@@ -242,9 +245,25 @@ class EditorFragment :
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
-        (context as? FragmentActivity)?.let {
-            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
-            tabListViewModel = ViewModelProviders.of(it).get(TabListViewModel::class.java)
+        (context as? FragmentActivity)?.let { activity ->
+            headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+            tabListViewModel = ViewModelProviders.of(activity).get(TabListViewModel::class.java)
+
+            (ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)).let { viewModel ->
+                var currentWord = ""
+                viewModel.find.observe(activity, Observer {
+                    currentWord = it ?: ""
+                    finder.findDown(currentWord)
+                })
+
+                viewModel.upward.observe(activity, Observer { keyword ->
+                    finder.findUp(currentWord)
+                })
+
+                viewModel.downward.observe(activity, Observer { keyword ->
+                    finder.findDown(currentWord)
+                })
+            }
         }
 
         arguments?.getString("path")?.let {

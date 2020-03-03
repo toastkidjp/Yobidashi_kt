@@ -11,9 +11,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
+ * TODO introduce LiveData.
  * @author toastkidjp
  */
 class PageSearcherViewModel : ViewModel() {
+
+    val find = MutableLiveData<String?>()
 
     val upward = MutableLiveData<String?>()
 
@@ -22,6 +25,10 @@ class PageSearcherViewModel : ViewModel() {
     val clear = MutableLiveData<Unit>()
 
     val close = MutableLiveData<Unit>()
+
+    fun find(s: String?) {
+        find.postValue(s)
+    }
 
     fun findDown(s: String?) {
         downward.postValue(s)
