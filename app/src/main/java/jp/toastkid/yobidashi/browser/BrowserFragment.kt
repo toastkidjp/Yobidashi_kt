@@ -515,6 +515,13 @@ class BrowserFragment : Fragment(),
             it.icon.setColorFilter(fontColor)
             it.mainText.setTextColor(fontColor)
             it.subText.setTextColor(fontColor)
+            it.reload.setColorFilter(fontColor)
+            it.back.setColorFilter(fontColor)
+            it.forward.setColorFilter(fontColor)
+            it.tabIcon.setColorFilter(fontColor)
+            it.tabCount.setTextColor(fontColor)
+            it.pageInformation.setColorFilter(fontColor)
+            it.userAgent.setColorFilter(fontColor)
         }
 
         ClippingUrlOpener(binding?.root) { browserViewModel?.open(it) }
