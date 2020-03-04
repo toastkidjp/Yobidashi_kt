@@ -180,14 +180,14 @@ class BrowserFragment : Fragment(),
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
-        headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+        val viewModelProvider = ViewModelProviders.of(activity)
+        headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
 
         headerViewModel?.stopProgress?.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
             }
             stopSwipeRefresherLoading()
-            //TODO tabs.saveTabList()
         })
 
         headerViewModel?.progress?.observe(activity, Observer { newProgress ->
@@ -202,46 +202,45 @@ class BrowserFragment : Fragment(),
             }
         })
 
-        val browserHeaderViewModel = ViewModelProviders.of(activity)
-                .get(BrowserHeaderViewModel::class.java)
+        viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
+            viewModel.title.observe(activity, Observer { title ->
+                if (title.isNullOrBlank()) {
+                    return@Observer
+                }
+                headerBinding?.mainText?.text = title
+            })
 
-        browserHeaderViewModel.title.observe(activity, Observer { title ->
-            if (title.isNullOrBlank()) {
-                return@Observer
-            }
-            headerBinding?.mainText?.text = title
-        })
+            viewModel.url.observe(activity, Observer { url ->
+                if (url.isNullOrBlank()) {
+                    return@Observer
+                }
+                headerBinding?.subText?.text = url
+            })
 
-        browserHeaderViewModel.url.observe(activity, Observer { url ->
-            if (url.isNullOrBlank()) {
-                return@Observer
-            }
-            headerBinding?.subText?.text = url
-        })
+            viewModel.reset.observe(activity, Observer {
+                val headerView = headerBinding?.root ?: return@Observer
+                headerViewModel?.replace(headerView)
+            })
+        }
 
-        browserHeaderViewModel.reset.observe(activity, Observer {
-            val headerView = headerBinding?.root ?: return@Observer
-            headerViewModel?.replace(headerView)
-        })
-
-        ViewModelProviders.of(activity).get(LoadingViewModel::class.java)
+        viewModelProvider.get(LoadingViewModel::class.java)
                 .onPageFinished
                 .observe(
                         activity,
                         Observer { browserModule.saveArchiveForAutoArchive() }
                 )
 
-        ViewModelProviders.of(activity).get(BrowserFragmentViewModel::class.java)
+        viewModelProvider.get(BrowserFragmentViewModel::class.java)
                 .loadWithNewTab
                 .observe(activity, Observer {
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
 
-        ViewModelProviders.of(activity).get(TabListViewModel::class.java)
+        viewModelProvider.get(TabListViewModel::class.java)
                 .tabCount
                 .observe(activity, Observer { headerBinding?.tabCount?.setText(it.toString()) })
 
-        (ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)).let { viewModel ->
+        viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(activity, Observer {
                 browserModule.find(it)
             })
@@ -250,7 +249,7 @@ class BrowserFragment : Fragment(),
                 browserModule.findUp()
             })
 
-            viewModel.downward.observe(activity, Observer { 
+            viewModel.downward.observe(activity, Observer {
                 browserModule.findDown()
             })
         }
