@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/back"
-            android:onClick="@{view -> fragment.tabList()}"
             >
             <LinearLayout
                 android:id="@+id/url_box"
