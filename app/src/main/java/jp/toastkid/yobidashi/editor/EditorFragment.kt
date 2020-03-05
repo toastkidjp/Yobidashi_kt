@@ -50,6 +50,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import java.io.File
@@ -249,6 +250,10 @@ class EditorFragment :
             headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
             tabListViewModel = ViewModelProviders.of(activity).get(TabListViewModel::class.java)
 
+            tabListViewModel
+                    ?.tabCount
+                    ?.observe(activity, Observer { menuBinding.tabCount.setText(it.toString()) })
+
             (ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)).let { viewModel ->
                 var currentWord = ""
                 viewModel.find.observe(activity, Observer {
@@ -307,6 +312,9 @@ class EditorFragment :
                 menuBinding.clear
         )
 
+        menuBinding.tabIcon.setColorFilter(colorPair.fontColor())
+        menuBinding.tabCount.setTextColor(colorPair.fontColor())
+
         menuBinding.editorMenu.setBackgroundColor(colorPair.bgColor())
 
         binding.editorScroll.setBackgroundColor(preferenceApplier.editorBackgroundColor())
@@ -341,6 +349,11 @@ class EditorFragment :
     private fun setContentTextLengthCount(context: Context) {
         menuBinding.counter?.text =
                 context.getString(R.string.message_character_count, content().length)
+    }
+
+    // TODO should implement view model.
+    fun tabList() {
+        (activity as? MainActivity)?.switchTabList()
     }
 
     /**
@@ -383,7 +396,7 @@ class EditorFragment :
 
     /**
      * Find text in bound to upward.
-     *
+     * TODO remove it.
      * @param text Finding text
      */
     fun findUp(text: String) = finder.findUp(text)
