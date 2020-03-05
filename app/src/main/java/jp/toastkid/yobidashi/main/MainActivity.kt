@@ -62,6 +62,7 @@ import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
+import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -808,7 +809,6 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
         menuInflater.also {
-            it.inflate(R.menu.settings_toolbar_menu, menu)
             it.inflate(R.menu.main_fab_menu, menu)
         }
         return super.onCreateOptionsMenu(menu)
@@ -819,12 +819,8 @@ class MainActivity : AppCompatActivity(),
             switchTabList()
             true
         }
-        R.id.menu_exit -> {
-            moveTaskToBack(true)
-            true
-        }
-        R.id.menu_close -> {
-            finish()
+        R.id.setting -> {
+            startActivity(SettingsActivity.makeIntent(this))
             true
         }
         R.id.reset_menu_position -> {
@@ -833,6 +829,10 @@ class MainActivity : AppCompatActivity(),
                 it.translationY = 0f
                 preferenceApplier.clearMenuFabPosition()
             }
+            true
+        }
+        R.id.menu_exit -> {
+            moveTaskToBack(true)
             true
         }
         else -> super.onOptionsItemSelected(item)

@@ -287,10 +287,6 @@ class BrowserFragment : Fragment(),
                 )
                 return true
             }
-            R.id.setting -> {
-                startActivity(SettingsActivity.makeIntent(requireContext()))
-                return true
-            }
             R.id.add_rss -> {
                 RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { binding?.root }
                 return true
