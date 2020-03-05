@@ -1,16 +1,12 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -19,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -33,7 +30,7 @@ import jp.toastkid.yobidashi.tab.model.Tab
  *
  * @author toastkidjp
  */
-class TabListDialogFragment : DialogFragment() {
+class TabListDialogFragment : BottomSheetDialogFragment() {
 
     /**
      * DataBinding object.
@@ -85,35 +82,22 @@ class TabListDialogFragment : DialogFragment() {
         fun tabIndexOfFromTabList(tab: Tab): Int
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val activityContext = context
-                ?: return super.onCreateDialog(savedInstanceState)
-
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         val preferenceApplier = PreferenceApplier(activityContext)
         colorPair = preferenceApplier.colorPair()
 
-        val target = activity ?: return super.onCreateDialog(savedInstanceState)
+        val target = activity ?: return super.onCreateView(inflater, container, savedInstanceState)
         if (target is Callback) {
             callback = target
         } else {
-            return super.onCreateDialog(savedInstanceState)
+            return super.onCreateView(inflater, container, savedInstanceState)
         }
 
         initializeContentView(activityContext)
-
-        setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
-
-        return AlertDialog.Builder(activityContext)
-                .setView(binding.root)
-                .create()
-                .also {
-                    it.window?.also { window ->
-                        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT)
-                    }
-                }
+        return binding.root
     }
 
     override fun onDismiss(dialog: DialogInterface) {
