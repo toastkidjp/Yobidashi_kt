@@ -34,7 +34,6 @@ import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
@@ -468,8 +467,6 @@ class BrowserFragment : Fragment(),
             it.userAgent.setColorFilter(fontColor)
             it.htmlSource.setColorFilter(fontColor)
         }
-
-        ClippingUrlOpener(binding?.root) { browserViewModel?.open(it) }
 
         browserModule.resizePool(preferenceApplier.poolSize)
         browserModule.applyNewAlpha()

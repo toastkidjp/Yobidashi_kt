@@ -49,6 +49,7 @@ import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
@@ -580,6 +581,8 @@ class MainActivity : AppCompatActivity(),
 
         menuViewModel?.tabCount(tabs.size())
         tabListViewModel?.tabCount(tabs.size())
+
+        ClippingUrlOpener(binding.root) { browserViewModel?.open(it) }
     }
 
     /**
