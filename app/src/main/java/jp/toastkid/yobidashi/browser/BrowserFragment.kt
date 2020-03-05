@@ -183,12 +183,14 @@ class BrowserFragment : Fragment(),
         headerViewModel?.progress?.observe(activity, Observer { newProgress ->
             if (70 < newProgress) {
                 binding?.progress?.isVisible = false
+                headerBinding?.reload?.setImageResource(R.drawable.ic_reload)
                 //TODO refreshThumbnail()
                 return@Observer
             }
             binding?.progress?.let {
                 it.isVisible = true
                 it.progress = newProgress
+                headerBinding?.reload?.setImageResource(R.drawable.ic_close)
             }
         })
 
@@ -302,6 +304,7 @@ class BrowserFragment : Fragment(),
                     )
                 }
             }
+            // TODO Delete it.
             R.id.stop_loading -> {
                 stopCurrentLoading()
                 return true
@@ -311,7 +314,11 @@ class BrowserFragment : Fragment(),
     }
 
     fun reload() {
-        browserModule.reload()
+        if (binding?.progress?.isVisible == true) {
+            browserModule.stopLoading()
+        } else {
+            browserModule.reload()
+        }
     }
 
     fun openReaderMode() {
