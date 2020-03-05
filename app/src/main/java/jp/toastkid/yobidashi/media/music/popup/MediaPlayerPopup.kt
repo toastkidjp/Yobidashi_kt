@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.popup
+package jp.toastkid.yobidashi.media.music.popup
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,6 +13,7 @@ import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.session.PlaybackState
 import android.support.v4.media.MediaBrowserCompat
@@ -23,7 +24,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
-import androidx.core.content.ContextCompat
+import androidx.annotation.LayoutRes
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -36,12 +38,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.media.Adapter
-import jp.toastkid.yobidashi.media.MediaPlayerPopupViewModel
-import jp.toastkid.yobidashi.media.MediaPlayerService
+import jp.toastkid.yobidashi.media.music.Adapter
+import jp.toastkid.yobidashi.media.music.MediaPlayerPopupViewModel
+import jp.toastkid.yobidashi.media.music.MediaPlayerService
 import timber.log.Timber
 
 /**
@@ -104,12 +107,6 @@ class MediaPlayerPopup(private val context: Context) {
 
             mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
             attemptMediaController()?.registerCallback(controllerCallback)
-
-            viewModel?.clickItem?.observe(attemptExtractActivity() as FragmentActivity, Observer {
-                attemptMediaController()
-                        ?.transportControls
-                        ?.playFromUri(it.description.mediaUri, bundleOf())
-            })
         }
     }
 
@@ -125,25 +122,27 @@ class MediaPlayerPopup(private val context: Context) {
         }
     }
 
-    private var viewModel: MediaPlayerPopupViewModel?
+    private var mediaPlayerPopupViewModel: MediaPlayerPopupViewModel? = null
+
+    private var browserViewModel: BrowserViewModel? = null
 
     private val disposables = CompositeDisposable()
 
     init {
         val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_media_player, null, false)
+        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.popup = this
 
-        viewModel = (attemptExtractActivity() as? FragmentActivity)?.let {
-            ViewModelProviders.of(it).get(MediaPlayerPopupViewModel::class.java)
-        }
+        initializeViewModels()
 
         adapter = Adapter(
                 LayoutInflater.from(context),
                 preferenceApplier,
                 context.resources,
-                viewModel
+                mediaPlayerPopupViewModel
         )
+
+        observeViewModels()
 
         binding.mediaList.adapter = adapter
         binding.mediaList.layoutManager =
@@ -151,14 +150,7 @@ class MediaPlayerPopup(private val context: Context) {
 
         applyColors()
 
-        popupWindow.contentView = binding.root
-
-        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
-
-        popupWindow.isClippingEnabled = false
-
-        popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
-        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+        initializePopupWindow()
 
         setSlidingListener()
 
@@ -170,6 +162,19 @@ class MediaPlayerPopup(private val context: Context) {
         )
     }
 
+    private fun observeViewModels() {
+        (attemptExtractActivity() as? FragmentActivity)?.also {
+            mediaPlayerPopupViewModel?.clickItem?.observe(it, Observer {
+                attemptMediaController()
+                        ?.transportControls
+                        ?.playFromUri(it.description.mediaUri, bundleOf())
+            })
+            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, Observer {
+                browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
+            })
+        }
+    }
+
     private fun applyColors() {
         val colorPair = preferenceApplier.colorPair()
         binding.control.setBackgroundColor(colorPair.bgColor())
@@ -179,6 +184,19 @@ class MediaPlayerPopup(private val context: Context) {
         binding.playSwitch.setColorFilter(fontColor)
         binding.shuffle.setColorFilter(fontColor)
         binding.hide.setColorFilter(fontColor)
+    }
+
+    private fun initializePopupWindow() {
+        popupWindow.contentView = binding.root
+
+        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        popupWindow.isClippingEnabled = false
+
+        popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
+        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        popupWindow.animationStyle = R.style.PopupWindowVisibilityAnimation
     }
 
     fun switchState() {
@@ -270,6 +288,13 @@ class MediaPlayerPopup(private val context: Context) {
                 .addTo(disposables)
     }
 
+    private fun initializeViewModels() {
+        val viewModelProvider = (attemptExtractActivity() as? FragmentActivity)
+                ?.let { owner -> ViewModelProviders.of(owner) }
+        browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
+        mediaPlayerPopupViewModel = viewModelProvider?.get(MediaPlayerPopupViewModel::class.java)
+    }
+
     fun hide() {
         popupWindow.dismiss()
 
@@ -277,8 +302,6 @@ class MediaPlayerPopup(private val context: Context) {
             it.unregisterCallback(controllerCallback)
             mediaBrowser.disconnect()
         }
-
-        viewModel?.clickItem?.removeObservers(attemptExtractActivity() as FragmentActivity)
 
         disposables.clear()
     }
@@ -292,4 +315,10 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun attemptExtractActivity() = (context as? Activity)
 
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.popup_media_player
+
+    }
 }

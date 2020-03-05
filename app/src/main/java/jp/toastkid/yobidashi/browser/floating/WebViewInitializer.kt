@@ -7,7 +7,9 @@
  */
 package jp.toastkid.yobidashi.browser.floating
 
+import android.annotation.TargetApi
 import android.graphics.Bitmap
+import android.os.Build
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -32,8 +34,8 @@ class WebViewInitializer {
         viewModel.newUrl(url)
 
         webView.webViewClient = object : WebViewClient() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                viewModel.openUrl(url)
                 return false
             }
         }

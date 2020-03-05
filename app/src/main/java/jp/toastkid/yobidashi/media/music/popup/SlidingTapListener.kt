@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.popup
+package jp.toastkid.yobidashi.media.music.popup
 
 import android.view.MotionEvent
 import android.view.View

@@ -16,6 +16,7 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.PopupWindow
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
@@ -27,7 +28,6 @@ import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.main.MainActivity
-import timber.log.Timber
 
 /**
  * Floating preview.
@@ -44,7 +44,7 @@ class FloatingPreview(context: Context) {
 
     init {
         val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.popup_floating_preview, null, false)
+        binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.preview = this
 
         popupWindow.contentView = binding.root
@@ -53,7 +53,6 @@ class FloatingPreview(context: Context) {
             viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
 
             viewModel?.title?.observe(context, Observer {
-                Timber.i("title $it")
                 binding.title.text = it
             })
 
@@ -62,13 +61,7 @@ class FloatingPreview(context: Context) {
             })
 
             viewModel?.url?.observe(context, Observer {
-                Timber.i("url $it")
                 binding.url.text = it
-            })
-
-            viewModel?.open?.observe(context, Observer {
-                Timber.i("open $it")
-                openNewTabWithUrl(it)
             })
         }
 
@@ -172,6 +165,10 @@ class FloatingPreview(context: Context) {
     fun isVisible() = popupWindow.isShowing
 
     companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.popup_floating_preview
+
         private const val DURATION_MS = 200L
 
         private const val SPECIAL_WEB_VIEW_ID = "preview"

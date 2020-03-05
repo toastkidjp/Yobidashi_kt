@@ -12,8 +12,7 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
@@ -113,6 +112,40 @@ class EditorModule(
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
         })
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.editorInput.customInsertionActionModeCallback = object : ActionMode.Callback {
+
+                override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
+                    MenuInflater(context).inflate(R.menu.context_editor, menu)
+                    return true
+                }
+
+                override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
+                    when (menu?.itemId) {
+                        R.id.context_edit_insert_as_plain -> {
+                            insertAsPlain()
+                            actionMode?.finish()
+                            return true
+                        }
+                        R.id.context_edit_paste_as_quotation -> {
+                            pasteAsQuotation()
+                            actionMode?.finish()
+                            return true
+                        }
+                        else -> Unit
+                    }
+                    actionMode?.finish()
+                    return false
+                }
+
+                override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
+
+                override fun onDestroyActionMode(p0: ActionMode?) = Unit
+
+            }
+        }
+
         lastSavedTitle = context.getString(R.string.last_saved)
 
         menuBinding = DataBindingUtil.inflate(
@@ -144,8 +177,6 @@ class EditorModule(
                 mb.lastSaved,
                 mb.counter,
                 mb.backup,
-                mb.insertAsPlain,
-                mb.pasteAsQuotation,
                 mb.clear
                 )
 

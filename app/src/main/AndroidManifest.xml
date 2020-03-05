@@ -180,7 +180,7 @@
             android:permission="android.permission.BIND_JOB_SERVICE"
             />
 
-        <service android:name=".media.MediaPlayerService"
+        <service android:name=".media.music.MediaPlayerService"
             android:exported="false"
             >
             <intent-filter>

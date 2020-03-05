@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media
+package jp.toastkid.yobidashi.media.music
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -22,7 +22,7 @@ import android.view.KeyEvent
 import androidx.core.app.NotificationManagerCompat
 import androidx.media.MediaBrowserServiceCompat
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.media.notification.NotificationFactory
+import jp.toastkid.yobidashi.media.music.notification.NotificationFactory
 import timber.log.Timber
 
 /**

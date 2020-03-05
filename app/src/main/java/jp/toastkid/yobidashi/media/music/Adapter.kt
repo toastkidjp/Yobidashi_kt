@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media
+package jp.toastkid.yobidashi.media.music
 
 import android.content.res.Resources
 import android.support.v4.media.MediaBrowserCompat
@@ -34,7 +34,7 @@ class Adapter(
         private val layoutInflater: LayoutInflater,
         private val preferenceApplier: PreferenceApplier,
         resources: Resources,
-        private val viewModel: MediaPlayerPopupViewModel?
+        private val mediaPlayerPopupViewModel: MediaPlayerPopupViewModel?
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private lateinit var binding: ItemMediaListBinding
@@ -57,21 +57,27 @@ class Adapter(
         val item = items.get(position)
         holder.bindText(item.description)
 
+        val iconColor = preferenceApplier.colorPair().bgColor()
+        holder.setLyricsIconColor(iconColor)
+
         Maybe.fromCallable { item.description.iconUri?.let { albumArtFinder(it) } ?: throw RuntimeException() }
                 .subscribeOn(Schedulers.io())
                 .map { BitmapScaling(it, iconWidth, iconWidth) }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        holder::setIcon,
-                        {
-                            holder.setIconColor(preferenceApplier.colorPair().bgColor())
-                            holder.setIconId(R.drawable.ic_music)
-                        }
-                )
+                .subscribe(holder::setIcon) {
+                    holder.setIconColor(iconColor)
+                    holder.setIconId(R.drawable.ic_music)
+                }
                 .addTo(disposables)
 
         holder.setOnClickListener(View.OnClickListener {
-            viewModel?.clickItem(item)
+            mediaPlayerPopupViewModel?.clickItem(item)
+        })
+
+        holder.setOnLyricsClickListener(View.OnClickListener {
+            item.description.title?.also { lyrics ->
+                mediaPlayerPopupViewModel?.clickLyrics(lyrics.toString())
+            }
         })
     }
 

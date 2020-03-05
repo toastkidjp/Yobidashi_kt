@@ -29,8 +29,11 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.journeyapps.barcodescanner.camera.CameraManager
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
@@ -55,7 +58,7 @@ import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.media.image.ImageViewerFragment
-import jp.toastkid.yobidashi.media.popup.MediaPlayerPopup
+import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -360,6 +363,7 @@ class MainActivity : AppCompatActivity() {
             }
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(binding.root)
+                menuViewModel?.close()
             }
             Menu.ABOUT-> {
                 startActivity(AboutThisAppActivity.makeIntent(this))
@@ -536,23 +540,25 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        try {
-            setBackgroundImage(
-                    ImageLoader.readBitmapDrawable(
-                            this,
-                            Uri.parse(File(backgroundImagePath).toURI().toString())
-                    )
+        Maybe.fromCallable {
+            ImageLoader.readBitmapDrawable(
+                    this,
+                    File(backgroundImagePath).toURI().toString().toUri()
             )
-        } catch (e: IOException) {
-            Timber.e(e)
-            Toaster.snackShort(
-                    binding.root,
-                    getString(R.string.message_failed_read_image),
-                    preferenceApplier.colorPair()
-            )
-            preferenceApplier.removeBackgroundImagePath()
-            setBackgroundImage(null)
         }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setBackgroundImage) {
+                    Timber.e(it)
+                    Toaster.snackShort(
+                            binding.root,
+                            getString(R.string.message_failed_read_image),
+                            preferenceApplier.colorPair()
+                    )
+                    preferenceApplier.removeBackgroundImagePath()
+                    setBackgroundImage(null)
+                }
+                .addTo(disposables)
     }
 
     /**

@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media
+package jp.toastkid.yobidashi.media.music
 
 import android.support.v4.media.MediaBrowserCompat
 import androidx.lifecycle.LiveData
@@ -23,5 +23,13 @@ class MediaPlayerPopupViewModel : ViewModel() {
 
     fun clickItem(item: MediaBrowserCompat.MediaItem) {
         _clickItem.postValue(item)
+    }
+
+    private val _lyrics = MutableLiveData<String>()
+
+    val clickLyrics: LiveData<String> = _lyrics
+
+    fun clickLyrics(name: CharSequence?) {
+        name?.also { _lyrics.postValue(it.toString()) }
     }
 }

@@ -31,6 +31,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 import java.io.File
 
@@ -67,6 +68,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         layoutParams.height = displayMetrics.heightPixels
         binding.photo.layoutParams = layoutParams
 
+        val colorPair = PreferenceApplier(binding.root.context).colorPair()
+        binding.reverse.setColorFilter(colorPair.fontColor())
+        binding.rotateLeft.setColorFilter(colorPair.fontColor())
+        binding.rotateRight.setColorFilter(colorPair.fontColor())
+
         loadImageAsync(activityContext, path)
 
         binding.photo.maximumScale = 100f
@@ -101,15 +107,37 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 .addTo(disposables)
     }
 
+    fun rotateLeft() {
+        val bitmap = binding.photo.drawable.toBitmap()
+        applyMatrix(
+                bitmap,
+                makeRotateMatrix(270f, bitmap.width.toFloat(), bitmap.height.toFloat())
+        )
+    }
+
+    fun rotateRight() {
+        val bitmap = binding.photo.drawable.toBitmap()
+        applyMatrix(
+                bitmap,
+                makeRotateMatrix(90f, bitmap.width.toFloat(), bitmap.height.toFloat())
+        )
+    }
+
+    private fun makeRotateMatrix(degrees: Float, width: Float, height: Float) =
+            Matrix().also { it.setRotate(degrees, width / 2f, height / 2f) }
+
     fun reverse() {
-        val current = binding.photo.drawable.toBitmap()
+        applyMatrix(binding.photo.drawable.toBitmap(), horizontalMatrix)
+    }
+
+    private fun applyMatrix(bitmap: Bitmap, matrix: Matrix) {
         val horizontalFlipped = Bitmap.createBitmap(
-                current,
+                bitmap,
                 0,
                 0,
-                current.getWidth(),
-                current.getHeight(),
-                horizontalMatrix,
+                bitmap.getWidth(),
+                bitmap.getHeight(),
+                matrix,
                 false
         )
         binding.photo.setImageBitmap(horizontalFlipped)
