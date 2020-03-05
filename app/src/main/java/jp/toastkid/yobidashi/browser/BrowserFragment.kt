@@ -304,11 +304,6 @@ class BrowserFragment : Fragment(),
                     )
                 }
             }
-            // TODO Delete it.
-            R.id.stop_loading -> {
-                stopCurrentLoading()
-                return true
-            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -378,14 +373,6 @@ class BrowserFragment : Fragment(),
                     showReaderFragment(it.replace("\\u003C", "<"))
                 }
         )
-    }
-
-    /**
-     * Stop current tab's loading.
-     */
-    private fun stopCurrentLoading() {
-        browserModule.stopLoading()
-        Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
     }
 
     /**
