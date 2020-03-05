@@ -24,6 +24,8 @@ import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
@@ -263,6 +265,28 @@ class BrowserFragment : Fragment(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.add_bookmark -> {
+                val context = context ?: return true
+                val faviconApplier = FaviconApplier(context)
+                val url = browserModule.currentUrl() ?: ""
+                BookmarkInsertion(
+                        context,
+                        browserModule.currentTitle(),
+                        url,
+                        faviconApplier.makePath(url),
+                        Bookmark.getRootFolderName()
+                ).insert()
+
+                val parent = binding?.root ?: return true
+                Toaster.snackLong(
+                        parent,
+                        context.getString(R.string.message_done_added_bookmark),
+                        R.string.open,
+                        View.OnClickListener { bookmark() },
+                        colorPair()
+                )
+                return true
+            }
             R.id.setting -> {
                 startActivity(SettingsActivity.makeIntent(requireContext()))
                 return true
@@ -370,13 +394,6 @@ class BrowserFragment : Fragment(),
                     )
                 }
             }
-            Menu.ADD_BOOKMARK-> {
-                /* TODO
-                tabs.addBookmark {
-                    bookmark(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
-                }
-                */
-            }
             else -> Unit
         }
     }
@@ -459,7 +476,7 @@ class BrowserFragment : Fragment(),
      *
      * @param option [ActivityOptions]
      */
-    private fun bookmark(option: ActivityOptions) {
+    private fun bookmark(option: ActivityOptions = ActivityOptions.makeBasic()) {
         val fragmentActivity = activity ?: return
         startActivityForResult(
                 BookmarkActivity.makeIntent(fragmentActivity),
