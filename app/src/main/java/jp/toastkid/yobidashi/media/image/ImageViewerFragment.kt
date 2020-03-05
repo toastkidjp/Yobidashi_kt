@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
 import timber.log.Timber
 
 /**
@@ -87,6 +88,10 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             loadImages()
         })
 
+        viewModel.refresh.observe(this, Observer {
+            attemptLoad()
+        })
+
         val contentResolver = context.contentResolver ?: return
         bucketLoader = BucketLoader(contentResolver)
         imageLoader = ImageLoader(contentResolver)
@@ -112,6 +117,10 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     override fun onStart() {
         super.onStart()
 
+        attemptLoad()
+    }
+
+    private fun attemptLoad() {
         RxPermissions(requireActivity())
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .observeOn(Schedulers.io())
@@ -175,6 +184,11 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                 toTop()
             R.id.list_to_bottom ->
                 toBottom()
+            R.id.excluding_items_setting -> {
+                val fragment = ExcludingSettingFragment()
+                fragment.setTargetFragment(this, 1)
+                fragment.show(fragmentManager, "setting")
+            }
         }
         return super.onOptionsItemSelected(item)
     }

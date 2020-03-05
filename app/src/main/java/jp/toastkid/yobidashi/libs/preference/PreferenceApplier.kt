@@ -419,4 +419,15 @@ class PreferenceApplier(private val context: Context) {
 
     fun excludedItems() =
             preferences.getStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, emptySet())
+
+    fun removeFromExcluding(path: String) {
+        mutableSetOf<String>().also {
+            it.addAll(excludedItems())
+            it.remove(path)
+            preferences
+                    .edit()
+                    .putStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, it)
+                    .apply()
+        }
+    }
 }

@@ -31,4 +31,13 @@ class ImageViewerFragmentViewModel : ViewModel() {
     fun longClick(name: String) {
         _onLongClick.postValue(name)
     }
+
+    private val _refresh = MutableLiveData<Unit>()
+
+    val refresh: LiveData<Unit> = _refresh
+
+    fun refresh() {
+        _refresh.postValue(Unit)
+    }
+
 }

@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+
+    <item
+        android:id="@+id/excluding_items_setting"
+        android:title="@string/title_excluding_item_setting"
+        android:orderInCategory="109"
+        app:showAsAction="never"
+        />
     <item
         android:id="@+id/list_to_top"
         android:title="@string/title_menu_to_top"
