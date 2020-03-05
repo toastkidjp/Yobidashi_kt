@@ -47,7 +47,13 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 style="@style/Widget.MaterialComponents.BottomAppBar"
                 app:layout_behavior="jp.toastkid.yobidashi.libs.view.BottomNavigationBehavior"
-                />
+                >
+                <FrameLayout
+                    android:id="@+id/toolbar_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </com.google.android.material.bottomappbar.BottomAppBar>
 
             <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
                 android:id="@+id/menus_view"

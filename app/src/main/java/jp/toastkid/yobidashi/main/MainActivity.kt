@@ -235,9 +235,9 @@ class MainActivity : AppCompatActivity(),
             if (view == null) {
                 return@Observer
             }
-            binding.toolbar.removeViewAt(0)
+            binding.toolbarContent.removeAllViews()
             binding.toolbar.layoutParams.height = view.layoutParams.height
-            binding.toolbar.addView(
+            binding.toolbarContent.addView(
                     view,
                     0
             )
