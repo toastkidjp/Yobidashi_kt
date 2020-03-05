@@ -1,12 +1,9 @@
 package jp.toastkid.yobidashi.browser
 
-import android.app.Activity
 import android.app.ActivityOptions
-import android.content.ActivityNotFoundException
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -20,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
@@ -38,22 +34,18 @@ import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
-import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
-import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -279,7 +271,7 @@ class BrowserFragment : Fragment(),
                         parent,
                         context.getString(R.string.message_done_added_bookmark),
                         R.string.open,
-                        View.OnClickListener { bookmark() },
+                        View.OnClickListener { bookmark(activityOptionsFactory.makeScaleUpBundle(it)) },
                         colorPair()
                 )
                 return true
@@ -405,7 +397,7 @@ class BrowserFragment : Fragment(),
      *
      * @param option [ActivityOptions]
      */
-    private fun bookmark(option: ActivityOptions = ActivityOptions.makeBasic()) {
+    private fun bookmark(option: ActivityOptions) {
         val fragmentActivity = activity ?: return
         fragmentActivity.startActivityForResult(
                 BookmarkActivity.makeIntent(fragmentActivity),
