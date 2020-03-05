@@ -52,7 +52,6 @@ import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
-import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
@@ -112,8 +111,6 @@ class BrowserFragment : Fragment(),
     private var menuViewModel: MenuViewModel? = null
 
     private var headerViewModel: HeaderViewModel? = null
-
-    private lateinit var randomWikipedia: RandomWikipedia
 
     private var browserViewModel: BrowserViewModel? = null
 
@@ -287,9 +284,32 @@ class BrowserFragment : Fragment(),
                 )
                 return true
             }
+            R.id.add_archive -> {
+                browserModule.saveArchive()
+                return true
+            }
             R.id.add_rss -> {
                 RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { binding?.root }
                 return true
+            }
+            R.id.replace_home -> {
+                browserModule.currentUrl()?.let {
+                    val parent = binding?.root ?: return true
+                    if (Urls.isInvalidUrl(it)) {
+                        Toaster.snackShort(
+                                parent,
+                                R.string.message_cannot_replace_home_url,
+                                colorPair()
+                        )
+                        return true
+                    }
+                    preferenceApplier.homeUrl = it
+                    Toaster.snackShort(
+                            parent,
+                            getString(R.string.message_replace_home_url, it) ,
+                            colorPair()
+                    )
+                }
             }
             R.id.stop_loading -> {
                 stopCurrentLoading()
@@ -297,101 +317,6 @@ class BrowserFragment : Fragment(),
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    fun onMenuClick(menu: Menu) {
-        val fragmentActivity = activity ?: return
-        val snackbarParent = binding?.root as View
-        when (menu) {
-            Menu.RELOAD -> {
-                reload()
-            }
-            Menu.BACK -> {
-                back()
-            }
-            Menu.FORWARD-> {
-                forward()
-            }
-            Menu.USER_AGENT-> {
-                showUserAgentSetting()
-            }
-            Menu.READER_MODE -> {
-                openReaderMode()
-            }
-            Menu.HTML_SOURCE -> {
-                browserModule.invokeHtmlSourceExtraction(
-                        ValueCallback {
-                            showReaderFragment(it.replace("\\u003C", "<"))
-                        }
-                )
-            }
-            Menu.PAGE_INFORMATION-> {
-                showPageInformation()
-            }
-            Menu.STOP_LOADING-> {
-                stopCurrentLoading()
-            }
-            Menu.ARCHIVE-> {
-                browserModule.saveArchive()
-            }
-            Menu.RANDOM_WIKIPEDIA -> {
-                if (preferenceApplier.wifiOnly &&
-                        WifiConnectionChecker.isNotConnecting(requireContext())) {
-                    val parent = binding?.webViewContainer ?: return
-                    Toaster.snackShort(
-                            parent,
-                            getString(R.string.message_wifi_not_connecting),
-                            colorPair()
-                    )
-                    return
-                }
-
-                if (!::randomWikipedia.isInitialized) {
-                    randomWikipedia = RandomWikipedia()
-                }
-                randomWikipedia
-                        .fetchWithAction { title, link ->
-                            browserViewModel?.open(link)
-                            val parent = binding?.webViewContainer ?: return@fetchWithAction
-                            Toaster.snackShort(
-                                    parent,
-                                    getString(R.string.message_open_random_wikipedia, title),
-                                    colorPair()
-                            )
-                        }
-                        .addTo(disposables)
-            }
-            Menu.WEB_SEARCH-> {
-                search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
-            }
-            Menu.VOICE_SEARCH-> {
-                try {
-                    startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
-                } catch (e: ActivityNotFoundException) {
-                    Timber.e(e)
-                    binding?.root?.let { VoiceSearch.suggestInstallGoogleApp(it, colorPair()) }
-                }
-            }
-            Menu.REPLACE_HOME-> {
-                browserModule.currentUrl()?.let {
-                    if (Urls.isInvalidUrl(it)) {
-                        Toaster.snackShort(
-                                snackbarParent,
-                                R.string.message_cannot_replace_home_url,
-                                colorPair()
-                        )
-                        return
-                    }
-                    preferenceApplier.homeUrl = it
-                    Toaster.snackShort(
-                            snackbarParent,
-                            getString(R.string.message_replace_home_url, it) ,
-                            colorPair()
-                    )
-                }
-            }
-            else -> Unit
-        }
     }
 
     fun reload() {
@@ -449,6 +374,14 @@ class BrowserFragment : Fragment(),
                 )
     }
 
+    fun showHtmlSource() {
+        browserModule.invokeHtmlSourceExtraction(
+                ValueCallback {
+                    showReaderFragment(it.replace("\\u003C", "<"))
+                }
+        )
+    }
+
     /**
      * Stop current tab's loading.
      */
@@ -474,11 +407,18 @@ class BrowserFragment : Fragment(),
      */
     private fun bookmark(option: ActivityOptions = ActivityOptions.makeBasic()) {
         val fragmentActivity = activity ?: return
-        startActivityForResult(
+        fragmentActivity.startActivityForResult(
                 BookmarkActivity.makeIntent(fragmentActivity),
                 BookmarkActivity.REQUEST_CODE,
                 option.toBundle()
         )
+    }
+
+    /**
+     * TODO implement ViewModel.
+     */
+    fun search() {
+        search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
     }
 
     /**
@@ -534,6 +474,7 @@ class BrowserFragment : Fragment(),
             it.tabCount.setTextColor(fontColor)
             it.pageInformation.setColorFilter(fontColor)
             it.userAgent.setColorFilter(fontColor)
+            it.htmlSource.setColorFilter(fontColor)
         }
 
         ClippingUrlOpener(binding?.root) { browserViewModel?.open(it) }
@@ -598,19 +539,6 @@ class BrowserFragment : Fragment(),
      */
     private fun hideOption(): Boolean {
         return false
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        if (resultCode != Activity.RESULT_OK || intent == null) {
-            return
-        }
-        when (requestCode) {
-            VoiceSearch.REQUEST_CODE -> {
-                activity?.let {
-                    VoiceSearch.processResult(it, intent).addTo(disposables)
-                }
-            }
-        }
     }
 
     /**

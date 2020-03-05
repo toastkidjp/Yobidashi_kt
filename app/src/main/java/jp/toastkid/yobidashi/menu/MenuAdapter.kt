@@ -49,13 +49,6 @@ internal class MenuAdapter(
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = menus[position % menus.size]
-
-        if (menu == Menu.TAB_LIST) {
-            holder.setCount(tabCount)
-        } else {
-            holder.hideCount()
-        }
-
         holder.setColorPair(preferenceApplier.colorPair())
         holder.setText(menu.titleId)
         holder.setImage(menu.iconId)
@@ -69,10 +62,6 @@ internal class MenuAdapter(
     }
 
     override fun getItemCount(): Int = MAXIMUM
-
-    fun setTabCount(count: Int) {
-        tabCount = count
-    }
 
     companion object {
 

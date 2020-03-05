@@ -15,48 +15,23 @@ enum class Menu(
         @param:StringRes val titleId: Int,
         @param:DrawableRes val iconId: Int
 ) {
-
-    TAB_LIST(R.string.title_tab_list, R.drawable.ic_tab),
-
     TOP(R.string.title_menu_to_top, R.drawable.ic_top),
 
     BOTTOM(R.string.title_menu_to_bottom, R.drawable.ic_bottom),
-
-    BACK(R.string.title_menu_back, R.drawable.ic_back),
-
-    FORWARD(R.string.title_menu_forward, R.drawable.ic_forward),
-
-    RELOAD(R.string.title_menu_reload, R.drawable.ic_reload),
-
-    STOP_LOADING(R.string.title_stop_loading, R.drawable.ic_close),
-
-    READER_MODE(R.string.title_menu_reader_mode, R.drawable.ic_reader_mode),
-
-    HTML_SOURCE(R.string.title_menu_html_source, R.drawable.ic_code),
-
-    PAGE_INFORMATION(R.string.title_menu_page_information, R.drawable.ic_info),
-
-    USER_AGENT(R.string.title_user_agent, R.drawable.ic_user_agent),
 
     WIFI_SETTING(R.string.title_settings_wifi, R.drawable.ic_wifi),
 
     FIND_IN_PAGE(R.string.title_find_in_page, R.drawable.ic_find_in_page),
 
-    ARCHIVE(R.string.title_archive, R.drawable.ic_archive),
-
     VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
 
     SHARE(R.string.section_title_share, R.drawable.ic_share),
-
-    REPLACE_HOME(R.string.title_replace_home, R.drawable.ic_replace_home),
 
     LOAD_HOME(R.string.title_load_home, R.drawable.ic_home),
 
     VIEW_HISTORY(R.string.title_view_history, R.drawable.ic_history),
 
     BOOKMARK(R.string.title_bookmark, R.drawable.ic_bookmark),
-
-    ADD_BOOKMARK(R.string.title_add_bookmark, R.drawable.ic_add_bookmark),
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 
@@ -65,8 +40,6 @@ enum class Menu(
     RANDOM_WIKIPEDIA(R.string.menu_random_wikipedia, R.drawable.ic_wikipedia_white),
 
     WHAT_HAPPENED_TODAY(R.string.menu_what_happened_today, R.drawable.ic_what_happened_today),
-
-    SETTING(R.string.title_settings, R.drawable.ic_settings),
 
     EDITOR(R.string.title_editor, R.drawable.ic_edit),
 
@@ -93,8 +66,6 @@ enum class Menu(
     MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),
 
     ABOUT(R.string.title_about_this_app, R.drawable.ic_yobidashi),
-
-    EXIT(R.string.exit, R.drawable.ic_exit)
     ;
 
 }

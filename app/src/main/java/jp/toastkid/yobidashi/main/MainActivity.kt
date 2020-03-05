@@ -62,6 +62,7 @@ import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
+import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
@@ -271,7 +272,6 @@ class MainActivity : AppCompatActivity(),
                 { obtainFragment(it) },
                 { openPdfTabFromStorage() },
                 { openEditorTab() },
-                { switchTabList() },
                 { pageSearchPresenter.switch() },
                 { useCameraPermission(it) },
                 { menuViewModel?.close() }
@@ -886,6 +886,9 @@ class MainActivity : AppCompatActivity(),
                     it.arguments = bundleOf("uri" to uri)
                     replaceFragment(it)
                 }
+            }
+            VoiceSearch.REQUEST_CODE -> {
+                VoiceSearch.processResult(this, data).addTo(disposables)
             }
         }
     }

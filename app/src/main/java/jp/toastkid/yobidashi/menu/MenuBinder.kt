@@ -53,11 +53,6 @@ class MenuBinder(
             if (newVisible) open() else close()
         })
 
-        menuViewModel?.tabCount?.observe(fragmentActivity, Observer {
-            menuAdapter?.setTabCount(it)
-            menuAdapter?.notifyDataSetChanged()
-        })
-
         menuViewModel?.onResume?.observe(fragmentActivity, Observer {
             val activityContext = recyclerView?.context ?: return@Observer
             val preferenceApplier = PreferenceApplier(activityContext)
