@@ -2,10 +2,12 @@ package jp.toastkid.yobidashi.tab.tab_list
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -137,6 +139,11 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         // TODO use data binding
         binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
 
+        applyColorTo(binding.addPdfTab, colorPair)
+        applyColorTo(binding.addEditorTab, colorPair)
+        applyColorTo(binding.addTab, colorPair)
+        applyColorTo(binding.clearTabs, colorPair)
+
         binding.recyclerView.layoutManager?.scrollToPosition(index)
         binding.recyclerView.scheduleLayoutAnimation()
         if (firstLaunch) {
@@ -148,6 +155,14 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
             firstLaunch = false
         }
         lastTabId = callback?.currentTabIdFromTabList() ?: ""
+    }
+
+    private fun applyColorTo(floatingActionButton: FloatingActionButton?, pair: ColorPair) {
+        floatingActionButton?.backgroundTintList = ColorStateList.valueOf(pair.bgColor())
+        floatingActionButton?.drawable?.also {
+            DrawableCompat.setTint(it, pair.fontColor())
+            floatingActionButton.setImageDrawable(it)
+        }
     }
 
     /**
