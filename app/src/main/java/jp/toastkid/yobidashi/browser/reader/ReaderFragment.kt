@@ -130,21 +130,12 @@ class ReaderFragment : Fragment(), ContentScrollable {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.reader, menu)
-        inflater?.inflate(R.menu.list_scrolling, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_speech -> {
                 speechMaker.invoke("${binding.title.text}$lineSeparator${binding.content.text}")
-                return true
-            }
-            R.id.list_to_top -> {
-                toTop()
-                return true
-            }
-            R.id.list_to_bottom -> {
-                toBottom()
                 return true
             }
         }

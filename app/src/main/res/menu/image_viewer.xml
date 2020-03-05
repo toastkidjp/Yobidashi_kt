@@ -9,16 +9,4 @@
         android:orderInCategory="109"
         app:showAsAction="never"
         />
-    <item
-        android:id="@+id/list_to_top"
-        android:title="@string/title_menu_to_top"
-        android:orderInCategory="110"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/list_to_bottom"
-        android:title="@string/title_menu_to_bottom"
-        android:orderInCategory="111"
-        app:showAsAction="never"
-        />
 </menu>
