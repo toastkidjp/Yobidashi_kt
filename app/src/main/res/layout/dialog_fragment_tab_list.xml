@@ -1,76 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:paddingBottom="12dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@color/pre4_ripple"
         >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:orientation="vertical"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            >
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layoutAnimation="@anim/layout_slide_up"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+            android:layout_height="200dp"
+            android:layoutAnimation="@anim/layout_slide_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_pdf_tab"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                app:srcCompat="@drawable/ic_pdf"
-                app:rippleColor="@color/aw_ripple"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_editor_tab"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                app:srcCompat="@drawable/ic_edit"
-                app:rippleColor="@color/aw_ripple"
-                app:layout_constraintTop_toTopOf="@id/add_pdf_tab"
-                app:layout_constraintEnd_toStartOf="@id/add_pdf_tab"
-                />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_tab"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                app:srcCompat="@drawable/ic_add_tab"
-                app:rippleColor="@color/aw_ripple"
-                app:layout_constraintTop_toTopOf="@id/add_pdf_tab"
-                app:layout_constraintEnd_toStartOf="@id/add_editor_tab"
-                />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/clear_tabs"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_toRightOf="@id/add_tab"
-                android:layout_toEndOf="@id/add_tab"
-                app:srcCompat="@drawable/ic_clear_form"
-                app:rippleColor="@color/aw_ripple"
-                app:layout_constraintTop_toTopOf="@id/add_pdf_tab"
-                app:layout_constraintEnd_toStartOf="@id/add_tab"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_pdf_tab"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_view"
+            app:rippleColor="@color/aw_ripple"
+            app:srcCompat="@drawable/ic_pdf"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_editor_tab"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toStartOf="@id/add_pdf_tab"
+            app:layout_constraintTop_toTopOf="@id/add_pdf_tab"
+            app:rippleColor="@color/aw_ripple"
+            app:srcCompat="@drawable/ic_edit"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_tab"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toStartOf="@id/add_editor_tab"
+            app:layout_constraintTop_toTopOf="@id/add_pdf_tab"
+            app:rippleColor="@color/aw_ripple"
+            app:srcCompat="@drawable/ic_add_tab"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/clear_tabs"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_toEndOf="@id/add_tab"
+            android:layout_toRightOf="@id/add_tab"
+            app:layout_constraintEnd_toStartOf="@id/add_tab"
+            app:layout_constraintTop_toTopOf="@id/add_pdf_tab"
+            app:rippleColor="@color/aw_ripple"
+            app:srcCompat="@drawable/ic_clear_form"
+            />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/snackbar_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

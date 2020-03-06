@@ -148,7 +148,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         binding.recyclerView.scheduleLayoutAnimation()
         if (firstLaunch) {
             Toaster.snackShort(
-                    binding.recyclerView,
+                    binding.snackbarParent,
                     R.string.message_tutorial_remove_tab,
                     colorPair
             )
