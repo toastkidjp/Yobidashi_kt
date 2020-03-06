@@ -26,7 +26,6 @@ class ColorPair(
      * Set background and text color.
      *
      * @param tv
-     * @param pair
      */
     fun setTo(tv: TextView) {
         tv.setBackgroundColor(bgColor)
@@ -36,6 +35,11 @@ class ColorPair(
         }
     }
 
+    /**
+     * Apply colors to passed [FloatingActionButton].
+     *
+     * @param floatingActionButton [FloatingActionButton]
+     */
     fun applyTo(floatingActionButton: FloatingActionButton?) {
         floatingActionButton?.backgroundTintList = ColorStateList.valueOf(bgColor)
         floatingActionButton?.drawable?.also {
