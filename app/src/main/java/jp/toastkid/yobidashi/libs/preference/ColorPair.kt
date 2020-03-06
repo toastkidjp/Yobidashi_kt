@@ -1,9 +1,12 @@
 package jp.toastkid.yobidashi.libs.preference
 
+import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * Color pair of toolbar and so on...
@@ -30,6 +33,14 @@ class ColorPair(
         tv.setTextColor(fontColor)
         tv.compoundDrawables.forEach {
             it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
+        }
+    }
+
+    fun applyTo(floatingActionButton: FloatingActionButton?) {
+        floatingActionButton?.backgroundTintList = ColorStateList.valueOf(bgColor)
+        floatingActionButton?.drawable?.also {
+            DrawableCompat.setTint(it, fontColor)
+            floatingActionButton.setImageDrawable(it)
         }
     }
 }
