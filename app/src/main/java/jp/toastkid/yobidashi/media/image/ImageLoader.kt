@@ -31,13 +31,7 @@ class ImageLoader(private val contentResolver: ContentResolver) {
         val displayNameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
 
         while (cursor?.moveToNext() == true) {
-            images.add(
-                    Image(
-                            cursor.getString(dataIndex),
-                            cursor.getString(displayNameIndex),
-                            false
-                    )
-            )
+            images.add(Image(cursor.getString(dataIndex), cursor.getString(displayNameIndex)))
         }
         return images
     }

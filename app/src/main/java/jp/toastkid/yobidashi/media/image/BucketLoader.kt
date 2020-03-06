@@ -35,13 +35,16 @@ class BucketLoader(private val contentResolver: ContentResolver) {
         val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
         while (cursor?.moveToNext() == true) {
             val path = cursor.getString(pathIndex)
-            val parentPath = parentExtractor(path)
-            if (parentPath == null || names.contains(parentPath)) {
-                continue
-            }
+            val parentPath = parentExtractor(path) ?: continue
             names.add(parentPath)
-            buckets.add(Image.makeBucket(cursor.getString(columnIndex), path))
+            buckets.add(Image.makeBucket(cursor.getString(columnIndex), path, 0))
         }
-        return buckets.distinct()
+        return buckets
+                .groupBy { it.name }
+                .map {
+                    val bucket = it.value[0]
+                    bucket.itemCount = it.value.size
+                    bucket
+                }
     }
 }
