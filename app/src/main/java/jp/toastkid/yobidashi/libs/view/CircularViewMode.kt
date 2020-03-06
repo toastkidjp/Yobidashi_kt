@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class CircularViewMode() {
 
-    private var rightCircleOffset = 500
-    private var leftCircleOffset = -100
+    private var rightCircleOffset = 700
+    private var leftCircleOffset = -300
     private var degToRad = 1.0f / 180.0f * Math.PI.toFloat()
     private var scalingRatio = 0.001f
     private var translationRatio = 0.09f
