@@ -49,6 +49,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private var adapter: Adapter? = null
 
+    private var currentBucket: String? = null
+
     private val parentExtractor = ParentExtractor()
 
     private val disposables = CompositeDisposable()
@@ -149,12 +151,16 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
 
+        val sort = preferenceApplier.imageViewerSort()
+
         if (bucket.isNullOrBlank()) {
-            bucketLoader().filter { excludedItemFilter(parentExtractor(it.path)) }
+            bucketLoader(sort)
+                    .filter { excludedItemFilter(parentExtractor(it.path)) }
         } else {
-            imageLoader(bucket).filter { excludedItemFilter(it.path) }
+            imageLoader(sort, bucket).filter { excludedItemFilter(it.path) }
         }
                 .forEach { adapter?.add(it) }
+        currentBucket = bucket
         refreshContent()
     }
 
@@ -184,6 +190,18 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                 val fragment = ExcludingSettingFragment()
                 fragment.setTargetFragment(this, 1)
                 fragment.show(fragmentManager, "setting")
+            }
+            R.id.sort_by_date -> {
+                preferenceApplier.setImageViewerSort(Sort.DATE)
+                loadImages(currentBucket)
+            }
+            R.id.sort_by_name -> {
+                preferenceApplier.setImageViewerSort(Sort.NAME)
+                loadImages(currentBucket)
+            }
+            R.id.sort_by_count -> {
+                preferenceApplier.setImageViewerSort(Sort.ITEM_COUNT)
+                loadImages(currentBucket)
             }
         }
         return super.onOptionsItemSelected(item)

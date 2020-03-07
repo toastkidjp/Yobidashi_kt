@@ -15,14 +15,14 @@ import android.provider.MediaStore
  */
 class ImageLoader(private val contentResolver: ContentResolver) {
 
-    operator fun invoke(bucket: String): List<Image> {
+    operator fun invoke(sort: Sort, bucket: String): List<Image> {
         val cursor = MediaStore.Images.Media.query(
                 contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 columns,
                 "bucket_display_name = ?",
                 arrayOf(bucket),
-                "datetaken DESC"
+                sort.imageSort
         )
 
         val images = mutableListOf<Image>()

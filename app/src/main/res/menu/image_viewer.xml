@@ -9,4 +9,25 @@
         android:orderInCategory="109"
         app:showAsAction="never"
         />
+
+    <item
+        android:id="@+id/sort_by_date"
+        android:title="Sort by date"
+        android:orderInCategory="109"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/sort_by_name"
+        android:title="Sort by name"
+        android:orderInCategory="109"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/sort_by_count"
+        android:title="Sort by count"
+        android:orderInCategory="109"
+        app:showAsAction="never"
+        />
 </menu>
