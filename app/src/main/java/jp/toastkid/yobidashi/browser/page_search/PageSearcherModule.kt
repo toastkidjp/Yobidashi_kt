@@ -14,12 +14,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * Module for find in page.
@@ -46,6 +48,8 @@ class PageSearcherModule(
      */
     private val editText: EditText
 
+    private val inputSubject = PublishSubject.create<String>()
+
     /**
      * Use for disposing subscriptions.
      */
@@ -68,16 +72,22 @@ class PageSearcherModule(
                 Inputs.hideKeyboard(editText)
                 true
             }
+
             editText.addTextChangedListener(object : TextWatcher{
                 override fun afterTextChanged(p0: Editable?) = Unit
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    viewModel.find(p0.toString())
+                    inputSubject.onNext(p0.toString())
                 }
-
             })
+
+            inputSubject.distinctUntilChanged()
+                    .subscribeOn(Schedulers.io())
+                    .debounce(1000L, TimeUnit.MILLISECONDS)
+                    .subscribe { viewModel.find(it) }
+                    .addTo(disposables)
         }
 
         (context as? FragmentActivity)?.let { activity ->
