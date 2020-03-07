@@ -124,11 +124,7 @@ class BrowserFragment : Fragment(),
 
         preferenceApplier = PreferenceApplier(activityContext)
 
-        browserModule = BrowserModule(
-                context as Context,
-                binding?.webViewContainer,
-                historyAddingCallback = { title, url -> /* TODO tabs.addHistory(title, url)*/ }
-        )
+        browserModule = BrowserModule(activityContext, binding?.webViewContainer)
 
         setHasOptionsMenu(true)
 

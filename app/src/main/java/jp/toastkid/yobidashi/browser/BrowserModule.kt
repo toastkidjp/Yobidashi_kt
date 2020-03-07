@@ -55,8 +55,7 @@ import java.io.IOException
  */
 class BrowserModule(
         private val context: Context,
-        private val webViewContainer: FrameLayout?,
-        private val historyAddingCallback: (String, String) -> Unit
+        private val webViewContainer: FrameLayout?
 ) {
 
     private val webViewPool: WebViewPool
@@ -152,8 +151,6 @@ class BrowserModule(
             } catch (e: Exception) {
                 Timber.e(e)
             }
-
-            historyAddingCallback(title, urlStr)
 
             if (preferenceApplier.saveViewHistory
                     && title.isNotEmpty()
