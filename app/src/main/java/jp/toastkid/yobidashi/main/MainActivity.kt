@@ -12,8 +12,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -100,11 +98,6 @@ class MainActivity : AppCompatActivity(),
      * Disposables.
      */
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
-
-    /**
-     * Use for delaying.
-     */
-    private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     /**
      * Tab list dialog fragment.
@@ -389,15 +382,6 @@ class MainActivity : AppCompatActivity(),
     private fun openNewWebTab(uri: Uri) {
         tabs.openNewWebTab(uri.toString())
         replaceToCurrentTab(true)
-    }
-
-    /**
-     * TODO: Remove it.
-     * Finish this activity with transition animation.
-     */
-    private fun finishWithoutTransition() {
-        overridePendingTransition(0, 0)
-        finish()
     }
 
     /**
