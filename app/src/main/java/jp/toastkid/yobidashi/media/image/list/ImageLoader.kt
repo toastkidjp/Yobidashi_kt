@@ -5,11 +5,12 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.image
+package jp.toastkid.yobidashi.media.image.list
 
 import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.MediaStore
+import jp.toastkid.yobidashi.media.image.Image
 
 /**
  * @author toastkidjp

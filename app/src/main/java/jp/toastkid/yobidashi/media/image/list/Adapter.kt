@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.image
+package jp.toastkid.yobidashi.media.image.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemImageThumbnailsBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.media.image.Image
 import jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment
 
 /**

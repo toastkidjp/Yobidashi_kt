@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
-import jp.toastkid.yobidashi.media.image.Sort
+import jp.toastkid.yobidashi.media.image.list.Sort
 import jp.toastkid.yobidashi.menu.MenuPos
 import jp.toastkid.yobidashi.search.SearchCategory
 import java.io.File

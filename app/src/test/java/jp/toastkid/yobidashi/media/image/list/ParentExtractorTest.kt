@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.media.image
+package jp.toastkid.yobidashi.media.image.list
 
 import org.junit.Assert.*
 import org.junit.Test

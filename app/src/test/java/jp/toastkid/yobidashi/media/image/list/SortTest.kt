@@ -1,5 +1,6 @@
-package jp.toastkid.yobidashi.media.image
+package jp.toastkid.yobidashi.media.image.list
 
+import jp.toastkid.yobidashi.media.image.list.Sort
 import org.junit.Assert.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith

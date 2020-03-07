@@ -7,6 +7,8 @@
  */
 package jp.toastkid.yobidashi.media.image
 
+import jp.toastkid.yobidashi.media.image.list.ParentExtractor
+
 /**
  * @author toastkidjp
  */
