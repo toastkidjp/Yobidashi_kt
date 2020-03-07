@@ -42,9 +42,6 @@ import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
-import timber.log.Timber
-import java.io.File
-import java.io.IOException
 
 /**
  * Internal browser fragment.
@@ -505,22 +502,6 @@ class BrowserFragment : Fragment(),
      */
     private fun hideOption(): Boolean {
         return false
-    }
-
-    /**
-     * Load archive file.
-     *
-     * @param file Archive file
-     */
-    fun loadArchive(file: File) {
-        try {
-            browserModule.loadArchive(file)
-        } catch (e: IOException) {
-            Timber.e(e)
-        } catch (error: Throwable) {
-            Timber.e(error)
-            System.gc()
-        }
     }
 
     fun preview(url: String) {
