@@ -189,6 +189,10 @@ class BrowserFragment : Fragment(),
                 val headerView = headerBinding?.root ?: return@Observer
                 headerViewModel?.replace(headerView)
             })
+
+            viewModel.enableForward.observe(activity, Observer {
+                updateForwardButtonState(it)
+            })
         }
 
         viewModelProvider.get(LoadingViewModel::class.java)
@@ -221,7 +225,6 @@ class BrowserFragment : Fragment(),
                 browserModule.findDown()
             })
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
@@ -300,6 +303,11 @@ class BrowserFragment : Fragment(),
     fun tabList() {
         val mainActivity = activity as? MainActivity
         mainActivity?.switchTabList()
+    }
+
+    private fun updateForwardButtonState(enable: Boolean) {
+        headerBinding?.forward?.isEnabled = enable
+        headerBinding?.forward?.alpha = if (enable) 1f else 0.6f
     }
 
     private fun showReaderFragment(content: String) {

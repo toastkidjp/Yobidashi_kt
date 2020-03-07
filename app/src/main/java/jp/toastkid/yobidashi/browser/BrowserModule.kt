@@ -363,6 +363,7 @@ class BrowserModule(
         currentWebView?.let {
             it.onResume()
             webViewContainer?.addView(it)
+            updateForwardButtonState(it.canGoForward())
 
             val activity = webViewContainer?.context
             if (activity is FragmentActivity
@@ -373,6 +374,10 @@ class BrowserModule(
 
         reloadWebViewSettings().addTo(disposables)
         return currentWebView?.url.isNullOrBlank()
+    }
+
+    private fun updateForwardButtonState(newState: Boolean) {
+        browserHeaderViewModel?.setForwardButtonEnability(newState)
     }
 
     /**
@@ -413,6 +418,7 @@ class BrowserModule(
     fun back() = currentView()?.let {
         return if (it.canGoBack()) {
             it.goBack()
+            updateForwardButtonState(it.canGoForward())
             true
         } else false
     } ?: false
@@ -421,6 +427,8 @@ class BrowserModule(
         if (it.canGoForward()) {
             it.goForward()
         }
+
+        updateForwardButtonState(it.canGoForward())
     }
 
     fun canCurrentTabGoesBack() = currentView()?.canGoBack() == true
