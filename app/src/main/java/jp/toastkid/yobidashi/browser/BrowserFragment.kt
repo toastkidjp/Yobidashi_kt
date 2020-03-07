@@ -1,9 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
 import android.app.ActivityOptions
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -43,7 +41,6 @@ import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
-import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import timber.log.Timber
 import java.io.File
@@ -69,11 +66,6 @@ class BrowserFragment : Fragment(),
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
-
-    /**
-     * Search-with-clip object.
-     */
-    private lateinit var searchWithClip: SearchWithClip
 
     /**
      * Browser module.
@@ -134,15 +126,6 @@ class BrowserFragment : Fragment(),
         val activityContext = context ?: return null
 
         preferenceApplier = PreferenceApplier(activityContext)
-        val colorPair = preferenceApplier.colorPair()
-
-        val cm = activityContext.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        searchWithClip = SearchWithClip(
-                cm,
-                binding?.root as View,
-                colorPair
-        ) { preview(it) }
-        searchWithClip.invoke()
 
         browserModule = BrowserModule(
                 context as Context,
@@ -595,7 +578,6 @@ class BrowserFragment : Fragment(),
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
-        searchWithClip.dispose()
         headerViewModel?.show()
         browserModule.dispose()
     }

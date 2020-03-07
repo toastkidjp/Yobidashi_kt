@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -62,6 +63,7 @@ import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -130,6 +132,11 @@ class MainActivity : AppCompatActivity(),
     private lateinit var tabs: TabAdapter
 
     /**
+     * Search-with-clip object.
+     */
+    private lateinit var searchWithClip: SearchWithClip
+
+    /**
      * Rx permission.
      */
     private var rxPermissions: RxPermissions? = null
@@ -156,13 +163,24 @@ class MainActivity : AppCompatActivity(),
 
         rxPermissions = RxPermissions(this)
 
-        initializeHeaderViewModel()
+        val colorPair = preferenceApplier.colorPair()
+
+        searchWithClip = SearchWithClip(
+                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
+                binding.root,
+                colorPair,
+                browserViewModel
+        )
+        searchWithClip.invoke()
+
         setFabListener()
 
         pageSearchPresenter = PageSearcherModule(
                 this,
                 binding.sip as ModuleSearcherBinding
         )
+
+        initializeHeaderViewModel()
 
         initializeMenuViewModel()
 
@@ -374,6 +392,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
+     * TODO: Remove it.
      * Finish this activity with transition animation.
      */
     private fun finishWithoutTransition() {
@@ -904,6 +923,7 @@ class MainActivity : AppCompatActivity(),
     override fun onDestroy() {
         tabs.dispose()
         disposables.clear()
+        searchWithClip.dispose()
         menuUseCase.dispose()
         contentViewModel?.content?.removeObservers(this)
         pageSearchPresenter.dispose()
