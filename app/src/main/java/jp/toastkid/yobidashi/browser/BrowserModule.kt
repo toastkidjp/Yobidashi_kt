@@ -29,6 +29,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
+import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
@@ -96,6 +97,8 @@ class BrowserModule(
 
     private val slideDown
             = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+
+    private val idGenerator = IdGenerator()
 
     private var lastId = ""
 
@@ -321,27 +324,30 @@ class BrowserModule(
     }
 
     private fun loadUrl(url: String) {
-        Timber.i("tab load $url")
         if (url.isEmpty()) {
             return
         }
+
         val context: Context = context
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
-            Toaster.tShort(context, R.string.message_wifi_not_connecting)
-            return
-        }
 
         val currentView = currentView()
-        currentView?.loadUrl(url)
         if (TextUtils.isEmpty(currentUrl())
                 && Urls.isValidUrl(url)
                 && NetworkChecker.isNotAvailable(context)
         ) {
             currentView ?: return
-            autoArchive.load(currentView, currentView.url) {
+            autoArchive.load(currentView, idGenerator.from(url)) {
                 Toaster.snackShort(currentView, "Load archive.", preferenceApplier.colorPair())
             }
+            return
         }
+
+        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+            Toaster.tShort(context, R.string.message_wifi_not_connecting)
+            return
+        }
+
+        currentView?.loadUrl(url)
     }
 
     private fun replaceWebView(tabId: String): Boolean {
@@ -447,7 +453,7 @@ class BrowserModule(
         }
 
         val webView = currentView()
-        autoArchive.save(webView, webView?.url)
+        autoArchive.save(webView, idGenerator.from(webView?.url))
     }
 
     /**

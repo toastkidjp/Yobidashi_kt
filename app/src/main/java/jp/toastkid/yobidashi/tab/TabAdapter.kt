@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
+import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -188,7 +189,7 @@ class TabAdapter(
         val tab = tabList.get(index)
         if (tab is WebTab) {
             deleteThumbnail(tab.thumbnailPath)
-            autoArchive.delete(tab.id())
+            autoArchive.delete(IdGenerator().from(tab.getUrl()))
             /* TODO
             if (index == this.index()) {
                 browserModule.animate(slideDown)

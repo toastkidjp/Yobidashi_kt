@@ -22,11 +22,18 @@ class AutoArchive(private val filesDir: StorageWrapper) {
         webView?.saveWebArchive(filesDir.assignNewFile("$id$EXTENSION").absolutePath)
     }
 
-    fun delete(tabId: String) {
+    fun delete(tabId: String?) {
+        if (tabId == null) {
+            return
+        }
         filesDir.delete("$tabId$EXTENSION")
     }
 
-    fun load(webView: WebView?, id: String, callback: () -> Unit) {
+    fun load(webView: WebView?, id: String?, callback: () -> Unit) {
+        if (id == null) {
+            return
+        }
+
         val file = filesDir.findByName("$id$EXTENSION") ?: return
         webView?.let {
             it.loadUrl(Uri.fromFile(file).toString())
