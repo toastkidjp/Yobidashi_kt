@@ -16,8 +16,10 @@ import android.webkit.WebView
 import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.webkit.WebViewFeature
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -131,6 +133,16 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
             })
+
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                it.darkModeCheck.let { checkBox ->
+                    checkBox.isChecked = preferenceApplier.useDarkMode()
+                    checkBox.jumpDrawablesToCurrentState()
+                }
+            } else {
+                it.darkModeCheck.isVisible = false
+            }
+
             it.valueBackgroundAlpha.progress =
                     (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
         }
@@ -222,7 +234,16 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         preferenceApplier.useInversion = newState
         binding.useInversionCheck.isChecked = newState
     }
-    
+
+    /**
+     * Switch Wi-Fi only mode.
+     */
+    fun switchDarkMode() {
+        val newState = !preferenceApplier.useDarkMode()
+        preferenceApplier.setUseDarkMode(newState)
+        binding.darkModeCheck.isChecked = newState
+    }
+
     /**
      * Switch JavaScript enabling.
      */

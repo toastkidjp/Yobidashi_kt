@@ -462,5 +462,6 @@
     <string name="title_playing_speed_3">x3</string>
     <string name="title_playing_speed_5">x5</string>
     <string name="title_excluding_item_setting">Excluding items</string>
+    <string name="title_dark_mode">Use dark mode</string>
 
 </resources>

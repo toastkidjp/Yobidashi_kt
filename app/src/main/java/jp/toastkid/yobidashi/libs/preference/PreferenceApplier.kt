@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.libs.preference
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -42,7 +43,7 @@ class PreferenceApplier(private val context: Context) {
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
-        IMAGE_VIEWER_SORT_TYPE
+        IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE
     }
 
     private val preferences: SharedPreferences =
@@ -439,6 +440,17 @@ class PreferenceApplier(private val context: Context) {
 
     fun setImageViewerSort(sort: Sort) {
         preferences.edit().putString(Key.IMAGE_VIEWER_SORT_TYPE.name, sort.name).apply()
+    }
+
+    fun useDarkMode(): Boolean {
+        return preferences.getBoolean(
+                Key.BROWSER_DARK_MODE.name,
+                (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        )
+    }
+
+    fun setUseDarkMode(newState: Boolean) {
+        preferences.edit().putBoolean(Key.BROWSER_DARK_MODE.name, newState).apply()
     }
 
 }

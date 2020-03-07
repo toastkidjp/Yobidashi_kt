@@ -68,6 +68,8 @@ dependencies {
     implementation "androidx.exifinterface:exifinterface:1.1.0"
     implementation "androidx.work:work-runtime:2.3.0"
 
+    implementation "androidx.webkit:webkit:1.2.0"
+
     def roomVersion = '2.2.0'
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"

@@ -363,6 +363,34 @@
                 <include layout="@layout/primary_dark_divider"/>
 
                 <FrameLayout
+                    android:id="@+id/dark_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_transparent"
+                    android:onClick="@{view -> fragment.switchDarkMode()}"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/settings_item_left_margin"
+                        android:gravity="center_vertical"
+                        android:text="@string/title_dark_mode"
+                        />
+                    <CheckBox
+                        android:id="@+id/dark_mode_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/common_horizontal_margin"
+                        android:layout_marginEnd="@dimen/common_horizontal_margin"
+                        android:layout_gravity="end"
+                        android:clickable="false"
+                        style="@style/Border"
+                        />
+                </FrameLayout>
+
+                <include layout="@layout/primary_dark_divider"/>
+
+                <FrameLayout
                     android:id="@+id/ad_remove"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
