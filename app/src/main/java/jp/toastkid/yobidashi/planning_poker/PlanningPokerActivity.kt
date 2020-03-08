@@ -6,10 +6,6 @@ import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityPlanningPokerBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -32,39 +28,28 @@ class PlanningPokerActivity : AppCompatActivity() {
         setContentView(LAYOUT_ID)
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding?.cardsView?.let {
-            it.layoutManager = layoutManager
-            it.adapter = Adapter()
-            layoutManager.scrollToPosition(Adapter.medium())
-            ItemTouchHelper(
-                    object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
-                        override fun onMove(
-                                rv: RecyclerView,
-                                viewHolder: RecyclerView.ViewHolder,
-                                target: RecyclerView.ViewHolder
-                        ): Boolean {
-                            val fromPos = viewHolder.adapterPosition
-                            val toPos = target.adapterPosition
-                            it.adapter?.notifyItemMoved(fromPos, toPos)
-                            (viewHolder as CardViewHolder).open()
-                            return true
-                        }
-
-                        override fun onSwiped(
-                                viewHolder: RecyclerView.ViewHolder,
-                                direction: Int
-                        ) {
-                            (viewHolder as CardViewHolder).open()
-                        }
-                    }).attachToRecyclerView(it)
-            LinearSnapHelper().attachToRecyclerView(it)
-        }
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(
+                R.anim.slide_in_right,
+                0,
+                0,
+                android.R.anim.slide_out_right
+        )
+        transaction.add(R.id.content, CardListFragment())
+        transaction.commit()
     }
 
     override fun onResume() {
         super.onResume()
         binding?.background?.let { ImageLoader.setImageToImageView(it, backgroundImagePath()) }
+    }
+
+    fun setCard(text: String) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
+        transaction.add(R.id.content, CardFragment.makeWithNumber(text))
+        transaction.addToBackStack(CardFragment::class.java.canonicalName)
+        transaction.commit()
     }
 
     private fun backgroundImagePath() = PreferenceApplier(this).backgroundImagePath

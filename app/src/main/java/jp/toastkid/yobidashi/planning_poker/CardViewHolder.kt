@@ -17,9 +17,9 @@ internal class CardViewHolder(private val binding: ItemPlanningPokerBinding)
         }
     }
 
+    // TODO should use ViewModel.
     fun open() {
-        val context = binding.root.context
-        context.startActivity(
-                CardViewActivity.makeIntent(context, binding.cardText.text.toString()))
+        (binding.root.context as? PlanningPokerActivity)
+                ?.setCard(binding.cardText.text.toString())
     }
 }
