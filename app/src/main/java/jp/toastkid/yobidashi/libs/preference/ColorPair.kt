@@ -47,4 +47,12 @@ class ColorPair(
             floatingActionButton.setImageDrawable(it)
         }
     }
+
+    fun applyReverseTo(floatingActionButton: FloatingActionButton?) {
+        floatingActionButton?.backgroundTintList = ColorStateList.valueOf(fontColor)
+        floatingActionButton?.drawable?.also {
+            DrawableCompat.setTint(it, bgColor)
+            floatingActionButton.setImageDrawable(it)
+        }
+    }
 }

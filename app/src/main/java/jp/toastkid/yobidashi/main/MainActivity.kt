@@ -601,6 +601,8 @@ class MainActivity : AppCompatActivity(),
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
         binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
 
+        colorPair.applyReverseTo(binding.menuSwitch)
+
         applyBackgrounds()
     }
 
