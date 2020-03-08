@@ -275,7 +275,7 @@ class MainActivity : AppCompatActivity(),
         menuUseCase = MenuUseCase(
                 { this },
                 { findCurrentFragment() },
-                { replaceFragment(it) },
+                { replaceFragment(it, true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
@@ -415,7 +415,7 @@ class MainActivity : AppCompatActivity(),
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = false) {
+    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = true) {
         val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager.fragments
         if (fragments.size != 0) {
@@ -423,12 +423,15 @@ class MainActivity : AppCompatActivity(),
                 fragments.remove(fragment)
             }
         }
-        transaction.setCustomAnimations(
-                if (withAnimation) R.anim.slide_up else R.anim.slide_in_right,
-                0,
-                0,
-                if (withAnimation) R.anim.slide_down else android.R.anim.slide_out_right
-        )
+
+        if (withAnimation) {
+            transaction.setCustomAnimations(
+                    if (withSlideIn) R.anim.slide_up else R.anim.slide_in_right,
+                    0,
+                    0,
+                    if (withSlideIn) R.anim.slide_down else android.R.anim.slide_out_right
+            )
+        }
 
         transaction.replace(R.id.content, fragment, fragment::class.java.canonicalName)
 
@@ -448,7 +451,7 @@ class MainActivity : AppCompatActivity(),
         when (val currentTab = tabs.currentTab()) {
             is WebTab -> {
                 val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
-                replaceFragment(browserFragment)
+                replaceFragment(browserFragment, false)
                 browserFragmentViewModel
                         ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
             }
@@ -529,6 +532,8 @@ class MainActivity : AppCompatActivity(),
 
         if (findCurrentFragment is BrowserFragment) {
             tabs.closeTab(tabs.index())
+            tabListViewModel?.tabCount(tabs.size())
+
             if (tabs.isEmpty()) {
                 onEmptyTabs()
                 return
