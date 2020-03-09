@@ -13,7 +13,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
-import jp.toastkid.yobidashi.settings.background.BackgroundSettingActivity
+import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
 import okhttp3.Request
 import timber.log.Timber
 import java.io.File
@@ -54,7 +54,7 @@ object ImageDownloader {
                 .subscribeOn(Schedulers.io())
                 .filter { it.code() == HttpURLConnection.HTTP_OK }
                 .map {
-                    val storeroom = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
+                    val storeroom = FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory())
                     val file = storeroom.assignNewFile(Uri.parse(url))
                     bitmapCompressor(BitmapFactory.decodeStream(it.body()?.byteStream()), file)
                     file

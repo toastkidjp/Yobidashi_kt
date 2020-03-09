@@ -96,11 +96,6 @@
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".settings.background.BackgroundSettingActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"
-            />
-        <activity
             android:name=".launcher.LauncherActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"

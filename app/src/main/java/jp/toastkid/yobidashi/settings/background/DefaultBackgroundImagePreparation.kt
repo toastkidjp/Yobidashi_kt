@@ -9,6 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
 import java.io.FileOutputStream
 
 /**
@@ -24,7 +25,7 @@ class DefaultBackgroundImagePreparation {
      * @param context [Context]
      */
     operator fun invoke(context: Context): Disposable = Completable.fromAction {
-            val filesDir = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR)
+            val filesDir = FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory())
             val defaultFile = filesDir.assignNewFile("sakura")
             BitmapFactory.decodeResource(context.resources, R.mipmap.sakura)
                     .compress(Bitmap.CompressFormat.PNG, 100,

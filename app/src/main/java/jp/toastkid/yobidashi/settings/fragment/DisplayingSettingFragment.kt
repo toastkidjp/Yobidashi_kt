@@ -151,7 +151,8 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
                     data,
                     binding.fabParent,
                     preferenceApplier.colorPair(),
-                    { adapter?.notifyDataSetChanged() }
+                    { adapter?.notifyDataSetChanged() },
+                    BACKGROUND_DIR
             )
                     .invoke()
                     .addTo(disposables)
@@ -191,7 +192,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         /**
          * Background image dir.
          */
-        const val BACKGROUND_DIR: String = "background_dir"
+        private const val BACKGROUND_DIR: String = "background_dir"
 
         /**
          * Request code.
@@ -200,6 +201,8 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_setting_display
+
+        fun getBackgroundDirectory() = BACKGROUND_DIR
 
     }
 }

@@ -38,7 +38,8 @@ internal class LoadedAction (
         data: Intent,
         private val parent: View,
         private val colorPair: ColorPair,
-        private val onLoadedAction: () -> Unit
+        private val onLoadedAction: () -> Unit,
+        private val fileDir: String
 ) {
 
     /** Image file URI.  */
@@ -86,7 +87,7 @@ internal class LoadedAction (
      */
     @Throws(FileNotFoundException::class)
     private fun storeImageToFile(context: Context, image: Bitmap, uri: Uri) {
-        val output = FilesDir(context, BackgroundSettingActivity.BACKGROUND_DIR).assignNewFile(uri)
+        val output = FilesDir(context, fileDir).assignNewFile(uri)
         PreferenceApplier(context).backgroundImagePath = output.path
         val size = Rect()
         (context as Activity).windowManager.defaultDisplay.getRectSize(size)
