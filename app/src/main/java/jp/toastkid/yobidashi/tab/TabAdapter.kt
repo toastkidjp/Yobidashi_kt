@@ -157,7 +157,6 @@ class TabAdapter(
 
     internal fun replace(tab: Tab) {
         setIndexByTab(tab)
-        //TODO replaceToCurrentTab(true)
     }
 
     private fun invalidIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
@@ -190,13 +189,6 @@ class TabAdapter(
         if (tab is WebTab) {
             deleteThumbnail(tab.thumbnailPath)
             autoArchive.delete(IdGenerator().from(tab.getUrl()))
-            /* TODO
-            if (index == this.index()) {
-                browserModule.animate(slideDown)
-                browserModule.disableWebView()
-                browserModule.detachWebView(tab.id())
-            }
-             */
         }
 
         tabList.closeTab(index)
@@ -228,28 +220,6 @@ class TabAdapter(
     }
 
     internal fun indexOf(tab: Tab): Int = tabList.indexOf(tab)
-
-    fun addBookmark(callback: () -> Unit) {
-        /* TODO check it
-        val context = contextSupplier()
-        val url = browserModule.currentUrl() ?: ""
-        BookmarkInsertion(
-                context,
-                browserModule.currentTitle(),
-                url,
-                faviconApplier.makePath(url),
-                Bookmark.getRootFolderName()
-        ).insert()
-
-        Toaster.snackLong(
-                webViewContainer,
-                context.getString(R.string.message_done_added_bookmark),
-                R.string.open,
-                View.OnClickListener { callback() },
-                colorPair
-        )
-         */
-    }
 
     internal fun currentTab(): Tab? = tabList.get(index())
 
@@ -285,11 +255,6 @@ class TabAdapter(
          * Directory path to screenshot.
          */
         private const val SCREENSHOT_DIR_PATH: String = "tabs/screenshots"
-
-        /**
-         * PDF tab's dummy title.
-         */
-        private const val PDF_TAB_TITLE: String = "PDF Tab"
 
         /**
          * Make new screenshot dir wrapper instance.
