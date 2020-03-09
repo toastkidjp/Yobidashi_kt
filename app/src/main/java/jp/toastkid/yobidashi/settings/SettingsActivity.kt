@@ -102,7 +102,7 @@ class SettingsActivity : AppCompatActivity() {
             finish()
             true
         }
-        else -> true
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

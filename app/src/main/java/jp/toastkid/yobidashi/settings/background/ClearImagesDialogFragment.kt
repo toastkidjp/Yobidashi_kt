@@ -2,8 +2,8 @@ package jp.toastkid.yobidashi.settings.background
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -23,6 +23,12 @@ internal class ClearImagesDialogFragment : DialogFragment() {
         if (activityContext is Callback) {
             onClick = activityContext
         }
+
+        val target = targetFragment
+        if (target is Callback) {
+            onClick = target
+        }
+
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.clear_all)
                 .setMessage(HtmlCompat.fromHtml(activityContext.getString(R.string.confirm_clear_all_settings)))
