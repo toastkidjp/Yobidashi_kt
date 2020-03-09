@@ -113,11 +113,6 @@
             android:theme="@style/AppTheme.Translucent"
             />
         <activity
-            android:name=".planning_poker.PlanningPokerActivity"
-            android:label="@string/title_planning_poker"
-            android:theme="@style/AppTheme.Translucent"
-            />
-        <activity
             android:name=".search.favorite.FavoriteSearchActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"

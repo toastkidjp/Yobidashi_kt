@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi.planning_poker
 
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 
 /**
@@ -26,7 +26,6 @@ internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val text = Suite.values()[position % Suite.values().size].text()
         holder.setText(text)
-        holder.itemView.setOnClickListener { holder.open() }
     }
 
     override fun getItemCount(): Int = MAXIMUM_SIZE

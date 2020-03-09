@@ -13,6 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -63,6 +65,36 @@ class CardListFragment : Fragment() {
             LinearSnapHelper().attachToRecyclerView(it)
         }
         return binding.root
+    }
+
+    private var viewModel: CardListFragmentViewModel? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity?.also { fragmentActivity ->
+            viewModel = ViewModelProviders.of(fragmentActivity)
+                    .get(CardListFragmentViewModel::class.java)
+            viewModel
+                    ?.nextCard
+                    ?.observe(fragmentActivity, Observer { openCard(it) })
+        }
+    }
+
+    private fun openCard(text: String?) {
+        if (text.isNullOrBlank()) {
+            return
+        }
+
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
+        transaction?.add(R.id.content, CardFragment.makeWithNumber(text))
+        transaction?.addToBackStack(CardFragment::class.java.canonicalName)
+        transaction?.commit()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        viewModel?.clearValue()
     }
 
 }

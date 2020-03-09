@@ -37,7 +37,7 @@ import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
-import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
+import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -124,7 +124,7 @@ class MenuUseCase(
                 cleanProcess()
             }
             Menu.PLANNING_POKER-> {
-                startActivity(PlanningPokerActivity.makeIntent(activitySupplier()))
+                replaceFragment(obtainFragment(CardListFragment::class.java))
             }
             Menu.CAMERA-> {
                 useCameraPermission { startActivity(IntentFactory.camera()) }

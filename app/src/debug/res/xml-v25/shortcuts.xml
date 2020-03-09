@@ -36,22 +36,4 @@
 
     </shortcut>
 
-    <shortcut
-        android:shortcutId="shortcut3"
-        android:enabled="true"
-        android:icon="@drawable/ic_card_black"
-        android:shortcutShortLabel="@string/title_planning_poker"
-        android:shortcutLongLabel="@string/title_planning_poker"
-        >
-
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="jp.toastkid.yobidashi.d"
-            android:targetClass="jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity"
-            />
-
-        <categories android:name="android.shortcut.conversation" />
-
-    </shortcut>
-
 </shortcuts>
