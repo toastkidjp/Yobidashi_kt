@@ -43,8 +43,8 @@ class CardFragment : Fragment() {
             )
         }
         val arguments = arguments ?: Bundle()
-        if (arguments.containsKey(CardViewActivity.EXTRA_KEY_CARD_TEXT)) {
-            arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT)
+        if (arguments.containsKey(EXTRA_KEY_CARD_TEXT)) {
+            arguments.getString(EXTRA_KEY_CARD_TEXT)
                     ?.let { setText(it) }
         }
         return binding.root
@@ -65,6 +65,11 @@ class CardFragment : Fragment() {
     companion object {
 
         /**
+         * Card extra key.
+         */
+        private const val EXTRA_KEY_CARD_TEXT = "card_text"
+
+        /**
          * Layout ID.
          */
         @LayoutRes
@@ -72,7 +77,7 @@ class CardFragment : Fragment() {
 
         fun makeWithNumber(text: String): Fragment {
             return CardFragment().also {
-                it.arguments = bundleOf(CardViewActivity.EXTRA_KEY_CARD_TEXT to text)
+                it.arguments = bundleOf(EXTRA_KEY_CARD_TEXT to text)
             }
         }
     }
