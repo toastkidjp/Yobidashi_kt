@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -604,6 +605,15 @@ class MainActivity : AppCompatActivity(),
         colorPair.applyReverseTo(binding.menuSwitch)
 
         applyBackgrounds()
+
+        updateColorFilter()
+    }
+
+    // TODO move to viewModel.
+    fun updateColorFilter() {
+        binding.foreground.foreground =
+                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor())
+                else null
     }
 
     /**

@@ -19,7 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppActivity
+import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -34,7 +34,8 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.media.image.ImageViewerFragment
+import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.rss.RssReaderFragment
@@ -115,10 +116,10 @@ class MenuUseCase(
                     Timber.w(e)
                 }
             }
-            /*Menu.OVERLAY_COLOR_FILTER-> {
-                val rootView = binding.root
-                ColorFilter(this, rootView).switchState(this)
-            }*/
+            Menu.OVERLAY_COLOR_FILTER-> {
+                preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
+                (activitySupplier() as? MainActivity)?.updateColorFilter()
+            }
             Menu.MEMORY_CLEANER -> {
                 cleanProcess()
             }
@@ -142,7 +143,7 @@ class MenuUseCase(
                 close()
             }
             Menu.ABOUT-> {
-                startActivity(AboutThisAppActivity.makeIntent(activitySupplier()))
+                replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
             }
             Menu.BOOKMARK-> {
                 activitySupplier().also {
