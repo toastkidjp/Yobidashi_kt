@@ -101,11 +101,6 @@
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".about.AboutThisAppActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            />
-        <activity
             android:name=".launcher.LauncherActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
