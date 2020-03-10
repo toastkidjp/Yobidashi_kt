@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
-import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
+import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
@@ -48,7 +48,7 @@ import timber.log.Timber
 import java.util.*
 
 /**
- * TODO clean up duplcated codes.
+ * TODO clean up duplicated codes.
  * @author toastkidjp
  */
 class MenuUseCase(
@@ -241,12 +241,7 @@ class MenuUseCase(
                         .addTo(disposables)
             }
             Menu.VIEW_ARCHIVE -> {
-                activitySupplier().also {
-                    it.startActivityForResult(
-                        ArchivesActivity.makeIntent(it),
-                        ArchivesActivity.REQUEST_CODE
-                    )
-                }
+                replaceFragment(obtainFragment(ArchivesFragment::class.java))
             }
             Menu.FIND_IN_PAGE-> {
                 switchPageSearcher()

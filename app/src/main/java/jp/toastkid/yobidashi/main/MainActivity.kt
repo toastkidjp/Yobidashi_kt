@@ -37,7 +37,6 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.*
-import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
@@ -77,7 +76,6 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
 import kotlin.math.min
 
 /**
@@ -869,17 +867,6 @@ class MainActivity : AppCompatActivity(),
         when (requestCode) {
             ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE -> {
                 data.data?.let { loadUri(it) }
-            }
-            ArchivesActivity.REQUEST_CODE -> {
-                try {
-                    tabs.openNewWebTab(ArchivesActivity.extractFileUrl(data))
-                    replaceToCurrentTab()
-                } catch (e: IOException) {
-                    Timber.e(e)
-                } catch (error: OutOfMemoryError) {
-                    Timber.e(error)
-                    System.gc()
-                }
             }
             IntentIntegrator.REQUEST_CODE -> {
                 val result: IntentResult? =
