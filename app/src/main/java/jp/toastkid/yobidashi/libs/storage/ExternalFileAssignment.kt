@@ -24,8 +24,8 @@ class ExternalFileAssignment {
             context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         }
 
-        if (!externalFilesDir.exists()) {
-            externalFilesDir.mkdirs()
+        if (externalFilesDir?.exists() != false) {
+            externalFilesDir?.mkdirs()
         }
         return File(externalFilesDir, fileName)
     }

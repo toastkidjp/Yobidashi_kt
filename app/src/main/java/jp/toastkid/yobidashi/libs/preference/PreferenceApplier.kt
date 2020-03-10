@@ -111,7 +111,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     var backgroundImagePath: String
-        get() = preferences.getString(Key.BG_IMAGE.name, "")
+        get() = preferences.getString(Key.BG_IMAGE.name, "") ?: ""
         set(path) = preferences.edit().putString(Key.BG_IMAGE.name, path).apply()
 
     fun hasBackgroundImagePath(): Boolean = backgroundImagePath.isNotEmpty()
@@ -172,10 +172,10 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun menuPosId(): Int =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
+            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name) ?: "").id
 
     fun menuPos(): MenuPos =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name))
+            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name) ?: "")
 
     fun setLoadImage(newState: Boolean) {
         preferences.edit().putBoolean(Key.LOAD_IMAGE.name, newState).apply()
@@ -193,7 +193,7 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putString(Key.USER_AGENT.name, path).apply()
     }
 
-    fun userAgent(): String = preferences.getString(Key.USER_AGENT.name, "DEFAULT")
+    fun userAgent(): String = preferences.getString(Key.USER_AGENT.name, "DEFAULT") ?: ""
 
     var homeUrl: String
         get() = preferences.getString(Key.HOME_URL.name,
@@ -202,7 +202,7 @@ class PreferenceApplier(private val context: Context) {
                 } else {
                     "https://m.yahoo.co.jp"
                 }
-        )
+        ) ?: ""
         set(path) {
             if (Urls.isInvalidUrl(path)) {
                 return
@@ -234,7 +234,7 @@ class PreferenceApplier(private val context: Context) {
         return preferences.getString(
                 Key.DEFAULT_SEARCH_ENGINE.name,
                 SearchCategory.getDefaultCategoryName()
-        )
+        ) ?: ""
     }
 
     var enableSearchQueryExtract: Boolean
@@ -268,7 +268,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     internal fun browserScreenMode(): ScreenMode =
-            ScreenMode.valueOf(preferences.getString(Key.SCREEN_MODE.name, ScreenMode.EXPANDABLE.name))
+            ScreenMode.valueOf(preferences.getString(Key.SCREEN_MODE.name, ScreenMode.EXPANDABLE.name) ?: "")
 
     var useInversion: Boolean
         get () = preferences.getBoolean(Key.USE_INVERSION.name, false)
@@ -421,7 +421,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun excludedItems() =
-            preferences.getStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, emptySet())
+            preferences.getStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, emptySet()) ?: emptySet()
 
     fun removeFromExcluding(path: String) {
         mutableSetOf<String>().also {

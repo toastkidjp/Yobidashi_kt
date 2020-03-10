@@ -37,7 +37,7 @@ class RssUrlExtractor {
 
     companion object {
 
-        private val DEFAULT_LINE_SEPARATOR = System.getProperty("line.separator")
+        private val DEFAULT_LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
 
         private val REGEX = Pattern.compile(
                 "href=\"(.+?)\"",

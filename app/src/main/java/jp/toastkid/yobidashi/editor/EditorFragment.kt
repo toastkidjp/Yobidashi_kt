@@ -54,7 +54,6 @@ import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import java.io.File
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -84,9 +83,9 @@ class EditorFragment :
     /**
      * Default date format holder.
      */
-    private val dateFormatHolder: ThreadLocal<DateFormat> by lazy {
-        object: ThreadLocal<DateFormat>() {
-            override fun initialValue(): DateFormat =
+    private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
+        object: ThreadLocal<SimpleDateFormat>() {
+            override fun initialValue() =
                     SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         }
     }
@@ -495,7 +494,7 @@ class EditorFragment :
             context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         }
 
-        if (!externalFilesDir.exists()) {
+        if (externalFilesDir?.exists() == false) {
             externalFilesDir.mkdirs()
         }
         return File(externalFilesDir, fileName)

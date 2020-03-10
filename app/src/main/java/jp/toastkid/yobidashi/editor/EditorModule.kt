@@ -425,9 +425,9 @@ class EditorModule(
             context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         }
 
-        if (!externalFilesDir.exists()) {
-            externalFilesDir.mkdirs()
-        }
+        /*if (!externalFilesDir?.exists()) {
+            externalFilesDir?.mkdirs()
+        }*/
         return File(externalFilesDir, fileName)
     }
 

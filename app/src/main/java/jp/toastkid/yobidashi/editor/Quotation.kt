@@ -12,7 +12,7 @@ class Quotation {
     /**
      * Line separator.
      */
-    private val lineSeparator = System.getProperty("line.separator")
+    private val lineSeparator = System.getProperty("line.separator") ?: "\n"
 
     /**
      * Invoke quotation function.

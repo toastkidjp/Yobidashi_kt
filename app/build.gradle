@@ -8,8 +8,8 @@ apply plugin: 'io.fabric'
 apply from: 'signing/config.gradle', to: android
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.0'
     byte verMajor  = 1
     byte verMiddle = 2
     byte verMinor  = 8

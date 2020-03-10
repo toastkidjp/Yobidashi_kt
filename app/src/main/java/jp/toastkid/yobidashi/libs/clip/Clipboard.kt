@@ -32,7 +32,7 @@ object Clipboard {
      */
     fun clip(context: Context, text: String) {
         val cm = clipboardManager(context)
-        cm?.primaryClip = ClipData(TEXT_DATA, ClipData.Item(text))
+        cm?.setPrimaryClip(ClipData(TEXT_DATA, ClipData.Item(text)))
     }
 
     /**
