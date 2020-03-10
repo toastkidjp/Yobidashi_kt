@@ -30,8 +30,6 @@ import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.MainActivity
@@ -60,7 +58,6 @@ class MenuUseCase(
         private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
         private val switchPageSearcher: () -> Unit,
-        private val useCameraPermission: (() -> Unit) -> Unit,
         private val close: () -> Unit
 ) {
 
@@ -103,18 +100,8 @@ class MenuUseCase(
             Menu.SHARE-> {
                 findCurrentFragment()?.share()
             }
-            Menu.WIFI_SETTING-> {
-                startActivity(SettingsIntentFactory.wifi())
-            }
             Menu.CODE_READER -> {
                 startActivity(BarcodeReaderActivity.makeIntent(activitySupplier()))
-            }
-            Menu.SCHEDULE-> {
-                try {
-                    startActivity(IntentFactory.makeCalendar())
-                } catch (e: ActivityNotFoundException) {
-                    Timber.w(e)
-                }
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
@@ -125,12 +112,6 @@ class MenuUseCase(
             }
             Menu.PLANNING_POKER-> {
                 replaceFragment(obtainFragment(CardListFragment::class.java))
-            }
-            Menu.CAMERA-> {
-                useCameraPermission { startActivity(IntentFactory.camera()) }
-            }
-            Menu.TORCH-> {
-                useCameraPermission { torch.switch() }
             }
             Menu.APP_LAUNCHER-> {
                 startActivity(LauncherActivity.makeIntent(activitySupplier()))

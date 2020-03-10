@@ -19,8 +19,6 @@ enum class Menu(
 
     BOTTOM(R.string.title_menu_to_bottom, R.drawable.ic_bottom),
 
-    WIFI_SETTING(R.string.title_settings_wifi, R.drawable.ic_wifi),
-
     FIND_IN_PAGE(R.string.title_find_in_page, R.drawable.ic_find_in_page),
 
     VIEW_ARCHIVE(R.string.title_archives, R.drawable.ic_view_archive),
@@ -47,13 +45,7 @@ enum class Menu(
 
     CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
 
-    SCHEDULE(R.string.title_calendar, R.drawable.ic_schedule),
-
-    CAMERA(R.string.title_camera, R.drawable.ic_camera),
-
     PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),
-
-    TORCH(R.string.title_torch, R.drawable.ic_light),
 
     APP_LAUNCHER(R.string.title_apps_launcher, R.drawable.ic_launcher),
 

@@ -36,6 +36,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
@@ -284,7 +285,6 @@ class MainActivity : AppCompatActivity(),
                 { openPdfTabFromStorage() },
                 { openEditorTab() },
                 { pageSearchPresenter.switch() },
-                { useCameraPermission(it) },
                 { menuViewModel?.close() }
         )
 
@@ -850,6 +850,10 @@ class MainActivity : AppCompatActivity(),
                 it.translationY = 0f
                 preferenceApplier.clearMenuFabPosition()
             }
+            true
+        }
+        R.id.about_this_app -> {
+            replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
             true
         }
         R.id.menu_exit -> {
