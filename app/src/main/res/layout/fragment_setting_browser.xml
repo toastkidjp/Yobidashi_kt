@@ -6,6 +6,7 @@
     </data>
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -294,7 +295,7 @@
 
                 <include layout="@layout/primary_dark_divider"/>
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_item_height"
@@ -305,6 +306,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/title_tab_retaining_size"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         />
                     <TextView
                         android:id="@+id/pool_size_text"
@@ -312,23 +315,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_toRightOf="@id/title_pool_size"
-                        android:layout_toEndOf="@id/title_pool_size"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/title_pool_size"
                         />
                     <SeekBar
                         android:id="@+id/pool_size_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/title_pool_size"
                         android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/title_pool_size"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         style="@style/OneLineTextMenu"
                         android:max="20"
                         />
-                </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include layout="@layout/primary_dark_divider"/>
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_item_height"
@@ -338,6 +344,8 @@
                         android:id="@+id/title_background_alpha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:text="Background alpha"
                         />
                     <TextView
@@ -346,19 +354,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_toRightOf="@id/title_background_alpha"
-                        android:layout_toEndOf="@id/title_background_alpha"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/title_background_alpha"
                         />
                     <SeekBar
                         android:id="@+id/value_background_alpha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/title_background_alpha"
+                        app:layout_constraintTop_toBottomOf="@id/title_background_alpha"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginTop="8dp"
                         style="@style/OneLineTextMenu"
                         android:max="100"
                         />
-                </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include layout="@layout/primary_dark_divider"/>
 
