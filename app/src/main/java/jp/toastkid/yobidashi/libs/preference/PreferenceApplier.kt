@@ -11,7 +11,6 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.media.image.list.Sort
-import jp.toastkid.yobidashi.menu.MenuPos
 import jp.toastkid.yobidashi.search.SearchCategory
 import java.io.File
 import java.util.*
@@ -27,7 +26,7 @@ class PreferenceApplier(private val context: Context) {
     @SuppressWarnings("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
-        USE_DAILY_ALARM, USE_INTERNAL_BROWSER
+        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS
     }
 
     private enum class Key {
@@ -35,7 +34,7 @@ class PreferenceApplier(private val context: Context) {
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
         ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH,
         BG_IMAGE, LAST_AD_DATE,
-        USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS, MENU_POS,
+        USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
@@ -166,16 +165,6 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun useJavaScript(): Boolean = preferences.getBoolean(Key.USE_JS.name, true)
-
-    fun setMenuPos(newState: MenuPos) {
-        preferences.edit().putString(Key.MENU_POS.name, newState.name).apply()
-    }
-
-    fun menuPosId(): Int =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name) ?: "").id
-
-    fun menuPos(): MenuPos =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name) ?: "")
 
     fun setLoadImage(newState: Boolean) {
         preferences.edit().putBoolean(Key.LOAD_IMAGE.name, newState).apply()

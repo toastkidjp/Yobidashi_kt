@@ -241,36 +241,6 @@
 
                 <include layout="@layout/primary_dark_divider"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/OneLineTextMenu"
-                    android:text="@string/title_menu_position"
-                    />
-                <RadioGroup
-                    android:id="@+id/menu_pos_radio"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/settings_item_left_margin"
-                    >
-                    <RadioButton
-                        android:id="@+id/menu_pos_left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/left"
-                        />
-                    <RadioButton
-                        android:id="@+id/menu_pos_right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/settings_item_left_margin"
-                        android:text="@string/right"
-                        />
-                </RadioGroup>
-
-                <include layout="@layout/primary_dark_divider"/>
-
                 <FrameLayout
                     android:id="@+id/user_agent"
                     android:layout_width="match_parent"

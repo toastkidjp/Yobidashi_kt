@@ -30,7 +30,6 @@ import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.menu.MenuPos
 
 /**
  * Setting fragment of WEB browser.
@@ -67,7 +66,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             TextInputs.setEmptyAlert(it.homeInputLayout)
         }
         initBrowserExpandable()
-        initMenuPos()
     }
 
     override fun onResume() {
@@ -151,11 +149,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             it.check(preferenceApplier.browserScreenMode().id())
             it.jumpDrawablesToCurrentState()
         }
-
-        binding.menuPosRadio.let {
-            it.check(preferenceApplier.menuPosId())
-            it.jumpDrawablesToCurrentState()
-        }
     }
 
     /**
@@ -167,20 +160,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 R.id.full_screen  -> preferenceApplier.setBrowserScreenMode(ScreenMode.FULL_SCREEN)
                 R.id.expandable   -> preferenceApplier.setBrowserScreenMode(ScreenMode.EXPANDABLE)
                 R.id.fixed        -> preferenceApplier.setBrowserScreenMode(ScreenMode.FIXED)
-            }
-        }
-    }
-
-    /**
-     * Initialize menu position setting.
-     */
-    private fun initMenuPos() {
-        binding.menuPosRadio.let {
-            it.setOnCheckedChangeListener { group, _ ->
-                when (group.checkedRadioButtonId) {
-                    R.id.menu_pos_left  -> preferenceApplier.setMenuPos(MenuPos.LEFT)
-                    R.id.menu_pos_right -> preferenceApplier.setMenuPos(MenuPos.RIGHT)
-                }
             }
         }
     }
