@@ -420,7 +420,7 @@ class PreferenceApplier(private val context: Context) {
                 .apply()
     }
 
-    fun excludedItems() =
+    fun excludedItems(): Set<String> =
             preferences.getStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, emptySet()) ?: emptySet()
 
     fun removeFromExcluding(path: String) {
