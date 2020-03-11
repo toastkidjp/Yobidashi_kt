@@ -17,7 +17,6 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
@@ -246,11 +245,9 @@ class BrowserFragment : Fragment(),
                 ).insert()
 
                 val parent = binding?.root ?: return true
-                Toaster.snackLong(
+                Toaster.snackShort(
                         parent,
                         context.getString(R.string.message_done_added_bookmark),
-                        R.string.open,
-                        View.OnClickListener { bookmark(activityOptionsFactory.makeScaleUpBundle(it)) },
                         colorPair()
                 )
                 return true
@@ -367,20 +364,6 @@ class BrowserFragment : Fragment(),
      * Do browser forward action.
      */
     fun forward() = browserModule.forward()
-
-    /**
-     * Show bookmark activity.
-     *
-     * @param option [ActivityOptions]
-     */
-    private fun bookmark(option: ActivityOptions) {
-        val fragmentActivity = activity ?: return
-        fragmentActivity.startActivityForResult(
-                BookmarkActivity.makeIntent(fragmentActivity),
-                BookmarkActivity.REQUEST_CODE,
-                option.toBundle()
-        )
-    }
 
     /**
      * TODO implement ViewModel.

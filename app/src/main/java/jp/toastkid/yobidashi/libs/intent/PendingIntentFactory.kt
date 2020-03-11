@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
@@ -98,7 +97,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     10,
-                    BookmarkActivity.makeIntent(context),
+                    MainActivity.makeBookmarkIntent(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 

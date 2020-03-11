@@ -34,11 +34,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.*
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
@@ -373,6 +374,9 @@ class MainActivity : AppCompatActivity(),
                         .invoke()
                         .addTo(disposables)
                 return
+            }
+            "${BuildConfig.APPLICATION_ID}.bookmark" -> {
+                replaceFragment(obtainFragment(BookmarkFragment::class.java))
             }
         }
     }
@@ -868,7 +872,8 @@ class MainActivity : AppCompatActivity(),
             return
         }
         when (requestCode) {
-            ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE -> {
+            // TODO Delete it.
+            ViewHistoryActivity.REQUEST_CODE, BookmarkFragment.REQUEST_CODE -> {
                 data.data?.let { loadUri(it) }
             }
             IntentIntegrator.REQUEST_CODE -> {
@@ -967,6 +972,12 @@ class MainActivity : AppCompatActivity(),
                 .also {
                     it.action = Intent.ACTION_VIEW
                     it.putExtra("random_wikipedia", true)
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
+
+        fun makeBookmarkIntent(context: Context) = Intent(context, MainActivity::class.java)
+                .also {
+                    it.action = "${BuildConfig.APPLICATION_ID}.bookmark"
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
 

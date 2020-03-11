@@ -2,16 +2,16 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.MenuItem
+import android.view.*
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,34 +22,34 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import jp.toastkid.yobidashi.databinding.ActivityBookmarkBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import okio.Okio
 import timber.log.Timber
 
 /**
  * Bookmark list activity.
- *
+ * TODO Implement ContentScrollable.
  * @author toastkidjp
  */
-class BookmarkActivity: AppCompatActivity(),
+class BookmarkFragment: Fragment(),
         BookmarkClearDialogFragment.OnClickBookmarkClearCallback,
         DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
-        AddingFolderDialogFragment.OnClickAddingFolder
+        AddingFolderDialogFragment.OnClickAddingFolder,
+        CommonFragmentAction
 {
 
     /**
      * Data binding object.
      */
-    private lateinit var binding: ActivityBookmarkBinding
+    private lateinit var binding: FragmentBookmarkBinding
 
     /**
      * Adapter.
@@ -65,18 +65,20 @@ class BookmarkActivity: AppCompatActivity(),
      */
     private val disposables = CompositeDisposable()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(LAYOUT_ID)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
 
-        preferenceApplier = PreferenceApplier(this)
+        val context = context
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        bookmarkRepository = DatabaseFinder().invoke(this).bookmarkRepository()
+        preferenceApplier = PreferenceApplier(context)
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
+
+        binding.historiesView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         adapter = ActivityAdapter(
-                this,
+                context,
                 bookmarkRepository,
                 { history -> finishWithResult(Uri.parse(history.url)) },
                 { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) },
@@ -110,16 +112,11 @@ class BookmarkActivity: AppCompatActivity(),
                     }
                 }).attachToRecyclerView(binding.historiesView)
 
-        binding.toolbar.also { toolbar ->
-            toolbar.setNavigationIcon(R.drawable.ic_back)
-            toolbar.setTitle(R.string.title_bookmark)
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.inflateMenu(R.menu.bookmark)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
-            toolbar.setNavigationOnClickListener { onBackPressed() }
-        }
-
         adapter.showRoot()
+
+        setHasOptionsMenu(true)
+
+        return binding.root
     }
 
     /**
@@ -128,56 +125,70 @@ class BookmarkActivity: AppCompatActivity(),
      * @param uri
      */
     private fun finishWithResult(uri: Uri) {
-        val intent = Intent()
-        intent.data = uri
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+        popBackStack()
+        ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java).open(uri)
+    }
+
+    private fun popBackStack() {
+        activity?.supportFragmentManager?.popBackStack()
     }
 
     override fun onResume() {
         super.onResume()
 
         adapter.refresh()
-
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
-
-        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
-    private fun clickMenu(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.bookmark, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
             R.id.clear -> {
                 BookmarkClearDialogFragment()
-                        .show(
-                                supportFragmentManager,
-                                BookmarkClearDialogFragment::class.java.simpleName
-                        )
-                return true
+                        .also {
+                            it.setTargetFragment(this, 1)
+                            it.show(
+                                    fragmentManager,
+                                    BookmarkClearDialogFragment::class.java.simpleName
+                            )
+                        }
+                true
             }
             R.id.add_default -> {
                 DefaultBookmarkDialogFragment()
-                        .show(
-                                supportFragmentManager,
-                                DefaultBookmarkDialogFragment::class.java.simpleName
-                        )
-                return true
+                        .also {
+                            it.setTargetFragment(this, 2)
+                            it.show(
+                                    fragmentManager,
+                                    DefaultBookmarkDialogFragment::class.java.simpleName
+                            )
+                        }
+                true
             }
             R.id.add_folder -> {
-                AddingFolderDialogFragment().show(
-                        supportFragmentManager,
-                        AddingFolderDialogFragment::class.java.simpleName
-                )
+                AddingFolderDialogFragment().also {
+                    it.setTargetFragment(this, 3)
+                    it.show(
+                            fragmentManager,
+                            AddingFolderDialogFragment::class.java.simpleName
+                    )
+                }
+                true
             }
             R.id.import_bookmark -> {
-                RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         .subscribe(
                                 { granted ->
                                     if (!granted) {
+                                        /* TODO
                                         Toaster.snackShort(
                                                 binding.root,
                                                 R.string.message_requires_permission_storage,
                                                 preferenceApplier.colorPair()
-                                        )
+                                        )*/
                                         return@subscribe
                                     }
                                     startActivityForResult(
@@ -188,22 +199,23 @@ class BookmarkActivity: AppCompatActivity(),
                                 { Timber.e(it) }
                         )
                         .addTo(disposables)
-                return true
+                true
             }
             R.id.export_bookmark -> {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    Toaster.snackShort(binding.root, R.string.message_disusable_menu, preferenceApplier.colorPair())
+                    // TODO Toaster.snackShort(binding.root, R.string.message_disusable_menu, preferenceApplier.colorPair())
                     return true
                 }
-                RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         .subscribe(
                                 { granted ->
                                     if (!granted) {
+                                        /* TODO
                                         Toaster.snackShort(
                                                 binding.root,
                                                 R.string.message_requires_permission_storage,
                                                 preferenceApplier.colorPair()
-                                        )
+                                        )*/
                                         return@subscribe
                                     }
                                     startActivityForResult(
@@ -215,34 +227,17 @@ class BookmarkActivity: AppCompatActivity(),
                                 { Timber.e(it) }
                         )
                         .addTo(disposables)
-                return true
+                true
             }
-            R.id.to_top -> {
-                RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
-                return true
-            }
-            R.id.to_bottom -> {
-                RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
-                return true
-            }
-            R.id.menu_exit -> {
-                moveTaskToBack(true)
-                return true
-            }
-            R.id.menu_close -> {
-                finish()
-                return true
-            }
-            else -> return true
+            else -> super.onOptionsItemSelected(item)
         }
-        return true
     }
 
-    override fun onBackPressed() {
+    override fun pressBack(): Boolean {
         if (adapter.back()) {
-            return
+            return true
         }
-        super.onBackPressed()
+        return super.pressBack()
     }
 
     override fun onClickBookmarkClear() {
@@ -250,7 +245,7 @@ class BookmarkActivity: AppCompatActivity(),
     }
 
     override fun onClickAddDefaultBookmark() {
-        BookmarkInitializer()(this) { adapter.showRoot() }
+        BookmarkInitializer()(binding.root.context) { adapter.showRoot() }
                 .addTo(disposables)
 
         Toaster.snackShort(binding.root, R.string.done_addition, preferenceApplier.colorPair())
@@ -262,8 +257,8 @@ class BookmarkActivity: AppCompatActivity(),
         }
         Completable.fromAction {
             BookmarkInsertion(
-                    this,
-                    title as String, // This value is always non-null, because it has checked at above statement.
+                    binding.root.context,
+                    title ?: "", // This value is always non-null, because it has checked at above statement.
                     parent = adapter.currentFolderName(),
                     folder = true
             ).insert() }
@@ -294,10 +289,10 @@ class BookmarkActivity: AppCompatActivity(),
      */
     private fun importBookmark(uri: Uri) {
         Completable.fromAction {
-            val inputStream = contentResolver.openInputStream(uri) ?: return@fromAction
+            val inputStream = context?.contentResolver?.openInputStream(uri) ?: return@fromAction
             ExportedFileParser()(inputStream).forEach {
                 BookmarkInsertion(
-                        this,
+                        requireContext(),
                         title  = it.title,
                         url    = it.url,
                         folder = it.folder,
@@ -310,11 +305,12 @@ class BookmarkActivity: AppCompatActivity(),
                 .subscribe(
                         {
                             adapter.reload()
-                            Toaster.snackShort(
+                            /*TODO use common parent
+                               Toaster.snackShort(
                                     binding.root,
                                     R.string.done_addition,
                                     preferenceApplier.colorPair()
-                            )
+                            )*/
                         },
                         { Timber.e(it) }
                 ).addTo(disposables)
@@ -329,12 +325,10 @@ class BookmarkActivity: AppCompatActivity(),
         Maybe.fromCallable { bookmarkRepository.all() }
                 .subscribeOn(Schedulers.io())
                 .subscribe(
-                        {
-                            val outputStream = contentResolver.openOutputStream(uri) ?: return@subscribe
-                            Okio.buffer(Okio.sink(outputStream)).run {
-                                writeUtf8(Exporter(it).invoke())
-                                flush()
-                                close()
+                        { bookmarks ->
+                            val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@subscribe
+                            Okio.buffer(Okio.sink(outputStream)).use {
+                                it.writeUtf8(Exporter(bookmarks).invoke())
                             }
                         },
                         Timber::e
@@ -354,7 +348,7 @@ class BookmarkActivity: AppCompatActivity(),
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.activity_bookmark
+        private const val LAYOUT_ID: Int = R.layout.fragment_bookmark
 
         /**
          * Request code.
@@ -371,15 +365,5 @@ class BookmarkActivity: AppCompatActivity(),
          */
         private const val REQUEST_CODE_EXPORT_BOOKMARK = 12212
 
-        /**
-         * Make launching intent.
-         *
-         * @param context [Context]
-         */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, BookmarkActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
     }
 }

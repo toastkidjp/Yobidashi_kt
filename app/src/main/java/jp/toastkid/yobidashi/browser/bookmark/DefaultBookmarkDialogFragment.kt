@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 
 /**
@@ -25,11 +25,12 @@ class DefaultBookmarkDialogFragment : DialogFragment() {
     private var onClick: OnClickDefaultBookmarkCallback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        if (activityContext is OnClickDefaultBookmarkCallback) {
-            onClick = activityContext
+        val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
+        if (target is OnClickDefaultBookmarkCallback) {
+            onClick = target
         }
+
+        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_add_default_bookmark)
