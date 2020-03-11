@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -26,10 +26,13 @@ class ClearDialogFragment : DialogFragment() {
     private var onClick: Callback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-        if (activityContext is Callback) {
-            onClick = activityContext
+        val target = targetFragment
+        if (target is Callback) {
+            onClick = target
         }
+
+        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_view_history)
                 .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))

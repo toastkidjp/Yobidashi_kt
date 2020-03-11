@@ -8,17 +8,4 @@
         android:checkable="false"
         app:showAsAction="never"
         />
-
-    <item
-        android:id="@+id/to_top"
-        android:orderInCategory="100"
-        android:title="@string/top_mark"
-        app:showAsAction="never"
-        />
-    <item
-        android:id="@+id/to_bottom"
-        android:orderInCategory="101"
-        android:title="@string/bottom_mark"
-        app:showAsAction="never"
-        />
 </menu>

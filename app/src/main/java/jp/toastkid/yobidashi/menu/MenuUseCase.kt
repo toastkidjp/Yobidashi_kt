@@ -19,7 +19,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -29,7 +28,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.MainActivity
@@ -46,15 +45,15 @@ import timber.log.Timber
 import java.util.*
 
 /**
+ * TODO commit: remove obtain -> view history
  * TODO clean up duplicated codes.
  * @author toastkidjp
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
         private val findCurrentFragment: () -> CommonFragmentAction?,
-        private val replaceFragment: (Fragment) -> Unit,
+        private val replaceFragment: (Class<out Fragment>) -> Unit,
         private val cleanProcess: () -> Unit,
-        private val obtainFragment: (Class<out Fragment>) -> Fragment,
         private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
         private val switchPageSearcher: () -> Unit,
@@ -111,21 +110,21 @@ class MenuUseCase(
                 cleanProcess()
             }
             Menu.PLANNING_POKER-> {
-                replaceFragment(obtainFragment(CardListFragment::class.java))
+                replaceFragment(CardListFragment::class.java)
             }
             Menu.APP_LAUNCHER-> {
                 startActivity(LauncherActivity.makeIntent(activitySupplier()))
             }
             Menu.RSS_READER -> {
-                replaceFragment(obtainFragment(RssReaderFragment::class.java))
+                replaceFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(activitySupplier().findViewById(android.R.id.content))
                 close()
-            }
+            }/*
             Menu.ABOUT-> {
-                replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
-            }
+                replaceFragment(AboutThisAppFragment::class.java)
+            }*/
             Menu.BOOKMARK-> {
                 activitySupplier().also {
                     it.startActivityForResult(
@@ -135,15 +134,16 @@ class MenuUseCase(
                 }
             }
             Menu.VIEW_HISTORY-> {
-                activitySupplier().also {
+                replaceFragment(ViewHistoryActivity::class.java)
+                /*activitySupplier().also {
                     it.startActivityForResult(
                             ViewHistoryActivity.makeIntent(it),
                             ViewHistoryActivity.REQUEST_CODE
                     )
-                }
+                }*/
             }
             Menu.IMAGE_VIEWER -> {
-                replaceFragment(obtainFragment(ImageViewerFragment::class.java))
+                replaceFragment(ImageViewerFragment::class.java)
             }
             Menu.LOAD_HOME-> {
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
@@ -222,7 +222,7 @@ class MenuUseCase(
                         .addTo(disposables)
             }
             Menu.VIEW_ARCHIVE -> {
-                replaceFragment(obtainFragment(ArchivesFragment::class.java))
+                replaceFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
                 switchPageSearcher()

@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
-import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
@@ -45,7 +44,7 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 
 /**
  * Internal browser fragment.
- *
+ * TODO re-implement speech function
  * @author toastkidjp
  */
 class BrowserFragment : Fragment(),
@@ -463,12 +462,12 @@ class BrowserFragment : Fragment(),
     }
 
     override fun pressLongBack(): Boolean {
-        activity?.let {
+        /*TODO activity?.let {
             it.startActivityForResult(
                 ViewHistoryActivity.makeIntent(it),
                 ViewHistoryActivity.REQUEST_CODE
             )
-        }
+        }*/
         return true
     }
 

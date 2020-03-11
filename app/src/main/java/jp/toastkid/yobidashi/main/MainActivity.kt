@@ -275,13 +275,12 @@ class MainActivity : AppCompatActivity(),
         menuUseCase = MenuUseCase(
                 { this },
                 { findCurrentFragment() },
-                { replaceFragment(it, true, false) },
+                { replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
                     }
                 },
-                { obtainFragment(it) },
                 { openPdfTabFromStorage() },
                 { openEditorTab() },
                 { pageSearchPresenter.switch() },

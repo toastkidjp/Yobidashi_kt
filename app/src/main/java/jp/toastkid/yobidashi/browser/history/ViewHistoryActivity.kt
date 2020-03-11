@@ -1,30 +1,29 @@
 package jp.toastkid.yobidashi.browser.history
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.*
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.ActivityViewHistoryBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 
 /**
+ * TODO: Implement content scrollable, remove background.
  * @author toastkidjp
  */
-class ViewHistoryActivity: AppCompatActivity(), ClearDialogFragment.Callback {
+class ViewHistoryActivity: Fragment(), ClearDialogFragment.Callback {
 
     private lateinit var binding: ActivityViewHistoryBinding
 
@@ -32,22 +31,24 @@ class ViewHistoryActivity: AppCompatActivity(), ClearDialogFragment.Callback {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(LAYOUT_ID)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
 
-        preferenceApplier = PreferenceApplier(this)
+        val context = requireContext()
+        preferenceApplier = PreferenceApplier(context)
 
-        binding = DataBindingUtil.setContentView<ActivityViewHistoryBinding>(this, LAYOUT_ID)
-        val viewHistoryRepository = DatabaseFinder().invoke(this).viewHistoryRepository()
+        binding = DataBindingUtil.inflate<ActivityViewHistoryBinding>(inflater, LAYOUT_ID, container, false)
+        val viewHistoryRepository = DatabaseFinder().invoke(context).viewHistoryRepository()
 
-        binding.historiesView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        binding.historiesView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
         adapter = ActivityAdapter(
-                this,
+                context,
                 viewHistoryRepository,
                 { history -> finishWithResult(Uri.parse(history.url)) },
                 { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) }
         )
+
         binding.historiesView.adapter = adapter
         binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean = false
@@ -75,78 +76,70 @@ class ViewHistoryActivity: AppCompatActivity(), ClearDialogFragment.Callback {
                         adapter.removeAt(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(binding.historiesView)
-
-        binding.toolbar.also { toolbar ->
-            toolbar.setNavigationIcon(R.drawable.ic_back)
-            toolbar.setNavigationOnClickListener { finish() }
-            toolbar.setTitle(titleId())
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.inflateMenu(R.menu.view_history)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
-        }
+        return binding.root
     }
 
-    private fun finishWithResult(uri: Uri) {
-        val intent = Intent()
-        intent.setData(uri)
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+    private fun finishWithResult(uri: Uri?) {
+        if (uri == null) {
+            return
+        }
+
+        val browserViewModel =
+                ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+
+        popBackStack()
+        browserViewModel.open(uri)
+    }
+
+    private fun popBackStack() {
+        activity?.supportFragmentManager?.popBackStack()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onResume() {
         super.onResume()
 
         adapter.refresh {
-            if (adapter.itemCount == 0) {
-                Toaster.tShort(this, getString(R.string.message_none_search_histories))
-                finish()
+            if (adapter.itemCount != 0) {
+                return@refresh
             }
+
+            Toaster.tShort(requireContext(), R.string.message_none_search_histories)
+            popBackStack()
         }
-
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
-
-        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
-    private fun clickMenu(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        when (itemId) {
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.view_history, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
             R.id.clear -> {
-                ClearDialogFragment().show(
-                        supportFragmentManager,
+                val clearDialogFragment = ClearDialogFragment()
+                clearDialogFragment.setTargetFragment(this, REQUEST_CODE)
+                clearDialogFragment.show(
+                        fragmentManager,
                         ClearDialogFragment::class.java.simpleName
                 )
                 return true
             }
-            R.id.to_top -> {
-                RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
-                return true
-            }
-            R.id.to_bottom -> {
-                RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
-                return true
-            }
-            R.id.menu_exit -> {
-                moveTaskToBack(true)
-                return true
-            }
-            R.id.menu_close -> {
-                finish()
-                return true
-            }
+            else -> return super.onOptionsItemSelected(item)
         }
-        return true
     }
 
     override fun onClickClear() {
         adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())}
-        finish()
+        popBackStack()
     }
 
-    private fun titleId(): Int = R.string.title_view_history
-
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
+        super.onDetach()
         adapter.dispose()
     }
 
