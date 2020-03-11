@@ -579,7 +579,10 @@ class MainActivity : AppCompatActivity(),
             tabs.openNewWebTab(preferenceApplier.homeUrl)
         }
 
-        replaceToCurrentTab(false)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
+        if (currentFragment is TabUiFragment || currentFragment == null) {
+            replaceToCurrentTab(false)
+        }
     }
 
     override fun onResume() {

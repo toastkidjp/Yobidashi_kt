@@ -38,11 +38,12 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.TabUiFragment
 
 /**
  * @author toastkidjp
  */
-class PdfViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable {
+class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, ContentScrollable {
 
     /**
      * Data binding object.

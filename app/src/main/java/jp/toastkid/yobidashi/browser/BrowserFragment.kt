@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
@@ -47,6 +48,7 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
  * @author toastkidjp
  */
 class BrowserFragment : Fragment(),
+        TabUiFragment,
         CommonFragmentAction,
         UserAgentDialogFragment.Callback,
         ContentScrollable

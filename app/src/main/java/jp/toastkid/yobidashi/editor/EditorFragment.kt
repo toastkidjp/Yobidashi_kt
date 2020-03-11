@@ -51,6 +51,7 @@ import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import java.io.File
@@ -64,6 +65,7 @@ import java.util.*
  */
 class EditorFragment :
         Fragment(),
+        TabUiFragment,
         PasteAsConfirmationDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
@@ -288,10 +290,11 @@ class EditorFragment :
     }
 
     override fun onDetach() {
-        super.onDetach()
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
+        speechMaker.dispose()
+        super.onDetach()
     }
 
     /**
