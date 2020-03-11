@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.yobidashi.libs.network
 
 import android.content.Context
 import android.net.ConnectivityManager

@@ -9,7 +9,6 @@ import android.os.Environment
 import com.tbruyelle.rxpermissions2.RxPermissions
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 
