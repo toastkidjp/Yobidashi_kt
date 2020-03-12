@@ -275,7 +275,7 @@ class MainActivity : AppCompatActivity(),
 
         menuUseCase = MenuUseCase(
                 { this },
-                { findCurrentFragment() },
+                { supportFragmentManager.findFragmentById(R.id.content) },
                 { replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {

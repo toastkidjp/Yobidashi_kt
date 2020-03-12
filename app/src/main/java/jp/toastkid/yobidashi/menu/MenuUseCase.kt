@@ -45,13 +45,12 @@ import timber.log.Timber
 import java.util.*
 
 /**
- * TODO commit: remove obtain -> view history
  * TODO clean up duplicated codes.
  * @author toastkidjp
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val findCurrentFragment: () -> CommonFragmentAction?,
+        private val findCurrentFragment: () -> Fragment?,
         private val replaceFragment: (Class<out Fragment>) -> Unit,
         private val cleanProcess: () -> Unit,
         private val openPdfTabFromStorage: () -> Unit,
@@ -85,19 +84,14 @@ class MenuUseCase(
     fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
-                val currentFragment = findCurrentFragment()
-                if (currentFragment is ContentScrollable) {
-                    currentFragment.toTop()
-                }
+                (findCurrentFragment() as? ContentScrollable)?.toTop()
+
             }
             Menu.BOTTOM-> {
-                val currentFragment = findCurrentFragment()
-                if (currentFragment is ContentScrollable) {
-                    currentFragment.toBottom()
-                }
+                (findCurrentFragment() as? ContentScrollable)?.toBottom()
             }
             Menu.SHARE-> {
-                findCurrentFragment()?.share()
+                (findCurrentFragment() as? CommonFragmentAction)?.share()
             }
             Menu.CODE_READER -> {
                 startActivity(BarcodeReaderActivity.makeIntent(activitySupplier()))
@@ -121,21 +115,12 @@ class MenuUseCase(
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(activitySupplier().findViewById(android.R.id.content))
                 close()
-            }/*
-            Menu.ABOUT-> {
-                replaceFragment(AboutThisAppFragment::class.java)
-            }*/
+            }
             Menu.BOOKMARK-> {
                 replaceFragment(BookmarkFragment::class.java)
             }
             Menu.VIEW_HISTORY-> {
                 replaceFragment(ViewHistoryFragment::class.java)
-                /*activitySupplier().also {
-                    it.startActivityForResult(
-                            ViewHistoryActivity.makeIntent(it),
-                            ViewHistoryActivity.REQUEST_CODE
-                    )
-                }*/
             }
             Menu.IMAGE_VIEWER -> {
                 replaceFragment(ImageViewerFragment::class.java)
