@@ -31,19 +31,22 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.main.ContentScrollable
 import okio.Okio
 import timber.log.Timber
 
 /**
  * Bookmark list activity.
- * TODO Implement ContentScrollable.
+ *
  * @author toastkidjp
  */
 class BookmarkFragment: Fragment(),
         BookmarkClearDialogFragment.OnClickBookmarkClearCallback,
         DefaultBookmarkDialogFragment.OnClickDefaultBookmarkCallback,
         AddingFolderDialogFragment.OnClickAddingFolder,
-        CommonFragmentAction
+        CommonFragmentAction,
+        ContentScrollable
 {
 
     /**
@@ -260,6 +263,14 @@ class BookmarkFragment: Fragment(),
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { adapter.reload() }
                 .addTo(disposables)
+    }
+
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
