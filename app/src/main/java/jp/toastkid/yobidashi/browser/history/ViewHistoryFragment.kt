@@ -18,12 +18,14 @@ import jp.toastkid.yobidashi.databinding.FragmentViewHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.main.ContentScrollable
 
 /**
- * TODO: Implement content scrollable, remove background.
+ * TODO: remove background.
  * @author toastkidjp
  */
-class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback {
+class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScrollable {
 
     private lateinit var binding: FragmentViewHistoryBinding
 
@@ -136,6 +138,14 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback {
     override fun onClickClear() {
         adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())}
         popBackStack()
+    }
+
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.historiesView, adapter.itemCount)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.historiesView, adapter.itemCount)
     }
 
     override fun onDetach() {
