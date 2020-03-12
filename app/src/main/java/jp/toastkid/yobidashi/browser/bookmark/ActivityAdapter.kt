@@ -124,15 +124,7 @@ internal class ActivityAdapter(
         findByFolderName(Bookmark.getRootFolderName())
     }
 
-    fun search(query: String) {
-        displayItems(
-                Maybe.fromCallable {
-                    bookmarkRepository.search("%$query%")
-                }
-        )
-    }
-
-    fun findByFolderName(title: String) {
+    private fun findByFolderName(title: String) {
         displayItems(Maybe.fromCallable { bookmarkRepository.findByParent(title) })
     }
 
