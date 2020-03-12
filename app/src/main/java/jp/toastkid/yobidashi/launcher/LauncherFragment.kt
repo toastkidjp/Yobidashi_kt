@@ -20,13 +20,15 @@ import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.main.ContentScrollable
 
 /**
  * App Launcher.
  *
  * @author toastkidjp
  */
-class LauncherFragment : Fragment() {
+class LauncherFragment : Fragment(), ContentScrollable {
 
     /**
      * Binding object.
@@ -98,6 +100,14 @@ class LauncherFragment : Fragment() {
         EditTextColorSetter().invoke(binding.filter, fontColor)
         binding.inputBorder.setBackgroundColor(fontColor)
         ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
+    }
+
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.appItemsView, adapter.itemCount)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.appItemsView, adapter.itemCount)
     }
 
     override fun onPause() {
