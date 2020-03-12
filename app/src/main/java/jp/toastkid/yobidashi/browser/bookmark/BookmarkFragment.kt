@@ -133,12 +133,6 @@ class BookmarkFragment: Fragment(),
         activity?.supportFragmentManager?.popBackStack()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        adapter.refresh()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.bookmark, menu)
@@ -288,23 +282,23 @@ class BookmarkFragment: Fragment(),
      * @param uri Bookmark exported html's Uri.
      */
     private fun importBookmark(uri: Uri) {
-        Completable.fromAction {
-            val inputStream = context?.contentResolver?.openInputStream(uri) ?: return@fromAction
-            ExportedFileParser()(inputStream).forEach {
-                BookmarkInsertion(
-                        requireContext(),
-                        title  = it.title,
-                        url    = it.url,
-                        folder = it.folder,
-                        parent = it.parent
-                ).insert()
-            }
-        }
+        val context = context ?: return
+        val inputStream = context.contentResolver?.openInputStream(uri) ?: return
+
+        Completable.using(
+                { inputStream },
+                {
+                    Completable.fromAction {
+                        ExportedFileParser()(it).forEach { bookmarkRepository.add(it) }
+                    }
+                },
+                { it.close() }
+        )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
-                            adapter.reload()
+                            adapter.showRoot()
                             /*TODO use common parent
                                Toaster.snackShort(
                                     binding.root,

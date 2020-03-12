@@ -25,7 +25,7 @@ class BookmarkInsertion (
         if (title.isEmpty()) {
             return Disposables.empty()
         }
-        return insert(makeItem(title, url, faviconPath, parent, folder))
+        return insert(Bookmark.make(title, url, faviconPath, parent, folder))
     }
 
     private fun insert(bookmark: Bookmark): Disposable {
@@ -38,23 +38,6 @@ class BookmarkInsertion (
                         {},
                         Timber::e
                 )
-    }
-
-    private fun makeItem(
-            title: String,
-            url: String = "",
-            faviconPath: String = "",
-            parent: String = "parent",
-            folder: Boolean = false
-    ): Bookmark {
-        val bookmark = Bookmark()
-        bookmark.title = title
-        bookmark.url = url
-        bookmark.favicon = faviconPath
-        bookmark.lastViewed = System.currentTimeMillis()
-        bookmark.parent = parent
-        bookmark.folder = folder
-        return bookmark
     }
 
 }
