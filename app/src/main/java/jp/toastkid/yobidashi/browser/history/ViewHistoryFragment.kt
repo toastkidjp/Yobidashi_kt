@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
-import jp.toastkid.yobidashi.databinding.ActivityViewHistoryBinding
+import jp.toastkid.yobidashi.databinding.FragmentViewHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -23,9 +23,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * TODO: Implement content scrollable, remove background.
  * @author toastkidjp
  */
-class ViewHistoryActivity: Fragment(), ClearDialogFragment.Callback {
+class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback {
 
-    private lateinit var binding: ActivityViewHistoryBinding
+    private lateinit var binding: FragmentViewHistoryBinding
 
     private lateinit var adapter: ActivityAdapter
 
@@ -37,7 +37,7 @@ class ViewHistoryActivity: Fragment(), ClearDialogFragment.Callback {
         val context = requireContext()
         preferenceApplier = PreferenceApplier(context)
 
-        binding = DataBindingUtil.inflate<ActivityViewHistoryBinding>(inflater, LAYOUT_ID, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val viewHistoryRepository = DatabaseFinder().invoke(context).viewHistoryRepository()
 
         binding.historiesView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -144,13 +144,13 @@ class ViewHistoryActivity: Fragment(), ClearDialogFragment.Callback {
     }
 
     companion object {
-        @LayoutRes const val LAYOUT_ID: Int = R.layout.activity_view_history
+        @LayoutRes const val LAYOUT_ID: Int = R.layout.fragment_view_history
 
         /** Request code. */
         const val REQUEST_CODE: Int = 201
 
         fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, ViewHistoryActivity::class.java)
+            val intent = Intent(context, ViewHistoryFragment::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             return intent
         }

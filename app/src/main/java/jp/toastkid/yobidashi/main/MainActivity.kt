@@ -40,7 +40,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
-import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
@@ -876,7 +876,7 @@ class MainActivity : AppCompatActivity(),
         }
         when (requestCode) {
             // TODO Delete it.
-            ViewHistoryActivity.REQUEST_CODE, BookmarkFragment.REQUEST_CODE -> {
+            ViewHistoryFragment.REQUEST_CODE, BookmarkFragment.REQUEST_CODE -> {
                 data.data?.let { loadUri(it) }
             }
             IntentIntegrator.REQUEST_CODE -> {

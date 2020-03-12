@@ -24,7 +24,7 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
-import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -129,7 +129,7 @@ class MenuUseCase(
                 replaceFragment(BookmarkFragment::class.java)
             }
             Menu.VIEW_HISTORY-> {
-                replaceFragment(ViewHistoryActivity::class.java)
+                replaceFragment(ViewHistoryFragment::class.java)
                 /*activitySupplier().also {
                     it.startActivityForResult(
                             ViewHistoryActivity.makeIntent(it),
