@@ -38,7 +38,10 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
-import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.libs.BitmapCompressor
+import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
@@ -309,7 +312,13 @@ class BrowserModule(
             val url = href?.data?.getString("url")?.toUri()
                     ?: return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
             view.stopLoading()
-            context.startActivity(MainActivity.makeBrowserIntent(context, url))
+
+            (context as? FragmentActivity)?.also { fragmentActivity ->
+                ViewModelProviders.of(fragmentActivity)
+                        .get(BrowserViewModel::class.java)
+                        .open(url)
+            }
+
             return true
         }
     }

@@ -9,13 +9,14 @@ import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.MainActivity
 
 /**
  * About this app.
@@ -57,16 +58,19 @@ class AboutThisAppFragment : Fragment() {
     }
 
     fun privacyPolicy() {
-        startActivity(
-                MainActivity.makeBrowserIntent(
-                        requireContext(),
-                        getString(R.string.link_privacy_policy).toUri()
-                )
-        )
+        val browserViewModel =
+                ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+
+        popBackStack()
+        browserViewModel.open(getString(R.string.link_privacy_policy).toUri())
     }
 
     fun aboutAuthorApp() {
         startActivity(IntentFactory.authorsApp())
+    }
+
+    private fun popBackStack() {
+        activity?.supportFragmentManager?.popBackStack()
     }
 
     companion object {
