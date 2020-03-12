@@ -25,7 +25,7 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
-import jp.toastkid.yobidashi.launcher.LauncherActivity
+import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
@@ -107,7 +107,7 @@ class MenuUseCase(
                 replaceFragment(CardListFragment::class.java)
             }
             Menu.APP_LAUNCHER-> {
-                startActivity(LauncherActivity.makeIntent(activitySupplier()))
+                replaceFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
                 replaceFragment(RssReaderFragment::class.java)

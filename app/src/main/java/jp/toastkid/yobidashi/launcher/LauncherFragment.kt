@@ -6,62 +6,51 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.MenuItem
-import androidx.annotation.IdRes
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ActivityLauncherBinding
+import jp.toastkid.yobidashi.databinding.FragmentLauncherBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
-import jp.toastkid.yobidashi.settings.SettingsActivity
 
 /**
  * App Launcher.
  *
  * @author toastkidjp
  */
-class LauncherActivity : AppCompatActivity() {
+class LauncherFragment : Fragment() {
 
     /**
      * Binding object.
      */
-    private val binding: ActivityLauncherBinding by lazy {
-        DataBindingUtil.setContentView<ActivityLauncherBinding>(this, LAYOUT_ID)
-    }
+    private lateinit var binding: FragmentLauncherBinding
 
     /**
      * Adapter.
      */
     private val adapter by lazy {
-        Adapter(this, binding.toolbar)
+        Adapter(requireContext(), binding.toolbar)
     }
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(LAYOUT_ID)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
 
-        preferenceApplier = PreferenceApplier(this)
-        
-        binding.toolbar.also { toolbar ->
-            toolbar.setNavigationIcon(R.drawable.ic_back)
-            toolbar.setNavigationOnClickListener { finish() }
-            toolbar.setTitle(R.string.title_apps_launcher)
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.inflateMenu(R.menu.launcher)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
-        }
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        preferenceApplier = PreferenceApplier(context)
 
-        binding.appItemsView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+
+        binding.appItemsView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         binding.appItemsView.adapter = adapter
         binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
@@ -75,6 +64,8 @@ class LauncherActivity : AppCompatActivity() {
             }
         }
         initInput(adapter)
+
+        return binding.root
     }
 
     /**
@@ -103,41 +94,10 @@ class LauncherActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val colorPair = preferenceApplier.colorPair()
-        ToolbarColorApplier()(window, binding.toolbar, colorPair)
         val fontColor = colorPair.fontColor()
         EditTextColorSetter().invoke(binding.filter, fontColor)
         binding.inputBorder.setBackgroundColor(fontColor)
         ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
-    }
-
-    private fun clickMenu(item: MenuItem): Boolean {
-        @IdRes val itemId: Int = item.itemId
-
-        val itemCount = binding.appItemsView.adapter?.itemCount ?: 0
-
-        when (itemId) {
-            R.id.setting -> {
-                startActivity(SettingsActivity.makeIntent(this))
-                return true
-            }
-            R.id.to_top -> {
-                RecyclerViewScroller.toTop(binding.appItemsView, itemCount)
-                return true
-            }
-            R.id.to_bottom -> {
-                RecyclerViewScroller.toBottom(binding.appItemsView, itemCount)
-                return true
-            }
-            R.id.menu_exit -> {
-                moveTaskToBack(true)
-                return true
-            }
-            R.id.menu_close -> {
-                finish()
-                return true
-            }
-            else -> return true
-        }
     }
 
     override fun onPause() {
@@ -156,16 +116,16 @@ class LauncherActivity : AppCompatActivity() {
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.activity_launcher
+        private const val LAYOUT_ID: Int = R.layout.fragment_launcher
 
         /**
          * Make launcher intent.
-         *
+         * TODO Delete it
          * @param context
          * @return [Intent]
          */
         fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, LauncherActivity::class.java)
+            val intent = Intent(context, LauncherFragment::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             return intent
         }

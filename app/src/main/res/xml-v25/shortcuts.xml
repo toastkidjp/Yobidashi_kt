@@ -18,22 +18,4 @@
 
     </shortcut>
 
-    <shortcut
-        android:shortcutId="shortcut2"
-        android:enabled="true"
-        android:icon="@mipmap/ic_launcher"
-        android:shortcutShortLabel="@string/title_apps_launcher"
-        android:shortcutLongLabel="@string/title_apps_launcher"
-        >
-
-        <intent
-            android:action="jp.toastkid.yobidashi.launcher"
-            android:targetPackage="jp.toastkid.yobidashi"
-            android:targetClass="jp.toastkid.yobidashi.launcher.LauncherActivity"
-            />
-
-        <categories android:name="android.shortcut.conversation" />
-
-    </shortcut>
-
 </shortcuts>
