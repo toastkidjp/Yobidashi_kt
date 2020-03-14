@@ -17,13 +17,14 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.ContentScrollable
 
 /**
  * About this app.
  *
  * @author toastkidjp
  */
-class AboutThisAppFragment : Fragment() {
+class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     /**
      * Data Binding.
@@ -71,6 +72,14 @@ class AboutThisAppFragment : Fragment() {
 
     private fun popBackStack() {
         activity?.supportFragmentManager?.popBackStack()
+    }
+
+    override fun toTop() {
+        binding?.aboutScroll?.smoothScrollTo(0, 0)
+    }
+
+    override fun toBottom() {
+        binding?.aboutScroll?.smoothScrollTo(0, binding?.root?.measuredHeight ?: 0)
     }
 
     companion object {
