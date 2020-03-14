@@ -38,7 +38,11 @@ import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
-import jp.toastkid.yobidashi.browser.*
+import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
+import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.LoadingViewModel
+import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
@@ -437,8 +441,7 @@ class MainActivity : AppCompatActivity(),
 
         transaction.replace(R.id.content, fragment, fragment::class.java.canonicalName)
 
-        // TODO fix it
-        if (fragment !is BrowserFragment && fragment !is EditorFragment) {
+        if (fragment !is TabUiFragment) {
             transaction.addToBackStack(fragment::class.java.canonicalName)
         }
         transaction.commitAllowingStateLoss()
