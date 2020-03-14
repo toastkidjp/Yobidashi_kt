@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.ActionMode
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.webkit.WebView
@@ -11,7 +11,9 @@ import androidx.annotation.Size
 import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.search.UrlFactory
 
 /**
@@ -44,6 +46,8 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     private val urlFactory = UrlFactory()
 
     private val selectedTextExtractor = SelectedTextExtractor()
+
+    private val speechMaker by lazy { SpeechMaker(context) }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
         if (motionEvent?.action == MotionEvent.ACTION_UP) {
@@ -128,27 +132,39 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode =
             super.startActionMode(
                     object : ActionMode.Callback {
-
-                        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                            if (TextUtils.equals("Web search", item?.title)) {
-                                selectedTextExtractor.withAction(this@CustomWebView) { word ->
-                                    context?.let {
-                                        val url = urlFactory(
-                                                it,
-                                                PreferenceApplier(it).getDefaultSearchEngine(),
-                                                word
-                                        ).toString()
-
-                                        loadUrl(url)
-                                    }
-                                }
-                                return true
-                            }
-                            return callback?.onActionItemClicked(mode, item) ?: false
+                        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                            val menuInflater = MenuInflater(context)
+                            menuInflater.inflate(R.menu.context_speech, menu)
+                            menuInflater.inflate(R.menu.context_browser, menu)
+                            return true
                         }
 
-                        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                            return callback?.onCreateActionMode(mode, menu) ?: false
+                        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                            when (item?.itemId) {
+                                R.id.context_edit_speech -> {
+                                    selectedTextExtractor.withAction(this@CustomWebView) {
+                                        speechMaker.invoke(it)
+                                    }
+                                    mode?.finish()
+                                    return true
+                                }
+                                R.id.web_search -> {
+                                    selectedTextExtractor.withAction(this@CustomWebView) { word ->
+                                        context?.let {
+                                            val url = urlFactory(
+                                                    it,
+                                                    PreferenceApplier(it).getDefaultSearchEngine(),
+                                                    word
+                                            ).toString()
+
+                                            loadUrl(url)
+                                        }
+                                    }
+                                    mode?.finish()
+                                    return true
+                                }
+                            }
+                            return callback?.onActionItemClicked(mode, item) ?: false
                         }
 
                         override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
