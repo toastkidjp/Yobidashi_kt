@@ -4,7 +4,11 @@ import android.app.ActivityOptions
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.ValueCallback
 import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
@@ -158,12 +162,12 @@ class BrowserFragment : Fragment(),
 
         headerViewModel?.progress?.observe(activity, Observer { newProgress ->
             if (70 < newProgress) {
-                binding?.progress?.isVisible = false
+                headerBinding?.progress?.isVisible = false
                 headerBinding?.reload?.setImageResource(R.drawable.ic_reload)
                 //TODO refreshThumbnail()
                 return@Observer
             }
-            binding?.progress?.let {
+            headerBinding?.progress?.let {
                 it.isVisible = true
                 it.progress = newProgress
                 headerBinding?.reload?.setImageResource(R.drawable.ic_close)
@@ -286,7 +290,7 @@ class BrowserFragment : Fragment(),
     }
 
     fun reload() {
-        if (binding?.progress?.isVisible == true) {
+        if (headerBinding?.progress?.isVisible == true) {
             browserModule.stopLoading()
         } else {
             browserModule.reload()
