@@ -20,7 +20,13 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.*
+import android.view.ActionMode
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
@@ -176,7 +182,6 @@ class EditorFragment :
                         }
                         else -> Unit
                     }
-                    actionMode?.finish()
                     return false
                 }
 
@@ -229,7 +234,6 @@ class EditorFragment :
                     }
                     else -> Unit
                 }
-                actionMode?.finish()
                 return false
             }
 
