@@ -48,7 +48,7 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 
 /**
  * Internal browser fragment.
- * TODO re-implement speech function
+ *
  * @author toastkidjp
  */
 class BrowserFragment : Fragment(),
@@ -450,15 +450,7 @@ class BrowserFragment : Fragment(),
         }
     }
 
-    override fun pressLongBack(): Boolean {
-        /*TODO activity?.let {
-            it.startActivityForResult(
-                ViewHistoryActivity.makeIntent(it),
-                ViewHistoryActivity.REQUEST_CODE
-            )
-        }*/
-        return true
-    }
+    override fun pressLongBack() = true
 
     override fun pressBack(): Boolean = hideOption() || back()
 
@@ -525,7 +517,7 @@ class BrowserFragment : Fragment(),
         Toaster.snackShort(
                 binding?.root as View,
                 getString(R.string.format_result_user_agent, userAgent.title()),
-                preferenceApplier.colorPair()
+                colorPair()
         )
     }
 
