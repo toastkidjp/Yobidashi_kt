@@ -30,20 +30,6 @@ class PendingIntentFactory {
             )
 
     /**
-     * Make launch main activity.
-     *
-     * @param context
-     * @return
-     */
-    fun main(context: Context): PendingIntent =
-            PendingIntent.getActivity(
-                    context,
-                    3,
-                    MainActivity.makeIntent(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-    /**
      * Return Launcher Intent of Launcher Activity.
      *
      * @param context

@@ -938,15 +938,6 @@ class MainActivity : AppCompatActivity(),
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 7
 
-        /**
-         * Make launcher intent.
-         *
-         * @param context
-         * @return [Intent]
-         */
-        fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
-                .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
-
         fun makeBarcodeReaderIntent(context: Context) =
                 makeWithAction(context, "${BuildConfig.APPLICATION_ID}.barcode_reader")
 
