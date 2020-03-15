@@ -18,8 +18,6 @@ import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupBarcodeResultBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -70,12 +68,10 @@ class BarcodeReaderResultPopup(context: Context) {
         popupWindow.setOnDismissListener {
             binding?.result?.text = ""
         }
+    }
 
-        if (context is FragmentActivity) {
-            popupViewModel =
-                    ViewModelProviders.of(context).get(BarcodeReaderResultPopupViewModel::class.java)
-
-        }
+    fun setViewModel(viewModel: BarcodeReaderResultPopupViewModel?) {
+        popupViewModel = viewModel
     }
 
     /**

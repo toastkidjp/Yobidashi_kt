@@ -20,7 +20,7 @@ class BarcodeReaderResultPopupViewModel : ViewModel() {
     val clip: LiveData<String> = _clip
 
     fun clipText(text: String?) {
-        if (text == null) {
+        if (text.isNullOrEmpty()) {
             return
         }
         _clip.postValue(text)
@@ -30,7 +30,7 @@ class BarcodeReaderResultPopupViewModel : ViewModel() {
     val share: LiveData<String> = _share
 
     fun shareText(text: String?) {
-        if (text == null) {
+        if (text.isNullOrEmpty()) {
             return
         }
         _share.postValue(text)
@@ -40,7 +40,7 @@ class BarcodeReaderResultPopupViewModel : ViewModel() {
     val open: LiveData<String> = _open
 
     fun openText(text: String?) {
-        if (text == null) {
+        if (text.isNullOrEmpty()) {
             return
         }
         _open.postValue(text)
