@@ -18,13 +18,11 @@ class MenuViewModel : ViewModel() {
     private val _click = MutableLiveData<Menu>()
     private val _longClick = MutableLiveData<Menu>()
     private val _visibility = MutableLiveData<Boolean>()
-    private val _tabCount = MutableLiveData<Int>()
     private val _onResume = MutableLiveData<Unit>()
 
     val click: LiveData<Menu> = _click
     val longClick: LiveData<Menu> = _longClick
     val visibility: LiveData<Boolean> = _visibility
-    val tabCount: LiveData<Int> = _tabCount
     val onResume: LiveData<Unit> = _onResume
 
     fun click(menu: Menu) {
@@ -33,10 +31,6 @@ class MenuViewModel : ViewModel() {
 
     fun longClick(menu: Menu) {
         _longClick.postValue(menu)
-    }
-
-    fun tabCount(count: Int) {
-        _tabCount.postValue(count)
     }
 
     fun onResume() {
