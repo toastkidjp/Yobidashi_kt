@@ -19,7 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
+import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
@@ -94,7 +94,7 @@ class MenuUseCase(
                 (findCurrentFragment() as? CommonFragmentAction)?.share()
             }
             Menu.CODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(activitySupplier()))
+                replaceFragment(BarcodeReaderFragment::class.java)
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
