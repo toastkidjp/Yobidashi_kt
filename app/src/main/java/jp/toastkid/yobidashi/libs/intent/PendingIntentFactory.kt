@@ -4,7 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.settings.SettingsActivity
 
@@ -39,7 +39,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     6,
-                    MainActivity.makeLauncherIntent(context),
+                    mainActivityIntentFactory.launcher(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -53,7 +53,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     8,
-                    MainActivity.makeBarcodeReaderIntent(context),
+                    mainActivityIntentFactory.barcodeReader(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -67,7 +67,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     9,
-                    MainActivity.makeBrowserIntent(context, PreferenceApplier(context).homeUrl.toUri()),
+                    mainActivityIntentFactory.browser(context, PreferenceApplier(context).homeUrl.toUri()),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -81,7 +81,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     10,
-                    MainActivity.makeBookmarkIntent(context),
+                    mainActivityIntentFactory.bookmark(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -95,7 +95,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     11,
-                    MainActivity.makeRandomWikipediaIntent(context),
+                    mainActivityIntentFactory.randomWikipedia(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -112,4 +112,8 @@ class PendingIntentFactory {
                     SettingsActivity.makeIntent(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
+
+    companion object {
+        private val mainActivityIntentFactory = MainActivityIntentFactory()
+    }
 }

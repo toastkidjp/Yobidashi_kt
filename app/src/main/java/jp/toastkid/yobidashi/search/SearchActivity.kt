@@ -26,7 +26,14 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.*
+import jp.toastkid.yobidashi.databinding.ActivitySearchBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchClipboardBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
+import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -36,7 +43,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
-import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.clip.ClipboardModule
@@ -154,7 +161,7 @@ class SearchActivity : AppCompatActivity(),
         { clipped ->
             if (Urls.isValidUrl(clipped)) {
                 finish()
-                startActivity(MainActivity.makeBrowserIntent(this, clipped.toUri()))
+                startActivity(MainActivityIntentFactory().browser(this, clipped.toUri()))
             } else {
                 search(binding?.searchCategories?.selectedItem.toString(), clipped)
             }

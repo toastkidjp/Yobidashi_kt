@@ -34,7 +34,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
@@ -381,13 +380,13 @@ class MainActivity : AppCompatActivity(),
                         .addTo(disposables)
                 return
             }
-            "${BuildConfig.APPLICATION_ID}.bookmark" -> {
+            BOOKMARK -> {
                 replaceFragment(obtainFragment(BookmarkFragment::class.java))
             }
-            "${BuildConfig.APPLICATION_ID}.launcher" -> {
+            APP_LAUNCHER -> {
                 replaceFragment(obtainFragment(LauncherFragment::class.java))
             }
-            "${BuildConfig.APPLICATION_ID}.barcode_reader" -> {
+            BARCODE_READER -> {
                 replaceFragment(obtainFragment(BarcodeReaderFragment::class.java))
             }
         }
@@ -938,43 +937,6 @@ class MainActivity : AppCompatActivity(),
          */
         private const val REQUEST_CODE_OPEN_PDF: Int = 7
 
-        fun makeBarcodeReaderIntent(context: Context) =
-                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.barcode_reader")
-
-        fun makeLauncherIntent(context: Context) =
-                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.launcher")
-
-        fun makeBookmarkIntent(context: Context) =
-                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.bookmark")
-
-        private fun makeWithAction(context: Context, action: String) =
-                Intent(context, MainActivity::class.java)
-                        .also {
-                            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            it.action = action
-                        }
-
-        /**
-         * Make browser intent.
-         *
-         * @param context
-         * @param uri
-         *
-         * @return [Intent]
-         */
-        fun makeBrowserIntent(context: Context, uri: Uri) = Intent(context, MainActivity::class.java)
-                .also {
-                    it.action = Intent.ACTION_VIEW
-                    it.data = uri
-                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                }
-
-        fun makeRandomWikipediaIntent(context: Context) = Intent(context, MainActivity::class.java)
-                .also {
-                    it.action = Intent.ACTION_VIEW
-                    it.putExtra("random_wikipedia", true)
-                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                }
     }
 
 }
