@@ -45,7 +45,7 @@ class ExporterTest {
      * Read [Bookmark] objects from source.
      */
     private fun readSource(): List<String>? =
-            Okio.buffer(Okio.source(classLoader.getResourceAsStream(sourcePath))).let {
+            Okio.buffer(Okio.source(classLoader?.getResourceAsStream(sourcePath))).let {
                 val sourceText: String? = it.readUtf8()
                 it.close()
                 return sourceText?.split("\n")
@@ -55,6 +55,6 @@ class ExporterTest {
      * Read expected html string.
      */
     private fun readExpected()
-            = Okio.buffer(Okio.source(classLoader.getResourceAsStream(expectedPath)))
+            = Okio.buffer(Okio.source(classLoader?.getResourceAsStream(expectedPath)))
                 .readUtf8().replace("\r\n", "")
 }

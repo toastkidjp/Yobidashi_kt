@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi.browser.block
 
 import okio.Okio
 import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -17,7 +19,13 @@ class AdRemoverTest {
     /**
      * Test target.
      */
-    private var adRemover = AdRemover(javaClass.classLoader.getResourceAsStream("ad/ad_hosts.txt"))
+    private lateinit var adRemover: AdRemover
+
+    @Before
+    fun setUp() {
+        val inputStream = javaClass.classLoader?.getResourceAsStream("ad/ad_hosts.txt") ?: return fail()
+        adRemover = AdRemover(inputStream)
+    }
 
     @Test
     fun test() {
