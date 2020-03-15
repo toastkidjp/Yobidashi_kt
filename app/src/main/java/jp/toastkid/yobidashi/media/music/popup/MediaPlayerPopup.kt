@@ -278,7 +278,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        val slidingTouchListener = SlidingTouchListener(binding.contentPanel)
+        val slidingTouchListener = SlidingTouchListener(binding.popupBackground)
         slidingTouchListener.setCallback(object : SlidingTouchListener.OnNewPosition {
             override fun onNewPosition(x: Float, y: Float) {
                 if (y > swipeLimit) {
