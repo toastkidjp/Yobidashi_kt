@@ -529,7 +529,6 @@ class MainActivity : AppCompatActivity(),
 
         if (findCurrentFragment is BrowserFragment) {
             tabs.closeTab(tabs.index())
-            tabListViewModel?.tabCount(tabs.size())
 
             if (tabs.isEmpty()) {
                 onEmptyTabs()
@@ -587,8 +586,7 @@ class MainActivity : AppCompatActivity(),
         setFabPosition()
         tabs.loadBackgroundTabsFromDirIfNeed()
 
-        menuViewModel?.tabCount(tabs.size())
-        tabListViewModel?.tabCount(tabs.size())
+        tabs.setCount()
 
         ClippingUrlOpener(binding.root) { browserViewModel?.open(it) }
     }
@@ -794,8 +792,6 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCloseTabListDialogFragment() {
         replaceToCurrentTab()
-        menuViewModel?.tabCount(tabs.size())
-        tabListViewModel?.tabCount(tabs.size())
     }
 
     override fun onOpenEditor() = openEditorTab()

@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
+import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import timber.log.Timber
 import java.io.File
 
@@ -55,6 +56,8 @@ class TabAdapter(
 
     private val bitmapCompressor = BitmapCompressor()
 
+    private var tabListViewModel: TabListViewModel? = null
+
     init {
         val viewContext = contextSupplier()
         tabsScreenshots = makeNewScreenshotDir(viewContext)
@@ -64,6 +67,7 @@ class TabAdapter(
             val viewModelProvider = ViewModelProviders.of(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+            tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
         }
     }
     /**
@@ -105,6 +109,7 @@ class TabAdapter(
     fun openNewWebTab(url: String = preferenceApplier.homeUrl, withLoad: Boolean = true) {
         val newTab = WebTab.make("New tab: $url", url)
         tabList.add(newTab)
+        setCount()
         setIndexByTab(newTab)
     }
 
@@ -121,6 +126,7 @@ class TabAdapter(
 
         tabList.add(WebTab.makeBackground(tabTitle, url))
         tabList.save()
+        setCount()
     }
 
     /**
@@ -132,6 +138,7 @@ class TabAdapter(
             editorTab.path = path
         }
         tabList.add(editorTab)
+        setCount()
         setIndexByTab(editorTab)
     }
 
@@ -139,6 +146,7 @@ class TabAdapter(
         val pdfTab = PdfTab()
         pdfTab.setPath(uri.toString())
         tabList.add(pdfTab)
+        setCount()
         setIndexByTab(pdfTab)
     }
 
@@ -192,6 +200,7 @@ class TabAdapter(
         }
 
         tabList.closeTab(index)
+        setCount()
         if (tabList.isEmpty) {
             tabEmptyCallback()
         }
@@ -247,6 +256,10 @@ class TabAdapter(
         }
 
         tabList.updateWithIdAndHistory(idAndHistory)
+    }
+
+    fun setCount() {
+        tabListViewModel?.tabCount(size())
     }
 
     companion object {
