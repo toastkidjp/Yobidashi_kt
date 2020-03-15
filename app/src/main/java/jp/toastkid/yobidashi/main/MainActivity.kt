@@ -38,6 +38,7 @@ import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
+import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -385,6 +386,9 @@ class MainActivity : AppCompatActivity(),
             }
             "${BuildConfig.APPLICATION_ID}.launcher" -> {
                 replaceFragment(obtainFragment(LauncherFragment::class.java))
+            }
+            "${BuildConfig.APPLICATION_ID}.barcode_reader" -> {
+                replaceFragment(obtainFragment(BarcodeReaderFragment::class.java))
             }
         }
     }
@@ -963,11 +967,21 @@ class MainActivity : AppCompatActivity(),
         fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
                 .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
-        fun makeLauncherIntent(context: Context) = Intent(context, MainActivity::class.java)
-                .also {
-                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    it.action = "${BuildConfig.APPLICATION_ID}.launcher"
-                }
+        fun makeBarcodeReaderIntent(context: Context) =
+                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.barcode_reader")
+
+        fun makeLauncherIntent(context: Context) =
+                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.launcher")
+
+        fun makeBookmarkIntent(context: Context) =
+                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.bookmark")
+
+        private fun makeWithAction(context: Context, action: String) =
+                Intent(context, MainActivity::class.java)
+                        .also {
+                            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            it.action = action
+                        }
 
         /**
          * Make browser intent.
@@ -990,13 +1004,6 @@ class MainActivity : AppCompatActivity(),
                     it.putExtra("random_wikipedia", true)
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
-
-        fun makeBookmarkIntent(context: Context) = Intent(context, MainActivity::class.java)
-                .also {
-                    it.action = "${BuildConfig.APPLICATION_ID}.bookmark"
-                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                }
-
     }
 
 }

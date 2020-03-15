@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.libs.intent
 import android.app.PendingIntent
 import android.content.Context
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.SearchActivity
@@ -68,7 +67,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     8,
-                    BarcodeReaderActivity.makeIntent(context),
+                    MainActivity.makeBarcodeReaderIntent(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
