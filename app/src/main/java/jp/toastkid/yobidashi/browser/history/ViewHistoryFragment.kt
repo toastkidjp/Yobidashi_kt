@@ -1,10 +1,13 @@
 package jp.toastkid.yobidashi.browser.history
 
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -159,10 +162,5 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         /** Request code. */
         const val REQUEST_CODE: Int = 201
 
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, ViewHistoryFragment::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
     }
 }
