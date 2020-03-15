@@ -3,22 +3,20 @@ package jp.toastkid.yobidashi.launcher
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentLauncherBinding
-import jp.toastkid.yobidashi.libs.EditTextColorSetter
-import jp.toastkid.yobidashi.libs.ImageLoader
-import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
@@ -38,11 +36,11 @@ class LauncherFragment : Fragment(), ContentScrollable {
     /**
      * Adapter.
      */
-    private val adapter by lazy {
-        Adapter(requireContext(), binding.toolbar)
-    }
+    private lateinit var adapter: Adapter
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private var prev = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -54,52 +52,29 @@ class LauncherFragment : Fragment(), ContentScrollable {
 
         binding.appItemsView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
+        adapter = Adapter(requireContext(), binding.root)
+
         binding.appItemsView.adapter = adapter
         binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                if (!binding.filter.hasFocus()) {
-                    return false
-                }
-                Inputs.hideKeyboard(binding.filter)
                 binding.appItemsView.requestFocus()
                 return false
             }
         }
-        initInput(adapter)
+
+        activity?.also {
+            val viewModel = ViewModelProviders.of(it).get(PageSearcherViewModel::class.java)
+            viewModel.find.observe(it, Observer {
+                if (TextUtils.equals(prev, it)) {
+                    return@Observer
+                }
+                prev = it.toString()
+                adapter.filter(prev)
+                binding.appItemsView.scheduleLayoutAnimation()
+            })
+        }
 
         return binding.root
-    }
-
-    /**
-     * Initialize input.
-     *
-     * @param adapter [Adapter]
-     */
-    private fun initInput(adapter: Adapter) {
-        binding.filter.addTextChangedListener(object : TextWatcher {
-            var prev: String = ""
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (TextUtils.equals(prev, s)) {
-                    return
-                }
-                prev = s.toString()
-                adapter.filter(s.toString())
-                binding.appItemsView.scheduleLayoutAnimation()
-            }
-
-            override fun afterTextChanged(s: Editable) = Unit
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val colorPair = preferenceApplier.colorPair()
-        val fontColor = colorPair.fontColor()
-        EditTextColorSetter().invoke(binding.filter, fontColor)
-        binding.inputBorder.setBackgroundColor(fontColor)
-        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
     override fun toTop() {
@@ -108,11 +83,6 @@ class LauncherFragment : Fragment(), ContentScrollable {
 
     override fun toBottom() {
         RecyclerViewScroller.toBottom(binding.appItemsView, adapter.itemCount)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Inputs.hideKeyboard(binding.filter)
     }
 
     override fun onDestroy() {
