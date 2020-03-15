@@ -50,6 +50,7 @@ import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
+import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
@@ -381,6 +382,9 @@ class MainActivity : AppCompatActivity(),
             }
             "${BuildConfig.APPLICATION_ID}.bookmark" -> {
                 replaceFragment(obtainFragment(BookmarkFragment::class.java))
+            }
+            "${BuildConfig.APPLICATION_ID}.launcher" -> {
+                replaceFragment(obtainFragment(LauncherFragment::class.java))
             }
         }
     }
@@ -958,6 +962,12 @@ class MainActivity : AppCompatActivity(),
          */
         fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
                 .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
+
+        fun makeLauncherIntent(context: Context) = Intent(context, MainActivity::class.java)
+                .also {
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    it.action = "${BuildConfig.APPLICATION_ID}.launcher"
+                }
 
         /**
          * Make browser intent.
