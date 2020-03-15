@@ -286,7 +286,7 @@ class BarcodeReaderFragment : Fragment() {
 
         activity?.let {
             Toaster.tShort(it, R.string.message_requires_permission_camera)
-            it.finish()
+            fragmentManager?.popBackStack()
         }
     }
 
