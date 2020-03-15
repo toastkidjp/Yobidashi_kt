@@ -399,22 +399,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
-     * Use camera permission with specified action.
-     *
-     * @param onGranted action
-     */
-    private fun useCameraPermission(onGranted: () -> Unit) {
-        rxPermissions
-                ?.request(Manifest.permission.CAMERA)
-                ?.filter { it }
-                ?.subscribe(
-                        { onGranted() },
-                        { Timber.e(it) }
-                )
-                ?.addTo(disposables)
-    }
-
-    /**
      * Load Uri.
      *
      * @param uri
