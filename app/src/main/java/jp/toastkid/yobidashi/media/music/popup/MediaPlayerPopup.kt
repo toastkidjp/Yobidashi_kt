@@ -104,24 +104,26 @@ class MediaPlayerPopup(private val context: Context) {
 
         override fun onConnected() {
             attemptExtractActivity()?.also {
+                val mediaControllerCompat = MediaControllerCompat(context, mediaBrowser.sessionToken)
+                mediaControllerCompat.registerCallback(controllerCallback)
                 MediaControllerCompat.setMediaController(
                         it,
-                        MediaControllerCompat(context, mediaBrowser.sessionToken)
+                        mediaControllerCompat
                 )
             }
 
             mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
-            attemptMediaController()?.registerCallback(controllerCallback)
         }
     }
 
     private val controllerCallback = object : MediaControllerCompat.Callback() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            when (attemptMediaController()?.playbackState?.state) {
-                PlaybackState.STATE_PLAYING -> setPlayIcon()
-                PlaybackState.STATE_PAUSED -> setPauseIcon()
-                PlaybackState.STATE_STOPPED -> setPlayIcon()
+            Timber.e(RuntimeException("state: ${state?.state}"))
+            when (state?.state) {
+                PlaybackStateCompat.STATE_PLAYING -> setPauseIcon()
+                PlaybackStateCompat.STATE_PAUSED -> setPlayIcon()
+                PlaybackStateCompat.STATE_STOPPED -> setPlayIcon()
                 else -> Unit
             }
         }
@@ -246,12 +248,7 @@ class MediaPlayerPopup(private val context: Context) {
 
         mediaController.transportControls.play()
 
-        setPlayIcon()
-    }
-
-    private fun setPlayIcon() {
-        binding.playSwitch.setImageBitmap(pauseBitmap)
-        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+        setPauseIcon()
     }
 
     private fun pause() {
@@ -260,10 +257,15 @@ class MediaPlayerPopup(private val context: Context) {
 
         mediaController.transportControls.pause()
 
-        setPauseIcon()
+        setPlayIcon()
     }
 
     private fun setPauseIcon() {
+        binding.playSwitch.setImageBitmap(pauseBitmap)
+        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+    }
+
+    private fun setPlayIcon() {
         binding.playSwitch.setImageBitmap(playBitmap)
         binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
     }
@@ -302,7 +304,7 @@ class MediaPlayerPopup(private val context: Context) {
                 .observeOn(Schedulers.io())
                 .subscribe(
                         {
-                            if (it) {
+                            if (it && !mediaBrowser.isConnected) {
                                 mediaBrowser.connect()
                                 return@subscribe
                             }
