@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi.launcher
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -98,16 +96,5 @@ class LauncherFragment : Fragment(), ContentScrollable {
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_launcher
 
-        /**
-         * Make launcher intent.
-         * TODO Delete it
-         * @param context
-         * @return [Intent]
-         */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, LauncherFragment::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
     }
 }
