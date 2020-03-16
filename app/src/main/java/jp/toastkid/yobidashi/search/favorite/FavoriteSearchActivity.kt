@@ -7,12 +7,9 @@ import android.view.MenuItem
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivityEmptyBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 
 /**
  * Search history list activity.
@@ -31,15 +28,15 @@ class FavoriteSearchActivity : AppCompatActivity() {
 
         preferenceApplier = PreferenceApplier(this)
 
-        binding = DataBindingUtil.setContentView<ActivityEmptyBinding>(this, LAYOUT_ID)
-
+        //binding = DataBindingUtil.setContentView<ActivityEmptyBinding>(this, LAYOUT_ID)
+/*
         binding.toolbar.also { toolbar ->
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener { finish() }
             toolbar.setTitle(titleId)
             toolbar.inflateMenu(R.menu.settings_toolbar_menu)
             toolbar.setOnMenuItemClickListener{ clickMenu(it) }
-        }
+        }*/
 
         val fragment = FavoriteSearchFragment()
         val transaction = supportFragmentManager.beginTransaction()
@@ -50,9 +47,9 @@ class FavoriteSearchActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
+        //ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
-        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
+        //ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
     }
 
     private fun clickMenu(item: MenuItem) = when (item.itemId) {
