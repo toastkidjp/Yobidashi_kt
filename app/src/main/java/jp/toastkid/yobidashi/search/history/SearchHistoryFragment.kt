@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ActivitySearchHistoryBinding
+import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -26,10 +26,10 @@ import jp.toastkid.yobidashi.search.SearchAction
  *
  * @author toastkidjp
  */
-class SearchHistoryActivity : Fragment(),
+class SearchHistoryFragment : Fragment(),
         SearchHistoryClearDialogFragment.OnClickSearchHistoryClearCallback {
 
-    private lateinit var binding: ActivitySearchHistoryBinding
+    private lateinit var binding: FragmentSearchHistoryBinding
 
     private lateinit var adapter: ActivityAdapter
 
@@ -99,7 +99,7 @@ class SearchHistoryActivity : Fragment(),
     companion object {
 
         @LayoutRes
-        private const val LAYOUT_ID: Int = R.layout.activity_search_history
+        private const val LAYOUT_ID: Int = R.layout.fragment_search_history
 
     }
 }

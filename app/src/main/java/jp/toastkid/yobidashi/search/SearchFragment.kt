@@ -55,7 +55,7 @@ import jp.toastkid.yobidashi.search.clip.ClipboardModule
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
-import jp.toastkid.yobidashi.search.history.SearchHistoryActivity
+import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
@@ -248,7 +248,7 @@ class SearchFragment : Fragment() {
             true
         }
         R.id.open_search_history -> {
-            (activity as? SearchActivity)?.replaceFragment(SearchHistoryActivity())
+            (activity as? SearchActivity)?.replaceFragment(SearchHistoryFragment())
             true
         }
         R.id.setting -> {

@@ -97,18 +97,6 @@
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".search.favorite.FavoriteSearchActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            />
-        <activity
-            android:name=".search.history.SearchHistoryActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            />
-        <activity
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             />
