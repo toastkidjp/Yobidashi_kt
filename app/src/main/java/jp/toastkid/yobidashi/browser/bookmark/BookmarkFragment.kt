@@ -7,7 +7,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -354,11 +359,6 @@ class BookmarkFragment: Fragment(),
          */
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_bookmark
-
-        /**
-         * Request code.
-         */
-        const val REQUEST_CODE: Int = 202
 
         /**
          * Request code of importing bookmarks.
