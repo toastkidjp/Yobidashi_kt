@@ -1,23 +1,24 @@
 package jp.toastkid.yobidashi.search.history
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySearchHistoryBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.search.SearchAction
 
 /**
@@ -25,7 +26,7 @@ import jp.toastkid.yobidashi.search.SearchAction
  *
  * @author toastkidjp
  */
-class SearchHistoryActivity : AppCompatActivity(),
+class SearchHistoryActivity : Fragment(),
         SearchHistoryClearDialogFragment.OnClickSearchHistoryClearCallback {
 
     private lateinit var binding: ActivitySearchHistoryBinding
@@ -36,89 +37,69 @@ class SearchHistoryActivity : AppCompatActivity(),
 
     private val disposables = CompositeDisposable()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(LAYOUT_ID)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        preferenceApplier = PreferenceApplier(context)
 
-        preferenceApplier = PreferenceApplier(this)
-
-        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
         binding.historiesView.layoutManager =
-                LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        val repository = DatabaseFinder().invoke(this).searchHistoryRepository()
+        // TODO move it.
+        val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
 
         adapter = ActivityAdapter(
-                this,
+                context,
                 repository,
-                { history -> SearchAction(this, history.category as String, history.query as String).invoke()},
+                { history -> SearchAction(context, history.category as String, history.query as String).invoke()},
                 { history -> Toaster.snackShort(binding.root, history.query as String, preferenceApplier.colorPair()) }
         )
         binding.historiesView.adapter = adapter
 
         SwipeActionAttachment().invoke(binding.historiesView)
 
-        binding.toolbar.also { toolbar ->
-            toolbar.setNavigationIcon(R.drawable.ic_back)
-            toolbar.setNavigationOnClickListener { finish() }
-            toolbar.setTitle(titleId())
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.inflateMenu(R.menu.search_history)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
-        }
-
         binding.historiesView.scheduleLayoutAnimation()
+        return binding.root
     }
 
     override fun onResume() {
         super.onResume()
 
-        adapter.refresh()
-
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
-
-        ImageLoader.setImageToImageView(binding.background, preferenceApplier.backgroundImagePath)
-    }
-
-    override fun onPostResume() {
-        super.onPostResume()
-
-        if (adapter.itemCount == 0) {
-            Toaster.tShort(this, getString(R.string.message_none_search_histories))
-            finish()
+        adapter.refresh {
+            Toaster.tShort(binding.root.context, getString(R.string.message_none_search_histories))
+            activity?.supportFragmentManager?.popBackStack()
         }
     }
 
-    private fun clickMenu(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.close -> finish()
-            R.id.clear -> SearchHistoryClearDialogFragment().show(
-                    supportFragmentManager,
-                    SearchHistoryClearDialogFragment::class.java.simpleName
-            )
-            R.id.menu_exit -> moveTaskToBack(true)
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.search_history, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.clear -> {
+                SearchHistoryClearDialogFragment().show(
+                        fragmentManager,
+                        SearchHistoryClearDialogFragment::class.java.simpleName
+                )
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
-        return true
     }
 
     override fun onClickSearchHistoryClear() {
         adapter.clearAll { Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair()) }
                 .addTo(disposables)
-        finish()
+        activity?.supportFragmentManager?.popBackStack()
     }
-
-    private fun titleId(): Int = R.string.title_search_history
 
     companion object {
 
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.activity_search_history
 
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, SearchHistoryActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
     }
 }
