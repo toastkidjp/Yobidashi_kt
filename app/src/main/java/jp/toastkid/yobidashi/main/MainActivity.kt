@@ -44,7 +44,6 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
-import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
@@ -865,10 +864,6 @@ class MainActivity : AppCompatActivity(),
             return
         }
         when (requestCode) {
-            // TODO Delete it.
-            ViewHistoryFragment.REQUEST_CODE, BookmarkFragment.REQUEST_CODE -> {
-                data.data?.let { loadUri(it) }
-            }
             IntentIntegrator.REQUEST_CODE -> {
                 val result: IntentResult? =
                         IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
