@@ -3,7 +3,7 @@
     <data>
         <variable name="activity" type="jp.toastkid.yobidashi.search.SearchFragment" />
     </data>
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -42,5 +42,5 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>
