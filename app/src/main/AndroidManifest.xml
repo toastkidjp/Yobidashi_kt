@@ -45,7 +45,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
         </activity>
 
         <activity-alias
@@ -76,18 +75,6 @@
                 android:resource="@mipmap/ic_launcher"
                 />
         </activity-alias>
-
-        <activity
-            android:name=".search.SearchActivity"
-            android:label="@string/title_search"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.WEB_SEARCH" />
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".settings.SettingsActivity"
