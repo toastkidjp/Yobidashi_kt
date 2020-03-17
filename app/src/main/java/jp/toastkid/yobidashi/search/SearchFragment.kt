@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
@@ -195,11 +196,13 @@ class SearchFragment : Fragment() {
                 getString(R.string.message_search_on_background),
                 preferenceApplier.colorPair()
         )*/
+
+        setHasOptionsMenu(true)
+
         return binding?.root
     }
 
     private fun setQuery() {
-        // TODO should check behavior.
         arguments?.getString(EXTRA_KEY_QUERY)?.let { query ->
             headerBinding?.searchInput?.let { input ->
                 input.setText(query)
@@ -236,11 +239,19 @@ class SearchFragment : Fragment() {
             true
         }
         R.id.open_favorite_search -> {
-            (activity as? SearchActivity)?.replaceFragment(FavoriteSearchFragment())
+            activity?.also {
+                ViewModelProviders.of(it)
+                        .get(ContentViewModel::class.java)
+                        .nextFragment(FavoriteSearchFragment())
+            }
             true
         }
         R.id.open_search_history -> {
-            (activity as? SearchActivity)?.replaceFragment(SearchHistoryFragment())
+            activity?.also {
+                ViewModelProviders.of(it)
+                        .get(ContentViewModel::class.java)
+                        .nextFragment(SearchHistoryFragment())
+            }
             true
         }
         else -> super.onOptionsItemSelected(item)
