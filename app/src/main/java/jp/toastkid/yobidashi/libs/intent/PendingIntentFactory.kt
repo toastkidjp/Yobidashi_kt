@@ -25,7 +25,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     0,
-                    SearchActivity.makeIntent(context),
+                    mainActivityIntentFactory.search(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
