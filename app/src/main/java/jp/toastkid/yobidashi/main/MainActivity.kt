@@ -53,6 +53,7 @@ import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -367,7 +368,12 @@ class MainActivity : AppCompatActivity(),
             }
             Intent.ACTION_SEND -> {
                 calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
-                    loadUri(it.toString().toUri())
+                    val query = it.toString()
+                    if (Urls.isInvalidUrl(query)) {
+                        search(preferenceApplier.getDefaultSearchEngine(), query)
+                        return
+                    }
+                    loadUri(query.toUri())
                 }
                 return
             }
@@ -377,10 +383,7 @@ class MainActivity : AppCompatActivity(),
                 } else {
                     preferenceApplier.getDefaultSearchEngine()
                 }
-
-                SearchAction(this, category, calledIntent.getStringExtra(SearchManager.QUERY))
-                        .invoke()
-                        .addTo(disposables)
+                search(category, calledIntent.getStringExtra(SearchManager.QUERY))
                 return
             }
             BOOKMARK -> {
@@ -396,6 +399,16 @@ class MainActivity : AppCompatActivity(),
                 replaceFragment(obtainFragment(SearchFragment::class.java))
             }
         }
+    }
+
+    private fun search(category: String?, query: String?) {
+        if (category.isNullOrEmpty() || query.isNullOrEmpty()) {
+            return
+        }
+
+        SearchAction(this, category, query)
+                .invoke()
+                .addTo(disposables)
     }
 
     private fun openNewWebTab(uri: Uri) {

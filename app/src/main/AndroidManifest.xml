@@ -76,6 +76,17 @@
                 />
         </activity-alias>
 
+        <activity-alias
+            android:name=".search.SearchActivity"
+            android:targetActivity=".main.MainActivity"
+            android:label="@string/title_search"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.WEB_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_settings"
