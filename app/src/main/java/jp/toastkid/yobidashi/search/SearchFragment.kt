@@ -37,7 +37,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ActivitySearchBinding
+import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
@@ -72,7 +72,7 @@ class SearchFragment : Fragment() {
     /**
      * View binder.
      */
-    private var binding: ActivitySearchBinding? = null
+    private var binding: FragmentSearchBinding? = null
 
     /**
      * Favorite search module.
@@ -513,7 +513,7 @@ TODO Move individual fragments
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.activity_search
+        private const val LAYOUT_ID = R.layout.fragment_search
 
 
         /**
