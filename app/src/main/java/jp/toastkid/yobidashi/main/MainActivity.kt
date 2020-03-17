@@ -67,6 +67,7 @@ import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -390,6 +391,9 @@ class MainActivity : AppCompatActivity(),
             }
             BARCODE_READER -> {
                 replaceFragment(obtainFragment(BarcodeReaderFragment::class.java))
+            }
+            SEARCH -> {
+                replaceFragment(obtainFragment(SearchFragment::class.java))
             }
         }
     }
