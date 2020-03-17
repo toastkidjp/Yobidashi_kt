@@ -15,3 +15,4 @@ import jp.toastkid.yobidashi.BuildConfig
 const val BARCODE_READER = "${BuildConfig.APPLICATION_ID}.barcode_reader"
 const val APP_LAUNCHER = "${BuildConfig.APPLICATION_ID}.launcher"
 const val BOOKMARK = "${BuildConfig.APPLICATION_ID}.bookmark"
+const val SEARCH = "${BuildConfig.APPLICATION_ID}.search"

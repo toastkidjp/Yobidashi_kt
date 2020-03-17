@@ -36,7 +36,7 @@ import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
-import jp.toastkid.yobidashi.search.SearchActivity
+import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.torch.Torch
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
@@ -140,7 +140,7 @@ class MenuUseCase(
                     is BrowserFragment ->
                         fragment.search()
                     else ->
-                        startActivity(SearchActivity.makeIntent(activitySupplier()))
+                        replaceFragment(SearchFragment::class.java)
                 }
             }
             Menu.VOICE_SEARCH-> {

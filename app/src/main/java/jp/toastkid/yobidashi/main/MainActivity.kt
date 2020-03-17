@@ -192,6 +192,9 @@ class MainActivity : AppCompatActivity(),
                 null -> Unit
             }
         })
+        contentViewModel?.fragment?.observe(this, Observer {
+            replaceFragment(it, true, true)
+        })
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {

@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi.search
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -65,34 +63,6 @@ class SearchActivity : AppCompatActivity() {
          * Extra key of URL.
          */
         private const val EXTRA_KEY_URL = "url"
-
-        /**
-         * Make launch [Intent].
-         *
-         * @param context [Context]
-         */
-        fun makeIntent(context: Context, title: String? = null, url: String? = null) =
-                Intent(context, SearchActivity::class.java)
-                        .apply {
-                            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                            title?.let {
-                                putExtra(EXTRA_KEY_TITLE, it)
-                            }
-                            url?.let {
-                                putExtra(EXTRA_KEY_URL, it)
-                            }
-                        }
-
-        /**
-         * Make launcher [Intent] with query.
-         *
-         * @param context [Context]
-         * @param query Query
-         * @param title Title
-         * @param url URL
-         */
-        fun makeIntentWithQuery(context: Context, query: String, title: String?, url: String? = null): Intent =
-                makeIntent(context, title, url).apply { putExtra(EXTRA_KEY_QUERY, query) }
 
     }
 }

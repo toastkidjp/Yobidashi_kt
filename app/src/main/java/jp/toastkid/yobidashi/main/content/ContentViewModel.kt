@@ -7,11 +7,13 @@
  */
 package jp.toastkid.yobidashi.main.content
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
+ * TODO Rename MainActivityViewModel and add snackbar, fragment switching
  * @author toastkidjp
  */
 class ContentViewModel : ViewModel() {
@@ -23,4 +25,13 @@ class ContentViewModel : ViewModel() {
     fun nextContent(newOrder: ContentSwitchOrder) {
         _content.postValue(newOrder)
     }
+
+    private val _fragment = MutableLiveData<Fragment>()
+
+    val fragment: LiveData<Fragment> = _fragment
+
+    fun nextFragment(fragment: Fragment) {
+        _fragment.postValue(fragment)
+    }
+
 }

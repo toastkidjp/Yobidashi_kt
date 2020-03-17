@@ -44,6 +44,8 @@ class MainActivityIntentFactory {
 
     fun bookmark(context: Context) = withAction(context, BOOKMARK)
 
+    fun search(context: Context) = withAction(context, SEARCH)
+
     private fun withAction(context: Context, action: String) =
             Intent(context, MainActivity::class.java)
                     .also {

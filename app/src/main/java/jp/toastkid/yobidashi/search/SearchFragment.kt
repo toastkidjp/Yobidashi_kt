@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.search
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,8 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -28,12 +31,14 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySearchBinding
+import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchClipboardBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
@@ -48,6 +53,7 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
@@ -60,7 +66,6 @@ import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
-import jp.toastkid.yobidashi.settings.SettingsActivity
 import timber.log.Timber
 
 /**
@@ -112,6 +117,10 @@ class SearchFragment : Fragment() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var headerViewModel: HeaderViewModel? = null
+
+    private var headerBinding: ModuleHeaderSearchBinding? = null
+
     private var currentTitle: String? = null
 
     private var currentUrl: String? = null
@@ -122,17 +131,16 @@ class SearchFragment : Fragment() {
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding?.activity = this
-        binding?.searchClear?.setOnClickListener { binding?.searchInput?.setText("") }
-
         val context = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
-        currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
-        currentUrl = arguments?.getString(EXTRA_KEY_URL)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        binding?.activity = this
 
-        binding?.searchCategories?.let {
+        headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_header_search, container, false)
+        // TODO use data binding.
+        headerBinding?.searchClear?.setOnClickListener { headerBinding?.searchInput?.setText("") }
+        headerBinding?.searchCategories?.let {
             it.adapter = SearchCategoryAdapter(context)
             val index = SearchCategory.findIndex(
                     SearchCategory.findByHostOrNull(currentUrl?.toUri()?.host)?.name
@@ -140,6 +148,9 @@ class SearchFragment : Fragment() {
             )
             it.setSelection(index)
         }
+
+        currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
+        currentUrl = arguments?.getString(EXTRA_KEY_URL)
 
         preferenceApplier = PreferenceApplier(context)
 
@@ -157,7 +168,7 @@ class SearchFragment : Fragment() {
                 activity?.supportFragmentManager?.popBackStack() // TODO check behavior.
                 startActivity(MainActivityIntentFactory().browser(context, clipped.toUri()))
             } else {
-                search(binding?.searchCategories?.selectedItem.toString(), clipped)
+                search(headerBinding?.searchCategories?.selectedItem.toString(), clipped)
             }
         }
 
@@ -168,16 +179,16 @@ class SearchFragment : Fragment() {
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                binding?.searchInput as EditText,
-                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
-                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) },
+                headerBinding?.searchInput as EditText,
+                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion) },
+                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion, true) },
                 this::hideKeyboard
         )
 
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion) },
-                { suggestion -> search(binding?.searchCategories?.selectedItem.toString(), suggestion, true) }
+                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion) },
+                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion, true) }
         )
 
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding)
@@ -185,39 +196,28 @@ class SearchFragment : Fragment() {
         setListenerForKeyboardHiding()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding?.searchBar?.transitionName = "share"
+            headerBinding?.searchBar?.transitionName = "share"
         }
 
-        binding?.toolbar?.also { toolbar ->
-            toolbar.navigationIcon = null
-            toolbar.setPadding(0,0,0,0)
-            toolbar.setContentInsetsAbsolute(0,0)
+        setQuery()
 
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.inflateMenu(R.menu.search_menu)
-            toolbar.menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
-            toolbar.menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
-            toolbar.setOnMenuItemClickListener { clickMenu(it) }
-
-            setQuery()
+        activity?.also {
+            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
         }
 
+        /* TODO
         Toaster.snackShort(
                 binding?.background as View,
                 getString(R.string.message_search_on_background),
                 preferenceApplier.colorPair()
-        )
+        )*/
         return binding?.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setQuery() {
         // TODO should check behavior.
         arguments?.getString(EXTRA_KEY_QUERY)?.let { query ->
-            binding?.searchInput?.let { input ->
+            headerBinding?.searchInput?.let { input ->
                 input.setText(query)
                 input.selectAll()
             }
@@ -232,7 +232,15 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun clickMenu(item: MenuItem): Boolean = when (item.itemId) {
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater?.inflate(R.menu.search_menu, menu)
+        menu?.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
+        menu?.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
         R.id.suggestion_check -> {
             preferenceApplier.switchEnableSuggestion()
             item.isChecked = preferenceApplier.isEnableSuggestion
@@ -251,11 +259,7 @@ class SearchFragment : Fragment() {
             (activity as? SearchActivity)?.replaceFragment(SearchHistoryFragment())
             true
         }
-        R.id.setting -> {
-            startActivity(SettingsActivity.makeIntent(requireContext()))
-            true
-        }
-        else -> true
+        else -> super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("SetTextI18n")
@@ -274,8 +278,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun setTextAndMoveCursorToEnd(text: String) {
-        binding?.searchInput?.setText(text)
-        binding?.searchInput?.setSelection(text.length)
+        headerBinding?.searchInput?.setText(text)
+        headerBinding?.searchInput?.setSelection(text.length)
     }
 
     /**
@@ -288,9 +292,9 @@ class SearchFragment : Fragment() {
                     binding?.historyModule as ModuleSearchHistoryBinding,
                     { history -> search(history.category as String, history.query as String) },
                     { searchHistory ->
-                        binding?.searchInput?.setText("${searchHistory.query} ")
-                        binding?.searchInput?.setSelection(
-                                binding?.searchInput?.text.toString().length)
+                        headerBinding?.searchInput?.setText("${searchHistory.query} ")
+                        headerBinding?.searchInput?.setSelection(
+                                headerBinding?.searchInput?.text.toString().length)
                     }
             )
         }.subscribeOn(Schedulers.newThread())
@@ -313,16 +317,19 @@ class SearchFragment : Fragment() {
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
         urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
+
+        val headerView = headerBinding?.root ?: return
+        headerViewModel?.replace(headerView)
     }
 
     /**
      * Initialize search input.
      */
     private fun initSearchInput() {
-        binding?.searchInput?.let {
+        headerBinding?.searchInput?.let {
             it.setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    search(binding?.searchCategories?.selectedItem.toString(), v.text.toString())
+                    search(headerBinding?.searchCategories?.selectedItem.toString(), v.text.toString())
                 }
                 true
             }
@@ -369,7 +376,7 @@ class SearchFragment : Fragment() {
     private fun setActionButtonState(useVoiceSearch: Boolean) {
         this.useVoice = useVoiceSearch
         (if (useVoiceSearch) R.drawable.ic_mic else R.drawable.ic_search_white)
-                .also { binding?.searchAction?.setImageResource(it) }
+                .also { headerBinding?.searchAction?.setImageResource(it) }
     }
 
     /**
@@ -379,9 +386,9 @@ class SearchFragment : Fragment() {
         val colorPair : ColorPair = preferenceApplier.colorPair()
         @ColorInt val bgColor:   Int = colorPair.bgColor()
         @ColorInt val fontColor: Int = colorPair.fontColor()
-        EditTextColorSetter().invoke(binding?.searchInput, fontColor)
+        EditTextColorSetter().invoke(headerBinding?.searchInput, fontColor)
 
-        binding?.also {
+        headerBinding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
             it.searchAction.setOnClickListener {
@@ -395,8 +402,8 @@ class SearchFragment : Fragment() {
                     return@setOnClickListener
                 }
                 search(
-                        binding?.searchCategories?.selectedItem.toString(),
-                        binding?.searchInput?.text.toString()
+                        headerBinding?.searchCategories?.selectedItem.toString(),
+                        headerBinding?.searchInput?.text.toString()
                 )
             }
             it.searchClear.setColorFilter(fontColor)
@@ -438,7 +445,7 @@ class SearchFragment : Fragment() {
      * Hide software keyboard.
      */
     private fun hideKeyboard() {
-        binding?.searchInput?.let { Inputs.hideKeyboard(it) }
+        headerBinding?.searchInput?.let { Inputs.hideKeyboard(it) }
     }
 /*
 TODO Move individual fragments
@@ -525,6 +532,7 @@ TODO Move individual fragments
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_search
 
+
         /**
          * Extra key of query.
          */
@@ -539,5 +547,37 @@ TODO Move individual fragments
          * Extra key of URL.
          */
         private const val EXTRA_KEY_URL = "url"
+
+        /**
+         * Make launch [Intent].
+         *
+         * @param context [Context]
+         */
+        fun makeWith(context: Context, title: String? = null, url: String? = null) =
+                SearchFragment()
+                        .also { fragment ->
+                            fragment.arguments = Bundle().also { bundle ->
+                                title?.let {
+                                    bundle.putString(EXTRA_KEY_TITLE, it)
+                                }
+                                url?.let {
+                                    bundle.putString(EXTRA_KEY_URL, it)
+                                }
+                            }
+                        }
+
+        /**
+         * Make launcher [Intent] with query.
+         *
+         * @param context [Context]
+         * @param query Query
+         * @param title Title
+         * @param url URL
+         */
+        fun makeWithQuery(context: Context, query: String, title: String?, url: String? = null) =
+                makeWith(context, title, url).also { fragment ->
+                    fragment.arguments?.putString(EXTRA_KEY_QUERY, query)
+                }
+
     }
 }
