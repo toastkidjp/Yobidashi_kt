@@ -40,7 +40,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchClipboardBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
@@ -49,15 +48,12 @@ import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
-import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
-import jp.toastkid.yobidashi.search.clip.ClipboardModule
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
@@ -77,8 +73,6 @@ class SearchFragment : Fragment() {
      * View binder.
      */
     private var binding: ActivitySearchBinding? = null
-
-    private var clipboardModule: ClipboardModule? = null
 
     /**
      * Favorite search module.
@@ -161,16 +155,6 @@ class SearchFragment : Fragment() {
         initSearchInput()
 
         applyColor()
-
-        clipboardModule = ClipboardModule(binding?.clipboardModule as ModuleSearchClipboardBinding)
-        { clipped ->
-            if (Urls.isValidUrl(clipped)) {
-                activity?.supportFragmentManager?.popBackStack() // TODO check behavior.
-                startActivity(MainActivityIntentFactory().browser(context, clipped.toUri()))
-            } else {
-                search(headerBinding?.searchCategories?.selectedItem.toString(), clipped)
-            }
-        }
 
         urlModule = UrlModule(
                 binding?.urlModule as ModuleSearchUrlBinding,
@@ -520,7 +504,6 @@ TODO Move individual fragments
         historyModule?.dispose()
         suggestionModule?.dispose()
         urlSuggestionModule?.dispose()
-        clipboardModule?.dispose()
         appModule?.dispose()
     }
 
