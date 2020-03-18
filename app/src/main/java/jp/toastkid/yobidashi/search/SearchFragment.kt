@@ -223,6 +223,7 @@ class SearchFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
 
         inflater?.inflate(R.menu.search_menu, menu)
+        // TODO Move onResume
         menu?.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
         menu?.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
     }
@@ -311,8 +312,6 @@ class SearchFragment : Fragment() {
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
-        urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
-
         val headerView = headerBinding?.root ?: return
         headerViewModel?.replace(headerView)
     }
@@ -335,6 +334,10 @@ class SearchFragment : Fragment() {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
                     val key = s.toString()
+
+                    (if (key.isEmpty()|| key == currentUrl) urlModule?.switch(currentTitle, currentUrl)
+                    else urlModule?.hide())
+                            ?.addTo(disposables)
 
                     setActionButtonState(key.isEmpty())
 
@@ -442,44 +445,6 @@ class SearchFragment : Fragment() {
     private fun hideKeyboard() {
         headerBinding?.searchInput?.let { Inputs.hideKeyboard(it) }
     }
-/*
-TODO Move individual fragments
-    override fun onClickDeleteAllFavoriteSearch() {
-        val context = requireContext()
-        val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
-        Completable.fromAction { repository.deleteAll() }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            favoriteModule?.clear()
-                            Toaster.snackShort(
-                                    binding?.root as View,
-                                    R.string.settings_color_delete,
-                                    PreferenceApplier(context).colorPair()
-                            )
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
-    }
-
-    override fun onClickClearSearchHistory() {
-        Completable.fromAction { DatabaseFinder().invoke(this).searchHistoryRepository().deleteAll() }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            historyModule?.clear()
-                            Toaster.snackShort(
-                                    binding?.root as View,
-                                    R.string.settings_color_delete,
-                                    PreferenceApplier(this).colorPair()
-                            )
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
-    }
-*/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
