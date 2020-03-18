@@ -361,7 +361,6 @@ class BrowserModule(
         browserHeaderViewModel?.resetContent()
 
         val currentWebView = getWebView(tabId)
-        Inputs.hideKeyboard((currentWebView?.context as? Activity)?.window?.currentFocus)
         if (webViewContainer?.childCount != 0) {
             val previousView = webViewContainer?.get(0)
             if (currentWebView == previousView) {
