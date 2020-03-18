@@ -10,7 +10,12 @@ package jp.toastkid.yobidashi.settings.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
@@ -24,6 +29,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
 import jp.toastkid.yobidashi.settings.background.LoadedAction
@@ -97,6 +103,10 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
                     preferenceApplier.colorPair()
             )
         }
+    }
+
+    fun applyDarkMode() {
+        DarkModeApplier().invoke(preferenceApplier, binding.fabParent)
     }
 
     /**
