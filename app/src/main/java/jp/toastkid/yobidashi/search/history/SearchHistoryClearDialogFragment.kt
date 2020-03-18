@@ -9,8 +9,10 @@ package jp.toastkid.yobidashi.search.history
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -35,8 +37,10 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-        if (activityContext is OnClickSearchHistoryClearCallback) {
-            onClick = activityContext
+
+        val target = targetFragment
+        if (target is OnClickSearchHistoryClearCallback) {
+            onClick = target
         }
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_search_history)
@@ -48,5 +52,16 @@ class SearchHistoryClearDialogFragment : DialogFragment() {
                 }
                 .setCancelable(true)
                 .create()
+    }
+
+    companion object {
+        fun show(fragmentManager: FragmentManager, targetFragment: Fragment) {
+            val dialogFragment = SearchHistoryClearDialogFragment()
+            dialogFragment.setTargetFragment(targetFragment, 1)
+            dialogFragment.show(
+                    fragmentManager,
+                    SearchHistoryClearDialogFragment::class.java.canonicalName
+            )
+        }
     }
 }

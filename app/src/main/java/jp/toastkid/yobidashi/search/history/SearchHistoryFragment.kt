@@ -12,14 +12,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
+import timber.log.Timber
 
 /**
  * Search history list activity.
@@ -59,6 +62,8 @@ class SearchHistoryFragment : Fragment(),
 
         SwipeActionAttachment().invoke(binding.historiesView)
 
+        setHasOptionsMenu(true)
+
         binding.historiesView.scheduleLayoutAnimation()
         return binding.root
     }
@@ -80,9 +85,10 @@ class SearchHistoryFragment : Fragment(),
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.clear -> {
-                SearchHistoryClearDialogFragment().show(
+                val fragmentManager = fragmentManager ?: return true
+                SearchHistoryClearDialogFragment.show(
                         fragmentManager,
-                        SearchHistoryClearDialogFragment::class.java.simpleName
+                        this
                 )
                 return true
             }
@@ -91,9 +97,23 @@ class SearchHistoryFragment : Fragment(),
     }
 
     override fun onClickSearchHistoryClear() {
-        adapter.clearAll { Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair()) }
+        val context = context ?: return
+        Completable.fromAction { DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll() }
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {
+                            Toaster.snackShort(
+                                    binding.root as View,
+                                    R.string.settings_color_delete,
+                                    PreferenceApplier(context).colorPair()
+                            )
+                            adapter.clearAll { Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair()) }
+                                    .addTo(disposables)
+                            activity?.supportFragmentManager?.popBackStack()
+                        },
+                        Timber::e
+                )
                 .addTo(disposables)
-        activity?.supportFragmentManager?.popBackStack()
     }
 
     companion object {
