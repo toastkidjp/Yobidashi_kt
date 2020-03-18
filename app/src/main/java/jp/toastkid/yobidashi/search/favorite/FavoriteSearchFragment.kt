@@ -1,7 +1,11 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -147,7 +151,12 @@ class FavoriteSearchFragment : Fragment(),
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        Completable.fromAction { adapter?.clear() }
+        val context = requireContext()
+        val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
+        Completable.fromAction {
+            repository.deleteAll()
+            adapter?.clear()
+        }
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe {
@@ -156,6 +165,7 @@ class FavoriteSearchFragment : Fragment(),
                             R.string.settings_color_delete,
                             colorPair()
                     )
+                    activity?.supportFragmentManager?.popBackStack()
                 }
                 ?.addTo(disposables)
     }
