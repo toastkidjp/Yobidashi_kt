@@ -473,14 +473,14 @@ class SearchFragment : Fragment() {
         hideKeyboard()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         disposables.clear()
         favoriteModule?.dispose()
         historyModule?.dispose()
         suggestionModule?.dispose()
         urlSuggestionModule?.dispose()
         appModule?.dispose()
+        super.onDetach()
     }
 
     companion object {
