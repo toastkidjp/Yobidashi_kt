@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivityIntentFactory
-import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.settings.SettingsActivity
 
 /**
@@ -19,7 +18,7 @@ class PendingIntentFactory {
      * Make launch search intent.
      *
      * @param context
-     * @return [SearchActivity]'s pending intent
+     * @return [MainActivity]'s pending intent with search action
      */
     fun makeSearchLauncher(context: Context): PendingIntent =
             PendingIntent.getActivity(
