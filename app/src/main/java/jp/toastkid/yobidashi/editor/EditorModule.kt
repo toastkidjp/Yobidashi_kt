@@ -19,6 +19,7 @@ import android.widget.TextView
 import androidx.annotation.Dimension
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -27,11 +28,10 @@ import com.google.android.material.snackbar.Snackbar
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorMenuBinding
-import jp.toastkid.yobidashi.libs.FileExtractorFromUri
-import jp.toastkid.yobidashi.libs.ThumbnailGenerator
-import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -144,6 +144,58 @@ class EditorModule(
                 override fun onDestroyActionMode(p0: ActionMode?) = Unit
 
             }
+        }
+
+        val browserViewModel = (binding.root.context as? FragmentActivity)?.let { fragmentActivity ->
+            ViewModelProviders.of(fragmentActivity)
+                    .get(BrowserViewModel::class.java)
+        }
+
+        binding.editorInput.customSelectionActionModeCallback = object : ActionMode.Callback {
+
+            override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
+                val text = extractSelectedText()
+                if (Urls.isValidUrl(text)) {
+                    MenuInflater(context).inflate(R.menu.context_editor_url, menu)
+                }
+                return true
+            }
+
+            override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
+                val text = extractSelectedText()
+                when (menuItem?.itemId) {
+                    R.id.context_edit_url_open_new -> {
+                        browserViewModel?.open(text.toUri())
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.context_edit_url_open_background -> {
+                        browserViewModel?.openBackground(text.toUri())
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.context_edit_url_preview -> {
+                        browserViewModel?.preview(text.toUri())
+                        Inputs.hideKeyboard(binding.root)
+                        actionMode?.finish()
+                        return true
+                    }
+                    else -> Unit
+                }
+                actionMode?.finish()
+                return false
+            }
+
+            private fun extractSelectedText(): String {
+                return binding.editorInput.text
+                        .subSequence(binding.editorInput.selectionStart, binding.editorInput.selectionEnd)
+                        .toString()
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
+
+            override fun onDestroyActionMode(p0: ActionMode?) = Unit
+
         }
 
         lastSavedTitle = context.getString(R.string.last_saved)

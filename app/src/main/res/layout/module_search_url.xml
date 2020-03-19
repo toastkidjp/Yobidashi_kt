@@ -34,18 +34,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="32dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center_vertical"
-                tools:src="@drawable/ic_web_black"
-                android:contentDescription="@null"
-                android:adjustViewBounds="true"
-                app:layout_constraintStart_toStartOf="@id/title"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
+
             <TextView
                 android:id="@+id/text"
                 android:layout_width="0dp"
@@ -55,15 +44,15 @@
                 android:maxLines="3"
                 android:textSize="14sp"
                 android:textColor="@color/link_blue"
-                app:layout_constraintTop_toTopOf="@id/image"
-                app:layout_constraintBottom_toBottomOf="@id/image"
-                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintEnd_toStartOf="@id/share"
                 android:background="@drawable/ripple_transparent"
                 />
             <ImageView
                 android:id="@+id/share"
-                android:layout_width="32dp"
+                android:layout_width="28dp"
                 android:layout_height="0dp"
                 android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/ic_share_black"
@@ -78,17 +67,31 @@
                 />
             <ImageView
                 android:id="@+id/clip"
-                android:layout_width="32dp"
+                android:layout_width="28dp"
                 android:layout_height="0dp"
                 android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/ic_clipboard_black"
+                android:contentDescription="@null"
+                app:layout_constraintEnd_toStartOf="@id/edit"
+                app:layout_constraintTop_toTopOf="@id/text"
+                app:layout_constraintBottom_toBottomOf="@id/text"
+                android:adjustViewBounds="true"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{module::clipUrl}"
+                />
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="28dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_edit_black"
                 android:contentDescription="@null"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/text"
                 app:layout_constraintBottom_toBottomOf="@id/text"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{module::clipUrl}"
+                android:onClick="@{view -> module.edit()}"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -23,7 +23,10 @@ import timber.log.Timber
 /**
  * @author toastkidjp
  */
-class UrlModule(private val binding: ModuleSearchUrlBinding) {
+class UrlModule(
+        private val binding: ModuleSearchUrlBinding,
+        private val insert: (String) -> Unit
+) {
 
     private val preferenceApplier = PreferenceApplier(binding.root.context)
 
@@ -49,6 +52,10 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         )
     }
 
+    fun edit() {
+        insert(binding.text.text.toString())
+    }
+
     /**
      * This function is called from data-binding.
      *
@@ -58,10 +65,19 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
         view.context.startActivity(IntentFactory.makeShareUrl(getCurrentText()))
     }
 
-    fun switch(url: String?): Disposable =
+    /**
+     * Switch visibility and content.
+     *
+     * @param title site's title
+     * @param url URL
+     * @return [Disposable]
+     */
+    fun switch(title: String?, url: String?): Disposable =
             if (url.isNullOrBlank() || !enable) {
+                clearContent()
                 hide()
             } else {
+                setTitle(title)
                 setLink(url)
                 show()
             }
@@ -93,6 +109,10 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
 
     private fun getCurrentText() = binding.text.text.toString()
 
+    private fun setTitle(title: String?) {
+        binding.title.text = title
+    }
+
     /**
      * Set open link and icon.
      *
@@ -100,6 +120,11 @@ class UrlModule(private val binding: ModuleSearchUrlBinding) {
      */
     private fun setLink(link: String) {
         binding.text.text = link
+    }
+
+    private fun clearContent() {
+        binding.title.text = ""
+        binding.text.text = ""
     }
 
     private fun runOnMainThread(action: () -> Unit) =

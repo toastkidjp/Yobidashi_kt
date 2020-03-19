@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemImageThumbnailsBinding
+import jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment
 
 /**
  * RecyclerView's adapter.

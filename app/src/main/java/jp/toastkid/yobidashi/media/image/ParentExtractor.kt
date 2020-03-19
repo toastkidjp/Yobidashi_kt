@@ -7,14 +7,15 @@
  */
 package jp.toastkid.yobidashi.media.image
 
-import android.graphics.Matrix
-
 /**
+ * TODO extract last delimiter.
  * @author toastkidjp
  */
-class RotateMatrixFactory {
+class ParentExtractor {
 
-    operator fun invoke(degrees: Float, width: Float, height: Float) =
-            Matrix().also { it.setRotate(degrees, width / 2f, height / 2f) }
-
+    operator fun invoke(path: String?): String? =
+            when {
+                path.isNullOrBlank() || !path.contains("/") -> path
+                else -> path.substring(0, path.lastIndexOf("/"))
+            }
 }

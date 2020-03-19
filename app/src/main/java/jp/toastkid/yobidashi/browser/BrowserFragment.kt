@@ -248,6 +248,12 @@ class BrowserFragment : Fragment(),
         browserViewModel?.preview?.observe(activity, Observer {
             preview(it.toString())
         })
+        browserViewModel?.open?.observe(activity, Observer {
+            tabs.openNewWebTab(it.toString())
+        })
+        browserViewModel?.openBackground?.observe(activity, Observer {
+            tabs.openBackgroundTab(it.toString(), it.toString())
+        })
 
         pageSearchPresenter = PageSearcherModule(
                 this,
@@ -583,12 +589,13 @@ class BrowserFragment : Fragment(),
      */
     private fun search(option: ActivityOptions) {
         context?.let {
+            val currentTitle = browserModule.currentTitle()
             val currentUrl = browserModule.currentUrl()
             val query = searchQueryExtractor.invoke(currentUrl)
             val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
-                SearchActivity.makeIntent(it, currentUrl)
+                SearchActivity.makeIntent(it, currentTitle, currentUrl)
             } else {
-                SearchActivity.makeIntentWithQuery(it, query ?: "", currentUrl)
+                SearchActivity.makeIntentWithQuery(it, query ?: "", currentTitle, currentUrl)
             }
             startActivity(makeIntent, option.toBundle())
         }
@@ -670,13 +677,22 @@ class BrowserFragment : Fragment(),
 
     private fun tapHeader() {
         val activityContext = context ?: return
+        val currentTitle = browserModule.currentTitle()
         val currentUrl = browserModule.currentUrl()
         val inputText = if (preferenceApplier.enableSearchQueryExtract) {
             searchQueryExtractor(currentUrl) ?: currentUrl
         } else {
             currentUrl
         }
-        startActivity(SearchActivity.makeIntentWithQuery(activityContext, inputText ?: "", currentUrl))
+
+        startActivity(
+                SearchActivity.makeIntentWithQuery(
+                        activityContext,
+                        inputText ?: "",
+                        currentTitle,
+                        currentUrl
+                )
+        )
     }
 
     /**

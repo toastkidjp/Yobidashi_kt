@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.media.image
+package jp.toastkid.yobidashi.media.image.preview
 
 import android.app.Dialog
 import android.content.ActivityNotFoundException
@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.media.image.Image
 import timber.log.Timber
 import java.io.File
 

@@ -116,12 +116,15 @@ class SearchActivity : AppCompatActivity(),
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var currentTitle: String? = null
+
     private var currentUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
 
+        currentTitle = intent.getStringExtra(EXTRA_KEY_TITLE)
         currentUrl = intent.getStringExtra(EXTRA_KEY_URL)
 
         preferenceApplier = PreferenceApplier(this)
@@ -154,7 +157,10 @@ class SearchActivity : AppCompatActivity(),
             }
         }
 
-        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding)
+        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding) {
+            // TODO attempt to use method reference
+            setTextAndMoveCursorToEnd(it)
+        }
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -259,16 +265,19 @@ class SearchActivity : AppCompatActivity(),
                     binding?.favoriteModule as ModuleSearchFavoriteBinding,
                     { fav -> search(fav.category as String, fav.query as String) },
                     this::hideKeyboard,
-                    { fav ->
-                        binding?.searchInput?.setText("${fav.query} ")
-                        binding?.searchInput?.setSelection(
-                                binding?.searchInput?.text.toString().length)
+                    { fav -> // TODO Clean it.
+                        setTextAndMoveCursorToEnd("${fav.query} ")
                     }
             )
         }
                 .subscribeOn(Schedulers.newThread())
                 .subscribe( { favoriteModule?.query("") }, { Timber.e(it) })
                 .addTo(disposables)
+    }
+
+    private fun setTextAndMoveCursorToEnd(text: String) {
+        binding?.searchInput?.setText(text)
+        binding?.searchInput?.setSelection(text.length)
     }
 
     /**
@@ -307,7 +316,7 @@ class SearchActivity : AppCompatActivity(),
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
-        urlModule?.switch(currentUrl)?.addTo(disposables)
+        urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
     }
 
     /**
@@ -539,6 +548,11 @@ class SearchActivity : AppCompatActivity(),
         private const val EXTRA_KEY_QUERY = "query"
 
         /**
+         * Extra key of title.
+         */
+        private const val EXTRA_KEY_TITLE = "title"
+
+        /**
          * Extra key of URL.
          */
         private const val EXTRA_KEY_URL = "url"
@@ -548,10 +562,13 @@ class SearchActivity : AppCompatActivity(),
          *
          * @param context [Context]
          */
-        fun makeIntent(context: Context, url: String? = null) =
+        fun makeIntent(context: Context, title: String? = null, url: String? = null) =
                 Intent(context, SearchActivity::class.java)
                         .apply {
                             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            title?.let {
+                                putExtra(EXTRA_KEY_TITLE, it)
+                            }
                             url?.let {
                                 putExtra(EXTRA_KEY_URL, it)
                             }
@@ -562,9 +579,11 @@ class SearchActivity : AppCompatActivity(),
          *
          * @param context [Context]
          * @param query Query
+         * @param title Title
+         * @param url URL
          */
-        fun makeIntentWithQuery(context: Context, query: String, url: String? = null): Intent =
-                makeIntent(context, url).apply { putExtra(EXTRA_KEY_QUERY, query) }
+        fun makeIntentWithQuery(context: Context, query: String, title: String?, url: String? = null): Intent =
+                makeIntent(context, title, url).apply { putExtra(EXTRA_KEY_QUERY, query) }
 
     }
 }
