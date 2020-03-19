@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivityIntentFactory
-import jp.toastkid.yobidashi.settings.SettingsActivity
 
 /**
  * Factory of [PendingIntent].
@@ -99,7 +98,7 @@ class PendingIntentFactory {
             )
 
     /**
-     * Make Setting activity's [PendingIntent].
+     * Make Setting fragment's [PendingIntent].
      *
      * @param context [Context]
      * @return [PendingIntent]
@@ -108,7 +107,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     12,
-                    SettingsActivity.makeIntent(context),
+                    mainActivityIntentFactory.setting(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 

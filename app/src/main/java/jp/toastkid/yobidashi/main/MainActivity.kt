@@ -395,6 +395,9 @@ class MainActivity : AppCompatActivity(),
             SEARCH -> {
                 replaceFragment(obtainFragment(SearchFragment::class.java))
             }
+            SETTING -> {
+                replaceFragment(obtainFragment(SettingFragment::class.java))
+            }
         }
     }
 

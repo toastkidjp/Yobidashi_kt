@@ -46,6 +46,8 @@ class MainActivityIntentFactory {
 
     fun search(context: Context) = withAction(context, SEARCH)
 
+    fun setting(context: Context) = withAction(context, SETTING)
+
     private fun withAction(context: Context, action: String) =
             Intent(context, MainActivity::class.java)
                     .also {
