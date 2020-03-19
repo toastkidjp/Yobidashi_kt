@@ -26,14 +26,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
@@ -50,7 +48,6 @@ import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -641,29 +638,13 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        Maybe.fromCallable {
-            ImageLoader.readBitmapDrawable(
-                    this,
-                    File(backgroundImagePath).toURI().toString().toUri()
-            )
-        }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setBackgroundImage) {
-                    Timber.e(it)
-                    Toaster.snackShort(
-                            binding.root,
-                            getString(R.string.message_failed_read_image),
-                            preferenceApplier.colorPair()
-                    )
-                    preferenceApplier.removeBackgroundImagePath()
-                    setBackgroundImage(null)
-                }
-                .addTo(disposables)
+        Glide.with(this)
+                .load(File(backgroundImagePath).toURI().toString().toUri())
+                .into(binding.background)
     }
 
     /**
-     * Set background image.
+     * Set background image. TODO remove it.
      *
      * @param background nullable
      */
