@@ -69,7 +69,7 @@ import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
-import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -281,7 +281,7 @@ class MainActivity : AppCompatActivity(),
 
         menuUseCase = MenuUseCase(
                 { this },
-                { supportFragmentManager.findFragmentById(R.id.content) },
+                { findFragment() },
                 { replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -553,8 +553,9 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
+        val fragment = findFragment()
         val backStackEntryCount = supportFragmentManager?.backStackEntryCount ?: 0
-        if (backStackEntryCount >= 1) {
+        if (backStackEntryCount >= 1 && fragment !is TabUiFragment) {
             supportFragmentManager?.popBackStack()
             return
         }
@@ -562,9 +563,11 @@ class MainActivity : AppCompatActivity(),
         confirmExit()
     }
 
+    private fun findFragment() = supportFragmentManager.findFragmentById(R.id.content)
+
     /**
      * Find current fragment.
-     *
+     * TODO Delete it.
      * @return fragment or null
      */
     private fun findCurrentFragment(): CommonFragmentAction? {
@@ -837,7 +840,7 @@ class MainActivity : AppCompatActivity(),
             true
         }
         R.id.setting -> {
-            startActivity(SettingsActivity.makeIntent(this))
+            replaceFragment(obtainFragment(SettingFragment::class.java))
             true
         }
         R.id.reset_menu_position -> {

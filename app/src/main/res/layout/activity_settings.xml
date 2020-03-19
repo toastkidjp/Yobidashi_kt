@@ -2,7 +2,7 @@
 <layout>
 
     <data>
-        <variable name="activity" type="jp.toastkid.yobidashi.settings.SettingsActivity" />
+        <variable name="fragment" type="jp.toastkid.yobidashi.settings.SettingFragment" />
     </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
             android:background="@color/transparent"
+            android:visibility="gone"
             >
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -29,7 +30,6 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
             <androidx.viewpager.widget.PagerTabStrip
                 android:id="@+id/tab_strip"

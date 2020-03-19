@@ -1,26 +1,30 @@
+/*
+ * Copyright (c) 2019 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
 package jp.toastkid.yobidashi.settings
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ActivitySettingsBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 
 /**
- * Settings activity.
- *
  * @author toastkidjp
  */
-class SettingsActivity : AppCompatActivity() {
+class SettingFragment : Fragment() {
 
     /**
      * DataBinding object.
@@ -29,44 +33,43 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(LAYOUT_ID)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        preferenceApplier = PreferenceApplier(context)
 
-        preferenceApplier = PreferenceApplier(this)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        binding.fragment = this
 
-        binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
-        //binding.activity = this
-        binding.toolbar.also { toolbar ->
-            setSupportActionBar(toolbar)
-            toolbar.setNavigationIcon(R.drawable.ic_back)
-            toolbar.setNavigationOnClickListener { finish() }
-            toolbar.setTitle(TITLE_ID)
-        }
-
-        supportFragmentManager?.let { fragmentManager ->
+        childFragmentManager.let { fragmentManager ->
             binding.container.adapter = PagerAdapter(fragmentManager) { getString(it) }
             binding.container.offscreenPageLimit = 3
         }
+
+        setHasOptionsMenu(true)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.container.currentItem = 0
     }
 
     override fun onResume() {
         super.onResume()
 
         val colorPair = preferenceApplier.colorPair()
-        ToolbarColorApplier()(window, binding.toolbar, colorPair)
+
         binding.tabStrip.also {
             it.setBackgroundColor(colorPair.bgColor())
             it.setTextColor(colorPair.fontColor())
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        val menuInflater = MenuInflater(this)
-        menuInflater.inflate(R.menu.settings_toolbar_menu, menu)
-        menuInflater.inflate(R.menu.setting_tab_shortcut, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.setting_tab_shortcut, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
@@ -90,14 +93,6 @@ class SettingsActivity : AppCompatActivity() {
             binding.container.currentItem = 7
             true
         }
-        R.id.menu_exit -> {
-            moveTaskToBack(true)
-            true
-        }
-        R.id.menu_close -> {
-            finish()
-            true
-        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -109,19 +104,5 @@ class SettingsActivity : AppCompatActivity() {
         @LayoutRes
         private const val LAYOUT_ID = R.layout.activity_settings
 
-        @StringRes
-        private const val TITLE_ID = R.string.title_settings
-
-        /**
-         * Make this activity's intent.
-         * @param context
-         *
-         * @return
-         */
-        fun makeIntent(context: Context): Intent {
-            val intent = Intent(context, SettingsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            return intent
-        }
     }
 }
