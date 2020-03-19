@@ -35,6 +35,39 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="20dp"
             >
+
+            <ImageView
+                android:id="@+id/reverse_filter"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_monochrome"
+                android:tint="@color/lime_bg"
+                android:onClick="@{view -> dialog.reverseFilter()}"
+                />
+
+            <ImageView
+                android:id="@+id/sepia"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_monochrome"
+                android:tint="@color/deep_orange_500_dd"
+                android:onClick="@{view -> dialog.sepia()}"
+                />
+            <ImageView
+                android:id="@+id/gray_scale"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_monochrome"
+                android:tint="@color/pre4_ripple"
+                android:onClick="@{view -> dialog.grayScale()}"
+                />
+
             <ImageView
                 android:id="@+id/rotate_left"
                 android:layout_width="44dp"

@@ -13,6 +13,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -156,6 +158,61 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     PreferenceApplier(binding.root.context).colorPair()
             )
         }
+    }
+
+    fun reverseFilter() {
+        if (binding.photo.colorFilter != null) {
+            clearFilter()
+            return
+        }
+
+        binding.photo.colorFilter = ColorMatrixColorFilter(
+                ColorMatrix().also {
+                    it.set(
+                            floatArrayOf(
+                                    -1f,0f,0f,0f,255f,
+                                    0f,-1f,0f,0f,255f,
+                                    0f,0f,-1f,0f,255f,
+                                    0f,0f,0f,1f,255f
+                            )
+                    )
+                }
+        )
+    }
+
+    fun sepia() {
+        if (binding.photo.colorFilter != null) {
+            clearFilter()
+            return
+        }
+
+        binding.photo.colorFilter = ColorMatrixColorFilter(
+                ColorMatrix().also {
+                    it.set(
+                            floatArrayOf(
+                                    0.9f,0f,0f,0f,000f,
+                                    0f,0.7f,0f,0f,000f,
+                                    0f,0f,0.4f,0f,000f,
+                                    0f,0f,0f,1f,000f
+                            )
+                    )
+                }
+        )
+    }
+
+    fun grayScale() {
+        if (binding.photo.colorFilter != null) {
+            clearFilter()
+            return
+        }
+
+        val colorMatrix = ColorMatrix()
+        colorMatrix.setSaturation(0.0f)
+        binding.photo.colorFilter = ColorMatrixColorFilter(colorMatrix)
+    }
+
+    private fun clearFilter() {
+        binding.photo.colorFilter = null
     }
 
     fun rotateLeft() {
