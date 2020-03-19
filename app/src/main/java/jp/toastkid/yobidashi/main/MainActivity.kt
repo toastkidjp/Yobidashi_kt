@@ -432,6 +432,11 @@ class MainActivity : AppCompatActivity(),
      * @param fragment {@link BaseFragment} instance
      */
     private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = true) {
+        val currentFragment = findFragment()
+        if (currentFragment == fragment) {
+            return
+        }
+
         val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager.fragments
         if (fragments.size != 0) {
