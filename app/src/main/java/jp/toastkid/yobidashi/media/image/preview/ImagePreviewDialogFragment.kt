@@ -20,6 +20,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toBitmap
@@ -42,6 +43,8 @@ import timber.log.Timber
 import java.io.File
 
 /**
+ * TODO Remake normal fragment
+ * TODO Divide filter implementation to other class.
  * @author toastkidjp
  */
 class ImagePreviewDialogFragment  : DialogFragment() {
@@ -81,6 +84,35 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         fitPhotoView()
 
         applyColorToButtons()
+
+        binding.alpha.progress = 50
+        binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (!fromUser) {
+                    return
+                }
+
+                val progressFloat = ((progress - 50).toFloat() / 100f)
+
+                binding.photo.colorFilter = ColorMatrixColorFilter(
+                        ColorMatrix().also {
+                            it.set(
+                                    floatArrayOf(
+                                            1f,0f,0f,progressFloat,000f,
+                                            0f,1f,0f,progressFloat,000f,
+                                            0f,0f,1f,progressFloat,000f,
+                                            0f,0f,0f,1f,000f
+                                    )
+                            )
+                        }
+                )
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+
+        })
 
         contentResolver = binding.root.context.contentResolver
         loadImageAsync(activityContext, path)
