@@ -27,14 +27,10 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.bumptech.glide.Glide
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.image.Image
@@ -153,21 +149,9 @@ class ImagePreviewDialogFragment  : DialogFragment() {
             return
         }
 
-        val uri = Uri.parse(File(path).toURI().toString())
-        Maybe.fromCallable {
-            ImageLoader.loadBitmap(
-                    activityContext,
-                    uri
-            )
-        }
-                .subscribeOn(Schedulers.io())
-                .map { rotatedImageFixing(contentResolver, it, uri) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        binding.photo::setImageBitmap,
-                        Timber::e
-                )
-                .addTo(disposables)
+        Glide.with(activityContext)
+                .load(Uri.parse(File(path).toURI().toString()))
+                .into(binding.photo)
     }
 
     fun edit() {
