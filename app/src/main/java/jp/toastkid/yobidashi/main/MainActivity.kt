@@ -562,9 +562,11 @@ class MainActivity : AppCompatActivity(),
         }
 
         val fragment = findFragment()
-        val backStackEntryCount = supportFragmentManager?.backStackEntryCount ?: 0
-        if (backStackEntryCount >= 1 && fragment !is TabUiFragment) {
+        if (fragment !is EditorFragment) {
             supportFragmentManager?.popBackStack()
+            if ((supportFragmentManager?.backStackEntryCount ?: 0) <= 1) {
+                moveTaskToBack(true)
+            }
             return
         }
 
