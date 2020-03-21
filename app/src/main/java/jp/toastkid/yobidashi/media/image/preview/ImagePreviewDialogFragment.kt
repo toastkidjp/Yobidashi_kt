@@ -27,6 +27,8 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
@@ -48,6 +50,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private lateinit var binding: DialogImagePreviewBinding
 
     private lateinit var contentResolver: ContentResolver
+
+    private lateinit var colorFilterUseCase: ColorFilterUseCase
 
     private var path: String? = null
 
@@ -108,6 +112,13 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
 
+        })
+
+        // TODO Move to onViewCreated
+        val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
+        colorFilterUseCase = ColorFilterUseCase(viewModel)
+        viewModel.colorFilter.observe(this, Observer {
+            binding.photo.colorFilter = it
         })
 
         contentResolver = binding.root.context.contentResolver
@@ -177,54 +188,15 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     fun reverseFilter() {
-        if (binding.photo.colorFilter != null) {
-            clearFilter()
-            return
-        }
-
-        binding.photo.colorFilter = ColorMatrixColorFilter(
-                ColorMatrix().also {
-                    it.set(
-                            floatArrayOf(
-                                    -1f,0f,0f,0f,255f,
-                                    0f,-1f,0f,0f,255f,
-                                    0f,0f,-1f,0f,255f,
-                                    0f,0f,0f,1f,255f
-                            )
-                    )
-                }
-        )
+        colorFilterUseCase.reverseFilter()
     }
 
     fun sepia() {
-        if (binding.photo.colorFilter != null) {
-            clearFilter()
-            return
-        }
-
-        binding.photo.colorFilter = ColorMatrixColorFilter(
-                ColorMatrix().also {
-                    it.set(
-                            floatArrayOf(
-                                    0.9f,0f,0f,0f,000f,
-                                    0f,0.7f,0f,0f,000f,
-                                    0f,0f,0.4f,0f,000f,
-                                    0f,0f,0f,1f,000f
-                            )
-                    )
-                }
-        )
+        colorFilterUseCase.sepia()
     }
 
     fun grayScale() {
-        if (binding.photo.colorFilter != null) {
-            clearFilter()
-            return
-        }
-
-        val colorMatrix = ColorMatrix()
-        colorMatrix.setSaturation(0.0f)
-        binding.photo.colorFilter = ColorMatrixColorFilter(colorMatrix)
+        colorFilterUseCase.grayScale()
     }
 
     private fun clearFilter() {
