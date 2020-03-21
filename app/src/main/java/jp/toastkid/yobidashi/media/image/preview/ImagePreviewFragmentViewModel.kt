@@ -21,6 +21,10 @@ class ImagePreviewFragmentViewModel : ViewModel() {
 
     val colorFilter: LiveData<ColorFilter?> = _colorFilter
 
+    fun newColorFilter(colorFilter: ColorFilter) {
+        _colorFilter.postValue(colorFilter)
+    }
+
     fun newColorFilter(filter: ImageColorFilter) {
         _colorFilter.postValue(filter.filter)
     }

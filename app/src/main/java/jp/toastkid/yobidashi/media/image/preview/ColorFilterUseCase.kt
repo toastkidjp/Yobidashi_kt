@@ -7,12 +7,33 @@
  */
 package jp.toastkid.yobidashi.media.image.preview
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+
 /**
  * @author toastkidjp
  */
 class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
 
     private var lastFilter: ImageColorFilter? = null
+
+    fun applyAlpha(alpha: Float) {
+        lastFilter = null
+        viewModel.newColorFilter(
+                ColorMatrixColorFilter(
+                        ColorMatrix().also {
+                            it.set(
+                                    floatArrayOf(
+                                            1f,0f,0f,alpha,000f,
+                                            0f,1f,0f,alpha,000f,
+                                            0f,0f,1f,alpha,000f,
+                                            0f,0f,0f,1f,000f
+                                    )
+                            )
+                        }
+                )
+        )
+    }
 
     fun reverseFilter() {
         applyFilter(ImageColorFilter.REVERSE)

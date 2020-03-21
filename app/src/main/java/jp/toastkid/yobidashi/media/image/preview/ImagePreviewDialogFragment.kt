@@ -13,8 +13,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -83,6 +81,13 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         applyColorToButtons()
 
+        // TODO Move to onViewCreated
+        val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
+        binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
+        viewModel.colorFilter.observe(this, Observer {
+            binding.photo.colorFilter = it
+        })
+
         binding.alpha.progress = 50
         binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -90,33 +95,13 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     return
                 }
 
-                val progressFloat = ((progress - 50).toFloat() / 100f)
-
-                binding.photo.colorFilter = ColorMatrixColorFilter(
-                        ColorMatrix().also {
-                            it.set(
-                                    floatArrayOf(
-                                            1f,0f,0f,progressFloat,000f,
-                                            0f,1f,0f,progressFloat,000f,
-                                            0f,0f,1f,progressFloat,000f,
-                                            0f,0f,0f,1f,000f
-                                    )
-                            )
-                        }
-                )
+                binding.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
 
-        })
-
-        // TODO Move to onViewCreated
-        val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
-        binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
-        viewModel.colorFilter.observe(this, Observer {
-            binding.photo.colorFilter = it
         })
 
         contentResolver = binding.root.context.contentResolver
