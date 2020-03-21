@@ -39,8 +39,6 @@ import timber.log.Timber
 import java.io.File
 
 /**
- * TODO Remake normal fragment
- * TODO Divide filter implementation to other class.
  * @author toastkidjp
  */
 class ImagePreviewDialogFragment  : DialogFragment() {
@@ -81,28 +79,13 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         applyColorToButtons()
 
-        // TODO Move to onViewCreated
         val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
             binding.photo.colorFilter = it
         })
 
-        binding.alpha.progress = 50
-        binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (!fromUser) {
-                    return
-                }
-
-                binding.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-
-        })
+        initializeAlphaSlider()
 
         contentResolver = binding.root.context.contentResolver
         loadImageAsync(activityContext, path)
@@ -119,6 +102,24 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                                 ViewGroup.LayoutParams.MATCH_PARENT)
                     }
                 }
+    }
+
+    private fun initializeAlphaSlider() {
+        binding.alpha.progress = 50
+        binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (!fromUser) {
+                    return
+                }
+
+                binding.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+
+        })
     }
 
     private fun fitPhotoView() {
