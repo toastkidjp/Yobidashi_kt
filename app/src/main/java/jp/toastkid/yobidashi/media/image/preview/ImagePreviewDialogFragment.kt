@@ -199,10 +199,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         colorFilterUseCase.grayScale()
     }
 
-    private fun clearFilter() {
-        binding.photo.colorFilter = null
-    }
-
     fun rotateLeft() {
         val bitmap = binding.photo.drawable.toBitmap()
         binding.photo.setImageBitmap(rotatedBitmapFactory.rotateLeft(bitmap))
