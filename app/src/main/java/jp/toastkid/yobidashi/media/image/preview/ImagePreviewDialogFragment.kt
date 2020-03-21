@@ -51,8 +51,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private lateinit var contentResolver: ContentResolver
 
-    private lateinit var colorFilterUseCase: ColorFilterUseCase
-
     private var path: String? = null
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
@@ -116,8 +114,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         // TODO Move to onViewCreated
         val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
-        colorFilterUseCase = ColorFilterUseCase(viewModel)
-        binding.colorFilterUseCase = colorFilterUseCase
+        binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
             binding.photo.colorFilter = it
         })
