@@ -117,6 +117,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         // TODO Move to onViewCreated
         val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
         colorFilterUseCase = ColorFilterUseCase(viewModel)
+        binding.colorFilterUseCase = colorFilterUseCase
         viewModel.colorFilter.observe(this, Observer {
             binding.photo.colorFilter = it
         })
@@ -185,18 +186,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     PreferenceApplier(binding.root.context).colorPair()
             )
         }
-    }
-
-    fun reverseFilter() {
-        colorFilterUseCase.reverseFilter()
-    }
-
-    fun sepia() {
-        colorFilterUseCase.sepia()
-    }
-
-    fun grayScale() {
-        colorFilterUseCase.grayScale()
     }
 
     fun rotateLeft() {
