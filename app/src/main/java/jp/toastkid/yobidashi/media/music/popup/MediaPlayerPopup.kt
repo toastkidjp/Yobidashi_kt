@@ -75,7 +75,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     private val heightPixels = resources.displayMetrics.heightPixels
 
-    private val headerHeight = resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
+    private val headerHeight = resources.getDimensionPixelSize(R.dimen.media_player_popup_header_height)
 
     private val swipeLimit = heightPixels - headerHeight
 
@@ -283,7 +283,7 @@ class MediaPlayerPopup(private val context: Context) {
                 if (y > swipeLimit) {
                     return
                 }
-                popupWindow.update(-1, -y.toInt(), -1, -1)
+                popupWindow.update(-1, -(y.toInt() - headerHeight), -1, -1)
             }
         })
         binding.header.setOnTouchListener(slidingTouchListener)
