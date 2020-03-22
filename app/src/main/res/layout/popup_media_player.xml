@@ -17,7 +17,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="@dimen/media_player_popup_header_height"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp"
             app:layout_constraintTop_toTopOf="parent"
