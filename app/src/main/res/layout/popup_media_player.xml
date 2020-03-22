@@ -48,6 +48,7 @@
                     app:srcCompat="@drawable/ic_stop"
                     android:onClick="@{view -> popup.reset()}"
                     android:contentDescription="@string/settings_color_reset"
+                    android:background="@drawable/ripple_transparent"
                     />
                 <ImageView
                     android:id="@+id/play_switch"
@@ -60,6 +61,7 @@
                     app:srcCompat="@drawable/ic_play_media"
                     android:onClick="@{view -> popup.switchState()}"
                     android:contentDescription="@string/description_play_switch"
+                    android:background="@drawable/ripple_transparent"
                     />
                 <ImageView
                     android:id="@+id/shuffle"
@@ -72,6 +74,7 @@
                     app:srcCompat="@drawable/ic_shuffle"
                     android:onClick="@{view -> popup.shuffle()}"
                     android:contentDescription="@string/action_shuffle"
+                    android:background="@drawable/ripple_transparent"
                     />
                 <Spinner
                     android:id="@+id/playing_speed"
@@ -85,6 +88,7 @@
                     app:srcCompat="@drawable/ic_close"
                     android:onClick="@{view -> popup.hide()}"
                     android:contentDescription="@string/close"
+                    android:background="@drawable/ripple_transparent"
                     />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
