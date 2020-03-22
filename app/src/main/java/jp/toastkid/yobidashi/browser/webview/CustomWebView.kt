@@ -70,7 +70,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         }
         val eventX = event.x.toInt()
         val eventY = event.y.toInt()
-        event.offsetLocation(nestedOffsetX, nestedOffsetY)
 
         when (action) {
             MotionEvent.ACTION_MOVE -> {
@@ -83,7 +82,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     deltaX -= scrollConsumed[0]
                     lastX = eventX - scrollConsumed[0].toFloat()
 
-                    event.offsetLocation(deltaX, deltaY/*TODO -scrollOffset[1].toFloat()*/)
+                    event.offsetLocation(deltaX, deltaY)
                     nestedOffsetX += scrollOffset[0]
                     nestedOffsetY += scrollOffset[1]
                 }
