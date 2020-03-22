@@ -7,9 +7,6 @@
  */
 package jp.toastkid.yobidashi.media.image
 
-/**
- * @author toastkidjp
- */
 import android.Manifest
 import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat
@@ -46,6 +43,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
 
     private lateinit var imageLoader: ImageLoader
 
+    private lateinit var preferenceApplier: PreferenceApplier
+
     private var adapter: Adapter? = null
 
     private val disposables = CompositeDisposable()
@@ -65,12 +64,21 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
 
         val context = view.context
 
-        adapter = Adapter(fragmentManager) {
-            Completable.fromAction { loadImages(it) }
-                    .subscribeOn(Schedulers.io())
-                    .subscribe()
-                    .addTo(disposables)
-        }
+        preferenceApplier = PreferenceApplier(context)
+
+        adapter = Adapter(
+                fragmentManager,
+                {
+                    Completable.fromAction { loadImages(it) }
+                            .subscribeOn(Schedulers.io())
+                            .subscribe()
+                            .addTo(disposables)
+                },
+                {
+                    preferenceApplier.addExcludeItem(it)
+                    loadImages()
+                }
+        )
 
         val contentResolver = context.contentResolver ?: return
         bucketLoader = BucketLoader(contentResolver)
@@ -123,17 +131,20 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
     private fun loadImages(bucket: String? = null) {
         adapter?.clear()
 
-        // TODO clean up it.
-        if (bucket.isNullOrBlank()) {
-            bucketLoader().forEach { adapter?.add(it) }
-            activity?.runOnUiThread {
-                adapter?.notifyDataSetChanged()
-                RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
-            }
-            return
-        }
+        val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
 
-        imageLoader(bucket).forEach { adapter?.add(it) }
+        val parentExtractor = ParentExtractor()
+
+        if (bucket.isNullOrBlank()) {
+            bucketLoader().filter { excludedItemFilter(parentExtractor(it.path)) }
+        } else {
+            imageLoader(bucket).filter { excludedItemFilter(it.path) }
+        }
+                .forEach { adapter?.add(it) }
+        refreshContent()
+    }
+
+    private fun refreshContent() {
         activity?.runOnUiThread {
             adapter?.notifyDataSetChanged()
             RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)

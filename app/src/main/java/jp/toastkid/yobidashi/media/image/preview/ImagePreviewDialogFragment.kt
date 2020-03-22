@@ -11,9 +11,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -50,7 +48,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
 
-    private val rotateMatrixFactory = RotateMatrixFactory()
+    private val rotatedBitmapFactory = RotatedBitmapFactory()
 
     private val disposables = CompositeDisposable()
 
@@ -122,9 +120,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {
-                            binding.photo.setImageBitmap(it)
-                        },
+                        binding.photo::setImageBitmap,
                         Timber::e
                 )
                 .addTo(disposables)
@@ -154,35 +150,17 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     fun rotateLeft() {
         val bitmap = binding.photo.drawable.toBitmap()
-        applyMatrix(
-                bitmap,
-                rotateMatrixFactory(270f, bitmap.width.toFloat(), bitmap.height.toFloat())
-        )
+        binding.photo.setImageBitmap(rotatedBitmapFactory.rotateLeft(bitmap))
     }
 
     fun rotateRight() {
         val bitmap = binding.photo.drawable.toBitmap()
-        applyMatrix(
-                bitmap,
-                rotateMatrixFactory(90f, bitmap.width.toFloat(), bitmap.height.toFloat())
-        )
+        binding.photo.setImageBitmap(rotatedBitmapFactory.rotateRight(bitmap))
     }
 
     fun reverse() {
-        applyMatrix(binding.photo.drawable.toBitmap(), horizontalMatrix)
-    }
-
-    private fun applyMatrix(bitmap: Bitmap, matrix: Matrix) {
-        val horizontalFlipped = Bitmap.createBitmap(
-                bitmap,
-                0,
-                0,
-                bitmap.width,
-                bitmap.height,
-                matrix,
-                false
-        )
-        binding.photo.setImageBitmap(horizontalFlipped)
+        val bitmap = binding.photo.drawable.toBitmap()
+        binding.photo.setImageBitmap(rotatedBitmapFactory.reverse(bitmap))
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
@@ -201,8 +179,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         private val LAYOUT_ID = R.layout.dialog_image_preview
 
         private const val KEY_IMAGE = "image"
-
-        private val horizontalMatrix = Matrix().also { it.preScale(-1f, 1f) }
 
         fun withImage(image: Image) =
                 ImagePreviewDialogFragment()

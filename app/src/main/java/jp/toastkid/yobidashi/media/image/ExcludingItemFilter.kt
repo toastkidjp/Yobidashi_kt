@@ -10,13 +10,8 @@ package jp.toastkid.yobidashi.media.image
 /**
  * @author toastkidjp
  */
-data class Image(val path: String, val name: String, val isBucket: Boolean) {
+class ExcludingItemFilter(private val excludingItems: Set<String>) {
 
-    fun makeExcludingId() = if (isBucket) parentExtractor(path) else path
-
-    companion object {
-        private val parentExtractor = ParentExtractor()
-
-        fun makeBucket(bucketName: String, path: String) = Image(path, bucketName, true)
-    }
+    operator fun invoke(path: String?) =
+            excludingItems.isNullOrEmpty() || !excludingItems.contains(path)
 }

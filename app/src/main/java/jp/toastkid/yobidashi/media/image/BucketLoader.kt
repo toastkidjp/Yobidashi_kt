@@ -15,18 +15,30 @@ import android.provider.MediaStore
  */
 class BucketLoader(private val contentResolver: ContentResolver) {
 
+    private val names = mutableSetOf<String>()
+
     operator fun invoke(): List<Image> {
+        names.clear()
+
         val cursor = MediaStore.Images.Media.query(
                 contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                arrayOf(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+                arrayOf(MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA)
         )
 
         val buckets = mutableListOf<Image>()
+        val parentExtractor = ParentExtractor()
 
         val columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+        val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
         while (cursor?.moveToNext() == true) {
-            buckets.add(Image.makeBucket(cursor.getString(columnIndex)))
+            val path = cursor.getString(pathIndex)
+            val parentPath = parentExtractor(path)
+            if (parentPath == null || names.contains(parentPath)) {
+                continue
+            }
+            names.add(parentPath)
+            buckets.add(Image.makeBucket(cursor.getString(columnIndex), path))
         }
         return buckets.distinct()
     }

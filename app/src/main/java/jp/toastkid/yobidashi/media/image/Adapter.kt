@@ -23,7 +23,8 @@ import jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment
  */
 internal class Adapter(
         private val fragmentManager: FragmentManager?,
-        private val onClick: (String) -> Unit
+        private val onClick: (String) -> Unit,
+        private val onLongClick: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private val images = mutableListOf<Image>()
@@ -39,13 +40,24 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.applyContent(images.get(position)) {
+        val image = images.get(position)
+        holder.applyContent(image) {
             if (it.isBucket) {
                 onClick(it.name)
             } else {
                 ImagePreviewDialogFragment.withImage(it)
                         .show(fragmentManager, ImagePreviewDialogFragment::class.java.simpleName)
             }
+        }
+        holder.itemView.setOnLongClickListener {
+            val excludingId = image.makeExcludingId()
+
+            if (excludingId.isNullOrBlank()) {
+                return@setOnLongClickListener true
+            }
+
+            onLongClick(excludingId)
+            return@setOnLongClickListener true
         }
     }
 
