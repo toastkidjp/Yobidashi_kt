@@ -58,5 +58,6 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
 
     private fun clearFilter() {
         viewModel.clearFilter()
+        lastFilter = null
     }
 }
