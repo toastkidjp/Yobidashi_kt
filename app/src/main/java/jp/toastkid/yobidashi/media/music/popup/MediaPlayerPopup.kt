@@ -119,7 +119,6 @@ class MediaPlayerPopup(private val context: Context) {
     private val controllerCallback = object : MediaControllerCompat.Callback() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            Timber.e(RuntimeException("state: ${state?.state}"))
             when (state?.state) {
                 PlaybackStateCompat.STATE_PLAYING -> setPauseIcon()
                 PlaybackStateCompat.STATE_PAUSED -> setPlayIcon()
