@@ -77,7 +77,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     private val headerHeight = resources.getDimensionPixelSize(R.dimen.media_player_popup_header_height)
 
-    private val swipeLimit = heightPixels - headerHeight
+    private val swipeLimit = heightPixels - (headerHeight / 2)
 
     private val pauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_pause)
 
