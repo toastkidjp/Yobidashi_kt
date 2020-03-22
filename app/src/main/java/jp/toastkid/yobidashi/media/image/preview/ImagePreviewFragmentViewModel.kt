@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.media.image.preview
 
+import android.graphics.Bitmap
 import android.graphics.ColorFilter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,5 +32,13 @@ class ImagePreviewFragmentViewModel : ViewModel() {
 
     fun clearFilter() {
         _colorFilter.postValue(null)
+    }
+
+    private val _bitmap = MutableLiveData<Bitmap>()
+
+    val bitmap: LiveData<Bitmap> = _bitmap
+
+    fun nextBitmap(bitmap: Bitmap) {
+        _bitmap.postValue(bitmap)
     }
 }

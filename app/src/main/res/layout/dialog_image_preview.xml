@@ -3,6 +3,7 @@
     <data>
         <variable name="dialog" type="jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment" />
         <variable name="colorFilterUseCase" type="jp.toastkid.yobidashi.media.image.preview.ColorFilterUseCase" />
+        <variable name="imageRotationUseCase" type="jp.toastkid.yobidashi.media.image.preview.ImageRotationUseCase" />
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -87,7 +88,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_rotate_left"
-                android:onClick="@{view -> dialog.rotateLeft()}"
+                android:onClick="@{view -> imageRotationUseCase.rotateLeft()}"
                 />
             <ImageView
                 android:id="@+id/reverse"
@@ -97,7 +98,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_flip"
-                android:onClick="@{view -> dialog.reverse()}"
+                android:onClick="@{view -> imageRotationUseCase.reverse()}"
                 />
             <ImageView
                 android:id="@+id/rotate_right"
@@ -107,7 +108,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_rotate_right"
-                android:onClick="@{view -> dialog.rotateRight()}"
+                android:onClick="@{view -> imageRotationUseCase.rotateRight()}"
                 />
             <ImageView
                 android:id="@+id/edit"

@@ -51,8 +51,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
 
-    private val rotatedBitmapFactory = RotatedBitmapFactory()
-
     private val rotatedImageFixing = RotatedImageFixing()
 
     private val disposables = CompositeDisposable()
@@ -84,8 +82,13 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         viewModel.colorFilter.observe(this, Observer {
             binding.photo.colorFilter = it
         })
-
         initializeAlphaSlider()
+
+        binding.imageRotationUseCase =
+                ImageRotationUseCase(viewModel, { binding.photo.drawable.toBitmap() })
+        viewModel.bitmap.observe(this, Observer {
+            binding.photo.setImageBitmap(it)
+        })
 
         contentResolver = binding.root.context.contentResolver
         loadImageAsync(activityContext, path)
@@ -169,21 +172,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     PreferenceApplier(binding.root.context).colorPair()
             )
         }
-    }
-
-    fun rotateLeft() {
-        val bitmap = binding.photo.drawable.toBitmap()
-        binding.photo.setImageBitmap(rotatedBitmapFactory.rotateLeft(bitmap))
-    }
-
-    fun rotateRight() {
-        val bitmap = binding.photo.drawable.toBitmap()
-        binding.photo.setImageBitmap(rotatedBitmapFactory.rotateRight(bitmap))
-    }
-
-    fun reverse() {
-        val bitmap = binding.photo.drawable.toBitmap()
-        binding.photo.setImageBitmap(rotatedBitmapFactory.reverse(bitmap))
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
