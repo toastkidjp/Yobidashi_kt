@@ -11,7 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.*
+import jp.toastkid.yobidashi.settings.fragment.BrowserSettingFragment
+import jp.toastkid.yobidashi.settings.fragment.ColorFilterSettingFragment
+import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
+import jp.toastkid.yobidashi.settings.fragment.EditorSettingFragment
+import jp.toastkid.yobidashi.settings.fragment.NotificationSettingFragment
+import jp.toastkid.yobidashi.settings.fragment.OtherSettingFragment
+import jp.toastkid.yobidashi.settings.fragment.SearchSettingFragment
+import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 
 /**
  * Setting fragments pager adapter.
@@ -21,42 +28,33 @@ import jp.toastkid.yobidashi.settings.fragment.*
  * @author toastkidjp
  */
 class PagerAdapter(
-        fragmentManager: FragmentManager,
+        private val fragmentManager: FragmentManager,
         private val titleResolver: (Int) -> String
 ) : FragmentPagerAdapter(fragmentManager) {
 
-    private val browserSettingFragment by lazy { BrowserSettingFragment() }
-
-    private val searchSettingFragment by lazy { SearchSettingFragment() }
-
-    private val colorFilterSettingFragment by lazy { ColorFilterSettingFragment() }
-
-    private val displayingSettingFragment by lazy { DisplayingSettingFragment() }
-
-    private val colorSettingFragment by lazy { ColorSettingFragment() }
-
-    private val editorSettingFragment by lazy { EditorSettingFragment() }
-
-    private val notificationSettingFragment by lazy { NotificationSettingFragment() }
-
-    private val otherSettingFragment by lazy { OtherSettingFragment() }
-
     override fun getCount(): Int = 8
 
-    override fun getItem(position: Int): Fragment = when (position) {
-        0 -> displayingSettingFragment
-        1 -> colorSettingFragment
-        2 -> searchSettingFragment
-        3 -> browserSettingFragment
-        4 -> editorSettingFragment
-        5 -> colorFilterSettingFragment
-        6 -> notificationSettingFragment
-        7 -> otherSettingFragment
-        else -> otherSettingFragment
-    }
+    override fun getItem(position: Int): Fragment = obtainFragment(
+            when (position) {
+                0 -> DisplayingSettingFragment::class.java
+                1 -> ColorSettingFragment::class.java
+                2 -> SearchSettingFragment::class.java
+                3 -> BrowserSettingFragment::class.java
+                4 -> EditorSettingFragment::class.java
+                5 -> ColorFilterSettingFragment::class.java
+                6 -> NotificationSettingFragment::class.java
+                7 -> OtherSettingFragment::class.java
+                else -> OtherSettingFragment::class.java
+            }
+    )
+
+    private fun obtainFragment(fragmentClass: Class<out Fragment>) =
+            fragmentManager.findFragmentByTag(fragmentClass.canonicalName)
+                    ?: fragmentClass.newInstance()
 
     override fun getPageTitle(position: Int): CharSequence? {
         val item = getItem(position)
         return if (item is TitleIdSupplier) titleResolver(item.titleId()) else ""
     }
+
 }
