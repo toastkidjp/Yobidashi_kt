@@ -244,6 +244,14 @@ class MainActivity : AppCompatActivity(),
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
         processShortcut(intent)
+
+        supportFragmentManager.addOnBackStackChangedListener {
+            val findFragment = findFragment()
+
+            if (findFragment !is TabUiFragment && supportFragmentManager.backStackEntryCount == 0) {
+                moveTaskToBack(true)
+            }
+        }
     }
 
     private fun obtainFragment(fragmentClass: Class<out Fragment>) =
@@ -563,10 +571,7 @@ class MainActivity : AppCompatActivity(),
 
         val fragment = findFragment()
         if (fragment !is EditorFragment) {
-            supportFragmentManager?.popBackStack()
-            if ((supportFragmentManager?.backStackEntryCount ?: 0) <= 1) {
-                moveTaskToBack(true)
-            }
+            supportFragmentManager?.popBackStackImmediate()
             return
         }
 
