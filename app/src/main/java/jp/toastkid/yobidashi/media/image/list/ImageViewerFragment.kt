@@ -116,7 +116,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)
                 .also { viewModel ->
                     viewModel.find.observe(activity, Observer {
-                        Timber.i("observe $it")
                         filterByName(it)
                     })
                 }
