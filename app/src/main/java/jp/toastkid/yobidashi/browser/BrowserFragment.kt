@@ -193,6 +193,9 @@ class BrowserFragment : Fragment(),
             })
 
             viewModel.reset.observe(activity, Observer {
+                if (!isVisible) {
+                    return@Observer
+                }
                 val headerView = headerBinding?.root ?: return@Observer
                 headerViewModel?.replace(headerView)
             })
