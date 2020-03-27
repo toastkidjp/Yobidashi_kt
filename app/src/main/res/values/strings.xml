@@ -421,6 +421,7 @@
     <string name="search_category_open_street_map">OpenStreetMap</string>
     <string name="search_category_quora">Quora</string>
     <string name="title_menu_reader_mode">Reader mode</string>
+    <string name="title_menu_html_source">HTML source</string>
     <string name="launcher">Launcher</string>
     <string name="barcode">Barcode</string>
     <string name="title_rss_reader">RSS Reader</string>

@@ -36,6 +36,7 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import okio.Okio
 import timber.log.Timber
@@ -76,6 +77,8 @@ class EditorModule(
         }
     }
 
+    private lateinit var speechMaker: SpeechMaker
+
     /**
      * Last saved text.
      */
@@ -102,6 +105,8 @@ class EditorModule(
 
         finder = EditTextFinder(binding.editorInput)
 
+        speechMaker = SpeechMaker(binding.root.context)
+
         binding.editorInput.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(contentEditable: Editable?) {
                 setContentTextLengthCount(context)
@@ -117,7 +122,9 @@ class EditorModule(
             binding.editorInput.customInsertionActionModeCallback = object : ActionMode.Callback {
 
                 override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
-                    MenuInflater(context).inflate(R.menu.context_editor, menu)
+                    val menuInflater = MenuInflater(context)
+                    menuInflater.inflate(R.menu.context_editor, menu)
+                    menuInflater.inflate(R.menu.context_speech, menu)
                     return true
                 }
 
@@ -130,6 +137,11 @@ class EditorModule(
                         }
                         R.id.context_edit_paste_as_quotation -> {
                             pasteAsQuotation()
+                            actionMode?.finish()
+                            return true
+                        }
+                        R.id.context_edit_speech -> {
+                            speechMaker.invoke(content())
                             actionMode?.finish()
                             return true
                         }
@@ -158,6 +170,7 @@ class EditorModule(
                 if (Urls.isValidUrl(text)) {
                     MenuInflater(context).inflate(R.menu.context_editor_url, menu)
                 }
+                MenuInflater(context).inflate(R.menu.context_speech, menu)
                 return true
             }
 
@@ -177,6 +190,11 @@ class EditorModule(
                     R.id.context_edit_url_preview -> {
                         browserViewModel?.preview(text.toUri())
                         Inputs.hideKeyboard(binding.root)
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.context_edit_speech -> {
+                        speechMaker.invoke(text)
                         actionMode?.finish()
                         return true
                     }

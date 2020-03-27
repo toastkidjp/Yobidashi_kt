@@ -7,9 +7,9 @@
  */
 package jp.toastkid.yobidashi.media.image
 
-import android.net.Uri
 import android.text.TextUtils
 import android.widget.ImageView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemImageThumbnailsBinding
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.ImageLoader
+import jp.toastkid.yobidashi.settings.background.RotatedImageFixing
 import timber.log.Timber
 import java.io.File
 
@@ -30,6 +31,10 @@ import java.io.File
  */
 internal class ViewHolder(private val binding: ItemImageThumbnailsBinding)
     : RecyclerView.ViewHolder(binding.root) {
+
+    private val contentResolver = binding.root.context.contentResolver
+
+    private val rotatedImageFixing = RotatedImageFixing()
 
     /**
      * Apply file content.
@@ -45,19 +50,18 @@ internal class ViewHolder(private val binding: ItemImageThumbnailsBinding)
     }
 
     private fun setImageTo(iv: ImageView, imagePath: String) {
+        iv.setImageResource(R.drawable.ic_image_search)
         if (TextUtils.isEmpty(imagePath)) {
-            iv.setImageResource(R.drawable.ic_image_search)
             return
         }
 
-        Maybe.fromCallable {
-            ImageLoader.loadBitmap(
-                    iv.context,
-                    Uri.parse(File(imagePath).toURI().toString())
-            )
-        }
+        val uri = File(imagePath).toURI().toString().toUri()
+        Maybe.fromCallable { ImageLoader.loadBitmap(iv.context, uri) }
                 .subscribeOn(Schedulers.io())
-                .map { BitmapScaling(it, 300.0, 300.0) }
+                .map {
+                    val bitmap = BitmapScaling(it, 300.0, 300.0)
+                    rotatedImageFixing.invoke(contentResolver, bitmap, uri)
+                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         iv::setImageBitmap,
