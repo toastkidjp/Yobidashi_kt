@@ -3,6 +3,8 @@
     <data>
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.ColorFilterSettingFragment" />
+        <variable name="useCase"
+            type="jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterUseCase" />
     </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -58,11 +60,13 @@
                 android:layout_marginLeft="40dp"
                 android:text="@string/title_filter_color"
                 />
-            <Button
+            <TextView
                 android:id="@+id/default_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="?android:attr/buttonBarStyle"
+                android:background="@drawable/ripple_soft"
+                android:padding="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_gravity="right|center_vertical"
                 android:text="@string/title_default"
@@ -85,6 +89,7 @@
                     android:layout_height="40dp"
                     android:background="@color/default_color_filter"
                     style="?android:attr/buttonBarStyle"
+                    android:onClick="@{view -> useCase.setYellow()}"
                     />
                 <Button
                     android:id="@+id/dark"
@@ -93,6 +98,7 @@
                     android:layout_marginLeft="8dp"
                     android:background="@color/darkgray_scale"
                     style="?android:attr/buttonBarStyle"
+                    android:onClick="@{view -> useCase.setDark()}"
                     />
                 <Button
                     android:id="@+id/red"
@@ -101,6 +107,7 @@
                     android:layout_marginLeft="8dp"
                     android:background="@color/red_200_dd"
                     style="?android:attr/buttonBarStyle"
+                    android:onClick="@{view -> useCase.setRed()}"
                     />
                 <Button
                     android:id="@+id/green"
@@ -109,6 +116,7 @@
                     android:layout_marginLeft="8dp"
                     android:background="@color/lime_bg"
                     style="?android:attr/buttonBarStyle"
+                    android:onClick="@{view -> useCase.setGreen()}"
                     />
                 <Button
                     android:id="@+id/blue"
@@ -117,6 +125,7 @@
                     android:layout_marginLeft="8dp"
                     android:background="@color/light_blue_200_dd"
                     style="?android:attr/buttonBarStyle"
+                    android:onClick="@{view -> useCase.setBlue()}"
                     />
             </LinearLayout>
         </HorizontalScrollView>

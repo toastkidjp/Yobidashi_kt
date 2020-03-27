@@ -70,6 +70,7 @@ import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingFragment
+import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -226,6 +227,12 @@ class MainActivity : AppCompatActivity(),
                         this,
                         Observer { tabs.updateWebTab(it) }
                 )
+
+        ViewModelProviders.of(this).get(OverlayColorFilterViewModel::class.java)
+                .newColor
+                .observe(this, Observer {
+                    updateColorFilter()
+                })
 
         tabListViewModel = ViewModelProviders.of(this).get(TabListViewModel::class.java)
         tabListViewModel
@@ -639,8 +646,7 @@ class MainActivity : AppCompatActivity(),
         updateColorFilter()
     }
 
-    // TODO move to viewModel.
-    fun updateColorFilter() {
+    private fun updateColorFilter() {
         binding.foreground.foreground =
                 if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor())
                 else null
