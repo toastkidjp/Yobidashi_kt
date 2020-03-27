@@ -135,6 +135,7 @@ class FavoriteSearchFragment : Fragment(),
 
         inflater.inflate(R.menu.favorite_toolbar_menu, menu)
 
+        // TODO rewrite.
         menu.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
             val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
             ClearFavoriteSearchDialogFragment.show(
@@ -181,8 +182,7 @@ class FavoriteSearchFragment : Fragment(),
      * Invoke addition.
      */
     private fun invokeAddition() {
-        val layout = binding?.additionArea ?: return
-        Addition(layout) { messageId -> Toaster.snackShort(layout, messageId, colorPair()) }.invoke()
+        FavoriteSearchAdditionDialogFragment().show(fragmentManager, "addition")
     }
 
     private fun colorPair() = preferenceApplier.colorPair()
