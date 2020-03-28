@@ -92,6 +92,24 @@
                     android:onClick="@{view -> useCase.setYellow()}"
                     />
                 <Button
+                    android:id="@+id/red_yellow"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@color/red_yellow"
+                    style="?android:attr/buttonBarStyle"
+                    android:onClick="@{view -> useCase.setRedYellow()}"
+                    />
+                <Button
+                    android:id="@+id/orange"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@color/deep_orange_500_dd"
+                    style="?android:attr/buttonBarStyle"
+                    android:onClick="@{view -> useCase.setOrange()}"
+                    />
+                <Button
                     android:id="@+id/dark"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
