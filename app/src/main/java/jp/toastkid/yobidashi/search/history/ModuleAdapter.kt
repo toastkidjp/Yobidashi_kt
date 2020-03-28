@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.search.history
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
@@ -17,6 +18,7 @@ import jp.toastkid.yobidashi.search.BackgroundSearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 import java.util.*
+import kotlin.math.min
 
 /**
  * ModuleAdapter of search history list.
@@ -34,7 +36,9 @@ internal class ModuleAdapter(
         private val repository: SearchHistoryRepository,
         private val onClick: (SearchHistory) -> Unit,
         private val onVisibilityChanged: (Boolean) -> Unit,
-        private val onClickAdd: (SearchHistory) -> Unit
+        private val onClickAdd: (SearchHistory) -> Unit,
+        private val useAddition: Boolean = true,
+        private val maxItemCount: Int = -1
 ) : RecyclerView.Adapter<ViewHolder>(), Removable {
 
     /**
@@ -48,8 +52,10 @@ internal class ModuleAdapter(
     private val selected: MutableList<SearchHistory> = ArrayList(5)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate<ItemSearchHistoryBinding>(
-                inflater, R.layout.item_search_history, parent, false))
+        val binding = DataBindingUtil.inflate<ItemSearchHistoryBinding>(
+                inflater, R.layout.item_search_history, parent, false)
+        binding.searchHistoryAdd.isVisible = useAddition
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -78,6 +84,44 @@ internal class ModuleAdapter(
     }
 
     /**
+     * Clear all items.
+     *
+     * @param onComplete Callback
+     * @return [Disposable]
+     */
+    fun clearAll(onComplete: () -> Unit): Disposable =
+            Completable.fromAction {
+                repository.deleteAll()
+                selected.clear()
+            }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {
+                                onComplete()
+                                notifyDataSetChanged()
+                            },
+                            Timber::e
+                    )
+
+    fun refresh(onComplete: () -> Unit): Disposable {
+        return Maybe.fromCallable { repository.findAll() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            if (it.isEmpty()) {
+                                onComplete()
+                                return@subscribe
+                            }
+                            selected.addAll(it)
+                            notifyDataSetChanged()
+                        },
+                        Timber::e
+                )
+    }
+
+    /**
      * Execute query.
      *
      * @param s
@@ -90,7 +134,7 @@ internal class ModuleAdapter(
             if (s.isNotBlank()) {
                 repository.select("$s%")
             } else {
-                repository.findLast5()
+                repository.find(maxItemCount)
             }
         }
                 .subscribeOn(Schedulers.newThread())
@@ -150,6 +194,6 @@ internal class ModuleAdapter(
     }
 
     override fun getItemCount(): Int {
-        return selected.size
+        return if (maxItemCount == -1) selected.size else min(maxItemCount, selected.size)
     }
 }

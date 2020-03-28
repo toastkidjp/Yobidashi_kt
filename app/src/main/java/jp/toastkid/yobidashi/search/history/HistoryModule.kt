@@ -66,7 +66,9 @@ class HistoryModule(
                 repository,
                 searchCallback,
                 { visible -> if (visible) { show() } else { hide() } },
-                { history -> onClickAdd(history) }
+                { history -> onClickAdd(history) },
+                true,
+                5
         )
         binding.searchHistories.adapter = moduleAdapter
 
