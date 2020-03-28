@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -15,7 +14,15 @@ import android.text.TextUtils
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.webkit.*
+import android.webkit.SslErrorHandler
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -39,7 +46,6 @@ import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
 import jp.toastkid.yobidashi.libs.BitmapCompressor
-import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -373,6 +379,8 @@ class BrowserModule(
             it.onResume()
             webViewContainer?.addView(it)
             updateForwardButtonState(it.canGoForward())
+            browserHeaderViewModel?.nextTitle(it.title)
+            browserHeaderViewModel?.nextUrl(it.url)
             it.startAnimation(slideUpFromBottom)
 
             val activity = webViewContainer?.context
