@@ -67,6 +67,10 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
      */
     private fun initInput() {
         TextInputs.setEmptyAlert(binding.favoriteSearchAdditionQuery)
+        binding.favoriteSearchAdditionQuery?.editText?.setOnEditorActionListener { _, _, _ ->
+            ok()
+            return@setOnEditorActionListener true
+        }
     }
 
     override fun onResume() {
