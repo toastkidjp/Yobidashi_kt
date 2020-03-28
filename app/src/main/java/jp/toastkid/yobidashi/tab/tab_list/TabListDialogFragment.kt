@@ -71,7 +71,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     interface Callback {
         fun onCloseOnly()
-        fun onCloseTabListDialogFragment()
+        fun onCloseTabListDialogFragment(lastTabId: String)
         fun onOpenEditor()
         fun onOpenPdf()
         fun openNewTabFromTabList()
@@ -106,12 +106,12 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        callback?.onCloseTabListDialogFragment()
+        callback?.onCloseTabListDialogFragment(lastTabId)
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        callback?.onCloseTabListDialogFragment()
+        callback?.onCloseTabListDialogFragment(lastTabId)
     }
 
     /**

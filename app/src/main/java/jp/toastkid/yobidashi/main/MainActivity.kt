@@ -309,7 +309,9 @@ class MainActivity : AppCompatActivity(),
                 { menuViewModel?.close() }
         )
 
-        menuViewModel?.click?.observe(this, Observer(menuUseCase::onMenuClick))
+        menuViewModel?.click?.observe(this, Observer {
+            menuUseCase.onMenuClick(it)
+        })
 
         menuViewModel?.longClick?.observe(this, Observer {
             menuUseCase.onMenuLongClick(it)
@@ -355,12 +357,6 @@ class MainActivity : AppCompatActivity(),
      * @param calledIntent
      */
     private fun processShortcut(calledIntent: Intent) {
-        if (calledIntent.action == null) {
-            // Add for re-creating activity.
-            replaceToCurrentTab()
-            return
-        }
-
         if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
             RandomWikipedia().fetchWithAction { title, uri ->
                 openNewWebTab(uri)
@@ -412,6 +408,18 @@ class MainActivity : AppCompatActivity(),
             }
             SETTING -> {
                 replaceFragment(obtainFragment(SettingFragment::class.java))
+            }
+            else -> {
+                if (tabs.isEmpty()) {
+                    openNewTab()
+                    return
+                }
+
+                // Add for re-creating activity.
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
+                if (currentFragment is TabUiFragment || currentFragment == null) {
+                    replaceToCurrentTab(false)
+                }
             }
         }
     }
@@ -606,19 +614,6 @@ class MainActivity : AppCompatActivity(),
                 .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        if (tabs.isEmpty()) {
-            tabs.openNewWebTab(preferenceApplier.homeUrl)
-        }
-
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
-        if (currentFragment is TabUiFragment || currentFragment == null) {
-            replaceToCurrentTab(false)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         refresh()
@@ -800,8 +795,7 @@ class MainActivity : AppCompatActivity(),
      */
     private fun onEmptyTabs() {
         tabListDialogFragment?.dismiss()
-        tabs.openNewWebTab()
-        replaceToCurrentTab(true)
+        openNewTab()
     }
 
     override fun onClickClear() {
@@ -813,8 +807,10 @@ class MainActivity : AppCompatActivity(),
         tabListDialogFragment?.dismiss()
     }
 
-    override fun onCloseTabListDialogFragment() {
-        replaceToCurrentTab()
+    override fun onCloseTabListDialogFragment(lastTabId: String) {
+        if (lastTabId != tabs.currentTabId()) {
+            replaceToCurrentTab()
+        }
     }
 
     override fun onOpenEditor() = openEditorTab()
@@ -822,8 +818,22 @@ class MainActivity : AppCompatActivity(),
     override fun onOpenPdf() = openPdfTabFromStorage()
 
     override fun openNewTabFromTabList() {
-        tabs.openNewWebTab()
-        replaceToCurrentTab(true)
+        openNewTab()
+    }
+
+    private fun openNewTab() {
+        when (preferenceApplier.startUp) {
+            StartUp.SEARCH -> {
+                replaceFragment(obtainFragment(SearchFragment::class.java))
+            }
+            StartUp.BROWSER -> {
+                tabs.openNewWebTab()
+                replaceToCurrentTab(true)
+            }
+            StartUp.BOOKMARK -> {
+                replaceFragment(obtainFragment(BookmarkFragment::class.java))
+            }
+        }
     }
 
     override fun tabIndexFromTabList() = tabs.index()
