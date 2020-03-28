@@ -4,6 +4,7 @@
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.OtherSettingFragment" />
     </data>
+    <!--Use NestedScroll-->
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -131,6 +132,8 @@
                     android:drawableStart="@drawable/ic_android_app"
                     android:onClick="@{view -> fragment.allApps()}"
                     />
+
+                <include layout="@layout/primary_dark_divider"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
