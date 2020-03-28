@@ -19,7 +19,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 class OverlayColorFilterUseCase(
         private val preferenceApplier: PreferenceApplier,
         colorResolver: (Int) -> Int,
-        private val overlayColorFilterViewModel: OverlayColorFilterViewModel
+        private val overlayColorFilterViewModel: OverlayColorFilterViewModel?
 ) {
 
     private val blueBase = colorResolver(R.color.light_blue_200_dd)
@@ -77,7 +77,7 @@ class OverlayColorFilterUseCase(
     private fun setNewColor(alpha: Int, @ColorInt newBaseColor: Int) {
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)
         preferenceApplier.setFilterColor(newColor)
-        overlayColorFilterViewModel.newColor(newColor)
+        overlayColorFilterViewModel?.newColor(newColor)
     }
 
     companion object {
