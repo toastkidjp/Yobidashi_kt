@@ -38,7 +38,7 @@ class FavoriteSearchFragment : Fragment(),
     /**
      * RecyclerView's adapter
      */
-    private var adapter: ActivityAdapter? = null
+    private var adapter: ModuleAdapter? = null
 
     /**
      * Data Binding object.
@@ -80,11 +80,12 @@ class FavoriteSearchFragment : Fragment(),
 
         val repository = DatabaseFinder().invoke(fragmentActivity).favoriteSearchRepository()
 
-        adapter = ActivityAdapter(
+        adapter = ModuleAdapter(
                 fragmentActivity,
                 repository,
-                { category, query -> this.startSearch(category, query) },
-                { messageId -> Toaster.snackShort(binding?.content as View, messageId, colorPair()) }
+                { startSearch(SearchCategory.findByCategory(it.category), it.query ?: "") },
+                { },
+                { }
         )
 
         binding?.favoriteSearchView?.let {
@@ -112,7 +113,7 @@ class FavoriteSearchFragment : Fragment(),
                         if (direction != ItemTouchHelper.RIGHT) {
                             return
                         }
-                        adapter?.deleteAt(viewHolder.adapterPosition)
+                        adapter?.removeAt(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(binding?.favoriteSearchView)
         adapter?.refresh()

@@ -72,7 +72,8 @@ class FavoriteSearchModule(
                 repository,
                 searchCallback,
                 { visible -> if (visible) { show() } else { hide() } },
-                { history -> onClickAdd(history) }
+                { history -> onClickAdd(history) },
+                5
         )
         binding.searchFavorites.adapter = moduleAdapter
         binding.searchFavorites.onFlingListener = object : RecyclerView.OnFlingListener() {

@@ -28,8 +28,8 @@ interface FavoriteSearchRepository {
     @Query("SELECT * FROM FavoriteSearch")
     fun findAll(): List<FavoriteSearch>
 
-    @Query("SELECT * FROM FavoriteSearch ORDER BY id DESC LIMIT 5")
-    fun findLast5(): List<FavoriteSearch>
+    @Query("SELECT * FROM FavoriteSearch ORDER BY id DESC LIMIT :count")
+    fun find(count: Int): List<FavoriteSearch>
 
     @Delete
     fun delete(favoriteSearch: FavoriteSearch)
