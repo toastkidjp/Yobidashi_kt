@@ -13,17 +13,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
- * TODO Rename MainActivityViewModel and add snackbar, fragment switching
+ * TODO Rename MainActivityViewModel and add snackbar
  * @author toastkidjp
  */
 class ContentViewModel : ViewModel() {
 
-    private val _content = MutableLiveData<ContentSwitchOrder>()
+    private val _fragmentClass = MutableLiveData<Class<out Fragment>>()
 
-    val content: LiveData<ContentSwitchOrder> = _content
+    val fragmentClass: LiveData<Class<out Fragment>> = _fragmentClass
 
-    fun nextContent(newOrder: ContentSwitchOrder) {
-        _content.postValue(newOrder)
+    fun nextFragment(fragmentClass: Class<out Fragment>) {
+        _fragmentClass.postValue(fragmentClass)
     }
 
     private val _fragment = MutableLiveData<Fragment>()

@@ -57,13 +57,11 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
-import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
-import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -183,14 +181,8 @@ class MainActivity : AppCompatActivity(),
         initializeMenuViewModel()
 
         contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
-        contentViewModel?.content?.observe(this, Observer {
-            when (it) {
-                ContentSwitchOrder.RSS_SETTING -> {
-                    val fragment = obtainFragment(RssSettingFragment::class.java)
-                    replaceFragment(fragment)
-                }
-                null -> Unit
-            }
+        contentViewModel?.fragmentClass?.observe(this, Observer {
+            replaceFragment(obtainFragment(it))
         })
         contentViewModel?.fragment?.observe(this, Observer {
             replaceFragment(it, true, true)
@@ -944,7 +936,6 @@ class MainActivity : AppCompatActivity(),
         disposables.clear()
         searchWithClip.dispose()
         menuUseCase.dispose()
-        contentViewModel?.content?.removeObservers(this)
         pageSearchPresenter.dispose()
         super.onDestroy()
     }

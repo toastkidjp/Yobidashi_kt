@@ -243,7 +243,7 @@ class SearchFragment : Fragment() {
             activity?.also {
                 ViewModelProviders.of(it)
                         .get(ContentViewModel::class.java)
-                        .nextFragment(FavoriteSearchFragment())
+                        .nextFragment(FavoriteSearchFragment::class.java)
             }
             true
         }
@@ -251,7 +251,7 @@ class SearchFragment : Fragment() {
             activity?.also {
                 ViewModelProviders.of(it)
                         .get(ContentViewModel::class.java)
-                        .nextFragment(SearchHistoryFragment())
+                        .nextFragment(SearchHistoryFragment::class.java)
             }
             true
         }
