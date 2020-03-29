@@ -10,43 +10,52 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/settings_item_left_margin"
-        android:layout_marginRight="@dimen/settings_item_left_margin"
         android:background="@color/soft_background"
         app:cardElevation="3dp"
         >
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/settings_item_left_margin"
             >
-
             <TextView
+                android:id="@+id/title_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/category"
                 android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 />
             <Spinner
                 android:id="@+id/favorite_search_addition_categories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
                 android:spinnerMode="dropdown"
                 android:background="@color/spinner_background"
+                app:layout_constraintTop_toBottomOf="@id/title_category"
+                app:layout_constraintStart_toStartOf="parent"
                 />
             <TextView
+                android:id="@+id/title_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/word"
                 android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/favorite_search_addition_categories"
+                app:layout_constraintStart_toStartOf="parent"
                 />
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/favorite_search_addition_query"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/errorText"
+                app:layout_constraintTop_toBottomOf="@id/title_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add"
                 >
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/favorite_search_addition_query_input"
@@ -56,34 +65,21 @@
                     android:maxLines="1"
                     android:inputType="text"
                     android:imeActionLabel="@string/title_add"
-                    android:imeOptions="actionDone"
                     />
             </com.google.android.material.textfield.TextInputLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
+
+            <Button
+                android:id="@+id/add"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                >
+                android:layout_margin="5dp"
+                android:text="@string/title_add"
+                android:onClick="@{view -> action.ok()}"
+                app:layout_constraintTop_toBottomOf="@id/title_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
-                <Button
-                    android:id="@+id/close"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_margin="5dp"
-                    android:onClick="@{view -> action.dismiss()}"
-                    android:text="@string/close" />
-
-                <Button
-                    android:id="@+id/add"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="@string/title_add"
-                    android:onClick="@{view -> action.ok()}"
-                    />
-            </LinearLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

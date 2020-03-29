@@ -77,10 +77,7 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        PreferenceApplier(binding.root.context).colorPair().let {
-            it.setTo(binding.close)
-            it.setTo(binding.add)
-        }
+        PreferenceApplier(binding.root.context).colorPair().setTo(binding.add)
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
