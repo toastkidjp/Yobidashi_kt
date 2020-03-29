@@ -3,11 +3,13 @@ package jp.toastkid.yobidashi.tab.tab_list
 import android.graphics.Color
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemTabListBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.preference.ColorPair
+import java.io.File
 
 /**
  * WebTab item view's holder.
@@ -36,7 +38,11 @@ internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerVie
             binding.image.setImageResource(R.mipmap.ic_launcher_round)
             return
         }
-        ImageLoader.setImageToImageView(binding.image, thumbnailPath)
+
+        Glide.with(binding.image)
+                .load(File(thumbnailPath).toURI().toString().toUri())
+                .override(binding.image.measuredWidth, binding.image.measuredHeight)
+                .into(binding.image)
     }
 
     /**
