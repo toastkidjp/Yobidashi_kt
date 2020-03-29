@@ -147,6 +147,7 @@ internal class ModuleAdapter(
     }
 
     fun refresh(): Disposable {
+        selected.clear()
         return Maybe.fromCallable { favoriteSearchRepository.findAll() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

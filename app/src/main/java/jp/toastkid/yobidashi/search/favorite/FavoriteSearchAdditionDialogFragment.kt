@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogFavoriteSearchAdditionBinding
@@ -84,7 +85,20 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface?) {
         Inputs.hideKeyboard(binding.favoriteSearchAdditionQueryInput)
+        reload()
         super.onDismiss(dialog)
+    }
+
+    override fun onCancel(dialog: DialogInterface?) {
+        reload()
+        super.onCancel(dialog)
+    }
+
+    private fun reload() {
+        val target = targetFragment ?: return
+        ViewModelProviders.of(target)
+                .get(FavoriteSearchFragmentViewModel::class.java)
+                .reload()
     }
 
     /**

@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.search.favorite
 import android.os.Handler
 import android.os.Looper
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
@@ -96,24 +95,6 @@ class FavoriteSearchModule(
     fun query(s: CharSequence) {
         disposable?.dispose()
         disposable = moduleAdapter.query(s)
-    }
-
-    /**
-     * Confirm clear search history.
-     */
-    fun confirmClear() {
-        val activityContext = binding.root.context
-        if (activityContext is FragmentActivity) {
-            ClearFavoriteSearchDialogFragment().show(
-                    activityContext.supportFragmentManager,
-                    ClearFavoriteSearchDialogFragment::class.java.simpleName
-                    )
-        }
-    }
-
-    fun clear() {
-        moduleAdapter.clear()
-        hide()
     }
 
     /**
