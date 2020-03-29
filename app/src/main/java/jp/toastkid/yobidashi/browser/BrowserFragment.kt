@@ -23,7 +23,6 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
@@ -87,11 +86,6 @@ class BrowserFragment : Fragment(),
      * Composite disposer.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * Floating preview object.
-     */
-    private var floatingPreview: FloatingPreview? = null
 
     private var menuViewModel: MenuViewModel? = null
 
@@ -500,28 +494,6 @@ class BrowserFragment : Fragment(),
      */
     private fun hideOption(): Boolean {
         return false
-    }
-
-    fun preview(url: String) {
-        val webView = browserModule.getWebView(FloatingPreview.getSpecialId())
-        if (webView == null) {
-            Toaster.snackLong(
-                    binding?.root as View,
-                    R.string.message_preview_failed,
-                    R.string.retry,
-                    View.OnClickListener { preview(url) },
-                    colorPair()
-                    )
-            return
-        }
-
-        if (floatingPreview == null) {
-            floatingPreview = FloatingPreview(requireContext())
-        }
-
-        binding?.root?.let {
-            floatingPreview?.show(it, webView, url)
-        }
     }
     
     private fun colorPair() = preferenceApplier.colorPair()

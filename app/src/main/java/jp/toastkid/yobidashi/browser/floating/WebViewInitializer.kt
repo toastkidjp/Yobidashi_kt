@@ -16,11 +16,15 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
  */
 class WebViewInitializer {
+
+    private val darkModeApplier = DarkModeApplier()
 
     /**
      * Initialize WebView.
@@ -30,6 +34,9 @@ class WebViewInitializer {
      */
     operator fun invoke(webView: WebView, url: String) {
         val context = webView.context as? FragmentActivity ?: return
+
+        darkModeApplier(webView, PreferenceApplier(webView.context).useDarkMode())
+
         val viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
         viewModel.newUrl(url)
 

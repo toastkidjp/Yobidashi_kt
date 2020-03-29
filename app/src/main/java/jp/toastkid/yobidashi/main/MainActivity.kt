@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
+import android.webkit.WebView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -42,12 +43,14 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
+import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -190,7 +193,8 @@ class MainActivity : AppCompatActivity(),
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
-            (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)?.preview(it.toString())
+            Inputs.hideKeyboard(binding.content)
+            FloatingPreview(this).show(binding.root, WebView(this), it.toString())
         })
         browserViewModel?.open?.observe(this, Observer {
             tabs.openNewWebTab(it.toString())
