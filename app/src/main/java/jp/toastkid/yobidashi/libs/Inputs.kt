@@ -7,7 +7,6 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -43,15 +42,12 @@ object Inputs {
      * @param v
      */
     fun hideKeyboard(v: View?) {
-        Timber.i("called")
         val manager = v?.context
                 ?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
         if (!manager.isActive) {
-            Timber.i("inactive")
             return
         }
-        Timber.i("hide")
-        manager.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        manager.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
     /**
