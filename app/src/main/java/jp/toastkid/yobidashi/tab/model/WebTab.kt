@@ -39,7 +39,6 @@ internal class WebTab: Tab {
         if (histories.isEmpty()) histories.add(history) else histories.set(0, history)
 
         if (background) {
-            histories.removeAt(0)
             background = false
         }
     }
