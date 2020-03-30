@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -27,25 +26,31 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * Floating preview.
  *
  * @author toastkidjp
  */
-class FloatingPreview(context: Context) {
+class FloatingPreview(private val webView: WebView) {
 
-    private val popupWindow = PopupWindow(context)
+    private val popupWindow = PopupWindow(webView.context)
 
     private val binding: PopupFloatingPreviewBinding
+
+    private val darkModeApplier = DarkModeApplier()
 
     private var viewModel: FloatingPreviewViewModel? = null
 
     init {
+        val context = webView.context
         val layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.preview = this
+        binding.previewContainer.addView(webView)
 
         popupWindow.contentView = binding.root
 
@@ -79,6 +84,8 @@ class FloatingPreview(context: Context) {
 
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
         popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
+
+        WebViewInitializer()(webView)
     }
 
     /**
@@ -87,21 +94,14 @@ class FloatingPreview(context: Context) {
      * @param webView [WebView]
      * @param url URL string
      */
-    fun show(parent: View, webView: WebView, url: String) {
-        if (binding.previewContainer.childCount != 0) {
-            binding.previewContainer.removeAllViews()
-        }
-
+    fun show(parent: View, url: String) {
         setSlidingListener()
 
         binding.icon.setImageBitmap(null)
 
+        darkModeApplier(webView, PreferenceApplier(webView.context).useDarkMode())
         webView.isEnabled = true
         webView.onResume()
-
-        WebViewInitializer()(webView, url)
-
-        binding.previewContainer.addView(webView)
 
         webView.loadUrl(url)
 
@@ -128,6 +128,8 @@ class FloatingPreview(context: Context) {
      * Hide this preview.
      */
     fun hide() {
+        webView.onPause()
+        webView.isEnabled = false
         popupWindow.dismiss()
     }
 
@@ -167,6 +169,10 @@ class FloatingPreview(context: Context) {
 
     fun isVisible() = popupWindow.isShowing
 
+    fun dispose() {
+        webView.destroy()
+    }
+
     companion object {
 
         @LayoutRes
@@ -175,7 +181,5 @@ class FloatingPreview(context: Context) {
         private const val DURATION_MS = 200L
 
         private const val SPECIAL_WEB_VIEW_ID = "preview"
-
-        fun getSpecialId() = SPECIAL_WEB_VIEW_ID
     }
 }

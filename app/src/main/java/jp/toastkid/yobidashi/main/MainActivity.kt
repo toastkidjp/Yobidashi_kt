@@ -128,6 +128,8 @@ class MainActivity : AppCompatActivity(),
 
     private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
+    private var floatingPreview: FloatingPreview? = null
+
     private lateinit var tabs: TabAdapter
 
     /**
@@ -194,7 +196,11 @@ class MainActivity : AppCompatActivity(),
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
             Inputs.hideKeyboard(binding.content)
-            FloatingPreview(this).show(binding.root, WebView(this), it.toString())
+
+            if (floatingPreview == null) {
+                floatingPreview = FloatingPreview(WebView(this))
+            }
+            floatingPreview?.show(binding.root, it.toString())
         })
         browserViewModel?.open?.observe(this, Observer {
             tabs.openNewWebTab(it.toString())
@@ -941,6 +947,7 @@ class MainActivity : AppCompatActivity(),
         searchWithClip.dispose()
         menuUseCase.dispose()
         pageSearchPresenter.dispose()
+        floatingPreview?.dispose()
         super.onDestroy()
     }
 
