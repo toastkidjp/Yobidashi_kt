@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.editor
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -39,6 +40,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import com.tbruyelle.rxpermissions2.RxPermissions
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -115,6 +117,8 @@ class EditorFragment :
      */
     private lateinit var finder: EditTextFinder
 
+    private lateinit var rxPermissions: RxPermissions
+
     private var headerViewModel: HeaderViewModel? = null
 
     private var tabListViewModel: TabListViewModel? = null
@@ -136,6 +140,8 @@ class EditorFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val context = context ?: return
+
+        rxPermissions = RxPermissions(requireActivity())
 
         preferenceApplier = PreferenceApplier(context)
         finder = EditTextFinder(binding.editorInput)
@@ -517,6 +523,12 @@ class EditorFragment :
         if (!file.exists()) {
             file.createNewFile()
         }
+
+        if (rxPermissions.isRevoked(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            snackText(R.string.message_requires_permission_storage)
+            return
+        }
+
         Okio.buffer(Okio.sink(file)).use {
             it.writeUtf8(content())
             it.flush()
