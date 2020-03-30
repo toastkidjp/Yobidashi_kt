@@ -7,4 +7,10 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/context_edit_add_minus"
+        android:title="Add minus"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
 </menu>

@@ -205,6 +205,8 @@ class EditorFragment :
 
         binding.editorInput.customSelectionActionModeCallback = object : ActionMode.Callback {
 
+            private val listHeadAdder = ListHeadAdder()
+
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val text = extractSelectedText()
                 if (Urls.isValidUrl(text)) {
@@ -219,11 +221,11 @@ class EditorFragment :
                 val text = extractSelectedText()
                 when (menuItem?.itemId) {
                     R.id.context_edit_add_order -> {
-                        binding.editorInput.text.replace(
-                                binding.editorInput.selectionStart,
-                                binding.editorInput.selectionEnd,
-                                "1. ${text.replace("\n", "\n1. ")}"
-                        )
+                        listHeadAdder(binding.editorInput, "1.")
+                        return true
+                    }
+                    R.id.context_edit_add_minus -> {
+                        listHeadAdder(binding.editorInput, "-")
                         return true
                     }
                     R.id.context_edit_url_open_new -> {
