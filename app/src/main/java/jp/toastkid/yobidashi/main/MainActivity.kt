@@ -8,7 +8,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -655,22 +654,13 @@ class MainActivity : AppCompatActivity(),
     private fun applyBackgrounds() {
         val backgroundImagePath = preferenceApplier.backgroundImagePath
         if (backgroundImagePath.isEmpty()) {
-            setBackgroundImage(null)
+            binding.background.setImageDrawable(null)
             return
         }
 
         Glide.with(this)
                 .load(File(backgroundImagePath).toURI().toString().toUri())
                 .into(binding.background)
-    }
-
-    /**
-     * Set background image. TODO remove it.
-     *
-     * @param background nullable
-     */
-    private fun setBackgroundImage(background: BitmapDrawable?) {
-        binding.background.setImageDrawable(background)
     }
 
     /**
