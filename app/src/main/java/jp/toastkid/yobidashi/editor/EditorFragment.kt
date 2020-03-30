@@ -210,6 +210,7 @@ class EditorFragment :
                 if (Urls.isValidUrl(text)) {
                     MenuInflater(context).inflate(R.menu.context_editor_url, menu)
                 }
+                MenuInflater(context).inflate(R.menu.context_editor_selected, menu)
                 MenuInflater(context).inflate(R.menu.context_speech, menu)
                 return true
             }
@@ -217,6 +218,14 @@ class EditorFragment :
             override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
                 val text = extractSelectedText()
                 when (menuItem?.itemId) {
+                    R.id.context_edit_add_order -> {
+                        binding.editorInput.text.replace(
+                                binding.editorInput.selectionStart,
+                                binding.editorInput.selectionEnd,
+                                "1. ${text.replace("\n", "\n1. ")}"
+                        )
+                        return true
+                    }
                     R.id.context_edit_url_open_new -> {
                         browserViewModel?.open(text.toUri())
                         actionMode?.finish()
