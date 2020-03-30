@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.media.music.AlbumArtFinder
 import java.util.*
 
 /**
@@ -36,15 +35,12 @@ class Adapter(
 
     private lateinit var binding: ItemMediaListBinding
 
-    private lateinit var albumArtFinder: AlbumArtFinder
-
     private val items = mutableListOf<MediaBrowserCompat.MediaItem>()
 
     private val iconWidth = resources.getDimensionPixelSize(ICON_WIDTH_ID)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, parent, false)
-        albumArtFinder = AlbumArtFinder(binding.root.context.contentResolver)
 
         val placeholder = ContextCompat.getDrawable(binding.root.context, R.drawable.ic_music)
         if (placeholder != null) {
