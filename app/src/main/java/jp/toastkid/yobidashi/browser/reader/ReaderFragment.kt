@@ -37,9 +37,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
     private lateinit var speechMaker: SpeechMaker
 
-    // TODO Delete it.
-    private var viewModel: ReaderFragmentViewModel? = null
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -58,8 +55,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
             arguments.getString(KEY_TITLE)?.also { binding.title.text = it }
             arguments.getString(KEY_CONTENT)?.also { binding.textContent.text = it }
         }
-
-        viewModel = ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
 
         binding.textContent.customSelectionActionModeCallback = object : ActionMode.Callback {
 
