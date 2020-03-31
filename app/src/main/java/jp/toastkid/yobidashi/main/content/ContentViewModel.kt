@@ -34,4 +34,11 @@ class ContentViewModel : ViewModel() {
         _fragment.postValue(fragment)
     }
 
+    private val _snackbar = MutableLiveData<String>()
+
+    val snackbar: LiveData<String> = _snackbar
+
+    fun snackShort(message: String) {
+        _snackbar.postValue(message)
+    }
 }

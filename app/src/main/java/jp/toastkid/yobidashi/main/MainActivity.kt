@@ -191,6 +191,9 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.fragment?.observe(this, Observer {
             replaceFragment(it, true, true)
         })
+        contentViewModel?.snackbar?.observe(this, Observer {
+            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+        })
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -469,6 +472,7 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
+        // TODO Fix animation
         if (withAnimation) {
             transaction.setCustomAnimations(
                     if (withSlideIn) R.anim.slide_up else R.anim.slide_in_right,
@@ -528,7 +532,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         tabs.saveTabList()
-        tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
+        refreshThumbnail()
     }
 
     /**
@@ -540,9 +544,12 @@ class MainActivity : AppCompatActivity(),
         tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
     }
 
+    // TODO Fix it.
     private fun refreshThumbnail() {
-        val currentTab = tabs.currentTab()
-        tabs.deleteThumbnail(currentTab?.thumbnailPath)
+        val findFragment = findFragment()
+        if (findFragment !is TabUiFragment) {
+            return
+        }
         tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
     }
 

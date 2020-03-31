@@ -25,13 +25,11 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
-import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -93,6 +91,8 @@ class BrowserFragment : Fragment(),
 
     private var browserViewModel: BrowserViewModel? = null
 
+    private var contentViewModel: ContentViewModel? = null
+
     private val activityOptionsFactory = ActivityOptionsFactory()
 
     override fun onAttach(context: Context) {
@@ -144,6 +144,8 @@ class BrowserFragment : Fragment(),
                 .get(MenuViewModel::class.java)
 
         initializeHeaderViewModels(activity)
+
+        contentViewModel = ViewModelProviders.of(activity).get(ContentViewModel::class.java)
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
@@ -250,12 +252,7 @@ class BrowserFragment : Fragment(),
                         Bookmark.getRootFolderName()
                 ).insert()
 
-                val parent = binding?.root ?: return true
-                Toaster.snackShort(
-                        parent,
-                        context.getString(R.string.message_done_added_bookmark),
-                        colorPair()
-                )
+                contentViewModel?.snackShort(context.getString(R.string.message_done_added_bookmark))
                 return true
             }
             R.id.add_archive -> {
@@ -268,21 +265,13 @@ class BrowserFragment : Fragment(),
             }
             R.id.replace_home -> {
                 browserModule.currentUrl()?.let {
-                    val parent = binding?.root ?: return true
+                    val context = context ?: return true
                     if (Urls.isInvalidUrl(it)) {
-                        Toaster.snackShort(
-                                parent,
-                                R.string.message_cannot_replace_home_url,
-                                colorPair()
-                        )
+                        contentViewModel?.snackShort(context.getString(R.string.message_cannot_replace_home_url))
                         return true
                     }
                     preferenceApplier.homeUrl = it
-                    Toaster.snackShort(
-                            parent,
-                            getString(R.string.message_replace_home_url, it) ,
-                            colorPair()
-                    )
+                    contentViewModel?.snackShort(context.getString(R.string.message_replace_home_url))
                 }
             }
         }
@@ -316,21 +305,12 @@ class BrowserFragment : Fragment(),
         val lineSeparator = System.getProperty("line.separator") ?: ""
         val replacedContent = content.replace("\\n", lineSeparator)
 
-        ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
-                .close.observe(requireActivity(), Observer {
-            fragmentManager?.popBackStack()
-        })
-
         val readerFragment =
-                fragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
-                        ?: ReaderFragment.withContent(browserModule.currentTitle(), replacedContent)
+                activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
+                        ?: ReaderFragment()
+        (readerFragment as? ReaderFragment)?.setContent(browserModule.currentTitle(), replacedContent)
 
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(
-                R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-        transaction?.replace(R.id.content, readerFragment, readerFragment::class.java.canonicalName)
-        transaction?.addToBackStack(readerFragment::class.java.canonicalName)
-        transaction?.commit()
+        contentViewModel?.nextFragment(readerFragment)
     }
 
     fun showUserAgentSetting() {
@@ -500,11 +480,7 @@ class BrowserFragment : Fragment(),
 
     override fun onClickUserAgent(userAgent: UserAgent) {
         browserModule.resetUserAgent(userAgent.text())
-        Toaster.snackShort(
-                binding?.root as View,
-                getString(R.string.format_result_user_agent, userAgent.title()),
-                colorPair()
-        )
+        contentViewModel?.snackShort(getString(R.string.format_result_user_agent, userAgent.title()))
     }
 
     fun stopSwipeRefresherLoading() {
