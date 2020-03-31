@@ -40,6 +40,8 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private val intentFactory = SettingsIntentFactory()
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -105,42 +107,42 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      * Call device settings.
      */
     fun deviceSetting() {
-        startActivity(SettingsIntentFactory.makeLaunch())
+        startActivity(intentFactory.makeLaunch())
     }
 
     /**
      * Call Wi-Fi settings.
      */
     fun wifi() {
-        startActivity(SettingsIntentFactory.wifi())
+        startActivity(intentFactory.wifi())
     }
 
     /**
      * Call Wireless settings.
      */
     fun wireless() {
-        startActivity(SettingsIntentFactory.wireless())
+        startActivity(intentFactory.wireless())
     }
 
     /**
      * Call Date-and-Time settings.
      */
     fun dateAndTime() {
-        startActivity(SettingsIntentFactory.dateAndTime())
+        startActivity(intentFactory.dateAndTime())
     }
 
     /**
      * Call display settings.
      */
     fun display() {
-        startActivity(SettingsIntentFactory.display())
+        startActivity(intentFactory.display())
     }
 
     /**
      * Call all app settings.
      */
     fun allApps() {
-        startActivity(SettingsIntentFactory.allApps())
+        startActivity(intentFactory.allApps())
     }
 
     @StringRes

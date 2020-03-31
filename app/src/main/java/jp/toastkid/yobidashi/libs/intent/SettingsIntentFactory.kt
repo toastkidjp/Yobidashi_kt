@@ -8,7 +8,7 @@ import android.provider.Settings
 
  * @author toastkidjp
  */
-object SettingsIntentFactory {
+class SettingsIntentFactory {
 
     /**
      * Make launch settings intent.
