@@ -13,17 +13,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingOtherBinding
-import jp.toastkid.yobidashi.libs.HtmlCompat
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.StartUp
+import jp.toastkid.yobidashi.settings.ClearSettingConfirmDialogFragment
 
 /**
  * @author toastkidjp
@@ -88,19 +85,10 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      * @param v
      */
     fun clearSettings(v: View) {
-        val fragmentActivity = activity ?: return
-        AlertDialog.Builder(fragmentActivity)
-                .setTitle(R.string.title_clear_settings)
-                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
-                .setCancelable(true)
-                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
-                .setPositiveButton(R.string.ok) { d, _ ->
-                    preferenceApplier.clear()
-                    Updater.update(fragmentActivity)
-                    Toaster.snackShort(v, R.string.done_clear, preferenceApplier.colorPair())
-                    d.dismiss()
-                }
-                .show()
+        ClearSettingConfirmDialogFragment().show(
+                fragmentManager,
+                ClearSettingConfirmDialogFragment::class.java.canonicalName
+        )
     }
 
     /**
