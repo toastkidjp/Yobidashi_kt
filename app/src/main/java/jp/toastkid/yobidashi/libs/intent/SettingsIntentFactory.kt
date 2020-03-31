@@ -14,59 +14,35 @@ object SettingsIntentFactory {
      * Make launch settings intent.
      * @return [Intent]
      */
-    fun makeLaunch(): Intent {
-        val intent = Intent()
-        intent.action = Settings.ACTION_SETTINGS
-        return intent
-    }
+    fun makeLaunch() = Intent(Settings.ACTION_SETTINGS)
 
     /**
      * Make launch Wi-Fi settings intent.
      * @return [Intent]
      */
-    fun wifi(): Intent {
-        val intent = Intent()
-        intent.action = Settings.ACTION_WIFI_SETTINGS
-        return intent
-    }
+    fun wifi() = Intent(Settings.ACTION_WIFI_SETTINGS)
 
     /**
      * Make launch wireless settings intent.
      * @return [Intent]
      */
-    fun wireless(): Intent {
-        val intent = Intent()
-        intent.action = Settings.ACTION_WIRELESS_SETTINGS
-        return intent
-    }
+    fun wireless() = Intent(Settings.ACTION_WIRELESS_SETTINGS)
 
     /**
      * Make launch all apps settings intent.
      * @return [Intent]
      */
-    fun allApps(): Intent {
-        val intent = Intent()
-        intent.action = Settings.ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS
-        return intent
-    }
+    fun allApps() = Intent(Settings.ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS)
 
     /**
      * Make launch Date and Time settings intent.
      * @return [Intent]
      */
-    fun dateAndTime(): Intent {
-        val intent = Intent()
-        intent.action = Settings.ACTION_DATE_SETTINGS
-        return intent
-    }
+    fun dateAndTime() = Intent(Settings.ACTION_DATE_SETTINGS)
 
     /**
      * Make launch display settings intent.
      * @return [Intent]
      */
-    fun display(): Intent {
-        val intent = Intent()
-        intent.action = Settings.ACTION_DISPLAY_SETTINGS
-        return intent
-    }
+    fun display() = Intent(Settings.ACTION_DISPLAY_SETTINGS)
 }
