@@ -13,4 +13,10 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/context_edit_add_quote"
+        android:title="Add quote"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
 </menu>

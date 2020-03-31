@@ -228,6 +228,10 @@ class EditorFragment :
                         listHeadAdder(binding.editorInput, "-")
                         return true
                     }
+                    R.id.context_edit_add_quote -> {
+                        listHeadAdder(binding.editorInput, ">")
+                        return true
+                    }
                     R.id.context_edit_url_open_new -> {
                         browserViewModel?.open(text.toUri())
                         actionMode?.finish()
