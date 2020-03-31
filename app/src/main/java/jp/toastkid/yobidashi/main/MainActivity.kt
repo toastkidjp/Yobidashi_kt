@@ -458,7 +458,7 @@ class MainActivity : AppCompatActivity(),
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = true) {
+    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
             return
@@ -472,13 +472,12 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
-        // TODO Fix animation
         if (withAnimation) {
             transaction.setCustomAnimations(
-                    if (withSlideIn) R.anim.slide_up else R.anim.slide_in_right,
+                    if (withSlideIn) R.anim.slide_in_right else R.anim.slide_up,
                     0,
                     0,
-                    if (withSlideIn) R.anim.slide_down else android.R.anim.slide_out_right
+                    if (withSlideIn) android.R.anim.slide_out_right else R.anim.slide_down
             )
         }
 
