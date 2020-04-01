@@ -422,20 +422,6 @@ class EditorFragment :
     }
 
     /**
-     * Find text in bound to upward.
-     * TODO remove it.
-     * @param text Finding text
-     */
-    fun findUp(text: String) = finder.findUp(text)
-
-    /**
-     * Find text in bound to downward.
-     *
-     * @param text Finding text
-     */
-    fun findDown(text: String) = finder.findDown(text)
-
-    /**
      * Move cursor to specified index.
      *
      * @param index index of editor.
