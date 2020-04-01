@@ -567,12 +567,12 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        val findCurrentFragment = findCurrentFragment()
-        if (findCurrentFragment?.pressBack() == true) {
+        val currentFragment = findFragment()
+        if (currentFragment is CommonFragmentAction && currentFragment.pressBack()) {
             return
         }
 
-        if (findCurrentFragment is BrowserFragment) {
+        if (currentFragment is BrowserFragment) {
             tabs.closeTab(tabs.index())
 
             if (tabs.isEmpty()) {
@@ -593,17 +593,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun findFragment() = supportFragmentManager.findFragmentById(R.id.content)
-
-    /**
-     * Find current fragment.
-     * TODO Delete it.
-     * @return fragment or null
-     */
-    private fun findCurrentFragment(): CommonFragmentAction? {
-        val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.content)
-
-        return if (fragment != null) fragment as? CommonFragmentAction else null
-    }
 
     /**
      * Show confirm exit.
