@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/context_edit_add_order"
-        android:title="Add order"
+        android:title="@string/title_context_editor_add_order"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/context_edit_add_minus"
-        android:title="Add minus"
+        android:title="@string/title_context_editor_add_minus"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/context_edit_add_quote"
-        android:title="Add quote"
+        android:title="@string/title_context_editor_add_quote"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
