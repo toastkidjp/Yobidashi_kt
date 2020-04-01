@@ -434,8 +434,6 @@ class BrowserFragment : Fragment(),
         }
     }
 
-    override fun pressLongBack() = true
-
     override fun pressBack(): Boolean = hideOption() || back()
 
     override fun share() {
