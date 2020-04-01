@@ -86,7 +86,6 @@ class MenuUseCase(
         when (menu) {
             Menu.TOP-> {
                 (findCurrentFragment() as? ContentScrollable)?.toTop()
-
             }
             Menu.BOTTOM-> {
                 (findCurrentFragment() as? ContentScrollable)?.toBottom()
