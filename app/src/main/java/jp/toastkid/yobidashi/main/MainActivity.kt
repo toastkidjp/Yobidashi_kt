@@ -12,7 +12,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.webkit.WebView
@@ -550,13 +549,6 @@ class MainActivity : AppCompatActivity(),
             return
         }
         tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
-    }
-
-    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
-        KeyEvent.KEYCODE_BACK ->
-            findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
-        else ->
-            super.onKeyLongPress(keyCode, event)
     }
 
     override fun onBackPressed() {
