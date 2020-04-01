@@ -84,7 +84,7 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
      *
      * @param v
      */
-    fun clearSettings(v: View) {
+    fun clearSettings() {
         ClearSettingConfirmDialogFragment().show(
                 fragmentManager,
                 ClearSettingConfirmDialogFragment::class.java.canonicalName
