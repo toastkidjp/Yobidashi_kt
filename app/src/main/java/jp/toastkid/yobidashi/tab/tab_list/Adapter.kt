@@ -14,6 +14,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.tab.TabThumbnails
 
 /**
  * WebTab list adapter.
@@ -38,6 +39,8 @@ internal class Adapter(
      * For snackbar and view color.
      */
     private val colorPair: ColorPair = PreferenceApplier(context).colorPair()
+
+    private val tabThumbnails = TabThumbnails { context }
 
     /**
      * Current index.
@@ -75,7 +78,7 @@ internal class Adapter(
             return@setOnLongClickListener true
         }
 
-        holder.setImagePath(tab.thumbnailPath)
+        holder.setImagePath(tabThumbnails.assignNewFile(tab.thumbnailPath()).absolutePath)
         holder.setTitle(tab.title())
         holder.setCloseAction(View.OnClickListener { closeAt(callback.tabIndexOfFromTabList(tab)) })
         holder.setColor(colorPair)

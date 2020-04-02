@@ -121,16 +121,13 @@ class TabList private constructor() {
         remove(tab)
     }
 
+    // TODO merge it.
     internal fun remove(tab: Tab) {
         File(itemsDir, tab.id() + ".json").delete()
         tabs.remove(tab)
-        tab.deleteLastThumbnail()
     }
 
     internal fun clear() {
-        for (tab in tabs) {
-            tab.deleteLastThumbnail()
-        }
         tabs.clear()
         index = 0
         tabsFile?.delete()

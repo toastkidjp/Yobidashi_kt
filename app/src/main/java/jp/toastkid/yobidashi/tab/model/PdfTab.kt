@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.tab.model
 
-import java.io.File
 import java.util.*
 
 /**
@@ -16,8 +15,6 @@ class PdfTab: Tab {
 
     private var path: String = ""
 
-    override var thumbnailPath: String = ""
-
     private val id: String = UUID.randomUUID().toString()
 
     private var position: Int = 0
@@ -29,13 +26,6 @@ class PdfTab: Tab {
     }
 
     override fun getScrolled(): Int = position
-
-    override fun deleteLastThumbnail() {
-        val lastScreenshot = File(thumbnailPath)
-        if (lastScreenshot.exists()) {
-            lastScreenshot.delete()
-        }
-    }
 
     override fun title(): String = titleStr
 

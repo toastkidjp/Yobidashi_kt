@@ -228,7 +228,12 @@ class MainActivity : AppCompatActivity(),
                 .onPageFinished
                 .observe(
                         this,
-                        Observer { tabs.updateWebTab(it) }
+                        Observer {
+                            tabs.updateWebTab(it)
+                            if (tabs.currentTabId() == it.first) {
+                                refreshThumbnail()
+                            }
+                        }
                 )
 
         ViewModelProviders.of(this).get(OverlayColorFilterViewModel::class.java)
@@ -506,6 +511,7 @@ class MainActivity : AppCompatActivity(),
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
+                refreshThumbnail()
             }
             is PdfTab -> {
                 val url: String = currentTab.getUrl()
@@ -517,7 +523,7 @@ class MainActivity : AppCompatActivity(),
                                 obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment ?: return
                         pdfViewerFragment.arguments = bundleOf("uri" to uri, "scrollY" to currentTab.getScrolled())
                         replaceFragment(pdfViewerFragment, withAnimation)
-
+                        refreshThumbnail()
                     } catch (e: SecurityException) {
                         Timber.e(e)
                         return
@@ -530,7 +536,6 @@ class MainActivity : AppCompatActivity(),
         }
 
         tabs.saveTabList()
-        refreshThumbnail()
     }
 
     /**
@@ -542,7 +547,6 @@ class MainActivity : AppCompatActivity(),
         tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
     }
 
-    // TODO Fix it.
     private fun refreshThumbnail() {
         val findFragment = findFragment()
         if (findFragment !is TabUiFragment) {

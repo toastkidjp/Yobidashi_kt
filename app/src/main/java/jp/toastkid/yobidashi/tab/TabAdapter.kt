@@ -17,7 +17,6 @@ import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.EditorTab
@@ -42,7 +41,7 @@ class TabAdapter(
 
     private val colorPair: ColorPair
 
-    private val tabsScreenshots: FilesDir
+    private val tabThumbnails: TabThumbnails
 
     private val preferenceApplier: PreferenceApplier
 
@@ -60,7 +59,7 @@ class TabAdapter(
 
     init {
         val viewContext = contextSupplier()
-        tabsScreenshots = makeNewScreenshotDir(viewContext)
+        tabThumbnails = TabThumbnails(contextSupplier)
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
         if (viewContext is MainActivity) {
@@ -77,9 +76,8 @@ class TabAdapter(
         val currentTab = tabList.currentTab() ?: return
         makeDrawingCache()?.let {
             Completable.fromAction {
-                val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
+                val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
                 bitmapCompressor(it, file)
-                currentTab.thumbnailPath = file.absolutePath
             }.subscribeOn(Schedulers.io())
                     .subscribe({}, Timber::e)
                     .addTo(disposables)
@@ -195,11 +193,11 @@ class TabAdapter(
         }
         val tab = tabList.get(index)
         if (tab is WebTab) {
-            deleteThumbnail(tab.thumbnailPath)
             autoArchive.delete(IdGenerator().from(tab.getUrl()))
         }
 
         tabList.closeTab(index)
+        tabThumbnails.delete(tab?.thumbnailPath())
         setCount()
         if (tabList.isEmpty) {
             tabEmptyCallback()
@@ -218,7 +216,7 @@ class TabAdapter(
     fun dispose() {
         if (!preferenceApplier.doesRetainTabs()) {
             tabList.clear()
-            tabsScreenshots.clean()
+            tabThumbnails.clean()
         }
         disposables.clear()
         tabList.dispose()
@@ -226,6 +224,7 @@ class TabAdapter(
 
     internal fun clear() {
         tabList.clear()
+        tabThumbnails.clean()
     }
 
     internal fun indexOf(tab: Tab): Int = tabList.indexOf(tab)
@@ -260,20 +259,6 @@ class TabAdapter(
 
     fun setCount() {
         tabListViewModel?.tabCount(size())
-    }
-
-    companion object {
-
-        /**
-         * Directory path to screenshot.
-         */
-        private const val SCREENSHOT_DIR_PATH: String = "tabs/screenshots"
-
-        /**
-         * Make new screenshot dir wrapper instance.
-         */
-        fun makeNewScreenshotDir(context: Context): FilesDir = FilesDir(context, SCREENSHOT_DIR_PATH)
-
     }
 
 }

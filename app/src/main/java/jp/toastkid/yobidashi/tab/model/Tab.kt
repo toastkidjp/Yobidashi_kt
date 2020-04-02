@@ -5,7 +5,7 @@ package jp.toastkid.yobidashi.tab.model
  */
 interface Tab {
 
-    var thumbnailPath: String
+    fun thumbnailPath(): String = "${id()}.png"
 
     fun id(): String
 
@@ -18,8 +18,6 @@ interface Tab {
     fun back(): String = ""
 
     fun forward(): String = ""
-
-    fun deleteLastThumbnail()
 
     fun title(): String
 }

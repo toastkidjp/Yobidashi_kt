@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.tab.model
 
 import android.text.TextUtils
 import jp.toastkid.yobidashi.tab.History
-import java.io.File
 import java.util.*
 
 /**
@@ -15,8 +14,6 @@ internal class WebTab: Tab {
     private val histories: MutableList<History> = mutableListOf()
 
     private val id: String = UUID.randomUUID().toString()
-
-    override var thumbnailPath: String = ""
 
     @Transient var background = false
 
@@ -60,13 +57,6 @@ internal class WebTab: Tab {
     override fun getScrolled(): Int = latest.scrolled
 
     override fun getUrl(): String = latest.url()
-
-    override fun deleteLastThumbnail() {
-        val lastScreenshot = File(thumbnailPath)
-        if (lastScreenshot.exists()) {
-            lastScreenshot.delete()
-        }
-    }
 
     override fun title(): String = latest.title()
 
