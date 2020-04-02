@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.menu
 
 import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -229,10 +228,6 @@ class MenuUseCase(
                 preferenceApplier.colorPair()
         )
         return true
-    }
-
-    private fun startActivity(intent: Intent) {
-        activitySupplier().startActivity(intent)
     }
 
     fun dispose() {
