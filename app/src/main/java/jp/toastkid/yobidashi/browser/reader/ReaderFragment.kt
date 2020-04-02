@@ -159,9 +159,9 @@ class ReaderFragment : Fragment(), ContentScrollable {
         speechMaker.stop()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         speechMaker.dispose()
+        super.onDetach()
     }
 
     companion object {
