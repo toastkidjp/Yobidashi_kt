@@ -433,7 +433,7 @@ class EditorFragment :
 
     /**
      * Return root view.
-     *
+     * TODO merge it.
      * @return [View]
      */
     fun view(): View = binding.root
@@ -560,7 +560,7 @@ class EditorFragment :
      *
      * @param data [Uri]
      */
-    fun readFromFileUri(data: Uri) {
+    private fun readFromFileUri(data: Uri) {
         val context = context ?: return
 
         FileExtractorFromUri(context, data)?.let {
@@ -573,7 +573,7 @@ class EditorFragment :
      *
      * @param file [File]
      */
-    fun readFromFile(file: File) {
+    private fun readFromFile(file: File) {
         if (!file.exists() || !file.canRead()) {
             snackText(R.string.message_cannot_read_file)
             clearPath()
@@ -607,7 +607,7 @@ class EditorFragment :
     /**
      * Clear current file path and reset edit-text.
      */
-    fun clearPath() {
+    private fun clearPath() {
         path = ""
         clearInput()
         menuBinding.lastSaved?.setText("")
@@ -616,7 +616,7 @@ class EditorFragment :
     /**
      * Clear input text.
      */
-    fun clearInput() {
+    private fun clearInput() {
         setContentText("")
     }
 
