@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.session.PlaybackState
+import android.os.Build
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -23,10 +24,12 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.widget.AdapterView
 import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -66,15 +69,17 @@ class MediaPlayerPopup(private val context: Context) {
 
     private val preferenceApplier = PreferenceApplier(context)
 
-    private val heightPixels = context.resources.displayMetrics.heightPixels
+    private val resources = context.resources
 
-    private val headerHeight = context.resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
+    private val heightPixels = resources.displayMetrics.heightPixels
+
+    private val headerHeight = resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
 
     private val swipeLimit = heightPixels - headerHeight
 
-    private val pauseBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_pause)
+    private val pauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_pause)
 
-    private val playBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_play_media)
+    private val playBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_play_media)
 
     private val subscriptionCallback = object : MediaBrowserCompat.SubscriptionCallback() {
 
@@ -136,7 +141,7 @@ class MediaPlayerPopup(private val context: Context) {
         adapter = Adapter(
                 LayoutInflater.from(context),
                 preferenceApplier,
-                context.resources,
+                resources,
                 mediaPlayerPopupViewModel
         )
 
@@ -145,6 +150,8 @@ class MediaPlayerPopup(private val context: Context) {
         binding.mediaList.adapter = adapter
         binding.mediaList.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        initializePlaybackSpeedChanger()
 
         applyColors()
 
@@ -158,6 +165,26 @@ class MediaPlayerPopup(private val context: Context) {
                 connectionCallback,
                 null
         )
+    }
+
+    private fun initializePlaybackSpeedChanger() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            binding.playingSpeed.isVisible = false
+            return
+        }
+
+        binding.playingSpeed.isVisible = true
+
+        PlayingSpeedSpinnerInitializer().invoke(binding.playingSpeed)
+        binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val speed = PlayingSpeed.findById(id).speed
+                val intent = MediaPlayerService.makeSpeedIntent(speed)
+                context.sendBroadcast(intent)
+            }
+        }
     }
 
     private fun observeViewModels() {

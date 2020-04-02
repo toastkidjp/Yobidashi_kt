@@ -61,13 +61,13 @@ class Adapter(
         val iconColor = preferenceApplier.colorPair().bgColor()
         holder.setLyricsIconColor(iconColor)
 
+        setDefaultIcon(holder, iconColor)
         Maybe.fromCallable { item.description.iconUri?.let { albumArtFinder(it) } ?: throw RuntimeException() }
                 .subscribeOn(Schedulers.io())
                 .map { BitmapScaling(it, iconWidth, iconWidth) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(holder::setIcon) {
-                    holder.setIconColor(iconColor)
-                    holder.setIconId(R.drawable.ic_music)
+                    setDefaultIcon(holder, iconColor)
                 }
                 .addTo(disposables)
 
@@ -80,6 +80,11 @@ class Adapter(
                 mediaPlayerPopupViewModel?.clickLyrics(lyrics.toString())
             }
         })
+    }
+
+    private fun setDefaultIcon(holder: ViewHolder, iconColor: Int) {
+        holder.setIconColor(iconColor)
+        holder.setIconId(R.drawable.ic_music)
     }
 
     override fun getItemCount() = items.size

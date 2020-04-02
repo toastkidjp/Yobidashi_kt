@@ -157,10 +157,10 @@ class SearchActivity : AppCompatActivity(),
             }
         }
 
-        urlModule = UrlModule(binding?.urlModule as ModuleSearchUrlBinding) {
-            // TODO attempt to use method reference
-            setTextAndMoveCursorToEnd(it)
-        }
+        urlModule = UrlModule(
+                binding?.urlModule as ModuleSearchUrlBinding,
+                this::setTextAndMoveCursorToEnd
+        )
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
@@ -265,9 +265,7 @@ class SearchActivity : AppCompatActivity(),
                     binding?.favoriteModule as ModuleSearchFavoriteBinding,
                     { fav -> search(fav.category as String, fav.query as String) },
                     this::hideKeyboard,
-                    { fav -> // TODO Clean it.
-                        setTextAndMoveCursorToEnd("${fav.query} ")
-                    }
+                    { setTextAndMoveCursorToEnd("${it.query} ") }
             )
         }
                 .subscribeOn(Schedulers.newThread())

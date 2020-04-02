@@ -17,6 +17,8 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.WorkerThread
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -68,19 +70,22 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
 
         preferenceApplier = PreferenceApplier(context)
 
-        adapter = Adapter(
-                fragmentManager,
-                {
-                    Completable.fromAction { loadImages(it) }
-                            .subscribeOn(Schedulers.io())
-                            .subscribe()
-                            .addTo(disposables)
-                },
-                {
-                    preferenceApplier.addExcludeItem(it)
-                    loadImages()
-                }
-        )
+        val viewModel =
+                ViewModelProviders.of(this).get(ImageViewerFragmentViewModel::class.java)
+
+        adapter = Adapter(fragmentManager, viewModel)
+
+        viewModel.onClick.observe(this, Observer {
+            Completable.fromAction { loadImages(it) }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
+                    .addTo(disposables)
+        })
+
+        viewModel.onLongClick.observe(this, Observer {
+            preferenceApplier.addExcludeItem(it)
+            loadImages()
+        })
 
         val contentResolver = context.contentResolver ?: return
         bucketLoader = BucketLoader(contentResolver)

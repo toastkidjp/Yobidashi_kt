@@ -23,8 +23,7 @@ import jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment
  */
 internal class Adapter(
         private val fragmentManager: FragmentManager?,
-        private val onClick: (String) -> Unit,
-        private val onLongClick: (String) -> Unit
+        private val imageViewerFragmentViewModel: ImageViewerFragmentViewModel?
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     private val images = mutableListOf<Image>()
@@ -43,7 +42,7 @@ internal class Adapter(
         val image = images.get(position)
         holder.applyContent(image) {
             if (it.isBucket) {
-                onClick(it.name)
+                imageViewerFragmentViewModel?.click(it.name)
             } else {
                 ImagePreviewDialogFragment.withImage(it)
                         .show(fragmentManager, ImagePreviewDialogFragment::class.java.simpleName)
@@ -56,7 +55,7 @@ internal class Adapter(
                 return@setOnLongClickListener true
             }
 
-            onLongClick(excludingId)
+            imageViewerFragmentViewModel?.longClick(excludingId)
             return@setOnLongClickListener true
         }
     }
