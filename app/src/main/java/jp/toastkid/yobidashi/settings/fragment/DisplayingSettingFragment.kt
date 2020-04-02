@@ -192,8 +192,8 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
     @StringRes
     override fun titleId() = R.string.title_settings_display
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
+        super.onDetach()
         disposables.clear()
     }
 
