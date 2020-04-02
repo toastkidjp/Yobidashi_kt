@@ -529,6 +529,14 @@ class BrowserModule(
         currentView()?.stopLoading()
     }
 
+    fun onResume() {
+        currentView()?.onResume()
+    }
+
+    fun onPause() {
+        currentView()?.onPause()
+    }
+
     /**
      * Dispose [WebViewPool].
      */

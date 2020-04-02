@@ -420,6 +420,7 @@ class BrowserFragment : Fragment(),
 
         browserModule.resizePool(preferenceApplier.poolSize)
         browserModule.applyNewAlpha()
+        browserModule.onResume()
 
         binding?.swipeRefresher?.let {
             it.setProgressBackgroundColorSchemeColor(preferenceApplier.color)
@@ -488,6 +489,7 @@ class BrowserFragment : Fragment(),
     override fun onPause() {
         super.onPause()
         stopSwipeRefresherLoading()
+        browserModule.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
