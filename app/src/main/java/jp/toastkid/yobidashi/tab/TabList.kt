@@ -118,11 +118,6 @@ class TabList private constructor() {
             this.index--
         }
         val tab: Tab = tabs[index]
-        remove(tab)
-    }
-
-    // TODO merge it.
-    internal fun remove(tab: Tab) {
         File(itemsDir, tab.id() + ".json").delete()
         tabs.remove(tab)
     }
