@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
@@ -129,17 +128,9 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         binding = DataBindingUtil.inflate(
                 LayoutInflater.from(activityContext),
                 R.layout.dialog_fragment_tab_list, null, false)
+        binding.dialog = this
 
         initRecyclerView(binding.recyclerView)
-
-        initAddEditorTabButton()
-
-        initAddTabButton(binding.addTab)
-
-        initClearTabs(binding.clearTabs)
-
-        // TODO use data binding
-        binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
 
         colorPair.applyTo(binding.addPdfTab)
         colorPair.applyTo(binding.addEditorTab)
@@ -159,37 +150,39 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         lastTabId = callback?.currentTabIdFromTabList() ?: ""
     }
 
-    /**
-     * Initialize add-editor-tab button.
-     */
-    private fun initAddEditorTabButton() =
-            binding.addEditorTab.setOnClickListener {
-                it.isClickable = false
-                callback?.onOpenEditor()
-                it.isClickable = true
-                dismiss()
-            }
+    fun openPdf() {
+        callback?.onOpenPdf()
+    }
 
-    /**
-     * Initialize FAB of "clear tabs".
-     *
-     * @param clearTabs
-     */
-    private fun initClearTabs(clearTabs: FloatingActionButton) =
-            clearTabs.setOnClickListener { v ->
-                val context = v.context
-                if (context is FragmentActivity) {
-                    val fragmentManager = context.supportFragmentManager
-                    val targetFragment =
-                            fragmentManager.findFragmentByTag(BrowserFragment::class.java.canonicalName)
-                    val dialogFragment = TabListClearDialogFragment()
-                    dialogFragment.setTargetFragment(targetFragment, 1)
-                    dialogFragment.show(
-                            fragmentManager,
-                            TabListClearDialogFragment::class.java.canonicalName
-                    )
-                }
-            }
+    fun openEditor(view: View) {
+        view.isClickable = false
+        callback?.onOpenEditor()
+        view.isClickable = true
+        dismiss()
+    }
+
+    fun addTab(view: View) {
+        view.isClickable = false
+        callback?.openNewTabFromTabList()
+        adapter.notifyItemInserted(adapter.itemCount - 1)
+        view.isClickable = true
+        dismiss()
+    }
+
+    fun clearTabs(v: View) {
+        val context = v.context
+        if (context is FragmentActivity) {
+            val fragmentManager = context.supportFragmentManager
+            val targetFragment =
+                    fragmentManager.findFragmentByTag(BrowserFragment::class.java.canonicalName)
+            val dialogFragment = TabListClearDialogFragment()
+            dialogFragment.setTargetFragment(targetFragment, 1)
+            dialogFragment.show(
+                    fragmentManager,
+                    TabListClearDialogFragment::class.java.canonicalName
+            )
+        }
+    }
 
     /**
      * Initialize recyclerView.
@@ -232,20 +225,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         rightTouchHelper?.startDrag(viewHolder)
         leftTouchHelper?.startDrag(viewHolder)
     }
-
-    /**
-     * Initialize adding tab fab.
-     *
-     * @param addTab fab
-     */
-    private fun initAddTabButton(addTab: FloatingActionButton) =
-            addTab.setOnClickListener {
-                addTab.isClickable = false
-                callback?.openNewTabFromTabList()
-                adapter.notifyItemInserted(adapter.itemCount - 1)
-                addTab.isClickable = true
-                dismiss()
-            }
 
     // TODO extract class
     private fun applyBackgrounds() {
