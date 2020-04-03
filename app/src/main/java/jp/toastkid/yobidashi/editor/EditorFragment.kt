@@ -68,7 +68,7 @@ import java.util.*
 
 
 /**
- *
+ * TODO Modify behavior on switched new tab.
  * @author toastkidjp
  */
 class EditorFragment :
@@ -297,8 +297,11 @@ class EditorFragment :
             }
         }
 
-        arguments?.getString("path")?.let {
-            readFromFile(File(it))
+        val path = arguments?.getString("path")
+        if (path == null) {
+            clearInput()
+        } else {
+            readFromFile(File(path))
         }
     }
 
