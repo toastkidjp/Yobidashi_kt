@@ -208,6 +208,9 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.openPdf?.observe(this, Observer {
             openPdfTabFromStorage()
         })
+        contentViewModel?.openEditorTab?.observe(this, Observer {
+            openEditorTab()
+        })
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -320,7 +323,6 @@ class MainActivity : AppCompatActivity(),
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
                     }
                 },
-                { openEditorTab() },
                 { pageSearchPresenter.switch() },
                 { menuViewModel?.close() }
         )

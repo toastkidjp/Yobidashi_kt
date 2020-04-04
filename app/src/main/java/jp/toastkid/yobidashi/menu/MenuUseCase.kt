@@ -46,7 +46,6 @@ class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
         private val contentViewModel: ContentViewModel?,
         private val cleanProcess: () -> Unit,
-        private val openEditorTab: () -> Unit,
         private val switchPageSearcher: () -> Unit,
         private val close: () -> Unit
 ) {
@@ -110,7 +109,7 @@ class MenuUseCase(
                         .open(preferenceApplier.homeUrl.toUri())
             }
             Menu.EDITOR-> {
-                openEditorTab()
+                contentViewModel?.openEditorTab()
             }
             Menu.PDF-> {
                 contentViewModel?.openPdf()

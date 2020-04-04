@@ -81,4 +81,12 @@ class ContentViewModel : ViewModel() {
     fun openPdf() {
         _openPdf.postValue(Unit)
     }
+
+    private val _openEditorTab = MutableLiveData<Unit>()
+
+    val openEditorTab: LiveData<Unit> = _openEditorTab
+
+    fun openEditorTab() {
+        _openEditorTab.postValue(Unit)
+    }
 }
