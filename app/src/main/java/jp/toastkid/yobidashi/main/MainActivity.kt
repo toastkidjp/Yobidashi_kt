@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.main
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
 import android.content.ClipboardManager
@@ -56,7 +55,6 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.menu.MenuBinder
@@ -81,7 +79,6 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
-import kotlin.math.min
 
 /**
  * Main of this calendar app.
@@ -171,8 +168,6 @@ class MainActivity : AppCompatActivity(),
                 browserViewModel
         )
         searchWithClip.invoke()
-
-        setFabListener()
 
         pageSearchPresenter = PageSearcherModule(
                 this,
@@ -295,12 +290,7 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProviders.of(this).get(MenuViewModel::class.java)
 
-        MenuBinder(
-                this,
-                menuViewModel,
-                binding.menusView,
-                binding.menuSwitch
-        )
+        MenuBinder(this, menuViewModel, binding.menusView, binding.menuSwitch)
 
         menuUseCase = MenuUseCase(
                 { this },
@@ -324,39 +314,6 @@ class MainActivity : AppCompatActivity(),
         menuViewModel?.longClick?.observe(this, Observer {
             menuUseCase.onMenuLongClick(it)
         })
-    }
-
-    /**
-     * Set FAB's listener.
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setFabListener() {
-        val listener = DraggableTouchListener()
-        listener.setCallback(object : DraggableTouchListener.OnNewPosition {
-            override fun onNewPosition(x: Float, y: Float) {
-                preferenceApplier.setNewMenuFabPosition(x, y)
-            }
-        })
-        listener.setOnClick(object : DraggableTouchListener.OnClick {
-            override fun onClick() {
-                menuViewModel?.switchVisibility(binding?.menusView?.isVisible == false)
-            }
-        })
-
-        binding.menuSwitch.setOnTouchListener(listener)
-
-        binding.menuSwitch.viewTreeObserver.addOnGlobalLayoutListener {
-            val menuFabPosition = preferenceApplier.menuFabPosition()
-            val displayMetrics = binding.menuSwitch.context.resources.displayMetrics
-            if (binding.menuSwitch.x > displayMetrics.widthPixels) {
-                binding.menuSwitch.x =
-                        min(menuFabPosition?.first ?: 0f, displayMetrics.widthPixels.toFloat())
-            }
-            if (binding.menuSwitch.y > displayMetrics.heightPixels) {
-                binding.menuSwitch.y =
-                        min(menuFabPosition?.second ?: 0f, displayMetrics.heightPixels.toFloat())
-            }
-        }
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -615,7 +572,7 @@ class MainActivity : AppCompatActivity(),
         super.onResume()
         refresh()
         menuViewModel?.onResume()
-        setFabPosition()
+
         tabs.loadBackgroundTabsFromDirIfNeed()
 
         tabs.setCount()
@@ -695,26 +652,6 @@ class MainActivity : AppCompatActivity(),
                         Timber::e
                 )
                 ?.addTo(disposables)
-    }
-
-    private fun setFabPosition() {
-        binding.menuSwitch.let {
-            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
-            val displayMetrics = it.context.resources.displayMetrics
-            val x = when {
-                fabPosition.first > displayMetrics.widthPixels.toFloat() ->
-                    displayMetrics.widthPixels.toFloat()
-                fabPosition.first < 0 -> 0f
-                else -> fabPosition.first
-            }
-            val y = when {
-                fabPosition.second > displayMetrics.heightPixels.toFloat() ->
-                    displayMetrics.heightPixels.toFloat()
-                fabPosition.second < 0 -> 0f
-                else -> fabPosition.second
-            }
-            it.animate().x(x).y(y).setDuration(10).start()
-        }
     }
 
     private fun hideToolbar() {
