@@ -12,7 +12,6 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import com.journeyapps.barcodescanner.camera.CameraManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
@@ -34,7 +33,6 @@ import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
-import jp.toastkid.yobidashi.torch.Torch
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import timber.log.Timber
@@ -59,20 +57,6 @@ class MenuUseCase(
     private lateinit var randomWikipedia: RandomWikipedia
 
     private val disposables = CompositeDisposable()
-
-    /**
-     * Torch API facade.
-     */
-    private val torch by lazy {
-        val fragmentActivity = activitySupplier()
-        Torch(CameraManager(fragmentActivity)) {
-            Toaster.snackShort(
-                    fragmentActivity.findViewById(android.R.id.content),
-                    it,
-                    preferenceApplier.colorPair()
-            )
-        }
-    }
 
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
 
@@ -221,7 +205,6 @@ class MenuUseCase(
     }
 
     fun dispose() {
-        torch.dispose()
         disposables.clear()
     }
 
