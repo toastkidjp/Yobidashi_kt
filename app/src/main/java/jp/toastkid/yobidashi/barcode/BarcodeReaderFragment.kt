@@ -16,6 +16,8 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -88,15 +90,6 @@ class BarcodeReaderFragment : Fragment() {
         preferenceApplier = PreferenceApplier(requireContext())
 
         binding?.fragment = this
-        binding?.toolbar?.let { toolbar ->
-            activity?.setTitle(R.string.title_camera)
-            toolbar.inflateMenu(R.menu.camera)
-            toolbar.inflateMenu(R.menu.settings_toolbar_menu)
-            toolbar.setOnMenuItemClickListener{ clickMenu(it) }
-
-            toolbar.setNavigationIcon(R.drawable.ic_back)
-            toolbar.setNavigationOnClickListener { activity?.finish() }
-        }
 
         if (isNotGranted()) {
             requestPermissions(arrayOf(permission), 1)
@@ -125,6 +118,8 @@ class BarcodeReaderFragment : Fragment() {
 
         initializeFab()
         startDecode()
+
+        setHasOptionsMenu(true)
     }
 
     /**
@@ -136,14 +131,19 @@ class BarcodeReaderFragment : Fragment() {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                     && activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.camera, menu)
+    }
+
     /**
      * Invoke click menu action.
      *
      * @param item [MenuItem]
      * @return This function always return true
      */
-    private fun clickMenu(item: MenuItem) = when (item.itemId) {
-        R.id.reset_fab_position -> {
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.reset_camera_fab_position -> {
             binding?.camera?.also {
                 it.translationX = 0f
                 it.translationY = 0f
@@ -151,15 +151,7 @@ class BarcodeReaderFragment : Fragment() {
             }
             true
         }
-        R.id.menu_exit -> {
-            activity?.moveTaskToBack(true)
-            true
-        }
-        R.id.menu_close -> {
-            activity?.finish()
-            true
-        }
-        else -> true
+        else -> super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -170,6 +162,12 @@ class BarcodeReaderFragment : Fragment() {
                 preferenceApplier.setNewCameraFabPosition(x, y)
             }
         })
+        draggableTouchListener.setOnClick(object : DraggableTouchListener.OnClick {
+            override fun onClick() {
+                camera()
+            }
+        })
+
         binding?.camera?.setOnTouchListener(draggableTouchListener)
 
         binding?.camera?.also {
@@ -212,7 +210,7 @@ class BarcodeReaderFragment : Fragment() {
         }
     }
 
-    fun camera() {
+    private fun camera() {
         val barcodeView = binding?.barcodeView ?: return
 
         barcodeView.barcodeView?.cameraInstance?.requestPreview(object : PreviewCallback {
@@ -263,8 +261,8 @@ class BarcodeReaderFragment : Fragment() {
         super.onResume()
         binding?.barcodeView?.resume()
         val colorPair = preferenceApplier.colorPair()
-        binding?.toolbar?.setTitleTextColor(colorPair.fontColor())
         resultPopup.onResume(colorPair)
+        colorPair.applyReverseTo(binding?.camera)
     }
 
     override fun onPause() {

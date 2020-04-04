@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/reset_fab_position"
-        android:title="@string/reset_button_position"
+        android:id="@+id/reset_camera_fab_position"
+        android:title="@string/title_reset_camera_button_position"
         android:orderInCategory="100"
         app:showAsAction="never"
         />
