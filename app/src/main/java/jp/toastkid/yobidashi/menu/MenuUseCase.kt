@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
@@ -45,13 +46,14 @@ import timber.log.Timber
 import java.util.*
 
 /**
+ * TODO use viewModel.
  * TODO clean up duplicated codes.
  * @author toastkidjp
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
         private val findCurrentFragment: () -> Fragment?,
-        private val replaceFragment: (Class<out Fragment>) -> Unit,
+        private val contentViewModel: ContentViewModel?,
         private val cleanProcess: () -> Unit,
         private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
@@ -93,7 +95,7 @@ class MenuUseCase(
                 (findCurrentFragment() as? CommonFragmentAction)?.share()
             }
             Menu.CODE_READER -> {
-                replaceFragment(BarcodeReaderFragment::class.java)
+                contentViewModel?.nextFragment(BarcodeReaderFragment::class.java)
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
@@ -106,26 +108,26 @@ class MenuUseCase(
                 cleanProcess()
             }
             Menu.PLANNING_POKER-> {
-                replaceFragment(CardListFragment::class.java)
+                contentViewModel?.nextFragment(CardListFragment::class.java)
             }
             Menu.APP_LAUNCHER-> {
-                replaceFragment(LauncherFragment::class.java)
+                contentViewModel?.nextFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
-                replaceFragment(RssReaderFragment::class.java)
+                contentViewModel?.nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(activitySupplier().findViewById(android.R.id.content))
                 close()
             }
             Menu.BOOKMARK-> {
-                replaceFragment(BookmarkFragment::class.java)
+                contentViewModel?.nextFragment(BookmarkFragment::class.java)
             }
             Menu.VIEW_HISTORY-> {
-                replaceFragment(ViewHistoryFragment::class.java)
+                contentViewModel?.nextFragment(ViewHistoryFragment::class.java)
             }
             Menu.IMAGE_VIEWER -> {
-                replaceFragment(ImageViewerFragment::class.java)
+                contentViewModel?.nextFragment(ImageViewerFragment::class.java)
             }
             Menu.LOAD_HOME-> {
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
@@ -142,7 +144,7 @@ class MenuUseCase(
                     is BrowserFragment ->
                         fragment.search()
                     else ->
-                        replaceFragment(SearchFragment::class.java)
+                        contentViewModel?.nextFragment(SearchFragment::class.java)
                 }
             }
             Menu.VOICE_SEARCH-> {
@@ -204,7 +206,7 @@ class MenuUseCase(
                         .addTo(disposables)
             }
             Menu.VIEW_ARCHIVE -> {
-                replaceFragment(ArchivesFragment::class.java)
+                contentViewModel?.nextFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
                 switchPageSearcher()

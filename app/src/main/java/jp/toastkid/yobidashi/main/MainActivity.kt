@@ -295,7 +295,7 @@ class MainActivity : AppCompatActivity(),
         menuUseCase = MenuUseCase(
                 { this },
                 { findFragment() },
-                { replaceFragment(obtainFragment(it), true, false) },
+                contentViewModel,//{ replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
