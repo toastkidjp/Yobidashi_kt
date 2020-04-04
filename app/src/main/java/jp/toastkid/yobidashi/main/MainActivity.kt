@@ -178,42 +178,7 @@ class MainActivity : AppCompatActivity(),
 
         initializeMenuViewModel()
 
-        contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
-        contentViewModel?.fragmentClass?.observe(this, Observer {
-            replaceFragment(obtainFragment(it))
-        })
-        contentViewModel?.fragment?.observe(this, Observer {
-            replaceFragment(it, true, true)
-        })
-        contentViewModel?.snackbar?.observe(this, Observer {
-            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
-        })
-        contentViewModel?.toTop?.observe(this, Observer {
-            (findFragment() as? ContentScrollable)?.toTop()
-        })
-        contentViewModel?.toBottom?.observe(this, Observer {
-            (findFragment() as? ContentScrollable)?.toBottom()
-        })
-        contentViewModel?.share?.observe(this, Observer {
-            (findFragment() as? CommonFragmentAction)?.share()
-        })
-        contentViewModel?.webSearch?.observe(this, Observer {
-            when (val fragment = findFragment()) {
-                is BrowserFragment ->
-                    fragment.search()
-                else ->
-                    contentViewModel?.nextFragment(SearchFragment::class.java)
-            }
-        })
-        contentViewModel?.openPdf?.observe(this, Observer {
-            openPdfTabFromStorage()
-        })
-        contentViewModel?.openEditorTab?.observe(this, Observer {
-            openEditorTab()
-        })
-        contentViewModel?.switchPageSearcher?.observe(this, Observer {
-            pageSearchPresenter.switch()
-        })
+        initializeContentViewModel()
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -318,7 +283,6 @@ class MainActivity : AppCompatActivity(),
 
         MenuBinder(this, menuViewModel, binding.menusView, binding.menuSwitch)
 
-        //TODO check { replaceFragment(obtainFragment(it), true, false) },
         menuUseCase = MenuUseCase(
                 { this },
                 {
@@ -335,6 +299,45 @@ class MainActivity : AppCompatActivity(),
 
         menuViewModel?.longClick?.observe(this, Observer {
             menuUseCase.onMenuLongClick(it)
+        })
+    }
+
+    private fun initializeContentViewModel() {
+        contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
+        contentViewModel?.fragmentClass?.observe(this, Observer {
+            replaceFragment(obtainFragment(it))
+        })
+        contentViewModel?.fragment?.observe(this, Observer {
+            replaceFragment(it, true, true)
+        })
+        contentViewModel?.snackbar?.observe(this, Observer {
+            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+        })
+        contentViewModel?.toTop?.observe(this, Observer {
+            (findFragment() as? ContentScrollable)?.toTop()
+        })
+        contentViewModel?.toBottom?.observe(this, Observer {
+            (findFragment() as? ContentScrollable)?.toBottom()
+        })
+        contentViewModel?.share?.observe(this, Observer {
+            (findFragment() as? CommonFragmentAction)?.share()
+        })
+        contentViewModel?.webSearch?.observe(this, Observer {
+            when (val fragment = findFragment()) {
+                is BrowserFragment ->
+                    fragment.search()
+                else ->
+                    contentViewModel?.nextFragment(SearchFragment::class.java)
+            }
+        })
+        contentViewModel?.openPdf?.observe(this, Observer {
+            openPdfTabFromStorage()
+        })
+        contentViewModel?.openEditorTab?.observe(this, Observer {
+            openEditorTab()
+        })
+        contentViewModel?.switchPageSearcher?.observe(this, Observer {
+            pageSearchPresenter.switch()
         })
     }
 
