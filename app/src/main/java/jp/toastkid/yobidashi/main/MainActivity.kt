@@ -318,9 +318,9 @@ class MainActivity : AppCompatActivity(),
 
         MenuBinder(this, menuViewModel, binding.menusView, binding.menuSwitch)
 
+        //TODO check { replaceFragment(obtainFragment(it), true, false) },
         menuUseCase = MenuUseCase(
                 { this },
-                contentViewModel,//TODO check { replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)

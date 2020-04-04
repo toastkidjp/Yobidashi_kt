@@ -44,10 +44,12 @@ import java.util.*
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val contentViewModel: ContentViewModel?,
         private val cleanProcess: () -> Unit,
         private val close: () -> Unit
 ) {
+
+    private val contentViewModel =
+            ViewModelProviders.of(activitySupplier()).get(ContentViewModel::class.java)
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
@@ -60,16 +62,16 @@ class MenuUseCase(
     fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
-                contentViewModel?.toTop()
+                contentViewModel.toTop()
             }
             Menu.BOTTOM-> {
-                contentViewModel?.toBottom()
+                contentViewModel.toBottom()
             }
             Menu.SHARE-> {
-                contentViewModel?.share()
+                contentViewModel.share()
             }
             Menu.CODE_READER -> {
-                contentViewModel?.nextFragment(BarcodeReaderFragment::class.java)
+                contentViewModel.nextFragment(BarcodeReaderFragment::class.java)
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
@@ -82,39 +84,39 @@ class MenuUseCase(
                 cleanProcess()
             }
             Menu.PLANNING_POKER-> {
-                contentViewModel?.nextFragment(CardListFragment::class.java)
+                contentViewModel.nextFragment(CardListFragment::class.java)
             }
             Menu.APP_LAUNCHER-> {
-                contentViewModel?.nextFragment(LauncherFragment::class.java)
+                contentViewModel.nextFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
-                contentViewModel?.nextFragment(RssReaderFragment::class.java)
+                contentViewModel.nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(activitySupplier().findViewById(android.R.id.content))
                 close()
             }
             Menu.BOOKMARK-> {
-                contentViewModel?.nextFragment(BookmarkFragment::class.java)
+                contentViewModel.nextFragment(BookmarkFragment::class.java)
             }
             Menu.VIEW_HISTORY-> {
-                contentViewModel?.nextFragment(ViewHistoryFragment::class.java)
+                contentViewModel.nextFragment(ViewHistoryFragment::class.java)
             }
             Menu.IMAGE_VIEWER -> {
-                contentViewModel?.nextFragment(ImageViewerFragment::class.java)
+                contentViewModel.nextFragment(ImageViewerFragment::class.java)
             }
             Menu.LOAD_HOME-> {
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
                         .open(preferenceApplier.homeUrl.toUri())
             }
             Menu.EDITOR-> {
-                contentViewModel?.openEditorTab()
+                contentViewModel.openEditorTab()
             }
             Menu.PDF-> {
-                contentViewModel?.openPdf()
+                contentViewModel.openPdf()
             }
             Menu.WEB_SEARCH -> {
-                contentViewModel?.webSearch()
+                contentViewModel.webSearch()
             }
             Menu.VOICE_SEARCH-> {
                 activitySupplier().also {
@@ -175,10 +177,10 @@ class MenuUseCase(
                         .addTo(disposables)
             }
             Menu.VIEW_ARCHIVE -> {
-                contentViewModel?.nextFragment(ArchivesFragment::class.java)
+                contentViewModel.nextFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
-                contentViewModel?.switchPageSearcher()
+                contentViewModel.switchPageSearcher()
             }
         }
     }
