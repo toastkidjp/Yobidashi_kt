@@ -211,6 +211,9 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.openEditorTab?.observe(this, Observer {
             openEditorTab()
         })
+        contentViewModel?.switchPageSearcher?.observe(this, Observer {
+            pageSearchPresenter.switch()
+        })
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -323,7 +326,6 @@ class MainActivity : AppCompatActivity(),
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
                     }
                 },
-                { pageSearchPresenter.switch() },
                 { menuViewModel?.close() }
         )
 

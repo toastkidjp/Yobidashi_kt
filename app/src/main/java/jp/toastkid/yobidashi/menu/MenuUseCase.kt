@@ -46,7 +46,6 @@ class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
         private val contentViewModel: ContentViewModel?,
         private val cleanProcess: () -> Unit,
-        private val switchPageSearcher: () -> Unit,
         private val close: () -> Unit
 ) {
 
@@ -179,7 +178,7 @@ class MenuUseCase(
                 contentViewModel?.nextFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
-                switchPageSearcher()
+                contentViewModel?.switchPageSearcher()
             }
         }
     }

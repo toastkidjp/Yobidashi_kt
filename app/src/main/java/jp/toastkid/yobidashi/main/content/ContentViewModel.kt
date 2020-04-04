@@ -89,4 +89,12 @@ class ContentViewModel : ViewModel() {
     fun openEditorTab() {
         _openEditorTab.postValue(Unit)
     }
+
+    private val _switchPageSearcher = MutableLiveData<Unit>()
+
+    val switchPageSearcher: LiveData<Unit> = _switchPageSearcher
+
+    fun switchPageSearcher() {
+        _switchPageSearcher.postValue(Unit)
+    }
 }
