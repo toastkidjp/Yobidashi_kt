@@ -10,16 +10,13 @@ package jp.toastkid.yobidashi.menu
 import android.content.ActivityNotFoundException
 import android.view.View
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.journeyapps.barcodescanner.camera.CameraManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
@@ -29,14 +26,12 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
-import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.torch.Torch
@@ -46,13 +41,11 @@ import timber.log.Timber
 import java.util.*
 
 /**
- * TODO use viewModel.
  * TODO clean up duplicated codes.
  * @author toastkidjp
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val findCurrentFragment: () -> Fragment?,
         private val contentViewModel: ContentViewModel?,
         private val cleanProcess: () -> Unit,
         private val openPdfTabFromStorage: () -> Unit,
@@ -86,13 +79,13 @@ class MenuUseCase(
     fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
-                (findCurrentFragment() as? ContentScrollable)?.toTop()
+                contentViewModel?.toTop()
             }
             Menu.BOTTOM-> {
-                (findCurrentFragment() as? ContentScrollable)?.toBottom()
+                contentViewModel?.toBottom()
             }
             Menu.SHARE-> {
-                (findCurrentFragment() as? CommonFragmentAction)?.share()
+                contentViewModel?.share()
             }
             Menu.CODE_READER -> {
                 contentViewModel?.nextFragment(BarcodeReaderFragment::class.java)
@@ -140,12 +133,7 @@ class MenuUseCase(
                 openPdfTabFromStorage()
             }
             Menu.WEB_SEARCH -> {
-                when (val fragment = findCurrentFragment()) {
-                    is BrowserFragment ->
-                        fragment.search()
-                    else ->
-                        contentViewModel?.nextFragment(SearchFragment::class.java)
-                }
+                contentViewModel?.webSearch()
             }
             Menu.VOICE_SEARCH-> {
                 activitySupplier().also {

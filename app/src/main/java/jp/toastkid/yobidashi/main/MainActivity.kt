@@ -188,6 +188,23 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.snackbar?.observe(this, Observer {
             Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
         })
+        contentViewModel?.toTop?.observe(this, Observer {
+            (findFragment() as? ContentScrollable)?.toTop()
+        })
+        contentViewModel?.toBottom?.observe(this, Observer {
+            (findFragment() as? ContentScrollable)?.toBottom()
+        })
+        contentViewModel?.share?.observe(this, Observer {
+            (findFragment() as? CommonFragmentAction)?.share()
+        })
+        contentViewModel?.webSearch?.observe(this, Observer {
+            when (val fragment = findFragment()) {
+                is BrowserFragment ->
+                    fragment.search()
+                else ->
+                    contentViewModel?.nextFragment(SearchFragment::class.java)
+            }
+        })
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -295,7 +312,7 @@ class MainActivity : AppCompatActivity(),
         menuUseCase = MenuUseCase(
                 { this },
                 { findFragment() },
-                contentViewModel,//{ replaceFragment(obtainFragment(it), true, false) },
+                contentViewModel,//TODO check { replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
