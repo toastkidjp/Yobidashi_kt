@@ -337,6 +337,11 @@ class MainActivity : AppCompatActivity(),
                 preferenceApplier.setNewMenuFabPosition(x, y)
             }
         })
+        listener.setOnClick(object : DraggableTouchListener.OnClick {
+            override fun onClick() {
+                menuViewModel?.switchVisibility(binding?.menusView?.isVisible == false)
+            }
+        })
 
         binding.menuSwitch.setOnTouchListener(listener)
 

@@ -9,22 +9,15 @@ package jp.toastkid.yobidashi.menu
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.RippleDrawable
-import android.os.Build
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
 
@@ -39,8 +32,6 @@ class MenuBinder(
 ) {
 
     private var menuAdapter: MenuAdapter? = null
-
-    private var menuDrawable: Drawable? = null
 
     private var previousIconColor: Int = Color.TRANSPARENT
 
@@ -60,13 +51,11 @@ class MenuBinder(
                 it.requestLayout()
             }
 
-            val newColor = preferenceApplier.colorPair().bgColor()
+            val colorPair = preferenceApplier.colorPair()
+            val newColor = colorPair.bgColor()
             if (previousIconColor != newColor) {
-                menuDrawable?.also { drawable ->
-                    DrawableCompat.setTint(drawable, preferenceApplier.colorPair().bgColor())
-                    menuSwitch?.setImageDrawable(drawable)
-                }
                 previousIconColor = newColor
+                colorPair.applyReverseTo(menuSwitch)
             }
         })
 
@@ -81,17 +70,6 @@ class MenuBinder(
         recyclerView?.layoutManager = layoutManager
         layoutManager.scrollToPosition(MenuAdapter.mediumPosition())
         recyclerView?.setNeedLoop(true)
-        menuDrawable = ContextCompat.getDrawable(context, R.drawable.ic_menu)
-        menuSwitch?.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                (it.background as? RippleDrawable)?.also { ripple ->
-                    ripple.state = arrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled)
-                            .toIntArray()
-                    menuSwitch.postDelayed({ ripple.state = IntArray(0) }, 200)
-                }
-            }
-            menuViewModel?.switchVisibility(recyclerView?.isVisible == false)
-        }
     }
 
     private fun open() {
