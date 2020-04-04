@@ -205,6 +205,9 @@ class MainActivity : AppCompatActivity(),
                     contentViewModel?.nextFragment(SearchFragment::class.java)
             }
         })
+        contentViewModel?.openPdf?.observe(this, Observer {
+            openPdfTabFromStorage()
+        })
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -311,14 +314,12 @@ class MainActivity : AppCompatActivity(),
 
         menuUseCase = MenuUseCase(
                 { this },
-                { findFragment() },
                 contentViewModel,//TODO check { replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
                     }
                 },
-                { openPdfTabFromStorage() },
                 { openEditorTab() },
                 { pageSearchPresenter.switch() },
                 { menuViewModel?.close() }

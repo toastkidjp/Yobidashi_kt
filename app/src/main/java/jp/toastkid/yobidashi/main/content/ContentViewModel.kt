@@ -73,4 +73,12 @@ class ContentViewModel : ViewModel() {
     fun webSearch() {
         _webSearch.postValue(Unit)
     }
+
+    private val _openPdf = MutableLiveData<Unit>()
+
+    val openPdf: LiveData<Unit> = _openPdf
+
+    fun openPdf() {
+        _openPdf.postValue(Unit)
+    }
 }

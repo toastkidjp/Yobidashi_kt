@@ -46,7 +46,6 @@ class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
         private val contentViewModel: ContentViewModel?,
         private val cleanProcess: () -> Unit,
-        private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
         private val switchPageSearcher: () -> Unit,
         private val close: () -> Unit
@@ -114,7 +113,7 @@ class MenuUseCase(
                 openEditorTab()
             }
             Menu.PDF-> {
-                openPdfTabFromStorage()
+                contentViewModel?.openPdf()
             }
             Menu.WEB_SEARCH -> {
                 contentViewModel?.webSearch()
