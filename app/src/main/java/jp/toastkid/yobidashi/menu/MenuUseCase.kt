@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.menu
 
 import android.content.ActivityNotFoundException
+import android.os.Build
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
@@ -20,6 +21,7 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
+import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -44,7 +46,6 @@ import java.util.*
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val cleanProcess: () -> Unit,
         private val close: () -> Unit
 ) {
 
@@ -81,7 +82,12 @@ class MenuUseCase(
                 }
             }
             Menu.MEMORY_CLEANER -> {
-                cleanProcess()
+                val activity = activitySupplier()
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    contentViewModel.snackShort(activity.getString(R.string.message_cannot_use_under_l))
+                    return
+                }
+                ProcessCleanerInvoker()(activity.findViewById(android.R.id.content)).addTo(disposables)
             }
             Menu.PLANNING_POKER-> {
                 contentViewModel.nextFragment(CardListFragment::class.java)

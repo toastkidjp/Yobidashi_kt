@@ -285,11 +285,6 @@ class MainActivity : AppCompatActivity(),
 
         menuUseCase = MenuUseCase(
                 { this },
-                {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        ProcessCleanerInvoker()(binding.root).addTo(disposables)
-                    }
-                },
                 { menuViewModel?.close() }
         )
 
