@@ -8,17 +8,32 @@
 package jp.toastkid.yobidashi.libs
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.view.View
+import androidx.annotation.UiThread
 
 /**
  * @author toastkidjp
  */
 class ThumbnailGenerator {
 
-    @Suppress("DEPRECATION")
+    @UiThread
     operator fun invoke(view: View?): Bitmap? {
-        view?.invalidate()
-        view?.buildDrawingCache()
-        return view?.drawingCache
+        if (view == null) {
+            return null
+        }
+
+        val bitmap = Bitmap.createBitmap(
+                view.measuredWidth,
+                view.measuredHeight,
+                Bitmap.Config.ARGB_8888
+        )
+
+        val c = Canvas(bitmap)
+
+        view.invalidate()
+        view.draw(c)
+
+        return bitmap
     }
 }
