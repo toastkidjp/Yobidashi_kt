@@ -99,7 +99,8 @@ class MenuUseCase(
                 contentViewModel.nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
-                mediaPlayerPopup.show(activitySupplier().findViewById(android.R.id.content))
+                val parent = extractContentView() ?: return
+                mediaPlayerPopup.show(parent)
                 close()
             }
             Menu.BOOKMARK-> {
@@ -198,9 +199,9 @@ class MenuUseCase(
      * @return true
      */
     fun onMenuLongClick(menu: Menu): Boolean {
+        val view = extractContentView() ?: return true
         Toaster.snackLong(
-                // TODO extract to function.
-                activitySupplier().findViewById(android.R.id.content),
+                view,
                 menu.titleId,
                 R.string.run,
                 View.OnClickListener { onMenuClick(menu) },
@@ -208,6 +209,9 @@ class MenuUseCase(
         )
         return true
     }
+
+    private fun extractContentView(): View? =
+            activitySupplier().findViewById(android.R.id.content)
 
     fun dispose() {
         disposables.clear()
