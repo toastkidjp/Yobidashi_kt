@@ -40,8 +40,6 @@ internal class MenuAdapter(
      */
     private val preferenceApplier = PreferenceApplier(context)
 
-    private var tabCount = 0
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
             MenuViewHolder(
                     DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false)
