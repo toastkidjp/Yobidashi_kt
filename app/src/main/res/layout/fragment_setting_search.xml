@@ -4,7 +4,7 @@
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.SearchSettingFragment" />
     </data>
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/search_module"
         android:layout_width="match_parent"
@@ -268,5 +268,5 @@
 
             </LinearLayout>
         </FrameLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>

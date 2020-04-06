@@ -3,7 +3,7 @@
     <data>
         <variable name="fragment" type="jp.toastkid.yobidashi.settings.color.ColorSettingFragment" />
     </data>
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/setting_scroll"
@@ -180,5 +180,5 @@
                     />
             </FrameLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>
