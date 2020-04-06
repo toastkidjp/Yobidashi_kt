@@ -130,8 +130,6 @@ class SearchFragment : Fragment() {
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        // TODO delete it.
-        binding?.activity = this
 
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_header_search, container, false)
         headerBinding?.fragment = this
