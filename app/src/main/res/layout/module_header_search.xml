@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="fragment"
+            type="jp.toastkid.yobidashi.search.SearchFragment"
+            />
+    </data>
+
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -56,12 +63,14 @@
             android:layout_marginEnd="44dp"
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/ic_close"
+            android:onClick="@{view -> fragment.clearInput()}"
             />
         <FrameLayout
             android:id="@+id/search_action_background"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
+            android:onClick="@{view -> fragment.invokeSearch()}"
             >
             <ImageView
                 android:id="@+id/search_action"

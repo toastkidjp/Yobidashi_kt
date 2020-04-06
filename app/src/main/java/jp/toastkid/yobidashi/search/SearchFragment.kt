@@ -130,11 +130,11 @@ class SearchFragment : Fragment() {
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        // TODO delete it.
         binding?.activity = this
 
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_header_search, container, false)
-        // TODO use data binding.
-        headerBinding?.searchClear?.setOnClickListener { headerBinding?.searchInput?.setText("") }
+        headerBinding?.fragment = this
         headerBinding?.searchCategories?.let {
             it.adapter = SearchCategoryAdapter(context)
             val index = SearchCategory.findIndex(
@@ -200,6 +200,10 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    fun clearInput() {
+        headerBinding?.searchInput?.setText("")
     }
 
     private fun setQuery() {
@@ -389,24 +393,25 @@ class SearchFragment : Fragment() {
         headerBinding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener {
-                if (useVoice) {
-                    try {
-                        startActivityForResult(VoiceSearch.makeIntent(requireContext()), VoiceSearch.REQUEST_CODE)
-                    } catch (e: ActivityNotFoundException) {
-                        Timber.e(e)
-                        VoiceSearch.suggestInstallGoogleApp(binding?.root as View, colorPair)
-                    }
-                    return@setOnClickListener
-                }
-                search(
-                        headerBinding?.searchCategories?.selectedItem.toString(),
-                        headerBinding?.searchInput?.text.toString()
-                )
-            }
             it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
+    }
+
+    fun invokeSearch() {
+        if (useVoice) {
+            try {
+                startActivityForResult(VoiceSearch.makeIntent(requireContext()), VoiceSearch.REQUEST_CODE)
+            } catch (e: ActivityNotFoundException) {
+                Timber.e(e)
+                VoiceSearch.suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
+            }
+            return
+        }
+        search(
+                headerBinding?.searchCategories?.selectedItem.toString(),
+                headerBinding?.searchInput?.text.toString()
+        )
     }
 
     /**
