@@ -2,6 +2,7 @@
 <layout>
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="220dp"
         android:layout_height="220dp"
         xmlns:card_view="http://schemas.android.com/tools"
@@ -40,7 +41,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="top|right"
-            android:src="@drawable/ic_remove_circle"
+            app:srcCompat="@drawable/ic_remove_circle"
             android:background="@drawable/ripple_transparent"
             />
     </androidx.cardview.widget.CardView>
