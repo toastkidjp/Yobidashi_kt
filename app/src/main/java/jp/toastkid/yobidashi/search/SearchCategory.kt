@@ -76,6 +76,12 @@ enum class SearchCategory(
             "https://%s.wikipedia.org/w/index.php?search=",
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
     ),
+    INTERNET_ARCHIVE(
+            R.string.search_category_internet_archive,
+            R.drawable.ic_internet_archive,
+            "https://archive.org/search.php?query=",
+            { l, h, q -> String.format(h, l) + Uri.encode(q) }
+    ),
     TWITTER(R.string.search_category_twitter,
             R.drawable.ic_twitter,
             "https://twitter.com/search?src=typd&q="
