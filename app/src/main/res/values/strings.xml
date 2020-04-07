@@ -470,5 +470,6 @@
     <string name="title_context_editor_add_quote">Add quote</string>
     <string name="title_reset_camera_button_position">Reset camera position</string>
     <string name="naver">NAVER</string>
+    <string name="daum">Daum</string>
 
 </resources>

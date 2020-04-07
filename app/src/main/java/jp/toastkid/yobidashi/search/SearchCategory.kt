@@ -63,6 +63,10 @@ enum class SearchCategory(
             R.drawable.ic_naver,
             "https://search.naver.com/search.naver?ie=utf8&query="
     ),
+    DAUM(R.string.daum,
+            R.drawable.ic_daum,
+            "https://search.daum.net/search?w=tot&q="
+    ),
     IMAGE(R.string.search_category_image,
             R.drawable.ic_image_search,
             "https://www.google.co.jp/search?site=imghp&tbm=isch&q="
