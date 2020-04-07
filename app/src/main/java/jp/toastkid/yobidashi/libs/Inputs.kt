@@ -41,14 +41,13 @@ object Inputs {
      * Hide software keyboard.
      * @param v
      */
-    fun hideKeyboard(v: View) {
-        val manager = v.context
-                .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    fun hideKeyboard(v: View?) {
+        val manager = v?.context
+                ?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
         if (!manager.isActive) {
             return
         }
-        manager.hideSoftInputFromWindow(
-                v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        manager.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     /**

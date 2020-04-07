@@ -89,15 +89,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     /**
-     * Browser fragment.
-     */
-    private lateinit var browserFragment: BrowserFragment
-
-    private val rssReaderFragment by lazy { RssReaderFragment() }
-
-    private val rssReaderSettingFragment by lazy { RssSettingFragment() }
-
-    /**
      * Disposables.
      */
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
@@ -146,8 +137,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.toolbar.also { setSupportActionBar(it) }
 
-        browserFragment = BrowserFragment()
-
         if (preferenceApplier.useColorFilter()) {
             ColorFilter(this, binding.root).start()
         }
@@ -162,7 +151,8 @@ class MainActivity : AppCompatActivity() {
         contentViewModel?.content?.observe(this, Observer {
             when (it) {
                 ContentSwitchOrder.RSS_SETTING -> {
-                    replaceFragment(rssReaderSettingFragment)
+                    val fragment = obtainFragment(RssSettingFragment::class.java)
+                    replaceFragment(fragment)
                 }
                 null -> Unit
             }
@@ -170,6 +160,10 @@ class MainActivity : AppCompatActivity() {
 
         processShortcut(intent)
     }
+
+    private fun obtainFragment(fragmentClass: Class<out Fragment>) =
+            supportFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
+                    ?: fragmentClass.newInstance()
 
     private fun initializeHeaderViewModel() {
         val headerViewModel = ViewModelProviders.of(this).get(HeaderViewModel::class.java)
@@ -249,12 +243,16 @@ class MainActivity : AppCompatActivity() {
     private fun processShortcut(calledIntent: Intent) {
         if (calledIntent.action == null) {
             // Add for re-creating activity.
+            val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
+                    ?: return
             replaceFragment(browserFragment)
             return
         }
 
         if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
             RandomWikipedia().fetchWithAction { title, uri ->
+                val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
+                        ?: return@fetchWithAction
                 browserFragment.loadWithNewTab(uri)
                 Toaster.snackShort(
                         binding.root,
@@ -359,7 +357,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(LauncherActivity.makeIntent(this))
             }
             Menu.RSS_READER -> {
-                replaceFragment(rssReaderFragment)
+                replaceFragment(obtainFragment(RssReaderFragment::class.java))
             }
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(binding.root)
@@ -372,10 +370,11 @@ class MainActivity : AppCompatActivity() {
                 moveTaskToBack(true)
             }
             Menu.IMAGE_VIEWER -> {
-                replaceFragment(ImageViewerFragment())
+                replaceFragment(obtainFragment(ImageViewerFragment::class.java))
             }
             else -> {
-                browserFragment.onMenuClick(menu)
+                (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
+                        ?.onMenuClick(menu)
             }
         }
     }
@@ -419,6 +418,7 @@ class MainActivity : AppCompatActivity() {
      * @param uri
      */
     private fun loadUri(uri: Uri) {
+        val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
         if (browserFragment.isVisible) {
             browserFragment.loadWithNewTab(uri)
             return
@@ -432,6 +432,7 @@ class MainActivity : AppCompatActivity() {
      * @param uri default empty.
      */
     private fun replaceWithBrowser(uri: Uri = Uri.EMPTY) {
+        val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
         replaceFragment(browserFragment)
         if (uri != Uri.EMPTY) {
             uiThreadHandler.postDelayed({ browserFragment.loadWithNewTab(uri) }, 200L)
@@ -459,11 +460,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-        transaction.add(R.id.content, fragment, fragment::class.java.simpleName)
+        transaction.add(R.id.content, fragment, fragment::class.java.canonicalName)
 
         // TODO fix it
         if (fragment !is BrowserFragment) {
-            transaction.addToBackStack(fragment::class.java.simpleName)
+            transaction.addToBackStack(fragment::class.java.canonicalName)
         }
         transaction.commitAllowingStateLoss()
     }
@@ -671,7 +672,10 @@ class MainActivity : AppCompatActivity() {
                 try {
                     replaceWithBrowser()
                     uiThreadHandler.postDelayed(
-                            { browserFragment.loadArchive(ArchivesActivity.extractFile(intent)) },
+                            {
+                                (obtainFragment(BrowserFragment::class.java) as BrowserFragment)
+                                    .loadArchive(ArchivesActivity.extractFile(intent))
+                            },
                             200L
                     )
                 } catch (e: IOException) {

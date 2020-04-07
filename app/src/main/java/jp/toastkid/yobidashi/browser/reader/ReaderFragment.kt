@@ -29,6 +29,8 @@ class ReaderFragment : Fragment() {
 
     private lateinit var speechMaker: SpeechMaker
 
+    private var viewModel: ReaderFragmentViewModel? = null
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -36,6 +38,7 @@ class ReaderFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+        binding.fragment = this
         speechMaker = SpeechMaker(binding.root.context)
         return binding.root
     }
@@ -46,6 +49,8 @@ class ReaderFragment : Fragment() {
             arguments.getString(KEY_TITLE)?.also { binding.title.text = it }
             arguments.getString(KEY_CONTENT)?.also { binding.content.text = it }
         }
+
+        viewModel = ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
 
         binding.content.customSelectionActionModeCallback = object : ActionMode.Callback {
 
@@ -84,15 +89,11 @@ class ReaderFragment : Fragment() {
 
         }
 
-        binding.close.setOnClickListener {
-            close()
-        }
-
         setHasOptionsMenu(true)
     }
 
     fun close() {
-        ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java].close()
+        viewModel?.close()
     }
 
     override fun onResume() {
@@ -110,12 +111,21 @@ class ReaderFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.reader, menu)
+        inflater?.inflate(R.menu.list_scrolling, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_speech -> {
                 speechMaker.invoke("${binding.title.text}$lineSeparator${binding.content.text}")
+                return true
+            }
+            R.id.list_to_top -> {
+                binding.scroll.smoothScrollTo(0, 0)
+                return true
+            }
+            R.id.list_to_bottom -> {
+                binding.scroll.smoothScrollTo(0, binding.content.measuredHeight)
                 return true
             }
         }

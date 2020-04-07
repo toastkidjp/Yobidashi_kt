@@ -23,7 +23,9 @@ class BucketLoader(private val contentResolver: ContentResolver) {
         val cursor = MediaStore.Images.Media.query(
                 contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                arrayOf(MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA)
+                arrayOf(MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA),
+                null,
+                "datetaken DESC"
         )
 
         val buckets = mutableListOf<Image>()

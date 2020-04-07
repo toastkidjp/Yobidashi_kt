@@ -15,6 +15,7 @@ import android.provider.MediaStore
  */
 class ImageLoader(private val contentResolver: ContentResolver) {
 
+    // TODO Extract array
     operator fun invoke(bucket: String): List<Image> {
         val cursor = MediaStore.Images.Media.query(
                 contentResolver,
@@ -22,11 +23,12 @@ class ImageLoader(private val contentResolver: ContentResolver) {
                 arrayOf(
                         MediaStore.Images.Media.DATA,
                         MediaStore.Images.Media.DISPLAY_NAME,
-                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                        MediaStore.Images.Media.DATE_TAKEN
                 ),
                 "bucket_display_name = ?",
                 arrayOf(bucket),
-                null
+                "datetaken DESC"
         )
 
         val images = mutableListOf<Image>()

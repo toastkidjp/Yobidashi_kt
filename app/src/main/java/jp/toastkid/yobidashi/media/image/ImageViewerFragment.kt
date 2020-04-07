@@ -10,9 +10,7 @@ package jp.toastkid.yobidashi.media.image
 import android.Manifest
 import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.LayoutRes
 import androidx.annotation.WorkerThread
 import androidx.databinding.DataBindingUtil
@@ -60,6 +58,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -154,6 +153,21 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
             adapter?.notifyDataSetChanged()
             RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.list_scrolling, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.list_to_top ->
+                RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
+            R.id.list_to_bottom ->
+                RecyclerViewScroller.toBottom(binding.images, adapter?.itemCount ?: 0)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDetach() {

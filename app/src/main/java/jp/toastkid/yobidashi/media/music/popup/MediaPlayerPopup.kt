@@ -46,6 +46,8 @@ import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
+import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapter
+import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed
 import timber.log.Timber
 
 /**
@@ -175,7 +177,11 @@ class MediaPlayerPopup(private val context: Context) {
 
         binding.playingSpeed.isVisible = true
 
-        PlayingSpeedSpinnerInitializer().invoke(binding.playingSpeed)
+        binding.playingSpeed.adapter = PlaybackSpeedAdapter(
+                LayoutInflater.from(binding.root.context),
+                preferenceApplier.colorPair()
+        )
+        binding.playingSpeed.setSelection(PlayingSpeed.getDefault().findIndex())
         binding.playingSpeed.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
 

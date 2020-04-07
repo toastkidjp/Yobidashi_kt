@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.tab
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
@@ -26,6 +27,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.BitmapCompressor
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
@@ -258,6 +260,7 @@ class TabAdapter(
         browserHeaderViewModel?.resetContent()
 
         val currentWebView = currentWebView()
+        Inputs.hideKeyboard((currentWebView?.context as? Activity)?.window?.currentFocus)
         if (webViewContainer.childCount != 0) {
             val previousView = webViewContainer[0]
             if (currentWebView != previousView) {
