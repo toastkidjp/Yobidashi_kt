@@ -32,7 +32,8 @@ class SearchQueryExtractor {
                     or host.endsWith(".buzzfeed.com")
                     or host.endsWith("openweathermap.org")
                     or host.endsWith(".quora.com")
-                    or host.endsWith(".livejournal.com") ->
+                    or host.endsWith(".livejournal.com")
+                    or host.endsWith("search.daum.net") ->
                 uri.getQueryParameter("q")
             host.startsWith("www.amazon.") ->
                 uri.getQueryParameter("field-keywords")

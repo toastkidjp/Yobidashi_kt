@@ -56,5 +56,9 @@ class SearchQueryExtractorTest {
                 "tomato",
                 searchQueryExtractor("https://search.naver.com/search.naver?ie=utf8&query=tomato")
         )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://search.daum.net/search?w=tot&q=orange")
+        )
     }
 }
