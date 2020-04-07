@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
 
 /**
@@ -27,6 +29,17 @@ class ViewHolder(private val binding: ItemBookmarkBinding): RecyclerView.ViewHol
      */
     fun setUrl(url: String) {
         binding.url.setText(url)
+    }
+
+    fun setIconResource(@DrawableRes iconId: Int) {
+        binding.icon.setImageResource(iconId)
+    }
+
+    fun setIconFromPath(path: String) {
+        Glide.with(itemView.context)
+                .load(path)
+                .override(64)
+                .into(binding.icon)
     }
 
     /**

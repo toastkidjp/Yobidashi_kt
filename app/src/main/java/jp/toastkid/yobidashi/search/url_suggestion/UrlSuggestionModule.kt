@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -12,6 +13,7 @@ import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
@@ -43,6 +45,12 @@ class UrlSuggestionModule(
      * Use for disposing.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
+
+    /**
+     * Bookmark's database repository.
+     */
+    private val bookmarkRepository: BookmarkRepository =
+            DatabaseFinder().invoke(binding.root.context).bookmarkRepository()
 
     /**
      * Database repository.
@@ -82,9 +90,15 @@ class UrlSuggestionModule(
             return Disposables.empty()
         }
 
-        return Maybe.fromCallable { viewHistoryRepository.search("%$q%", ITEM_LIMIT) }
+        val bookmarkStream = Maybe.fromCallable { bookmarkRepository.search("%$q%", ITEM_LIMIT) }
                 .subscribeOn(Schedulers.io())
                 .flatMapObservable { it.toObservable() }
+
+        val viewHistoryStream = Maybe.fromCallable { viewHistoryRepository.search("%$q%", ITEM_LIMIT) }
+                .subscribeOn(Schedulers.io())
+                .flatMapObservable { it.toObservable() }
+
+        return Observable.concat(bookmarkStream, viewHistoryStream)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate {
                     if (adapter.isNotEmpty()) {
