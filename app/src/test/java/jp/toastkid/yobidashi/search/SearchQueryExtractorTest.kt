@@ -52,5 +52,9 @@ class SearchQueryExtractorTest {
                 "train",
                 searchQueryExtractor("https://archive.org/search.php?query=train")
         )
+        assertEquals(
+                "tomato",
+                searchQueryExtractor("https://search.naver.com/search.naver?ie=utf8&query=tomato")
+        )
     }
 }

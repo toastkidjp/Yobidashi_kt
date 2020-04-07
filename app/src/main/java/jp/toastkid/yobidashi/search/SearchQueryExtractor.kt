@@ -45,7 +45,8 @@ class SearchQueryExtractor {
             host.endsWith(".yelp.com") ->
                 uri.getQueryParameter("find_desc")
             host.startsWith("facebook.com")
-                    or host.endsWith("archive.org") ->
+                    or host.endsWith("archive.org")
+                    or host.endsWith("search.naver.com") ->
                 uri.getQueryParameter("query")
             host.endsWith(".wikipedia.org")
                 or host.endsWith(".wikimedia.org") ->
