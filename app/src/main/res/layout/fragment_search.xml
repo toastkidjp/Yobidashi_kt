@@ -22,14 +22,14 @@
             <include android:id="@+id/url_suggestion_module"
                 layout="@layout/module_url_suggestion" />
 
-            <include android:id="@+id/suggestion_module"
-                layout="@layout/module_search_suggestion" />
-
             <include android:id="@+id/favorite_module"
                 layout="@layout/module_search_favorite" />
 
             <include android:id="@+id/history_module"
                 layout="@layout/module_search_history" />
+
+            <include android:id="@+id/suggestion_module"
+                layout="@layout/module_search_suggestion" />
 
             <include android:id="@+id/app_module"
                 layout="@layout/module_search_apps" />
