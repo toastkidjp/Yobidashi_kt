@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -146,21 +147,23 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
         inflater.inflate(R.menu.favorite_toolbar_menu, menu)
-
-        // TODO rewrite.
-        menu.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
-            val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
-            ClearFavoriteSearchDialogFragment.show(fragmentManager, this)
-            true
-        }
-
-        menu.findItem(R.id.favorite_toolbar_menu_add)?.setOnMenuItemClickListener {
-            invokeAddition()
-            true
-        }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem?) =
+            when (item?.itemId) {
+                R.id.favorite_toolbar_menu_clear -> {
+                    fragmentManager?.let {
+                        ClearFavoriteSearchDialogFragment.show(it, this)
+                    }
+                    true
+                }
+                R.id.favorite_toolbar_menu_add -> {
+                    invokeAddition()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
 
     private fun clear() {
         val context = requireContext()
