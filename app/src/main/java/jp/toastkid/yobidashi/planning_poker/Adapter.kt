@@ -11,10 +11,10 @@ import jp.toastkid.yobidashi.R
  *
  * @author toastkidjp
  */
-internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
+internal class Adapter : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            CardViewHolder(
+            ViewHolder(
                     DataBindingUtil.inflate(
                             LayoutInflater.from(parent.context),
                             R.layout.item_planning_poker,
@@ -23,7 +23,7 @@ internal class Adapter : RecyclerView.Adapter<CardViewHolder>() {
                     )
             )
 
-    override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val text = Suite.values()[position % Suite.values().size].text()
         holder.setText(text)
     }
