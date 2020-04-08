@@ -33,9 +33,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
@@ -64,6 +66,7 @@ import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * @author toastkidjp
@@ -119,6 +122,11 @@ class SearchFragment : Fragment() {
     private var currentTitle: String? = null
 
     private var currentUrl: String? = null
+
+    /**
+     * Use for handling input action.
+     */
+    private val inputSubject = PublishSubject.create<String>()
 
     /**
      * Disposables.
@@ -331,41 +339,58 @@ class SearchFragment : Fragment() {
             }
             it.addTextChangedListener(object : TextWatcher {
 
+                private var previous = ""
+
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-                    val key = s.toString()
-
-                    (if (key.isEmpty()|| key == currentUrl) urlModule?.switch(currentTitle, currentUrl)
-                    else urlModule?.hide())
-                            ?.addTo(disposables)
-
-                    setActionButtonState(key.isEmpty())
-
-                    if (preferenceApplier.isEnableSearchHistory) {
-                        historyModule?.query(s)
-                    }
-                    favoriteModule?.query(s)
-                    urlSuggestionModule?.query(s)
-
-                    if (preferenceApplier.isEnableAppSearch()) {
-                        appModule?.request(key)
-                    } else {
-                        appModule?.hide()
-                    }
-
-                    if (preferenceApplier.isDisableSuggestion) {
-                        suggestionModule?.clear()
+                    val newQuery = s.toString()
+                    if (newQuery == previous) {
                         return
                     }
-
-                    suggestionModule?.request(key)
+                    previous = newQuery
+                    inputSubject.onNext(newQuery)
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
             })
+
+            inputSubject.distinctUntilChanged()
+                    .debounce(800L, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { suggest(it) }//TODO error case
+                    .addTo(disposables)
         }
+    }
+
+    private fun suggest(key: String) {
+        if (key.isEmpty()|| key == currentUrl) {
+            urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
+        } else {
+            urlModule?.hide()?.addTo(disposables)
+        }
+
+        setActionButtonState(key.isEmpty())
+
+        if (preferenceApplier.isEnableSearchHistory) {
+            historyModule?.query(key)
+        }
+
+        favoriteModule?.query(key)
+        urlSuggestionModule?.query(key)
+
+        if (preferenceApplier.isEnableAppSearch()) {
+            appModule?.request(key)
+        } else {
+            appModule?.hide()
+        }
+
+        if (preferenceApplier.isDisableSuggestion) {
+            suggestionModule?.clear()
+            return
+        }
+
+        suggestionModule?.request(key)
     }
 
     /**
