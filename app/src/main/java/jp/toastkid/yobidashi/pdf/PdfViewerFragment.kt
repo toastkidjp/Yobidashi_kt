@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -72,7 +73,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate<FragmentPdfViewerBinding>(
                 inflater,
-                R.layout.fragment_pdf_viewer,
+                LAYOUT_ID,
                 container,
                 false
         )
@@ -217,5 +218,10 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
     override fun onDetach() {
         super.onDetach()
         disposables.clear()
+    }
+
+    companion object {
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_pdf_viewer
     }
 }
