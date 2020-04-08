@@ -19,6 +19,7 @@ import timber.log.Timber
  * URL suggestion module's adapter.
  *
  * @param context [Context]
+ * @param removeAt Callback of removing
  * @param browseCallback
  * @param browseBackgroundCallback
  * @author toastkidjp
