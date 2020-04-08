@@ -25,7 +25,7 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class Adapter(
-        context: Context,
+        private val layoutInflater: LayoutInflater,
         private val removeAt: (Int) -> Unit,
         private val browseCallback: (String) -> Unit,
         private val browseBackgroundCallback: (String) -> Unit
@@ -35,11 +35,6 @@ class Adapter(
      * Item list.
      */
     private val suggestions: MutableList<UrlItem> = mutableListOf()
-
-    /**
-     * Layout inflater.
-     */
-    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(

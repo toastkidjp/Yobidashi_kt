@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,7 @@ class UrlSuggestionModule(
      * Adapter.
      */
     private val adapter = Adapter(
-            binding.root.context,
+            LayoutInflater.from(binding.root.context),
             this::removeAt,
             browseCallback,
             browseBackgroundCallback
