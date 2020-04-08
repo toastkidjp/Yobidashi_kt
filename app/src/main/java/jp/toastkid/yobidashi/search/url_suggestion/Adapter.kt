@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,7 @@ import timber.log.Timber
 /**
  * URL suggestion module's adapter.
  *
- * @param context [Context]
+ * @param layoutInflater [LayoutInflater]
  * @param removeAt Callback of removing
  * @param browseCallback
  * @param browseBackgroundCallback
