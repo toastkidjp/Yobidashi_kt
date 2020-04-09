@@ -131,6 +131,12 @@
         2. 背景を好きな画像に変更できます。\n
         3. 好きな検索サイトをデフォルトにできます。\n
         4. デフォルトのホーム画面だけでなく、検索やアプリランチャー画面を起動直後の画面に設定できます。\n
+        \n
+        Resources\n
+        I have used icons which are owned by "Icon Rainbow (https://icon-rainbow.com/)".\n
+        \n
+        - インターネットでの検索アイコン 1: https://icon-rainbow.com/インターネットでの検索アイコン 1/\n
+        - サイト内検索のアイコン素材: https://icon-rainbow.com/サイト内検索のアイコン素材/\n
     </string>
     <string name="message_done_load_ad">広告のロードが完了しました。</string>
     <string name="message_failed_ad_loading">広告のロードに失敗しました。</string>
