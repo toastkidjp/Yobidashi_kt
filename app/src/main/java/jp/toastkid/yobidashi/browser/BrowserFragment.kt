@@ -128,9 +128,6 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
-        // TODO use data binding
-        headerBinding?.urlBox?.setOnClickListener { tapHeader() }
-
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
 
         return binding?.root
@@ -443,7 +440,7 @@ class BrowserFragment : Fragment(),
         )
     }
 
-    private fun tapHeader() {
+    fun tapHeader() {
         val activityContext = context ?: return
         val currentTitle = browserModule.currentTitle()
         val currentUrl = browserModule.currentUrl()
