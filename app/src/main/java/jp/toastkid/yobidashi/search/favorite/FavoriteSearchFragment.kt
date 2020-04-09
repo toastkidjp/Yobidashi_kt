@@ -59,6 +59,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
             savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+        // TODO
         binding = DataBindingUtil.inflate<FragmentFavoriteSearchBinding>(
                 inflater, LAYOUT_ID, container, false)
         binding?.activity = this

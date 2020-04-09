@@ -60,7 +60,7 @@ internal class ModuleAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val searchHistory = selected[position]
-        holder.setText(searchHistory.query!!)
+        holder.setText(searchHistory.query)
         holder.itemView.setOnClickListener {
             try {
                 onClick(searchHistory)

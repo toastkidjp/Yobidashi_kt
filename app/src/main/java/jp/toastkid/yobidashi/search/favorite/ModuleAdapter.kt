@@ -55,7 +55,7 @@ internal class ModuleAdapter(
 
     override fun onBindViewHolder(holder: ModuleViewHolder, position: Int) {
         val favorite = selected[position]
-        holder.setText(favorite.query!!)
+        holder.setText(favorite.query)
         holder.itemView.setOnClickListener {
             try {
                 onClick(favorite)
