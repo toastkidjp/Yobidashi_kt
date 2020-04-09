@@ -302,7 +302,7 @@ class MainActivity : AppCompatActivity(),
             replaceFragment(obtainFragment(it))
         })
         contentViewModel?.fragment?.observe(this, Observer {
-            replaceFragment(it, true, true)
+            replaceFragment(it, withAnimation = true, withSlideIn = true)
         })
         contentViewModel?.snackbar?.observe(this, Observer {
             Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
