@@ -102,9 +102,10 @@ class TabAdapter(
 
     /**
      * Open new tab with URL string.
-     * TODO remove withLoad.
+     *
+     * @param url URL (default = homeUrl)
      */
-    fun openNewWebTab(url: String = preferenceApplier.homeUrl, withLoad: Boolean = true) {
+    fun openNewWebTab(url: String = preferenceApplier.homeUrl) {
         val newTab = WebTab.make("New tab: $url", url)
         tabList.add(newTab)
         setCount()
