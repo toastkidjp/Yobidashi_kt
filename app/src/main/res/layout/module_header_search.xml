@@ -61,6 +61,7 @@
             android:layout_gravity="right"
             android:layout_marginRight="44dp"
             android:layout_marginEnd="44dp"
+            android:padding="8dp"
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/ic_close"
             android:onClick="@{view -> fragment.clearInput()}"
