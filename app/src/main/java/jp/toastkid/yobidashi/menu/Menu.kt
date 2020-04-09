@@ -33,7 +33,7 @@ enum class Menu(
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 
-    WEB_SEARCH(R.string.title_search, R.drawable.ic_search_white),
+    WEB_SEARCH(R.string.title_search, R.drawable.ic_web_search),
 
     RANDOM_WIKIPEDIA(R.string.menu_random_wikipedia, R.drawable.ic_wikipedia_white),
 
