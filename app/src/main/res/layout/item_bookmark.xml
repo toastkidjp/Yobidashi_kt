@@ -7,10 +7,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:layout_margin="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:foreground="@drawable/ripple_transparent"
         app:cardBackgroundColor="@color/filter_white_bb"
-        app:cardElevation="3dp"
+        app:cardElevation="2dp"
         >
         <ImageView
             android:id="@+id/icon"
@@ -25,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="48dp"
-            android:layout_marginRight="44dp"
+            android:layout_marginRight="32dp"
             >
             <TextView
                 android:id="@+id/title"
@@ -54,7 +57,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
         <ImageView
             android:id="@+id/delete"
-            android:layout_width="40dp"
+            android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
             app:srcCompat="@drawable/ic_remove_search"
