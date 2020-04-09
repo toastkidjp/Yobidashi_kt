@@ -254,6 +254,9 @@ class BrowserFragment : Fragment(),
         browserViewModel?.openBackground?.observe(activity, Observer {
             tabs.openBackgroundTab(it.toString(), it.toString())
         })
+        browserViewModel?.openBackgroundWithTitle?.observe(activity, Observer {
+            tabs.openBackgroundTab(it.first, it.second.toString())
+        })
 
         pageSearchPresenter = PageSearcherModule(
                 this,
@@ -888,6 +891,7 @@ class BrowserFragment : Fragment(),
     
     private fun colorPair() = preferenceApplier.colorPair()
 
+    // TODO Delete
     override fun onClickImageSearch(url: String) {
         tabs.openNewWebTab("https://www.google.co.jp/searchbyimage?image_url=$url")
     }

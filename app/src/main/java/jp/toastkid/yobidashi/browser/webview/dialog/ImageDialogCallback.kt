@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.browser.webview.dialog
 
 /**
+ * TODO Remove
  * @author toastkidjp
  */
 interface ImageDialogCallback {
