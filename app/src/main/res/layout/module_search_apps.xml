@@ -3,18 +3,33 @@
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/search_vertical_margin"
         app:cardElevation="3dp"
         android:visibility="gone"
+        tools:visibility="visible"
         android:background="@color/filter_white_bb"
         >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_apps"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="false"
-            />
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_apps_launcher"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_apps"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>
