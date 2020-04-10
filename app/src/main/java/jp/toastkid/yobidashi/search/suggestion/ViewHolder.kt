@@ -1,8 +1,7 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
-
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
 
 /**
@@ -35,7 +34,4 @@ internal class ViewHolder
         binding.searchSuggestAdd.setOnClickListener(listener)
     }
 
-    fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
-    }
 }
