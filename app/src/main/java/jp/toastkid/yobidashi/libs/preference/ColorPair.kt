@@ -27,10 +27,10 @@ class ColorPair(
      *
      * @param tv
      */
-    fun setTo(tv: TextView) {
-        tv.setBackgroundColor(bgColor)
-        tv.setTextColor(fontColor)
-        tv.compoundDrawables.forEach {
+    fun setTo(tv: TextView?) {
+        tv?.setBackgroundColor(bgColor)
+        tv?.setTextColor(fontColor)
+        tv?.compoundDrawables?.forEach {
             it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
         }
     }

@@ -484,13 +484,13 @@ class SearchFragment : Fragment() {
         when (requestCode) {
             VoiceSearch.REQUEST_CODE -> {
                 suggestionModule?.run {
-                    show()
                     val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    if (result?.size == 0) {
+                    if (result == null || result.size == 0) {
                         return
                     }
                     clear()
-                    addAll(result ?: emptyList())
+                    addAll(result)
+                    show()
                 }
             }
         }

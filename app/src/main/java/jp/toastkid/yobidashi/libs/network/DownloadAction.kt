@@ -50,7 +50,7 @@ class DownloadAction(
 
         request.setVisibleInDownloadsUi(true)
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
-        val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        dm.enqueue(request)
+        val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
+        dm?.enqueue(request)
     }
 }

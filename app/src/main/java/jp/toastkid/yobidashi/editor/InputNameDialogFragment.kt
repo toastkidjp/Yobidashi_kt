@@ -86,7 +86,7 @@ class InputNameDialogFragment : DialogFragment() {
     }
 
     private fun saveAndClose(inputLayout: TextInputLayout, d: DialogInterface) {
-        if (inputLayout.editText?.text?.isEmpty() as Boolean) {
+        if (inputLayout.editText?.text?.isEmpty() == true) {
             d.dismiss()
             return
         }
