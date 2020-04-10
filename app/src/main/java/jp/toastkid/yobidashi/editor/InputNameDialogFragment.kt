@@ -110,7 +110,7 @@ class InputNameDialogFragment : DialogFragment() {
         /**
          * Show dialog.
          *
-         * @param context [Context]
+         * @param target [Fragment]
          */
         fun show(target: Fragment) {
             val dialogFragment = InputNameDialogFragment()
