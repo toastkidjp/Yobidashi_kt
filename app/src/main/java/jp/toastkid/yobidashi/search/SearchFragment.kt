@@ -491,6 +491,17 @@ class SearchFragment : Fragment() {
                     clear()
                     addAll(result)
                     show()
+
+                    Completable.timer(200L, TimeUnit.MILLISECONDS, Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    {
+                                        val top = binding?.suggestionModule?.root?.top ?: 0
+                                        binding?.scroll?.smoothScrollTo(0, top)
+                                    },
+                                    Timber::e
+                            )
+                            .addTo(disposables)
                 }
             }
         }
