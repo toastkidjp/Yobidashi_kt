@@ -98,7 +98,7 @@ internal class ModuleAdapter(
                     onVisibilityChanged(!isEmpty)
                     notifyDataSetChanged()
                 }
-                .subscribe(this::add)
+                .subscribe(this::add, Timber::e)
     }
 
     /**
@@ -114,12 +114,15 @@ internal class ModuleAdapter(
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    notifyItemRemoved(position)
-                    if (isEmpty) {
-                        onVisibilityChanged(false)
-                    }
-                }
+                .subscribe(
+                        {
+                            notifyItemRemoved(position)
+                            if (isEmpty) {
+                                onVisibilityChanged(false)
+                            }
+                        },
+                        Timber::e
+                )
     }
 
     /**
