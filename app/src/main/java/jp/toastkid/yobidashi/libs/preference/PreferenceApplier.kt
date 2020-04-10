@@ -113,8 +113,6 @@ class PreferenceApplier(private val context: Context) {
         get() = preferences.getString(Key.BG_IMAGE.name, "") ?: ""
         set(path) = preferences.edit().putString(Key.BG_IMAGE.name, path).apply()
 
-    fun hasBackgroundImagePath(): Boolean = backgroundImagePath.isNotEmpty()
-
     fun removeBackgroundImagePath() {
         preferences.edit().remove(Key.BG_IMAGE.name).apply()
     }
