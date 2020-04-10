@@ -483,26 +483,24 @@ class SearchFragment : Fragment() {
 
         when (requestCode) {
             VoiceSearch.REQUEST_CODE -> {
-                suggestionModule?.run {
-                    val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    if (result == null || result.size == 0) {
-                        return
-                    }
-                    clear()
-                    addAll(result)
-                    show()
-
-                    Completable.timer(200L, TimeUnit.MILLISECONDS, Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    {
-                                        val top = binding?.suggestionModule?.root?.top ?: 0
-                                        binding?.scroll?.smoothScrollTo(0, top)
-                                    },
-                                    Timber::e
-                            )
-                            .addTo(disposables)
+                val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if (result == null || result.size == 0) {
+                    return
                 }
+                suggestionModule?.clear()
+                suggestionModule?.addAll(result)
+                suggestionModule?.show()
+
+                Completable.timer(200L, TimeUnit.MILLISECONDS, Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                {
+                                    val top = binding?.suggestionModule?.root?.top ?: 0
+                                    binding?.scroll?.smoothScrollTo(0, top)
+                                },
+                                Timber::e
+                        )
+                        .addTo(disposables)
             }
         }
     }
