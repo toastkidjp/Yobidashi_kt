@@ -354,15 +354,19 @@ class SearchFragment : Fragment() {
                 override fun afterTextChanged(s: Editable) = Unit
             })
 
-            inputSubject.distinctUntilChanged()
-                    .debounce(800L, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { suggest(it) },
-                            Timber::e
-                    )
-                    .addTo(disposables)
+            invokeSuggestion()
         }
+    }
+
+    private fun invokeSuggestion() {
+        inputSubject.distinctUntilChanged()
+                .debounce(800L, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { suggest(it) },
+                        Timber::e
+                )
+                .addTo(disposables)
     }
 
     private fun suggest(key: String) {
