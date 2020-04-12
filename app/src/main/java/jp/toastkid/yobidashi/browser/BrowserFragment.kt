@@ -377,10 +377,7 @@ class BrowserFragment : Fragment(),
                 pageSearchPresenter.show(fragmentActivity)
             }
             Menu.SHARE-> {
-                startActivity(
-                        IntentFactory.makeShare(browserModule.currentTitle()
-                                + System.getProperty("line.separator") + browserModule.currentUrl())
-                )
+                tabs.share()
             }
             Menu.USER_AGENT-> {
                 val fragmentManager = fragmentManager ?: return

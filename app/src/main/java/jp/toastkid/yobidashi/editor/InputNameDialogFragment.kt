@@ -12,10 +12,10 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputLayout
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -118,11 +118,11 @@ class InputNameDialogFragment : DialogFragment() {
             if (context is FragmentActivity) {
                 val supportFragmentManager = context.supportFragmentManager
                 val target = supportFragmentManager
-                        .findFragmentByTag(BrowserFragment::class.java.simpleName)
+                        .findFragmentByTag(BrowserFragment::class.java.canonicalName)
                 dialogFragment.setTargetFragment(target, 1)
                 dialogFragment.show(
                         supportFragmentManager,
-                        InputNameDialogFragment::class.java.simpleName
+                        InputNameDialogFragment::class.java.canonicalName
                 )
             }
         }

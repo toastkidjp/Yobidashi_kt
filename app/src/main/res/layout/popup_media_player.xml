@@ -51,7 +51,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@drawable/ic_reset"
+                        app:srcCompat="@drawable/ic_stop"
                         android:onClick="@{view -> popup.reset()}"
                         android:contentDescription="@string/settings_color_reset"
                         />
