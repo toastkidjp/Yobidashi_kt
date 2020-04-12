@@ -455,20 +455,15 @@ class SearchFragment : Fragment() {
             )
             return
         }
+
         SearchAction(context, category, query, currentUrl, onBackground)
                 .invoke()
                 .addTo(disposables)
-        if (onBackground) {
-            Toaster.snackShort(
-                    binding?.root as View,
-                    getString(R.string.message_background_search, query),
-                    preferenceApplier.colorPair()
-            )
-        }
     }
 
     /**
      * Hide software keyboard.
+     * TODO should deactivate
      */
     private fun hideKeyboard() {
         headerBinding?.searchInput?.let { Inputs.hideKeyboard(it) }

@@ -6,7 +6,7 @@ import java.util.*
 /**
  * Uri queue for opening on background.
  * Implements for enabling search on background.
- *
+ * TODO Delete it.
  * @author toastkidjp
  */
 object BackgroundTabQueue {
