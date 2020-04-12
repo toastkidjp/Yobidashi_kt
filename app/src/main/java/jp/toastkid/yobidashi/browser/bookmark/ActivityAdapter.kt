@@ -7,6 +7,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -16,11 +18,9 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.tab.BackgroundTabQueue
 import timber.log.Timber
 import java.util.*
 
@@ -87,13 +87,12 @@ internal class ActivityAdapter(
             holder.setImage(bookmark.favicon).addTo(disposables)
         }
 
+        val browserViewModel = (holder.itemView.context as? FragmentActivity)?.let {
+            ViewModelProviders.of(it).get(BrowserViewModel::class.java)
+        }
+
         holder.itemView.setOnLongClickListener { v ->
-            BackgroundTabQueue.add(bookmark.title, Uri.parse(bookmark.url))
-            Toaster.snackShort(
-                    v,
-                    v.context.getString(R.string.message_background_tab, bookmark.title),
-                    PreferenceApplier(v.context).colorPair()
-            )
+            browserViewModel?.openBackground(bookmark.title, Uri.parse(bookmark.url))
             true
         }
     }
