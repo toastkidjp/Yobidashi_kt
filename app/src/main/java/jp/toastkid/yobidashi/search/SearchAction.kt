@@ -74,18 +74,16 @@ class SearchAction(
      * @param validatedUrl passed query is URL.
      */
     private fun withInternalBrowser(validatedUrl: Boolean) {
+        val browserViewModel = (activityContext as? FragmentActivity)?.let {
+            ViewModelProviders.of(it).get(BrowserViewModel::class.java)
+        }
+
         if (validatedUrl) {
-            // TODO Use ViewModel.
-            activityContext.startActivity(
-                    mainActivityIntentFactory.browser(activityContext, Uri.parse(query)))
+            browserViewModel?.open(Uri.parse(query))
             return
         }
 
         val searchUri = urlFactory(activityContext, category, query, currentUrl)
-
-        val browserViewModel = (activityContext as? FragmentActivity)?.let {
-            ViewModelProviders.of(it).get(BrowserViewModel::class.java)
-        }
 
         if (onBackground) {
             browserViewModel?.openBackground(
