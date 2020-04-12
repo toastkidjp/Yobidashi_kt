@@ -357,7 +357,10 @@ class SearchFragment : Fragment() {
             inputSubject.distinctUntilChanged()
                     .debounce(800L, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { suggest(it) }//TODO error case
+                    .subscribe(
+                            { suggest(it) },
+                            Timber::e
+                    )
                     .addTo(disposables)
         }
     }
