@@ -2,14 +2,16 @@ package jp.toastkid.yobidashi.search
 
 import android.content.Context
 import android.net.Uri
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
-import jp.toastkid.yobidashi.tab.BackgroundTabQueue
 
 /**
  * Search action shortcut.
@@ -73,6 +75,7 @@ class SearchAction(
      */
     private fun withInternalBrowser(validatedUrl: Boolean) {
         if (validatedUrl) {
+            // TODO Use ViewModel.
             activityContext.startActivity(
                     mainActivityIntentFactory.browser(activityContext, Uri.parse(query)))
             return
@@ -80,15 +83,18 @@ class SearchAction(
 
         val searchUri = urlFactory(activityContext, category, query, currentUrl)
 
+        val browserViewModel = (activityContext as? FragmentActivity)?.let {
+            ViewModelProviders.of(it).get(BrowserViewModel::class.java)
+        }
+
         if (onBackground) {
-            BackgroundTabQueue.add(
+            browserViewModel?.openBackground(
                     activityContext.getString(R.string.title_tab_background_search, query),
                     searchUri
             )
             return
         }
-
-        activityContext.startActivity(mainActivityIntentFactory.browser(activityContext, searchUri))
+        browserViewModel?.open(searchUri)
     }
 
 }
