@@ -360,7 +360,7 @@ class SearchFragment : Fragment() {
 
     private fun invokeSuggestion() {
         inputSubject.distinctUntilChanged()
-                .debounce(800L, TimeUnit.MILLISECONDS)
+                .debounce(500L, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { suggest(it) },
