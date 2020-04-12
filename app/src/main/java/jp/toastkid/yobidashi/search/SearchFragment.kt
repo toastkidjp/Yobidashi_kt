@@ -544,7 +544,7 @@ class SearchFragment : Fragment() {
          *
          * @param context [Context]
          */
-        fun makeWith(context: Context, title: String? = null, url: String? = null) =
+        fun makeWith(title: String? = null, url: String? = null) =
                 SearchFragment()
                         .also { fragment ->
                             fragment.arguments = Bundle().also { bundle ->
@@ -565,8 +565,8 @@ class SearchFragment : Fragment() {
          * @param title Title
          * @param url URL
          */
-        fun makeWithQuery(context: Context, query: String, title: String?, url: String? = null) =
-                makeWith(context, title, url).also { fragment ->
+        fun makeWithQuery(query: String, title: String?, url: String? = null) =
+                makeWith(title, url).also { fragment ->
                     fragment.arguments?.putString(EXTRA_KEY_QUERY, query)
                 }
 

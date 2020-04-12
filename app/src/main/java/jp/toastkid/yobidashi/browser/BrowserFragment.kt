@@ -366,9 +366,9 @@ class BrowserFragment : Fragment(),
             val currentUrl = browserModule.currentUrl()
             val query = searchQueryExtractor.invoke(currentUrl)
             val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
-                SearchFragment.makeWith(it, currentTitle, currentUrl)
+                SearchFragment.makeWith(currentTitle, currentUrl)
             } else {
-                SearchFragment.makeWithQuery(it, query ?: "", currentTitle, currentUrl)
+                SearchFragment.makeWithQuery(query ?: "", currentTitle, currentUrl)
             }
             activity?.also { activity ->
                 ViewModelProviders.of(activity)
@@ -451,7 +451,6 @@ class BrowserFragment : Fragment(),
         }
 
         val fragment = SearchFragment.makeWithQuery(
-                activityContext,
                 inputText ?: "",
                 currentTitle,
                 currentUrl
