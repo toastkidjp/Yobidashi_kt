@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.search
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -541,8 +540,6 @@ class SearchFragment : Fragment() {
 
         /**
          * Make launch [Intent].
-         *
-         * @param context [Context]
          */
         fun makeWith(title: String? = null, url: String? = null) =
                 SearchFragment()
@@ -560,7 +557,6 @@ class SearchFragment : Fragment() {
         /**
          * Make launcher [Intent] with query.
          *
-         * @param context [Context]
          * @param query Query
          * @param title Title
          * @param url URL
