@@ -20,21 +20,26 @@ object Inputs {
      * @param editText
      */
     fun showKeyboard(activity: Activity, editText: EditText) {
-        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (!inputMethodManager.isActive) {
+        val inputMethodManager =
+                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        if (inputMethodManager?.isActive == false) {
             return
         }
-        inputMethodManager.showSoftInput(editText, 0)
+        inputMethodManager?.showSoftInput(editText, 0)
     }
 
     /**
      * For Fragment.
+     *
      * @param activity
      */
     fun toggle(activity: Activity) {
-        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.toggleSoftInput(
-                InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS)
+        val inputMethodManager =
+                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.toggleSoftInput(
+                InputMethodManager.SHOW_IMPLICIT,
+                InputMethodManager.HIDE_NOT_ALWAYS
+        )
     }
 
     /**

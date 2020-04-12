@@ -520,7 +520,7 @@ class BrowserModule(
      * @return is disable Pull-to-Refresh
      */
     fun disablePullToRefresh(): Boolean =
-            currentView()?.let { !(it as CustomWebView).enablePullToRefresh || it.scrollY != 0 } ?: false
+            (currentView() as? CustomWebView)?.let { !it.enablePullToRefresh || it.scrollY != 0 } ?: false
 
     /**
      * Stop loading in current tab.

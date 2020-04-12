@@ -55,6 +55,7 @@ class SearchHistoryFragment : Fragment(),
         adapter = ModuleAdapter(
                 context,
                 repository,
+                // TODO use elvis
                 { history -> SearchAction(context, history.category as String, history.query as String).invoke()},
                 { },
                 { },
@@ -105,7 +106,7 @@ class SearchHistoryFragment : Fragment(),
                 .subscribe(
                         {
                             Toaster.snackShort(
-                                    binding.root as View,
+                                    binding.root,
                                     R.string.settings_color_delete,
                                     PreferenceApplier(context).colorPair()
                             )

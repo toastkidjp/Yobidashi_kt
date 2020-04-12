@@ -43,8 +43,8 @@ class SlidingTouchListener(private val targetView: View) : View.OnTouchListener 
             MotionEvent.ACTION_MOVE -> {
                 val viewHeight = view.height
 
-                val viewParent = view.parent as View
-                val parentHeight = viewParent.height.toFloat()
+                val viewParent = view.parent as? View
+                val parentHeight = viewParent?.height?.toFloat() ?: 0f
 
                 var newY = motionEvent.rawY + dY
                 newY = Math.max(0f, newY)

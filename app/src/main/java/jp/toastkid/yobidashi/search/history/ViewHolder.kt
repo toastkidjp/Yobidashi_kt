@@ -54,6 +54,7 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.searchHistoryAdd.setImageResource(addIcon)
     }
 
+    // TODO Delete it.
     fun hideAddButton() {
         binding.searchHistoryAdd.visibility = View.GONE
     }
@@ -73,9 +74,9 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     private fun updateRightMargin(margin: Int) {
-        val marginLayoutParams = binding.front.layoutParams as ViewGroup.MarginLayoutParams
-        marginLayoutParams.rightMargin = margin
+        val marginLayoutParams = binding.front.layoutParams as? ViewGroup.MarginLayoutParams
+        marginLayoutParams?.rightMargin = margin
         binding.front.layoutParams = marginLayoutParams
-        marginLayoutParams.updateMargins()
+        marginLayoutParams?.updateMargins()
     }
 }
