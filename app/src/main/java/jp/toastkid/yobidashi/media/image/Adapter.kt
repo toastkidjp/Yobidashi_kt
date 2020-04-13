@@ -9,11 +9,14 @@ package jp.toastkid.yobidashi.media.image
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemImageThumbnailsBinding
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment
 
 /**
@@ -35,7 +38,11 @@ internal class Adapter(
                 parent,
                 false
         )
-        return ViewHolder(itemBinding)
+        val placeholder = ContextCompat.getDrawable(parent.context, R.drawable.ic_image_search)
+        if (placeholder != null) {
+            DrawableCompat.setTint(placeholder, PreferenceApplier(parent.context).color)
+        }
+        return ViewHolder(itemBinding, placeholder)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

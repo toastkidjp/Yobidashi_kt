@@ -21,7 +21,7 @@ import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchCategory
-import jp.toastkid.yobidashi.search.SearchCategorySpinnerInitializer
+import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 
 /**
  * @author toastkidjp
@@ -45,7 +45,11 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
 
-        SearchCategorySpinnerInitializer.invoke(binding.searchCategories)
+        binding.searchCategories.adapter = SearchCategoryAdapter(activityContext)
+        val index = SearchCategory.findIndex(
+                PreferenceApplier(activityContext).getDefaultSearchEngine()
+        )
+        binding.searchCategories.setSelection(index)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier.setDefaultSearchEngine(

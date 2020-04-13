@@ -248,8 +248,7 @@ class TabAdapter(
         when (tabList.currentTab()) {
             is WebTab -> {
                 webViewContainer.context.startActivity(
-                        IntentFactory.makeShare(browserModule.currentTitle()
-                                + System.getProperty("line.separator") + browserModule.currentUrl())
+                        IntentFactory.makeShare(browserModule.makeShareMessage())
                 )
             }
             is EditorTab -> {

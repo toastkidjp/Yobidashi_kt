@@ -7,19 +7,22 @@
  */
 package jp.toastkid.yobidashi.media.music.popup
 
-import android.graphics.Bitmap
-import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.support.v4.media.MediaDescriptionCompat
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
 
 /**
  * @author toastkidjp
  */
-class ViewHolder(private val binding: ItemMediaListBinding) : RecyclerView.ViewHolder(binding.root) {
+class ViewHolder(
+        private val binding: ItemMediaListBinding,
+        private val placeholder: Drawable?
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bindText(description: MediaDescriptionCompat) {
         binding.title.text = description.title
@@ -30,10 +33,6 @@ class ViewHolder(private val binding: ItemMediaListBinding) : RecyclerView.ViewH
         binding.lyrics.setColorFilter(color)
     }
 
-    fun setIconColor(@ColorInt color: Int) {
-        binding.icon.setColorFilter(color)
-    }
-
     fun setOnClickListener(onClickListener: View.OnClickListener) {
         binding.root.setOnClickListener(onClickListener)
     }
@@ -42,12 +41,11 @@ class ViewHolder(private val binding: ItemMediaListBinding) : RecyclerView.ViewH
         binding.lyrics.setOnClickListener(onClickListener)
     }
 
-    fun setIcon(albumArtOrNull: Bitmap) {
-        setIconColor(Color.TRANSPARENT)
-        binding.icon.setImageBitmap(albumArtOrNull)
-    }
-
-    fun setIconId(@DrawableRes iconId: Int) {
-        binding.icon.setImageResource(iconId)
+    fun loadIcon(uri: Uri?, iconWidth: Int) {
+        Glide.with(binding.root.context)
+                .load(uri)
+                .placeholder(placeholder)
+                .override(iconWidth)
+                .into(binding.icon)
     }
 }

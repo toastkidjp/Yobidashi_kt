@@ -38,6 +38,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.search.apps.AppModule
+import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.clip.ClipboardModule
 import jp.toastkid.yobidashi.search.favorite.ClearFavoriteSearchDialogFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchActivity
@@ -133,10 +134,12 @@ class SearchActivity : AppCompatActivity(),
         binding?.activity = this
         binding?.searchClear?.setOnClickListener { binding?.searchInput?.setText("") }
         binding?.searchCategories?.let {
-            SearchCategorySpinnerInitializer.invoke(
-                    it,
-                    SearchCategory.findByHostOrNull(currentUrl?.toUri()?.host)
+            it.adapter = SearchCategoryAdapter(this@SearchActivity)
+            val index = SearchCategory.findIndex(
+                    SearchCategory.findByHostOrNull(currentUrl?.toUri()?.host)?.name
+                            ?: PreferenceApplier(this@SearchActivity).getDefaultSearchEngine()
             )
+            it.setSelection(index)
         }
 
         initFavoriteModule()

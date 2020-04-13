@@ -30,7 +30,7 @@ android {
         debug {
             minifyEnabled true
             useProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules-debug.pro'
             applicationIdSuffix ".d"
             manifestPlaceholders = [app_name: "Xobidashi"]
             versionNameSuffix = ".d"
