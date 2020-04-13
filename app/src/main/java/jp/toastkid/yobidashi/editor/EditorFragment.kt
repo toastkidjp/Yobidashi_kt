@@ -60,6 +60,7 @@ import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import timber.log.Timber
@@ -123,6 +124,8 @@ class EditorFragment :
     private var headerViewModel: HeaderViewModel? = null
 
     private var tabListViewModel: TabListViewModel? = null
+
+    private var contentViewModel: ContentViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -199,6 +202,7 @@ class EditorFragment :
             }
         }
 
+        // TODO move to common initialization.
         val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
             ViewModelProviders.of(fragmentActivity)
                     .get(BrowserViewModel::class.java)
@@ -273,6 +277,7 @@ class EditorFragment :
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
+        // TODO extract viewmoodelProviders to common variable
         (context as? FragmentActivity)?.let { activity ->
             headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
             tabListViewModel = ViewModelProviders.of(activity).get(TabListViewModel::class.java)
@@ -296,13 +301,15 @@ class EditorFragment :
                     finder.findDown(currentWord)
                 })
             }
+
+            contentViewModel = ViewModelProviders.of(activity).get(ContentViewModel::class.java)
         }
 
         reload()
     }
 
     fun reload() {
-        Timber.i("reload")
+        Timber.i("reload")// TODO delete
         if (arguments?.containsKey("path") == true) {
             path = arguments?.getString("path") ?: ""
             Timber.i("reset path to $path")
@@ -684,7 +691,7 @@ class EditorFragment :
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
-                    binding.root,
+                    view,
                     view.text.toString(),
                     R.string.run,
                     View.OnClickListener { view.performClick() },
@@ -701,7 +708,7 @@ class EditorFragment :
      * @param id
      */
     private fun snackText(@StringRes id: Int) {
-        Toaster.snackShort(binding.root, id, preferenceApplier.colorPair())
+        contentViewModel?.snackShort(id)
     }
 
     /**
@@ -710,11 +717,7 @@ class EditorFragment :
      * @param message
      */
     private fun snackText(message: String) {
-        Toaster.snackShort(
-                binding.root,
-                message,
-                preferenceApplier.colorPair()
-        )
+        contentViewModel?.snackShort(message)
     }
 
     /**
