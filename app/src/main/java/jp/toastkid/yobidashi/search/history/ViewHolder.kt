@@ -54,11 +54,6 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.searchHistoryAdd.setImageResource(addIcon)
     }
 
-    // TODO Delete it.
-    fun hideAddButton() {
-        binding.searchHistoryAdd.visibility = View.GONE
-    }
-
     override fun getFrontView(): View = binding.front
 
     override fun isButtonVisible(): Boolean = binding.delete.isVisible
