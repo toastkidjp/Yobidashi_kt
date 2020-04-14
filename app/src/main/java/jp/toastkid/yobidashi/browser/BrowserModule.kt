@@ -149,13 +149,13 @@ class BrowserModule(
             super.onPageFinished(view, url)
             isLoadFinished = true
 
-            loadingViewModel?.finished(lastId, History.make(view.title, view.url))
+            val title = view.title ?: ""
+            val urlStr = url ?: ""
+
+            loadingViewModel?.finished(lastId, History.make(title, urlStr))
 
             headerViewModel?.updateProgress(100)
             headerViewModel?.stopProgress(true)
-
-            val title = view.title ?: ""
-            val urlStr = url ?: ""
 
             try {
                 if (view == currentView()) {
