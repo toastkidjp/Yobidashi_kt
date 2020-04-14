@@ -9,13 +9,13 @@ package jp.toastkid.yobidashi.editor
 
 import android.content.res.Resources
 import android.graphics.PorterDuff
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import timber.log.Timber
 
 /**
@@ -25,9 +25,12 @@ class CursorColorSetter {
 
     operator fun invoke(editText: EditText, @ColorInt newColor: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            editText.textCursorDrawable = makeDrawables(editText, newColor)?.get(0) ?: ColorDrawable(newColor)
+            val drawable = editText.textCursorDrawable ?: return
+            DrawableCompat.setTint(drawable, newColor)
+            editText.textCursorDrawable = drawable
             return
         }
+
         try {
             val editor = extractEditor(editText)
             val field = editor.javaClass.getDeclaredField("mCursorDrawable")
