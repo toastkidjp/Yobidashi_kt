@@ -143,6 +143,7 @@ class BrowserModule(
             isLoadFinished = false
 
             rssAddingSuggestion(view, url).addTo(disposables)
+            updateBackButtonState(view.canGoBack())
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
