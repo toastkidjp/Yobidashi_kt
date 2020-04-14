@@ -29,9 +29,9 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun setOnClickAdd(history: SearchHistory, onClickAdd: (SearchHistory) -> Unit) {
-        binding.searchHistoryAdd.setOnClickListener ({ _ ->
+        binding.searchHistoryAdd.setOnClickListener { _ ->
             onClickAdd(history)
-        })
+        }
     }
 
     fun setOnClickDelete(onClick: () -> Unit) {
