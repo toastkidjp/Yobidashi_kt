@@ -380,6 +380,7 @@ class BrowserModule(
         currentWebView?.let {
             it.onResume()
             webViewContainer?.addView(it)
+            updateBackButtonState(it.canGoBack())
             updateForwardButtonState(it.canGoForward())
             browserHeaderViewModel?.nextTitle(it.title)
             browserHeaderViewModel?.nextUrl(it.url)
@@ -394,6 +395,10 @@ class BrowserModule(
 
         reloadWebViewSettings().addTo(disposables)
         return currentWebView?.url.isNullOrBlank()
+    }
+
+    private fun updateBackButtonState(newState: Boolean) {
+        browserHeaderViewModel?.setBackButtonEnability(newState)
     }
 
     private fun updateForwardButtonState(newState: Boolean) {
@@ -438,6 +443,7 @@ class BrowserModule(
     fun back() = currentView()?.let {
         return if (it.canGoBack()) {
             it.goBack()
+            updateBackButtonState(it.canGoBack())
             updateForwardButtonState(it.canGoForward())
             true
         } else false
@@ -448,6 +454,7 @@ class BrowserModule(
             it.goForward()
         }
 
+        updateBackButtonState(it.canGoBack())
         updateForwardButtonState(it.canGoForward())
     }
 
