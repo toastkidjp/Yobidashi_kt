@@ -174,13 +174,6 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
             if (index < 0 || adapter.itemCount < index) 0 else index
 
     /**
-     * Return current item position.
-     *
-     * @return current item position.
-     */
-    fun currentItemPosition(): Int = layoutManager.findFirstVisibleItemPosition()
-
-    /**
      * Animate root view.
      *
      * @param animation
