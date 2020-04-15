@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchInsertion
 internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     : RecyclerView.ViewHolder(binding.root), SwipeViewHolder {
 
-    private val buttonMargin = binding.root.context.resources
+    private val buttonMargin = binding.root.resources
             .getDimensionPixelSize(R.dimen.button_margin)
 
     fun setText(text: String?) {
