@@ -536,11 +536,11 @@ class BrowserModule(
     }
 
     fun onResume() {
-        currentView()?.onResume()
+        webViewPool.onResume()
     }
 
     fun onPause() {
-        currentView()?.onPause()
+        webViewPool.onPause()
     }
 
     /**
