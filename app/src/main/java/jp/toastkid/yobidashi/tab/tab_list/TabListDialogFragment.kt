@@ -72,7 +72,7 @@ class TabListDialogFragment : DialogFragment() {
     interface Callback {
         fun onCloseTabListDialogFragment()
         fun onOpenEditor()
-        fun onOpenPdf()
+        //TODO fun onOpenPdf()
         fun openNewTabFromTabList()
         fun tabIndexFromTabList(): Int
         fun currentTabIdFromTabList(): String
@@ -149,7 +149,7 @@ class TabListDialogFragment : DialogFragment() {
 
         initClearTabs(binding.clearTabs)
 
-        binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
+        //TODO binding.addPdfTab.setOnClickListener { callback?.onOpenPdf() }
 
         binding.recyclerView.layoutManager?.scrollToPosition(index)
         binding.recyclerView.scheduleLayoutAnimation()

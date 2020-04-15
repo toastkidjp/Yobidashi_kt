@@ -30,12 +30,13 @@ import jp.toastkid.yobidashi.databinding.FragmentImageViewerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.main.ContentScrollable
 import timber.log.Timber
 
 /**
  * @author toastkidjp
  */
-class ImageViewerFragment : Fragment(), CommonFragmentAction {
+class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
     private lateinit var binding: FragmentImageViewerBinding
 
@@ -155,6 +156,14 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
         }
     }
 
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.images, adapter?.itemCount ?: 0)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.list_scrolling, menu)
@@ -163,9 +172,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.list_to_top ->
-                RecyclerViewScroller.toTop(binding.images, adapter?.itemCount ?: 0)
+                toTop()
             R.id.list_to_bottom ->
-                RecyclerViewScroller.toBottom(binding.images, adapter?.itemCount ?: 0)
+                toBottom()
         }
         return super.onOptionsItemSelected(item)
     }

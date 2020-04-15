@@ -19,11 +19,12 @@ import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
+import jp.toastkid.yobidashi.main.ContentScrollable
 
 /**
  * @author toastkidjp
  */
-class ReaderFragment : Fragment() {
+class ReaderFragment : Fragment(), ContentScrollable {
 
     private lateinit var binding: FragmentReaderModeBinding
 
@@ -96,6 +97,14 @@ class ReaderFragment : Fragment() {
         viewModel?.close()
     }
 
+    override fun toTop() {
+        binding.scroll.smoothScrollTo(0, 0)
+    }
+
+    override fun toBottom() {
+        binding.scroll.smoothScrollTo(0, binding.content.measuredHeight)
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -121,11 +130,11 @@ class ReaderFragment : Fragment() {
                 return true
             }
             R.id.list_to_top -> {
-                binding.scroll.smoothScrollTo(0, 0)
+                toTop()
                 return true
             }
             R.id.list_to_bottom -> {
-                binding.scroll.smoothScrollTo(0, binding.content.measuredHeight)
+                toBottom()
                 return true
             }
         }

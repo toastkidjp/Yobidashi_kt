@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -26,7 +25,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -39,18 +37,19 @@ import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
-import jp.toastkid.yobidashi.browser.webview.dialog.AnchorDialogCallback
-import jp.toastkid.yobidashi.browser.webview.dialog.ImageDialogCallback
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.databinding.ModuleEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
-import jp.toastkid.yobidashi.editor.*
-import jp.toastkid.yobidashi.libs.*
-import jp.toastkid.yobidashi.libs.clip.Clipboard
+import jp.toastkid.yobidashi.editor.EditorModule
+import jp.toastkid.yobidashi.editor.InputNameDialogFragment
+import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -80,14 +79,11 @@ import java.util.*
  */
 class BrowserFragment : Fragment(),
         CommonFragmentAction,
-        ImageDialogCallback,
-        AnchorDialogCallback,
         TabListClearDialogFragment.Callback,
         UserAgentDialogFragment.Callback,
-        ClearTextDialogFragment.Callback,
+        TabListDialogFragment.Callback,
         InputNameDialogFragment.Callback,
-        PasteAsConfirmationDialogFragment.Callback,
-        TabListDialogFragment.Callback
+        ContentScrollable
 {
 
     /**
@@ -237,6 +233,10 @@ class BrowserFragment : Fragment(),
         return binding?.root
     }
 
+    override fun onClickInputName(fileName: String) {
+        editorModule.assignNewFile(fileName)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -362,12 +362,6 @@ class BrowserFragment : Fragment(),
             }
             Menu.FORWARD-> {
                 forward()
-            }
-            Menu.TOP-> {
-                toTop()
-            }
-            Menu.BOTTOM-> {
-                toBottom()
             }
             Menu.FIND_IN_PAGE-> {
                 if (pageSearchPresenter.isVisible()) {
@@ -513,9 +507,6 @@ class BrowserFragment : Fragment(),
             Menu.EDITOR-> {
                 openEditorTab()
             }
-            Menu.PDF-> {
-                openPdfTabFromStorage()
-            }
             else -> Unit
         }
     }
@@ -615,14 +606,14 @@ class BrowserFragment : Fragment(),
     /**
      * Go to bottom.
      */
-    private fun toBottom() {
+    override fun toBottom() {
         tabs.pageDown()
     }
 
     /**
      * Go to top.
      */
-    private fun toTop() {
+    override fun toTop() {
         tabs.pageUp()
     }
 
@@ -632,7 +623,6 @@ class BrowserFragment : Fragment(),
         switchToolbarVisibility()
 
         val colorPair = colorPair()
-        editorModule.applySettings()
 
         val fontColor = colorPair.fontColor()
 
@@ -648,6 +638,10 @@ class BrowserFragment : Fragment(),
 
         if (pdfModule.isVisible()) {
             pdfModule.applyColor(colorPair)
+        }
+
+        if (editorModule.isVisible()) {
+            editorModule.applySettings()
         }
 
         if (tabs.isNotEmpty()) {
@@ -761,14 +755,6 @@ class BrowserFragment : Fragment(),
                     VoiceSearch.processResult(it, intent).addTo(disposables)
                 }
             }
-            REQUEST_CODE_OPEN_PDF -> {
-                val uri = intent.data ?: return
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val takeFlags: Int = intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    context?.contentResolver?.takePersistableUriPermission(uri, takeFlags)
-                }
-                tabs.openNewPdfTab(uri)
-            }
             BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
                 intent.data?.let {
                     tabs.openNewWebTab(it.toString())
@@ -784,26 +770,6 @@ class BrowserFragment : Fragment(),
                 }
             }
         }
-    }
-
-    /**
-     * Open PDF from storage.
-     */
-    private fun openPdfTabFromStorage() {
-        rxPermissions
-                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                ?.subscribe(
-                        { granted ->
-                            if (!granted) {
-                                return@subscribe
-                            }
-                            startActivityForResult(
-                                    IntentFactory.makeOpenDocument("application/pdf"),
-                                    REQUEST_CODE_OPEN_PDF
-                            )
-                        },
-                        Timber::e
-                )?.addTo(disposables)
     }
 
     /**
@@ -852,19 +818,7 @@ class BrowserFragment : Fragment(),
         tabs.openNewWebTab(uri.toString())
     }
 
-    override fun openNewTab(url: String) {
-        loadWithNewTab(url.toUri())
-    }
-
-    override fun openBackgroundTab(title: String, url: String) {
-        tabs.openBackgroundTab(title, url)
-    }
-
-    override fun openCurrent(url: String) {
-        tabs.callLoadUrl(url)
-    }
-
-    override fun preview(url: String) {
+    private fun preview(url: String) {
         val webView = browserModule.getWebView(FloatingPreview.getSpecialId())
         if (webView == null) {
             Toaster.snackLong(
@@ -888,48 +842,6 @@ class BrowserFragment : Fragment(),
     
     private fun colorPair() = preferenceApplier.colorPair()
 
-    // TODO Delete
-    override fun onClickImageSearch(url: String) {
-        tabs.openNewWebTab("https://www.google.co.jp/searchbyimage?image_url=$url")
-    }
-
-    override fun onClickSetBackground(url: String) {
-        val activityContext = context ?: return
-        ImageDownloader(url, { activityContext }, Consumer { file ->
-            preferenceApplier.backgroundImagePath = file.absolutePath
-            Toaster.snackShort(
-                    binding?.root as View,
-                    R.string.message_change_background_image,
-                    preferenceApplier.colorPair()
-            )
-        }).addTo(disposables)
-    }
-
-    override fun onClickSaveForBackground(url: String) {
-        val activityContext = context ?: return
-        ImageDownloader(url, { activityContext }, Consumer { file ->
-            Toaster.snackShort(
-                    binding?.root as View,
-                    getString(R.string.message_done_save) + file.name,
-                    preferenceApplier.colorPair()
-            )
-        }).addTo(disposables)
-    }
-
-    override fun onClickDownloadImage(url: String) {
-        val activityContext = context ?: return
-        if (Urls.isInvalidUrl(url)) {
-            Toaster.snackShort(
-                    binding?.root as View,
-                    activityContext.getString(R.string.message_cannot_downloading_image),
-                    PreferenceApplier(activityContext).colorPair()
-            )
-            return
-        }
-
-        ImageDownloadActionDialogFragment.show(activityContext, url)
-    }
-
     override fun onClickClear() {
         tabs.clear()
         onEmptyTabs()
@@ -944,28 +856,11 @@ class BrowserFragment : Fragment(),
         )
     }
 
-    override fun onClickClearInput() {
-        editorModule.clearInput()
-    }
-
-    override fun onClickInputName(fileName: String) {
-        editorModule.assignNewFile(fileName)
-    }
-
-    override fun onClickPasteAs() {
-        val activityContext = context ?: return
-        val primary = Clipboard.getPrimary(activityContext)
-        if (TextUtils.isEmpty(primary)) {
-            return
-        }
-        editorModule.insert(Quotation()(primary))
-    }
-
     override fun onCloseTabListDialogFragment() = hideTabList()
 
     override fun onOpenEditor() = openEditorTab()
 
-    override fun onOpenPdf() = openPdfTabFromStorage()
+    //TODO override fun onOpenPdf() = openPdfTabFromStorage()
 
     override fun openNewTabFromTabList() = tabs.openNewWebTab()
 
@@ -997,7 +892,6 @@ class BrowserFragment : Fragment(),
 
     override fun onPause() {
         super.onPause()
-        editorModule.saveIfNeed()
         stopSwipeRefresherLoading()
     }
 
@@ -1028,11 +922,6 @@ class BrowserFragment : Fragment(),
     }
 
     companion object {
-
-        /**
-         * Request code of opening PDF.
-         */
-        private const val REQUEST_CODE_OPEN_PDF: Int = 3
 
         /**
          * Layout ID.
