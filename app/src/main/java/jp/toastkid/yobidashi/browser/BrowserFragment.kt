@@ -446,7 +446,6 @@ class BrowserFragment : Fragment(),
     }
 
     fun tapHeader() {
-        val activityContext = context ?: return
         val currentTitle = browserModule.currentTitle()
         val currentUrl = browserModule.currentUrl()
         val inputText = if (preferenceApplier.enableSearchQueryExtract) {
