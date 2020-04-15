@@ -41,7 +41,7 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
+        binding.divider.isVisible = visible
     }
 
     fun setFavorite(category: String, query: String) {
