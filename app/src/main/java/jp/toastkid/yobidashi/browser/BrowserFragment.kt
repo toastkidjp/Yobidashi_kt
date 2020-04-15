@@ -193,13 +193,9 @@ class BrowserFragment : Fragment(),
                 headerViewModel?.replace(headerView)
             })
 
-            viewModel.enableForward.observe(activity, Observer {
-                updateForwardButtonState(it)
-            })
+            viewModel.enableForward.observe(activity, Observer(::updateForwardButtonState))
 
-            viewModel.enableBack.observe(activity, Observer {
-                updateBackButtonState(it)
-            })
+            viewModel.enableBack.observe(activity, Observer(::updateBackButtonState))
         }
 
         viewModelProvider.get(LoadingViewModel::class.java)
