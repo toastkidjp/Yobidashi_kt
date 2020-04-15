@@ -76,6 +76,10 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         val context = view.context
 
+        val contentResolver = context.contentResolver ?: return
+        bucketLoader = BucketLoader(contentResolver)
+        imageLoader = ImageLoader(contentResolver)
+
         preferenceApplier = PreferenceApplier(context)
 
         val viewModelProvider = ViewModelProviders.of(this)
@@ -101,10 +105,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         })
 
         observePageSearcherViewModel()
-
-        val contentResolver = context.contentResolver ?: return
-        bucketLoader = BucketLoader(contentResolver)
-        imageLoader = ImageLoader(contentResolver)
 
         binding.images.adapter = adapter
         binding.images.layoutManager =
