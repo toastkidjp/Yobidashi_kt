@@ -11,12 +11,14 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentViewHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
@@ -25,7 +27,6 @@ import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 
 /**
- * TODO: remove background.
  * @author toastkidjp
  */
 class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScrollable {
@@ -81,7 +82,21 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
                         adapter.removeAt(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(binding.historiesView)
+
+        setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val fragmentActivity = activity ?: return
+        ViewModelProviders.of(fragmentActivity).get(PageSearcherViewModel::class.java)
+                .find
+                .observe(fragmentActivity, Observer {
+                    adapter.filter(it)
+                })
     }
 
     private fun finishWithResult(uri: Uri?) {
@@ -98,11 +113,6 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
     private fun popBackStack() {
         activity?.supportFragmentManager?.popBackStack()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onResume() {

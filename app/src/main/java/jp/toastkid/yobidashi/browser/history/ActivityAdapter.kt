@@ -91,7 +91,25 @@ internal class ActivityAdapter(
 
     override fun getItemCount(): Int = items.size
 
+    fun filter(query: String?) {
+        if (query.isNullOrBlank()) {
+            refresh()
+            return
+        }
+
+        items.clear()
+        CompletableLift.fromAction { items.addAll(viewHistoryRepository.search("%$query%")) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { notifyDataSetChanged() },
+                        Timber::e
+                )
+                .addTo(disposables)
+    }
+
     fun refresh(onComplete: () -> Unit = {}) {
+        items.clear()
         CompletableLift.fromAction { items.addAll(viewHistoryRepository.reversed()) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
