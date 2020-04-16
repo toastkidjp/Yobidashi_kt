@@ -3,9 +3,9 @@ package jp.toastkid.yobidashi.settings.background
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.SavedImageBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
@@ -37,7 +37,8 @@ internal class ViewHolder(
             return
         }
 
-        ImageLoader.setImageToImageView(this.binding.image, f.path)
+        Glide.with(binding.image).load(f.path).into(binding.image)
+
         this.binding.text.text = f.name
         this.binding.remove.setOnClickListener { removeSetImage(f) }
         this.binding.root.setOnClickListener {
