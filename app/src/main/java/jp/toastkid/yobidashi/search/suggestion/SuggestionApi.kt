@@ -16,7 +16,7 @@ import java.util.*
  *
  * @author toastkidjp
  */
-class SuggestionFetcher {
+class SuggestionApi {
 
     /**
      * HTTP client.
