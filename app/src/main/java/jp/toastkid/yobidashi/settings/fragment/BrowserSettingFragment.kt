@@ -156,11 +156,13 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      */
     private fun initBrowserExpandable() {
         binding.browserExpand.screenMode?.setOnCheckedChangeListener { group, _ ->
-            when (group.checkedRadioButtonId) {
-                R.id.full_screen  -> preferenceApplier.setBrowserScreenMode(ScreenMode.FULL_SCREEN)
-                R.id.expandable   -> preferenceApplier.setBrowserScreenMode(ScreenMode.EXPANDABLE)
-                R.id.fixed        -> preferenceApplier.setBrowserScreenMode(ScreenMode.FIXED)
+            val screenMode = when (group.checkedRadioButtonId) {
+                R.id.full_screen -> ScreenMode.FULL_SCREEN
+                R.id.expandable  -> ScreenMode.EXPANDABLE
+                R.id.fixed       -> ScreenMode.FIXED
+                else             -> ScreenMode.EXPANDABLE
             }
+            preferenceApplier.setBrowserScreenMode(screenMode)
         }
     }
 
