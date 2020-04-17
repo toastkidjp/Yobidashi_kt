@@ -20,11 +20,11 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentViewHistoryBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 
 /**
  * @author toastkidjp
@@ -37,6 +37,8 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var contentViewModel: ContentViewModel? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -44,15 +46,20 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         preferenceApplier = PreferenceApplier(context)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
+
+        // TODO Delete unused local variable.
         val viewHistoryRepository = DatabaseFinder().invoke(context).viewHistoryRepository()
 
         binding.historiesView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        val fragmentActivity = requireActivity()
+        contentViewModel = ViewModelProviders.of(fragmentActivity).get(ContentViewModel::class.java)
 
         adapter = ActivityAdapter(
                 context,
                 viewHistoryRepository,
                 { history -> finishWithResult(Uri.parse(history.url)) },
-                { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) }
+                { history -> contentViewModel?.snackShort(history.title) }
         )
 
         binding.historiesView.adapter = adapter
@@ -123,7 +130,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
                 return@refresh
             }
 
-            Toaster.tShort(requireContext(), R.string.message_none_search_histories)
+            contentViewModel?.snackShort(R.string.message_none_search_histories)
             popBackStack()
         }
     }
@@ -149,7 +156,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
     }
 
     override fun onClickClear() {
-        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())}
+        adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear)}
         popBackStack()
     }
 
