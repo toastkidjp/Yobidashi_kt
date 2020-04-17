@@ -137,7 +137,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+        return when (item?.itemId) {
             R.id.clear -> {
                 val clearDialogFragment = ClearDialogFragment()
                 clearDialogFragment.setTargetFragment(this, clearDialogFragment.id)
@@ -145,9 +145,9 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
                         fragmentManager,
                         ClearDialogFragment::class.java.simpleName
                 )
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
