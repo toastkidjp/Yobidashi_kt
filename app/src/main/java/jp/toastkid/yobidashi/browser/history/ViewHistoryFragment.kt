@@ -174,7 +174,8 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
     }
 
     companion object {
-        @LayoutRes const val LAYOUT_ID: Int = R.layout.fragment_view_history
+        @LayoutRes
+        private const val LAYOUT_ID: Int = R.layout.fragment_view_history
 
     }
 }
