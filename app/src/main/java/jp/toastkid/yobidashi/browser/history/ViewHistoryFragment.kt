@@ -47,17 +47,13 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        // TODO Delete unused local variable.
-        val viewHistoryRepository = DatabaseFinder().invoke(context).viewHistoryRepository()
-
         binding.historiesView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        val fragmentActivity = requireActivity()
-        contentViewModel = ViewModelProviders.of(fragmentActivity).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProviders.of(requireActivity()).get(ContentViewModel::class.java)
 
         adapter = ActivityAdapter(
                 context,
-                viewHistoryRepository,
+                DatabaseFinder().invoke(context).viewHistoryRepository(),
                 { history -> finishWithResult(Uri.parse(history.url)) },
                 { history -> contentViewModel?.snackShort(history.title) }
         )
