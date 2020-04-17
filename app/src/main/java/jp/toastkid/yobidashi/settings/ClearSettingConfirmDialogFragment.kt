@@ -38,7 +38,7 @@ class ClearSettingConfirmDialogFragment : DialogFragment() {
                     preferenceApplier.clear()
                     Updater.update(fragmentActivity)
                     ViewModelProviders.of(fragmentActivity).get(ContentViewModel::class.java)
-                            .snackShort(getString(R.string.done_clear))
+                            .snackShort(R.string.done_clear)
                     d.dismiss()
                 }
                 .show()
