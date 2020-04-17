@@ -39,9 +39,9 @@ internal class ViewHolder(
 
         Glide.with(binding.image).load(f.path).into(binding.image)
 
-        this.binding.text.text = f.name
-        this.binding.remove.setOnClickListener { removeSetImage(f) }
-        this.binding.root.setOnClickListener {
+        binding.text.text = f.name
+        binding.remove.setOnClickListener { removeSetImage(f) }
+        binding.root.setOnClickListener {
             preferenceApplier.backgroundImagePath = f.path
             Toaster.snackShort(
                     binding.image,
@@ -49,7 +49,7 @@ internal class ViewHolder(
                     preferenceApplier.colorPair()
             )
         }
-        this.binding.root.setOnLongClickListener { v ->
+        binding.root.setOnLongClickListener { v ->
             try {
                 val context = v.context
                 if (context is FragmentActivity) {
