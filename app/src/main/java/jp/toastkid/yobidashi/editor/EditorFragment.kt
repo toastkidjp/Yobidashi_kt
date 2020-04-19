@@ -279,14 +279,15 @@ class EditorFragment :
 
         // TODO extract viewmoodelProviders to common variable
         (context as? FragmentActivity)?.let { activity ->
-            headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
-            tabListViewModel = ViewModelProviders.of(activity).get(TabListViewModel::class.java)
+            val viewModelProvider = ViewModelProviders.of(activity)
+            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+            tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
 
             tabListViewModel
                     ?.tabCount
                     ?.observe(activity, Observer { menuBinding.tabCount.setText(it.toString()) })
 
-            (ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)).let { viewModel ->
+            (viewModelProvider.get(PageSearcherViewModel::class.java)).let { viewModel ->
                 var currentWord = ""
                 viewModel.find.observe(activity, Observer {
                     currentWord = it ?: ""
@@ -302,7 +303,7 @@ class EditorFragment :
                 })
             }
 
-            contentViewModel = ViewModelProviders.of(activity).get(ContentViewModel::class.java)
+            contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
         reload()
