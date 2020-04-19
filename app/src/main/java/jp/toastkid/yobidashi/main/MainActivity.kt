@@ -455,14 +455,12 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager.fragments
-        if (fragments.size != 0) {
-            if (fragments.contains(fragment)) {
-                fragments.remove(fragment)
-            }
+        if (fragments.size != 0 && fragments.contains(fragment)) {
+            fragments.remove(fragment)
         }
 
+        val transaction = supportFragmentManager.beginTransaction()
         if (withAnimation) {
             transaction.setCustomAnimations(
                     if (withSlideIn) R.anim.slide_in_right else R.anim.slide_up,
