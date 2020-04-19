@@ -324,6 +324,10 @@ class SearchFragment : Fragment() {
         val headerView = headerBinding?.root ?: return
         headerViewModel?.replace(headerView)
 
+        showKeyboard()
+    }
+
+    private fun showKeyboard() {
         activity?.let {
             val input = headerBinding?.searchInput ?: return@let
             if (!input.requestFocus()) {
@@ -331,7 +335,8 @@ class SearchFragment : Fragment() {
             }
 
             val inputMethodManager =
-                    it.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return@let
+                    it.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                            ?: return@let
 
             input.postDelayed(
                     { inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT) },
