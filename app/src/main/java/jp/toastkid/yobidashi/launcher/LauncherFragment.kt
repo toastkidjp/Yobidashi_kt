@@ -50,8 +50,7 @@ class LauncherFragment : Fragment(), ContentScrollable {
 
         binding.appItemsView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        adapter = Adapter(requireContext(), binding.root)// TODO use context
-
+        adapter = Adapter(context, binding.root)
         binding.appItemsView.adapter = adapter
         binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {
