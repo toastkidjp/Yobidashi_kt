@@ -452,13 +452,6 @@ class EditorFragment :
     }
 
     /**
-     * Return root view.
-     * TODO merge it.
-     * @return [View]
-     */
-    fun view(): View = binding.root
-
-    /**
      * Save current content to file.
      */
     fun save() {
@@ -661,7 +654,7 @@ class EditorFragment :
      * @param animation
      */
     fun animate(animation: Animation) {
-        view().startAnimation(animation)
+        binding.root.startAnimation(animation)
     }
 
     /**
