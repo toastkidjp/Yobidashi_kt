@@ -18,16 +18,16 @@ import jp.toastkid.yobidashi.libs.storage.StorageWrapper
  */
 class AutoArchive(private val filesDir: StorageWrapper) {
 
-    fun save(webView: WebView?, tabId: String) {
-        webView?.saveWebArchive(filesDir.assignNewFile("$tabId$EXTENSION").absolutePath)
+    fun save(webView: WebView?, id: String?) {
+        webView?.saveWebArchive(filesDir.assignNewFile("$id$EXTENSION").absolutePath)
     }
 
     fun delete(tabId: String) {
         filesDir.delete("$tabId$EXTENSION")
     }
 
-    fun load(webView: WebView?, tabId: String, callback: () -> Unit) {
-        val file = filesDir.findByName("$tabId$EXTENSION") ?: return
+    fun load(webView: WebView?, id: String, callback: () -> Unit) {
+        val file = filesDir.findByName("$id$EXTENSION") ?: return
         webView?.let {
             it.loadUrl(Uri.fromFile(file).toString())
             callback()

@@ -62,7 +62,7 @@ internal class Adapter(
         val tab = callback.getTabByIndexFromTabList(position) ?: return
         holder.itemView.setOnClickListener {
             callback.replaceTabFromTabList(tab)
-            callback.onCloseTabListDialogFragment()
+            callback.onCloseOnly()
         }
 
         holder.itemView.setOnLongClickListener {

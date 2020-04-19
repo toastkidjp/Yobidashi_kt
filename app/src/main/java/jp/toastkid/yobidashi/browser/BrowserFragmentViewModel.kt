@@ -7,19 +7,22 @@
  */
 package jp.toastkid.yobidashi.browser
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.toastkid.yobidashi.tab.History
 
 /**
  * @author toastkidjp
  */
-class LoadingViewModel : ViewModel() {
+class BrowserFragmentViewModel : ViewModel() {
 
-    private val _onPageFinished = MutableLiveData<Pair<String, History>>()
+    private val _loadWithNewTab = MutableLiveData<Pair<Uri, String>>()
 
-    val onPageFinished: LiveData<Pair<String, History>> = _onPageFinished
+    val loadWithNewTab: LiveData<Pair<Uri, String>> = _loadWithNewTab
 
-    fun finished(history: Pair<String, History>) = _onPageFinished.postValue(history)
+    fun loadWithNewTab(next: Pair<Uri, String>) {
+        _loadWithNewTab.postValue(next)
+    }
+
 }

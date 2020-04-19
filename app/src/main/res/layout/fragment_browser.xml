@@ -30,14 +30,6 @@
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <include android:id="@+id/editor" layout="@layout/module_editor" />
-
-        <FrameLayout
-            android:id="@+id/module_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
         <ProgressBar
             android:id="@+id/progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"

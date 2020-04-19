@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
+import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
@@ -35,12 +36,13 @@ import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 
 /**
  * @author toastkidjp
  */
-class PdfViewerFragment : Fragment() {
+class PdfViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
     /**
      * Data binding object.
@@ -131,6 +133,7 @@ class PdfViewerFragment : Fragment() {
         }
 
         arguments?.getParcelable<Uri>("uri")?.also { load(it) }
+        arguments?.getInt("scrollY")?.also { scrollTo(it) }
     }
 
     /**
@@ -184,19 +187,11 @@ class PdfViewerFragment : Fragment() {
         binding.root.startAnimation(animation)
     }
 
-    /**
-     * TODO Enable.
-     * Move to first page.
-     */
-    fun pageUp() {
+    override fun toTop() {
         RecyclerViewScroller.toTop(binding.pdfImages, adapter.itemCount)
     }
 
-    /**
-     * TODO Enable.
-     * Move to last page.
-     */
-    fun pageDown() {
+    override fun toBottom() {
         RecyclerViewScroller.toBottom(binding.pdfImages, adapter.itemCount)
     }
 

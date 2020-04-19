@@ -5,8 +5,9 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.rss
+package jp.toastkid.yobidashi.rss.api
 
+import jp.toastkid.yobidashi.rss.model.Rss
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Url

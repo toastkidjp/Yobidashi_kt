@@ -8,4 +8,11 @@
         android:checkable="false"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/open_tabs"
+        android:orderInCategory="100"
+        android:title="@string/title_tab_list"
+        android:checkable="false"
+        app:showAsAction="never"
+        />
 </menu>

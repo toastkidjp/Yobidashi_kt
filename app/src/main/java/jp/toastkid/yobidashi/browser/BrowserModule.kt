@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
 import android.annotation.TargetApi
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -10,11 +11,15 @@ import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
+import android.text.TextUtils
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.webkit.*
+import android.widget.FrameLayout
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 
@@ -34,22 +39,24 @@ import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.StateRepository
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
-import jp.toastkid.yobidashi.libs.BitmapCompressor
-import jp.toastkid.yobidashi.libs.ThumbnailGenerator
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.yobidashi.tab.History
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
 
 /**
  * @author toastkidjp
  */
 class BrowserModule(
         private val context: Context,
+        private val webViewContainer: FrameLayout?,
         private val historyAddingCallback: (String, String) -> Unit
 ) {
 
@@ -60,8 +67,6 @@ class BrowserModule(
     private val rssAddingSuggestion = RssAddingSuggestion(preferenceApplier)
 
     private val faviconApplier: FaviconApplier = FaviconApplier(context)
-
-    private val thumbnailGenerator = ThumbnailGenerator()
 
     private val readerModeUseCase by lazy { ReaderModeUseCase() }
 
@@ -84,6 +89,17 @@ class BrowserModule(
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
     private var loadingViewModel: LoadingViewModel? = null
+
+    /**
+     * Animation of slide up bottom.
+     */
+    private val slideUpFromBottom
+            = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+
+    private val slideDown
+            = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+
+    private var lastId = ""
 
     private val disposables = CompositeDisposable()
 
@@ -119,7 +135,7 @@ class BrowserModule(
             super.onPageFinished(view, url)
             isLoadFinished = true
 
-            loadingViewModel?.finished()
+            loadingViewModel?.finished(lastId to History.make(view.title, view.url))
 
             headerViewModel?.updateProgress(100)
             headerViewModel?.stopProgress(true)
@@ -299,7 +315,15 @@ class BrowserModule(
         }
     }
 
-    fun loadUrl(url: String) {
+    fun loadWithNewTab(uri: Uri, tabId: String) {
+        lastId = tabId
+        if (replaceWebView(tabId)) {
+            loadUrl(uri.toString())
+        }
+    }
+
+    private fun loadUrl(url: String) {
+        Timber.i("tab load $url")
         if (url.isEmpty()) {
             return
         }
@@ -309,14 +333,46 @@ class BrowserModule(
             //return
         }
 
-        currentView()?.loadUrl(url)
+        val currentView = currentView()
+        currentView?.loadUrl(url)
+        if (TextUtils.isEmpty(currentUrl())
+                && Urls.isValidUrl(url)
+                && NetworkChecker.isNotAvailable(context)
+        ) {
+            currentView ?: return
+            autoArchive.load(currentView, currentView.url) {
+                Toaster.snackShort(currentView, "Load archive.", preferenceApplier.colorPair())
+            }
+        }
     }
 
-    fun findAllAsync(text: String) {
-        currentView()?.findAllAsync(text)
-    }
+    private fun replaceWebView(tabId: String): Boolean {
+        browserHeaderViewModel?.resetContent()
 
-    fun makeDrawingCache(): Bitmap? = thumbnailGenerator(currentView())
+        val currentWebView = getWebView(tabId)
+        Inputs.hideKeyboard((currentWebView?.context as? Activity)?.window?.currentFocus)
+        if (webViewContainer?.childCount != 0) {
+            val previousView = webViewContainer?.get(0)
+            if (currentWebView == previousView) {
+                return false
+            }
+        }
+
+        webViewContainer?.removeAllViews()
+        currentWebView?.let {
+            it.onResume()
+            webViewContainer?.addView(it)
+
+            val activity = webViewContainer?.context
+            if (activity is FragmentActivity
+                    && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
+                ViewModelProviders.of(activity).get(HeaderViewModel::class.java).show()
+            }
+        }
+
+        reloadWebViewSettings().addTo(disposables)
+        return currentWebView?.url.isNullOrBlank()
+    }
 
     /**
      * Simple delegation to [WebView].
@@ -383,12 +439,13 @@ class BrowserModule(
     /**
      * Save archive file.
      */
-    fun saveArchiveForAutoArchive(tabId: String) {
+    fun saveArchiveForAutoArchive() {
         if (Archive.cannotUseArchive()) {
             return
         }
 
-        autoArchive.save(currentView(), tabId)
+        val webView = currentView()
+        autoArchive.save(webView, webView?.url)
     }
 
     /**
@@ -540,6 +597,11 @@ class BrowserModule(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             htmlSourceExtractionUseCase(currentView(), callback)
         }
+    }
+
+    @Throws(IOException::class)
+    fun loadArchive(archiveFile: File) {
+        currentView()?.let { Archive.loadArchive(it, archiveFile) }
     }
 
     companion object {

@@ -2,10 +2,7 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
 import android.text.TextUtils
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
+import android.view.*
 import android.webkit.WebView
 import androidx.annotation.Size
 import androidx.core.view.NestedScrollingChild
@@ -201,5 +198,13 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     override fun dispatchNestedPreFling(velocityX: Float, velocityY: Float): Boolean {
         return childHelper.dispatchNestedPreFling(velocityX, velocityY)
+    }
+
+    override fun onStartNestedScroll(child: View?, target: View?, nestedScrollAxes: Int): Boolean {
+        return (nestedScrollAxes and ViewCompat.SCROLL_AXIS_VERTICAL) != 0
+    }
+
+    override fun onNestedPreScroll(target: View?, dx: Int, dy: Int, consumed: IntArray?) {
+        childHelper.dispatchNestedPreScroll(dx, dy, consumed, null, ViewCompat.TYPE_NON_TOUCH)
     }
 }

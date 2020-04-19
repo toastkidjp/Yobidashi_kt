@@ -255,4 +255,19 @@ class TabList private constructor() {
         save()
     }
 
+    fun updateWithIdAndHistory(idAndHistory: Pair<String, History>) {
+        val targetId = idAndHistory.first
+        for (i in 0 until tabs.size) {
+            val tab = tabs[i]
+            if (tab !is WebTab || tab.id() != targetId) {
+                continue
+            }
+
+            tab.addHistory(idAndHistory.second)
+            tabs.set(i, tab)
+            save()
+            return
+        }
+    }
+
 }

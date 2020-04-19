@@ -10,11 +10,10 @@ package jp.toastkid.yobidashi.editor
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
@@ -59,19 +58,13 @@ class ClearTextDialogFragment : DialogFragment() {
          *
          * @param context [Context]
          */
-        fun show(context: Context) {
+        fun show(target: Fragment) {
             val dialogFragment = ClearTextDialogFragment()
-
-            if (context is FragmentActivity) {
-                val supportFragmentManager = context.supportFragmentManager
-                val target = supportFragmentManager
-                        .findFragmentByTag(BrowserFragment::class.java.canonicalName)
-                dialogFragment.setTargetFragment(target, 1)
-                dialogFragment.show(
-                        supportFragmentManager,
-                        dialogFragment::class.java.canonicalName
-                )
-            }
+            dialogFragment.setTargetFragment(target, 1)
+            dialogFragment.show(
+                    target.fragmentManager,
+                    dialogFragment::class.java.canonicalName
+            )
         }
     }
 }

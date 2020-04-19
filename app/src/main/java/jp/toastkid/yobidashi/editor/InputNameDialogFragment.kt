@@ -15,10 +15,9 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputLayout
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 
@@ -112,19 +111,13 @@ class InputNameDialogFragment : DialogFragment() {
          *
          * @param context [Context]
          */
-        fun show(context: Context) {
+        fun show(target: Fragment) {
             val dialogFragment = InputNameDialogFragment()
-
-            if (context is FragmentActivity) {
-                val supportFragmentManager = context.supportFragmentManager
-                val target = supportFragmentManager
-                        .findFragmentByTag(BrowserFragment::class.java.canonicalName)
-                dialogFragment.setTargetFragment(target, 1)
-                dialogFragment.show(
-                        supportFragmentManager,
-                        InputNameDialogFragment::class.java.canonicalName
-                )
-            }
+            dialogFragment.setTargetFragment(target, 1)
+            dialogFragment.show(
+                    target.fragmentManager,
+                    InputNameDialogFragment::class.java.canonicalName
+            )
         }
     }
 }

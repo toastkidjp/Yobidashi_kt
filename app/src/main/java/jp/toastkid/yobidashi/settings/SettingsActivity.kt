@@ -42,10 +42,10 @@ class SettingsActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
         binding.activity = this
         binding.toolbar.also { toolbar ->
+            setSupportActionBar(toolbar)
             toolbar.setNavigationIcon(R.drawable.ic_back)
             toolbar.setNavigationOnClickListener { finish() }
             toolbar.setTitle(TITLE_ID)
-            setSupportActionBar(toolbar)
         }
 
         supportFragmentManager?.let { fragmentManager ->
@@ -67,7 +67,9 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
-        MenuInflater(this).inflate(R.menu.setting_tab_shortcut, menu)
+        val menuInflater = MenuInflater(this)
+        menuInflater.inflate(R.menu.settings_toolbar_menu, menu)
+        menuInflater.inflate(R.menu.setting_tab_shortcut, menu)
         return true
     }
 

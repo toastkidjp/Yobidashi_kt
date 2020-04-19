@@ -1,18 +1,9 @@
 package jp.toastkid.yobidashi.tab
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
-import android.view.animation.AnimationUtils
-import android.webkit.WebView
-import android.widget.FrameLayout
-import androidx.core.view.get
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import io.reactivex.Completable
@@ -20,31 +11,21 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.*
-import jp.toastkid.yobidashi.browser.archive.Archive
+import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
-import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import jp.toastkid.yobidashi.editor.EditorModule
 import jp.toastkid.yobidashi.libs.BitmapCompressor
-import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.pdf.PdfModule
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
 
 /**
  * ModuleAdapter of [Tab].
@@ -52,35 +33,21 @@ import java.io.IOException
  * @author toastkidjp
  */
 class TabAdapter(
-        private val webViewContainer: FrameLayout,
-        private val browserModule: BrowserModule,
-        private val editor: EditorModule,
-        private val pdf: PdfModule,
+        private val contextSupplier: () -> Context,
         private val tabEmptyCallback: () -> Unit
 ) {
 
-    private val tabList: TabList = TabList.loadOrInit(webViewContainer.context)
+    private val tabList: TabList = TabList.loadOrInit(contextSupplier())
 
     private val colorPair: ColorPair
 
     private val tabsScreenshots: FilesDir
 
-    private val faviconApplier: FaviconApplier = FaviconApplier(webViewContainer.context)
-
     private val preferenceApplier: PreferenceApplier
 
-    private val autoArchive = AutoArchive.make(webViewContainer.context)
+    private val autoArchive = AutoArchive.make(contextSupplier())
 
     private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * Animation of slide up bottom.
-     */
-    private val slideUpFromBottom
-            = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_up)
-
-    private val slideDown
-            = AnimationUtils.loadAnimation(webViewContainer.context, R.anim.slide_down)
 
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
@@ -89,7 +56,7 @@ class TabAdapter(
     private val bitmapCompressor = BitmapCompressor()
 
     init {
-        val viewContext = webViewContainer.context
+        val viewContext = contextSupplier()
         tabsScreenshots = makeNewScreenshotDir(viewContext)
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
@@ -97,21 +64,14 @@ class TabAdapter(
             val viewModelProvider = ViewModelProviders.of(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
-
-            viewModelProvider.get(LoadingViewModel::class.java)
-                    .onPageFinished
-                    .observe(
-                            viewContext,
-                            Observer { browserModule.saveArchiveForAutoArchive(currentTabId()) }
-                    )
         }
     }
     /**
      * Save new thumbnail asynchronously.
      */
-    fun saveNewThumbnailAsync() {
+    fun saveNewThumbnailAsync(makeDrawingCache: () -> Bitmap?) {
         val currentTab = tabList.currentTab() ?: return
-        makeDrawingCache(currentTab)?.let {
+        makeDrawingCache()?.let {
             Completable.fromAction {
                 val file = tabsScreenshots.assignNewFile("${currentTab.id()}.png")
                 bitmapCompressor(it, file)
@@ -121,25 +81,6 @@ class TabAdapter(
                     .addTo(disposables)
         }
     }
-
-    /**
-     * Make drawing cache.
-     *
-     * @param tab
-     */
-    private fun makeDrawingCache(tab: Tab): Bitmap? =
-            when (tab) {
-                is WebTab -> {
-                    browserModule.makeDrawingCache()
-                }
-                is EditorTab -> {
-                    editor.makeThumbnail()
-                }
-                is PdfTab -> {
-                    pdf.makeThumbnail()
-                }
-                else -> null
-            }
 
     /**
      * Delete thumbnail file.
@@ -159,24 +100,12 @@ class TabAdapter(
 
     /**
      * Open new tab with URL string.
+     * TODO remove withLoad.
      */
     fun openNewWebTab(url: String = preferenceApplier.homeUrl, withLoad: Boolean = true) {
-        val newTab = WebTab()
-        if (Urls.isValidUrl(url)) {
-            newTab.histories.add(0, History("New tab: $url", url))
-        }
-        browserModule.onSaveInstanceState(currentTabId())
+        val newTab = WebTab.make("New tab: $url", url)
         tabList.add(newTab)
         setIndexByTab(newTab)
-        replaceWebView()
-        if (withLoad) {
-            callLoadUrl(url)
-        }
-        Toaster.snackShort(
-                webViewContainer,
-                webViewContainer.context.getString(R.string.message_tab_open_new, url),
-                preferenceApplier.colorPair()
-        )
     }
 
     /**
@@ -188,73 +117,29 @@ class TabAdapter(
     fun openBackgroundTab(title: String, url: String) {
         val tabTitle =
                 if (title.isNotBlank()) title
-                else webViewContainer.context.getString(R.string.new_tab)
+                else contextSupplier().getString(R.string.new_tab)
 
         tabList.add(WebTab.makeBackground(tabTitle, url))
         tabList.save()
-        Toaster.snackShort(
-                webViewContainer,
-                webViewContainer.context.getString(R.string.message_tab_open_background, url),
-                preferenceApplier.colorPair()
-        )
     }
 
     /**
      * This method allow calling from only [BrowserFragment].
      */
-    internal fun openNewEditorTab() {
+    internal fun openNewEditorTab(path: String? = null) {
         val editorTab = EditorTab()
+        if (path != null) {
+            editorTab.path = path
+        }
         tabList.add(editorTab)
         setIndexByTab(editorTab)
     }
 
-    /**
-     * Open new PDF tab with [Uri].
-     * TODO
-     * @param uri
-     */
-    /*internal fun openNewPdfTab(uri: Uri) {
-        val pdfTab = PdfTab().apply {
-            setTitle(uri.path ?: "")
-            setPath(uri.toString())
-        }
+    fun openNewPdfTab(uri: Uri) {
+        val pdfTab = PdfTab()
+        pdfTab.setPath(uri.toString())
         tabList.add(pdfTab)
         setIndexByTab(pdfTab)
-    }*/
-
-    fun back(): Boolean {
-        val currentTab = currentTab()
-        if (currentTab is EditorTab || currentTab is PdfTab || currentTab == null) {
-            return false
-        }
-
-        if (browserModule.canCurrentTabGoesBack()) {
-            return browserModule.back()
-        }
-
-        closeTab(index())
-        if (isEmpty()) {
-            tabEmptyCallback()
-            return true
-        }
-
-        replaceToCurrentTab(true)
-        return true
-    }
-
-    fun forward() = browserModule.forward()
-
-    fun share() {
-        when (tabList.currentTab()) {
-            is WebTab -> {
-                webViewContainer.context.startActivity(
-                        IntentFactory.makeShare(browserModule.makeShareMessage())
-                )
-            }
-            is EditorTab -> {
-                editor.share()
-            }
-        }
     }
 
     /**
@@ -270,144 +155,9 @@ class TabAdapter(
         tabList.setIndex(newIndex)
     }
 
-    private fun replaceWebView() {
-        browserHeaderViewModel?.resetContent()
-
-        val currentWebView = currentWebView()
-        Inputs.hideKeyboard((currentWebView?.context as? Activity)?.window?.currentFocus)
-        if (webViewContainer.childCount != 0) {
-            val previousView = webViewContainer[0]
-            if (currentWebView != previousView) {
-                if (previousView is WebView) {
-                    previousView.stopLoading()
-                    previousView.onPause()
-                }
-                webViewContainer.removeView(previousView)
-            }
-        }
-
-        currentWebView?.let {
-            if (it.parent != null) {
-                return@let
-            }
-            it.isEnabled = true
-            it.visibility = View.VISIBLE
-            it.onResume()
-            webViewContainer.addView(it)
-
-            val activity = webViewContainer.context
-            if (activity is FragmentActivity
-                    && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
-                ViewModelProviders.of(activity).get(HeaderViewModel::class.java).show()
-            }
-            browserModule.animate(slideUpFromBottom)
-        }
-
-        browserModule.reloadWebViewSettings().addTo(disposables)
-
-        browserModule.onViewStateRestored(currentTabId())
-        currentTab()?.let {
-            if (TextUtils.isEmpty(browserModule.currentUrl()) && Urls.isValidUrl(it.getUrl())) {
-                if (NetworkChecker.isNotAvailable(webViewContainer.context)) {
-                    autoArchive.load(currentWebView(), it.id()) {
-                        Toaster.snackShort(webViewContainer, "Load archive.", colorPair)
-                    }
-                    return@let
-                }
-                callLoadUrl(it.getUrl())
-                return@let
-            }
-            browserHeaderViewModel?.nextTitle(it.title())
-            browserHeaderViewModel?.nextUrl(it.getUrl())
-        }
-    }
-
     internal fun replace(tab: Tab) {
         setIndexByTab(tab)
         //TODO replaceToCurrentTab(true)
-    }
-
-    /**
-     * Replace visibilities for current tab.
-     *
-     * @param withAnimation for suppress redundant animation.
-     */
-    fun replaceToCurrentTab(withAnimation: Boolean = true) {
-        when (val currentTab = tabList.currentTab()) {
-            is WebTab -> {
-                replaceWebView()
-                if (editor.isVisible()) {
-                    editor.hide()
-                }
-                if (pdf.isVisible()) {
-                    pdf.hide()
-                }
-            }
-            is EditorTab -> {
-                if (currentTab.path.isNotBlank()) {
-                    editor.readFromFile(File(currentTab.path))
-                } else {
-                    editor.clearPath()
-                }
-
-                if (pdf.isVisible()) {
-                    pdf.hide()
-                }
-                editor.show()
-                if (withAnimation) {
-                    editor.animate(slideUpFromBottom)
-                }
-
-                browserModule.disableWebView()
-                saveNewThumbnailAsync()
-                tabList.save()
-            }
-            is PdfTab -> {
-                if (editor.isVisible()) {
-                    editor.hide()
-                }
-                pdf.show()
-
-                val url: String = currentTab.getUrl()
-                if (url.isNotEmpty()) {
-                    try {
-                        val uri = Uri.parse(url)
-                        pdf.load(uri)
-                        pdf.scrollTo(currentTab.getScrolled())
-                        saveNewThumbnailAsync()
-
-                        browserHeaderViewModel?.nextTitle(PDF_TAB_TITLE)
-                        browserHeaderViewModel?.nextUrl(uri.lastPathSegment ?: url)
-                    } catch (e: SecurityException) {
-                        failRead(e)
-                        return
-                    } catch (e: IllegalStateException) {
-                        failRead(e)
-                        return
-                    }
-                }
-
-                if (withAnimation) {
-                    pdf.animate(slideUpFromBottom)
-                }
-
-                browserModule.disableWebView()
-                tabList.save()
-            }
-        }
-    }
-
-    fun callLoadUrl(url: String) {
-        browserModule.loadUrl(url)
-        if (editor.isVisible()) {
-            editor.hide()
-        }
-    }
-
-    private fun failRead(e: Throwable) {
-        Timber.e(e)
-        Toaster.snackShort(webViewContainer, R.string.message_failed_tab_read, colorPair)
-        closeTab(index())
     }
 
     private fun invalidIndex(newIndex: Int): Boolean = newIndex < 0 || tabList.size() <= newIndex
@@ -418,42 +168,6 @@ class TabAdapter(
      * @return tab count
      */
     fun size(): Int = tabList.size()
-
-    /**
-     * Simple delegation to [WebView].
-     */
-    fun reload() {
-        browserModule.reload()
-    }
-
-    fun pageUp() {
-        when (currentTab()) {
-            is WebTab -> browserModule.pageUp()
-            is PdfTab -> pdf.pageUp()
-            is EditorTab -> editor.pageUp()
-        }
-    }
-
-    fun pageDown() {
-        when (currentTab()) {
-            is WebTab -> browserModule.pageDown()
-            is PdfTab -> pdf.pageDown()
-            is EditorTab -> editor.pageDown()
-        }
-    }
-
-    /**
-     * Load archive file.
-
-     * @param archiveFile
-     *
-     * @throws IOException
-     */
-    @Throws(IOException::class)
-    fun loadArchive(archiveFile: File) {
-        openNewWebTab(withLoad = true)
-        currentWebView()?.let { Archive.loadArchive(it, archiveFile) }
-    }
 
     /**
      * Return specified index tab.
@@ -476,50 +190,18 @@ class TabAdapter(
         if (tab is WebTab) {
             deleteThumbnail(tab.thumbnailPath)
             autoArchive.delete(tab.id())
+            /* TODO
             if (index == this.index()) {
                 browserModule.animate(slideDown)
                 browserModule.disableWebView()
                 browserModule.detachWebView(tab.id())
             }
+             */
         }
 
         tabList.closeTab(index)
         if (tabList.isEmpty) {
             tabEmptyCallback()
-        }
-    }
-
-    /**
-     * Find in page asynchronously.
-     * @param text
-     */
-    fun find(text: String) {
-        when (currentTab()) {
-            is WebTab -> browserModule.findAllAsync(text)
-            is PdfTab -> Unit
-            is EditorTab -> Unit
-        }
-    }
-
-    /**
-     * Find to upward.
-     */
-    fun findUp(text: String) {
-        when (currentTab()) {
-            is WebTab -> browserModule.findUp()
-            is PdfTab -> Unit
-            is EditorTab -> editor.findUp(text)
-        }
-    }
-
-    /**
-     * Find to downward.
-     */
-    fun findDown(text: String) {
-        when (currentTab()) {
-            is WebTab -> browserModule.findDown()
-            is PdfTab -> Unit
-            is EditorTab -> editor.findDown(text)
         }
     }
 
@@ -537,13 +219,8 @@ class TabAdapter(
             tabList.clear()
             tabsScreenshots.clean()
         }
-        browserModule.dispose()
         disposables.clear()
         tabList.dispose()
-    }
-
-    fun loadHome() {
-        callLoadUrl(preferenceApplier.homeUrl)
     }
 
     internal fun clear() {
@@ -552,21 +229,9 @@ class TabAdapter(
 
     internal fun indexOf(tab: Tab): Int = tabList.indexOf(tab)
 
-    /**
-     * Add history.
-     *
-     * @param title
-     * @param url
-     */
-    fun addHistory(title: String, url: String) {
-        val currentTab = tabList.currentTab()
-        if (currentTab is WebTab) {
-            currentTab.addHistory(History.make(title, url))
-        }
-    }
-
     fun addBookmark(callback: () -> Unit) {
-        val context = webViewContainer.context
+        /* TODO check it
+        val context = contextSupplier()
         val url = browserModule.currentUrl() ?: ""
         BookmarkInsertion(
                 context,
@@ -583,22 +248,12 @@ class TabAdapter(
                 View.OnClickListener { callback() },
                 colorPair
         )
+         */
     }
 
     internal fun currentTab(): Tab? = tabList.get(index())
 
     internal fun currentTabId(): String = currentTab()?.id() ?: "-1"
-
-    /**
-     * Update current tab state.
-     */
-    fun updateCurrentTab() {
-        val currentTab = currentTab()
-        if (currentTab is PdfTab) {
-            currentTab.setScrolled(pdf.currentItemPosition())
-            tabList.set(index(), currentTab)
-        }
-    }
 
     fun isEmpty(): Boolean = tabList.isEmpty
 
@@ -615,9 +270,14 @@ class TabAdapter(
         tabList.loadBackgroundTabsFromDirIfNeed()
     }
 
-    fun makeCurrentPageInformation(): Bundle = browserModule.makeCurrentPageInformation()
+    fun updateWebTab(idAndHistory: Pair<String, History>?) {
+        val id = idAndHistory?.first
+        if (currentTabId() != id) {
+            return
+        }
 
-    private fun currentWebView() = browserModule.getWebView(currentTabId())
+        tabList.updateWithIdAndHistory(idAndHistory)
+    }
 
     companion object {
 

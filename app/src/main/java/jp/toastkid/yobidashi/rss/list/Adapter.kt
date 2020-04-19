@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemRssListBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.rss.Item
+import jp.toastkid.yobidashi.rss.model.Item
 import jp.toastkid.yobidashi.rss.RssReaderFragmentViewModel
 
 /**

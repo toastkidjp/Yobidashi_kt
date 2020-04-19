@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.yobidashi.rss.api.RssReaderApi
 import jp.toastkid.yobidashi.rss.list.Adapter
 import timber.log.Timber
 
