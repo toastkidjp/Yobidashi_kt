@@ -135,7 +135,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         ClearImagesDialogFragment().also {
             it.setTargetFragment(this, IMAGE_READ_REQUEST)
             it.show(
-                    fragmentManager,
+                    requireFragmentManager(),
                     ClearImagesDialogFragment::class.java.simpleName
             )
         }
@@ -170,12 +170,12 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.background_setting_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item?.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
                 launchAdding()

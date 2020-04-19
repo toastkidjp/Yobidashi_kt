@@ -227,16 +227,16 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
         inflater?.inflate(R.menu.search_menu, menu)
         // TODO Move onResume
-        menu?.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
-        menu?.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+        menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
+        menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.suggestion_check -> {
             preferenceApplier.switchEnableSuggestion()
             item.isChecked = preferenceApplier.isEnableSuggestion

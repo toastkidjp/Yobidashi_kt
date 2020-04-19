@@ -67,12 +67,12 @@ class SettingFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.setting_tab_shortcut, menu)
+        inflater.inflate(R.menu.setting_tab_shortcut, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item?.itemId) {
         R.id.menu_search -> {
             binding.container.currentItem = 2
             true

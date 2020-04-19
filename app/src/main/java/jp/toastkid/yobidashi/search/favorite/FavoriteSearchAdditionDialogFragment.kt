@@ -80,13 +80,13 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
         PreferenceApplier(binding.root.context).colorPair().setTo(binding.add)
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         Inputs.hideKeyboard(binding.favoriteSearchAdditionQueryInput)
         reload()
         super.onDismiss(dialog)
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         reload()
         super.onCancel(dialog)
     }

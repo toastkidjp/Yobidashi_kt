@@ -115,8 +115,9 @@ class InputNameDialogFragment : DialogFragment() {
         fun show(target: Fragment) {
             val dialogFragment = InputNameDialogFragment()
             dialogFragment.setTargetFragment(target, 1)
+            val fragmentManager = target.fragmentManager ?: return
             dialogFragment.show(
-                    target.fragmentManager,
+                    fragmentManager,
                     InputNameDialogFragment::class.java.canonicalName
             )
         }

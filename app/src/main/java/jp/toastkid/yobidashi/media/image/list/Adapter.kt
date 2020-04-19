@@ -52,6 +52,7 @@ internal class Adapter(
             if (it.isBucket) {
                 imageViewerFragmentViewModel?.click(it.name)
             } else {
+                val fragmentManager = fragmentManager ?: return@applyContent
                 ImagePreviewDialogFragment.withImage(it)
                         .show(fragmentManager, ImagePreviewDialogFragment::class.java.simpleName)
             }

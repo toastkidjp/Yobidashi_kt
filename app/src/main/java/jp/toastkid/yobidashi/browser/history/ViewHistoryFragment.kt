@@ -136,18 +136,18 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.view_history, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item?.itemId) {
             R.id.clear -> {
                 val clearDialogFragment = ClearDialogFragment()
                 clearDialogFragment.setTargetFragment(this, clearDialogFragment.id)
                 clearDialogFragment.show(
-                        fragmentManager,
+                        requireFragmentManager(),
                         ClearDialogFragment::class.java.simpleName
                 )
                 true

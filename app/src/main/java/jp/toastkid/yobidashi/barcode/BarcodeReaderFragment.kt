@@ -131,9 +131,9 @@ class BarcodeReaderFragment : Fragment() {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                     && activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.camera, menu)
+        inflater.inflate(R.menu.camera, menu)
     }
 
     /**
@@ -142,7 +142,7 @@ class BarcodeReaderFragment : Fragment() {
      * @param item [MenuItem]
      * @return This function always return true
      */
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.reset_camera_fab_position -> {
             binding?.camera?.also {
                 it.translationX = 0f
