@@ -52,7 +52,7 @@ object NotificationWidget {
             NotificationChannel(
                     CHANNEL_ID,
                     name,
-                    NotificationManager.IMPORTANCE_HIGH
+                    NotificationManager.IMPORTANCE_LOW
             )
 
     /**
@@ -66,6 +66,7 @@ object NotificationWidget {
                 .setCustomContentView(remoteViewsFactory(context))
                 .setOngoing(true)
                 .setAutoCancel(false)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .build()
     }
 
