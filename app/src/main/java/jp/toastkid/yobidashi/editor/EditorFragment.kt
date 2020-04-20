@@ -293,11 +293,11 @@ class EditorFragment :
                     finder.findDown(currentWord)
                 })
 
-                viewModel.upward.observe(activity, Observer { keyword ->
+                viewModel.upward.observe(activity, Observer {
                     finder.findUp(currentWord)
                 })
 
-                viewModel.downward.observe(activity, Observer { keyword ->
+                viewModel.downward.observe(activity, Observer {
                     finder.findDown(currentWord)
                 })
             }
