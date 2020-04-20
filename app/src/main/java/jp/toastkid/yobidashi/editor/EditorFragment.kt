@@ -277,7 +277,6 @@ class EditorFragment :
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
-        // TODO extract viewmoodelProviders to common variable
         (context as? FragmentActivity)?.let { activity ->
             val viewModelProvider = ViewModelProviders.of(activity)
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
