@@ -49,12 +49,9 @@ class SearchHistoryFragment : Fragment(),
         binding.historiesView.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        // TODO move it.
-        val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
-
         adapter = ModuleAdapter(
                 context,
-                repository,
+                DatabaseFinder().invoke(context).searchHistoryRepository(),
                 { SearchAction(context, it.category ?: "", it.query ?: "").invoke()},
                 { },
                 { },
