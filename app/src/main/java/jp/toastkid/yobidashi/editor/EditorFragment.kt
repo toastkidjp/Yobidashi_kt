@@ -490,7 +490,7 @@ class EditorFragment :
     /**
      * Call from fragment's onPause().
      */
-    fun saveIfNeed() {
+    private fun saveIfNeed() {
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
