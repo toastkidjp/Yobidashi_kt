@@ -614,7 +614,7 @@ class EditorFragment :
     private fun setLastSaved(ms: Long) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = ms
-        menuBinding.lastSaved?.setText(lastSavedTitle + dateFormatHolder.get()?.format(calendar.time))
+        menuBinding.lastSaved?.text = lastSavedTitle + dateFormatHolder.get()?.format(calendar.time)
     }
 
     /**
@@ -623,7 +623,7 @@ class EditorFragment :
     private fun clearPath() {
         path = ""
         clearInput()
-        menuBinding.lastSaved?.setText("")
+        menuBinding.lastSaved?.text = ""
     }
 
     /**
