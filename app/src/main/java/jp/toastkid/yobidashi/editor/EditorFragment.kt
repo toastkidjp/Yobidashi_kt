@@ -63,7 +63,6 @@ import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
-import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -309,10 +308,8 @@ class EditorFragment :
     }
 
     fun reload() {
-        Timber.i("reload")// TODO delete
         if (arguments?.containsKey("path") == true) {
             path = arguments?.getString("path") ?: ""
-            Timber.i("reset path to $path")
         }
 
         if (path.isEmpty()) {
