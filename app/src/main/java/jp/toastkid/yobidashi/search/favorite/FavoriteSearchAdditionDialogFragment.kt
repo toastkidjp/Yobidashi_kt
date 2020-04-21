@@ -32,7 +32,11 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
      */
     private lateinit var binding: DialogFavoriteSearchAdditionBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(
