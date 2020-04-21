@@ -2,10 +2,13 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
 import android.text.TextUtils
-import android.view.*
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MotionEvent
 import android.webkit.WebView
 import androidx.annotation.Size
-import androidx.core.view.NestedScrollingChild
+import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -16,7 +19,7 @@ import jp.toastkid.yobidashi.search.UrlFactory
  *
  * @author toastkidjp
  */
-internal class CustomWebView(context: Context) : WebView(context), NestedScrollingChild {
+internal class CustomWebView(context: Context) : WebView(context), NestedScrollingChild3 {
 
     private val childHelper: NestedScrollingChildHelper = NestedScrollingChildHelper(this)
 
@@ -86,7 +89,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 val returnValue = super.dispatchTouchEvent(event)
                 lastY = eventY.toFloat()
                 // start NestedScroll
-                startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL)
+                startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)
                 return returnValue
             }
             MotionEvent.ACTION_UP -> {
@@ -172,12 +175,24 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         return childHelper.startNestedScroll(axes)
     }
 
+    override fun startNestedScroll(axes: Int, type: Int): Boolean {
+        return childHelper.startNestedScroll(axes, type)
+    }
+
     override fun stopNestedScroll() {
         childHelper.stopNestedScroll()
     }
 
+    override fun stopNestedScroll(type: Int) {
+        childHelper.stopNestedScroll(type)
+    }
+
     override fun hasNestedScrollingParent(): Boolean {
         return childHelper.hasNestedScrollingParent()
+    }
+
+    override fun hasNestedScrollingParent(type: Int): Boolean {
+        return childHelper.hasNestedScrollingParent(type)
     }
 
     override fun dispatchNestedScroll(dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int,
@@ -200,11 +215,16 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         return childHelper.dispatchNestedPreFling(velocityX, velocityY)
     }
 
-    override fun onStartNestedScroll(child: View?, target: View?, nestedScrollAxes: Int): Boolean {
-        return (nestedScrollAxes and ViewCompat.SCROLL_AXIS_VERTICAL) != 0
+    override fun dispatchNestedScroll(dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, offsetInWindow: IntArray?, type: Int, consumed: IntArray) {
+        return childHelper.dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, offsetInWindow, type, consumed)
     }
 
-    override fun onNestedPreScroll(target: View?, dx: Int, dy: Int, consumed: IntArray?) {
-        childHelper.dispatchNestedPreScroll(dx, dy, consumed, null, ViewCompat.TYPE_NON_TOUCH)
+    override fun dispatchNestedScroll(dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, offsetInWindow: IntArray?, type: Int): Boolean {
+        return childHelper.dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, offsetInWindow, type)
     }
+
+    override fun dispatchNestedPreScroll(dx: Int, dy: Int, consumed: IntArray?, offsetInWindow: IntArray?, type: Int): Boolean {
+        return childHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
+    }
+
 }

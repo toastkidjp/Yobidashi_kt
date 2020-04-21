@@ -23,18 +23,18 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
@@ -52,6 +53,7 @@ import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
@@ -111,11 +113,6 @@ class BrowserFragment : Fragment(),
 
     private var headerViewModel: HeaderViewModel? = null
 
-    /**
-     * Find-in-page module.
-     */
-    private lateinit var pageSearchPresenter: PageSearcherModule
-
     private lateinit var randomWikipedia: RandomWikipedia
 
     private var browserViewModel: BrowserViewModel? = null
@@ -135,12 +132,13 @@ class BrowserFragment : Fragment(),
             savedInstanceState: Bundle?
     ): View? {
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_browser_header, container, false)
+        headerBinding?.fragment = this
 
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding?.fragment = this
 
         binding?.swipeRefresher?.let {
-            it.setOnRefreshListener { browserModule.reload() }
+            it.setOnRefreshListener { reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
             it.setDistanceToTriggerSync(5000)
         }
@@ -166,7 +164,7 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
-        headerBinding?.root?.setOnClickListener { tapHeader() }
+        headerBinding?.urlBox?.setOnClickListener { tapHeader() }
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
 
@@ -180,26 +178,18 @@ class BrowserFragment : Fragment(),
         menuViewModel = ViewModelProviders.of(activity)
                 .get(MenuViewModel::class.java)
 
-        pageSearchPresenter = PageSearcherModule(
-                this,
-                binding?.sip as ModuleSearcherBinding,
-                { /*TODO browserModule.find(it)*/ },
-                { browserModule.findDown() },
-                { browserModule.findUp() }
-        )
-
         initializeHeaderViewModels(activity)
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
-        headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+        val viewModelProvider = ViewModelProviders.of(activity)
+        headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
 
         headerViewModel?.stopProgress?.observe(activity, Observer { stop ->
             if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
                 return@Observer
             }
             stopSwipeRefresherLoading()
-            //TODO tabs.saveTabList()
         })
 
         headerViewModel?.progress?.observe(activity, Observer { newProgress ->
@@ -214,40 +204,58 @@ class BrowserFragment : Fragment(),
             }
         })
 
-        val browserHeaderViewModel = ViewModelProviders.of(activity)
-                .get(BrowserHeaderViewModel::class.java)
+        viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
+            viewModel.title.observe(activity, Observer { title ->
+                if (title.isNullOrBlank()) {
+                    return@Observer
+                }
+                headerBinding?.mainText?.text = title
+            })
 
-        browserHeaderViewModel.title.observe(activity, Observer { title ->
-            if (title.isNullOrBlank()) {
-                return@Observer
-            }
-            headerBinding?.mainText?.text = title
-        })
+            viewModel.url.observe(activity, Observer { url ->
+                if (url.isNullOrBlank()) {
+                    return@Observer
+                }
+                headerBinding?.subText?.text = url
+            })
 
-        browserHeaderViewModel.url.observe(activity, Observer { url ->
-            if (url.isNullOrBlank()) {
-                return@Observer
-            }
-            headerBinding?.subText?.text = url
-        })
+            viewModel.reset.observe(activity, Observer {
+                val headerView = headerBinding?.root ?: return@Observer
+                headerViewModel?.replace(headerView)
+            })
+        }
 
-        browserHeaderViewModel.reset.observe(activity, Observer {
-            val headerView = headerBinding?.root ?: return@Observer
-            headerViewModel?.replace(headerView)
-        })
-
-        ViewModelProviders.of(activity).get(LoadingViewModel::class.java)
+        viewModelProvider.get(LoadingViewModel::class.java)
                 .onPageFinished
                 .observe(
                         activity,
                         Observer { browserModule.saveArchiveForAutoArchive() }
                 )
 
-        ViewModelProviders.of(activity).get(BrowserFragmentViewModel::class.java)
+        viewModelProvider.get(BrowserFragmentViewModel::class.java)
                 .loadWithNewTab
                 .observe(activity, Observer {
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
+
+        viewModelProvider.get(TabListViewModel::class.java)
+                .tabCount
+                .observe(activity, Observer { headerBinding?.tabCount?.setText(it.toString()) })
+
+        viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
+            viewModel.find.observe(activity, Observer {
+                browserModule.find(it)
+            })
+
+            viewModel.upward.observe(activity, Observer {
+                browserModule.findUp()
+            })
+
+            viewModel.downward.observe(activity, Observer {
+                browserModule.findDown()
+            })
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
@@ -257,8 +265,26 @@ class BrowserFragment : Fragment(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.setting -> {
-                startActivity(SettingsActivity.makeIntent(requireContext()))
+            R.id.add_bookmark -> {
+                val context = context ?: return true
+                val faviconApplier = FaviconApplier(context)
+                val url = browserModule.currentUrl() ?: ""
+                BookmarkInsertion(
+                        context,
+                        browserModule.currentTitle(),
+                        url,
+                        faviconApplier.makePath(url),
+                        Bookmark.getRootFolderName()
+                ).insert()
+
+                val parent = binding?.root ?: return true
+                Toaster.snackLong(
+                        parent,
+                        context.getString(R.string.message_done_added_bookmark),
+                        R.string.open,
+                        View.OnClickListener { bookmark() },
+                        colorPair()
+                )
                 return true
             }
             R.id.add_rss -> {
@@ -278,34 +304,19 @@ class BrowserFragment : Fragment(),
         val snackbarParent = binding?.root as View
         when (menu) {
             Menu.RELOAD -> {
-                browserModule.reload()
+                reload()
             }
             Menu.BACK -> {
-                browserModule.back()
+                back()
             }
             Menu.FORWARD-> {
                 forward()
             }
-            Menu.FIND_IN_PAGE-> {
-                if (pageSearchPresenter.isVisible()) {
-                    pageSearchPresenter.hide()
-                    return
-                }
-                pageSearchPresenter.show(fragmentActivity)
-            }
             Menu.USER_AGENT-> {
-                val fragmentManager = fragmentManager ?: return
-                val dialogFragment = UserAgentDialogFragment()
-                dialogFragment.setTargetFragment(this, 1)
-                dialogFragment.show(
-                        fragmentManager,
-                        UserAgentDialogFragment::class.java.simpleName
-                )
+                showUserAgentSetting()
             }
             Menu.READER_MODE -> {
-                browserModule.invokeContentExtraction(
-                        ValueCallback(this::showReaderFragment)
-                )
+                openReaderMode()
             }
             Menu.HTML_SOURCE -> {
                 browserModule.invokeHtmlSourceExtraction(
@@ -315,25 +326,13 @@ class BrowserFragment : Fragment(),
                 )
             }
             Menu.PAGE_INFORMATION-> {
-                val fragmentManager = fragmentManager ?: return
-                PageInformationDialogFragment()
-                        .also { it.arguments = browserModule.makeCurrentPageInformation() }
-                        .show(
-                                fragmentManager,
-                                PageInformationDialogFragment::class.java.simpleName
-                        )
+                showPageInformation()
             }
             Menu.STOP_LOADING-> {
                 stopCurrentLoading()
             }
             Menu.ARCHIVE-> {
                 browserModule.saveArchive()
-            }
-            Menu.VIEW_ARCHIVE -> {
-                startActivityForResult(
-                        ArchivesActivity.makeIntent(fragmentActivity),
-                        ArchivesActivity.REQUEST_CODE
-                )
             }
             Menu.RANDOM_WIKIPEDIA -> {
                 if (preferenceApplier.wifiOnly &&
@@ -391,29 +390,22 @@ class BrowserFragment : Fragment(),
                     )
                 }
             }
-            Menu.VIEW_HISTORY-> {
-                startActivityForResult(
-                        ViewHistoryActivity.makeIntent(fragmentActivity),
-                        ViewHistoryActivity.REQUEST_CODE
-                )
-            }
-            Menu.BOOKMARK-> {
-                context?.let {
-                    startActivityForResult(
-                            BookmarkActivity.makeIntent(it),
-                            BookmarkActivity.REQUEST_CODE
-                    )
-                }
-            }
-            Menu.ADD_BOOKMARK-> {
-                /* TODO
-                tabs.addBookmark {
-                    bookmark(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
-                }
-                */
-            }
             else -> Unit
         }
+    }
+
+    fun reload() {
+        browserModule.reload()
+    }
+
+    fun openReaderMode() {
+        browserModule.invokeContentExtraction(ValueCallback(this::showReaderFragment))
+    }
+
+    // TODO should implement view model.
+    fun tabList() {
+        val mainActivity = activity as? MainActivity
+        mainActivity?.switchTabList()
     }
 
     private fun showReaderFragment(content: String) {
@@ -432,9 +424,29 @@ class BrowserFragment : Fragment(),
         val transaction = fragmentManager?.beginTransaction()
         transaction?.setCustomAnimations(
                 R.anim.slide_in_right, 0, 0, android.R.anim.slide_out_right)
-        transaction?.add(R.id.content, readerFragment, readerFragment::class.java.canonicalName)
+        transaction?.replace(R.id.content, readerFragment, readerFragment::class.java.canonicalName)
         transaction?.addToBackStack(readerFragment::class.java.canonicalName)
         transaction?.commit()
+    }
+
+    fun showUserAgentSetting() {
+        val fragmentManager = fragmentManager ?: return
+        val dialogFragment = UserAgentDialogFragment()
+        dialogFragment.setTargetFragment(this, 1)
+        dialogFragment.show(
+                fragmentManager,
+                UserAgentDialogFragment::class.java.simpleName
+        )
+    }
+
+    fun showPageInformation() {
+        val fragmentManager = fragmentManager ?: return
+        PageInformationDialogFragment()
+                .also { it.arguments = browserModule.makeCurrentPageInformation() }
+                .show(
+                        fragmentManager,
+                        PageInformationDialogFragment::class.java.simpleName
+                )
     }
 
     /**
@@ -448,19 +460,19 @@ class BrowserFragment : Fragment(),
     /**
      * Do browser back action.
      */
-    private fun back(): Boolean = browserModule.back()
+    fun back(): Boolean = browserModule.back()
 
     /**
      * Do browser forward action.
      */
-    private fun forward() = browserModule.forward()
+    fun forward() = browserModule.forward()
 
     /**
      * Show bookmark activity.
      *
      * @param option [ActivityOptions]
      */
-    private fun bookmark(option: ActivityOptions) {
+    private fun bookmark(option: ActivityOptions = ActivityOptions.makeBasic()) {
         val fragmentActivity = activity ?: return
         startActivityForResult(
                 BookmarkActivity.makeIntent(fragmentActivity),
@@ -515,6 +527,13 @@ class BrowserFragment : Fragment(),
             it.icon.setColorFilter(fontColor)
             it.mainText.setTextColor(fontColor)
             it.subText.setTextColor(fontColor)
+            it.reload.setColorFilter(fontColor)
+            it.back.setColorFilter(fontColor)
+            it.forward.setColorFilter(fontColor)
+            it.tabIcon.setColorFilter(fontColor)
+            it.tabCount.setTextColor(fontColor)
+            it.pageInformation.setColorFilter(fontColor)
+            it.userAgent.setColorFilter(fontColor)
         }
 
         ClippingUrlOpener(binding?.root) { browserViewModel?.open(it) }
@@ -537,7 +556,7 @@ class BrowserFragment : Fragment(),
 
     override fun pressLongBack(): Boolean {
         activity?.let {
-            startActivityForResult(
+            it.startActivityForResult(
                 ViewHistoryActivity.makeIntent(it),
                 ViewHistoryActivity.REQUEST_CODE
             )
@@ -574,14 +593,10 @@ class BrowserFragment : Fragment(),
     }
 
     /**
+     * TODO delete it.
      * Hide option menus.
      */
     private fun hideOption(): Boolean {
-        if (pageSearchPresenter.isVisible()) {
-            pageSearchPresenter.hide()
-            return true
-        }
-
         return false
     }
 
@@ -590,17 +605,9 @@ class BrowserFragment : Fragment(),
             return
         }
         when (requestCode) {
-            ArchivesActivity.REQUEST_CODE -> {
-                loadArchive(ArchivesActivity.extractFile(intent))
-            }
             VoiceSearch.REQUEST_CODE -> {
                 activity?.let {
                     VoiceSearch.processResult(it, intent).addTo(disposables)
-                }
-            }
-            BookmarkActivity.REQUEST_CODE, ViewHistoryActivity.REQUEST_CODE -> {
-                intent.data?.let {
-                    browserViewModel?.open(it)
                 }
             }
         }
@@ -680,7 +687,6 @@ class BrowserFragment : Fragment(),
         searchWithClip.dispose()
         headerViewModel?.show()
         browserModule.dispose()
-        pageSearchPresenter.dispose()
     }
 
     companion object {

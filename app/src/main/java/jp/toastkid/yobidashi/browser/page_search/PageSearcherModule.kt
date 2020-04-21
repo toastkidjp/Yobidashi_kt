@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -28,11 +27,8 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class PageSearcherModule(
-        fragment: Fragment,
-        private val binding: ModuleSearcherBinding,
-        private val find: (String) -> Unit,
-        private val findDown: (String) -> Unit,
-        private val findUp: (String) -> Unit
+        fragmentActivity: FragmentActivity,
+        private val binding: ModuleSearcherBinding
 ) {
 
     /**
@@ -58,7 +54,7 @@ class PageSearcherModule(
     init {
         TextInputs.setEmptyAlert(binding.inputLayout)
 
-        val viewModel = ViewModelProviders.of(fragment).get(PageSearcherViewModel::class.java)
+        val viewModel = ViewModelProviders.of(fragmentActivity).get(PageSearcherViewModel::class.java)
 
         binding.viewModel = viewModel
 
@@ -78,21 +74,13 @@ class PageSearcherModule(
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    find(p0.toString())
+                    viewModel.find(p0.toString())
                 }
 
             })
         }
 
         (context as? FragmentActivity)?.let { activity ->
-            viewModel.upward.observe(activity, Observer { keyword ->
-                findUp(keyword ?: editText.text.toString())
-            })
-
-            viewModel.downward.observe(activity, Observer { keyword ->
-                findDown(keyword ?: editText.text.toString())
-            })
-
             viewModel.clear.observe(activity, Observer {
                 editText.setText("")
             })
@@ -126,12 +114,20 @@ class PageSearcherModule(
 
     fun isVisible() = binding.root.isVisible
 
+    fun switch() {
+        if (isVisible()) {
+            hide()
+        } else {
+            show()
+        }
+    }
+
     /**
      * Show module with opening software keyboard.
      *
      * @param activity [Activity]
      */
-    fun show(activity: Activity) {
+    fun show() {
         binding.root.animate()?.let {
             it.cancel()
             it.translationY(0f)
@@ -139,7 +135,9 @@ class PageSearcherModule(
                     .withStartAction { switchVisibility(View.GONE, View.VISIBLE) }
                     .withEndAction {
                         editText.requestFocus()
-                        Inputs.showKeyboard(activity, editText)
+                        (context as? Activity)?.also { activity ->
+                            Inputs.showKeyboard(activity, editText)
+                        }
                     }
                     .start()
         }

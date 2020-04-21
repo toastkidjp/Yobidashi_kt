@@ -30,11 +30,13 @@ import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleFragmentEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
@@ -48,21 +50,17 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 /**
- * saveTabCallback
- * { file ->
-val currentTab = tabs.currentTab()
-if (currentTab is EditorTab) {
-currentTab.setFileInformation(file)
-tabs.saveTabList()
-}
-}
+ *
  * @author toastkidjp
  */
 class EditorFragment :
@@ -111,6 +109,8 @@ class EditorFragment :
     private lateinit var finder: EditTextFinder
 
     private var headerViewModel: HeaderViewModel? = null
+
+    private var tabListViewModel: TabListViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -246,8 +246,29 @@ class EditorFragment :
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
-        (context as? FragmentActivity)?.let {
-            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+        (context as? FragmentActivity)?.let { activity ->
+            headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
+            tabListViewModel = ViewModelProviders.of(activity).get(TabListViewModel::class.java)
+
+            tabListViewModel
+                    ?.tabCount
+                    ?.observe(activity, Observer { menuBinding.tabCount.setText(it.toString()) })
+
+            (ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)).let { viewModel ->
+                var currentWord = ""
+                viewModel.find.observe(activity, Observer {
+                    currentWord = it ?: ""
+                    finder.findDown(currentWord)
+                })
+
+                viewModel.upward.observe(activity, Observer { keyword ->
+                    finder.findUp(currentWord)
+                })
+
+                viewModel.downward.observe(activity, Observer { keyword ->
+                    finder.findDown(currentWord)
+                })
+            }
         }
 
         arguments?.getString("path")?.let {
@@ -291,6 +312,9 @@ class EditorFragment :
                 menuBinding.clear
         )
 
+        menuBinding.tabIcon.setColorFilter(colorPair.fontColor())
+        menuBinding.tabCount.setTextColor(colorPair.fontColor())
+
         menuBinding.editorMenu.setBackgroundColor(colorPair.bgColor())
 
         binding.editorScroll.setBackgroundColor(preferenceApplier.editorBackgroundColor())
@@ -325,6 +349,11 @@ class EditorFragment :
     private fun setContentTextLengthCount(context: Context) {
         menuBinding.counter?.text =
                 context.getString(R.string.message_character_count, content().length)
+    }
+
+    // TODO should implement view model.
+    fun tabList() {
+        (activity as? MainActivity)?.switchTabList()
     }
 
     /**
@@ -367,7 +396,7 @@ class EditorFragment :
 
     /**
      * Find text in bound to upward.
-     *
+     * TODO remove it.
      * @param text Finding text
      */
     fun findUp(text: String) = finder.findUp(text)
@@ -540,7 +569,7 @@ class EditorFragment :
         setContentText(text)
         snackText(R.string.done_load)
         path = file.absolutePath
-        //TODO saveTabCallback(file)
+        tabListViewModel?.saveEditorTab(file)
 
         setLastSaved(file.lastModified())
     }
@@ -611,7 +640,7 @@ class EditorFragment :
             )
         }
         path = newFile.absolutePath
-        //TODO saveTabCallback(newFile)
+        tabListViewModel?.saveEditorTab(newFile)
         saveToFile(path)
     }
 

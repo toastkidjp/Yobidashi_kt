@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.tab.tab_list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.io.File
 
 /**
  * @author toastkidjp
@@ -22,6 +23,22 @@ internal class TabListViewModel : ViewModel() {
 
     fun sendStartDrag(viewHolder: ViewHolder) {
         _startDrag.postValue(viewHolder)
+    }
+
+    private val _saveEditorTab = MutableLiveData<File>()
+
+    val saveEditorTab: LiveData<File> = _saveEditorTab
+
+    fun saveEditorTab(nextFile: File) {
+        _saveEditorTab.postValue(nextFile)
+    }
+
+    private val _tabCount = MutableLiveData<Int>()
+
+    val tabCount: LiveData<Int> = _tabCount
+
+    fun tabCount(count: Int) {
+        _tabCount.postValue(count)
     }
 
 }

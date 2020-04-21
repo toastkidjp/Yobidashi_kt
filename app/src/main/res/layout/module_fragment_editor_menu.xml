@@ -8,7 +8,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/editor_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="48dp"
         tools:layout_height="60dp"
         >
         <LinearLayout
@@ -66,6 +66,40 @@
                 android:onClick="@{view -> fragment.saveAs()}"
                 android:onLongClick="@{fragment::showName}"
                 />
+
+            <FrameLayout
+                android:id="@+id/tab_list"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.tabList()}"
+                >
+                <ImageView
+                    android:id="@+id/tab_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_tab"
+                    tools:tint="@color/colorPrimaryDark"
+                    android:contentDescription="@string/tab_list"
+                    />
+                <TextView
+                    android:id="@+id/tab_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_gravity="center"
+                    android:textSize="12dp"
+                    tools:text="99"
+                    tools:textColor="@color/colorPrimaryDark"
+                    tools:ignore="SpUsage"
+                    />
+            </FrameLayout>
+
             <Button
                 android:id="@+id/load_as"
                 android:layout_width="60dp"

@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.archive
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -55,6 +56,9 @@ class ArchivesActivity : AppCompatActivity() {
 
         fun extractFile(intent: Intent) =
                 File(intent.getStringExtra(EXTRA_KEY_FILE_NAME))
+
+        fun extractFileUrl(data: Intent): String =
+                Uri.fromFile(extractFile(data)).toString()
 
         /**
          * Make launcher intent.

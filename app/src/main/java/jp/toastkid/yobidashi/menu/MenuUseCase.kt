@@ -21,6 +21,9 @@ import jp.toastkid.yobidashi.about.AboutThisAppActivity
 import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
+import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -51,6 +54,7 @@ class MenuUseCase(
         private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
         private val switchTabList: () -> Unit,
+        private val switchPageSearcher: () -> Unit,
         private val useCameraPermission: (() -> Unit) -> Unit,
         private val close: () -> Unit
 ) {
@@ -135,6 +139,22 @@ class MenuUseCase(
             Menu.ABOUT-> {
                 startActivity(AboutThisAppActivity.makeIntent(activitySupplier()))
             }
+            Menu.BOOKMARK-> {
+                activitySupplier().also {
+                    it.startActivityForResult(
+                            BookmarkActivity.makeIntent(it),
+                            BookmarkActivity.REQUEST_CODE
+                    )
+                }
+            }
+            Menu.VIEW_HISTORY-> {
+                activitySupplier().also {
+                    it.startActivityForResult(
+                            ViewHistoryActivity.makeIntent(it),
+                            ViewHistoryActivity.REQUEST_CODE
+                    )
+                }
+            }
             Menu.EXIT-> {
                 activitySupplier().moveTaskToBack(true)
             }
@@ -172,6 +192,17 @@ class MenuUseCase(
 
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
                         .open(url.toUri())
+            }
+            Menu.VIEW_ARCHIVE -> {
+                activitySupplier().also {
+                    it.startActivityForResult(
+                        ArchivesActivity.makeIntent(it),
+                        ArchivesActivity.REQUEST_CODE
+                    )
+                }
+            }
+            Menu.FIND_IN_PAGE-> {
+                switchPageSearcher()
             }
             Menu.TAB_LIST-> {
                 switchTabList()

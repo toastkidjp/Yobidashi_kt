@@ -13,8 +13,10 @@ import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -88,6 +90,14 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
             override fun onDestroyActionMode(p0: ActionMode?) = Unit
 
+        }
+
+        activity?.also { activity ->
+            val finder = TextViewHighlighter(binding.content)
+
+            ViewModelProviders.of(activity)
+                    .get(PageSearcherViewModel::class.java)
+                    .find.observe(activity, Observer { finder(it ?: "") })
         }
 
         setHasOptionsMenu(true)

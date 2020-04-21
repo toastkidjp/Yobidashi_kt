@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
@@ -39,8 +40,10 @@ import jp.toastkid.yobidashi.browser.*
 import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
@@ -59,6 +62,7 @@ import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
+import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.TabAdapter
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -66,6 +70,7 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
@@ -103,20 +108,24 @@ class MainActivity : AppCompatActivity(),
     private var tabListDialogFragment: DialogFragment? = null
 
     /**
+     * Find-in-page module.
+     */
+    private lateinit var pageSearchPresenter: PageSearcherModule
+
+    /**
      * Menu's view model.
      */
     private var menuViewModel: MenuViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
 
-    /**
-     * Archive folder.
-     */
-    private lateinit var tabs: TabAdapter
+    private var tabListViewModel: TabListViewModel? = null
 
     private var browserViewModel: BrowserViewModel? = null
 
     private var browserFragmentViewModel: BrowserFragmentViewModel? = null
+
+    private lateinit var tabs: TabAdapter
 
     /**
      * Rx permission.
@@ -141,13 +150,18 @@ class MainActivity : AppCompatActivity(),
 
         binding = DataBindingUtil.setContentView(this, LAYOUT_ID)
 
-        // TODO     Use    setSupportActionBar(binding.toolbar)
-        binding.toolbar.also { setSupportActionBar(it) }
+        setSupportActionBar(binding.toolbar)
 
         rxPermissions = RxPermissions(this)
 
         initializeHeaderViewModel()
         setFabListener()
+
+        pageSearchPresenter = PageSearcherModule(
+                this,
+                binding.sip as ModuleSearcherBinding
+        )
+
         initializeMenuViewModel()
 
         contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
@@ -193,6 +207,18 @@ class MainActivity : AppCompatActivity(),
                         Observer { tabs.updateWebTab(it) }
                 )
 
+        tabListViewModel = ViewModelProviders.of(this).get(TabListViewModel::class.java)
+        tabListViewModel
+                ?.saveEditorTab
+                ?.observe(
+                        this,
+                        Observer {
+                            val currentTab = tabs.currentTab() as? EditorTab ?: return@Observer
+                            currentTab.setFileInformation(it)
+                            tabs.saveTabList()
+                        }
+                )
+
         browserFragmentViewModel = ViewModelProviders.of(this).get(BrowserFragmentViewModel::class.java)
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
@@ -210,8 +236,9 @@ class MainActivity : AppCompatActivity(),
             if (view == null) {
                 return@Observer
             }
-            binding.toolbar.removeViewAt(0)
-            binding.toolbar.addView(
+            binding.toolbarContent.removeAllViews()
+            binding.toolbar.layoutParams.height = view.layoutParams.height
+            binding.toolbarContent.addView(
                     view,
                     0
             )
@@ -245,6 +272,7 @@ class MainActivity : AppCompatActivity(),
                 { openPdfTabFromStorage() },
                 { openEditorTab() },
                 { switchTabList() },
+                { pageSearchPresenter.switch() },
                 { useCameraPermission(it) },
                 { menuViewModel?.close() }
         )
@@ -458,7 +486,7 @@ class MainActivity : AppCompatActivity(),
     private fun showTabList() {
         refreshThumbnail()
         val fragmentManager = supportFragmentManager ?: return
-        tabListDialogFragment?.show(fragmentManager, "")
+        tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
     }
 
     private fun refreshThumbnail() {
@@ -482,6 +510,11 @@ class MainActivity : AppCompatActivity(),
 
         if (binding.menusView.isVisible) {
             menuViewModel?.close()
+            return
+        }
+
+        if (pageSearchPresenter.isVisible()) {
+            pageSearchPresenter.hide()
             return
         }
 
@@ -546,6 +579,7 @@ class MainActivity : AppCompatActivity(),
         tabs.loadBackgroundTabsFromDirIfNeed()
 
         menuViewModel?.tabCount(tabs.size())
+        tabListViewModel?.tabCount(tabs.size())
     }
 
     /**
@@ -554,6 +588,7 @@ class MainActivity : AppCompatActivity(),
     private fun refresh() {
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
+        binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
 
         applyBackgrounds()
     }
@@ -701,7 +736,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * Switch tab list visibility.
      */
-    private fun switchTabList() {
+    fun switchTabList() {
         initTabListIfNeed()
         if (tabListDialogFragment?.isVisible == true) {
             tabListDialogFragment?.dismiss()
@@ -738,6 +773,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCloseTabListDialogFragment() {
         replaceToCurrentTab()
         menuViewModel?.tabCount(tabs.size())
+        tabListViewModel?.tabCount(tabs.size())
     }
 
     override fun onOpenEditor() = openEditorTab()
@@ -773,7 +809,6 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
         menuInflater.also {
-            it.inflate(R.menu.settings_toolbar_menu, menu)
             it.inflate(R.menu.main_fab_menu, menu)
         }
         return super.onCreateOptionsMenu(menu)
@@ -784,12 +819,8 @@ class MainActivity : AppCompatActivity(),
             switchTabList()
             true
         }
-        R.id.menu_exit -> {
-            moveTaskToBack(true)
-            true
-        }
-        R.id.menu_close -> {
-            finish()
+        R.id.setting -> {
+            startActivity(SettingsActivity.makeIntent(this))
             true
         }
         R.id.reset_menu_position -> {
@@ -798,6 +829,10 @@ class MainActivity : AppCompatActivity(),
                 it.translationY = 0f
                 preferenceApplier.clearMenuFabPosition()
             }
+            true
+        }
+        R.id.menu_exit -> {
+            moveTaskToBack(true)
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -814,15 +849,8 @@ class MainActivity : AppCompatActivity(),
             }
             ArchivesActivity.REQUEST_CODE -> {
                 try {
-                    /*TODO
-                       replaceWithBrowser()
-                    uiThreadHandler.postDelayed(
-                            {
-                                (obtainFragment(BrowserFragment::class.java) as BrowserFragment)
-                                    .loadArchive(ArchivesActivity.extractFile(intent))
-                            },
-                            200L
-                    )*/
+                    tabs.openNewWebTab(ArchivesActivity.extractFileUrl(data))
+                    replaceToCurrentTab()
                 } catch (e: IOException) {
                     Timber.e(e)
                 } catch (error: OutOfMemoryError) {
@@ -868,11 +896,12 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         tabs.dispose()
         disposables.clear()
         menuUseCase.dispose()
         contentViewModel?.content?.removeObservers(this)
+        pageSearchPresenter.dispose()
+        super.onDestroy()
     }
 
     companion object {

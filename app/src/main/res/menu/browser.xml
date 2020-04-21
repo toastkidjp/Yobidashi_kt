@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/setting"
+        android:id="@+id/add_bookmark"
+        android:title="@string/title_add_bookmark"
         android:orderInCategory="100"
-        android:title="@string/title_settings"
         app:showAsAction="never"
         />
     <item

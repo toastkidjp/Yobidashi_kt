@@ -13,21 +13,6 @@
             android:layout_height="match_parent"
             tools:context="jp.toastkid.yobidashi.main.MainActivity"
             >
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                >
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    />
-            </com.google.android.material.appbar.AppBarLayout>
 
             <ImageView
                 android:id="@+id/background"
@@ -41,8 +26,34 @@
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 />
+
+            <include
+                android:id="@+id/sip"
+                layout="@layout/module_searcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                />
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                tools:backgroundTint="@color/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:hideOnScroll="true"
+                app:layout_scrollFlags="scroll|enterAlways"
+                style="@style/Widget.MaterialComponents.BottomAppBar"
+                app:layout_behavior="jp.toastkid.yobidashi.libs.view.BottomNavigationBehavior"
+                >
+                <FrameLayout
+                    android:id="@+id/toolbar_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </com.google.android.material.bottomappbar.BottomAppBar>
 
             <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
                 android:id="@+id/menus_view"

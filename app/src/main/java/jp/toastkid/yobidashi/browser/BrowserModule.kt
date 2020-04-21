@@ -389,6 +389,10 @@ class BrowserModule(
         animation?.let { currentView()?.startAnimation(it) }
     }
 
+    fun find(keyword: String?) {
+        currentView()?.findAllAsync(keyword)
+    }
+
     fun findUp() {
         currentView()?.findNext(false)
     }
