@@ -54,7 +54,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        val activityContext = context
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         return binding.root
     }
