@@ -40,15 +40,21 @@ class LauncherFragment : Fragment(), ContentScrollable {
 
     private var prev = ""
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+        val context = context
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(context)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        binding.appItemsView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.appItemsView.layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         adapter = Adapter(context, binding.root)
         binding.appItemsView.adapter = adapter
