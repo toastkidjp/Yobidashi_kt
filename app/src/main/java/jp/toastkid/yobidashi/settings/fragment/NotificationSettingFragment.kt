@@ -95,11 +95,8 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
         binding.useDailyNotificationCheck.isChecked = newState
 
         @StringRes val messageId =
-                if (newState) {
-                    R.string.message_stay_tuned
-                } else {
-                    R.string.message_remove_notification_widget
-                }
+                if (newState) R.string.message_stay_tuned
+                else R.string.message_remove_notification_widget
         contentViewModel.snackShort(messageId)
 
         val context = context ?: return
