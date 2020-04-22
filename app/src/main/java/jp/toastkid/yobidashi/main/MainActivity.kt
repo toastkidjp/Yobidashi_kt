@@ -561,7 +561,7 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        if (currentFragment is BrowserFragment) {
+        if (currentFragment is BrowserFragment || currentFragment is PdfViewerFragment) {
             tabs.closeTab(tabs.index())
 
             if (tabs.isEmpty()) {
