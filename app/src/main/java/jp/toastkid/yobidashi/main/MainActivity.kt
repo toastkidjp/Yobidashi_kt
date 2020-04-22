@@ -574,7 +574,7 @@ class MainActivity : AppCompatActivity(),
 
         val fragment = findFragment()
         if (fragment !is EditorFragment) {
-            supportFragmentManager?.popBackStackImmediate()
+            supportFragmentManager.popBackStackImmediate()
             return
         }
 
