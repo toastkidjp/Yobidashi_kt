@@ -75,11 +75,8 @@ class CardFragment : Fragment() {
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.item_planning_poker
 
-        fun makeWithNumber(text: String): Fragment {
-            return CardFragment().also {
-                it.arguments = bundleOf(EXTRA_KEY_CARD_TEXT to text)
-            }
-        }
+        fun makeWithNumber(text: String): Fragment =
+                CardFragment().also { it.arguments = bundleOf(EXTRA_KEY_CARD_TEXT to text) }
     }
 
 }
