@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable name="viewHolder"
+            type="jp.toastkid.yobidashi.planning_poker.ViewHolder" />
+    </data>
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,6 +14,7 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:foreground="@drawable/ripple_transparent"
+        android:onClick="@{view -> viewHolder.open()}"
         >
 
         <TextView

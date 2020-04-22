@@ -15,6 +15,7 @@ internal class ViewHolder(private val binding: ItemPlanningPokerBinding)
     private var viewModel: CardListFragmentViewModel? = null
 
     init {
+        binding.viewHolder = this
         viewModel = (binding.root.context as? FragmentActivity)?.let {
             ViewModelProviders.of(it).get(CardListFragmentViewModel::class.java)
         }
@@ -24,11 +25,6 @@ internal class ViewHolder(private val binding: ItemPlanningPokerBinding)
         binding.cardText.text = text
         if (text.codePointCount(0, text.length) >= 3) {
             binding.cardText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 120f)
-        }
-
-        // TODO use data-binding #536
-        itemView.setOnClickListener {
-            open()
         }
     }
 
