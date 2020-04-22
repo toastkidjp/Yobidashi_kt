@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -239,16 +238,4 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                 .into(binding.background)
     }
 
-    companion object {
-
-        /**
-         * Make this DialogFragment instance.
-         * TODO delete it.
-         * @param target target [Fragment]
-         */
-        fun make(target: Fragment): TabListDialogFragment {
-            val tabListDialogFragment = TabListDialogFragment()
-            return tabListDialogFragment
-        }
-    }
 }
