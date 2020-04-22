@@ -232,8 +232,8 @@ class SearchFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater?.inflate(R.menu.search_menu, menu)
-        // TODO Move onResume
+        inflater.inflate(R.menu.search_menu, menu)
+
         menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
         menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
     }
