@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.pdf
 
-import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
@@ -156,13 +155,6 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      */
     fun scrollTo(position: Int) {
         layoutManager.scrollToPosition(getSafeIndex(position))
-    }
-
-    /**
-     * Assign new thumbnail image.
-     */
-    fun makeThumbnail(): Bitmap? {
-        return thumbnailGenerator(binding.pdfImages)
     }
 
     /**
