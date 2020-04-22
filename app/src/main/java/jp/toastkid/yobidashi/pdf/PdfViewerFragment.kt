@@ -71,15 +71,15 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate<FragmentPdfViewerBinding>(
+        binding = DataBindingUtil.inflate(
                 inflater,
                 LAYOUT_ID,
                 container,
                 false
         )
-        headerBinding = DataBindingUtil.inflate<ModulePdfHeaderBinding>(
+        headerBinding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.module_pdf_header,
+                R.layout.module_pdf_header, // TODO Extract.
                 container,
                 false
         )
