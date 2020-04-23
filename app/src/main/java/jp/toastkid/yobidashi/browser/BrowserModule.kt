@@ -22,6 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -37,6 +38,7 @@ import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
+import jp.toastkid.yobidashi.browser.webview.StateRepository
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
 import jp.toastkid.yobidashi.libs.*
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
@@ -561,12 +563,14 @@ class BrowserModule(
      */
     fun detachWebView(tabId: String?) = webViewPool.remove(tabId)
 
-    fun onSaveInstanceState(outState: Bundle) {
-        currentView()?.saveState(outState)
+    fun onSaveInstanceState(id: String) {
+        val webView = currentView() ?: return
+        StateRepository(context.filesDir).save(id, webView)
     }
 
-    fun onViewStateRestored(savedInstanceState: Bundle?) {
-        currentView()?.restoreState(savedInstanceState)
+    fun onViewStateRestored(id: String) {
+        val webView = currentView() ?: return
+        StateRepository(context.filesDir).load(id, webView)
     }
 
     fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->

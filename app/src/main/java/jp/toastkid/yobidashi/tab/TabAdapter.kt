@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.ViewModelProviders
+
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo

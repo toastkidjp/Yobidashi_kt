@@ -584,12 +584,12 @@ class BrowserFragment : Fragment(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        browserModule.onSaveInstanceState(outState)
+        browserModule.onSaveInstanceState(tabs.currentTabId())
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        browserModule.onViewStateRestored(savedInstanceState)
+        browserModule.onViewStateRestored(tabs.currentTabId())
     }
 
     override fun onDestroy() {
