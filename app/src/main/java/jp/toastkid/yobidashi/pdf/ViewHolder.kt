@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.pdf
 
 import android.graphics.Bitmap
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemPdfContentBinding
 
@@ -32,12 +31,4 @@ class ViewHolder(private val binding: ItemPdfContentBinding) : RecyclerView.View
         binding.pageIndicator.text = "$current / $max"
     }
 
-    /**
-     * Set long tap action.
-     *
-     * @param onLongClickListener [View.OnLongClickListener]
-     */
-    fun setOnLongTap(onLongClickListener: View.OnLongClickListener) {
-        binding.image.setOnLongClickListener(onLongClickListener)
-    }
 }
