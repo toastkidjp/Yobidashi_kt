@@ -26,6 +26,8 @@ class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
 
     private val urlValidator = RssUrlValidator()
 
+    private val rssUrlExtractor = RssUrlExtractor()
+
     operator fun invoke(
             currentUrl: String?,
             snackbarParentSupplier: () -> View?
@@ -42,7 +44,7 @@ class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
         return Maybe.fromCallable { HtmlApi().invoke(currentUrl) }
                 .subscribeOn(Schedulers.io())
                 .filter { it.isSuccessful }
-                .map { RssUrlExtractor()(it.body()?.string()) }
+                .map { rssUrlExtractor(it.body()?.string()) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { storeToPreferences(it, snackbarParent, colorPair) },
