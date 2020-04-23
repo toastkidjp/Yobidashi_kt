@@ -304,7 +304,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
      * @param snackbarParent for data binding
      */
     fun clearCookie(snackbarParent: View) {
-        CookieCleanerCompat(snackbarParent)
+        CookieCleanerCompat().invoke(snackbarParent)
     }
 
     /**
