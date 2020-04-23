@@ -23,6 +23,13 @@ class RssUrlValidator {
             return true
         }
 
-        return (url.contains(".xml") || url.contains(".atom") || url.contains(".rdf"))
+        return isRssUrl(url)
+    }
+
+    companion object {
+
+        private val RSS_FILE_EXTENSIONS = setOf(".xml", ".atom", ".rdf")
+
+        private fun isRssUrl(url: String) = RSS_FILE_EXTENSIONS.any { url.contains(it) }
     }
 }
