@@ -486,7 +486,8 @@ class MainActivity : AppCompatActivity(),
     private fun replaceToCurrentTab(withAnimation: Boolean = true) {
         when (val currentTab = tabs.currentTab()) {
             is WebTab -> {
-                val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
+                val browserFragment =
+                        (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
                 browserFragmentViewModel
                         ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
