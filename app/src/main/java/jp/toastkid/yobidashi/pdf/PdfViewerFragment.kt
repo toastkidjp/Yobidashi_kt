@@ -32,7 +32,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
 import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
-import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
@@ -62,11 +61,9 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      */
     private lateinit var layoutManager: LinearLayoutManager
 
-    private val thumbnailGenerator = ThumbnailGenerator()
+    private var headerViewModel: HeaderViewModel? = null
 
     private val disposables = CompositeDisposable()
-
-    private var headerViewModel: HeaderViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
