@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.media.image
 
 import android.content.ContentResolver
+import android.database.Cursor
 import android.provider.MediaStore
 
 /**
@@ -15,29 +16,40 @@ import android.provider.MediaStore
  */
 class ImageLoader(private val contentResolver: ContentResolver) {
 
-    operator fun invoke(bucket: String): List<Image> {
-        val cursor = MediaStore.Images.Media.query(
-                contentResolver,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                columns,
-                "bucket_display_name = ?",
-                arrayOf(bucket),
-                "datetaken DESC"
+    operator fun invoke(sort: Sort, bucket: String): List<Image> {
+        return extractImages(
+                MediaStore.Images.Media.query(
+                        contentResolver,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        columns,
+                        "bucket_display_name = ?",
+                        arrayOf(bucket),
+                        sort.imageSort
+                )
         )
+    }
 
+    fun filterBy(name: String?): List<Image> {
+        return extractImages(
+                MediaStore.Images.Media.query(
+                        contentResolver,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        columns,
+                        "${MediaStore.Images.Media.DISPLAY_NAME} LIKE ?",
+                        arrayOf("%$name%"),
+                        Sort.NAME.imageSort
+                )
+        )
+    }
+
+    private fun extractImages(cursor: Cursor?): MutableList<Image> {
         val images = mutableListOf<Image>()
 
-        val dataIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-        val displayNameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)
+        val dataIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
+        val displayNameIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME) ?: 0
 
         while (cursor?.moveToNext() == true) {
-            images.add(
-                    Image(
-                            cursor.getString(dataIndex),
-                            cursor.getString(displayNameIndex),
-                            false
-                    )
-            )
+            images.add(Image(cursor.getString(dataIndex), cursor.getString(displayNameIndex)))
         }
         return images
     }

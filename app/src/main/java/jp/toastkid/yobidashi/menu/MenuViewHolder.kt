@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.menu
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -32,10 +31,6 @@ class MenuViewHolder(private val binding: ItemHomeMenuBinding)
     fun setColorPair(pair: ColorPair) {
         itemView.setBackgroundColor(pair.bgColor())
 
-        if (binding.count.isVisible) {
-            binding.count.setTextColor(pair.fontColor())
-        }
-
         binding.text.setTextColor(pair.fontColor())
 
         binding.image.setColorFilter(pair.fontColor())
@@ -49,12 +44,4 @@ class MenuViewHolder(private val binding: ItemHomeMenuBinding)
         itemView.setOnLongClickListener(onLongClick)
     }
 
-    fun setCount(tabCount: Int) {
-        binding.count.text = tabCount.toString()
-        binding.count.visibility = View.VISIBLE
-    }
-
-    fun hideCount() {
-        binding.count.visibility = View.GONE
-    }
 }

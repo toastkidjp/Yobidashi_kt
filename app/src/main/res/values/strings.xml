@@ -338,7 +338,6 @@
 
     <string name="message_disusable_menu">Sorry, but this device couldn\'t use this menu.</string>
     <string name="title_stop_loading">Stop loading</string>
-    <string name="message_stop_loading">It has stopped loading.</string>
     <string name="message_fail_to_connect_to_camera">Fail to connect to camera service.</string>
     <string name="title_tab_background_search">Search of \'%s\'</string>
     <string name="message_background_search">It has launched search \'%s\'.</string>
@@ -462,5 +461,6 @@
     <string name="title_playing_speed_2">x2</string>
     <string name="title_playing_speed_3">x3</string>
     <string name="title_playing_speed_5">x5</string>
+    <string name="title_excluding_item_setting">Excluding items</string>
 
 </resources>

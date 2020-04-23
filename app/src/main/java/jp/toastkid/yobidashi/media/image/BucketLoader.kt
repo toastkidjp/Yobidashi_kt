@@ -17,15 +17,19 @@ class BucketLoader(private val contentResolver: ContentResolver) {
 
     private val names = mutableSetOf<String>()
 
-    operator fun invoke(): List<Image> {
+    operator fun invoke(sort: Sort): List<Image> {
         names.clear()
 
         val cursor = MediaStore.Images.Media.query(
                 contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                arrayOf(MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA),
+                arrayOf(
+                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                        MediaStore.Images.Media.DATA,
+                        MediaStore.Images.Media.DATE_MODIFIED
+                ),
                 null,
-                "datetaken DESC"
+                sort.bucketSort
         )
 
         val buckets = mutableListOf<Image>()
@@ -35,13 +39,18 @@ class BucketLoader(private val contentResolver: ContentResolver) {
         val pathIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
         while (cursor?.moveToNext() == true) {
             val path = cursor.getString(pathIndex)
-            val parentPath = parentExtractor(path)
-            if (parentPath == null || names.contains(parentPath)) {
-                continue
-            }
+            val parentPath = parentExtractor(path) ?: continue
             names.add(parentPath)
-            buckets.add(Image.makeBucket(cursor.getString(columnIndex), path))
+            buckets.add(Image.makeBucket(cursor.getString(columnIndex), path, 0))
         }
-        return buckets.distinct()
+
+        val grouped = buckets
+                .groupBy { it.name }
+                .map {
+                    val bucket = it.value[0]
+                    bucket.itemCount = it.value.size
+                    bucket
+                }
+        return if (sort == Sort.ITEM_COUNT) grouped.sortedByDescending { it.itemCount } else grouped
     }
 }

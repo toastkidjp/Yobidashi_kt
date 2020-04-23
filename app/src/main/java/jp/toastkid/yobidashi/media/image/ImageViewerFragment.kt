@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat
 import android.view.*
 import androidx.annotation.LayoutRes
-import androidx.annotation.WorkerThread
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,11 +25,13 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentImageViewerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
 import timber.log.Timber
 
 /**
@@ -47,6 +48,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     private lateinit var preferenceApplier: PreferenceApplier
 
     private var adapter: Adapter? = null
+
+    private var currentBucket: String? = null
 
     private val parentExtractor = ParentExtractor()
 
@@ -70,8 +73,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         preferenceApplier = PreferenceApplier(context)
 
+        val viewModelProvider = ViewModelProviders.of(this)
         val viewModel =
-                ViewModelProviders.of(this).get(ImageViewerFragmentViewModel::class.java)
+                viewModelProvider.get(ImageViewerFragmentViewModel::class.java)
 
         adapter = Adapter(fragmentManager, viewModel)
 
@@ -87,6 +91,12 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             loadImages()
         })
 
+        viewModel.refresh.observe(this, Observer {
+            attemptLoad()
+        })
+
+        observePageSearcherViewModel()
+
         val contentResolver = context.contentResolver ?: return
         bucketLoader = BucketLoader(contentResolver)
         imageLoader = ImageLoader(contentResolver)
@@ -94,6 +104,17 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         binding.images.adapter = adapter
         binding.images.layoutManager =
                 GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+    }
+
+    private fun observePageSearcherViewModel() {
+        val activity = activity ?: return
+        ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)
+                .also { viewModel ->
+                    viewModel.find.observe(activity, Observer {
+                        Timber.i("observe $it")
+                        filterByName(it)
+                    })
+                }
     }
 
     fun reset() {
@@ -112,6 +133,10 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     override fun onStart() {
         super.onStart()
 
+        attemptLoad()
+    }
+
+    private fun attemptLoad() {
         RxPermissions(requireActivity())
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .observeOn(Schedulers.io())
@@ -134,18 +159,38 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                 .addTo(disposables)
     }
 
-    @WorkerThread
     private fun loadImages(bucket: String? = null) {
         adapter?.clear()
 
         val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
 
+        val sort = preferenceApplier.imageViewerSort()
+
         if (bucket.isNullOrBlank()) {
-            bucketLoader().filter { excludedItemFilter(parentExtractor(it.path)) }
+            bucketLoader(sort)
+                    .filter { excludedItemFilter(parentExtractor(it.path)) }
         } else {
-            imageLoader(bucket).filter { excludedItemFilter(it.path) }
+            imageLoader(sort, bucket).filter { excludedItemFilter(it.path) }
         }
                 .forEach { adapter?.add(it) }
+        currentBucket = bucket
+        refreshContent()
+    }
+
+    private fun filterByName(keyword: String?) {
+        if (keyword.isNullOrBlank()) {
+            loadImages()
+            return
+        }
+
+        adapter?.clear()
+
+        val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
+
+        imageLoader.filterBy(keyword)
+                .filter { excludedItemFilter(it.path) }
+                .forEach { adapter?.add(it) }
+        currentBucket = null
         refreshContent()
     }
 
@@ -166,15 +211,28 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.list_scrolling, menu)
+        inflater?.inflate(R.menu.image_viewer, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.list_to_top ->
-                toTop()
-            R.id.list_to_bottom ->
-                toBottom()
+            R.id.excluding_items_setting -> {
+                val fragment = ExcludingSettingFragment()
+                fragment.setTargetFragment(this, 1)
+                fragment.show(fragmentManager, "setting")
+            }
+            R.id.sort_by_date -> {
+                preferenceApplier.setImageViewerSort(Sort.DATE)
+                loadImages(currentBucket)
+            }
+            R.id.sort_by_name -> {
+                preferenceApplier.setImageViewerSort(Sort.NAME)
+                loadImages(currentBucket)
+            }
+            R.id.sort_by_count -> {
+                preferenceApplier.setImageViewerSort(Sort.ITEM_COUNT)
+                loadImages(currentBucket)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

@@ -14,7 +14,7 @@ import android.graphics.drawable.RippleDrawable
 import android.os.Build
 import android.view.Gravity
 import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
@@ -51,11 +51,6 @@ class MenuBinder(
 
         menuViewModel?.visibility?.observe(fragmentActivity, Observer { newVisible ->
             if (newVisible) open() else close()
-        })
-
-        menuViewModel?.tabCount?.observe(fragmentActivity, Observer {
-            menuAdapter?.setTabCount(it)
-            menuAdapter?.notifyDataSetChanged()
         })
 
         menuViewModel?.onResume?.observe(fragmentActivity, Observer {
@@ -103,7 +98,7 @@ class MenuBinder(
         val menuX: Float = menuSwitch?.x ?: 1000f
         val useLeft = menuX < 200f
         recyclerView?.layoutParams =
-                (recyclerView?.layoutParams as? CoordinatorLayout.LayoutParams)?.also {
+                (recyclerView?.layoutParams as? FrameLayout.LayoutParams)?.also {
                     it.gravity = if (useLeft) Gravity.LEFT else Gravity.RIGHT
                 }
         recyclerView?.setMode(useLeft)

@@ -333,7 +333,6 @@
     <string name="message_disusable_menu">この機能はOS 4.4以降でのみ利用可能です。</string>
 
     <string name="title_stop_loading">ロード中止</string>
-    <string name="message_stop_loading">ロードを中止しました。</string>
     <string name="message_fail_to_connect_to_camera">カメラを利用できないため、起動できませんでした。</string>
     <string name="title_tab_background_search">「%s」の検索結果</string>
     <string name="message_background_search">「%s」をバックグラウンドで検索します。</string>
@@ -457,5 +456,6 @@
     <string name="title_playing_speed_2">x2</string>
     <string name="title_playing_speed_3">x3</string>
     <string name="title_playing_speed_5">x5</string>
+    <string name="title_excluding_item_setting">Excluding items</string>
 
 </resources>

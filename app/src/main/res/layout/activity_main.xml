@@ -8,19 +8,20 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         >
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/content_description_background" />
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context="jp.toastkid.yobidashi.main.MainActivity"
             >
-
-            <ImageView
-                android:id="@+id/background"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/content_description_background" />
 
             <FrameLayout
                 android:id="@+id/content"
@@ -55,29 +56,29 @@
                     />
             </com.google.android.material.bottomappbar.BottomAppBar>
 
-            <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
-                android:id="@+id/menus_view"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layoutAnimation="@anim/layout_slide_in_right"
-                android:visibility="gone"
-                />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/menu_switch"
-                android:layout_width="@dimen/menu_button_size"
-                android:layout_height="@dimen/menu_button_size"
-                android:layout_gravity="right|bottom"
-                app:srcCompat="@drawable/ic_menu_cycle"
-                app:backgroundTint="@color/soft_background"
-                android:background="@drawable/ripple_transparent"
-                app:rippleColor="@color/aw_ripple"
-                android:clickable="true"
-                android:focusable="true"
-                />
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
+            android:id="@+id/menus_view"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|bottom"
+            android:layoutAnimation="@anim/layout_slide_in_right"
+            android:visibility="gone"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/menu_switch"
+            android:layout_width="@dimen/menu_button_size"
+            android:layout_height="@dimen/menu_button_size"
+            android:layout_gravity="right|bottom"
+            app:srcCompat="@drawable/ic_menu_cycle"
+            app:backgroundTint="@color/soft_background"
+            android:background="@drawable/ripple_transparent"
+            app:rippleColor="@color/aw_ripple"
+            android:clickable="true"
+            android:focusable="true"
+            />
 
     </FrameLayout>
 </layout>

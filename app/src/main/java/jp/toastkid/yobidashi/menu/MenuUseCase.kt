@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.journeyapps.barcodescanner.camera.CameraManager
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppActivity
@@ -27,6 +29,7 @@ import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.launcher.LauncherActivity
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -36,13 +39,15 @@ import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.search.SearchActivity
-import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.torch.Torch
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import timber.log.Timber
 import java.util.*
 
 /**
+ * TODO clean up duplcated codes.
  * @author toastkidjp
  */
 class MenuUseCase(
@@ -53,13 +58,16 @@ class MenuUseCase(
         private val obtainFragment: (Class<out Fragment>) -> Fragment,
         private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
-        private val switchTabList: () -> Unit,
         private val switchPageSearcher: () -> Unit,
         private val useCameraPermission: (() -> Unit) -> Unit,
         private val close: () -> Unit
 ) {
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
+
+    private lateinit var randomWikipedia: RandomWikipedia
+
+    private val disposables = CompositeDisposable()
 
     /**
      * Torch API facade.
@@ -90,9 +98,6 @@ class MenuUseCase(
                 if (currentFragment is ContentScrollable) {
                     currentFragment.toBottom()
                 }
-            }
-            Menu.SETTING-> {
-                startActivity(SettingsActivity.makeIntent(activitySupplier()))
             }
             Menu.SHARE-> {
                 findCurrentFragment()?.share()
@@ -155,9 +160,6 @@ class MenuUseCase(
                     )
                 }
             }
-            Menu.EXIT-> {
-                activitySupplier().moveTaskToBack(true)
-            }
             Menu.IMAGE_VIEWER -> {
                 replaceFragment(obtainFragment(ImageViewerFragment::class.java))
             }
@@ -174,9 +176,25 @@ class MenuUseCase(
             Menu.WEB_SEARCH -> {
                 when (val fragment = findCurrentFragment()) {
                     is BrowserFragment ->
-                        fragment.onMenuClick(menu)
+                        fragment.search()
                     else ->
                         startActivity(SearchActivity.makeIntent(activitySupplier()))
+                }
+            }
+            Menu.VOICE_SEARCH-> {
+                activitySupplier().also {
+                    try {
+                        it.startActivityForResult(
+                                VoiceSearch.makeIntent(it),
+                                VoiceSearch.REQUEST_CODE
+                        )
+                    } catch (e: ActivityNotFoundException) {
+                        Timber.e(e)
+                        VoiceSearch.suggestInstallGoogleApp(
+                                it.findViewById(android.R.id.content),
+                                preferenceApplier.colorPair()
+                        )
+                    }
                 }
             }
             Menu.WHAT_HAPPENED_TODAY -> {
@@ -193,6 +211,34 @@ class MenuUseCase(
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
                         .open(url.toUri())
             }
+            Menu.RANDOM_WIKIPEDIA -> {
+                val activity = activitySupplier()
+                if (preferenceApplier.wifiOnly &&
+                        WifiConnectionChecker.isNotConnecting(activity)) {
+                    Toaster.snackShort(
+                            activity.findViewById<View>(android.R.id.content),
+                            activity.getString(R.string.message_wifi_not_connecting),
+                            preferenceApplier.colorPair()
+                    )
+                    return
+                }
+
+                if (!::randomWikipedia.isInitialized) {
+                    randomWikipedia = RandomWikipedia()
+                }
+                randomWikipedia
+                        .fetchWithAction { title, link ->
+                            ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
+                                    .open(link)
+                            val fragmentActivity = activitySupplier()
+                            Toaster.snackShort(
+                                    fragmentActivity.findViewById<View>(android.R.id.content),
+                                    fragmentActivity.getString(R.string.message_open_random_wikipedia, title),
+                                    preferenceApplier.colorPair()
+                            )
+                        }
+                        .addTo(disposables)
+            }
             Menu.VIEW_ARCHIVE -> {
                 activitySupplier().also {
                     it.startActivityForResult(
@@ -203,13 +249,6 @@ class MenuUseCase(
             }
             Menu.FIND_IN_PAGE-> {
                 switchPageSearcher()
-            }
-            Menu.TAB_LIST-> {
-                switchTabList()
-            }
-            else -> {
-                (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)
-                        ?.onMenuClick(menu)
             }
         }
     }
@@ -238,6 +277,7 @@ class MenuUseCase(
 
     fun dispose() {
         torch.dispose()
+        disposables.clear()
     }
 
 }

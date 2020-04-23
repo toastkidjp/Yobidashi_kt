@@ -8,6 +8,12 @@
         app:showAsAction="never"
         />
     <item
+        android:id="@+id/add_archive"
+        android:title="@string/title_archive"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/add_rss"
         android:orderInCategory="100"
         android:title="@string/title_add_to_rss_reader"
@@ -15,10 +21,9 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/stop_loading"
+        android:id="@+id/replace_home"
+        android:title="@string/title_replace_home"
         android:orderInCategory="100"
-        android:title="@string/title_stop_loading"
-        android:checkable="false"
         app:showAsAction="never"
         />
 </menu>

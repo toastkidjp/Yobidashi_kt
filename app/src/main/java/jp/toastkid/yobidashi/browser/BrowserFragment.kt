@@ -1,12 +1,9 @@
 package jp.toastkid.yobidashi.browser
 
-import android.app.Activity
 import android.app.ActivityOptions
-import android.content.ActivityNotFoundException
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -20,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
@@ -38,23 +34,17 @@ import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.menu.Menu
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
-import jp.toastkid.yobidashi.search.voice.VoiceSearch
-import jp.toastkid.yobidashi.settings.SettingsActivity
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
-import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -112,8 +102,6 @@ class BrowserFragment : Fragment(),
     private var menuViewModel: MenuViewModel? = null
 
     private var headerViewModel: HeaderViewModel? = null
-
-    private lateinit var randomWikipedia: RandomWikipedia
 
     private var browserViewModel: BrowserViewModel? = null
 
@@ -195,12 +183,14 @@ class BrowserFragment : Fragment(),
         headerViewModel?.progress?.observe(activity, Observer { newProgress ->
             if (70 < newProgress) {
                 binding?.progress?.isVisible = false
+                headerBinding?.reload?.setImageResource(R.drawable.ic_reload)
                 //TODO refreshThumbnail()
                 return@Observer
             }
             binding?.progress?.let {
                 it.isVisible = true
                 it.progress = newProgress
+                headerBinding?.reload?.setImageResource(R.drawable.ic_close)
             }
         })
 
@@ -282,120 +272,48 @@ class BrowserFragment : Fragment(),
                         parent,
                         context.getString(R.string.message_done_added_bookmark),
                         R.string.open,
-                        View.OnClickListener { bookmark() },
+                        View.OnClickListener { bookmark(activityOptionsFactory.makeScaleUpBundle(it)) },
                         colorPair()
                 )
+                return true
+            }
+            R.id.add_archive -> {
+                browserModule.saveArchive()
                 return true
             }
             R.id.add_rss -> {
                 RssUrlFinder(preferenceApplier).invoke(browserModule.currentUrl()) { binding?.root }
                 return true
             }
-            R.id.stop_loading -> {
-                stopCurrentLoading()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    fun onMenuClick(menu: Menu) {
-        val fragmentActivity = activity ?: return
-        val snackbarParent = binding?.root as View
-        when (menu) {
-            Menu.RELOAD -> {
-                reload()
-            }
-            Menu.BACK -> {
-                back()
-            }
-            Menu.FORWARD-> {
-                forward()
-            }
-            Menu.USER_AGENT-> {
-                showUserAgentSetting()
-            }
-            Menu.READER_MODE -> {
-                openReaderMode()
-            }
-            Menu.HTML_SOURCE -> {
-                browserModule.invokeHtmlSourceExtraction(
-                        ValueCallback {
-                            showReaderFragment(it.replace("\\u003C", "<"))
-                        }
-                )
-            }
-            Menu.PAGE_INFORMATION-> {
-                showPageInformation()
-            }
-            Menu.STOP_LOADING-> {
-                stopCurrentLoading()
-            }
-            Menu.ARCHIVE-> {
-                browserModule.saveArchive()
-            }
-            Menu.RANDOM_WIKIPEDIA -> {
-                if (preferenceApplier.wifiOnly &&
-                        WifiConnectionChecker.isNotConnecting(requireContext())) {
-                    val parent = binding?.webViewContainer ?: return
-                    Toaster.snackShort(
-                            parent,
-                            getString(R.string.message_wifi_not_connecting),
-                            colorPair()
-                    )
-                    return
-                }
-
-                if (!::randomWikipedia.isInitialized) {
-                    randomWikipedia = RandomWikipedia()
-                }
-                randomWikipedia
-                        .fetchWithAction { title, link ->
-                            browserViewModel?.open(link)
-                            val parent = binding?.webViewContainer ?: return@fetchWithAction
-                            Toaster.snackShort(
-                                    parent,
-                                    getString(R.string.message_open_random_wikipedia, title),
-                                    colorPair()
-                            )
-                        }
-                        .addTo(disposables)
-            }
-            Menu.WEB_SEARCH-> {
-                search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
-            }
-            Menu.VOICE_SEARCH-> {
-                try {
-                    startActivityForResult(VoiceSearch.makeIntent(fragmentActivity), VoiceSearch.REQUEST_CODE)
-                } catch (e: ActivityNotFoundException) {
-                    Timber.e(e)
-                    binding?.root?.let { VoiceSearch.suggestInstallGoogleApp(it, colorPair()) }
-                }
-            }
-            Menu.REPLACE_HOME-> {
+            R.id.replace_home -> {
                 browserModule.currentUrl()?.let {
+                    val parent = binding?.root ?: return true
                     if (Urls.isInvalidUrl(it)) {
                         Toaster.snackShort(
-                                snackbarParent,
+                                parent,
                                 R.string.message_cannot_replace_home_url,
                                 colorPair()
                         )
-                        return
+                        return true
                     }
                     preferenceApplier.homeUrl = it
                     Toaster.snackShort(
-                            snackbarParent,
+                            parent,
                             getString(R.string.message_replace_home_url, it) ,
                             colorPair()
                     )
                 }
             }
-            else -> Unit
         }
+        return super.onOptionsItemSelected(item)
     }
 
     fun reload() {
-        browserModule.reload()
+        if (binding?.progress?.isVisible == true) {
+            browserModule.stopLoading()
+        } else {
+            browserModule.reload()
+        }
     }
 
     fun openReaderMode() {
@@ -449,12 +367,12 @@ class BrowserFragment : Fragment(),
                 )
     }
 
-    /**
-     * Stop current tab's loading.
-     */
-    private fun stopCurrentLoading() {
-        browserModule.stopLoading()
-        Toaster.snackShort(binding?.root as View, R.string.message_stop_loading, colorPair())
+    fun showHtmlSource() {
+        browserModule.invokeHtmlSourceExtraction(
+                ValueCallback {
+                    showReaderFragment(it.replace("\\u003C", "<"))
+                }
+        )
     }
 
     /**
@@ -472,13 +390,20 @@ class BrowserFragment : Fragment(),
      *
      * @param option [ActivityOptions]
      */
-    private fun bookmark(option: ActivityOptions = ActivityOptions.makeBasic()) {
+    private fun bookmark(option: ActivityOptions) {
         val fragmentActivity = activity ?: return
-        startActivityForResult(
+        fragmentActivity.startActivityForResult(
                 BookmarkActivity.makeIntent(fragmentActivity),
                 BookmarkActivity.REQUEST_CODE,
                 option.toBundle()
         )
+    }
+
+    /**
+     * TODO implement ViewModel.
+     */
+    fun search() {
+        search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
     }
 
     /**
@@ -534,9 +459,8 @@ class BrowserFragment : Fragment(),
             it.tabCount.setTextColor(fontColor)
             it.pageInformation.setColorFilter(fontColor)
             it.userAgent.setColorFilter(fontColor)
+            it.htmlSource.setColorFilter(fontColor)
         }
-
-        ClippingUrlOpener(binding?.root) { browserViewModel?.open(it) }
 
         browserModule.resizePool(preferenceApplier.poolSize)
         browserModule.applyNewAlpha()
@@ -598,19 +522,6 @@ class BrowserFragment : Fragment(),
      */
     private fun hideOption(): Boolean {
         return false
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        if (resultCode != Activity.RESULT_OK || intent == null) {
-            return
-        }
-        when (requestCode) {
-            VoiceSearch.REQUEST_CODE -> {
-                activity?.let {
-                    VoiceSearch.processResult(it, intent).addTo(disposables)
-                }
-            }
-        }
     }
 
     /**

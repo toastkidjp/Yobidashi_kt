@@ -38,7 +38,7 @@ internal class ViewHolder(
                 .override(300)
                 .into(binding.image)
 
-        this.binding.text.text = image.name
+        this.binding.text.text = image.makeDisplayName()
         this.binding.root.setOnClickListener {
             onClick(image)
         }
