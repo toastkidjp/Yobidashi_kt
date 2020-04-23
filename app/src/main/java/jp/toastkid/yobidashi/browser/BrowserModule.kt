@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Message
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.SslErrorHandler
@@ -42,9 +43,12 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
+import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
-import jp.toastkid.yobidashi.browser.webview.WebViewPool
+import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -68,8 +72,6 @@ class BrowserModule(
         private val context: Context,
         private val webViewContainer: FrameLayout?
 ) {
-
-    private val webViewPool: WebViewPool
 
     private val preferenceApplier = PreferenceApplier(context)
 
@@ -114,15 +116,18 @@ class BrowserModule(
 
     private var contentViewModel: ContentViewModel? = null
 
+    private val webViewFactory: WebViewFactory
+
+    private val darkThemeApplier = DarkModeApplier()
+
+    private val alphaConverter = AlphaConverter()
+
     private val disposables = CompositeDisposable()
 
     init {
-        webViewPool = WebViewPool(
-                context,
-                { makeWebViewClient() },
-                { makeWebChromeClient() },
-                preferenceApplier.poolSize
-        )
+        GlobalWebViewPool.resize(preferenceApplier.poolSize)
+
+        webViewFactory = WebViewFactory()
 
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
 
@@ -377,9 +382,17 @@ class BrowserModule(
             }
         }
 
+        Timber.i("tomato set webview ${tabId}")
+        setWebView(currentWebView)
+        return currentWebView?.url.isNullOrBlank()
+    }
+
+    private fun setWebView(webView: WebView?) {
         webViewContainer?.removeAllViews()
-        currentWebView?.let {
+        webView?.let {
             it.onResume()
+            (it.parent as? ViewGroup)?.removeAllViews()
+            darkThemeApplier(it, preferenceApplier.useDarkMode())
             webViewContainer?.addView(it)
             updateBackButtonState(it.canGoBack())
             updateForwardButtonState(it.canGoForward())
@@ -395,7 +408,6 @@ class BrowserModule(
         }
 
         reloadWebViewSettings().addTo(disposables)
-        return currentWebView?.url.isNullOrBlank()
     }
 
     private fun updateBackButtonState(newState: Boolean) {
@@ -487,7 +499,7 @@ class BrowserModule(
 
     /**
      * Reload [WebSettings].
-     *
+     * TODO make private.
      * @return subscription
      */
     fun reloadWebViewSettings(): Disposable {
@@ -536,18 +548,18 @@ class BrowserModule(
     }
 
     fun onResume() {
-        webViewPool.onResume()
+        GlobalWebViewPool.onResume()
     }
 
     fun onPause() {
-        webViewPool.onPause()
+        GlobalWebViewPool.onPause()
     }
 
     /**
-     * Dispose [WebViewPool].
+     * Dispose [GlobalWebViewPool].
      */
     fun dispose() {
-        webViewPool.dispose()
+        GlobalWebViewPool.dispose()
         disposables.clear()
     }
 
@@ -567,7 +579,9 @@ class BrowserModule(
      *
      * @return [WebView]
      */
-    private fun currentView(): WebView? = webViewPool.getLatest()
+    private fun currentView(): WebView? {
+        return GlobalWebViewPool.getLatest()
+    }
 
     /**
      * Return current [WebView]'s URL.
@@ -589,21 +603,29 @@ class BrowserModule(
      * @param tabId Tab's ID.
      * @return [WebView]
      */
-    fun getWebView(tabId: String?): WebView? = webViewPool.get(tabId)
+    private fun getWebView(tabId: String?): WebView? {
+        if (!GlobalWebViewPool.containsKey(tabId) && tabId != null) {
+            GlobalWebViewPool.put(tabId, makeWebView())
+        }
+        return GlobalWebViewPool.get(tabId)
+    }
+
+    private fun makeWebView(): WebView {
+        val webView = webViewFactory.make(context)
+        webView.webViewClient = makeWebViewClient()
+        webView.webChromeClient = makeWebChromeClient()
+        return webView
+    }
 
     /**
      * Detach [WebView] with tab ID.
      *
      * @param tabId Tab's ID.
      */
-    fun detachWebView(tabId: String?) = webViewPool.remove(tabId)
+    fun detachWebView(tabId: String?) = GlobalWebViewPool.remove(tabId)
 
     fun onSaveInstanceState(outState: Bundle) {
         currentView()?.saveState(outState)
-    }
-
-    fun onViewStateRestored(savedInstanceState: Bundle?) {
-        currentView()?.restoreState(savedInstanceState)
     }
 
     fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->
@@ -616,16 +638,16 @@ class BrowserModule(
     }
 
     /**
-     * Resize [WebViewPool].
+     * Resize [GlobalWebViewPool].
      *
      * @param poolSize
      */
     fun resizePool(poolSize: Int) {
-        webViewPool.resize(poolSize)
+        GlobalWebViewPool.resize(poolSize)
     }
 
     fun applyNewAlpha() {
-        webViewPool.applyNewAlpha()
+        GlobalWebViewPool.applyNewAlpha(alphaConverter.readBackground(context))
     }
 
     fun makeShareMessage() = "${currentTitle()}$lineSeparator${currentUrl()}"

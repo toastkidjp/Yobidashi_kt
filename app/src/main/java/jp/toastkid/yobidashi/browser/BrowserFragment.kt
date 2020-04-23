@@ -91,6 +91,8 @@ class BrowserFragment : Fragment(),
 
     private var browserViewModel: BrowserViewModel? = null
 
+    private var browserFragmentViewModel: BrowserFragmentViewModel? = null
+
     private var contentViewModel: ContentViewModel? = null
 
     private val activityOptionsFactory = ActivityOptionsFactory()
@@ -205,9 +207,10 @@ class BrowserFragment : Fragment(),
                         Observer { browserModule.saveArchiveForAutoArchive() }
                 )
 
-        viewModelProvider.get(BrowserFragmentViewModel::class.java)
-                .loadWithNewTab
-                .observe(activity, Observer {
+        browserFragmentViewModel = viewModelProvider.get(BrowserFragmentViewModel::class.java)
+        browserFragmentViewModel
+                ?.loadWithNewTab
+                ?.observe(activity, Observer {
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
 
@@ -490,16 +493,6 @@ class BrowserFragment : Fragment(),
         super.onPause()
         stopSwipeRefresherLoading()
         browserModule.onPause()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        browserModule.onSaveInstanceState(outState)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        browserModule.onViewStateRestored(savedInstanceState)
     }
 
     override fun onDestroy() {

@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-internal object WebViewFactory {
+internal class WebViewFactory {
 
     /**
      * [CompositeDisposable].
@@ -34,7 +34,7 @@ internal object WebViewFactory {
      * Use for only extract anchor URL.
      */
     private val handler = Handler(Handler.Callback { message ->
-        message?.data?.let { bundle ->
+        message.data?.let { bundle ->
             longTapItemHolder.title = bundle.get("title")?.toString() ?: ""
             longTapItemHolder.anchor = bundle.get("url")?.toString() ?: ""
         }
