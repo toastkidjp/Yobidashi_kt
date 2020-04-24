@@ -8,6 +8,7 @@ import androidx.annotation.ColorInt
 /**
  * [WebView] pool.
  *
+ * // TODO clean up comments
  * @param context Use for make [WebViewFactory] instance.
  * @param webViewClientSupplier
  * @param webChromeClientSupplier
@@ -80,11 +81,11 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
      * @param newSize new pool size
      */
     fun resize(newSize: Int) {
-        if (newSize == pool.maxSize()) {
+        if (newSize == pool.maxSize() || newSize <= 0) {
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-            && 0 < newSize) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             pool.resize(newSize)
         }
     }
