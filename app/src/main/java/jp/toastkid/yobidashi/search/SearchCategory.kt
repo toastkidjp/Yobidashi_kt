@@ -56,6 +56,11 @@ enum class SearchCategory(
             R.drawable.ic_yahoo_japan_logo,
             "https://search.yahoo.co.jp/search?p="
     ),
+    AOL(
+            R.string.aol,
+            R.drawable.ic_aol,
+            "https://www.aolsearch.com/search?s_chn=prt_bon-mobile&q="
+    ),
     ASK_COM(
             R.string.search_category_ask_com,
             R.drawable.ic_ask_com,

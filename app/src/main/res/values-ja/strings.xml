@@ -473,5 +473,6 @@
     <string name="naver">NAVER</string>
     <string name="daum">Daum</string>
     <string name="title_search_suggestion">Search suggestion</string>
+    <string name="aol">AOL.</string>
 
 </resources>
