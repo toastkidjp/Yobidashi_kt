@@ -287,6 +287,7 @@ class MainActivity : AppCompatActivity(),
                 { menuViewModel?.close() }
         )
 
+        // TODO Attempt to move to binder.
         menuViewModel?.click?.observe(this, Observer {
             menuUseCase.onMenuClick(it)
         })
@@ -529,6 +530,7 @@ class MainActivity : AppCompatActivity(),
      */
     private fun showTabList() {
         refreshThumbnail()
+        // TODO Remove unused elvis operator.
         val fragmentManager = supportFragmentManager ?: return
         tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
     }
@@ -810,6 +812,7 @@ class MainActivity : AppCompatActivity(),
         return super.onCreateOptionsMenu(menu)
     }
 
+    // TODO Use Non-null
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         R.id.open_tabs -> {
             switchTabList()
@@ -820,11 +823,7 @@ class MainActivity : AppCompatActivity(),
             true
         }
         R.id.reset_menu_position -> {
-            binding.menuSwitch.let {
-                it.translationX = 0f
-                it.translationY = 0f
-                preferenceApplier.clearMenuFabPosition()
-            }
+            menuViewModel?.resetPosition()
             true
         }
         R.id.about_this_app -> {

@@ -44,4 +44,12 @@ class MenuViewModel : ViewModel() {
     fun close() {
         _visibility.postValue(false)
     }
+
+    private val _resetPosition = MutableLiveData<Unit>()
+
+    val resetPosition: LiveData<Unit> = _resetPosition
+
+    fun resetPosition() {
+        _resetPosition.postValue(Unit)
+    }
 }
