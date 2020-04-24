@@ -30,22 +30,6 @@ enum class SearchCategory(
             R.drawable.ic_google,
             "https://www.google.com/search?q="
     ),
-    BING(
-            R.string.bing,
-            R.drawable.ic_bing_logo,
-            "https://www.bing.com/search?q="
-    ),
-    DUCKDUCKGO(
-            R.string.search_category_web,
-            R.drawable.ic_duckduckgo,
-            "https://duckduckgo.com/%s?ia=web",
-            { _, h, q -> String.format(h, q)}
-    ),
-    YANDEX(
-            R.string.search_category_yandex,
-            R.drawable.ic_yandex,
-            "https://www.yandex.com/search/?text="
-    ),
     YAHOO(
             R.string.search_category_yahoo,
             R.drawable.ic_yahoo,
@@ -61,10 +45,26 @@ enum class SearchCategory(
             R.drawable.ic_aol,
             "https://www.aolsearch.com/search?s_chn=prt_bon-mobile&q="
     ),
+    BING(
+            R.string.bing,
+            R.drawable.ic_bing_logo,
+            "https://www.bing.com/search?q="
+    ),
+    DUCKDUCKGO(
+            R.string.search_category_web,
+            R.drawable.ic_duckduckgo,
+            "https://duckduckgo.com/%s?ia=web",
+            { _, h, q -> String.format(h, q)}
+    ),
     ASK_COM(
             R.string.search_category_ask_com,
             R.drawable.ic_ask_com,
             "https://www.ask.com/web?q="
+    ),
+    YANDEX(
+            R.string.search_category_yandex,
+            R.drawable.ic_yandex,
+            "https://www.yandex.com/search/?text="
     ),
     BAIDU(
             R.string.baidu,
