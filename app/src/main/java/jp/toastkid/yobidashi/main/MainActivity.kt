@@ -866,11 +866,8 @@ class MainActivity : AppCompatActivity(),
                 }
 
                 tabs.openNewPdfTab(uri)
-
-                (obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment)?.let {
-                    it.arguments = bundleOf("uri" to uri)
-                    replaceFragment(it)
-                }
+                replaceToCurrentTab(true)
+                //TODO enable after commit. tabListDialogFragment?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(this, data).addTo(disposables)
