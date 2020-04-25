@@ -63,6 +63,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("p")
             host.endsWith("www.baidu.com") ->
                 uri.getQueryParameter("wd")
+            host == "www.wolframalpha.com" ->
+                uri.getQueryParameter("i")
             host.equals("www.tumblr.com") -> uri.lastPathSegment
             host.equals("www.instagram.com") -> Uri.decode(uri.lastPathSegment)
             else -> uri.getQueryParameter(
