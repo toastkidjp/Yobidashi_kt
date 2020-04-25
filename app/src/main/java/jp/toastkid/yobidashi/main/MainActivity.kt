@@ -4,15 +4,15 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -34,17 +34,24 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.*
-import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
-import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
+import jp.toastkid.yobidashi.about.AboutThisAppFragment
+import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
+import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
+import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.yobidashi.browser.LoadingViewModel
+import jp.toastkid.yobidashi.browser.ScreenMode
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
+import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
+import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
@@ -62,6 +69,7 @@ import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingsActivity
@@ -76,7 +84,6 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
 import kotlin.math.min
 
 /**
@@ -98,11 +105,6 @@ class MainActivity : AppCompatActivity(),
      * Disposables.
      */
     private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
-
-    /**
-     * Use for delaying.
-     */
-    private val uiThreadHandler = Handler(Looper.getMainLooper())
 
     /**
      * Tab list dialog fragment.
@@ -128,6 +130,11 @@ class MainActivity : AppCompatActivity(),
     private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
     private lateinit var tabs: TabAdapter
+
+    /**
+     * Search-with-clip object.
+     */
+    private lateinit var searchWithClip: SearchWithClip
 
     /**
      * Rx permission.
@@ -156,13 +163,24 @@ class MainActivity : AppCompatActivity(),
 
         rxPermissions = RxPermissions(this)
 
-        initializeHeaderViewModel()
+        val colorPair = preferenceApplier.colorPair()
+
+        searchWithClip = SearchWithClip(
+                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
+                binding.root,
+                colorPair,
+                browserViewModel
+        )
+        searchWithClip.invoke()
+
         setFabListener()
 
         pageSearchPresenter = PageSearcherModule(
                 this,
                 binding.sip as ModuleSearcherBinding
         )
+
+        initializeHeaderViewModel()
 
         initializeMenuViewModel()
 
@@ -263,18 +281,16 @@ class MainActivity : AppCompatActivity(),
 
         menuUseCase = MenuUseCase(
                 { this },
-                { findCurrentFragment() },
-                { replaceFragment(it) },
+                { supportFragmentManager.findFragmentById(R.id.content) },
+                { replaceFragment(obtainFragment(it), true, false) },
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                         ProcessCleanerInvoker()(binding.root).addTo(disposables)
                     }
                 },
-                { obtainFragment(it) },
                 { openPdfTabFromStorage() },
                 { openEditorTab() },
                 { pageSearchPresenter.switch() },
-                { useCameraPermission(it) },
                 { menuViewModel?.close() }
         )
 
@@ -365,20 +381,21 @@ class MainActivity : AppCompatActivity(),
                         .addTo(disposables)
                 return
             }
+            "${BuildConfig.APPLICATION_ID}.bookmark" -> {
+                replaceFragment(obtainFragment(BookmarkFragment::class.java))
+            }
+            "${BuildConfig.APPLICATION_ID}.launcher" -> {
+                replaceFragment(obtainFragment(LauncherFragment::class.java))
+            }
+            "${BuildConfig.APPLICATION_ID}.barcode_reader" -> {
+                replaceFragment(obtainFragment(BarcodeReaderFragment::class.java))
+            }
         }
     }
 
     private fun openNewWebTab(uri: Uri) {
         tabs.openNewWebTab(uri.toString())
         replaceToCurrentTab(true)
-    }
-
-    /**
-     * Finish this activity with transition animation.
-     */
-    private fun finishWithoutTransition() {
-        overridePendingTransition(0, 0)
-        finish()
     }
 
     /**
@@ -412,7 +429,7 @@ class MainActivity : AppCompatActivity(),
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = false) {
+    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = true) {
         val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager.fragments
         if (fragments.size != 0) {
@@ -420,17 +437,19 @@ class MainActivity : AppCompatActivity(),
                 fragments.remove(fragment)
             }
         }
-        transaction.setCustomAnimations(
-                if (withAnimation) R.anim.slide_up else R.anim.slide_in_right,
-                0,
-                0,
-                if (withAnimation) R.anim.slide_down else android.R.anim.slide_out_right
-        )
+
+        if (withAnimation) {
+            transaction.setCustomAnimations(
+                    if (withSlideIn) R.anim.slide_up else R.anim.slide_in_right,
+                    0,
+                    0,
+                    if (withSlideIn) R.anim.slide_down else android.R.anim.slide_out_right
+            )
+        }
 
         transaction.replace(R.id.content, fragment, fragment::class.java.canonicalName)
 
-        // TODO fix it
-        if (fragment !is BrowserFragment && fragment !is EditorFragment) {
+        if (fragment !is TabUiFragment) {
             transaction.addToBackStack(fragment::class.java.canonicalName)
         }
         transaction.commitAllowingStateLoss()
@@ -445,7 +464,7 @@ class MainActivity : AppCompatActivity(),
         when (val currentTab = tabs.currentTab()) {
             is WebTab -> {
                 val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
-                replaceFragment(browserFragment)
+                replaceFragment(browserFragment, false)
                 browserFragmentViewModel
                         ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
             }
@@ -526,6 +545,8 @@ class MainActivity : AppCompatActivity(),
 
         if (findCurrentFragment is BrowserFragment) {
             tabs.closeTab(tabs.index())
+            tabListViewModel?.tabCount(tabs.size())
+
             if (tabs.isEmpty()) {
                 onEmptyTabs()
                 return
@@ -569,7 +590,10 @@ class MainActivity : AppCompatActivity(),
             tabs.openNewWebTab(preferenceApplier.homeUrl)
         }
 
-        replaceToCurrentTab(false)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
+        if (currentFragment is TabUiFragment || currentFragment == null) {
+            replaceToCurrentTab(false)
+        }
     }
 
     override fun onResume() {
@@ -593,7 +617,18 @@ class MainActivity : AppCompatActivity(),
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
         binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
 
+        colorPair.applyReverseTo(binding.menuSwitch)
+
         applyBackgrounds()
+
+        updateColorFilter()
+    }
+
+    // TODO move to viewModel.
+    fun updateColorFilter() {
+        binding.foreground.foreground =
+                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor())
+                else null
     }
 
     /**
@@ -834,6 +869,10 @@ class MainActivity : AppCompatActivity(),
             }
             true
         }
+        R.id.about_this_app -> {
+            replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
+            true
+        }
         R.id.menu_exit -> {
             moveTaskToBack(true)
             true
@@ -847,19 +886,9 @@ class MainActivity : AppCompatActivity(),
             return
         }
         when (requestCode) {
-            ViewHistoryActivity.REQUEST_CODE, BookmarkActivity.REQUEST_CODE -> {
+            // TODO Delete it.
+            ViewHistoryFragment.REQUEST_CODE, BookmarkFragment.REQUEST_CODE -> {
                 data.data?.let { loadUri(it) }
-            }
-            ArchivesActivity.REQUEST_CODE -> {
-                try {
-                    tabs.openNewWebTab(ArchivesActivity.extractFileUrl(data))
-                    replaceToCurrentTab()
-                } catch (e: IOException) {
-                    Timber.e(e)
-                } catch (error: OutOfMemoryError) {
-                    Timber.e(error)
-                    System.gc()
-                }
             }
             IntentIntegrator.REQUEST_CODE -> {
                 val result: IntentResult? =
@@ -904,6 +933,7 @@ class MainActivity : AppCompatActivity(),
     override fun onDestroy() {
         tabs.dispose()
         disposables.clear()
+        searchWithClip.dispose()
         menuUseCase.dispose()
         contentViewModel?.content?.removeObservers(this)
         pageSearchPresenter.dispose()
@@ -937,6 +967,22 @@ class MainActivity : AppCompatActivity(),
         fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
                 .also { it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
 
+        fun makeBarcodeReaderIntent(context: Context) =
+                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.barcode_reader")
+
+        fun makeLauncherIntent(context: Context) =
+                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.launcher")
+
+        fun makeBookmarkIntent(context: Context) =
+                makeWithAction(context, "${BuildConfig.APPLICATION_ID}.bookmark")
+
+        private fun makeWithAction(context: Context, action: String) =
+                Intent(context, MainActivity::class.java)
+                        .also {
+                            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            it.action = action
+                        }
+
         /**
          * Make browser intent.
          *
@@ -958,7 +1004,6 @@ class MainActivity : AppCompatActivity(),
                     it.putExtra("random_wikipedia", true)
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
-
     }
 
 }

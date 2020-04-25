@@ -26,8 +26,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
-import jp.toastkid.yobidashi.main.MainActivity
 
 /**
  * Floating preview.
@@ -148,9 +148,12 @@ class FloatingPreview(context: Context) {
      * @param url URL string
      */
     private fun openNewTabWithUrl(url: String) {
-        binding.root.context?.let {
-            it.startActivity(MainActivity.makeBrowserIntent(it, url.toUri()))
+        (binding.root.context as? FragmentActivity)?.also { fragmentActivity ->
+            ViewModelProviders.of(fragmentActivity)
+                    .get(BrowserViewModel::class.java)
+                    .open(url.toUri())
         }
+
         hide()
     }
 

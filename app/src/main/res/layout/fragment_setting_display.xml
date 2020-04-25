@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <variable name="fragment"
-            type="jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment" />
+        <variable
+            name="fragment"
+            type="jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment"
+            />
     </data>
-    <FrameLayout
-        android:id="@+id/displaying_module"
-        style="@style/SettingCardStyle"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/soft_background"
         >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/clear_background_settings"
+            style="@style/OneLineTextMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:drawableLeft="@drawable/ic_close_black"
+            android:drawableStart="@drawable/ic_close_black"
+            android:onClick="@{view -> fragment.clearBackgroundSettings()}"
+            android:text="@string/title_bg_reset"
+            />
 
-            <TextView
-                android:id="@+id/background_settings"
-                style="@style/OneLineTextMenu"
+        <include layout="@layout/primary_dark_divider" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/fab_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/images_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_photo_black"
-                android:drawableStart="@drawable/ic_photo_black"
-                android:onClick="@{view -> fragment.backgroundSettings()}"
-                android:text="@string/title_set_bg"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
                 />
 
-            <include layout="@layout/primary_dark_divider" />
-
-            <TextView
-                android:id="@+id/clear_background_settings"
-                style="@style/OneLineTextMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_close_black"
-                android:drawableStart="@drawable/ic_close_black"
-                android:onClick="@{view -> fragment.clearBackgroundSettings()}"
-                android:text="@string/title_bg_reset"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="@dimen/fab_size"
+                android:layout_height="@dimen/fab_size"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="@dimen/fab_margin_bottom"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:layout_marginEnd="@dimen/fab_margin"
+                app:backgroundTint="@color/colorPrimaryDark"
+                app:rippleColor="@color/aw_ripple"
+                android:src="@drawable/ic_add_white"
+                android:onClick="@{view -> fragment.launchAdding()}"
                 />
-
-        </LinearLayout>
-    </FrameLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 </layout>

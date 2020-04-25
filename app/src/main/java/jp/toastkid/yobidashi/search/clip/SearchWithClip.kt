@@ -3,7 +3,9 @@ package jp.toastkid.yobidashi.search.clip
 import android.content.ClipboardManager
 import android.content.Context
 import android.view.View
+import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
@@ -18,7 +20,7 @@ import jp.toastkid.yobidashi.search.UrlFactory
  * @param cm For monitoring clipboard.
  * @param parent Use for showing snackbar.
  * @param colorPair Use for showing snackbar.
- * @param browseCallback Use for browse clipped URL.
+ * @param browserViewModel [BrowserViewModel].
  *
  * @author toastkidjp
  */
@@ -26,7 +28,7 @@ class SearchWithClip(
         private val cm: ClipboardManager,
         private val parent: View,
         private val colorPair: ColorPair,
-        private val browseCallback: (String) -> Unit
+        private val browserViewModel: BrowserViewModel?
 ) {
 
     /**
@@ -93,7 +95,7 @@ class SearchWithClip(
         val url =
                 if (Urls.isValidUrl(query)) query
                 else UrlFactory()(context, PreferenceApplier(context).getDefaultSearchEngine(), query).toString()
-        browseCallback(url)
+        browserViewModel?.preview(url.toUri())
     }
 
     /**

@@ -25,10 +25,10 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.api.RssReaderApi
@@ -96,8 +96,9 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
             }
 
             activity?.supportFragmentManager?.popBackStack()
-            val intent = MainActivity.makeBrowserIntent(fragmentActivity, it.toUri())
-            fragmentActivity.startActivity(intent)
+            ViewModelProviders.of(requireActivity())
+                    .get(BrowserViewModel::class.java)
+                    .open(it.toUri())
         })
     }
 

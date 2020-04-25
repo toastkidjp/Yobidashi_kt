@@ -2,19 +2,17 @@ package jp.toastkid.yobidashi.browser.archive
 
 import android.view.View
 import android.webkit.WebView
-
-import java.io.File
-
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import java.io.File
 
 /**
  * Archive file saver.
 
  * @author toastkidjp
  */
-internal object ArchiveSaver {
+class ArchiveSaver {
 
     /**
      * Invoke saver.

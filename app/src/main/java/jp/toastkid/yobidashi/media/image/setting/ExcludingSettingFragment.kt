@@ -21,7 +21,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingImageExcludingBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
-import jp.toastkid.yobidashi.media.image.ImageViewerFragmentViewModel
+import jp.toastkid.yobidashi.media.image.list.ImageViewerFragmentViewModel
 
 /**
  * @author toastkidjp

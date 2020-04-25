@@ -36,4 +36,10 @@ class BrowserHeaderViewModel : ViewModel() {
     fun resetContent() {
         _reset.postValue(Unit)
     }
+
+    private val _enableForward = MutableLiveData<Boolean>()
+    val enableForward: LiveData<Boolean> = _enableForward
+    fun setForwardButtonEnability(newState: Boolean) {
+        _enableForward.postValue(newState)
+    }
 }

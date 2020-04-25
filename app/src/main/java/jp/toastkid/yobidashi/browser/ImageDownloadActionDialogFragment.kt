@@ -17,7 +17,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier

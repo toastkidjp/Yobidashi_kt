@@ -8,8 +8,8 @@ apply plugin: 'io.fabric'
 apply from: 'signing/config.gradle', to: android
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.0'
     byte verMajor  = 1
     byte verMiddle = 2
     byte verMinor  = 8
@@ -67,6 +67,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation "androidx.exifinterface:exifinterface:1.1.0"
     implementation "androidx.work:work-runtime:2.3.0"
+
+    implementation "androidx.webkit:webkit:1.2.0"
 
     def roomVersion = '2.2.0'
     implementation "androidx.room:room-runtime:$roomVersion"

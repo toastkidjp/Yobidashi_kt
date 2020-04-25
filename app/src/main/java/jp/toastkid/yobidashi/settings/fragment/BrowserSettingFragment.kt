@@ -16,8 +16,10 @@ import android.webkit.WebView
 import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.webkit.WebViewFeature
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -28,7 +30,6 @@ import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.menu.MenuPos
 
 /**
  * Setting fragment of WEB browser.
@@ -65,7 +66,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             TextInputs.setEmptyAlert(it.homeInputLayout)
         }
         initBrowserExpandable()
-        initMenuPos()
     }
 
     override fun onResume() {
@@ -131,17 +131,22 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
             })
+
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                it.darkModeCheck.let { checkBox ->
+                    checkBox.isChecked = preferenceApplier.useDarkMode()
+                    checkBox.jumpDrawablesToCurrentState()
+                }
+            } else {
+                it.darkModeCheck.isVisible = false
+            }
+
             it.valueBackgroundAlpha.progress =
                     (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
         }
 
         binding.browserExpand.screenMode?.let {
             it.check(preferenceApplier.browserScreenMode().id())
-            it.jumpDrawablesToCurrentState()
-        }
-
-        binding.menuPosRadio.let {
-            it.check(preferenceApplier.menuPosId())
             it.jumpDrawablesToCurrentState()
         }
     }
@@ -155,20 +160,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 R.id.full_screen  -> preferenceApplier.setBrowserScreenMode(ScreenMode.FULL_SCREEN)
                 R.id.expandable   -> preferenceApplier.setBrowserScreenMode(ScreenMode.EXPANDABLE)
                 R.id.fixed        -> preferenceApplier.setBrowserScreenMode(ScreenMode.FIXED)
-            }
-        }
-    }
-
-    /**
-     * Initialize menu position setting.
-     */
-    private fun initMenuPos() {
-        binding.menuPosRadio.let {
-            it.setOnCheckedChangeListener { group, _ ->
-                when (group.checkedRadioButtonId) {
-                    R.id.menu_pos_left  -> preferenceApplier.setMenuPos(MenuPos.LEFT)
-                    R.id.menu_pos_right -> preferenceApplier.setMenuPos(MenuPos.RIGHT)
-                }
             }
         }
     }
@@ -222,7 +213,16 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         preferenceApplier.useInversion = newState
         binding.useInversionCheck.isChecked = newState
     }
-    
+
+    /**
+     * Switch Wi-Fi only mode.
+     */
+    fun switchDarkMode() {
+        val newState = !preferenceApplier.useDarkMode()
+        preferenceApplier.setUseDarkMode(newState)
+        binding.darkModeCheck.isChecked = newState
+    }
+
     /**
      * Switch JavaScript enabling.
      */

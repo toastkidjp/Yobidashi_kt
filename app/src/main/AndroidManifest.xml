@@ -23,6 +23,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         >
@@ -96,44 +97,6 @@
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".settings.background.BackgroundSettingActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"
-            />
-        <activity
-            android:name=".about.AboutThisAppActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            />
-        <activity
-            android:name=".launcher.LauncherActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            />
-        <activity
-            android:name=".planning_poker.CardViewActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            />
-        <activity
-            android:name=".barcode.BarcodeReaderActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            />
-        <activity
-            android:name=".browser.archive.ArchivesActivity"
-            android:label="@string/title_archives"
-            android:theme="@style/AppTheme.Translucent"
-            />
-        <activity
-            android:name=".planning_poker.PlanningPokerActivity"
-            android:label="@string/title_planning_poker"
-            android:theme="@style/AppTheme.Translucent"
-            />
-        <activity
             android:name=".search.favorite.FavoriteSearchActivity"
             android:theme="@style/AppTheme.Translucent"
             android:configChanges="orientation|screenSize"
@@ -145,19 +108,6 @@
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             />
-        <activity
-            android:name=".browser.history.ViewHistoryActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            />
-        <activity
-            android:name=".browser.bookmark.BookmarkActivity"
-            android:theme="@style/AppTheme.Translucent"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            />
-
         <activity
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
@@ -175,10 +125,6 @@
                 <action android:name="ADD_ITEM" />
             </intent-filter>
         </service>
-
-        <service android:name=".color_filter.ColorFilterService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            />
 
         <service android:name=".media.music.MediaPlayerService"
             android:exported="false"
@@ -201,6 +147,12 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_provider" />
+        </receiver>
+
+        <receiver android:name=".main.boot.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
 
         <provider

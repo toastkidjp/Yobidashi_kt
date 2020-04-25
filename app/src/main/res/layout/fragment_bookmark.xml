@@ -1,0 +1,11 @@
+<layout>
+    <androidx.recyclerview.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/histories_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/search_horizontal_margin"
+        android:layout_marginRight="@dimen/search_horizontal_margin"
+        android:layoutAnimation="@anim/layout_slide_in_right"
+        />
+</layout>

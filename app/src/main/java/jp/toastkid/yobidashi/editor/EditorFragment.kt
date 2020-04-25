@@ -20,7 +20,13 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.*
+import android.view.ActionMode
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
@@ -51,10 +57,10 @@ import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import java.io.File
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,6 +71,7 @@ import java.util.*
  */
 class EditorFragment :
         Fragment(),
+        TabUiFragment,
         PasteAsConfirmationDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
@@ -84,9 +91,9 @@ class EditorFragment :
     /**
      * Default date format holder.
      */
-    private val dateFormatHolder: ThreadLocal<DateFormat> by lazy {
-        object: ThreadLocal<DateFormat>() {
-            override fun initialValue(): DateFormat =
+    private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
+        object: ThreadLocal<SimpleDateFormat>() {
+            override fun initialValue() =
                     SimpleDateFormat("HH:mm:ss", Locale.getDefault())
         }
     }
@@ -175,7 +182,6 @@ class EditorFragment :
                         }
                         else -> Unit
                     }
-                    actionMode?.finish()
                     return false
                 }
 
@@ -228,7 +234,6 @@ class EditorFragment :
                     }
                     else -> Unit
                 }
-                actionMode?.finish()
                 return false
             }
 
@@ -289,10 +294,11 @@ class EditorFragment :
     }
 
     override fun onDetach() {
-        super.onDetach()
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
+        speechMaker.dispose()
+        super.onDetach()
     }
 
     /**
@@ -495,7 +501,7 @@ class EditorFragment :
             context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         }
 
-        if (!externalFilesDir.exists()) {
+        if (externalFilesDir?.exists() == false) {
             externalFilesDir.mkdirs()
         }
         return File(externalFilesDir, fileName)

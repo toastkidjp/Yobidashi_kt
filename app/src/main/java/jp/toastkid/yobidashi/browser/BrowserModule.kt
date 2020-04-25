@@ -40,9 +40,13 @@ import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.StateRepository
 import jp.toastkid.yobidashi.browser.webview.WebViewPool
-import jp.toastkid.yobidashi.libs.*
+import jp.toastkid.yobidashi.libs.BitmapCompressor
+import jp.toastkid.yobidashi.libs.Inputs
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
@@ -57,8 +61,7 @@ import java.io.IOException
  */
 class BrowserModule(
         private val context: Context,
-        private val webViewContainer: FrameLayout?,
-        private val historyAddingCallback: (String, String) -> Unit
+        private val webViewContainer: FrameLayout?
 ) {
 
     private val webViewPool: WebViewPool
@@ -154,8 +157,6 @@ class BrowserModule(
             } catch (e: Exception) {
                 Timber.e(e)
             }
-
-            historyAddingCallback(title, urlStr)
 
             if (preferenceApplier.saveViewHistory
                     && title.isNotEmpty()
@@ -313,7 +314,13 @@ class BrowserModule(
             val url = href?.data?.getString("url")?.toUri()
                     ?: return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
             view.stopLoading()
-            context.startActivity(MainActivity.makeBrowserIntent(context, url))
+
+            (context as? FragmentActivity)?.also { fragmentActivity ->
+                ViewModelProviders.of(fragmentActivity)
+                        .get(BrowserViewModel::class.java)
+                        .open(url)
+            }
+
             return true
         }
     }
@@ -368,6 +375,8 @@ class BrowserModule(
         currentWebView?.let {
             it.onResume()
             webViewContainer?.addView(it)
+            updateForwardButtonState(it.canGoForward())
+            it.startAnimation(slideUpFromBottom)
 
             val activity = webViewContainer?.context
             if (activity is FragmentActivity
@@ -378,6 +387,10 @@ class BrowserModule(
 
         reloadWebViewSettings().addTo(disposables)
         return currentWebView?.url.isNullOrBlank()
+    }
+
+    private fun updateForwardButtonState(newState: Boolean) {
+        browserHeaderViewModel?.setForwardButtonEnability(newState)
     }
 
     /**
@@ -418,6 +431,7 @@ class BrowserModule(
     fun back() = currentView()?.let {
         return if (it.canGoBack()) {
             it.goBack()
+            updateForwardButtonState(it.canGoForward())
             true
         } else false
     } ?: false
@@ -426,6 +440,8 @@ class BrowserModule(
         if (it.canGoForward()) {
             it.goForward()
         }
+
+        updateForwardButtonState(it.canGoForward())
     }
 
     fun canCurrentTabGoesBack() = currentView()?.canGoBack() == true

@@ -1,12 +1,14 @@
 package jp.toastkid.yobidashi.browser
 
 import android.app.ActivityOptions
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.ValueCallback
 import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
@@ -19,11 +21,9 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
-import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
@@ -39,15 +39,12 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
-import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
-import timber.log.Timber
-import java.io.File
-import java.io.IOException
 
 /**
  * Internal browser fragment.
@@ -55,6 +52,7 @@ import java.io.IOException
  * @author toastkidjp
  */
 class BrowserFragment : Fragment(),
+        TabUiFragment,
         CommonFragmentAction,
         UserAgentDialogFragment.Callback,
         ContentScrollable
@@ -69,11 +67,6 @@ class BrowserFragment : Fragment(),
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
-
-    /**
-     * Search-with-clip object.
-     */
-    private lateinit var searchWithClip: SearchWithClip
 
     /**
      * Browser module.
@@ -134,21 +127,8 @@ class BrowserFragment : Fragment(),
         val activityContext = context ?: return null
 
         preferenceApplier = PreferenceApplier(activityContext)
-        val colorPair = preferenceApplier.colorPair()
 
-        val cm = activityContext.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        searchWithClip = SearchWithClip(
-                cm,
-                binding?.root as View,
-                colorPair
-        ) { preview(it) }
-        searchWithClip.invoke()
-
-        browserModule = BrowserModule(
-                context as Context,
-                binding?.webViewContainer,
-                historyAddingCallback = { title, url -> /* TODO tabs.addHistory(title, url)*/ }
-        )
+        browserModule = BrowserModule(activityContext, binding?.webViewContainer)
 
         setHasOptionsMenu(true)
 
@@ -182,12 +162,12 @@ class BrowserFragment : Fragment(),
 
         headerViewModel?.progress?.observe(activity, Observer { newProgress ->
             if (70 < newProgress) {
-                binding?.progress?.isVisible = false
+                headerBinding?.progress?.isVisible = false
                 headerBinding?.reload?.setImageResource(R.drawable.ic_reload)
                 //TODO refreshThumbnail()
                 return@Observer
             }
-            binding?.progress?.let {
+            headerBinding?.progress?.let {
                 it.isVisible = true
                 it.progress = newProgress
                 headerBinding?.reload?.setImageResource(R.drawable.ic_close)
@@ -212,6 +192,10 @@ class BrowserFragment : Fragment(),
             viewModel.reset.observe(activity, Observer {
                 val headerView = headerBinding?.root ?: return@Observer
                 headerViewModel?.replace(headerView)
+            })
+
+            viewModel.enableForward.observe(activity, Observer {
+                updateForwardButtonState(it)
             })
         }
 
@@ -245,7 +229,6 @@ class BrowserFragment : Fragment(),
                 browserModule.findDown()
             })
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
@@ -268,11 +251,9 @@ class BrowserFragment : Fragment(),
                 ).insert()
 
                 val parent = binding?.root ?: return true
-                Toaster.snackLong(
+                Toaster.snackShort(
                         parent,
                         context.getString(R.string.message_done_added_bookmark),
-                        R.string.open,
-                        View.OnClickListener { bookmark(activityOptionsFactory.makeScaleUpBundle(it)) },
                         colorPair()
                 )
                 return true
@@ -309,7 +290,7 @@ class BrowserFragment : Fragment(),
     }
 
     fun reload() {
-        if (binding?.progress?.isVisible == true) {
+        if (headerBinding?.progress?.isVisible == true) {
             browserModule.stopLoading()
         } else {
             browserModule.reload()
@@ -324,6 +305,11 @@ class BrowserFragment : Fragment(),
     fun tabList() {
         val mainActivity = activity as? MainActivity
         mainActivity?.switchTabList()
+    }
+
+    private fun updateForwardButtonState(enable: Boolean) {
+        headerBinding?.forward?.isEnabled = enable
+        headerBinding?.forward?.alpha = if (enable) 1f else 0.6f
     }
 
     private fun showReaderFragment(content: String) {
@@ -384,20 +370,6 @@ class BrowserFragment : Fragment(),
      * Do browser forward action.
      */
     fun forward() = browserModule.forward()
-
-    /**
-     * Show bookmark activity.
-     *
-     * @param option [ActivityOptions]
-     */
-    private fun bookmark(option: ActivityOptions) {
-        val fragmentActivity = activity ?: return
-        fragmentActivity.startActivityForResult(
-                BookmarkActivity.makeIntent(fragmentActivity),
-                BookmarkActivity.REQUEST_CODE,
-                option.toBundle()
-        )
-    }
 
     /**
      * TODO implement ViewModel.
@@ -478,15 +450,7 @@ class BrowserFragment : Fragment(),
         }
     }
 
-    override fun pressLongBack(): Boolean {
-        activity?.let {
-            it.startActivityForResult(
-                ViewHistoryActivity.makeIntent(it),
-                ViewHistoryActivity.REQUEST_CODE
-            )
-        }
-        return true
-    }
+    override fun pressLongBack() = true
 
     override fun pressBack(): Boolean = hideOption() || back()
 
@@ -524,22 +488,6 @@ class BrowserFragment : Fragment(),
         return false
     }
 
-    /**
-     * Load archive file.
-     *
-     * @param file Archive file
-     */
-    fun loadArchive(file: File) {
-        try {
-            browserModule.loadArchive(file)
-        } catch (e: IOException) {
-            Timber.e(e)
-        } catch (error: Throwable) {
-            Timber.e(error)
-            System.gc()
-        }
-    }
-
     fun preview(url: String) {
         val webView = browserModule.getWebView(FloatingPreview.getSpecialId())
         if (webView == null) {
@@ -569,7 +517,7 @@ class BrowserFragment : Fragment(),
         Toaster.snackShort(
                 binding?.root as View,
                 getString(R.string.format_result_user_agent, userAgent.title()),
-                preferenceApplier.colorPair()
+                colorPair()
         )
     }
 
@@ -595,7 +543,6 @@ class BrowserFragment : Fragment(),
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
-        searchWithClip.dispose()
         headerViewModel?.show()
         browserModule.dispose()
     }

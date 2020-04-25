@@ -46,6 +46,23 @@ class Bookmark {
             val host = url.toUri().host ?: url
             return FilesDir(context, "favicons").assignNewFile("$host.png").absolutePath
         }
+
+        fun make(
+                title: String,
+                url: String = "",
+                faviconPath: String = "",
+                parent: String = "parent",
+                folder: Boolean = false
+        ): Bookmark {
+            val bookmark = Bookmark()
+            bookmark.title = title
+            bookmark.url = url
+            bookmark.favicon = faviconPath
+            bookmark.lastViewed = System.currentTimeMillis()
+            bookmark.parent = parent
+            bookmark.folder = folder
+            return bookmark
+        }
     }
 
 }

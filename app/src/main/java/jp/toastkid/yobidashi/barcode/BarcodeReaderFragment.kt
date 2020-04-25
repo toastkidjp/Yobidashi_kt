@@ -53,6 +53,8 @@ class BarcodeReaderFragment : Fragment() {
      */
     private var binding: FragmentBarcodeReaderBinding? = null
 
+    private var viewModel: BarcodeReaderResultPopupViewModel? = null
+
     /**
      * Preferences wrapper.
      */
@@ -103,20 +105,23 @@ class BarcodeReaderFragment : Fragment() {
 
         val requireActivity = requireActivity()
 
-        ViewModelProviders.of(requireActivity).get(BarcodeReaderResultPopupViewModel::class.java)
-                .also {
-                    it.clip.observe(requireActivity, Observer { text -> clip(text) })
-                    it.share.observe(requireActivity, Observer { text ->
+        viewModel = ViewModelProviders.of(this).get(BarcodeReaderResultPopupViewModel::class.java)
+        viewModel?.also {
+                    it.clip.observe(this, Observer { text -> clip(text) })
+                    it.share.observe(this, Observer { text ->
                         startActivity(IntentFactory.makeShare(text))
+                        activity?.supportFragmentManager?.popBackStack()
                     })
-                    it.open.observe(requireActivity, Observer { text ->
+                    it.open.observe(this, Observer { text ->
                         SearchAction(
                                 requireActivity,
                                 preferenceApplier.getDefaultSearchEngine(),
                                 text
                         ).invoke()
+                        activity?.supportFragmentManager?.popBackStack()
                     })
                 }
+        resultPopup.setViewModel(viewModel)
 
         initializeFab()
         startDecode()

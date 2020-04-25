@@ -35,7 +35,7 @@ internal object Archive {
      * @param webView
      */
     fun save(webView: WebView) {
-        ArchiveSaver.invoke(
+        ArchiveSaver().invoke(
                 webView,
                 makeNew(webView.context).assignNewFile(webView.title + Archive.fileExtension)
         )

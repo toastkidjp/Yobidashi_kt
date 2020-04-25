@@ -71,7 +71,7 @@ internal class ActivityAdapter(
         holder.itemView.setOnClickListener {
             if (bookmark.folder) {
                 folderHistory.push(bookmark.parent)
-                query(bookmark.title)
+                findByFolderName(bookmark.title)
             } else {
                 onClick(bookmark)
             }
@@ -98,18 +98,6 @@ internal class ActivityAdapter(
         }
     }
 
-    fun refresh() {
-        items.clear()
-        Maybe.fromCallable { items.addAll(bookmarkRepository.all()) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { notifyDataSetChanged() },
-                        Timber::e
-                )
-                .addTo(disposables)
-    }
-
     /**
      * Return current folder name.
      */
@@ -125,7 +113,7 @@ internal class ActivityAdapter(
         if (folderHistory.isEmpty()) {
             return false
         }
-        query(folderHistory.pop())
+        findByFolderName(folderHistory.pop())
         return true
     }
 
@@ -133,20 +121,24 @@ internal class ActivityAdapter(
      * Show root folder.
      */
     fun showRoot() {
-        query(Bookmark.getRootFolderName())
+        findByFolderName(Bookmark.getRootFolderName())
+    }
+
+    private fun findByFolderName(title: String) {
+        displayItems(Maybe.fromCallable { bookmarkRepository.findByParent(title) })
     }
 
     /**
      * Query with specified title.
      *
-     * @param title
+     * @param itemCall
      */
-    fun query(title: String) {
-        Maybe.fromCallable { bookmarkRepository.search(title) }
+    private fun displayItems(itemCall: Maybe<List<Bookmark>>) {
+        itemCall
                 .subscribeOn(Schedulers.io())
                 .flatMapObservable { it.toObservable() }
-                .doOnSubscribe { items.clear() }
                 .observeOn(Schedulers.computation())
+                .doOnSubscribe { items.clear() }
                 .subscribe(
                         { items.add(it) },
                         Timber::e,
@@ -164,7 +156,7 @@ internal class ActivityAdapter(
      * Reload.
      */
     fun reload() {
-        query(currentFolderName())
+        findByFolderName(currentFolderName())
     }
 
     /**

@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -19,10 +20,10 @@ class ExportedFileParserTest {
      */
     @Test
     fun testInvoke() {
-        val htmlFile = File(ExportedFileParserTest::class.java.classLoader
-                .getResource("bookmark/sample.html").toURI())
+        val resource = javaClass.classLoader
+                ?.getResource("bookmark/sample.html")?.toURI() ?: return fail()
+        val htmlFile = File(resource)
         val bookmarks = ExportedFileParser()(htmlFile)
-        //bookmarks.forEach { println(Moshi.Builder().build().adapter(Bookmark::class.java).toJson(it)) }
         assertEquals(18, bookmarks.size)
     }
 }

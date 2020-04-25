@@ -6,6 +6,9 @@ import android.util.LruCache
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * [WebView] pool.
@@ -30,6 +33,8 @@ internal class WebViewPool(
      * Containing [WebView] instance.
      */
     private val pool: LruCache<String, WebView>
+
+    private val preferenceApplier = PreferenceApplier(context)
 
     private val alphaConverter = AlphaConverter()
 
@@ -57,12 +62,16 @@ internal class WebViewPool(
 
         val extract = pool[tabId]
         if (extract != null) {
+            applyDarkThemeIfNeed(extract)
             return extract
         }
 
         val webView = WebViewFactory.make(context)
         webView.webViewClient = webViewClientSupplier()
         webView.webChromeClient = webChromeClientSupplier()
+
+        applyDarkThemeIfNeed(webView)
+
         pool.put(tabId, webView)
         return webView
     }
@@ -72,7 +81,11 @@ internal class WebViewPool(
      *
      * @return [WebView] (Nullable)
      */
-    fun getLatest(): WebView? = latestTabId?.let { pool.get(it) }
+    fun getLatest(): WebView? = latestTabId?.let {
+        val webView = pool.get(it)
+        applyDarkThemeIfNeed(webView)
+        webView
+    }
 
     /**
      * Remove [WebView] by tab ID.
@@ -101,10 +114,18 @@ internal class WebViewPool(
         }
     }
 
-
     fun applyNewAlpha() {
         val newAlphaBackground = alphaConverter.readBackground(context)
         pool.snapshot().values.forEach { it.setBackgroundColor(newAlphaBackground) }
+    }
+
+    private fun applyDarkThemeIfNeed(webView: WebView) {
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(
+                    webView.settings,
+                    if (preferenceApplier.useDarkMode()) WebSettingsCompat.FORCE_DARK_ON else WebSettingsCompat.FORCE_DARK_OFF
+            )
+        }
     }
 
     /**

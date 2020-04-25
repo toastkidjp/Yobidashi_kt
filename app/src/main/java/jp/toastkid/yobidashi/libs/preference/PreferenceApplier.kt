@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.libs.preference
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -9,8 +10,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.main.StartUp
-import jp.toastkid.yobidashi.media.image.Sort
-import jp.toastkid.yobidashi.menu.MenuPos
+import jp.toastkid.yobidashi.media.image.list.Sort
 import jp.toastkid.yobidashi.search.SearchCategory
 import java.io.File
 import java.util.*
@@ -26,7 +26,7 @@ class PreferenceApplier(private val context: Context) {
     @SuppressWarnings("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
-        USE_DAILY_ALARM, USE_INTERNAL_BROWSER
+        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS
     }
 
     private enum class Key {
@@ -34,7 +34,7 @@ class PreferenceApplier(private val context: Context) {
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
         ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH,
         BG_IMAGE, LAST_AD_DATE,
-        USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS, MENU_POS,
+        USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
         FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
@@ -42,7 +42,7 @@ class PreferenceApplier(private val context: Context) {
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
-        IMAGE_VIEWER_SORT_TYPE
+        IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE
     }
 
     private val preferences: SharedPreferences =
@@ -110,7 +110,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     var backgroundImagePath: String
-        get() = preferences.getString(Key.BG_IMAGE.name, "")
+        get() = preferences.getString(Key.BG_IMAGE.name, "") ?: ""
         set(path) = preferences.edit().putString(Key.BG_IMAGE.name, path).apply()
 
     fun hasBackgroundImagePath(): Boolean = backgroundImagePath.isNotEmpty()
@@ -166,16 +166,6 @@ class PreferenceApplier(private val context: Context) {
 
     fun useJavaScript(): Boolean = preferences.getBoolean(Key.USE_JS.name, true)
 
-    fun setMenuPos(newState: MenuPos) {
-        preferences.edit().putString(Key.MENU_POS.name, newState.name).apply()
-    }
-
-    fun menuPosId(): Int =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name)).id
-
-    fun menuPos(): MenuPos =
-            MenuPos.valueOf(preferences.getString(Key.MENU_POS.name, MenuPos.RIGHT.name))
-
     fun setLoadImage(newState: Boolean) {
         preferences.edit().putBoolean(Key.LOAD_IMAGE.name, newState).apply()
     }
@@ -192,7 +182,7 @@ class PreferenceApplier(private val context: Context) {
         preferences.edit().putString(Key.USER_AGENT.name, path).apply()
     }
 
-    fun userAgent(): String = preferences.getString(Key.USER_AGENT.name, "DEFAULT")
+    fun userAgent(): String = preferences.getString(Key.USER_AGENT.name, "DEFAULT") ?: ""
 
     var homeUrl: String
         get() = preferences.getString(Key.HOME_URL.name,
@@ -201,7 +191,7 @@ class PreferenceApplier(private val context: Context) {
                 } else {
                     "https://m.yahoo.co.jp"
                 }
-        )
+        ) ?: ""
         set(path) {
             if (Urls.isInvalidUrl(path)) {
                 return
@@ -233,7 +223,7 @@ class PreferenceApplier(private val context: Context) {
         return preferences.getString(
                 Key.DEFAULT_SEARCH_ENGINE.name,
                 SearchCategory.getDefaultCategoryName()
-        )
+        ) ?: ""
     }
 
     var enableSearchQueryExtract: Boolean
@@ -267,7 +257,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     internal fun browserScreenMode(): ScreenMode =
-            ScreenMode.valueOf(preferences.getString(Key.SCREEN_MODE.name, ScreenMode.EXPANDABLE.name))
+            ScreenMode.valueOf(preferences.getString(Key.SCREEN_MODE.name, ScreenMode.EXPANDABLE.name) ?: "")
 
     var useInversion: Boolean
         get () = preferences.getBoolean(Key.USE_INVERSION.name, false)
@@ -419,8 +409,8 @@ class PreferenceApplier(private val context: Context) {
                 .apply()
     }
 
-    fun excludedItems() =
-            preferences.getStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, emptySet())
+    fun excludedItems(): Set<String> =
+            preferences.getStringSet(Key.IMAGE_VIEWER_EXCLUDED_PATHS.name, emptySet()) ?: emptySet()
 
     fun removeFromExcluding(path: String) {
         mutableSetOf<String>().also {
@@ -439,6 +429,17 @@ class PreferenceApplier(private val context: Context) {
 
     fun setImageViewerSort(sort: Sort) {
         preferences.edit().putString(Key.IMAGE_VIEWER_SORT_TYPE.name, sort.name).apply()
+    }
+
+    fun useDarkMode(): Boolean {
+        return preferences.getBoolean(
+                Key.BROWSER_DARK_MODE.name,
+                (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        )
+    }
+
+    fun setUseDarkMode(newState: Boolean) {
+        preferences.edit().putBoolean(Key.BROWSER_DARK_MODE.name, newState).apply()
     }
 
 }

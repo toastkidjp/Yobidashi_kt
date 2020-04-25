@@ -17,10 +17,8 @@ import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.settings.ColorFilterSettingInitializer
 
 /**
  * @author toastkidjp
@@ -31,22 +29,12 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    /**
-     * Color filter.
-     */
-    private lateinit var colorFilter: ColorFilter
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
 
-        activity?.let {
-            colorFilter = ColorFilter(it, binding.root)
-        }
-
-        ColorFilterSettingInitializer(binding) { colorFilter.color(it) }.invoke()
         binding.fragment = this
         return binding.root
     }
@@ -66,9 +54,9 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
      * Switch color filter's visibility.
      */
     fun switchColorFilter() {
-        activity?.let {
-            binding.useColorFilterCheck.isChecked = colorFilter.switchState(it)
-        }
+        val newState = !preferenceApplier.useColorFilter()
+        binding.useColorFilterCheck.isChecked = newState
+        preferenceApplier.setUseColorFilter(newState)
     }
 
     @StringRes

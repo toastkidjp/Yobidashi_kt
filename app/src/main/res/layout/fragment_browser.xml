@@ -5,7 +5,6 @@
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,16 +27,6 @@
                     />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_gravity="top"
-            android:visibility="gone"
-            tools:visibility="visible"
-            />
 
     </FrameLayout>
 </layout>

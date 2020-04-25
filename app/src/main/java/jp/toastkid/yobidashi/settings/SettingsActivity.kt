@@ -2,9 +2,7 @@ package jp.toastkid.yobidashi.settings
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -13,9 +11,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.color_filter.ColorFilter
 import jp.toastkid.yobidashi.databinding.ActivitySettingsBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 
@@ -102,22 +98,7 @@ class SettingsActivity : AppCompatActivity() {
             finish()
             true
         }
-        else -> true
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ColorFilter.REQUEST_CODE) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-                Toaster.snackShort(
-                        binding.root,
-                        R.string.message_cannot_draw_overlay,
-                        preferenceApplier.colorPair()
-                )
-                return
-            }
-            ColorFilter(this, binding.root).start()
-        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {

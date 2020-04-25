@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -34,12 +34,12 @@ class BookmarkClearDialogFragment : DialogFragment() {
     private var onClickBookmarkClear: OnClickBookmarkClearCallback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        if (activityContext is OnClickBookmarkClearCallback) {
-            onClickBookmarkClear = activityContext
+        val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
+        if (target is OnClickBookmarkClearCallback) {
+            onClickBookmarkClear = target
         }
 
+        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_bookmark)
                 .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))

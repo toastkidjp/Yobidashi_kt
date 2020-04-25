@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.libs.speech
 import android.content.Context
 import android.os.Build
 import android.speech.tts.TextToSpeech
-import java.util.*
+import java.util.UUID
 import kotlin.math.min
 
 /**
@@ -33,7 +33,7 @@ class SpeechMaker(context: Context) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             textToSpeech.speak(
-                    message.substring(min(message.length, 3999)),
+                    message.substring(0, min(message.length, 3999)),
                     TextToSpeech.QUEUE_FLUSH,
                     null,
                     UUID.randomUUID().toString()

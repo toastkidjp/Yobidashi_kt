@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -37,13 +38,13 @@ class CardFragment : Fragment() {
                     v,
                     R.string.message_confirm_back,
                     R.string.back,
-                    View.OnClickListener{ activity?.finish() },
+                    View.OnClickListener{ activity?.supportFragmentManager?.popBackStack() },
                     PreferenceApplier(v.context).colorPair()
             )
         }
         val arguments = arguments ?: Bundle()
-        if (arguments.containsKey(CardViewActivity.EXTRA_KEY_CARD_TEXT)) {
-            arguments.getString(CardViewActivity.EXTRA_KEY_CARD_TEXT)
+        if (arguments.containsKey(EXTRA_KEY_CARD_TEXT)) {
+            arguments.getString(EXTRA_KEY_CARD_TEXT)
                     ?.let { setText(it) }
         }
         return binding.root
@@ -64,10 +65,21 @@ class CardFragment : Fragment() {
     companion object {
 
         /**
+         * Card extra key.
+         */
+        private const val EXTRA_KEY_CARD_TEXT = "card_text"
+
+        /**
          * Layout ID.
          */
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.item_planning_poker
+
+        fun makeWithNumber(text: String): Fragment {
+            return CardFragment().also {
+                it.arguments = bundleOf(EXTRA_KEY_CARD_TEXT to text)
+            }
+        }
     }
 
 }

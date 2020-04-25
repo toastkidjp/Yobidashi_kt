@@ -19,24 +19,22 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppActivity
-import jp.toastkid.yobidashi.barcode.BarcodeReaderActivity
+import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
-import jp.toastkid.yobidashi.browser.archive.ArchivesActivity
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkActivity
-import jp.toastkid.yobidashi.browser.history.ViewHistoryActivity
-import jp.toastkid.yobidashi.launcher.LauncherActivity
+import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
+import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
+import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
+import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.media.image.ImageViewerFragment
+import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
-import jp.toastkid.yobidashi.planning_poker.PlanningPokerActivity
+import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.search.SearchActivity
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -47,19 +45,17 @@ import timber.log.Timber
 import java.util.*
 
 /**
- * TODO clean up duplcated codes.
+ * TODO clean up duplicated codes.
  * @author toastkidjp
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val findCurrentFragment: () -> CommonFragmentAction?,
-        private val replaceFragment: (Fragment) -> Unit,
+        private val findCurrentFragment: () -> Fragment?,
+        private val replaceFragment: (Class<out Fragment>) -> Unit,
         private val cleanProcess: () -> Unit,
-        private val obtainFragment: (Class<out Fragment>) -> Fragment,
         private val openPdfTabFromStorage: () -> Unit,
         private val openEditorTab: () -> Unit,
         private val switchPageSearcher: () -> Unit,
-        private val useCameraPermission: (() -> Unit) -> Unit,
         private val close: () -> Unit
 ) {
 
@@ -88,80 +84,46 @@ class MenuUseCase(
     fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
-                val currentFragment = findCurrentFragment()
-                if (currentFragment is ContentScrollable) {
-                    currentFragment.toTop()
-                }
+                (findCurrentFragment() as? ContentScrollable)?.toTop()
+
             }
             Menu.BOTTOM-> {
-                val currentFragment = findCurrentFragment()
-                if (currentFragment is ContentScrollable) {
-                    currentFragment.toBottom()
-                }
+                (findCurrentFragment() as? ContentScrollable)?.toBottom()
             }
             Menu.SHARE-> {
-                findCurrentFragment()?.share()
-            }
-            Menu.WIFI_SETTING-> {
-                startActivity(SettingsIntentFactory.wifi())
+                (findCurrentFragment() as? CommonFragmentAction)?.share()
             }
             Menu.CODE_READER -> {
-                startActivity(BarcodeReaderActivity.makeIntent(activitySupplier()))
+                replaceFragment(BarcodeReaderFragment::class.java)
             }
-            Menu.SCHEDULE-> {
-                try {
-                    startActivity(IntentFactory.makeCalendar())
-                } catch (e: ActivityNotFoundException) {
-                    Timber.w(e)
-                }
+            Menu.OVERLAY_COLOR_FILTER-> {
+                preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
+                (activitySupplier() as? MainActivity)?.updateColorFilter()
             }
-            /*Menu.OVERLAY_COLOR_FILTER-> {
-                val rootView = binding.root
-                ColorFilter(this, rootView).switchState(this)
-            }*/
             Menu.MEMORY_CLEANER -> {
                 cleanProcess()
             }
             Menu.PLANNING_POKER-> {
-                startActivity(PlanningPokerActivity.makeIntent(activitySupplier()))
-            }
-            Menu.CAMERA-> {
-                useCameraPermission { startActivity(IntentFactory.camera()) }
-            }
-            Menu.TORCH-> {
-                useCameraPermission { torch.switch() }
+                replaceFragment(CardListFragment::class.java)
             }
             Menu.APP_LAUNCHER-> {
-                startActivity(LauncherActivity.makeIntent(activitySupplier()))
+                replaceFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
-                replaceFragment(obtainFragment(RssReaderFragment::class.java))
+                replaceFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
                 mediaPlayerPopup.show(activitySupplier().findViewById(android.R.id.content))
                 close()
             }
-            Menu.ABOUT-> {
-                startActivity(AboutThisAppActivity.makeIntent(activitySupplier()))
-            }
             Menu.BOOKMARK-> {
-                activitySupplier().also {
-                    it.startActivityForResult(
-                            BookmarkActivity.makeIntent(it),
-                            BookmarkActivity.REQUEST_CODE
-                    )
-                }
+                replaceFragment(BookmarkFragment::class.java)
             }
             Menu.VIEW_HISTORY-> {
-                activitySupplier().also {
-                    it.startActivityForResult(
-                            ViewHistoryActivity.makeIntent(it),
-                            ViewHistoryActivity.REQUEST_CODE
-                    )
-                }
+                replaceFragment(ViewHistoryFragment::class.java)
             }
             Menu.IMAGE_VIEWER -> {
-                replaceFragment(obtainFragment(ImageViewerFragment::class.java))
+                replaceFragment(ImageViewerFragment::class.java)
             }
             Menu.LOAD_HOME-> {
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
@@ -240,12 +202,7 @@ class MenuUseCase(
                         .addTo(disposables)
             }
             Menu.VIEW_ARCHIVE -> {
-                activitySupplier().also {
-                    it.startActivityForResult(
-                        ArchivesActivity.makeIntent(it),
-                        ArchivesActivity.REQUEST_CODE
-                    )
-                }
+                replaceFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
                 switchPageSearcher()

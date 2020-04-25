@@ -9,9 +9,9 @@ package jp.toastkid.yobidashi.editor
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -80,6 +80,7 @@ class InputNameDialogFragment : DialogFragment() {
                 }
                 return@setOnEditorActionListener false
             }
+            it.requestFocus()
         }
         return dialog
     }
@@ -94,8 +95,8 @@ class InputNameDialogFragment : DialogFragment() {
         d.dismiss()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         Inputs.showKeyboardForInputDialog(dialog?.window)
     }
 

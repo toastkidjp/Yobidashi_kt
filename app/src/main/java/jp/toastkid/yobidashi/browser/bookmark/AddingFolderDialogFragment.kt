@@ -26,13 +26,16 @@ class AddingFolderDialogFragment : DialogFragment() {
     private var onClick: OnClickAddingFolder? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        if (activityContext is OnClickAddingFolder) {
-            onClick = activityContext
+        val target = targetFragment ?: return super.onCreateDialog(savedInstanceState)
+        if (target is OnClickAddingFolder) {
+            onClick = target
         }
 
+        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+
         val inputLayout = TextInputs.make(activityContext)
+
+        inputLayout.editText?.requestFocus()
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(getString(R.string.title_dialog_input_file_name))
