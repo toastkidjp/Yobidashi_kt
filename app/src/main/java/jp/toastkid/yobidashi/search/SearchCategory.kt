@@ -40,6 +40,11 @@ enum class SearchCategory(
             R.drawable.ic_yahoo_japan_logo,
             "https://search.yahoo.co.jp/search?p="
     ),
+    WOLFRAM_ALPHA(
+            R.string.wolfram_alpha,
+            R.drawable.ic_wolfram_alpha,
+            "https://www.wolframalpha.com/input/?i="
+    ),
     AOL(
             R.string.aol,
             R.drawable.ic_aol,

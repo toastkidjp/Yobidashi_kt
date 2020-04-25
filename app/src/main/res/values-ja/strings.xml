@@ -474,5 +474,6 @@
     <string name="daum">Daum</string>
     <string name="title_search_suggestion">Search suggestion</string>
     <string name="aol">AOL.</string>
+    <string name="wolfram_alpha">Wolfram Alpha</string>
 
 </resources>
