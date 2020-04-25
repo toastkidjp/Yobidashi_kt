@@ -867,7 +867,7 @@ class MainActivity : AppCompatActivity(),
 
                 tabs.openNewPdfTab(uri)
                 replaceToCurrentTab(true)
-                //TODO enable after commit. tabListDialogFragment?.dismiss()
+                tabListDialogFragment?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(this, data).addTo(disposables)
