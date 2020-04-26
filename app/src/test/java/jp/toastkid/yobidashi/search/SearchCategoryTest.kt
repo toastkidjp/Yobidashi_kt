@@ -49,6 +49,7 @@ class SearchCategoryTest {
         assertSame(SearchCategory.FLICKR, SearchCategory.findByHostOrNull("www.flickr.com"))
         assertSame(SearchCategory.AOL, SearchCategory.findByHostOrNull("www.aolsearch.com"))
         assertSame(SearchCategory.WOLFRAM_ALPHA, SearchCategory.findByHostOrNull("www.wolframalpha.com"))
+        assertSame(SearchCategory.LINKED_IN, SearchCategory.findByHostOrNull("www.linkedin.com"))
     }
 
 }
