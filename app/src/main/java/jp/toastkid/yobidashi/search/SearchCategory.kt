@@ -113,6 +113,11 @@ enum class SearchCategory(
             "https://archive.org/search.php?query=",
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
     ),
+    LINKED_IN(
+            R.string.linked_in,
+            R.drawable.ic_linked_in,
+            "https://www.linkedin.com/jobs/search?keywords="
+    ),
     TWITTER(
             R.string.search_category_twitter,
             R.drawable.ic_twitter,
