@@ -45,11 +45,6 @@ enum class SearchCategory(
             R.drawable.ic_wolfram_alpha,
             "https://www.wolframalpha.com/input/?i="
     ),
-    AOL(
-            R.string.aol,
-            R.drawable.ic_aol,
-            "https://www.aolsearch.com/search?s_chn=prt_bon-mobile&q="
-    ),
     BING(
             R.string.bing,
             R.drawable.ic_bing_logo,
@@ -60,6 +55,11 @@ enum class SearchCategory(
             R.drawable.ic_duckduckgo,
             "https://duckduckgo.com/%s?ia=web",
             { _, h, q -> String.format(h, q)}
+    ),
+    AOL(
+            R.string.aol,
+            R.drawable.ic_aol,
+            "https://www.aolsearch.com/search?s_chn=prt_bon-mobile&q="
     ),
     ASK_COM(
             R.string.search_category_ask_com,
