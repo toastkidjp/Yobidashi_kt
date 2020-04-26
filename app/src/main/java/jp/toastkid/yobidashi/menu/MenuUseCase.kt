@@ -12,6 +12,7 @@ import android.os.Build
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -46,7 +47,7 @@ import java.util.*
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val close: () -> Unit
+        private val menuViewModel: MenuViewModel?
 ) {
 
     private val contentViewModel =
@@ -59,6 +60,17 @@ class MenuUseCase(
     private val disposables = CompositeDisposable()
 
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
+
+    init {
+        val activity = activitySupplier()
+        menuViewModel?.click?.observe(activity, Observer {
+            onMenuClick(it)
+        })
+
+        menuViewModel?.longClick?.observe(activity, Observer {
+            onMenuLongClick(it)
+        })
+    }
 
     fun onMenuClick(menu: Menu) {
         when (menu) {
@@ -101,7 +113,7 @@ class MenuUseCase(
             Menu.AUDIO -> {
                 val parent = extractContentView() ?: return
                 mediaPlayerPopup.show(parent)
-                close()
+                menuViewModel?.close()
             }
             Menu.BOOKMARK-> {
                 contentViewModel.nextFragment(BookmarkFragment::class.java)

@@ -282,19 +282,7 @@ class MainActivity : AppCompatActivity(),
 
         MenuBinder(this, menuViewModel, binding.menusView, binding.menuSwitch)
 
-        menuUseCase = MenuUseCase(
-                { this },
-                { menuViewModel?.close() }
-        )
-
-        // TODO Attempt to move to binder.
-        menuViewModel?.click?.observe(this, Observer {
-            menuUseCase.onMenuClick(it)
-        })
-
-        menuViewModel?.longClick?.observe(this, Observer {
-            menuUseCase.onMenuLongClick(it)
-        })
+        menuUseCase = MenuUseCase({ this }, menuViewModel)
     }
 
     private fun initializeContentViewModel() {
