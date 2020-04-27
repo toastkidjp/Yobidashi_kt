@@ -189,8 +189,7 @@ class MainActivity : AppCompatActivity(),
             floatingPreview?.show(binding.root, it.toString())
         })
         browserViewModel?.open?.observe(this, Observer {
-            tabs.openNewWebTab(it.toString())
-            replaceToCurrentTab(true)
+            openNewWebTab(it)
         })
         browserViewModel?.openBackground?.observe(this, Observer {
             tabs.openBackgroundTab(it.toString(), it.toString())
