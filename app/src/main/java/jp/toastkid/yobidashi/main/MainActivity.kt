@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(),
 
         searchWithClip = SearchWithClip(
                 applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
-                binding.root,
+                binding.content,
                 colorPair,
                 browserViewModel
         )
@@ -342,7 +342,7 @@ class MainActivity : AppCompatActivity(),
             RandomWikipedia().fetchWithAction { title, uri ->
                 openNewWebTab(uri)
                 Toaster.snackShort(
-                        binding.root,
+                        binding.content,
                         getString(R.string.message_open_random_wikipedia, title),
                         preferenceApplier.colorPair()
                 )
@@ -589,7 +589,7 @@ class MainActivity : AppCompatActivity(),
 
         tabs.setCount()
 
-        ClippingUrlOpener(binding.root) { browserViewModel?.open(it) }
+        ClippingUrlOpener(binding.content) { browserViewModel?.open(it) }
     }
 
     /**
@@ -835,11 +835,11 @@ class MainActivity : AppCompatActivity(),
                 val result: IntentResult? =
                         IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
                 if (result?.contents == null) {
-                    Toaster.snackShort(binding.root, "Cancelled", preferenceApplier.colorPair())
+                    Toaster.snackShort(binding.content, "Cancelled", preferenceApplier.colorPair())
                     return
                 }
                 Toaster.snackLong(
-                        binding.root,
+                        binding.content,
                         "Scanned: ${result.contents}",
                         R.string.clip,
                         View.OnClickListener { Clipboard.clip(this, result.contents) },
