@@ -349,7 +349,7 @@ class MainActivity : AppCompatActivity(),
 
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
-                calledIntent.data?.let { loadUri(it) }
+                calledIntent.data?.let { openNewWebTab(it) }
                 return
             }
             Intent.ACTION_SEND -> {
@@ -359,7 +359,7 @@ class MainActivity : AppCompatActivity(),
                         search(preferenceApplier.getDefaultSearchEngine(), query)
                         return
                     }
-                    loadUri(query.toUri())
+                    openNewWebTab(query.toUri())
                 }
                 return
             }
@@ -415,16 +415,6 @@ class MainActivity : AppCompatActivity(),
     private fun openNewWebTab(uri: Uri) {
         tabs.openNewWebTab(uri.toString())
         replaceToCurrentTab(true)
-    }
-
-    /**
-     * Load Uri.
-     *
-     * @param uri
-     */
-    private fun loadUri(uri: Uri) {
-        tabs.openNewWebTab(uri.toString())
-        replaceToCurrentTab()
     }
 
     /**
