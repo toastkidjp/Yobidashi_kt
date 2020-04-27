@@ -16,6 +16,7 @@ import jp.toastkid.yobidashi.search.BackgroundSearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 import java.util.*
+import kotlin.math.min
 
 /**
  * ModuleAdapter of search history list.
@@ -33,7 +34,8 @@ internal class ModuleAdapter(
         private val favoriteSearchRepository: FavoriteSearchRepository,
         private val onClick: (FavoriteSearch) -> Unit,
         private val onVisibilityChanged: (Boolean) -> Unit,
-        private val onClickAdd: (FavoriteSearch) -> Unit
+        private val onClickAdd: (FavoriteSearch) -> Unit,
+        private val maxItemCount: Int = -1
 ) : RecyclerView.Adapter<ModuleViewHolder>() {
 
     /**
@@ -86,7 +88,7 @@ internal class ModuleAdapter(
             if (s.isNotBlank()) {
                 favoriteSearchRepository.select("$s%")
             } else {
-                favoriteSearchRepository.findLast5()
+                favoriteSearchRepository.find(maxItemCount)
             }
         }
                 .subscribeOn(Schedulers.io())
@@ -106,11 +108,13 @@ internal class ModuleAdapter(
      */
     fun removeAt(position: Int): Disposable {
         val item = selected[position]
-        return Completable.fromAction { favoriteSearchRepository.delete(item) }
+        return Completable.fromAction {
+            favoriteSearchRepository.delete(item)
+            selected.remove(item)
+        }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    selected.remove(item)
                     notifyItemRemoved(position)
                     if (isEmpty) {
                         onVisibilityChanged(false)
@@ -142,7 +146,20 @@ internal class ModuleAdapter(
         selected.add(history)
     }
 
+    fun refresh(): Disposable {
+        return Maybe.fromCallable { favoriteSearchRepository.findAll() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {
+                            selected.addAll(it)
+                            notifyDataSetChanged()
+                        },
+                        Timber::e
+                )
+    }
+
     override fun getItemCount(): Int {
-        return selected.size
+        return if (maxItemCount == -1) selected.size else min(maxItemCount, selected.size)
     }
 }

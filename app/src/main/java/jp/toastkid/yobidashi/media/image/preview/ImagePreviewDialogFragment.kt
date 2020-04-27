@@ -18,20 +18,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.image.Image
@@ -51,8 +50,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private var path: String? = null
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
-
-    private val rotatedBitmapFactory = RotatedBitmapFactory()
 
     private val rotatedImageFixing = RotatedImageFixing()
 
@@ -80,6 +77,19 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         applyColorToButtons()
 
+        val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
+        binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
+        viewModel.colorFilter.observe(this, Observer {
+            binding.photo.colorFilter = it
+        })
+        initializeAlphaSlider()
+
+        binding.imageRotationUseCase =
+                ImageRotationUseCase(viewModel, { binding.photo.drawable.toBitmap() })
+        viewModel.bitmap.observe(this, Observer {
+            binding.photo.setImageBitmap(it)
+        })
+
         contentResolver = binding.root.context.contentResolver
         loadImageAsync(activityContext, path)
 
@@ -95,6 +105,24 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                                 ViewGroup.LayoutParams.MATCH_PARENT)
                     }
                 }
+    }
+
+    private fun initializeAlphaSlider() {
+        binding.alpha.progress = 50
+        binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (!fromUser) {
+                    return
+                }
+
+                binding.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+
+        })
     }
 
     private fun fitPhotoView() {
@@ -119,21 +147,9 @@ class ImagePreviewDialogFragment  : DialogFragment() {
             return
         }
 
-        val uri = Uri.parse(File(path).toURI().toString())
-        Maybe.fromCallable {
-            ImageLoader.loadBitmap(
-                    activityContext,
-                    uri
-            )
-        }
-                .subscribeOn(Schedulers.io())
-                .map { rotatedImageFixing(contentResolver, it, uri) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        binding.photo::setImageBitmap,
-                        Timber::e
-                )
-                .addTo(disposables)
+        Glide.with(activityContext)
+                .load(Uri.parse(File(path).toURI().toString()))
+                .into(binding.photo)
     }
 
     fun edit() {
@@ -156,21 +172,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     PreferenceApplier(binding.root.context).colorPair()
             )
         }
-    }
-
-    fun rotateLeft() {
-        val bitmap = binding.photo.drawable.toBitmap()
-        binding.photo.setImageBitmap(rotatedBitmapFactory.rotateLeft(bitmap))
-    }
-
-    fun rotateRight() {
-        val bitmap = binding.photo.drawable.toBitmap()
-        binding.photo.setImageBitmap(rotatedBitmapFactory.rotateRight(bitmap))
-    }
-
-    fun reverse() {
-        val bitmap = binding.photo.drawable.toBitmap()
-        binding.photo.setImageBitmap(rotatedBitmapFactory.reverse(bitmap))
     }
 
     override fun onDismiss(dialog: DialogInterface?) {

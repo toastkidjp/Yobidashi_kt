@@ -4,9 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.search.SearchActivity
-import jp.toastkid.yobidashi.settings.SettingsActivity
+import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 
 /**
  * Factory of [PendingIntent].
@@ -19,27 +17,13 @@ class PendingIntentFactory {
      * Make launch search intent.
      *
      * @param context
-     * @return [SearchActivity]'s pending intent
+     * @return [MainActivity]'s pending intent with search action
      */
     fun makeSearchLauncher(context: Context): PendingIntent =
             PendingIntent.getActivity(
                     context,
                     0,
-                    SearchActivity.makeIntent(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-    /**
-     * Make launch main activity.
-     *
-     * @param context
-     * @return
-     */
-    fun main(context: Context): PendingIntent =
-            PendingIntent.getActivity(
-                    context,
-                    3,
-                    MainActivity.makeIntent(context),
+                    mainActivityIntentFactory.search(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -53,7 +37,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     6,
-                    MainActivity.makeLauncherIntent(context),
+                    mainActivityIntentFactory.launcher(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -67,7 +51,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     8,
-                    MainActivity.makeBarcodeReaderIntent(context),
+                    mainActivityIntentFactory.barcodeReader(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -81,7 +65,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     9,
-                    MainActivity.makeBrowserIntent(context, PreferenceApplier(context).homeUrl.toUri()),
+                    mainActivityIntentFactory.browser(context, PreferenceApplier(context).homeUrl.toUri()),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -95,7 +79,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     10,
-                    MainActivity.makeBookmarkIntent(context),
+                    mainActivityIntentFactory.bookmark(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -109,12 +93,12 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     11,
-                    MainActivity.makeRandomWikipediaIntent(context),
+                    mainActivityIntentFactory.randomWikipedia(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
     /**
-     * Make Setting activity's [PendingIntent].
+     * Make Setting fragment's [PendingIntent].
      *
      * @param context [Context]
      * @return [PendingIntent]
@@ -123,7 +107,11 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     12,
-                    SettingsActivity.makeIntent(context),
+                    mainActivityIntentFactory.setting(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
+
+    companion object {
+        private val mainActivityIntentFactory = MainActivityIntentFactory()
+    }
 }

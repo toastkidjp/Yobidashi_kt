@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.tab.tab_list
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -28,9 +28,8 @@ class TabListClearDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            onClick = targetFragment
+        if (activityContext is Callback) {
+            onClick = activityContext
         }
 
         return AlertDialog.Builder(activityContext)

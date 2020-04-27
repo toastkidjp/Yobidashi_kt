@@ -58,6 +58,8 @@
                     />
             </FrameLayout>
 
+            <include layout="@layout/primary_dark_divider"/>
+
             <FrameLayout
                 android:id="@+id/use_daily_notification"
                 android:layout_width="match_parent"

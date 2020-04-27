@@ -3,30 +3,23 @@
     <data>
         <variable name="fragment" type="jp.toastkid.yobidashi.browser.BrowserFragment" />
     </data>
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         >
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresher"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
             >
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_refresher"
+            <FrameLayout
+                android:id="@+id/web_view_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-                <FrameLayout
-                    android:id="@+id/web_view_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-        </androidx.core.widget.NestedScrollView>
-
-    </FrameLayout>
+                android:layout_height="wrap_content"
+                />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

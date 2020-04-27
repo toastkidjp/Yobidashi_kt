@@ -14,7 +14,7 @@ import android.widget.RemoteViews
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import java.util.*
@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit
 class RemoteViewsFactory {
 
     private val dateArticleUrlFactory = DateArticleUrlFactory()
+
+    private val mainActivityIntentFactory = MainActivityIntentFactory()
 
     /**
      * Make RemoteViews.
@@ -64,7 +66,7 @@ class RemoteViewsFactory {
             PendingIntent.getActivity(
                     context,
                     0,
-                    MainActivity.makeBrowserIntent(context, makeArticleUri(context)),
+                    mainActivityIntentFactory.browser(context, makeArticleUri(context)),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -72,7 +74,7 @@ class RemoteViewsFactory {
             PendingIntent.getActivity(
                     context,
                     1,
-                    MainActivity.makeBrowserIntent(context, uri),
+                    mainActivityIntentFactory.browser(context, uri),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 

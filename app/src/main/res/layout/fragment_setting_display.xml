@@ -14,6 +14,18 @@
         android:layout_height="match_parent"
         android:background="@color/soft_background"
         >
+        <TextView
+            android:id="@+id/apply_dark_mode"
+            style="@style/OneLineTextMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_dark_mode_black"
+            android:drawableStart="@drawable/ic_dark_mode_black"
+            android:onClick="@{view -> fragment.applyDarkMode()}"
+            android:text="Apply dark mode"
+            />
+
+        <include layout="@layout/primary_dark_divider" />
 
         <TextView
             android:id="@+id/clear_background_settings"

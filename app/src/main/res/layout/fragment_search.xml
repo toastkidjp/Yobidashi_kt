@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="activity" type="jp.toastkid.yobidashi.search.SearchFragment" />
+    </data>
+    <androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideInset"
+        android:fillViewport="true"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/search_horizontal_margin"
+            android:layout_marginRight="@dimen/search_horizontal_margin"
+            >
+
+            <include android:id="@+id/url_module"
+                layout="@layout/module_search_url" />
+
+            <include android:id="@+id/url_suggestion_module"
+                layout="@layout/module_url_suggestion" />
+
+            <include android:id="@+id/suggestion_module"
+                layout="@layout/module_search_suggestion" />
+
+            <include android:id="@+id/favorite_module"
+                layout="@layout/module_search_favorite" />
+
+            <include android:id="@+id/history_module"
+                layout="@layout/module_search_history" />
+
+            <include android:id="@+id/app_module"
+                layout="@layout/module_search_apps" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

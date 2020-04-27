@@ -267,7 +267,7 @@
     <string name="title_startup_start">Start</string>
     <string name="title_setting_startup">Startup view</string>
     <string name="title_load_home">Load home page</string>
-    <string name="title_replace_home">Replace home page with current</string>
+    <string name="title_replace_home">Replace home page</string>
     <string name="message_cannot_replace_home_url">This page cannot replace home page.</string>
     <string name="message_replace_home_url">It has replaced home url. : %s</string>
     <string name="title_clear_view_history">Clear view history</string>
@@ -463,5 +463,6 @@
     <string name="title_playing_speed_5">x5</string>
     <string name="title_excluding_item_setting">Excluding items</string>
     <string name="title_dark_mode">Use dark mode</string>
+    <string name="undo">undo</string>
 
 </resources>

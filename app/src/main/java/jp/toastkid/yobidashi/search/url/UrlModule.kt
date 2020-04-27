@@ -95,7 +95,7 @@ class UrlModule(
     /**
      * Hide this module.
      */
-    private fun hide(): Disposable {
+    fun hide(): Disposable {
         if (binding.root.visibility == View.VISIBLE) {
             return runOnMainThread { binding.root.visibility = View.GONE }
         }

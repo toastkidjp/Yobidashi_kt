@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:foreground="@drawable/ripple_transparent"
+        >
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="40dp"
+            android:maxLines="1"
+            android:hint="@string/title_search"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            app:theme="@style/EditTextStyle"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:background="@color/transparent"
+            >
+            <requestFocus/>
+        </androidx.appcompat.widget.AppCompatEditText>
+
+        <View
+            android:id="@+id/search_input_border"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="60dp"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            />
+
+        <Spinner
+            android:id="@+id/search_categories"
+            android:layout_width="@dimen/search_category_spinner_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:spinnerMode="dropdown"
+            android:background="@color/spinner_background"
+            />
+
+        <ImageView
+            android:id="@+id/search_clear"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginRight="44dp"
+            android:layout_marginEnd="44dp"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/ic_close"
+            />
+        <FrameLayout
+            android:id="@+id/search_action_background"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            >
+            <ImageView
+                android:id="@+id/search_action"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                app:srcCompat="@drawable/ic_mic"
+                android:adjustViewBounds="true"
+                android:background="@drawable/ripple_appwidget"
+                />
+        </FrameLayout>
+
+    </FrameLayout>
+</layout>

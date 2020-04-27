@@ -2,6 +2,8 @@
 <layout>
     <data>
         <variable name="dialog" type="jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment" />
+        <variable name="colorFilterUseCase" type="jp.toastkid.yobidashi.media.image.preview.ColorFilterUseCase" />
+        <variable name="imageRotationUseCase" type="jp.toastkid.yobidashi.media.image.preview.ImageRotationUseCase" />
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,6 +28,18 @@
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/ic_close"
             android:onClick="@{view -> dialog.dismiss()}"
+            android:background="@drawable/ripple_transparent"
+            />
+
+        <SeekBar
+            android:id="@+id/alpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:max="100"
             />
 
         <LinearLayout
@@ -35,6 +49,42 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="20dp"
             >
+
+            <ImageView
+                android:id="@+id/reverse_filter"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_monochrome"
+                android:tint="@color/lime_bg"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> colorFilterUseCase.reverseFilter()}"
+                />
+
+            <ImageView
+                android:id="@+id/sepia"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_monochrome"
+                android:tint="@color/deep_orange_500_dd"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> colorFilterUseCase.sepia()}"
+                />
+            <ImageView
+                android:id="@+id/gray_scale"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_monochrome"
+                android:tint="@color/pre4_ripple"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> colorFilterUseCase.grayScale()}"
+                />
+
             <ImageView
                 android:id="@+id/rotate_left"
                 android:layout_width="44dp"
@@ -42,7 +92,8 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_rotate_left"
-                android:onClick="@{view -> dialog.rotateLeft()}"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> imageRotationUseCase.rotateLeft()}"
                 />
             <ImageView
                 android:id="@+id/reverse"
@@ -52,7 +103,8 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_flip"
-                android:onClick="@{view -> dialog.reverse()}"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> imageRotationUseCase.reverse()}"
                 />
             <ImageView
                 android:id="@+id/rotate_right"
@@ -62,7 +114,8 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_rotate_right"
-                android:onClick="@{view -> dialog.rotateRight()}"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> imageRotationUseCase.rotateRight()}"
                 />
             <ImageView
                 android:id="@+id/edit"
@@ -72,6 +125,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_brush"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> dialog.edit()}"
                 />
         </LinearLayout>

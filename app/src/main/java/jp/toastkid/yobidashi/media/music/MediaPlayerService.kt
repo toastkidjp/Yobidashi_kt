@@ -65,11 +65,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         @PlaybackStateCompat.State
         private var mediaState: Int = PlaybackStateCompat.STATE_NONE
 
-        override fun onPrepare() {
-            super.onPrepare()
-            setNewState(PlaybackStateCompat.STATE_PAUSED)
-        }
-
         override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
             super.onPlayFromUri(uri, extras)
             registerReceiver(audioNoisyReceiver, audioNoisyFilter)
@@ -163,6 +158,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
 
         private fun setNewState(@PlaybackStateCompat.State newState: Int) {
+            Timber.i("MediaPlayerPopup setState ${newState}")
             mediaState = newState
             stateBuilder = PlaybackStateCompat.Builder()
             stateBuilder

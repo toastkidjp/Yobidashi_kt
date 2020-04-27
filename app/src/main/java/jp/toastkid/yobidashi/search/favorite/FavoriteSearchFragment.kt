@@ -1,7 +1,11 @@
 package jp.toastkid.yobidashi.search.favorite
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -34,7 +38,7 @@ class FavoriteSearchFragment : Fragment(),
     /**
      * RecyclerView's adapter
      */
-    private var adapter: ActivityAdapter? = null
+    private var adapter: ModuleAdapter? = null
 
     /**
      * Data Binding object.
@@ -76,11 +80,12 @@ class FavoriteSearchFragment : Fragment(),
 
         val repository = DatabaseFinder().invoke(fragmentActivity).favoriteSearchRepository()
 
-        adapter = ActivityAdapter(
+        adapter = ModuleAdapter(
                 fragmentActivity,
                 repository,
-                { category, query -> this.startSearch(category, query) },
-                { messageId -> Toaster.snackShort(binding?.content as View, messageId, colorPair()) }
+                { startSearch(SearchCategory.findByCategory(it.category), it.query ?: "") },
+                { },
+                { }
         )
 
         binding?.favoriteSearchView?.let {
@@ -108,7 +113,7 @@ class FavoriteSearchFragment : Fragment(),
                         if (direction != ItemTouchHelper.RIGHT) {
                             return
                         }
-                        adapter?.deleteAt(viewHolder.adapterPosition)
+                        adapter?.removeAt(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(binding?.favoriteSearchView)
         adapter?.refresh()
@@ -131,6 +136,7 @@ class FavoriteSearchFragment : Fragment(),
 
         inflater.inflate(R.menu.favorite_toolbar_menu, menu)
 
+        // TODO rewrite.
         menu.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
             val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
             ClearFavoriteSearchDialogFragment.show(
@@ -147,7 +153,12 @@ class FavoriteSearchFragment : Fragment(),
     }
 
     override fun onClickDeleteAllFavoriteSearch() {
-        Completable.fromAction { adapter?.clear() }
+        val context = requireContext()
+        val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
+        Completable.fromAction {
+            repository.deleteAll()
+            adapter?.clear()
+        }
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe {
@@ -156,6 +167,7 @@ class FavoriteSearchFragment : Fragment(),
                             R.string.settings_color_delete,
                             colorPair()
                     )
+                    activity?.supportFragmentManager?.popBackStack()
                 }
                 ?.addTo(disposables)
     }
@@ -171,8 +183,7 @@ class FavoriteSearchFragment : Fragment(),
      * Invoke addition.
      */
     private fun invokeAddition() {
-        val layout = binding?.additionArea ?: return
-        Addition(layout) { messageId -> Toaster.snackShort(layout, messageId, colorPair()) }.invoke()
+        FavoriteSearchAdditionDialogFragment().show(fragmentManager, "addition")
     }
 
     private fun colorPair() = preferenceApplier.colorPair()

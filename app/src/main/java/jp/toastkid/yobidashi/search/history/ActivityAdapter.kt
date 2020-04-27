@@ -106,12 +106,16 @@ internal class ActivityAdapter(
                         Timber::e
                 )
 
-    fun refresh(): Disposable {
+    fun refresh(onComplete: () -> Unit): Disposable {
         return Maybe.fromCallable { repository.findAll() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
+                            if (it.isEmpty()) {
+                                onComplete()
+                                return@subscribe
+                            }
                             items.addAll(it)
                             notifyDataSetChanged()
                         },

@@ -39,6 +39,10 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private var lastY: Float = 0f
 
+    private var nestedOffsetX: Float = 0f
+
+    private var lastX: Float = 0f
+
     private val scrollOffset = IntArray(2)
 
     private val scrollConsumed = IntArray(2)
@@ -61,19 +65,25 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         val event = MotionEvent.obtain(motionEvent)
         val action = event.actionMasked
         if (action == MotionEvent.ACTION_DOWN) {
+            nestedOffsetX = 0f
             nestedOffsetY = 0f
         }
+        val eventX = event.x.toInt()
         val eventY = event.y.toInt()
-        event.offsetLocation(0f, nestedOffsetY)
 
         when (action) {
             MotionEvent.ACTION_MOVE -> {
+                var deltaX: Float = lastX - eventX
                 var deltaY: Float = lastY - eventY
                 // NestedPreScroll
-                if (dispatchNestedPreScroll(0, deltaY.toInt(), scrollConsumed, scrollOffset)) {
+                if (dispatchNestedPreScroll(deltaX.toInt(), deltaY.toInt(), scrollConsumed, scrollOffset)) {
                     deltaY -= scrollConsumed[1]
                     lastY = eventY - scrollOffset[1].toFloat()
-                    event.offsetLocation(0f, -scrollOffset[1].toFloat())
+                    deltaX -= scrollConsumed[0]
+                    lastX = eventX - scrollConsumed[0].toFloat()
+
+                    event.offsetLocation(deltaX, deltaY)
+                    nestedOffsetX += scrollOffset[0]
                     nestedOffsetY += scrollOffset[1]
                 }
                 requestDisallowInterceptTouchEvent(true)
@@ -81,8 +91,9 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                 val returnValue = super.dispatchTouchEvent(event)
 
                 // NestedScroll
-                if (dispatchNestedScroll(0, scrollOffset[1], 0, deltaY.toInt(), scrollOffset)) {
-                    event.offsetLocation(0f, scrollOffset[1].toFloat())
+                if (dispatchNestedScroll(scrollOffset[0], scrollOffset[1], deltaX.toInt(), deltaY.toInt(), scrollOffset)) {
+                    event.offsetLocation(scrollOffset[0].toFloat(), scrollOffset[1].toFloat())
+                    nestedOffsetX += scrollOffset[0]
                     nestedOffsetY += scrollOffset[1]
                     lastY -= scrollOffset[1]
                 }
@@ -91,6 +102,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             MotionEvent.ACTION_DOWN -> {
                 requestDisallowInterceptTouchEvent(true)
                 val returnValue = super.dispatchTouchEvent(event)
+                lastX = eventX.toFloat()
                 lastY = eventY.toFloat()
                 // start NestedScroll
                 startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL, ViewCompat.TYPE_TOUCH)

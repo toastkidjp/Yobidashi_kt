@@ -40,9 +40,10 @@ import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
-import jp.toastkid.yobidashi.search.SearchActivity
+import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 
@@ -121,7 +122,8 @@ class BrowserFragment : Fragment(),
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
-            it.setDistanceToTriggerSync(5000)
+            it.setDistanceToTriggerSync(8000)
+            it.setSlingshotDistance(150)
         }
 
         val activityContext = context ?: return null
@@ -132,6 +134,7 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
+        // TODO use data binding
         headerBinding?.urlBox?.setOnClickListener { tapHeader() }
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
@@ -190,6 +193,9 @@ class BrowserFragment : Fragment(),
             })
 
             viewModel.reset.observe(activity, Observer {
+                if (!isVisible) {
+                    return@Observer
+                }
                 val headerView = headerBinding?.root ?: return@Observer
                 headerViewModel?.replace(headerView)
             })
@@ -389,11 +395,15 @@ class BrowserFragment : Fragment(),
             val currentUrl = browserModule.currentUrl()
             val query = searchQueryExtractor.invoke(currentUrl)
             val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
-                SearchActivity.makeIntent(it, currentTitle, currentUrl)
+                SearchFragment.makeWith(it, currentTitle, currentUrl)
             } else {
-                SearchActivity.makeIntentWithQuery(it, query ?: "", currentTitle, currentUrl)
+                SearchFragment.makeWithQuery(it, query ?: "", currentTitle, currentUrl)
             }
-            startActivity(makeIntent, option.toBundle())
+            activity?.also { activity ->
+                ViewModelProviders.of(activity)
+                        .get(ContentViewModel::class.java)
+                        .nextFragment(makeIntent)
+            }
         }
     }
 
@@ -470,14 +480,18 @@ class BrowserFragment : Fragment(),
             currentUrl
         }
 
-        startActivity(
-                SearchActivity.makeIntentWithQuery(
-                        activityContext,
-                        inputText ?: "",
-                        currentTitle,
-                        currentUrl
-                )
+        val fragment = SearchFragment.makeWithQuery(
+                activityContext,
+                inputText ?: "",
+                currentTitle,
+                currentUrl
         )
+
+        activity?.also { activity ->
+            ViewModelProviders.of(activity)
+                    .get(ContentViewModel::class.java)
+                    .nextFragment(fragment)
+        }
     }
 
     /**

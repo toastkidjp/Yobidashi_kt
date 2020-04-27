@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 import jp.toastkid.yobidashi.tab.BackgroundTabQueue
 
@@ -37,6 +37,8 @@ class SearchAction(
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(activityContext)
 
     private val urlFactory = UrlFactory()
+
+    private val mainActivityIntentFactory = MainActivityIntentFactory()
 
     /**
      * Invoke action.
@@ -72,7 +74,7 @@ class SearchAction(
     private fun withInternalBrowser(validatedUrl: Boolean) {
         if (validatedUrl) {
             activityContext.startActivity(
-                    MainActivity.makeBrowserIntent(activityContext, Uri.parse(query)))
+                    mainActivityIntentFactory.browser(activityContext, Uri.parse(query)))
             return
         }
 
@@ -86,7 +88,7 @@ class SearchAction(
             return
         }
 
-        activityContext.startActivity(MainActivity.makeBrowserIntent(activityContext, searchUri))
+        activityContext.startActivity(mainActivityIntentFactory.browser(activityContext, searchUri))
     }
 
 }

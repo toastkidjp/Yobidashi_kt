@@ -75,9 +75,9 @@ class MediaPlayerPopup(private val context: Context) {
 
     private val heightPixels = resources.displayMetrics.heightPixels
 
-    private val headerHeight = resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
+    private val headerHeight = resources.getDimensionPixelSize(R.dimen.media_player_popup_header_height)
 
-    private val swipeLimit = heightPixels - headerHeight
+    private val swipeLimit = heightPixels - (headerHeight / 2)
 
     private val pauseBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_pause)
 
@@ -104,24 +104,25 @@ class MediaPlayerPopup(private val context: Context) {
 
         override fun onConnected() {
             attemptExtractActivity()?.also {
+                val mediaControllerCompat = MediaControllerCompat(context, mediaBrowser.sessionToken)
+                mediaControllerCompat.registerCallback(controllerCallback)
                 MediaControllerCompat.setMediaController(
                         it,
-                        MediaControllerCompat(context, mediaBrowser.sessionToken)
+                        mediaControllerCompat
                 )
             }
 
             mediaBrowser.subscribe(mediaBrowser.root, subscriptionCallback)
-            attemptMediaController()?.registerCallback(controllerCallback)
         }
     }
 
     private val controllerCallback = object : MediaControllerCompat.Callback() {
 
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-            when (attemptMediaController()?.playbackState?.state) {
-                PlaybackState.STATE_PLAYING -> setPlayIcon()
-                PlaybackState.STATE_PAUSED -> setPauseIcon()
-                PlaybackState.STATE_STOPPED -> setPlayIcon()
+            when (state?.state) {
+                PlaybackStateCompat.STATE_PLAYING -> setPauseIcon()
+                PlaybackStateCompat.STATE_PAUSED -> setPlayIcon()
+                PlaybackStateCompat.STATE_STOPPED -> setPlayIcon()
                 else -> Unit
             }
         }
@@ -246,12 +247,7 @@ class MediaPlayerPopup(private val context: Context) {
 
         mediaController.transportControls.play()
 
-        setPlayIcon()
-    }
-
-    private fun setPlayIcon() {
-        binding.playSwitch.setImageBitmap(pauseBitmap)
-        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+        setPauseIcon()
     }
 
     private fun pause() {
@@ -260,10 +256,15 @@ class MediaPlayerPopup(private val context: Context) {
 
         mediaController.transportControls.pause()
 
-        setPauseIcon()
+        setPlayIcon()
     }
 
     private fun setPauseIcon() {
+        binding.playSwitch.setImageBitmap(pauseBitmap)
+        binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
+    }
+
+    private fun setPlayIcon() {
         binding.playSwitch.setImageBitmap(playBitmap)
         binding.playSwitch.setColorFilter(preferenceApplier.fontColor)
     }
@@ -276,13 +277,13 @@ class MediaPlayerPopup(private val context: Context) {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        val slidingTouchListener = SlidingTouchListener(binding.contentPanel)
+        val slidingTouchListener = SlidingTouchListener(binding.popupBackground)
         slidingTouchListener.setCallback(object : SlidingTouchListener.OnNewPosition {
             override fun onNewPosition(x: Float, y: Float) {
                 if (y > swipeLimit) {
                     return
                 }
-                popupWindow.update(-1, -y.toInt(), -1, -1)
+                popupWindow.update(-1, -(y.toInt() - headerHeight), -1, -1)
             }
         })
         binding.header.setOnTouchListener(slidingTouchListener)
@@ -302,7 +303,7 @@ class MediaPlayerPopup(private val context: Context) {
                 .observeOn(Schedulers.io())
                 .subscribe(
                         {
-                            if (it) {
+                            if (it && !mediaBrowser.isConnected) {
                                 mediaBrowser.connect()
                                 return@subscribe
                             }

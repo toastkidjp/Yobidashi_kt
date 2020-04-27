@@ -3,7 +3,7 @@
     <data>
         <variable
             name="action"
-            type="jp.toastkid.yobidashi.search.favorite.Addition" />
+            type="jp.toastkid.yobidashi.search.favorite.FavoriteSearchAdditionDialogFragment" />
     </data>
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_margin="5dp"
-                    android:onClick="@{view -> action.cancel()}"
+                    android:onClick="@{view -> action.dismiss()}"
                     android:text="@string/close" />
 
                 <Button

@@ -50,7 +50,7 @@ class LauncherFragment : Fragment(), ContentScrollable {
 
         binding.appItemsView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        adapter = Adapter(requireContext(), binding.root)
+        adapter = Adapter(requireContext(), binding.root)// TODO use context
 
         binding.appItemsView.adapter = adapter
         binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
@@ -83,9 +83,9 @@ class LauncherFragment : Fragment(), ContentScrollable {
         RecyclerViewScroller.toBottom(binding.appItemsView, adapter.itemCount)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         adapter.dispose()
+        super.onDetach()
     }
 
     companion object {

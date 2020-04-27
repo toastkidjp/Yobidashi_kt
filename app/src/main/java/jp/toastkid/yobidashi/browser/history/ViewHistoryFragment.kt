@@ -127,7 +127,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         when (item?.itemId) {
             R.id.clear -> {
                 val clearDialogFragment = ClearDialogFragment()
-                clearDialogFragment.setTargetFragment(this, REQUEST_CODE)
+                clearDialogFragment.setTargetFragment(this, clearDialogFragment.id)
                 clearDialogFragment.show(
                         fragmentManager,
                         ClearDialogFragment::class.java.simpleName
@@ -158,9 +158,6 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
     companion object {
         @LayoutRes const val LAYOUT_ID: Int = R.layout.fragment_view_history
-
-        /** Request code. */
-        const val REQUEST_CODE: Int = 201
 
     }
 }

@@ -10,7 +10,12 @@ package jp.toastkid.yobidashi.media.image.list
 import android.Manifest
 import android.os.Bundle
 import android.support.v4.media.session.MediaControllerCompat
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -111,7 +116,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)
                 .also { viewModel ->
                     viewModel.find.observe(activity, Observer {
-                        Timber.i("observe $it")
                         filterByName(it)
                     })
                 }

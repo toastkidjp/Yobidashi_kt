@@ -9,10 +9,10 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.app.Dialog
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.appcompat.app.AlertDialog
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -29,10 +29,6 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
-
-        if (activityContext is Callback) {
-            onClick = activityContext
-        }
 
         val targetFragment = targetFragment
         if (targetFragment is Callback) {
