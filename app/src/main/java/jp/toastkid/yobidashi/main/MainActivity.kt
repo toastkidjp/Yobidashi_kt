@@ -188,9 +188,7 @@ class MainActivity : AppCompatActivity(),
             }
             floatingPreview?.show(binding.root, it.toString())
         })
-        browserViewModel?.open?.observe(this, Observer {
-            openNewWebTab(it)
-        })
+        browserViewModel?.open?.observe(this, Observer(::openNewWebTab))
         browserViewModel?.openBackground?.observe(this, Observer {
             tabs.openBackgroundTab(it.toString(), it.toString())
             Toaster.snackShort(
