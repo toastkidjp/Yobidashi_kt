@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/common_horizontal_margin"
     android:layout_marginStart="16dp"
-    android:background="@drawable/ripple_soft"
+    android:background="@drawable/ripple_transparent"
     >
     <ImageView
         android:id="@+id/search_category_image"
