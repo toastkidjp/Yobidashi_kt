@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/search_category"
         />
     <TextView
         android:id="@+id/search_category_text"
