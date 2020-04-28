@@ -99,9 +99,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             it.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
             it.saveViewHistoryCheck.jumpDrawablesToCurrentState()
 
-            it.useInversionCheck.isChecked = preferenceApplier.useInversion
-            it.useInversionCheck.jumpDrawablesToCurrentState()
-
             it.adRemoveCheck.isChecked = preferenceApplier.adRemove
             it.adRemoveCheck.jumpDrawablesToCurrentState()
 
@@ -205,16 +202,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 getString(R.string.message_commit_home, input),
                 preferenceApplier.colorPair()
         )
-    }
-
-    /**
-     * Switch content inversion enabling.
-     */
-    fun switchUseInversion() {
-        val preferenceApplier = preferenceApplier
-        val newState = !preferenceApplier.useInversion
-        preferenceApplier.useInversion = newState
-        binding.useInversionCheck.isChecked = newState
     }
 
     /**

@@ -26,7 +26,7 @@ class PreferenceApplier(private val context: Context) {
     @SuppressWarnings("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
-        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS
+        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION,
     }
 
     private enum class Key {
@@ -37,7 +37,7 @@ class PreferenceApplier(private val context: Context) {
         USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
-        FULL_SCREEN, SCREEN_MODE, USE_INVERSION, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
+        FULL_SCREEN, SCREEN_MODE, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
         EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_CURSOR_COLOR, EDITOR_HIGHLIGHT_COLOR,
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
@@ -256,10 +256,6 @@ class PreferenceApplier(private val context: Context) {
 
     internal fun browserScreenMode(): ScreenMode =
             ScreenMode.valueOf(preferences.getString(Key.SCREEN_MODE.name, ScreenMode.EXPANDABLE.name) ?: "")
-
-    var useInversion: Boolean
-        get () = preferences.getBoolean(Key.USE_INVERSION.name, false)
-        set (newValue) = preferences.edit().putBoolean(Key.USE_INVERSION.name, newValue).apply()
 
     var wifiOnly: Boolean
         get () = preferences.getBoolean(Key.WIFI_ONLY_MODE.name, true)
