@@ -17,8 +17,7 @@ internal class SuggestionParser {
      * @return suggest words
      */
     operator fun invoke(response: String): List<String> {
-        // TODO rewrite implementation.
-        val split = response.split("</CompleteSuggestion>").dropLastWhile { it.isEmpty() }
+        val split = response.split("</CompleteSuggestion>")
         val suggestions = ArrayList<String>(split.size)
 
         split.forEach {
