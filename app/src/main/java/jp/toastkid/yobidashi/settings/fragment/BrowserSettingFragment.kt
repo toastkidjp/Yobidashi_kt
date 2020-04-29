@@ -106,7 +106,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
                     val newSize = bar?.progress ?: 0
                     preferenceApplier.poolSize = newSize + 1
-                    it.poolSizeText.setText("${newSize + 1}")
+                    it.poolSizeText.text = "${newSize + 1}"
                 }
 
                 override fun onStartTrackingTouch(p0: SeekBar?) = Unit
