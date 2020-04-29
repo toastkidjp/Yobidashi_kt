@@ -51,6 +51,8 @@ enum class Menu(
 
     IMAGE_VIEWER(R.string.title_image_viewer, R.drawable.ic_photo),
 
+    GESTURE_MEMO(R.string.title_gesture_memo, R.drawable.ic_gesture_memo),
+
     OVERLAY_COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
 
     MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),

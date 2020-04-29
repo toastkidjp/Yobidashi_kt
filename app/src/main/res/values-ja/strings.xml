@@ -478,4 +478,11 @@
     <string name="linked_in">LinkedIn</string>
     <string name="search_category">検索種別</string>
 
+    <string name="touch_listener_single_touch">Single Touch</string>
+    <string name="touch_listener_multi_touch">Multi Touch</string>
+    <string name="touch_listener_gesture_detector">Gesture Detector</string>
+    <string name="touch_listener_scale_gesture_detector">Scale Gesture Detector</string>
+    <string name="touch_listener_default">Default</string>
+    <string name="title_gesture_memo">Gesture memo</string>
+
 </resources>
