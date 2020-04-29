@@ -35,7 +35,6 @@ class DrawingCanvas
     }
     private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
         override fun onDoubleTap(e: MotionEvent?): Boolean {
-            clear()
             return true
         }
     })
