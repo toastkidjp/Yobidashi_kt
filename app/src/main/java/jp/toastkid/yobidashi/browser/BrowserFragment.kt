@@ -463,8 +463,8 @@ class BrowserFragment : Fragment(),
                 currentUrl
         )
 
-        activity?.also { activity ->
-            ViewModelProviders.of(activity)
+        activity?.also {
+            ViewModelProviders.of(it)
                     .get(ContentViewModel::class.java)
                     .nextFragment(fragment)
         }
