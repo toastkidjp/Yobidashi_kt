@@ -17,8 +17,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.AppBarGestureMemoBinding
 import jp.toastkid.yobidashi.databinding.FragmentGestureMemoBinding
+import jp.toastkid.yobidashi.main.HeaderViewModel
 
 /**
  * TODO implement
@@ -31,14 +34,17 @@ class GestureMemoFragment : Fragment() {
 
     private lateinit var binding: FragmentGestureMemoBinding
 
+    private lateinit var appBarBinding: AppBarGestureMemoBinding
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gesture_memo, container, false)
+        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_gesture_memo, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.touchListenerChoices.setOnCheckedChangeListener { _, checkedId ->
+        appBarBinding.touchListenerChoices.setOnCheckedChangeListener { _, checkedId ->
             binding.canvas.isTouchEventListenerEnabled = false
             binding.canvas.clear()
             when (checkedId) {
@@ -126,4 +132,11 @@ class GestureMemoFragment : Fragment() {
             scaleGestureDetector.onTouchEvent(event)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        ViewModelProviders.of(requireActivity()).get(HeaderViewModel::class.java)
+                .replace(appBarBinding.root)
+    }
+
 }
