@@ -11,6 +11,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
@@ -39,6 +42,7 @@ class GestureMemoFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gesture_memo, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_gesture_memo, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -139,4 +143,18 @@ class GestureMemoFragment : Fragment() {
                 .replace(appBarBinding.root)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_gesture_memo, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.clear_canvas -> {
+                binding.canvas.clear()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
