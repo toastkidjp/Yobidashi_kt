@@ -263,10 +263,7 @@ class MainActivity : AppCompatActivity(),
             }
             binding.toolbarContent.removeAllViews()
             binding.toolbar.layoutParams.height = view.layoutParams.height
-            binding.toolbarContent.addView(
-                    view,
-                    0
-            )
+            binding.toolbarContent.addView(view, 0)
         })
 
         headerViewModel.visibility.observe(this, Observer { isVisible ->
