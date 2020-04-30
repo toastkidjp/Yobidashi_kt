@@ -26,11 +26,7 @@ import jp.toastkid.yobidashi.databinding.AppBarGestureMemoBinding
 import jp.toastkid.yobidashi.databinding.FragmentGestureMemoBinding
 import jp.toastkid.yobidashi.main.HeaderViewModel
 
-/**
- * TODO implement
- * - header
- * - option menu
- *
+/*+
  * @author toastkidjp
  */
 class GestureMemoFragment : Fragment() {
