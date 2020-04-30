@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -126,7 +127,11 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
         binding = DataBindingUtil.inflate(
                 LayoutInflater.from(activityContext),
-                R.layout.dialog_fragment_tab_list, null, false)
+                LAYOUT_ID,
+                null,
+                false
+        )
+
         binding.dialog = this
 
         initRecyclerView(binding.recyclerView)
@@ -238,4 +243,9 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                 .into(binding.background)
     }
 
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.dialog_fragment_tab_list
+    }
 }
