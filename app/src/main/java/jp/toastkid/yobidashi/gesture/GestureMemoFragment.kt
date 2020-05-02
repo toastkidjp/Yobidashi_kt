@@ -15,7 +15,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -52,7 +51,6 @@ class GestureMemoFragment : Fragment() {
             when (checkedId) {
                 R.id.defaultTouch -> setUpDefaultTouchListener()
                 R.id.gestureDetector -> setUpGestureDetector()
-                R.id.scaleGestureDetector -> setUpScaleGestureDetector()
             }
         }
     }
@@ -110,28 +108,6 @@ class GestureMemoFragment : Fragment() {
 
         binding.canvas.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
-        }
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setUpScaleGestureDetector() {
-        val scaleGestureDetectorListener = object : ScaleGestureDetector.OnScaleGestureListener {
-            override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
-                return true
-            }
-
-            override fun onScale(detector: ScaleGestureDetector?): Boolean {
-                return true
-            }
-
-            override fun onScaleEnd(detector: ScaleGestureDetector?) {
-            }
-        }
-
-        val scaleGestureDetector = ScaleGestureDetector(requireContext(), scaleGestureDetectorListener)
-
-        binding.canvas.setOnTouchListener { _, event ->
-            scaleGestureDetector.onTouchEvent(event)
         }
     }
 
