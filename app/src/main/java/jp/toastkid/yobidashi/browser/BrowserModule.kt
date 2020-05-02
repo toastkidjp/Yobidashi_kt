@@ -660,11 +660,6 @@ class BrowserModule(
         }
     }
 
-    @Throws(IOException::class)
-    fun loadArchive(archiveFile: File) {
-        currentView()?.let { Archive.loadArchive(it, archiveFile) }
-    }
-
     companion object {
         private val lineSeparator = System.getProperty("line.separator")
     }
