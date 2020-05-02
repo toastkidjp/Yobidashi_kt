@@ -265,7 +265,7 @@
     <string name="title_download_image">Download this image file</string>
     <string name="message_confirm_downloading_image">Would you like to download this image file?</string>
     <string name="title_startup_start">Start</string>
-    <string name="title_setting_startup">Startup view</string>
+    <string name="title_setting_new_tab">New tab</string>
     <string name="title_load_home">Load home page</string>
     <string name="title_replace_home">Replace home page</string>
     <string name="message_cannot_replace_home_url">This page cannot replace home page.</string>

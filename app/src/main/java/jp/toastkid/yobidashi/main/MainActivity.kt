@@ -8,7 +8,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -16,6 +15,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
+import android.webkit.WebView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -42,12 +42,14 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
+import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -57,13 +59,11 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
-import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
-import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -127,6 +127,8 @@ class MainActivity : AppCompatActivity(),
 
     private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
+    private var floatingPreview: FloatingPreview? = null
+
     private lateinit var tabs: TabAdapter
 
     /**
@@ -183,14 +185,8 @@ class MainActivity : AppCompatActivity(),
         initializeMenuViewModel()
 
         contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
-        contentViewModel?.content?.observe(this, Observer {
-            when (it) {
-                ContentSwitchOrder.RSS_SETTING -> {
-                    val fragment = obtainFragment(RssSettingFragment::class.java)
-                    replaceFragment(fragment)
-                }
-                null -> Unit
-            }
+        contentViewModel?.fragmentClass?.observe(this, Observer {
+            replaceFragment(obtainFragment(it))
         })
         contentViewModel?.fragment?.observe(this, Observer {
             replaceFragment(it, true, true)
@@ -198,7 +194,12 @@ class MainActivity : AppCompatActivity(),
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
-            (obtainFragment(BrowserFragment::class.java) as? BrowserFragment)?.preview(it.toString())
+            Inputs.hideKeyboard(binding.content)
+
+            if (floatingPreview == null) {
+                floatingPreview = FloatingPreview(WebView(this))
+            }
+            floatingPreview?.show(binding.root, it.toString())
         })
         browserViewModel?.open?.observe(this, Observer {
             tabs.openNewWebTab(it.toString())
@@ -309,7 +310,9 @@ class MainActivity : AppCompatActivity(),
                 { menuViewModel?.close() }
         )
 
-        menuViewModel?.click?.observe(this, Observer(menuUseCase::onMenuClick))
+        menuViewModel?.click?.observe(this, Observer {
+            menuUseCase.onMenuClick(it)
+        })
 
         menuViewModel?.longClick?.observe(this, Observer {
             menuUseCase.onMenuLongClick(it)
@@ -355,12 +358,6 @@ class MainActivity : AppCompatActivity(),
      * @param calledIntent
      */
     private fun processShortcut(calledIntent: Intent) {
-        if (calledIntent.action == null) {
-            // Add for re-creating activity.
-            replaceToCurrentTab()
-            return
-        }
-
         if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
             RandomWikipedia().fetchWithAction { title, uri ->
                 openNewWebTab(uri)
@@ -412,6 +409,18 @@ class MainActivity : AppCompatActivity(),
             }
             SETTING -> {
                 replaceFragment(obtainFragment(SettingFragment::class.java))
+            }
+            else -> {
+                if (tabs.isEmpty()) {
+                    openNewTab()
+                    return
+                }
+
+                // Add for re-creating activity.
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
+                if (currentFragment is TabUiFragment || currentFragment == null) {
+                    replaceToCurrentTab(false)
+                }
             }
         }
     }
@@ -606,19 +615,6 @@ class MainActivity : AppCompatActivity(),
                 .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        if (tabs.isEmpty()) {
-            tabs.openNewWebTab(preferenceApplier.homeUrl)
-        }
-
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
-        if (currentFragment is TabUiFragment || currentFragment == null) {
-            replaceToCurrentTab(false)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         refresh()
@@ -658,22 +654,13 @@ class MainActivity : AppCompatActivity(),
     private fun applyBackgrounds() {
         val backgroundImagePath = preferenceApplier.backgroundImagePath
         if (backgroundImagePath.isEmpty()) {
-            setBackgroundImage(null)
+            binding.background.setImageDrawable(null)
             return
         }
 
         Glide.with(this)
                 .load(File(backgroundImagePath).toURI().toString().toUri())
                 .into(binding.background)
-    }
-
-    /**
-     * Set background image. TODO remove it.
-     *
-     * @param background nullable
-     */
-    private fun setBackgroundImage(background: BitmapDrawable?) {
-        binding.background.setImageDrawable(background)
     }
 
     /**
@@ -800,8 +787,7 @@ class MainActivity : AppCompatActivity(),
      */
     private fun onEmptyTabs() {
         tabListDialogFragment?.dismiss()
-        tabs.openNewWebTab()
-        replaceToCurrentTab(true)
+        openNewTab()
     }
 
     override fun onClickClear() {
@@ -813,8 +799,10 @@ class MainActivity : AppCompatActivity(),
         tabListDialogFragment?.dismiss()
     }
 
-    override fun onCloseTabListDialogFragment() {
-        replaceToCurrentTab()
+    override fun onCloseTabListDialogFragment(lastTabId: String) {
+        if (lastTabId != tabs.currentTabId()) {
+            replaceToCurrentTab()
+        }
     }
 
     override fun onOpenEditor() = openEditorTab()
@@ -822,8 +810,22 @@ class MainActivity : AppCompatActivity(),
     override fun onOpenPdf() = openPdfTabFromStorage()
 
     override fun openNewTabFromTabList() {
-        tabs.openNewWebTab()
-        replaceToCurrentTab(true)
+        openNewTab()
+    }
+
+    private fun openNewTab() {
+        when (preferenceApplier.startUp) {
+            StartUp.SEARCH -> {
+                replaceFragment(obtainFragment(SearchFragment::class.java))
+            }
+            StartUp.BROWSER -> {
+                tabs.openNewWebTab()
+                replaceToCurrentTab(true)
+            }
+            StartUp.BOOKMARK -> {
+                replaceFragment(obtainFragment(BookmarkFragment::class.java))
+            }
+        }
     }
 
     override fun tabIndexFromTabList() = tabs.index()
@@ -934,8 +936,8 @@ class MainActivity : AppCompatActivity(),
         disposables.clear()
         searchWithClip.dispose()
         menuUseCase.dispose()
-        contentViewModel?.content?.removeObservers(this)
         pageSearchPresenter.dispose()
+        floatingPreview?.dispose()
         super.onDestroy()
     }
 

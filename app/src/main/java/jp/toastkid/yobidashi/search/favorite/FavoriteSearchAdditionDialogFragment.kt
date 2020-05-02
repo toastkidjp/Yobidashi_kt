@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogFavoriteSearchAdditionBinding
@@ -67,20 +68,34 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
      */
     private fun initInput() {
         TextInputs.setEmptyAlert(binding.favoriteSearchAdditionQuery)
+        binding.favoriteSearchAdditionQuery?.editText?.setOnEditorActionListener { _, _, _ ->
+            ok()
+            return@setOnEditorActionListener true
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        PreferenceApplier(binding.root.context).colorPair().let {
-            it.setTo(binding.close)
-            it.setTo(binding.add)
-        }
+        PreferenceApplier(binding.root.context).colorPair().setTo(binding.add)
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
         Inputs.hideKeyboard(binding.favoriteSearchAdditionQueryInput)
+        reload()
         super.onDismiss(dialog)
+    }
+
+    override fun onCancel(dialog: DialogInterface?) {
+        reload()
+        super.onCancel(dialog)
+    }
+
+    private fun reload() {
+        val target = targetFragment ?: return
+        ViewModelProviders.of(target)
+                .get(FavoriteSearchFragmentViewModel::class.java)
+                .reload()
     }
 
     /**

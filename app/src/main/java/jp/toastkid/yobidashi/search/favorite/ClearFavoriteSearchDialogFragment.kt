@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
@@ -21,19 +22,10 @@ import jp.toastkid.yobidashi.libs.HtmlCompat
  */
 class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
-    interface Callback {
-        fun onClickDeleteAllFavoriteSearch()
-    }
-
-    private var onClick: Callback? = null
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
-        val targetFragment = targetFragment
-        if (targetFragment is Callback) {
-            onClick = targetFragment
-        }
+        val targetFragment = targetFragment ?: return super.onCreateDialog(savedInstanceState)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_delete_all)
@@ -41,7 +33,9 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    onClick?.onClickDeleteAllFavoriteSearch()
+                    ViewModelProviders.of(targetFragment)
+                            .get(FavoriteSearchFragmentViewModel::class.java)
+                            .clear()
                     d.dismiss()
                 }
                 .create()
@@ -49,9 +43,8 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
     companion object {
 
-        fun show(fragmentManager: FragmentManager, targetClass: Class<out Fragment>) {
+        fun show(fragmentManager: FragmentManager, target: Fragment) {
             val dialogFragment = ClearFavoriteSearchDialogFragment()
-            val target = fragmentManager.findFragmentByTag(targetClass.canonicalName) ?: return
             dialogFragment.setTargetFragment(target, 1)
             dialogFragment.show(
                     fragmentManager,

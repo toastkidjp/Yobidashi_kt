@@ -5,10 +5,8 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.settings.fragment
+package jp.toastkid.yobidashi.search.favorite
 
-import android.graphics.Color
-import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,17 +14,21 @@ import androidx.lifecycle.ViewModel
 /**
  * @author toastkidjp
  */
-class OverlayColorFilterViewModel : ViewModel() {
+class FavoriteSearchFragmentViewModel : ViewModel() {
 
-    private val _newColor = MutableLiveData<Int>()
+    private val _reload = MutableLiveData<Unit>()
 
-    val newColor: LiveData<Int> = _newColor
+    val reload: LiveData<Unit> = _reload
 
-    fun newColor(@ColorInt color: Int) {
-        _newColor.postValue(color)
+    fun reload() {
+        _reload.postValue(Unit)
     }
 
-    fun update() {
-        _newColor.postValue(Color.TRANSPARENT)
+    private val _clear = MutableLiveData<Unit>()
+
+    val clear: LiveData<Unit> = _clear
+
+    fun clear() {
+        _clear.postValue(Unit)
     }
 }

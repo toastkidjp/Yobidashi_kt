@@ -33,6 +33,8 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var overlayColorFilterViewModel: OverlayColorFilterViewModel? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context
@@ -47,13 +49,11 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let { activity ->
-            val overlayColorFilterViewModel =
+            overlayColorFilterViewModel =
                     ViewModelProviders.of(activity).get(OverlayColorFilterViewModel::class.java)
             overlayColorFilterViewModel
-                    .newColor
-                    .observe(activity, Observer {
-                        binding.sample.setBackgroundColor(it)
-                    })
+                    ?.newColor
+                    ?.observe(activity, Observer { binding.sample.setBackgroundColor(it) })
             binding.useCase = OverlayColorFilterUseCase(
                     preferenceApplier,
                     { ContextCompat.getColor(activity, it) },
@@ -91,6 +91,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         binding.useColorFilterCheck.let {
             it.isChecked = preferenceApplier.useColorFilter()
             it.jumpDrawablesToCurrentState()
+            overlayColorFilterViewModel?.update()
         }
     }
 
@@ -101,6 +102,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         val newState = !preferenceApplier.useColorFilter()
         binding.useColorFilterCheck.isChecked = newState
         preferenceApplier.setUseColorFilter(newState)
+        overlayColorFilterViewModel?.update()
     }
 
     @StringRes

@@ -8,7 +8,12 @@
 package jp.toastkid.yobidashi.rss
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
@@ -29,10 +34,10 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.content.ContentSwitchOrder
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.api.RssReaderApi
 import jp.toastkid.yobidashi.rss.list.Adapter
+import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
 import timber.log.Timber
 
 /**
@@ -111,7 +116,8 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
         if (item?.itemId == R.id.action_rss_setting) {
             ViewModelProviders.of(requireActivity())
                     .get(ContentViewModel::class.java)
-                    .nextContent(ContentSwitchOrder.RSS_SETTING)
+                    .nextFragment(RssSettingFragment::class.java)
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

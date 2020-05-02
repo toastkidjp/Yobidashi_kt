@@ -29,14 +29,6 @@
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
                 />
-            <include layout="@layout/primary_dark_divider"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_item_height"
-                style="@style/OneLineTextMenu"
-                android:text="@string/title_clear_favorite_search"
-                android:onClick="@{view -> module.confirmClear()}"
-                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

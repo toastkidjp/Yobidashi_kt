@@ -34,7 +34,7 @@ class SearchHistoryFragment : Fragment(),
 
     private lateinit var binding: FragmentSearchHistoryBinding
 
-    private lateinit var adapter: ActivityAdapter
+    private lateinit var adapter: ModuleAdapter
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -52,11 +52,13 @@ class SearchHistoryFragment : Fragment(),
         // TODO move it.
         val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
 
-        adapter = ActivityAdapter(
+        adapter = ModuleAdapter(
                 context,
                 repository,
                 { history -> SearchAction(context, history.category as String, history.query as String).invoke()},
-                { history -> Toaster.snackShort(binding.root, history.query as String, preferenceApplier.colorPair()) }
+                { },
+                { },
+                false
         )
         binding.historiesView.adapter = adapter
 

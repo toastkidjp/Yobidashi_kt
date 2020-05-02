@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,9 +33,7 @@ import jp.toastkid.yobidashi.search.SearchCategory
  *
  * @author toastkidjp
  */
-class FavoriteSearchFragment : Fragment(),
-        CommonFragmentAction,
-        ClearFavoriteSearchDialogFragment.Callback {
+class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
     /**
      * RecyclerView's adapter
@@ -116,7 +116,15 @@ class FavoriteSearchFragment : Fragment(),
                         adapter?.removeAt(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(binding?.favoriteSearchView)
-        adapter?.refresh()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val viewModel =
+                ViewModelProviders.of(this).get(FavoriteSearchFragmentViewModel::class.java)
+        viewModel.reload.observe(this, Observer { adapter?.refresh() })
+        viewModel.clear.observe(this, Observer { clear() })
     }
 
     /**
@@ -131,6 +139,11 @@ class FavoriteSearchFragment : Fragment(),
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter?.refresh()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -139,10 +152,7 @@ class FavoriteSearchFragment : Fragment(),
         // TODO rewrite.
         menu.findItem(R.id.favorite_toolbar_menu_clear)?.setOnMenuItemClickListener {
             val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener true
-            ClearFavoriteSearchDialogFragment.show(
-                    fragmentManager,
-                    this::class.java
-            )
+            ClearFavoriteSearchDialogFragment.show(fragmentManager, this)
             true
         }
 
@@ -152,7 +162,7 @@ class FavoriteSearchFragment : Fragment(),
         }
     }
 
-    override fun onClickDeleteAllFavoriteSearch() {
+    private fun clear() {
         val context = requireContext()
         val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
         Completable.fromAction {
@@ -183,7 +193,9 @@ class FavoriteSearchFragment : Fragment(),
      * Invoke addition.
      */
     private fun invokeAddition() {
-        FavoriteSearchAdditionDialogFragment().show(fragmentManager, "addition")
+        FavoriteSearchAdditionDialogFragment()
+                .also { it.setTargetFragment(this, 0) }
+                .show(fragmentManager, "addition")
     }
 
     private fun colorPair() = preferenceApplier.colorPair()

@@ -16,9 +16,11 @@ class StartUpTest {
      */
     @Test
     fun testGetTitleId() {
-        assertEquals(StartUp.BROWSER, StartUp.findByName(null))
-        assertEquals(StartUp.BROWSER, StartUp.findByName(""))
+        assertEquals(StartUp.SEARCH, StartUp.findByName(null))
+        assertEquals(StartUp.SEARCH, StartUp.findByName(""))
         assertEquals(StartUp.SEARCH, StartUp.findByName("SEARCH"))
+        assertEquals(StartUp.BROWSER, StartUp.findByName("BROWSER"))
+        assertEquals(StartUp.BOOKMARK, StartUp.findByName("BOOKMARK"))
     }
 
     /**

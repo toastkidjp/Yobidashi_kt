@@ -8,8 +8,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/OneLineTextMenu"
-            android:drawableLeft="@drawable/ic_launch_black"
-            android:text="@string/title_setting_startup"
+            android:drawableLeft="@drawable/ic_tab_black"
+            android:drawablePadding="8dp"
+            android:text="@string/title_setting_new_tab"
             />
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -45,13 +46,13 @@
                     />
 
                 <RadioButton
-                    android:id="@+id/start_up_launcher"
+                    android:id="@+id/start_up_bookmark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/BackgroundEmphasisStyle"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/title_apps_launcher"
-                    android:drawableBottom="@mipmap/thumbnail_launcher"
+                    android:drawableBottom="@mipmap/thumbnail_bookmark"
                     />
             </RadioGroup>
         </HorizontalScrollView>

@@ -28,15 +28,20 @@ class WebViewInitializer {
      * @param webView [WebView]
      * @param url URL string
      */
-    operator fun invoke(webView: WebView, url: String) {
+    operator fun invoke(webView: WebView) {
         val context = webView.context as? FragmentActivity ?: return
+
         val viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
-        viewModel.newUrl(url)
 
         webView.webViewClient = object : WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 return false
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                viewModel.newUrl(url)
             }
         }
 

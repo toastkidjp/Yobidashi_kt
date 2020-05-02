@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.R
 enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
     SEARCH(R.string.title_search, R.id.start_up_search),
     BROWSER(R.string.title_browser, R.id.start_up_browser),
-    APPS_LAUNCHER(R.string.title_apps_launcher, R.id.start_up_launcher);
+    BOOKMARK(R.string.title_bookmark, R.id.start_up_bookmark);
 
     companion object {
 
@@ -37,6 +37,6 @@ enum class StartUp(@StringRes val titleId: Int, @IdRes val radioButtonId: Int) {
         /**
          * Return default value.
          */
-        private fun getDefault(): StartUp = BROWSER
+        private fun getDefault(): StartUp = SEARCH
     }
 }

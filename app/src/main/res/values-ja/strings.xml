@@ -261,7 +261,7 @@
     <string name="title_download_image">画像をダウンロード</string>
     <string name="message_confirm_downloading_image">この画像をダウンロードしますか？</string>
     <string name="title_startup_start">スタート</string>
-    <string name="title_setting_startup">起動時の表示</string>
+    <string name="title_setting_new_tab">新しいタブ</string>
     <string name="title_load_home">ホームページを開く</string>
     <string name="title_replace_home">ホームページに設定</string>
     <string name="message_cannot_replace_home_url">このページはホームに設定できません。</string>

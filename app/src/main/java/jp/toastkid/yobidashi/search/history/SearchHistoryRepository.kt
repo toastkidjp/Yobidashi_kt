@@ -7,7 +7,11 @@
  */
 package jp.toastkid.yobidashi.search.history
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 /**
  * @author toastkidjp
@@ -24,8 +28,8 @@ interface SearchHistoryRepository {
     @Query("SELECT * FROM SearchHistory")
     fun findAll(): List<SearchHistory>
 
-    @Query("SELECT * FROM SearchHistory ORDER BY timestamp DESC LIMIT 5")
-    fun findLast5(): List<SearchHistory>
+    @Query("SELECT * FROM SearchHistory ORDER BY timestamp DESC LIMIT :count")
+    fun find(count: Int): List<SearchHistory>
 
     @Delete
     fun delete(searchHistory: SearchHistory)
