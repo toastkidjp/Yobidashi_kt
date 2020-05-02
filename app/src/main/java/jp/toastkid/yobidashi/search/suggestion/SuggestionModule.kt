@@ -13,14 +13,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.toObservable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 
@@ -67,7 +70,7 @@ class SuggestionModule(
     /**
      * Last subscription's lastSubscription.
      */
-    private var lastSubscription: Disposable? = null
+    private var lastSubscription: Job? = null
 
     var enable: Boolean = true
 
@@ -104,11 +107,11 @@ class SuggestionModule(
      * @param key
      */
     fun request(key: String) {
-        lastSubscription?.dispose()
+        lastSubscription?.cancel()
 
         if (cache.containsKey(key)) {
             val cachedList = cache[key] ?: return
-            lastSubscription = replace(cachedList).addTo(disposables)
+            lastSubscription = replace(cachedList)
             return
         }
 
@@ -131,7 +134,7 @@ class SuggestionModule(
                 return@fetchAsync
             }
             cache[key] = suggestions
-            lastSubscription = replace(suggestions).addTo(disposables)
+            lastSubscription = replace(suggestions)
         }
     }
 
@@ -141,13 +144,12 @@ class SuggestionModule(
      * @param words Recognizer result words.
      */
     internal fun addAll(words: List<String>) {
-        words.toObservable()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate { adapter.notifyDataSetChanged() }
-                .observeOn(Schedulers.computation())
-                .subscribe(adapter::add, Timber::e)
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.Default) {
+                words.forEach { adapter.add(it) }
+            }
+            adapter.notifyDataSetChanged()
+        }
     }
 
     /**
@@ -156,17 +158,16 @@ class SuggestionModule(
      * @param suggestions
      * @return [Disposable]
      */
-    private fun replace(suggestions: Iterable<String>): Disposable =
-            suggestions.toObservable()
-                    .doOnNext { adapter.add(it) }
-                    .doOnSubscribe { adapter.clear() }
-                    .doOnTerminate {
-                        show()
-                        adapter.notifyDataSetChanged()
-                    }
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe({}, Timber::e)
-                    .addTo(disposables)
+    private fun replace(suggestions: Iterable<String>): Job {
+        return CoroutineScope(Dispatchers.Main).launch {
+            adapter.clear()// TODO consider to implement replace to adapter.
+            withContext(Dispatchers.Default) {
+                suggestions.forEach { adapter.add(it) }
+            }
+            show()
+            adapter.notifyDataSetChanged()
+        }
+    }
 
     /**
      * Show this module.
@@ -200,7 +201,7 @@ class SuggestionModule(
      * Dispose last subscription.
      */
     fun dispose() {
-        lastSubscription?.dispose()
+        lastSubscription?.cancel()
         disposables.clear()
     }
 
