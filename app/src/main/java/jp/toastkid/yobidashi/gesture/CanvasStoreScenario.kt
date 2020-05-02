@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.gesture
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
@@ -37,6 +38,6 @@ class CanvasStoreScenario {
         bitmapCompressor.invoke(bitmap, file)
 
         ViewModelProviders.of(activity).get(ContentViewModel::class.java)
-                .snackShort("Save current canvas to ${file.absolutePath}")
+                .snackShort(activity.getString(R.string.message_store_gesture_memo, file.absolutePath))
     }
 }
