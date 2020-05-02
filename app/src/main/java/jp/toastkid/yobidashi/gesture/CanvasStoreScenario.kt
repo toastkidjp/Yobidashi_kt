@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.gesture
 
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
@@ -38,6 +39,13 @@ class CanvasStoreScenario {
         bitmapCompressor.invoke(bitmap, file)
 
         ViewModelProviders.of(activity).get(ContentViewModel::class.java)
-                .snackShort(activity.getString(R.string.message_store_gesture_memo, file.absolutePath))
+                .snackShort(activity.getString(MESSAGE_ID, file.absolutePath))
+    }
+
+    companion object {
+
+        @StringRes
+        private val MESSAGE_ID = R.string.message_store_gesture_memo
+
     }
 }
