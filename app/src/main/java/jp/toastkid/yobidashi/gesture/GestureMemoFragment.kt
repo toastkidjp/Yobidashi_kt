@@ -24,7 +24,11 @@ import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarGestureMemoBinding
 import jp.toastkid.yobidashi.databinding.FragmentGestureMemoBinding
+import jp.toastkid.yobidashi.libs.BitmapCompressor
+import jp.toastkid.yobidashi.libs.ThumbnailGenerator
+import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
 import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 
 /*+
  * @author toastkidjp
@@ -148,6 +152,21 @@ class GestureMemoFragment : Fragment() {
         return when (item.itemId) {
             R.id.clear_canvas -> {
                 binding.canvas.clear()
+                true
+            }
+            R.id.save_canvas -> {
+                val activity = activity ?: return true
+                val bitmap = ThumbnailGenerator().invoke(binding.canvas) ?: return true
+
+                val file = ExternalFileAssignment().assignFile(
+                        activity,
+                        "GestureMemo_${System.currentTimeMillis()}.png"
+                )
+
+                BitmapCompressor().invoke(bitmap, file)
+
+                ViewModelProviders.of(activity).get(ContentViewModel::class.java)
+                        .snackShort("Save current canvas to ${file.absolutePath}")
                 true
             }
             else -> super.onOptionsItemSelected(item)
