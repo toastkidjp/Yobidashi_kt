@@ -20,15 +20,21 @@ import jp.toastkid.yobidashi.main.content.ContentViewModel
  */
 class CanvasStoreScenario {
 
-    operator fun invoke(activity: FragmentActivity, canvasView: View) {
-        val bitmap = ThumbnailGenerator().invoke(canvasView) ?: return
+    private val thumbnailGenerator = ThumbnailGenerator()
 
-        val file = ExternalFileAssignment().assignFile(
+    private val externalFileAssignment = ExternalFileAssignment()
+
+    private val bitmapCompressor = BitmapCompressor()
+
+    operator fun invoke(activity: FragmentActivity, canvasView: View) {
+        val bitmap = thumbnailGenerator.invoke(canvasView) ?: return
+
+        val file = externalFileAssignment.assignFile(
                 activity,
                 "GestureMemo_${System.currentTimeMillis()}.png"
         )
 
-        BitmapCompressor().invoke(bitmap, file)
+        bitmapCompressor.invoke(bitmap, file)
 
         ViewModelProviders.of(activity).get(ContentViewModel::class.java)
                 .snackShort("Save current canvas to ${file.absolutePath}")
