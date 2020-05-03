@@ -18,12 +18,6 @@
         <item name="android:textColorHighlight">@color/cyan_bg</item>
     </style>
 
-    <style name="SettingSubhead">
-        <item name="android:textSize">10sp</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
-
     <style name="OneLineTextMenu">
         <item name="android:background">@drawable/ripple_transparent</item>
         <item name="android:padding">16dp</item>
@@ -62,22 +56,11 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="errorText">
         <item name="android:textColor">@android:color/holo_red_dark</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="FakeTabStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:button">@android:color/transparent</item>
-        <item name="android:background">@drawable/fake_tab</item>
     </style>
 
     <style name="BackgroundEmphasisStyle">
@@ -87,13 +70,6 @@
         <item name="android:padding">8dp</item>
         <item name="android:button">@android:color/transparent</item>
         <item name="android:background">@drawable/emphasis</item>
-    </style>
-
-    <style name="MenuCardStyle">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:foreground">@drawable/ripple_transparent</item>
     </style>
 
     <style name="BarcodeReaderSubMenuStyle">
