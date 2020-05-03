@@ -366,17 +366,10 @@ class SearchFragment : Fragment() {
             }
             it.addTextChangedListener(object : TextWatcher {
 
-                private var previous = ""
-
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    val newQuery = s.toString()
-                    if (newQuery == previous) {
-                        return
-                    }
-                    previous = newQuery
-                    CoroutineScope(Dispatchers.Default).launch { channel.send(newQuery) }
+                    CoroutineScope(Dispatchers.Default).launch { channel.send(s.toString()) }
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
