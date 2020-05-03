@@ -1,47 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data>
         <variable name="fragment" type="jp.toastkid.yobidashi.settings.SettingFragment" />
     </data>
-    <LinearLayout
+    <androidx.viewpager.widget.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
+        <androidx.viewpager.widget.PagerTabStrip
+            android:id="@+id/tab_strip"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:background="@color/transparent"
-            android:visibility="gone"
-            >
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:minHeight="?android:actionBarSize"
-                />
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <androidx.viewpager.widget.PagerTabStrip
-                android:id="@+id/tab_strip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/textPrimary"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                />
-        </androidx.viewpager.widget.ViewPager>
-    </LinearLayout>
+            android:layout_gravity="top"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/textPrimary"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            />
+    </androidx.viewpager.widget.ViewPager>
 
 </layout>
