@@ -38,7 +38,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
@@ -65,6 +64,15 @@ import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -128,7 +136,7 @@ class SearchFragment : Fragment() {
     /**
      * Use for handling input action.
      */
-    private val inputSubject = PublishSubject.create<String>()
+    private val channel = Channel<String>()
 
     /**
      * Disposables.
@@ -368,7 +376,7 @@ class SearchFragment : Fragment() {
                         return
                     }
                     previous = newQuery
-                    inputSubject.onNext(newQuery)
+                    CoroutineScope(Dispatchers.Default).launch { channel.send(newQuery) }
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
@@ -379,14 +387,14 @@ class SearchFragment : Fragment() {
     }
 
     private fun invokeSuggestion() {
-        inputSubject.distinctUntilChanged()
-                .debounce(500L, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { suggest(it) },
-                        Timber::e
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Default).launch {
+            channel.receiveAsFlow()
+                    .distinctUntilChanged()
+                    .debounce(400)
+                    .collect {
+                        withContext(Dispatchers.Main) { suggest(it) }
+                    }
+        }
     }
 
     private fun suggest(key: String) {
@@ -529,6 +537,7 @@ class SearchFragment : Fragment() {
 
     override fun onDetach() {
         disposables.clear()
+        channel.cancel()
         favoriteModule?.dispose()
         historyModule?.dispose()
         suggestionModule?.dispose()
