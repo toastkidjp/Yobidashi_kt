@@ -10,15 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.toObservable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
@@ -135,21 +138,17 @@ internal class Adapter(private val context: Context, private val parent: View)
             notifyDataSetChanged()
             return
         }
-        master.toObservable()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.computation())
-                .filter { appInfo -> appInfo.packageName.contains(str) }
-                .take(if (limit == -1L) Long.MAX_VALUE else limit)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete {
-                    onResult()
-                    this.notifyDataSetChanged()
-                }
-                .doOnError {
-                    onResult()
-                }
-                .subscribe { installedApps.add(it) }
-                .addTo(disposables)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            master.asFlow()
+                    .filter { appInfo -> appInfo.packageName.contains(str) }
+                    .take(if (limit == -1L) Int.MAX_VALUE else limit.toInt())// TODO to Int
+                    .collect {
+                        installedApps.add(it)
+                    }
+            onResult()
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int = installedApps.size
