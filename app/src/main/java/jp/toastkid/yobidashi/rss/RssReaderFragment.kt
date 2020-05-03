@@ -23,11 +23,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -38,7 +33,14 @@ import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.api.RssReaderApi
 import jp.toastkid.yobidashi.rss.list.Adapter
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -49,7 +51,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
 
     private var viewModel: RssReaderFragmentViewModel? = null
 
-    private val disposables = CompositeDisposable()
+    private val disposables = Job()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -83,15 +85,15 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
             return
         }
 
-        Observable.fromIterable(readRssReaderTargets)
-                .subscribeOn(Schedulers.io())
-                .map { RssReaderApi().invoke(it) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { adapter.addAll(it?.items) },
-                        Timber::e
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            readRssReaderTargets.asFlow()
+                    .map { RssReaderApi().invoke(it) }
+                    .collect {
+                        withContext(Dispatchers.Main) {
+                            adapter.addAll(it?.items)
+                        }
+                    }
+        }
     }
 
     private fun observeViewModelEvent(fragmentActivity: FragmentActivity) {
@@ -129,7 +131,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
 
     override fun onDetach() {
         super.onDetach()
-        disposables.clear()
+        disposables.cancel()
     }
 
     companion object {
