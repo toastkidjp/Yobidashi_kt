@@ -218,11 +218,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun setQuery() {
-        arguments?.getString(EXTRA_KEY_QUERY)?.let { query ->
-            headerBinding?.searchInput?.let { input ->
-                input.setText(query)
-                input.selectAll()
-            }
+        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
+        headerBinding?.searchInput?.let { input ->
+            input.setText(query)
+            input.selectAll()
         }
     }
 
