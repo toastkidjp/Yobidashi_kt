@@ -5,13 +5,13 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import android.view.View
 import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
+import kotlinx.coroutines.Job
 
 /**
  * Voice search use case.
@@ -48,10 +48,10 @@ object VoiceSearch {
      *
      * @return [Disposable]
      */
-    fun processResult(context: Context, data: Intent): Disposable {
+    fun processResult(context: Context, data: Intent): Job {
         val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
         if (result.isNullOrEmpty()) {
-            return Disposables.empty()
+            return Job()
         }
         return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), result[0])
                 .invoke()

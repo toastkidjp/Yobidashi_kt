@@ -11,14 +11,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemRssSettingBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.history.Removable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -56,19 +58,19 @@ class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.A
 
     /**
      * Remove item with position.
-     *
+     * TODO Fix return type
      * @param position
      * @return [Disposable]
      */
     override fun removeAt(position: Int): Disposable {
         val item = items[position]
-        return Completable.fromAction { preferenceApplier.removeFromRssReaderTargets(item) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    items.remove(item)
-                    notifyItemRemoved(position)
-                }
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO)  { preferenceApplier.removeFromRssReaderTargets(item) }
+
+            items.remove(item)
+            notifyItemRemoved(position)
+        }
+        return Disposables.disposed()
     }
 
 }

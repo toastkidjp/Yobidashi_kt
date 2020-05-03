@@ -12,17 +12,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Search history list activity.
@@ -37,8 +36,6 @@ class SearchHistoryFragment : Fragment(),
     private lateinit var adapter: ModuleAdapter
 
     private lateinit var preferenceApplier: PreferenceApplier
-
-    private val disposables = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
@@ -97,22 +94,14 @@ class SearchHistoryFragment : Fragment(),
 
     override fun onClickSearchHistoryClear() {
         val context = context ?: return
-        Completable.fromAction { DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll() }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            Toaster.snackShort(
-                                    binding.root,
-                                    R.string.settings_color_delete,
-                                    PreferenceApplier(context).colorPair()
-                            )
-                            adapter.clearAll { Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair()) }
-                                    .addTo(disposables)
-                            activity?.supportFragmentManager?.popBackStack()
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll()
+            }
+
+            adapter.clearAll { Toaster.snackShort(binding.root, R.string.settings_color_delete, preferenceApplier.colorPair()) }
+            activity?.supportFragmentManager?.popBackStack()
+        }
     }
 
     companion object {

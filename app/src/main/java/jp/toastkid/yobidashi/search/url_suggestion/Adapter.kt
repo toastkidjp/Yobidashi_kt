@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * URL suggestion module's adapter.
@@ -91,17 +91,15 @@ class Adapter(
      * @param index
      * @return disposable
      */
-    fun removeAt(viewHistoryRepository: ViewHistoryRepository, index: Int): Disposable {
-        return Completable.fromAction {
-            val item = get(index)
-            //TODO consider it. viewHistoryRepository.delete(item)
-            suggestions.remove(item)
+    fun removeAt(viewHistoryRepository: ViewHistoryRepository, index: Int): Job {
+        return CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val item = get(index)
+                //TODO consider it. viewHistoryRepository.delete(item)
+                suggestions.remove(item)
+            }
+
+            notifyItemRemoved(index)
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { notifyItemRemoved(index) },
-                        Timber::e
-                )
     }
 }

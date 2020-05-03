@@ -3,15 +3,15 @@ package jp.toastkid.yobidashi
 import android.app.Application
 import android.os.Build
 import android.webkit.WebView
-import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -39,12 +39,9 @@ class ExtendedApplication : Application() {
 
         val preferenceApplier = PreferenceApplier(this)
 
-        Completable.fromAction { processForFirstLaunch(preferenceApplier) }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        { },
-                        { Timber.e(it) }
-                ).addTo(disposables)
+        CoroutineScope(Dispatchers.Default).launch {
+            processForFirstLaunch(preferenceApplier)
+        }
 
         if (preferenceApplier.useNotificationWidget()) {
             NotificationWidget.show(this)
@@ -63,8 +60,8 @@ class ExtendedApplication : Application() {
 
         DefaultColorInsertion().insert(this)
         preferenceApplier.updateLastAd()
-        BookmarkInitializer()(this).addTo(disposables)
-        DefaultBackgroundImagePreparation()(this).addTo(disposables)
+        BookmarkInitializer()(this)
+        DefaultBackgroundImagePreparation()(this)
     }
 
     override fun onTerminate() {

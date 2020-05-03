@@ -252,7 +252,6 @@ class BookmarkFragment: Fragment(),
 
     override fun onClickAddDefaultBookmark() {
         BookmarkInitializer()(binding.root.context) { adapter.showRoot() }
-                .addTo(disposables)
         contentViewModel?.snackShort(R.string.done_addition)
     }
 
@@ -260,17 +259,17 @@ class BookmarkFragment: Fragment(),
         if (TextUtils.isEmpty(title)) {
             return
         }
-        Completable.fromAction {
+
+        CoroutineScope(Dispatchers.Main).launch {
             BookmarkInsertion(
                     binding.root.context,
                     title ?: "", // This value is always non-null, because it has checked at above statement.
                     parent = adapter.currentFolderName(),
                     folder = true
-            ).insert() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { adapter.reload() }
-                .addTo(disposables)
+            ).insert()
+
+            adapter.reload()
+        }
     }
 
     override fun toTop() {

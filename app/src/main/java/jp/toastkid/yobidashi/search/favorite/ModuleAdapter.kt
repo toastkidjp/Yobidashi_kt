@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -113,23 +110,19 @@ internal class ModuleAdapter(
      *
      * @param position
      */
-    fun removeAt(position: Int): Disposable {
+    fun removeAt(position: Int): Job {
         val item = selected[position]
-        return Completable.fromAction {
-            favoriteSearchRepository.delete(item)
-            selected.remove(item)
+        return CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                favoriteSearchRepository.delete(item)
+                selected.remove(item)
+            }
+
+            notifyItemRemoved(position)
+            if (isEmpty) {
+                onVisibilityChanged(false)
+            }
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            notifyItemRemoved(position)
-                            if (isEmpty) {
-                                onVisibilityChanged(false)
-                            }
-                        },
-                        Timber::e
-                )
     }
 
     /**

@@ -4,13 +4,12 @@ import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
+import kotlinx.coroutines.Job
 
 /**
  * Search action shortcut.
@@ -42,7 +41,7 @@ class SearchAction(
     /**
      * Invoke action.
      */
-    operator fun invoke(): Disposable {
+    operator fun invoke(): Job {
         val disposable = insertToSearchHistory()
 
         val validatedUrl = Urls.isValidUrl(query)
@@ -51,11 +50,11 @@ class SearchAction(
         return disposable
     }
 
-    private fun insertToSearchHistory(): Disposable =
+    private fun insertToSearchHistory(): Job =
             if (preferenceApplier.isEnableSearchHistory && isNotUrl(query) && saveHistory) {
                 SearchHistoryInsertion.make(activityContext, category, query).insert()
             } else {
-                Disposables.disposed()
+                Job()
             }
 
     /**

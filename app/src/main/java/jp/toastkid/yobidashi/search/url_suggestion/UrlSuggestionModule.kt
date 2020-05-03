@@ -4,10 +4,6 @@ import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
@@ -17,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -39,11 +34,6 @@ class UrlSuggestionModule(
             )
 
     var enable = true
-
-    /**
-     * Use for disposing.
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
 
     /**
      * Bookmark's database repository.
@@ -73,7 +63,7 @@ class UrlSuggestionModule(
      * @param index
      */
     private fun removeAt(index: Int) {
-        adapter.removeAt(viewHistoryRepository, index).addTo(disposables)
+        adapter.removeAt(viewHistoryRepository, index)
     }
 
     /**
@@ -113,7 +103,6 @@ class UrlSuggestionModule(
     fun show() {
         if (!binding.root.isVisible && enable) {
             runOnMainThread { binding.root.isVisible = true }
-                    .addTo(disposables)
         }
     }
 
@@ -123,24 +112,11 @@ class UrlSuggestionModule(
     fun hide() {
         if (binding.root.isVisible) {
             runOnMainThread { binding.root.isVisible = false }
-                    .addTo(disposables)
         }
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            Completable.fromAction { action() }
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {},
-                            Timber::e
-                    )
-
-    /**
-     * Clear disposables.
-     */
-    fun dispose() {
-        disposables.clear()
-    }
+            CoroutineScope(Dispatchers.Main).launch { action() }
 
     companion object {
 

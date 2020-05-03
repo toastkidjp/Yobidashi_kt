@@ -404,9 +404,7 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        SearchAction(this, category, query)
-                .invoke()
-                .addTo(disposables)
+        SearchAction(this, category, query).invoke()
     }
 
     private fun openNewWebTab(uri: Uri) {
@@ -841,7 +839,7 @@ class MainActivity : AppCompatActivity(),
                 tabListDialogFragment?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
-                VoiceSearch.processResult(this, data).addTo(disposables)
+                VoiceSearch.processResult(this, data)
             }
         }
     }

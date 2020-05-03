@@ -24,7 +24,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
@@ -37,6 +36,9 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -89,10 +91,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         adapter = Adapter(fragmentManager, viewModel)
 
         viewModel.onClick.observe(this, Observer {
-            Completable.fromAction { loadImages(it) }
-                    .subscribeOn(Schedulers.io())
-                    .subscribe()
-                    .addTo(disposables)
+            CoroutineScope(Dispatchers.IO).launch { loadImages(it) }
         })
 
         viewModel.onLongClick.observe(this, Observer {

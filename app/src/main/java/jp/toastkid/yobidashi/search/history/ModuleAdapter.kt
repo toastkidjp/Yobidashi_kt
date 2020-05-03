@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchAction
@@ -99,20 +97,16 @@ internal class ModuleAdapter(
      * @param onComplete Callback
      * @return [Disposable]
      */
-    fun clearAll(onComplete: () -> Unit): Disposable =
-            Completable.fromAction {
-                repository.deleteAll()
-                selected.clear()
+    fun clearAll(onComplete: () -> Unit): Job =
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    repository.deleteAll()
+                    selected.clear()
+                }
+
+                onComplete()
+                notifyDataSetChanged()
             }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {
-                                onComplete()
-                                notifyDataSetChanged()
-                            },
-                            Timber::e
-                    )
 
     // TODO rename argument
     fun refresh(onComplete: () -> Unit) {
@@ -150,8 +144,10 @@ internal class ModuleAdapter(
         }
     }
 
+    // TODO Modify return type
     override fun removeAt(position: Int): Disposable {
-        return remove(selected[position])
+        remove(selected[position])
+        return Disposables.disposed()
     }
 
     /**
@@ -160,18 +156,19 @@ internal class ModuleAdapter(
      * @param item [SearchHistory]
      * @return [Disposable]
      */
-    private fun remove(item: SearchHistory): Disposable {
-        return Completable.fromAction { repository.delete(item) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    val index = selected.indexOf(item)
-                    selected.remove(item)
-                    notifyItemRemoved(index)
-                    if (isEmpty) {
-                        onVisibilityChanged(false)
-                    }
-                }
+    private fun remove(item: SearchHistory): Job {
+        return CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                repository.delete(item)
+            }
+
+            val index = selected.indexOf(item)
+            selected.remove(item)
+            notifyItemRemoved(index)
+            if (isEmpty) {
+                onVisibilityChanged(false)
+            }
+        }
     }
 
     /**

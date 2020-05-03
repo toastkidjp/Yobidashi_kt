@@ -10,11 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
@@ -60,6 +56,7 @@ internal class ActivityAdapter(
 
     /**
      * Use for run on main thread.
+     * TODO Delete it.
      */
     private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
@@ -156,14 +153,12 @@ internal class ActivityAdapter(
      * @param position position
      */
     fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
-        Completable.fromAction { bookmarkRepository.delete(item) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    items.remove(item)
-                    notifyItemRemoved(position)
-                }
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) { bookmarkRepository.delete(item) }
+
+            items.remove(item)
+            notifyItemRemoved(position)
+        }
     }
 
     /**
@@ -172,15 +167,13 @@ internal class ActivityAdapter(
      * @param onComplete callback
      */
     fun clearAll(onComplete: () -> Unit) {
-        Completable.fromAction { bookmarkRepository.clear() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    onComplete()
-                    items.clear()
-                    notifyDataSetChanged()
-                }
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) { bookmarkRepository.clear() }
+
+            onComplete()
+            items.clear()
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int = items.size

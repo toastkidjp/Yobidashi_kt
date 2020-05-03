@@ -12,8 +12,9 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -26,9 +27,7 @@ class DailyNotificationWorker(private val context: Context, workerParams: Worker
     override fun doWork(): Result {
         enqueueNextWork(context)
 
-        Completable.fromAction { DailyNotification().show(context) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        CoroutineScope(Dispatchers.IO).launch { DailyNotification().show(context) }
         return Result.success()
     }
 

@@ -34,7 +34,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
@@ -384,9 +383,9 @@ class SearchFragment : Fragment() {
 
     private fun suggest(key: String) {
         if (key.isEmpty()|| key == currentUrl) {
-            urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
+            urlModule?.switch(currentTitle, currentUrl)
         } else {
-            urlModule?.hide()?.addTo(disposables)
+            urlModule?.hide()
         }
 
         setActionButtonState(key.isEmpty())
@@ -471,9 +470,7 @@ class SearchFragment : Fragment() {
             return
         }
 
-        SearchAction(context, category, query, currentUrl, onBackground)
-                .invoke()
-                .addTo(disposables)
+        SearchAction(context, category, query, currentUrl, onBackground).invoke()
     }
 
     /**
@@ -523,7 +520,6 @@ class SearchFragment : Fragment() {
         favoriteModule?.dispose()
         historyModule?.dispose()
         suggestionModule?.dispose()
-        urlSuggestionModule?.dispose()
         appModule?.dispose()
         super.onDetach()
     }

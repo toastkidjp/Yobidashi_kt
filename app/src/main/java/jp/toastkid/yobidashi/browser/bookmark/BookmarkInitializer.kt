@@ -2,14 +2,14 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
 import androidx.core.net.toUri
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.storage.FilesDir
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
@@ -55,40 +55,39 @@ class BookmarkInitializer {
      *
      * @param context
      */
-    operator fun invoke(context: Context, onComplete: () -> Unit = {}): Disposable {
+    operator fun invoke(context: Context, onComplete: () -> Unit = {}): Job {
         val favicons = FilesDir(context, "favicons")
         val bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
 
-        return Completable.fromAction {
-            defaultBookmarks.forEach {
-                val parent = it.key
-                bookmarkRepository.add(
-                        Bookmark().also {
-                            it.title = parent
-                            it.parent = Bookmark.getRootFolderName()
-                            it.folder = true
-                        }
-                )
-                it.value.entries.forEach { entry ->
+        // TODO Extract to function.
+        return CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                defaultBookmarks.forEach {
+                    val parent = it.key
                     bookmarkRepository.add(
                             Bookmark().also {
-                                it.title = entry.key
-                                it.url = entry.value
-                                it.favicon =
-                                        favicons.assignNewFile("${entry.value.toUri().host}.png")
-                                                .absolutePath
-                                it.parent = parent
-                                it.folder = false
+                                it.title = parent
+                                it.parent = Bookmark.getRootFolderName()
+                                it.folder = true
                             }
                     )
+                    it.value.entries.forEach { entry ->
+                        bookmarkRepository.add(
+                                Bookmark().also {
+                                    it.title = entry.key
+                                    it.url = entry.value
+                                    it.favicon =
+                                            favicons.assignNewFile("${entry.value.toUri().host}.png")
+                                                    .absolutePath
+                                    it.parent = parent
+                                    it.folder = false
+                                }
+                        )
+                    }
                 }
             }
+
+            onComplete()
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { onComplete() },
-                        Timber::e
-                )
     }
 }

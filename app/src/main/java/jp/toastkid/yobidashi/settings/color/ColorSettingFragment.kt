@@ -11,11 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -28,7 +24,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 /**
  * Color setting activity.
@@ -195,18 +190,15 @@ class ColorSettingFragment : Fragment(),
 
         commitNewColor(bgColor, fontColor)
 
-        Completable.fromAction {
-            val savedColor = SavedColor.make(bgColor, fontColor)
-            repository.add(savedColor)
-            adapter?.add(savedColor)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val savedColor = SavedColor.make(bgColor, fontColor)
+                repository.add(savedColor)
+                adapter?.add(savedColor)
+            }
+
+            adapter?.notifyDataSetChanged()
         }
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(
-                        { adapter?.notifyDataSetChanged() },
-                        Timber::e
-                )
-                ?.addTo(disposables)
     }
 
     /**
@@ -260,7 +252,7 @@ class ColorSettingFragment : Fragment(),
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_random)
                     ?.setOnMenuItemClickListener {
                         val activityContext = context ?: return@setOnMenuItemClickListener true
-                        RandomColorInsertion()(activityContext).addTo(disposables)
+                        RandomColorInsertion()(activityContext)
                         snackShort(R.string.done_addition)
                         true
                     }
@@ -318,25 +310,20 @@ class ColorSettingFragment : Fragment(),
         }
 
         fun clear() {
-            Completable.fromAction {
-                repository.deleteAll()
-                items.clear()
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    repository.deleteAll()
+                    items.clear()
+                }
+
+                notifyDataSetChanged()
+                val root = binding?.root ?: return@launch
+                Toaster.snackShort(
+                        root,
+                        R.string.settings_color_delete,
+                        colorPair()
+                )
             }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {
-                                notifyDataSetChanged()
-                                val root = binding?.root ?: return@subscribe
-                                Toaster.snackShort(
-                                        root,
-                                        R.string.settings_color_delete,
-                                        colorPair()
-                                )
-                            },
-                            Timber::e
-                    )
-                    .addTo(disposables)
         }
     }
 

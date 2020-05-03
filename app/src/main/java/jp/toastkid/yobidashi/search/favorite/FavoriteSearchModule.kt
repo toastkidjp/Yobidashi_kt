@@ -5,15 +5,13 @@ import android.os.Looper
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 /**
  * Search history module.
@@ -49,11 +47,6 @@ class FavoriteSearchModule(
     private var disposable: Job? = null
 
     /**
-     * Use for disposing.
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
      * For executing on UI thread.
      */
     private val uiThreadHandler = Handler(Looper.getMainLooper())
@@ -83,7 +76,7 @@ class FavoriteSearchModule(
         }
         uiThreadHandler.post {
             RightSwipeActionAttachment()(binding.searchFavorites) {
-                moduleAdapter.removeAt(it).addTo(disposables)
+                moduleAdapter.removeAt(it)
             }
         }
     }
@@ -103,7 +96,6 @@ class FavoriteSearchModule(
     fun show() {
         if (!binding.root.isVisible && enable) {
             runOnMainThread { binding.root.isVisible = true }
-                    .addTo(disposables)
         }
     }
 
@@ -113,24 +105,17 @@ class FavoriteSearchModule(
     fun hide() {
         if (binding.root.isVisible) {
             runOnMainThread { binding.root.isVisible = false }
-                    .addTo(disposables)
         }
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            Completable.fromAction { action() }
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {},
-                            Timber::e
-                    )
+            CoroutineScope(Dispatchers.Main).launch { action() }
 
     /**
      * Dispose last subscription.
      */
     fun dispose() {
         disposable?.cancel()
-        disposables.clear()
     }
 
 }
