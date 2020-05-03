@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -23,6 +22,7 @@ import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
+import jp.toastkid.yobidashi.gesture.GestureMemoFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -33,7 +33,6 @@ import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
-import jp.toastkid.yobidashi.gesture.GestureMemoFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
@@ -100,7 +99,7 @@ class MenuUseCase(
                     contentViewModel.snackShort(activity.getString(R.string.message_cannot_use_under_l))
                     return
                 }
-                ProcessCleanerInvoker()(activity.findViewById(R.id.content)).addTo(disposables)
+                ProcessCleanerInvoker()(activity.findViewById(R.id.content))
             }
             Menu.PLANNING_POKER-> {
                 contentViewModel.nextFragment(CardListFragment::class.java)
@@ -197,7 +196,6 @@ class MenuUseCase(
                                     preferenceApplier.colorPair()
                             )
                         }
-                        .addTo(disposables)
             }
             Menu.VIEW_ARCHIVE -> {
                 contentViewModel.nextFragment(ArchivesFragment::class.java)

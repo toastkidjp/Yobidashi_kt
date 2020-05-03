@@ -11,17 +11,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
@@ -84,7 +85,7 @@ internal class ActivityAdapter(
         if (bookmark.folder) {
             holder.setImageId(R.drawable.ic_folder_black)
         } else {
-            holder.setImage(bookmark.favicon).addTo(disposables)
+            holder.setImage(bookmark.favicon)
         }
 
         val browserViewModel = (holder.itemView.context as? FragmentActivity)?.let {
@@ -124,31 +125,13 @@ internal class ActivityAdapter(
     }
 
     private fun findByFolderName(title: String) {
-        displayItems(Maybe.fromCallable { bookmarkRepository.findByParent(title) })
-    }
-
-    /**
-     * Query with specified title.
-     *
-     * @param itemCall
-     */
-    private fun displayItems(itemCall: Maybe<List<Bookmark>>) {
-        itemCall
-                .subscribeOn(Schedulers.io())
-                .flatMapObservable { it.toObservable() }
-                .observeOn(Schedulers.computation())
-                .doOnSubscribe { items.clear() }
-                .subscribe(
-                        { items.add(it) },
-                        Timber::e,
-                        {
-                            mainThreadHandler.post {
-                                notifyDataSetChanged()
-                                onRefresh()
-                            }
-                        }
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                bookmarkRepository.findByParent(title).forEach { items.add(it) }
+            }
+            notifyDataSetChanged()
+            onRefresh()
+        }
     }
 
     /**

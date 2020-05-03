@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -39,6 +38,10 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.content.ContentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okio.Okio
 import timber.log.Timber
 
@@ -327,18 +330,13 @@ class BookmarkFragment: Fragment(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        Maybe.fromCallable { bookmarkRepository.all() }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        { bookmarks ->
-                            val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@subscribe
-                            Okio.buffer(Okio.sink(outputStream)).use {
-                                it.writeUtf8(Exporter(bookmarks).invoke())
-                            }
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            val items = withContext(Dispatchers.IO) { bookmarkRepository.all() }
+            val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@launch
+            Okio.buffer(Okio.sink(outputStream)).use {
+                it.writeUtf8(Exporter(items).invoke())
+            }
+        }
     }
 
     override fun onDetach() {

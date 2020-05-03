@@ -7,15 +7,18 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 import kotlin.math.min
@@ -111,21 +114,17 @@ internal class ModuleAdapter(
                             Timber::e
                     )
 
-    fun refresh(onComplete: () -> Unit): Disposable {
-        return Maybe.fromCallable { repository.findAll() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            if (it.isEmpty()) {
-                                onComplete()
-                                return@subscribe
-                            }
-                            selected.addAll(it)
-                            notifyDataSetChanged()
-                        },
-                        Timber::e
-                )
+    // TODO rename argument
+    fun refresh(onComplete: () -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val items = withContext(Dispatchers.IO) { repository.findAll() }
+            if (items.isEmpty()) {
+                onComplete()
+                return@launch
+            }
+            selected.addAll(items)
+            notifyDataSetChanged()
+        }
     }
 
     /**
@@ -134,27 +133,21 @@ internal class ModuleAdapter(
      * @param s
      * @return [Disposable]
      */
-    fun query(s: CharSequence): Disposable {
+    fun query(s: CharSequence): Job {
         clear()
 
-        return Maybe.fromCallable {
-            if (s.isNotBlank()) {
-                repository.select("$s%")
-            } else {
-                repository.findAll()
+        return CoroutineScope(Dispatchers.Main).launch {
+            val items = withContext(Dispatchers.IO) {
+                if (s.isNotBlank()) {
+                    repository.select("$s%")
+                } else {
+                    repository.findAll()
+                }
             }
+            items.forEach { add(it) }
+            onVisibilityChanged(!isEmpty)
+            notifyDataSetChanged()
         }
-                .subscribeOn(Schedulers.newThread())
-                .flatMapObservable { it.toObservable() }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { this.add(it) },
-                        Timber::e,
-                        {
-                            onVisibilityChanged(!isEmpty)
-                            notifyDataSetChanged()
-                        }
-                )
     }
 
     override fun removeAt(position: Int): Disposable {

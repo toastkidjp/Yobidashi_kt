@@ -14,10 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.Job
 import timber.log.Timber
 
 /**
@@ -45,7 +45,7 @@ class HistoryModule(
     /**
      * Last subscription.
      */
-    private var disposable: Disposable? = null
+    private var disposable: Job? = null
 
     /**
      * Use for disposing.
@@ -84,7 +84,7 @@ class HistoryModule(
      * @param s query string
      */
     fun query(s: CharSequence) {
-        disposable?.dispose()
+        disposable?.cancel()
         disposable = moduleAdapter.query(s)
     }
 
@@ -138,7 +138,7 @@ class HistoryModule(
      * Dispose last subscription.
      */
     fun dispose() {
-        disposable?.dispose()
+        disposable?.cancel()
     }
 
 }

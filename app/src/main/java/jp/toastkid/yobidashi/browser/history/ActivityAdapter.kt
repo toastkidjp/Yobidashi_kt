@@ -76,7 +76,7 @@ internal class ActivityAdapter(
         }
         holder.setOnClickBookmark(viewHistory)
 
-        holder.setImage(viewHistory.favicon).addTo(disposables)
+        holder.setImage(viewHistory.favicon)
 
         val browserViewModel = (holder.itemView.context as? FragmentActivity)?.let {
             ViewModelProviders.of(it).get(BrowserViewModel::class.java)

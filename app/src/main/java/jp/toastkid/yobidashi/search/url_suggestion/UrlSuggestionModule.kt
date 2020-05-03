@@ -5,20 +5,18 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.toObservable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -83,33 +81,30 @@ class UrlSuggestionModule(
      *
      * @param q query string
      */
-    fun query(q: CharSequence): Disposable {
+    fun query(q: CharSequence) {
         adapter.clear()
         if (q.isEmpty()) {
             adapter.notifyDataSetChanged()
             hide()
-            return Disposables.empty()
+            return
         }
 
-        val bookmarkStream = Maybe.fromCallable { bookmarkRepository.search("%$q%", ITEM_LIMIT) }
-                .subscribeOn(Schedulers.io())
-                .flatMapObservable { it.toObservable() }
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                bookmarkRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
+            }
 
-        val viewHistoryStream = Maybe.fromCallable { viewHistoryRepository.search("%$q%", ITEM_LIMIT) }
-                .subscribeOn(Schedulers.io())
-                .flatMapObservable { it.toObservable() }
+            withContext(Dispatchers.IO) {
+                viewHistoryRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
+            }
 
-        return Observable.concat(bookmarkStream, viewHistoryStream)
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate {
-                    if (adapter.isNotEmpty()) {
-                        show()
-                    } else {
-                        hide()
-                    }
-                    adapter.notifyDataSetChanged()
-                }
-                .subscribe(adapter::add, Timber::e)
+            if (adapter.isNotEmpty()) {
+                show()
+            } else {
+                hide()
+            }
+            adapter.notifyDataSetChanged()
+        }
     }
 
     /**

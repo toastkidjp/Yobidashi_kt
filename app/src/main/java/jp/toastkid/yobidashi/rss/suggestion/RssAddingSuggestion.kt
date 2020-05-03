@@ -8,15 +8,14 @@
 package jp.toastkid.yobidashi.rss.suggestion
 
 import android.view.View
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -25,15 +24,17 @@ class RssAddingSuggestion(private val preferenceApplier: PreferenceApplier) {
 
     private val rssUrlValidator = RssUrlValidator()
 
-    operator fun invoke(view: View, url: String): Disposable =
-            Maybe.fromCallable { shouldShow(url) }
-                    .subscribeOn(Schedulers.computation())
-                    .filter { it }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { toast(view, url) },
-                            Timber::e
-                    )
+    operator fun invoke(view: View, url: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val shouldShow = withContext(Dispatchers.Default) { shouldShow(url) }
+            if (!shouldShow) {
+                return@launch
+            }
+
+            toast(view, url)
+        }
+    }
+
 
     private fun toast(view: View, url: String) {
         Toaster.snackLong(

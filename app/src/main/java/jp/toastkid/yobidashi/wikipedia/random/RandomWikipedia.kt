@@ -9,11 +9,10 @@ package jp.toastkid.yobidashi.wikipedia.random
 
 import android.net.Uri
 import androidx.core.net.toUri
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 /**
@@ -25,17 +24,15 @@ class RandomWikipedia {
 
     private val urlDecider = UrlDecider()
 
-    fun fetchWithAction(titleAndLinkConsumer: (String, Uri) -> Unit): Disposable =
-            Maybe.fromCallable {
-                val titles = wikipediaApi.invoke()?.filter { it.ns == 0 }
-                        ?: throw NullPointerException()
-                return@fromCallable titles[Random.nextInt(titles.size)].title
-            }
-                    .retry(3)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { titleAndLinkConsumer(it, "${urlDecider()}wiki/$it".toUri()) },
-                            Timber::e
-                    )
+    fun fetchWithAction(titleAndLinkConsumer: (String, Uri) -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val title = withContext(Dispatchers.IO) {
+                val titles = wikipediaApi.invoke()?.filter { it.ns == 0 } ?: return@withContext null
+                titles[Random.nextInt(titles.size)].title
+            } ?: return@launch
+
+            titleAndLinkConsumer(title, "${urlDecider()}wiki/$title".toUri())
+        }
+    }
+
 }

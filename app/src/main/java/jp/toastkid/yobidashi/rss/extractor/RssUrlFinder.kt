@@ -8,16 +8,14 @@
 package jp.toastkid.yobidashi.rss.extractor
 
 import android.view.View
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -31,25 +29,27 @@ class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
     operator fun invoke(
             currentUrl: String?,
             snackbarParentSupplier: () -> View?
-    ): Disposable {
-        val snackbarParent = snackbarParentSupplier() ?: return Disposables.disposed()
+    ) {
+        val snackbarParent = snackbarParentSupplier() ?: return
         val colorPair = preferenceApplier.colorPair()
 
         if (currentUrl?.isNotBlank() == true && urlValidator(currentUrl)) {
             preferenceApplier.saveNewRssReaderTargets(currentUrl)
             Toaster.snackShort(snackbarParent, "Added $currentUrl", colorPair)
-            return Disposables.disposed()
+            return
         }
 
-        return Maybe.fromCallable { HtmlApi().invoke(currentUrl) }
-                .subscribeOn(Schedulers.io())
-                .filter { it.isSuccessful }
-                .map { rssUrlExtractor(it.body()?.string()) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { storeToPreferences(it, snackbarParent, colorPair) },
-                        Timber::e
-                )
+        CoroutineScope(Dispatchers.Main).launch {
+            val rssItems = withContext(Dispatchers.IO) {
+                val response = HtmlApi().invoke(currentUrl)
+                        ?: return@withContext emptyList<String>()
+                if (!response.isSuccessful) {
+                    return@withContext emptyList<String>()
+                }
+                rssUrlExtractor(response.body()?.string())
+            }
+            storeToPreferences(rssItems, snackbarParent, colorPair)
+        }
     }
 
     private fun storeToPreferences(
