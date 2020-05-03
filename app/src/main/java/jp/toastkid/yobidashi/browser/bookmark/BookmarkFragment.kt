@@ -22,11 +22,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -303,24 +300,14 @@ class BookmarkFragment: Fragment(),
         val context = context ?: return
         val inputStream = context.contentResolver?.openInputStream(uri) ?: return
 
-        Completable.using(
-                { inputStream },
-                {
-                    Completable.fromAction {
-                        ExportedFileParser()(it).forEach { bookmarkRepository.add(it) }
-                    }
-                },
-                { it.close() }
-        )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            adapter.showRoot()
-                            contentViewModel?.snackShort(R.string.done_addition)
-                        },
-                        { Timber.e(it) }
-                ).addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                ExportedFileParser()(inputStream).forEach { bookmarkRepository.add(it) }
+
+                adapter.showRoot()
+                contentViewModel?.snackShort(R.string.done_addition)
+            }
+        }
     }
 
     /**
