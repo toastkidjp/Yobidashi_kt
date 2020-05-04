@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -55,11 +54,6 @@ class BrowserFragment : Fragment(),
         UserAgentDialogFragment.Callback,
         ContentScrollable
 {
-
-    /**
-     * RxPermissions.
-     */
-    private var rxPermissions: RxPermissions? = null
 
     /**
      * Preferences wrapper.
@@ -100,7 +94,6 @@ class BrowserFragment : Fragment(),
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity?.let {
-            rxPermissions = RxPermissions(it)
         }
     }
 
