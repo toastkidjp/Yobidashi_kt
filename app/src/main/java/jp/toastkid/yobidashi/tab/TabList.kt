@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.annotation.Keep
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
+import kotlinx.coroutines.Job
 import okio.Okio
 import timber.log.Timber
 import java.io.File
@@ -26,9 +26,6 @@ class TabList private constructor() {
 
     @Transient
     private val tabs: MutableList<Tab> = mutableListOf()
-
-    @Transient
-    private val disposables = CompositeDisposable()
 
     @Keep
     private var index: Int = 0
@@ -230,10 +227,6 @@ class TabList private constructor() {
     }
 
     internal fun indexOf(tab: Tab): Int = tabs.indexOf(tab)
-
-    fun dispose() {
-        disposables.clear()
-    }
 
     override fun toString(): String = tabs.toString()
 
