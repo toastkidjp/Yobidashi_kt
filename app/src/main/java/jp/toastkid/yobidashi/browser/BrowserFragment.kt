@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
 import android.app.ActivityOptions
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -90,12 +89,6 @@ class BrowserFragment : Fragment(),
     private var contentViewModel: ContentViewModel? = null
 
     private val activityOptionsFactory = ActivityOptionsFactory()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        activity?.let {
-        }
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
