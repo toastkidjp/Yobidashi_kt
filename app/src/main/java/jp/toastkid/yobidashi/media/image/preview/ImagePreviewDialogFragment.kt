@@ -11,7 +11,6 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -28,7 +27,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -49,8 +47,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private var path: String? = null
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
-
-    private val disposables = CompositeDisposable()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
@@ -189,16 +185,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     PreferenceApplier(binding.root.context).colorPair()
             )
         }
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        disposables.clear()
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        disposables.clear()
     }
 
     companion object {

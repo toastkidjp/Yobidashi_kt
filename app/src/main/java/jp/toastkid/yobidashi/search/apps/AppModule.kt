@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.search.apps
 import android.text.TextUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.launcher.Adapter
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +35,7 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
      */
     private var disposable: Job? = null
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     var enable = false
 
@@ -92,14 +91,14 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            CoroutineScope(Dispatchers.Main).launch { action() }
+            CoroutineScope(Dispatchers.Main).launch(disposables) { action() }
 
     /**
      * Dispose last query's disposable.
      */
     fun dispose() {
         disposable?.cancel()
-        disposables.clear()
+        disposables.cancel()
     }
 
 }

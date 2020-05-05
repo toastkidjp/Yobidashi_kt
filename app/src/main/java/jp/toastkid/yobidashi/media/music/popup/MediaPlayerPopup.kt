@@ -35,7 +35,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
@@ -47,6 +46,7 @@ import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapt
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -139,7 +139,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     private var browserViewModel: BrowserViewModel? = null
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     init {
         val layoutInflater = LayoutInflater.from(context)
@@ -305,7 +305,7 @@ class MediaPlayerPopup(private val context: Context) {
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
 
         val attemptExtractActivity = attemptExtractActivity() ?: return
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             RuntimePermissions(attemptExtractActivity)
                     .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                     ?.receiveAsFlow()
@@ -340,7 +340,7 @@ class MediaPlayerPopup(private val context: Context) {
             mediaBrowser.disconnect()
         }
 
-        disposables.clear()
+        disposables.cancel()
     }
 
     fun reset() {

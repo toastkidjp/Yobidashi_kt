@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
@@ -26,6 +25,7 @@ import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -48,10 +48,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    /**
-     * [CompositeDisposable].
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -169,7 +166,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
         val context = requireContext()
         val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) {
                 repository.deleteAll()
                 adapter?.clear()
@@ -203,8 +200,8 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onDetach() {
+        disposables.cancel()
         super.onDetach()
-        disposables.clear()
     }
 
     companion object {

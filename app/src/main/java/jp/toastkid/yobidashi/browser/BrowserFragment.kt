@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
@@ -72,11 +71,6 @@ class BrowserFragment : Fragment(),
     private var headerBinding: ModuleBrowserHeaderBinding? = null
 
     private val searchQueryExtractor = SearchQueryExtractor()
-
-    /**
-     * Composite disposer.
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
 
     private var menuViewModel: MenuViewModel? = null
 
@@ -481,9 +475,9 @@ class BrowserFragment : Fragment(),
         browserModule.onPause()
     }
 
+    // TODO Should be replaced to onDetach.
     override fun onDestroy() {
         super.onDestroy()
-        disposables.clear()
         headerViewModel?.show()
         browserModule.dispose()
     }

@@ -10,13 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
@@ -58,7 +58,7 @@ internal class Adapter(private val context: Context, private val parent: View)
     /**
      * Disposables.
      */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     init {
         master = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
@@ -139,7 +139,7 @@ internal class Adapter(private val context: Context, private val parent: View)
             return
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             master.asFlow()
                     .filter { appInfo -> appInfo.packageName.contains(str) }
                     .take(if (limit == -1L) Int.MAX_VALUE else limit.toInt())// TODO to Int
@@ -157,6 +157,6 @@ internal class Adapter(private val context: Context, private val parent: View)
      * Dispose disposables.
      */
     fun dispose() {
-        disposables.clear()
+        disposables.cancel()
     }
 }

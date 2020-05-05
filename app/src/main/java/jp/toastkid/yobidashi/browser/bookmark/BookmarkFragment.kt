@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -36,6 +35,7 @@ import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -71,10 +71,7 @@ class BookmarkFragment: Fragment(),
 
     private var contentViewModel: ContentViewModel? = null
 
-    /**
-     * Composite of disposables.
-     */
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -192,7 +189,7 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.import_bookmark -> {
-                CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
                     RuntimePermissions(requireActivity())
                             .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             ?.receiveAsFlow()
@@ -215,7 +212,7 @@ class BookmarkFragment: Fragment(),
                     contentViewModel?.snackShort(R.string.message_disusable_menu)
                     return true
                 }
-                CoroutineScope(Dispatchers.Main).launch {
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
                     RuntimePermissions(requireActivity())
                             .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             ?.receiveAsFlow()
@@ -259,7 +256,7 @@ class BookmarkFragment: Fragment(),
             return
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             BookmarkInsertion(
                     binding.root.context,
                     title ?: "", // This value is always non-null, because it has checked at above statement.
@@ -302,7 +299,7 @@ class BookmarkFragment: Fragment(),
         val context = context ?: return
         val inputStream = context.contentResolver?.openInputStream(uri) ?: return
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) {
                 ExportedFileParser()(inputStream).forEach { bookmarkRepository.add(it) }
 
@@ -318,7 +315,7 @@ class BookmarkFragment: Fragment(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             val items = withContext(Dispatchers.IO) { bookmarkRepository.all() }
             val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@launch
             Okio.buffer(Okio.sink(outputStream)).use {
@@ -329,7 +326,7 @@ class BookmarkFragment: Fragment(),
 
     override fun onDetach() {
         adapter.dispose()
-        disposables.clear()
+        disposables.cancel()
         super.onDetach()
     }
 

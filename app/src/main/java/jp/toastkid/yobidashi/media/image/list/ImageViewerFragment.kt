@@ -23,7 +23,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
@@ -36,6 +35,7 @@ import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -59,7 +59,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private val parentExtractor = ParentExtractor()
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -90,7 +90,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         adapter = Adapter(fragmentManager, viewModel)
 
         viewModel.onClick.observe(this, Observer {
-            CoroutineScope(Dispatchers.IO).launch { loadImages(it) }
+            CoroutineScope(Dispatchers.IO).launch(disposables) { loadImages(it) }
         })
 
         viewModel.onLongClick.observe(this, Observer {
@@ -139,7 +139,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     private fun attemptLoad() {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             RuntimePermissions(requireActivity())
                     .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                     ?.receiveAsFlow()
@@ -238,8 +238,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     override fun onDetach() {
+        disposables.cancel()
         super.onDetach()
-        disposables.clear()
     }
 
     companion object {

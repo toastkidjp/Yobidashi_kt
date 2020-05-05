@@ -10,13 +10,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -44,10 +44,7 @@ internal class ActivityAdapter(
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /**
-     * [CompositeDisposable].
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     /**
      * Folder moving history.
@@ -122,7 +119,7 @@ internal class ActivityAdapter(
     }
 
     private fun findByFolderName(title: String) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) {
                 bookmarkRepository.findByParent(title).forEach { items.add(it) }
             }
@@ -153,7 +150,7 @@ internal class ActivityAdapter(
      * @param position position
      */
     fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) { bookmarkRepository.delete(item) }
 
             items.remove(item)
@@ -167,7 +164,7 @@ internal class ActivityAdapter(
      * @param onComplete callback
      */
     fun clearAll(onComplete: () -> Unit) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) { bookmarkRepository.clear() }
 
             onComplete()
@@ -182,7 +179,7 @@ internal class ActivityAdapter(
      * Dispose all disposable instances.
      */
     fun dispose() {
-        disposables.clear()
+        disposables.cancel()
     }
 
 }

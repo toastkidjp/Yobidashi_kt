@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.Disposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
@@ -85,7 +84,7 @@ internal class ModuleAdapter(
      * Execute query.
      *
      * @param s query word [String]
-     * @return [Disposable]
+     * @return [Job]
      */
     fun query(s: CharSequence): Job {
         clear()

@@ -11,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -22,6 +21,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -64,7 +64,7 @@ class ColorSettingFragment : Fragment(),
     /**
      * Subscribed disposables.
      */
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(
@@ -160,7 +160,7 @@ class ColorSettingFragment : Fragment(),
         color.setTo(holder.textView)
         holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
         holder.remove.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO).launch(disposables) {
                 repository.delete(color)
                 adapter?.deleteAt(color)
             }
@@ -190,7 +190,7 @@ class ColorSettingFragment : Fragment(),
 
         commitNewColor(bgColor, fontColor)
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) {
                 val savedColor = SavedColor.make(bgColor, fontColor)
                 repository.add(savedColor)
@@ -289,14 +289,14 @@ class ColorSettingFragment : Fragment(),
 
         fun refresh() {
             items.clear()
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Main).launch(disposables) {
                 withContext(Dispatchers.IO) { repository.findAll().forEach { items.add(it) } }
                 notifyDataSetChanged()
             }
         }
 
         fun deleteAt(savedColor: SavedColor) {
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Main).launch(disposables) {
                 withContext(Dispatchers.IO) {
                     repository.delete(savedColor)
                     items.remove(savedColor)
@@ -310,7 +310,7 @@ class ColorSettingFragment : Fragment(),
         }
 
         fun clear() {
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Main).launch(disposables) {
                 withContext(Dispatchers.IO) {
                     repository.deleteAll()
                     items.clear()
@@ -330,7 +330,7 @@ class ColorSettingFragment : Fragment(),
     private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onDetach() {
-        disposables.clear()
+        disposables.cancel()
         super.onDetach()
     }
 

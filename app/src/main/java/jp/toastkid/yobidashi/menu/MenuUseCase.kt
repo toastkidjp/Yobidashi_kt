@@ -14,7 +14,6 @@ import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -56,8 +55,6 @@ class MenuUseCase(
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
     private lateinit var randomWikipedia: RandomWikipedia
-
-    private val disposables = CompositeDisposable()
 
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
 
@@ -226,9 +223,5 @@ class MenuUseCase(
 
     private fun extractContentView(): View? =
             activitySupplier().findViewById(R.id.content)
-
-    fun dispose() {
-        disposables.clear()
-    }
 
 }

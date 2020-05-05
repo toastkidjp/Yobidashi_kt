@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchAction
@@ -95,7 +93,7 @@ internal class ModuleAdapter(
      * Clear all items.
      *
      * @param onComplete Callback
-     * @return [Disposable]
+     * @return [Job]
      */
     fun clearAll(onComplete: () -> Unit): Job =
             CoroutineScope(Dispatchers.Main).launch {
@@ -125,7 +123,7 @@ internal class ModuleAdapter(
      * Execute query.
      *
      * @param s
-     * @return [Disposable]
+     * @return [Job]
      */
     fun query(s: CharSequence): Job {
         clear()
@@ -144,17 +142,15 @@ internal class ModuleAdapter(
         }
     }
 
-    // TODO Modify return type
-    override fun removeAt(position: Int): Disposable {
-        remove(selected[position])
-        return Disposables.disposed()
+    override fun removeAt(position: Int): Job {
+        return remove(selected[position])
     }
 
     /**
      * Remove item with position.
      *
      * @param item [SearchHistory]
-     * @return [Disposable]
+     * @return [Job]
      */
     private fun remove(item: SearchHistory): Job {
         return CoroutineScope(Dispatchers.Main).launch {

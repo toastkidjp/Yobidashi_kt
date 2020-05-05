@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.search.url
 
 import android.view.View
-import io.reactivex.disposables.Disposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -69,7 +68,6 @@ class UrlModule(
      *
      * @param title site's title
      * @param url URL
-     * @return [Disposable]
      */
     fun switch(title: String?, url: String?) =
             if (url.isNullOrBlank() || !enable) {

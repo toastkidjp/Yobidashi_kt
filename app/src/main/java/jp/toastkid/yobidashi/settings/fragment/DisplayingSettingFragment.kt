@@ -21,7 +21,6 @@ import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
 import jp.toastkid.yobidashi.libs.Toaster
@@ -59,8 +58,6 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
      * Wrapper of FilesDir.
      */
     private lateinit var filesDir: FilesDir
-
-    private val disposables = CompositeDisposable()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -190,11 +187,6 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
 
     @StringRes
     override fun titleId() = R.string.title_settings_display
-
-    override fun onDetach() {
-        super.onDetach()
-        disposables.clear()
-    }
 
     companion object {
 

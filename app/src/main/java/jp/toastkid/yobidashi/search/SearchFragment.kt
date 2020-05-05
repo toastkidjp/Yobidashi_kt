@@ -33,7 +33,6 @@ import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
@@ -62,6 +61,7 @@ import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -137,7 +137,7 @@ class SearchFragment : Fragment() {
     /**
      * Disposables.
      */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
@@ -273,7 +273,7 @@ class SearchFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun initFavoriteModule() {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             favoriteModule = withContext(Dispatchers.Default) {
                 FavoriteSearchModule(
                         binding?.favoriteModule as ModuleSearchFavoriteBinding,
@@ -295,7 +295,7 @@ class SearchFragment : Fragment() {
      */
     @SuppressLint("SetTextI18n")
     private fun initHistoryModule() {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             historyModule = withContext(Dispatchers.Default) {
                 HistoryModule(
                         binding?.historyModule as ModuleSearchHistoryBinding,
@@ -360,7 +360,7 @@ class SearchFragment : Fragment() {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    CoroutineScope(Dispatchers.Default).launch { channel.send(s.toString()) }
+                    CoroutineScope(Dispatchers.Default).launch(disposables) { channel.send(s.toString()) }
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
@@ -371,7 +371,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun invokeSuggestion() {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launch(disposables) {
             channel.receiveAsFlow()
                     .distinctUntilChanged()
                     .debounce(400)
@@ -498,7 +498,7 @@ class SearchFragment : Fragment() {
                 suggestionModule?.addAll(result)
                 suggestionModule?.show()
 
-                CoroutineScope(Dispatchers.Default).launch {
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
                     delay(200)
                     withContext(Dispatchers.Main) {
                         val top = binding?.suggestionModule?.root?.top ?: 0
@@ -515,7 +515,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onDetach() {
-        disposables.clear()
+        disposables.cancel()
         channel.cancel()
         favoriteModule?.dispose()
         historyModule?.dispose()

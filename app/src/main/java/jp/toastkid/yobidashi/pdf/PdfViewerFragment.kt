@@ -26,7 +26,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
@@ -62,8 +61,6 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
     private lateinit var layoutManager: LinearLayoutManager
 
     private var headerViewModel: HeaderViewModel? = null
-
-    private val disposables = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -195,11 +192,6 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         headerBinding.seek.progressDrawable.colorFilter =
                 PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
         EditTextColorSetter().invoke(headerBinding.input, colorPair.fontColor())
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        disposables.clear()
     }
 
     companion object {

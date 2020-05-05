@@ -7,11 +7,11 @@
  */
 package jp.toastkid.yobidashi.search.history
 
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Job
 
 /**
  * @author toastkidjp
  */
 interface Removable {
-    fun removeAt(position: Int): Disposable
+    fun removeAt(position: Int): Job
 }

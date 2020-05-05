@@ -30,7 +30,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
@@ -59,6 +58,7 @@ import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -120,7 +120,7 @@ class BrowserModule(
 
     private val alphaConverter = AlphaConverter()
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
@@ -376,7 +376,6 @@ class BrowserModule(
             }
         }
 
-        Timber.i("tomato set webview ${tabId}")
         setWebView(currentWebView)
         return currentWebView?.url.isNullOrBlank()
     }
@@ -506,7 +505,7 @@ class BrowserModule(
             it.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             val text = withContext(Dispatchers.IO) {
                 UserAgent.valueOf(preferenceApplier.userAgent()).text()
             }
@@ -554,7 +553,7 @@ class BrowserModule(
      */
     fun dispose() {
         GlobalWebViewPool.dispose()
-        disposables.clear()
+        disposables.cancel()
     }
 
     /**

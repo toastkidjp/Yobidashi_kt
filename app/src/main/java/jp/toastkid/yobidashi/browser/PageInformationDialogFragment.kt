@@ -16,7 +16,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageCache
@@ -25,6 +24,7 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -44,7 +44,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
     private val imageCache = ImageCache()
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun setArguments(args: Bundle?) {
         super.setArguments(args)
@@ -65,7 +65,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
         val imageView = contentView.findViewById<ImageView>(R.id.barcode)
 
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             val bitmap = withContext(Dispatchers.IO) { encodeBitmap() }
             setBitmap(bitmap, imageView, contentView)
         }
@@ -119,13 +119,13 @@ internal class PageInformationDialogFragment: DialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
+        disposables.cancel()
         super.onDismiss(dialog)
-        disposables.clear()
     }
 
     override fun onCancel(dialog: DialogInterface) {
+        disposables.cancel()
         super.onCancel(dialog)
-        disposables.clear()
     }
 
     companion object {

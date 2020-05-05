@@ -27,7 +27,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
@@ -77,6 +76,7 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * Disposables.
      */
-    private val disposables: CompositeDisposable by lazy { CompositeDisposable() }
+    private val disposables: Job by lazy { Job() }
 
     /**
      * Tab list dialog fragment.
@@ -616,7 +616,7 @@ class MainActivity : AppCompatActivity(),
      * Open PDF from storage.
      */
     private fun openPdfTabFromStorage() {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             runtimePermissions
                     ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
                     ?.receiveAsFlow()
@@ -637,7 +637,7 @@ class MainActivity : AppCompatActivity(),
      * Open Editor tab.
      */
     private fun openEditorTab(path: String? = null) {
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             runtimePermissions
                     ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
                     ?.receiveAsFlow()
@@ -855,9 +855,8 @@ class MainActivity : AppCompatActivity(),
 
     override fun onDestroy() {
         tabs.dispose()
-        disposables.clear()
+        disposables.cancel()
         searchWithClip.dispose()
-        menuUseCase.dispose()
         pageSearchPresenter.dispose()
         floatingPreview?.dispose()
         super.onDestroy()

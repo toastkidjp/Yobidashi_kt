@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi
 import android.app.Application
 import android.os.Build
 import android.webkit.WebView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
@@ -20,11 +19,6 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class ExtendedApplication : Application() {
-
-    /**
-     * [CompositeDisposable].
-     */
-    private val disposables = CompositeDisposable()
 
     override fun onCreate() {
         super.onCreate()
@@ -62,11 +56,6 @@ class ExtendedApplication : Application() {
         preferenceApplier.updateLastAd()
         BookmarkInitializer()(this)
         DefaultBackgroundImagePreparation()(this)
-    }
-
-    override fun onTerminate() {
-        super.onTerminate()
-        disposables.clear()
     }
 
 }

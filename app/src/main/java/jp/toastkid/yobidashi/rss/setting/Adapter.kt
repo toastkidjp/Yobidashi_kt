@@ -11,14 +11,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemRssSettingBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.history.Removable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -58,11 +57,11 @@ class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.A
 
     /**
      * Remove item with position.
-     * TODO Fix return type
+     *
      * @param position
-     * @return [Disposable]
+     * @return [Job]
      */
-    override fun removeAt(position: Int): Disposable {
+    override fun removeAt(position: Int): Job {
         val item = items[position]
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO)  { preferenceApplier.removeFromRssReaderTargets(item) }
@@ -70,7 +69,7 @@ class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.A
             items.remove(item)
             notifyItemRemoved(position)
         }
-        return Disposables.disposed()
+        return Job()
     }
 
 }
