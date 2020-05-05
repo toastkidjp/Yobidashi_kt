@@ -73,14 +73,12 @@ class UrlSuggestionModule(
      */
     fun query(q: CharSequence) {
         adapter.clear()
-        if (q.isEmpty()) {
-            adapter.notifyDataSetChanged()
-            hide()
-            return
-        }
 
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
+                if (q.isBlank()) {
+                    return@withContext
+                }
                 bookmarkRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
             }
 
