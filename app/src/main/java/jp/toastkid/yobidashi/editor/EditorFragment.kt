@@ -40,7 +40,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
-import com.tbruyelle.rxpermissions2.RxPermissions
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -53,6 +52,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
@@ -118,7 +118,7 @@ class EditorFragment :
      */
     private lateinit var finder: EditTextFinder
 
-    private lateinit var rxPermissions: RxPermissions
+    private lateinit var runtimePermissions: RuntimePermissions
 
     private var headerViewModel: HeaderViewModel? = null
 
@@ -144,7 +144,7 @@ class EditorFragment :
 
         val context = context ?: return
 
-        rxPermissions = RxPermissions(requireActivity())
+        runtimePermissions = RuntimePermissions(requireActivity())
 
         preferenceApplier = PreferenceApplier(context)
         finder = EditTextFinder(binding.editorInput)
@@ -535,7 +535,7 @@ class EditorFragment :
             file.createNewFile()
         }
 
-        if (rxPermissions.isRevoked(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (runtimePermissions.isRevoked(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             snackText(R.string.message_requires_permission_storage)
             return
         }

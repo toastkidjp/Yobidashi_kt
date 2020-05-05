@@ -21,9 +21,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -31,16 +29,18 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okio.Okio
-import timber.log.Timber
 
 /**
  * Bookmark list activity.
@@ -192,21 +192,22 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.import_bookmark -> {
-                RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .subscribe(
-                                { granted ->
-                                    if (!granted) {
-                                        contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                        return@subscribe
-                                    }
-                                    startActivityForResult(
-                                            IntentFactory.makeGetContent("text/html"),
-                                            REQUEST_CODE_IMPORT_BOOKMARK
-                                    )
-                                },
-                                { Timber.e(it) }
-                        )
-                        .addTo(disposables)
+                CoroutineScope(Dispatchers.Main).launch {
+                    RuntimePermissions(requireActivity())
+                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            ?.receiveAsFlow()
+                            ?.collect { permissionResult ->
+                                if (!permissionResult.granted) {
+                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                                    return@collect
+                                }
+
+                                startActivityForResult(
+                                        IntentFactory.makeGetContent("text/html"),
+                                        REQUEST_CODE_IMPORT_BOOKMARK
+                                )
+                            }
+                }
                 true
             }
             R.id.export_bookmark -> {
@@ -214,22 +215,23 @@ class BookmarkFragment: Fragment(),
                     contentViewModel?.snackShort(R.string.message_disusable_menu)
                     return true
                 }
-                RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .subscribe(
-                                { granted ->
-                                    if (!granted) {
-                                        contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                        return@subscribe
-                                    }
-                                    startActivityForResult(
+                CoroutineScope(Dispatchers.Main).launch {
+                    RuntimePermissions(requireActivity())
+                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            ?.receiveAsFlow()
+                            ?.collect { permissionResult ->
+                                if (!permissionResult.granted) {
+                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                                    return@collect
+                                }
+
+                                startActivityForResult(
                                         IntentFactory.makeDocumentOnStorage(
                                                 "text/html", "bookmark.html"),
                                         REQUEST_CODE_EXPORT_BOOKMARK
-                                    )
-                                },
-                                { Timber.e(it) }
-                        )
-                        .addTo(disposables)
+                                )
+                            }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

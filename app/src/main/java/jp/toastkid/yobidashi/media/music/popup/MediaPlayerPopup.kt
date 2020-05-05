@@ -35,19 +35,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapter
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -303,26 +305,24 @@ class MediaPlayerPopup(private val context: Context) {
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
 
         val attemptExtractActivity = attemptExtractActivity() ?: return
-        RxPermissions(attemptExtractActivity)
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .observeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            if (it && !mediaBrowser.isConnected) {
-                                mediaBrowser.connect()
-                                return@subscribe
-                            }
+        CoroutineScope(Dispatchers.Main).launch {
+            RuntimePermissions(attemptExtractActivity)
+                    .request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    ?.receiveAsFlow()
+                    ?.collect {
+                        if (it.granted && !mediaBrowser.isConnected) {
+                            mediaBrowser.connect()
+                            return@collect
+                        }
 
-                            Toaster.snackShort(
-                                    parent,
-                                    R.string.message_requires_permission_storage,
-                                    PreferenceApplier(binding.root.context).colorPair()
-                            )
-                            popupWindow.dismiss()
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
+                        Toaster.snackShort(
+                                parent,
+                                R.string.message_requires_permission_storage,
+                                PreferenceApplier(binding.root.context).colorPair()
+                        )
+                        popupWindow.dismiss()
+                    }
+        }
     }
 
     private fun initializeViewModels() {

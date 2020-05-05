@@ -27,9 +27,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
@@ -53,6 +51,7 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentViewModel
@@ -76,6 +75,11 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 
@@ -132,9 +136,9 @@ class MainActivity : AppCompatActivity(),
     private lateinit var searchWithClip: SearchWithClip
 
     /**
-     * Rx permission.
+     * Runtime permission.
      */
-    private var rxPermissions: RxPermissions? = null
+    private var runtimePermissions: RuntimePermissions? = null
 
     private val thumbnailGenerator = ThumbnailGenerator()
 
@@ -156,7 +160,7 @@ class MainActivity : AppCompatActivity(),
 
         setSupportActionBar(binding.toolbar)
 
-        rxPermissions = RxPermissions(this)
+        runtimePermissions = RuntimePermissions(this)
 
         val colorPair = preferenceApplier.colorPair()
 
@@ -612,40 +616,40 @@ class MainActivity : AppCompatActivity(),
      * Open PDF from storage.
      */
     private fun openPdfTabFromStorage() {
-        rxPermissions
-                ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                ?.subscribe(
-                        { granted ->
-                            if (!granted) {
-                                return@subscribe
-                            }
-                            startActivityForResult(
-                                    IntentFactory.makeOpenDocument("application/pdf"),
-                                    REQUEST_CODE_OPEN_PDF
-                            )
-                        },
-                        Timber::e
-                )?.addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            runtimePermissions
+                    ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    ?.receiveAsFlow()
+                    ?.collect { permission ->
+                        if (!permission.granted) {
+                            return@collect
+                        }
+
+                        startActivityForResult(
+                                IntentFactory.makeOpenDocument("application/pdf"),
+                                REQUEST_CODE_OPEN_PDF
+                        )
+                    }
+        }
     }
 
     /**
      * Open Editor tab.
      */
     private fun openEditorTab(path: String? = null) {
-        rxPermissions
-                ?.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                ?.subscribe(
-                        { granted ->
-                            if (!granted) {
-                                Toaster.tShort(this, R.string.message_requires_permission_storage)
-                                return@subscribe
-                            }
-                            tabs.openNewEditorTab(path)
-                            replaceToCurrentTab()
-                        },
-                        Timber::e
-                )
-                ?.addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            runtimePermissions
+                    ?.request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    ?.receiveAsFlow()
+                    ?.collect { permission ->
+                        if (!permission.granted) {
+                            return@collect
+                        }
+
+                        tabs.openNewEditorTab(path)
+                        replaceToCurrentTab()
+                    }
+        }
     }
 
     private fun hideToolbar() {
