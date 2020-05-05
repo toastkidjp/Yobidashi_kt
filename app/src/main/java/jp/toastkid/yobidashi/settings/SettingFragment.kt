@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.settings
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -43,6 +44,7 @@ class SettingFragment : Fragment() {
         childFragmentManager.let { fragmentManager ->
             binding.container.adapter = PagerAdapter(fragmentManager) { getString(it) }
             binding.container.offscreenPageLimit = 3
+            binding.tabStrip.setupWithViewPager(binding.container)
         }
 
         setHasOptionsMenu(true)
@@ -63,7 +65,8 @@ class SettingFragment : Fragment() {
 
         binding.tabStrip.also {
             it.setBackgroundColor(colorPair.bgColor())
-            it.setTextColor(colorPair.fontColor())
+            it.tabTextColors = ColorStateList.valueOf(colorPair.fontColor())
+            it.setSelectedTabIndicatorColor(colorPair.fontColor())
         }
     }
 

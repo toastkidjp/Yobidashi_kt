@@ -5,19 +5,21 @@
     </data>
     <androidx.viewpager.widget.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <androidx.viewpager.widget.PagerTabStrip
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_strip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:background="@color/colorPrimary"
             android:textColor="@color/textPrimary"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:elevation="4dp"
+            app:tabMode="scrollable"
+            app:tabTextAppearance="@style/SettingTabTextAppearance"
             />
     </androidx.viewpager.widget.ViewPager>
 
