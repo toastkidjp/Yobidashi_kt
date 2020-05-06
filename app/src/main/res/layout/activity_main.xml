@@ -59,13 +59,12 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
-            android:id="@+id/menus_view"
+        <ViewStub
+            android:id="@+id/menu_stub"
             android:layout_width="120dp"
             android:layout_height="match_parent"
             android:layout_gravity="right|bottom"
-            android:layoutAnimation="@anim/layout_slide_in_right"
-            android:visibility="gone"
+            android:layout="@layout/module_main_menu"
             />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

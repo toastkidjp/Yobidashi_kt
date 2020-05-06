@@ -8,18 +8,19 @@
 package jp.toastkid.yobidashi.menu
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
@@ -31,7 +32,7 @@ import kotlin.math.min
 class MenuBinder(
         fragmentActivity: FragmentActivity,
         private val menuViewModel: MenuViewModel?,
-        private val recyclerView: CircleRecyclerView?,
+        private val menuStub: ViewStubProxy,
         private val menuSwitch: FloatingActionButton?
 ) {
     private val preferenceApplier = PreferenceApplier(fragmentActivity)
@@ -40,14 +41,12 @@ class MenuBinder(
 
     private var previousIconColor: Int = Color.TRANSPARENT
 
+    private var recyclerView: CircleRecyclerView? = null
+
     init {
         setFabListener()
 
-        fragmentActivity.let {
-            menuAdapter = MenuAdapter(it, menuViewModel)
-        }
-
-        menuViewModel?.visibility?.observe(fragmentActivity, Observer { newVisible ->
+        menuViewModel?.visibility?.observe(fragmentActivity, Observer { newVisible -> // TODO Rename variable.
             if (newVisible) open() else close()
         })
 
@@ -70,19 +69,7 @@ class MenuBinder(
             }
         })
 
-        initializeWithContext(fragmentActivity)
-
         setFabPosition()
-    }
-
-    private fun initializeWithContext(context: Context) {
-        LinearSnapHelper().attachToRecyclerView(recyclerView)
-        recyclerView?.adapter = menuAdapter
-        val layoutManager =
-                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        recyclerView?.layoutManager = layoutManager
-        layoutManager.scrollToPosition(MenuAdapter.mediumPosition())
-        recyclerView?.setNeedLoop(true)
     }
 
     /**
@@ -98,7 +85,15 @@ class MenuBinder(
         })
         listener.setOnClick(object : DraggableTouchListener.OnClick {
             override fun onClick() {
-                menuViewModel?.switchVisibility(recyclerView?.isVisible == false)
+                if (!menuStub.isInflated) {
+                    menuStub.viewStub?.inflate()
+                    recyclerView = (menuStub.binding as? ModuleMainMenuBinding)?.menusView
+                    initializeWithContext()
+
+                    menuViewModel?.switchVisibility(true)
+                    return
+                }
+                menuViewModel?.switchVisibility(menuStub.root?.isVisible == false)
             }
         })
 
@@ -117,6 +112,21 @@ class MenuBinder(
                         min(menuFabPosition?.second ?: 0f, displayMetrics.heightPixels.toFloat())
             }
         }
+    }
+
+    private fun initializeWithContext() {
+        LinearSnapHelper().attachToRecyclerView(recyclerView)
+        (recyclerView?.context as? FragmentActivity)?.let {
+            val layoutManager =
+                    LinearLayoutManager(it, RecyclerView.VERTICAL, false)
+            recyclerView?.layoutManager = layoutManager
+            layoutManager.scrollToPosition(MenuAdapter.mediumPosition())
+
+            menuAdapter = MenuAdapter(it, menuViewModel)
+            recyclerView?.adapter = menuAdapter
+        }
+
+        recyclerView?.setNeedLoop(true)
     }
 
     private fun setFabPosition() {
@@ -142,12 +152,13 @@ class MenuBinder(
     private fun open() {
         val menuX: Float = menuSwitch?.x ?: 1000f
         val useLeft = menuX < 200f
-        recyclerView?.layoutParams =
-                (recyclerView?.layoutParams as? FrameLayout.LayoutParams)?.also {
+        menuStub.root?.layoutParams =
+                (menuStub.root?.layoutParams as? FrameLayout.LayoutParams)?.also {
                     it.gravity = if (useLeft) Gravity.LEFT else Gravity.RIGHT
                 }
+        menuStub.root?.visibility = View.VISIBLE
+
         recyclerView?.setMode(useLeft)
-        recyclerView?.visibility = View.VISIBLE
         recyclerView?.scheduleLayoutAnimation()
     }
 
@@ -157,8 +168,8 @@ class MenuBinder(
             it.alpha(0f)
                     .setDuration(350L)
                     .withEndAction {
-                        recyclerView.visibility = View.GONE
-                        recyclerView.alpha = 1f
+                        menuStub.root?.visibility = View.GONE
+                        menuStub.root?.alpha = 1f
                     }
                     .start()
         }

@@ -274,7 +274,7 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProviders.of(this).get(MenuViewModel::class.java)
 
-        MenuBinder(this, menuViewModel, binding.menusView, binding.menuSwitch)
+        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
         menuUseCase = MenuUseCase({ this }, menuViewModel)
     }
@@ -519,7 +519,7 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        if (binding.menusView.isVisible) {
+        if (binding.menuStub.root?.isVisible == true) {
             menuViewModel?.close()
             return
         }
