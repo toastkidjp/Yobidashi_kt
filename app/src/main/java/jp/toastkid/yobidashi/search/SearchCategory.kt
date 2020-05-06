@@ -104,7 +104,7 @@ enum class SearchCategory(
     WIKIPEDIA(
             R.string.search_category_wikipedia,
             R.drawable.ic_wikipedia,
-            "https://%s.wikipedia.org/w/index.php?search=",
+            "https://%s.m.wikipedia.org/w/index.php?search=",
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
     ),
     INTERNET_ARCHIVE(
@@ -121,7 +121,7 @@ enum class SearchCategory(
     TWITTER(
             R.string.search_category_twitter,
             R.drawable.ic_twitter,
-            "https://twitter.com/search?src=typd&q="
+            "https://mobile.twitter.com/search?src=typd&q="
     ),
     FACEBOOK(
             R.string.search_category_facebook,
