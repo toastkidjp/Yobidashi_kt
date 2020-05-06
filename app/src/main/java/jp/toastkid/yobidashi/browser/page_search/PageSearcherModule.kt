@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -109,8 +108,6 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
         viewStubProxy.viewStub?.inflate()
 
         val binding = viewStubProxy.binding as? ModuleSearcherBinding ?: return
-
-        TextInputs.setEmptyAlert(binding.inputLayout)
 
         val viewModel = (context as? FragmentActivity)?.let {
             ViewModelProviders.of(it).get(PageSearcherViewModel::class.java)
