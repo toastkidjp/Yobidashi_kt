@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi.media.music.popup
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -89,14 +88,20 @@ class MediaPlayerPopup(private val context: Context) {
                 parentId: String,
                 children: MutableList<MediaBrowserCompat.MediaItem>
         ) {
+            if (children.isEmpty()) {
+                hide()
+                return
+            }
+
             adapter?.clear()
 
             attemptMediaController()?.also {
                 it.transportControls?.prepare()
             }
+
             children.forEach { adapter?.add(it) }
 
-            attemptExtractActivity()?.runOnUiThread { adapter?.notifyDataSetChanged() }
+            adapter?.notifyDataSetChanged()
         }
     }
 
@@ -195,7 +200,7 @@ class MediaPlayerPopup(private val context: Context) {
     }
 
     private fun observeViewModels() {
-        (attemptExtractActivity() as? FragmentActivity)?.also {
+        (attemptExtractActivity())?.also {
             mediaPlayerPopupViewModel?.clickItem?.observe(it, Observer {
                 attemptMediaController()
                         ?.transportControls
@@ -310,7 +315,7 @@ class MediaPlayerPopup(private val context: Context) {
 
                             Toaster.snackShort(
                                     parent,
-                                    R.string.message_audio_file_is_not_found,
+                                    R.string.message_requires_permission_storage,
                                     PreferenceApplier(binding.root.context).colorPair()
                             )
                             popupWindow.dismiss()
@@ -345,7 +350,7 @@ class MediaPlayerPopup(private val context: Context) {
     private fun attemptMediaController() =
             attemptExtractActivity()?.let { MediaControllerCompat.getMediaController(it) }
 
-    private fun attemptExtractActivity() = (context as? Activity)
+    private fun attemptExtractActivity() = (context as? FragmentActivity)
 
     companion object {
 

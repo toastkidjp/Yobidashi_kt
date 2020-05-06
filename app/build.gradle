@@ -11,8 +11,8 @@ android {
     compileSdkVersion 29
     buildToolsVersion '29.0.0'
     byte verMajor  = 1
-    byte verMiddle = 2
-    byte verMinor  = 8
+    byte verMiddle = 4
+    byte verMinor  = 0
 
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
