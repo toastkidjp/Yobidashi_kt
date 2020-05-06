@@ -7,17 +7,22 @@
  */
 package jp.toastkid.yobidashi.browser.user_agent
 
-import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.appcompat.app.AlertDialog
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.DialogUserAgentBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
  */
-class UserAgentDialogFragment : DialogFragment() {
+class UserAgentDialogFragment : BottomSheetDialogFragment() {
 
     interface Callback {
         fun onClickUserAgent(userAgent: UserAgent)
@@ -25,8 +30,8 @@ class UserAgentDialogFragment : DialogFragment() {
 
     private var onClick: Callback? = null
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         val targetFragment = targetFragment
         if (targetFragment is Callback) {
@@ -35,19 +40,34 @@ class UserAgentDialogFragment : DialogFragment() {
 
         val preferenceApplier = PreferenceApplier(activityContext)
 
-        return AlertDialog.Builder(activityContext)
-                .setTitle(R.string.title_user_agent)
-                .setSingleChoiceItems(
-                        UserAgent.titles(),
-                        UserAgent.findCurrentIndex(preferenceApplier.userAgent())
-                ) { d, i ->
-                    val userAgent = UserAgent.values()[i]
-                    preferenceApplier.setUserAgent(userAgent.name)
-                    onClick?.onClickUserAgent(userAgent)
-                    d.dismiss()
+        val binding: DialogUserAgentBinding =
+                DataBindingUtil.inflate(inflater, R.layout.dialog_user_agent, container, false)
+
+        binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
+        val currentIndex = UserAgent.findCurrentIndex(preferenceApplier.userAgent())
+        val adapter = object : ArrayAdapter<CharSequence>(
+                activityContext,
+                android.R.layout.simple_list_item_single_choice,
+                android.R.id.text1,
+                UserAgent.titles()
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val isItemChecked = position == currentIndex
+                if (isItemChecked) {
+                    binding.list.setItemChecked(position, true)
                 }
-                .setNegativeButton(R.string.close) { d, _ -> d.cancel() }
-                .create()
+                return view
+            }
+        }
+        binding.list.adapter = adapter
+        binding.list.setOnItemClickListener { parent, view, position, id ->
+            val userAgent = UserAgent.values()[position]
+            preferenceApplier.setUserAgent(userAgent.name)
+            onClick?.onClickUserAgent(userAgent)
+            dismiss()
+        }
+        return binding.root
     }
 
 }
