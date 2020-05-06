@@ -308,8 +308,13 @@ class BrowserFragment : Fragment(),
     }
 
     fun showPageInformation() {
+        val pageInformation = browserModule.makeCurrentPageInformation()
+        if (pageInformation.isEmpty) {
+            return
+        }
+
         PageInformationDialogFragment()
-                .also { it.arguments = browserModule.makeCurrentPageInformation() }
+                .also { it.arguments = pageInformation }
                 .show(
                         parentFragmentManager,
                         PageInformationDialogFragment::class.java.simpleName

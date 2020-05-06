@@ -55,6 +55,10 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
     @SuppressLint("InflateParams", "SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        if (url.isNullOrBlank()) {
+            return super.onCreateDialog(savedInstanceState)
+        }
+
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
 
         val contentView = LayoutInflater.from(activityContext)
