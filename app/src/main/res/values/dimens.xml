@@ -25,6 +25,7 @@
     <dimen name="close_icon_size">32dp</dimen>
     <dimen name="tab_list_item_width">120dp</dimen>
     <dimen name="tab_list_item_height">160dp</dimen>
+    <dimen name="tab_list_peek_height">220dp</dimen>
 
     <dimen name="button_margin">64dp</dimen>
 
