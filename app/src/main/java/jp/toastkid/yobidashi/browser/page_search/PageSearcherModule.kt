@@ -86,7 +86,10 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
             it.cancel()
             it.translationY(-height)
                     .setDuration(ANIMATION_DURATION)
-                    .withStartAction { Inputs.hideKeyboard(editText) }
+                    .withStartAction {
+                        clearInput()
+                        Inputs.hideKeyboard(editText)
+                    }
                     .withEndAction { switchVisibility(View.VISIBLE, View.GONE) }
                     .start()
         }
@@ -148,7 +151,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
 
         (context as? FragmentActivity)?.let { activity ->
             viewModel?.clear?.observe(activity, Observer {
-                editText.setText("")
+                clearInput()
             })
 
             viewModel?.close?.observe(activity, Observer { hide() })
@@ -159,6 +162,10 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
         }
 
         setBackgroundColor(binding)
+    }
+
+    private fun clearInput() {
+        editText.setText("")
     }
 
     /**
