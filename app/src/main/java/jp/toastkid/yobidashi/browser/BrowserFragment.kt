@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser
 
-import android.app.ActivityOptions
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -343,15 +342,6 @@ class BrowserFragment : Fragment(),
      * TODO implement ViewModel.
      */
     fun search() {
-        search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
-    }
-
-    /**
-     * Show search activity.
-     *
-     * @param option [ActivityOptions]
-     */
-    private fun search(option: ActivityOptions) {
         context?.let {
             val currentTitle = browserModule.currentTitle()
             val currentUrl = browserModule.currentUrl()
