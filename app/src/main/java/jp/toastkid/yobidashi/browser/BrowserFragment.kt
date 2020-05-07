@@ -196,7 +196,7 @@ class BrowserFragment : Fragment(),
 
         viewModelProvider.get(TabListViewModel::class.java)
                 .tabCount
-                .observe(activity, Observer { headerBinding?.tabCount?.setText(it.toString()) })
+                .observe(activity, Observer { headerBinding?.tabCount?.text = it.toString() })
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(activity, Observer {
