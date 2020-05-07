@@ -46,8 +46,8 @@ class MenuBinder(
     init {
         setFabListener()
 
-        menuViewModel?.visibility?.observe(fragmentActivity, Observer { newVisible -> // TODO Rename variable.
-            if (newVisible) open() else close()
+        menuViewModel?.visibility?.observe(fragmentActivity, Observer {
+            if (it) open() else close()
         })
 
         menuViewModel?.onResume?.observe(fragmentActivity, Observer {
