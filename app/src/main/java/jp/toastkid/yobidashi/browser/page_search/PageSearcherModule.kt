@@ -4,7 +4,6 @@ import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
@@ -30,16 +29,12 @@ import kotlinx.coroutines.withContext
  */
 class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
 
+    private lateinit var binding: ModuleSearcherBinding
+
     /**
      * This value is used by show/hide animation.
      */
     private var height = 0f
-
-    /**
-     * Use for open software keyboard.
-     * TODO Delete it.
-     */
-    private lateinit var editText: EditText
 
     private val channel = Channel<String>()
 
@@ -56,7 +51,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
     /**
      * Show module with opening software keyboard.
      *
-     * @param activity [Activity]
+     * @param activity [Activity] TODO remove it.
      */
     fun show() {
         if (!viewStubProxy.isInflated) {
@@ -68,8 +63,9 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
                     .setDuration(ANIMATION_DURATION)
                     .withStartAction { switchVisibility(View.GONE, View.VISIBLE) }
                     .withEndAction {
+                        val editText = binding.inputLayout?.editText ?: return@withEndAction
                         editText.requestFocus()
-                        (editText.context as? Activity)?.also { activity ->
+                        (binding.root.context as? Activity)?.also { activity ->
                             Inputs.showKeyboard(activity, editText)
                         }
                     }
@@ -87,7 +83,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
                     .setDuration(ANIMATION_DURATION)
                     .withStartAction {
                         clearInput()
-                        Inputs.hideKeyboard(editText)
+                        Inputs.hideKeyboard(binding.inputLayout?.editText)
                     }
                     .withEndAction { switchVisibility(View.VISIBLE, View.GONE) }
                     .start()
@@ -107,7 +103,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
 
         viewStubProxy.viewStub?.inflate()
 
-        val binding = viewStubProxy.binding as? ModuleSearcherBinding ?: return
+        binding = viewStubProxy.binding as? ModuleSearcherBinding ?: return
 
         val viewModel = (context as? FragmentActivity)?.let {
             ViewModelProviders.of(it).get(PageSearcherViewModel::class.java)
@@ -143,7 +139,6 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
                             }
                         }
             }
-            editText = it
         }
 
         (context as? FragmentActivity)?.let { activity ->
@@ -162,7 +157,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
     }
 
     private fun clearInput() {
-        editText.setText("")
+        binding.inputLayout?.editText?.setText("")
     }
 
     /**
