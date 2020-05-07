@@ -19,7 +19,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ActivitySettingsBinding
+import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
@@ -30,7 +30,7 @@ class SettingFragment : Fragment() {
     /**
      * DataBinding object.
      */
-    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: FragmentSettingsBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -105,7 +105,7 @@ class SettingFragment : Fragment() {
          * Layout ID.
          */
         @LayoutRes
-        private const val LAYOUT_ID = R.layout.activity_settings
+        private const val LAYOUT_ID = R.layout.fragment_settings
 
     }
 }
