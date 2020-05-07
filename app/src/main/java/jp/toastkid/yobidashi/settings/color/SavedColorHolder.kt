@@ -1,9 +1,9 @@
 package jp.toastkid.yobidashi.settings.color
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.Button
-
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 
 /**
@@ -11,7 +11,7 @@ import jp.toastkid.yobidashi.R
  */
 internal class SavedColorHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val textView: Button = itemView.findViewById<Button>(R.id.color)
+    val textView: TextView = itemView.findViewById<Button>(R.id.color)
     val remove: View = itemView.findViewById(R.id.color_remove)
 
 }
