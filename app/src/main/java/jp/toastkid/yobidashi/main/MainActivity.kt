@@ -570,7 +570,10 @@ class MainActivity : AppCompatActivity(),
         menuViewModel?.onResume()
 
         tabs.setCount()
+    }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
         ClippingUrlOpener(binding.content) { browserViewModel?.open(it) }
     }
 
