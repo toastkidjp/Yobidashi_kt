@@ -25,7 +25,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
-import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -80,8 +79,6 @@ class BrowserFragment : Fragment(),
     private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
-
-    private val activityOptionsFactory = ActivityOptionsFactory()
 
     override fun onCreateView(
             inflater: LayoutInflater,
