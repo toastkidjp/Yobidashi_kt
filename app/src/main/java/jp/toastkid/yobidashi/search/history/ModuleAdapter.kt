@@ -106,12 +106,11 @@ internal class ModuleAdapter(
                 notifyDataSetChanged()
             }
 
-    // TODO rename argument
-    fun refresh(onComplete: () -> Unit) {
+    fun refresh(onEmpty: () -> Unit) {
         CoroutineScope(Dispatchers.Main).launch {
             val items = withContext(Dispatchers.IO) { repository.findAll() }
             if (items.isEmpty()) {
-                onComplete()
+                onEmpty()
                 return@launch
             }
             selected.addAll(items)
