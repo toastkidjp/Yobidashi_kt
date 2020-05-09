@@ -409,7 +409,7 @@ class BrowserFragment : Fragment(),
         }
     }
 
-    override fun pressBack(): Boolean = hideOption() || back()
+    override fun pressBack(): Boolean = back()
 
     override fun share() {
         startActivity(
