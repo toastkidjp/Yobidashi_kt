@@ -75,6 +75,13 @@ class SuggestionModule(
         layoutManager.justifyContent = JustifyContent.FLEX_START
         layoutManager.alignItems = AlignItems.STRETCH
 
+        initializeSearchSuggestionList(layoutManager, onClick)
+    }
+
+    private fun initializeSearchSuggestionList(
+            layoutManager: FlexboxLayoutManager,
+            onClick: () -> Unit
+    ) {
         binding.searchSuggestions.layoutManager = layoutManager
         binding.searchSuggestions.adapter = adapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
