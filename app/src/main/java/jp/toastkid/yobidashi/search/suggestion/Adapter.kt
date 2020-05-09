@@ -34,7 +34,6 @@ internal class Adapter (
      */
     fun clear() {
         suggestions.clear()
-        notifyDataSetChanged()
     }
 
     /**
