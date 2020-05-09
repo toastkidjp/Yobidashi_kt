@@ -72,7 +72,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         )
         headerBinding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.module_pdf_header, // TODO Extract.
+                APP_BAR_CONTENT_LAYOUT_ID,
                 container,
                 false
         )
@@ -195,7 +195,11 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
     }
 
     companion object {
+
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_pdf_viewer
+
+        @LayoutRes
+        private const val APP_BAR_CONTENT_LAYOUT_ID = R.layout.module_pdf_header
     }
 }
