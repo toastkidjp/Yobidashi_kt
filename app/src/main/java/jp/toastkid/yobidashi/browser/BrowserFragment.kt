@@ -464,11 +464,10 @@ class BrowserFragment : Fragment(),
         browserModule.onPause()
     }
 
-    // TODO Should be replaced to onDetach.
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         headerViewModel?.show()
         browserModule.dispose()
+        super.onDetach()
     }
 
     companion object {
