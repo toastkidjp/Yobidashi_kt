@@ -38,7 +38,7 @@ object ClippingUrlOpener {
         val activityContext = view.context
         val clipboardContent = Clipboard.getPrimary(activityContext)?.toString() ?: return
 
-        if (Urls.isInvalidUrl(clipboardContent) || TextUtils.equals(previous, clipboardContent)) {
+        if (shouldNotFeedback(clipboardContent)) {
             return
         }
 
@@ -46,6 +46,9 @@ object ClippingUrlOpener {
 
         feedbackToUser(view, clipboardContent, onClick, activityContext)
     }
+
+    private fun shouldNotFeedback(clipboardContent: String) =
+            Urls.isInvalidUrl(clipboardContent) || TextUtils.equals(previous, clipboardContent)
 
     private fun feedbackToUser(view: View, clipboardContent: String, onClick: (Uri) -> Unit, activityContext: Context) {
         Toaster.withAction(
