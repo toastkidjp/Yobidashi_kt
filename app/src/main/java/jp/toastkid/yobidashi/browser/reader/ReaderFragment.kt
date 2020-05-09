@@ -8,9 +8,14 @@
 package jp.toastkid.yobidashi.browser.reader
 
 import android.os.Bundle
-import android.view.*
+import android.view.ActionMode
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -32,8 +37,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
     private lateinit var speechMaker: SpeechMaker
 
-    private var viewModel: ReaderFragmentViewModel? = null
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -50,12 +53,10 @@ class ReaderFragment : Fragment(), ContentScrollable {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { arguments ->
             arguments.getString(KEY_TITLE)?.also { binding.title.text = it }
-            arguments.getString(KEY_CONTENT)?.also { binding.content.text = it }
+            arguments.getString(KEY_CONTENT)?.also { binding.textContent.text = it }
         }
 
-        viewModel = ViewModelProviders.of(requireActivity())[ReaderFragmentViewModel::class.java]
-
-        binding.content.customSelectionActionModeCallback = object : ActionMode.Callback {
+        binding.textContent.customSelectionActionModeCallback = object : ActionMode.Callback {
 
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val text = extractSelectedText()
@@ -81,8 +82,8 @@ class ReaderFragment : Fragment(), ContentScrollable {
             }
 
             private fun extractSelectedText(): String {
-                return binding.content.text
-                        .subSequence(binding.content.selectionStart, binding.content.selectionEnd)
+                return binding.textContent.text
+                        .subSequence(binding.textContent.selectionStart, binding.textContent.selectionEnd)
                         .toString()
             }
 
@@ -93,7 +94,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
         }
 
         activity?.also { activity ->
-            val finder = TextViewHighlighter(binding.content)
+            val finder = TextViewHighlighter(binding.textContent)
 
             ViewModelProviders.of(activity)
                     .get(PageSearcherViewModel::class.java)
@@ -103,8 +104,19 @@ class ReaderFragment : Fragment(), ContentScrollable {
         setHasOptionsMenu(true)
     }
 
+    fun setContent(title: String, content: String) {
+        if (arguments == null) {
+            arguments = Bundle()
+        }
+
+        arguments?.also {
+            it.putString(KEY_TITLE, title)
+            it.putString(KEY_CONTENT, content)
+        }
+    }
+
     fun close() {
-        viewModel?.close()
+        activity?.supportFragmentManager?.popBackStack()
     }
 
     override fun toTop() {
@@ -112,7 +124,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
     }
 
     override fun toBottom() {
-        binding.scroll.smoothScrollTo(0, binding.content.measuredHeight)
+        binding.scroll.smoothScrollTo(0, binding.textContent.measuredHeight)
     }
 
     override fun onResume() {
@@ -123,7 +135,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
         val editorFontColor = preferenceApplier.editorFontColor()
         binding.title.setTextColor(editorFontColor)
-        binding.content.setTextColor(editorFontColor)
+        binding.textContent.setTextColor(editorFontColor)
         binding.close.setColorFilter(editorFontColor)
     }
 
@@ -135,7 +147,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_speech -> {
-                speechMaker.invoke("${binding.title.text}$lineSeparator${binding.content.text}")
+                speechMaker.invoke("${binding.title.text}$lineSeparator${binding.textContent.text}")
                 return true
             }
         }
@@ -147,9 +159,9 @@ class ReaderFragment : Fragment(), ContentScrollable {
         speechMaker.stop()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         speechMaker.dispose()
+        super.onDetach()
     }
 
     companion object {
@@ -163,14 +175,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
         private val lineSeparator = System.getProperty("line.separator")
 
-        fun withContent(title: String, content: String): ReaderFragment {
-            val readerFragment = ReaderFragment()
-            readerFragment.arguments = bundleOf(
-                    KEY_TITLE to title,
-                    KEY_CONTENT to content
-            )
-            return readerFragment
-        }
     }
 
 }

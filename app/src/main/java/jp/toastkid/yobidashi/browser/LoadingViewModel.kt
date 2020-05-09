@@ -21,5 +21,5 @@ class LoadingViewModel : ViewModel() {
 
     val onPageFinished: LiveData<Pair<String, History>> = _onPageFinished
 
-    fun finished(history: Pair<String, History>) = _onPageFinished.postValue(history)
+    fun finished(tabId: String, history: History) = _onPageFinished.postValue(tabId to history)
 }

@@ -456,8 +456,11 @@
     <string name="title_playing_speed_2">x2</string>
     <string name="title_playing_speed_3">x3</string>
     <string name="title_playing_speed_5">x5</string>
-    <string name="title_excluding_item_setting">Excluding items</string>
+    <string name="title_excluding_item_setting">除外設定</string>
     <string name="title_dark_mode">ダークモードを使う</string>
     <string name="undo">undo</string>
+    <string name="title_context_editor_add_order">順序リスト</string>
+    <string name="title_context_editor_add_minus">リスト</string>
+    <string name="title_context_editor_add_quote">引用符</string>
 
 </resources>

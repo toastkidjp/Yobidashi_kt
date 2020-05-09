@@ -146,7 +146,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         colorPair.applyTo(binding.addTab)
         colorPair.applyTo(binding.clearTabs)
 
-        binding.recyclerView.layoutManager?.scrollToPosition(index)
+        binding.recyclerView.layoutManager?.scrollToPosition(index - 1)
         binding.recyclerView.scheduleLayoutAnimation()
         if (firstLaunch) {
             Toaster.snackShort(

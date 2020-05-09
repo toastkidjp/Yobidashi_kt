@@ -359,9 +359,9 @@ class ColorSettingFragment : Fragment(),
 
     private fun colorPair() = preferenceApplier.colorPair()
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         disposables.clear()
+        super.onDetach()
     }
 
 }

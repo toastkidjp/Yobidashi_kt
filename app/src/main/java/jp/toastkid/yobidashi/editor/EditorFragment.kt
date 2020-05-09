@@ -68,7 +68,7 @@ import java.util.*
 
 
 /**
- *
+ * TODO Modify behavior on switched new tab.
  * @author toastkidjp
  */
 class EditorFragment :
@@ -205,11 +205,14 @@ class EditorFragment :
 
         binding.editorInput.customSelectionActionModeCallback = object : ActionMode.Callback {
 
+            private val listHeadAdder = ListHeadAdder()
+
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val text = extractSelectedText()
                 if (Urls.isValidUrl(text)) {
                     MenuInflater(context).inflate(R.menu.context_editor_url, menu)
                 }
+                MenuInflater(context).inflate(R.menu.context_editor_selected, menu)
                 MenuInflater(context).inflate(R.menu.context_speech, menu)
                 return true
             }
@@ -217,6 +220,18 @@ class EditorFragment :
             override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
                 val text = extractSelectedText()
                 when (menuItem?.itemId) {
+                    R.id.context_edit_add_order -> {
+                        listHeadAdder(binding.editorInput, "1.")
+                        return true
+                    }
+                    R.id.context_edit_add_minus -> {
+                        listHeadAdder(binding.editorInput, "-")
+                        return true
+                    }
+                    R.id.context_edit_add_quote -> {
+                        listHeadAdder(binding.editorInput, ">")
+                        return true
+                    }
                     R.id.context_edit_url_open_new -> {
                         browserViewModel?.open(text.toUri())
                         actionMode?.finish()
@@ -282,8 +297,11 @@ class EditorFragment :
             }
         }
 
-        arguments?.getString("path")?.let {
-            readFromFile(File(it))
+        val path = arguments?.getString("path")
+        if (path == null) {
+            clearInput()
+        } else {
+            readFromFile(File(path))
         }
     }
 
@@ -407,20 +425,6 @@ class EditorFragment :
     }
 
     /**
-     * Find text in bound to upward.
-     * TODO remove it.
-     * @param text Finding text
-     */
-    fun findUp(text: String) = finder.findUp(text)
-
-    /**
-     * Find text in bound to downward.
-     *
-     * @param text Finding text
-     */
-    fun findDown(text: String) = finder.findDown(text)
-
-    /**
      * Move cursor to specified index.
      *
      * @param index index of editor.
@@ -432,7 +436,7 @@ class EditorFragment :
 
     /**
      * Return root view.
-     *
+     * TODO merge it.
      * @return [View]
      */
     fun view(): View = binding.root
@@ -559,7 +563,7 @@ class EditorFragment :
      *
      * @param data [Uri]
      */
-    fun readFromFileUri(data: Uri) {
+    private fun readFromFileUri(data: Uri) {
         val context = context ?: return
 
         FileExtractorFromUri(context, data)?.let {
@@ -572,7 +576,7 @@ class EditorFragment :
      *
      * @param file [File]
      */
-    fun readFromFile(file: File) {
+    private fun readFromFile(file: File) {
         if (!file.exists() || !file.canRead()) {
             snackText(R.string.message_cannot_read_file)
             clearPath()
@@ -606,7 +610,7 @@ class EditorFragment :
     /**
      * Clear current file path and reset edit-text.
      */
-    fun clearPath() {
+    private fun clearPath() {
         path = ""
         clearInput()
         menuBinding.lastSaved?.setText("")
@@ -615,7 +619,7 @@ class EditorFragment :
     /**
      * Clear input text.
      */
-    fun clearInput() {
+    private fun clearInput() {
         setContentText("")
     }
 

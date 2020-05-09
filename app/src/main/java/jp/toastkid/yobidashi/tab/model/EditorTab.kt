@@ -18,15 +18,11 @@ internal class EditorTab: Tab {
 
     var path: String = ""
 
-    override var thumbnailPath: String = ""
-
     override fun id(): String = id
 
     override fun setScrolled(scrollY: Int) = Unit
 
     override fun getScrolled(): Int = 0
-
-    override fun deleteLastThumbnail() = Unit
 
     override fun title(): String = titleStr
 

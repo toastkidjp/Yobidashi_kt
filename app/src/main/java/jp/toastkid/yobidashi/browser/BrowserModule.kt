@@ -147,7 +147,7 @@ class BrowserModule(
             super.onPageFinished(view, url)
             isLoadFinished = true
 
-            loadingViewModel?.finished(lastId to History.make(view.title, view.url))
+            loadingViewModel?.finished(lastId, History.make(view.title, view.url))
 
             headerViewModel?.updateProgress(100)
             headerViewModel?.stopProgress(true)
@@ -529,6 +529,14 @@ class BrowserModule(
      */
     fun stopLoading() {
         currentView()?.stopLoading()
+    }
+
+    fun onResume() {
+        currentView()?.onResume()
+    }
+
+    fun onPause() {
+        currentView()?.onPause()
     }
 
     /**

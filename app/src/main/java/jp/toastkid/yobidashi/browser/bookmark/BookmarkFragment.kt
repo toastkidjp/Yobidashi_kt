@@ -346,10 +346,10 @@ class BookmarkFragment: Fragment(),
                 .addTo(disposables)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         adapter.dispose()
         disposables.clear()
+        super.onDetach()
     }
 
     companion object {

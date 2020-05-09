@@ -12,7 +12,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.webkit.WebView
@@ -191,6 +190,9 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.fragment?.observe(this, Observer {
             replaceFragment(it, true, true)
         })
+        contentViewModel?.snackbar?.observe(this, Observer {
+            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+        })
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -226,7 +228,12 @@ class MainActivity : AppCompatActivity(),
                 .onPageFinished
                 .observe(
                         this,
-                        Observer { tabs.updateWebTab(it) }
+                        Observer {
+                            tabs.updateWebTab(it)
+                            if (tabs.currentTabId() == it.first) {
+                                refreshThumbnail()
+                            }
+                        }
                 )
 
         ViewModelProviders.of(this).get(OverlayColorFilterViewModel::class.java)
@@ -455,7 +462,7 @@ class MainActivity : AppCompatActivity(),
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = true) {
+    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
             return
@@ -471,10 +478,10 @@ class MainActivity : AppCompatActivity(),
 
         if (withAnimation) {
             transaction.setCustomAnimations(
-                    if (withSlideIn) R.anim.slide_up else R.anim.slide_in_right,
+                    if (withSlideIn) R.anim.slide_in_right else R.anim.slide_up,
                     0,
                     0,
-                    if (withSlideIn) R.anim.slide_down else android.R.anim.slide_out_right
+                    if (withSlideIn) android.R.anim.slide_out_right else R.anim.slide_down
             )
         }
 
@@ -504,6 +511,7 @@ class MainActivity : AppCompatActivity(),
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
+                refreshThumbnail()
             }
             is PdfTab -> {
                 val url: String = currentTab.getUrl()
@@ -515,7 +523,7 @@ class MainActivity : AppCompatActivity(),
                                 obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment ?: return
                         pdfViewerFragment.arguments = bundleOf("uri" to uri, "scrollY" to currentTab.getScrolled())
                         replaceFragment(pdfViewerFragment, withAnimation)
-
+                        refreshThumbnail()
                     } catch (e: SecurityException) {
                         Timber.e(e)
                         return
@@ -528,7 +536,6 @@ class MainActivity : AppCompatActivity(),
         }
 
         tabs.saveTabList()
-        tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
     }
 
     /**
@@ -541,16 +548,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun refreshThumbnail() {
-        val currentTab = tabs.currentTab()
-        tabs.deleteThumbnail(currentTab?.thumbnailPath)
+        val findFragment = findFragment()
+        if (findFragment !is TabUiFragment) {
+            return
+        }
         tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
-    }
-
-    override fun onKeyLongPress(keyCode: Int, event: KeyEvent?) = when (event?.keyCode) {
-        KeyEvent.KEYCODE_BACK ->
-            findCurrentFragment()?.pressLongBack() ?: super.onKeyLongPress(keyCode, event)
-        else ->
-            super.onKeyLongPress(keyCode, event)
     }
 
     override fun onBackPressed() {
@@ -569,12 +571,12 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        val findCurrentFragment = findCurrentFragment()
-        if (findCurrentFragment?.pressBack() == true) {
+        val currentFragment = findFragment()
+        if (currentFragment is CommonFragmentAction && currentFragment.pressBack()) {
             return
         }
 
-        if (findCurrentFragment is BrowserFragment) {
+        if (currentFragment is BrowserFragment) {
             tabs.closeTab(tabs.index())
 
             if (tabs.isEmpty()) {
@@ -595,17 +597,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun findFragment() = supportFragmentManager.findFragmentById(R.id.content)
-
-    /**
-     * Find current fragment.
-     * TODO Delete it.
-     * @return fragment or null
-     */
-    private fun findCurrentFragment(): CommonFragmentAction? {
-        val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.content)
-
-        return if (fragment != null) fragment as? CommonFragmentAction else null
-    }
 
     /**
      * Show confirm exit.

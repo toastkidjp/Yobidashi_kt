@@ -464,5 +464,8 @@
     <string name="title_excluding_item_setting">Excluding items</string>
     <string name="title_dark_mode">Use dark mode</string>
     <string name="undo">undo</string>
+    <string name="title_context_editor_add_order">Add order</string>
+    <string name="title_context_editor_add_minus">Add minus</string>
+    <string name="title_context_editor_add_quote">Add quote</string>
 
 </resources>
