@@ -478,7 +478,7 @@ class MainActivity : AppCompatActivity(),
 
                         val pdfViewerFragment =
                                 obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment ?: return
-                        pdfViewerFragment.arguments = bundleOf("uri" to uri, "scrollY" to currentTab.getScrolled())
+                        pdfViewerFragment.setInitialArguments(uri, currentTab.getScrolled())
                         replaceFragment(pdfViewerFragment, withAnimation)
                         refreshThumbnail()
                     } catch (e: SecurityException) {
