@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogFavoriteSearchAdditionBinding
@@ -97,7 +97,7 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
 
     private fun reload() {
         val target = targetFragment ?: return
-        ViewModelProviders.of(target)
+        ViewModelProvider(target)
                 .get(FavoriteSearchFragmentViewModel::class.java)
                 .reload()
     }

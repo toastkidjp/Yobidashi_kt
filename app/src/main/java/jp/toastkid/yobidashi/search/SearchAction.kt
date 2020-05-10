@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.search
 import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Urls
@@ -71,7 +71,7 @@ class SearchAction(
      */
     private fun withInternalBrowser(validatedUrl: Boolean) {
         val browserViewModel = (activityContext as? FragmentActivity)?.let {
-            ViewModelProviders.of(it).get(BrowserViewModel::class.java)
+            ViewModelProvider(it).get(BrowserViewModel::class.java)
         }
 
         if (validatedUrl) {

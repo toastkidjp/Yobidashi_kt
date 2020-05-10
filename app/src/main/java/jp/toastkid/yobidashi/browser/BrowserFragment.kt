@@ -14,7 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
@@ -106,7 +106,7 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
-        browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
+        browserViewModel = ViewModelProvider(this).get(BrowserViewModel::class.java)
 
         return binding?.root
     }
@@ -115,16 +115,16 @@ class BrowserFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         val activity = requireActivity()
-        menuViewModel = ViewModelProviders.of(activity)
+        menuViewModel = ViewModelProvider(activity)
                 .get(MenuViewModel::class.java)
 
         initializeHeaderViewModels(activity)
 
-        contentViewModel = ViewModelProviders.of(activity).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
-        val viewModelProvider = ViewModelProviders.of(activity)
+        val viewModelProvider = ViewModelProvider(activity)
         headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
 
         headerViewModel?.stopProgress?.observe(activity, Observer { stop ->
@@ -349,7 +349,7 @@ class BrowserFragment : Fragment(),
         }
 
         activity?.also  { activity ->
-            ViewModelProviders.of(activity)
+            ViewModelProvider(activity)
                     .get(ContentViewModel::class.java)
                     .nextFragment(makeIntent)
         }
@@ -433,7 +433,7 @@ class BrowserFragment : Fragment(),
         )
 
         activity?.also {
-            ViewModelProviders.of(it)
+            ViewModelProvider(it)
                     .get(ContentViewModel::class.java)
                     .nextFragment(fragment)
         }

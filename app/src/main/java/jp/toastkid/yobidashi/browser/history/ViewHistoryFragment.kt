@@ -12,7 +12,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -54,7 +54,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         binding.historiesView.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        contentViewModel = ViewModelProviders.of(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
         adapter = ActivityAdapter(
                 context,
@@ -100,7 +100,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         super.onViewCreated(view, savedInstanceState)
 
         val fragmentActivity = activity ?: return
-        ViewModelProviders.of(fragmentActivity).get(PageSearcherViewModel::class.java)
+        ViewModelProvider(fragmentActivity).get(PageSearcherViewModel::class.java)
                 .find
                 .observe(fragmentActivity, Observer {
                     adapter.filter(it)
@@ -113,7 +113,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         }
 
         val browserViewModel =
-                ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
 
         popBackStack()
         browserViewModel.open(uri)
