@@ -9,7 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -66,7 +66,7 @@ class LauncherFragment : Fragment(), ContentScrollable {
         }
 
         activity?.also {
-            val viewModel = ViewModelProviders.of(it).get(PageSearcherViewModel::class.java)
+            val viewModel = ViewModelProvider(it).get(PageSearcherViewModel::class.java)
             viewModel.find.observe(it, Observer {
                 if (TextUtils.equals(prev, it)) {
                     return@Observer

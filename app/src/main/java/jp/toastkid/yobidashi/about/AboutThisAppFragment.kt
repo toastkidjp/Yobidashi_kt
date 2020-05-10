@@ -9,7 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
@@ -60,7 +60,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     fun privacyPolicy() {
         val browserViewModel =
-                ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
 
         popBackStack()
         browserViewModel.open(getString(R.string.link_privacy_policy).toUri())

@@ -13,7 +13,7 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -50,7 +50,7 @@ class MenuUseCase(
 ) {
 
     private val contentViewModel =
-            ViewModelProviders.of(activitySupplier()).get(ContentViewModel::class.java)
+            ViewModelProvider(activitySupplier()).get(ContentViewModel::class.java)
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
@@ -86,7 +86,7 @@ class MenuUseCase(
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
                 (activitySupplier() as? MainActivity)?.let {
-                    ViewModelProviders.of(it).get(OverlayColorFilterViewModel::class.java)
+                    ViewModelProvider(it).get(OverlayColorFilterViewModel::class.java)
                             .newColor(preferenceApplier.filterColor())
                 }
             }
@@ -122,7 +122,7 @@ class MenuUseCase(
                 contentViewModel.nextFragment(ImageViewerFragment::class.java)
             }
             Menu.LOAD_HOME-> {
-                ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
+                ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
                         .open(preferenceApplier.homeUrl.toUri())
             }
             Menu.EDITOR-> {
@@ -164,7 +164,7 @@ class MenuUseCase(
                     return
                 }
 
-                ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
+                ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
                         .open(url.toUri())
             }
             Menu.RANDOM_WIKIPEDIA -> {
@@ -184,7 +184,7 @@ class MenuUseCase(
                 }
                 randomWikipedia
                         .fetchWithAction { title, link ->
-                            ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
+                            ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
                                     .open(link)
                             val fragmentActivity = activitySupplier()
                             Toaster.snackShort(

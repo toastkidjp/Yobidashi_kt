@@ -13,7 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -31,7 +31,7 @@ class AnchorTypeLongTapDialogFragment : DialogFragment() {
 
         val title = arguments?.getString(KEY_TITLE) ?: ""
 
-        val viewModel = ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
 
         val uri = url.toUri()
 

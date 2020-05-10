@@ -29,7 +29,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
@@ -62,7 +62,7 @@ class FloatingPreview(context: Context) {
         popupWindow.contentView = binding.root
 
         (context as? FragmentActivity)?.also {
-            viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
+            viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
             viewModel?.title?.observe(context, Observer {
                 binding.title.text = it
@@ -166,7 +166,7 @@ class FloatingPreview(context: Context) {
      */
     private fun openNewTabWithUrl(url: String) {
         (binding.root.context as? FragmentActivity)?.also { fragmentActivity ->
-            ViewModelProviders.of(fragmentActivity)
+            ViewModelProvider(fragmentActivity)
                     .get(BrowserViewModel::class.java)
                     .open(url.toUri())
         }

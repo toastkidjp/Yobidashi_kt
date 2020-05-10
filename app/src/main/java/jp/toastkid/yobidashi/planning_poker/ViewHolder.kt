@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.planning_poker
 
 import android.util.TypedValue
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemPlanningPokerBinding
 
@@ -17,7 +17,7 @@ internal class ViewHolder(private val binding: ItemPlanningPokerBinding)
     init {
         binding.viewHolder = this
         viewModel = (binding.root.context as? FragmentActivity)?.let {
-            ViewModelProviders.of(it).get(CardListFragmentViewModel::class.java)
+            ViewModelProvider(it).get(CardListFragmentViewModel::class.java)
         }
     }
 

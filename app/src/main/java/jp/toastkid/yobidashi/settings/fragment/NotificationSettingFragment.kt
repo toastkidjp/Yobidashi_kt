@@ -16,7 +16,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -54,7 +54,7 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
 
-        contentViewModel = ViewModelProviders.of(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
         return binding.root
     }

@@ -32,7 +32,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -327,7 +327,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun initializeViewModels() {
         val viewModelProvider = (attemptExtractActivity() as? FragmentActivity)
-                ?.let { owner -> ViewModelProviders.of(owner) }
+                ?.let { owner -> ViewModelProvider(owner) }
         browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
         mediaPlayerPopupViewModel = viewModelProvider?.get(MediaPlayerPopupViewModel::class.java)
     }

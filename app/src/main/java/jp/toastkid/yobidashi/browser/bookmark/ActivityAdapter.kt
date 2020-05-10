@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -83,7 +83,7 @@ internal class ActivityAdapter(
         }
 
         val browserViewModel = (holder.itemView.context as? FragmentActivity)?.let {
-            ViewModelProviders.of(it).get(BrowserViewModel::class.java)
+            ViewModelProvider(it).get(BrowserViewModel::class.java)
         }
 
         holder.itemView.setOnLongClickListener { v ->

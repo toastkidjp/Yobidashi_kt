@@ -25,7 +25,7 @@ import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
@@ -70,7 +70,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         applyColorToButtons()
 
-        val viewModel = ViewModelProviders.of(this).get(ImagePreviewFragmentViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
             binding.photo.colorFilter = it

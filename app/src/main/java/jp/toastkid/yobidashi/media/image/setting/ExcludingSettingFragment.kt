@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
@@ -52,7 +52,7 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
 
         binding.excludingItems.layoutManager = LinearLayoutManager(activity)
 
-        val viewModel = ViewModelProviders.of(this)
+        val viewModel = ViewModelProvider(this)
                 .get(ExcludingSettingFragmentViewModel::class.java)
 
         viewModel.dismiss.observe(this, Observer {
@@ -71,7 +71,7 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         val targetFragment = targetFragment ?: return
-        ViewModelProviders.of(targetFragment).get(ImageViewerFragmentViewModel::class.java)
+        ViewModelProvider(targetFragment).get(ImageViewerFragmentViewModel::class.java)
                 .refresh()
     }
 }

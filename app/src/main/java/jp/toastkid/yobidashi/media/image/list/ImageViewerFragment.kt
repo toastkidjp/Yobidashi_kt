@@ -20,7 +20,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -83,7 +83,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         preferenceApplier = PreferenceApplier(context)
 
-        val viewModelProvider = ViewModelProviders.of(this)
+        val viewModelProvider = ViewModelProvider(this)
         val viewModel =
                 viewModelProvider.get(ImageViewerFragmentViewModel::class.java)
 
@@ -111,7 +111,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private fun observePageSearcherViewModel() {
         val activity = activity ?: return
-        ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)
+        ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
                 .also { viewModel ->
                     viewModel.find.observe(activity, Observer {
                         filterByName(it)

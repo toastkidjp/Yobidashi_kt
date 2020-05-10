@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -50,7 +50,7 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
 
         activity?.let { activity ->
             overlayColorFilterViewModel =
-                    ViewModelProviders.of(activity).get(OverlayColorFilterViewModel::class.java)
+                    ViewModelProvider(activity).get(OverlayColorFilterViewModel::class.java)
             overlayColorFilterViewModel
                     ?.newColor
                     ?.observe(activity, Observer { binding.sample.setBackgroundColor(it) })

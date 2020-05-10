@@ -32,7 +32,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
@@ -200,8 +200,8 @@ class SearchFragment : Fragment() {
         }
 
         activity?.also {
-            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
-            contentViewModel = ViewModelProviders.of(it).get(ContentViewModel::class.java)
+            headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
+            contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
         }
 
         contentViewModel?.snackShort(R.string.message_search_on_background)
@@ -253,7 +253,7 @@ class SearchFragment : Fragment() {
         }
         R.id.open_favorite_search -> {
             activity?.also {
-                ViewModelProviders.of(it)
+                ViewModelProvider(it)
                         .get(ContentViewModel::class.java)
                         .nextFragment(FavoriteSearchFragment::class.java)
             }
@@ -261,7 +261,7 @@ class SearchFragment : Fragment() {
         }
         R.id.open_search_history -> {
             activity?.also {
-                ViewModelProviders.of(it)
+                ViewModelProvider(it)
                         .get(ContentViewModel::class.java)
                         .nextFragment(SearchHistoryFragment::class.java)
             }
