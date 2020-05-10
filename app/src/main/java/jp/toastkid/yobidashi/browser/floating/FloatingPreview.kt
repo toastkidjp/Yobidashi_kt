@@ -8,6 +8,8 @@
 package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -96,6 +98,12 @@ class FloatingPreview(private val webView: WebView) {
      */
     fun show(parent: View, url: String) {
         setSlidingListener()
+
+        binding.progress.progressDrawable.colorFilter =
+                PorterDuffColorFilter(
+                        PreferenceApplier(binding.root.context).fontColor,
+                        PorterDuff.Mode.SRC_IN
+                )
 
         binding.icon.setImageBitmap(null)
 
