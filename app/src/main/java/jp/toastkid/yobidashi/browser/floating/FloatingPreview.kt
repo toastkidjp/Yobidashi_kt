@@ -85,7 +85,7 @@ class FloatingPreview(private val webView: WebView) {
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
         popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
 
-        WebViewInitializer()(webView)
+        WebViewInitializer()(webView, binding.progress)
     }
 
     /**
