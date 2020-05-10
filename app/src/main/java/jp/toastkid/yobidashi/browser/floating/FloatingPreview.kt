@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.core.view.isEmpty
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -70,6 +73,25 @@ class FloatingPreview(private val webView: WebView) {
             viewModel?.url?.observe(context, Observer {
                 binding.url.text = it
             })
+
+            viewModel?.progress?.observe(context, Observer { newProgress ->
+                if (newProgress > 85) {
+                    if (binding.progress.isVisible) {
+                        binding.progress.isGone = true
+                    }
+                    return@Observer
+                }
+
+                if (binding.progress.isGone) {
+                    binding.progress.isVisible = true
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    binding.progress.setProgress(newProgress, true)
+                } else {
+                    binding.progress.progress = newProgress
+                }
+            })
         }
 
         popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
@@ -87,7 +109,7 @@ class FloatingPreview(private val webView: WebView) {
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
         popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
 
-        WebViewInitializer()(webView, binding.progress)
+        WebViewInitializer()(webView)
     }
 
     /**

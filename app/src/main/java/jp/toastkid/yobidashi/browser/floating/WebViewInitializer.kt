@@ -14,9 +14,6 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.ProgressBar
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 
@@ -31,7 +28,7 @@ class WebViewInitializer {
      * @param webView [WebView]
      * @param url URL string
      */
-    operator fun invoke(webView: WebView, progressBar: ProgressBar) {
+    operator fun invoke(webView: WebView) {
         val context = webView.context as? FragmentActivity ?: return
 
         val viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
@@ -45,13 +42,8 @@ class WebViewInitializer {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 viewModel.newUrl(url)
-                progressBar.isVisible = true
             }
 
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-                progressBar.isGone = true
-            }
         }
 
         webView.webChromeClient = object : WebChromeClient() {
@@ -68,16 +60,7 @@ class WebViewInitializer {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
 
-                if (newProgress > 85) {
-                    progressBar.isGone = true
-                    return
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    progressBar.setProgress(newProgress, true)
-                } else {
-                    progressBar.progress = newProgress
-                }
+                viewModel.newProgress(newProgress)
             }
         }
     }
