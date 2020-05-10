@@ -127,8 +127,10 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
             headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
         }
 
-        arguments?.getParcelable<Uri>("uri")?.also { load(it) }
-        arguments?.getInt("scrollY")?.also { scrollTo(it) }
+        arguments?.let { arguments ->
+            arguments.getParcelable<Uri>("uri")?.also { load(it) }
+            arguments.getInt("scrollY").also { scrollTo(it) }
+        }
     }
 
     /**
