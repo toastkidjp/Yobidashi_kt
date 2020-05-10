@@ -178,7 +178,8 @@ class MainActivity : AppCompatActivity(),
 
         initializeContentViewModel()
 
-        browserViewModel = ViewModelProvider(this).get(BrowserViewModel::class.java)
+        val activityViewModelProvider = ViewModelProvider(this)
+        browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
             Inputs.hideKeyboard(binding.content)
 
@@ -205,7 +206,7 @@ class MainActivity : AppCompatActivity(),
             )
         })
 
-        ViewModelProvider(this).get(LoadingViewModel::class.java)
+        activityViewModelProvider.get(LoadingViewModel::class.java)
                 .onPageFinished
                 .observe(
                         this,
@@ -217,13 +218,13 @@ class MainActivity : AppCompatActivity(),
                         }
                 )
 
-        ViewModelProvider(this).get(OverlayColorFilterViewModel::class.java)
+        activityViewModelProvider.get(OverlayColorFilterViewModel::class.java)
                 .newColor
                 .observe(this, Observer {
                     updateColorFilter()
                 })
 
-        tabListViewModel = ViewModelProvider(this).get(TabListViewModel::class.java)
+        tabListViewModel = activityViewModelProvider.get(TabListViewModel::class.java)
         tabListViewModel
                 ?.saveEditorTab
                 ?.observe(
@@ -235,7 +236,7 @@ class MainActivity : AppCompatActivity(),
                         }
                 )
 
-        browserFragmentViewModel = ViewModelProvider(this).get(BrowserFragmentViewModel::class.java)
+        browserFragmentViewModel = activityViewModelProvider.get(BrowserFragmentViewModel::class.java)
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
