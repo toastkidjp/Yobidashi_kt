@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
@@ -40,9 +41,11 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-class FloatingPreview(private val webView: WebView) {
+class FloatingPreview(context: Context) {
 
-    private val popupWindow = PopupWindow(webView.context)
+    private val popupWindow = PopupWindow(context)
+
+    private val webView = WebView(context)
 
     private val binding: PopupFloatingPreviewBinding
 
@@ -51,7 +54,6 @@ class FloatingPreview(private val webView: WebView) {
     private var viewModel: FloatingPreviewViewModel? = null
 
     init {
-        val context = webView.context
         val layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.preview = this

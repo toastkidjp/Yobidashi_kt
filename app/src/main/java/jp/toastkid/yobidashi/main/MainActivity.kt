@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -184,7 +183,7 @@ class MainActivity : AppCompatActivity(),
             Inputs.hideKeyboard(binding.content)
 
             if (floatingPreview == null) {
-                floatingPreview = FloatingPreview(WebView(this))
+                floatingPreview = FloatingPreview(this)
             }
             floatingPreview?.show(binding.root, it.toString())
         })
