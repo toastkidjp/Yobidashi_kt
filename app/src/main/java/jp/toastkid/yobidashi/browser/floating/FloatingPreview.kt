@@ -75,22 +75,7 @@ class FloatingPreview(private val webView: WebView) {
             })
 
             viewModel?.progress?.observe(context, Observer { newProgress ->
-                if (newProgress > 85) {
-                    if (binding.progress.isVisible) {
-                        binding.progress.isGone = true
-                    }
-                    return@Observer
-                }
-
-                if (binding.progress.isGone) {
-                    binding.progress.isVisible = true
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    binding.progress.setProgress(newProgress, true)
-                } else {
-                    binding.progress.progress = newProgress
-                }
+                setNewProgress(newProgress)
             })
         }
 
@@ -195,6 +180,25 @@ class FloatingPreview(private val webView: WebView) {
         }
         val view = binding.previewContainer.get(0)
         return view as? WebView
+    }
+
+    private fun setNewProgress(newProgress: Int) {
+        if (newProgress > 85) {
+            if (binding.progress.isVisible) {
+                binding.progress.isGone = true
+            }
+            return
+        }
+
+        if (binding.progress.isGone) {
+            binding.progress.isVisible = true
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            binding.progress.setProgress(newProgress, true)
+        } else {
+            binding.progress.progress = newProgress
+        }
     }
 
     fun isVisible() = popupWindow.isShowing
