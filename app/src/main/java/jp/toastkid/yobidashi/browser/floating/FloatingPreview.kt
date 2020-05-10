@@ -74,9 +74,7 @@ class FloatingPreview(private val webView: WebView) {
                 binding.url.text = it
             })
 
-            viewModel?.progress?.observe(context, Observer { newProgress ->
-                setNewProgress(newProgress)
-            })
+            viewModel?.progress?.observe(context, Observer(::setNewProgress))
         }
 
         popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
