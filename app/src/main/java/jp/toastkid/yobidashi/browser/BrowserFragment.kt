@@ -115,12 +115,13 @@ class BrowserFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         val activity = requireActivity()
-        menuViewModel = ViewModelProvider(activity)
+        val activityViewModelProvider = ViewModelProvider(activity)
+        menuViewModel = activityViewModelProvider
                 .get(MenuViewModel::class.java)
 
         initializeHeaderViewModels(activity)
 
-        contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
+        contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
