@@ -19,7 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarGestureMemoBinding
 import jp.toastkid.yobidashi.databinding.FragmentGestureMemoBinding
@@ -113,7 +113,7 @@ class GestureMemoFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        ViewModelProviders.of(requireActivity()).get(HeaderViewModel::class.java)
+        ViewModelProvider(requireActivity()).get(HeaderViewModel::class.java)
                 .replace(appBarBinding.root)
     }
 

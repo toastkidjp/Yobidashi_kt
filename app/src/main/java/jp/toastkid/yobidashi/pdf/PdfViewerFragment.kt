@@ -22,7 +22,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -124,7 +124,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         })
 
         (context as? FragmentActivity)?.let {
-            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+            headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
         }
 
         arguments?.getParcelable<Uri>("uri")?.also { load(it) }

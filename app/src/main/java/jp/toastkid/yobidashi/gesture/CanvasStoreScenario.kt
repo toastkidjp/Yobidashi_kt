@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.gesture
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
@@ -38,7 +38,7 @@ class CanvasStoreScenario {
 
         bitmapCompressor.invoke(bitmap, file)
 
-        ViewModelProviders.of(activity).get(ContentViewModel::class.java)
+        ViewModelProvider(activity).get(ContentViewModel::class.java)
                 .snackShort(activity.getString(MESSAGE_ID, file.absolutePath))
     }
 
