@@ -39,7 +39,8 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
                 .setItems(R.array.image_menu, { _, which ->
                     when (which) {
                         0 -> viewModel.open("https://www.google.co.jp/searchbyimage?image_url=$url".toUri())
-                        1 -> downloadImage(url)
+                        1 -> ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java).preview(url.toUri())
+                        2 -> downloadImage(url)
                     }
                 })
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }

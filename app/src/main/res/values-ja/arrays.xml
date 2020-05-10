@@ -9,6 +9,7 @@
     </array>
     <array name="image_menu">
         <item name="image_search">この画像で検索</item>
+        <item name="preview">ちょっと見る</item>
         <item name="download">画像をダウンロード</item>
     </array>
     <array name="url_menu">
