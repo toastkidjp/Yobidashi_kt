@@ -93,7 +93,7 @@ class FloatingPreview(private val webView: WebView) {
     /**
      * Invoke floating preview.
      *
-     * @param webView [WebView]
+     * @param parent Parent [View] for Snackbar
      * @param url URL string
      */
     fun show(parent: View, url: String) {
