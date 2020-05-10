@@ -172,20 +172,18 @@ class SearchFragment : Fragment() {
                 this::setTextAndMoveCursorToEnd
         )
 
-        // TODO Clean up code.
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
                 headerBinding?.searchInput as EditText,
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion) },
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion, true) },
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it) },
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it, true) },
                 this::hideKeyboard
         )
 
-        // TODO Clean up code.
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion) },
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion, true) }
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it) },
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it, true) }
         )
 
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding)
