@@ -59,7 +59,6 @@ class Adapter(
 
     fun removeAt(position: Int) {
         items.get(position)
-
     }
 
 }

@@ -37,15 +37,6 @@ class ProcessCleanerInvoker {
         val context = snackbarParent.context
         val preferenceApplier = PreferenceApplier(context)
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Toaster.snackShort(
-                    snackbarParent,
-                    R.string.message_cannot_use_under_l,
-                    preferenceApplier.colorPair()
-            )
-            return Disposables.disposed()
-        }
-
         if (UsageStatsPermissionChecker()
                         .invoke(
                                 context.getSystemService(Context.APP_OPS_SERVICE) as? AppOpsManager,

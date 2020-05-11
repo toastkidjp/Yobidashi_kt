@@ -35,6 +35,26 @@ class ColorFilterUseCase(private val viewModel: ImagePreviewFragmentViewModel) {
         )
     }
 
+    fun applyContrast(contrast: Float) {
+        lastFilter = null
+        val v = Math.max(contrast, 0f) + 1f
+        val o = -128 * (v - 1);
+        viewModel.newColorFilter(
+                ColorMatrixColorFilter(
+                        ColorMatrix().also {
+                            it.set(
+                                    floatArrayOf(
+                                            v,0f,0f,0f,o,
+                                            0f,v,0f,0f,o,
+                                            0f,0f,v,0f,o,
+                                            0f,0f,0f,1f,000f
+                                    )
+                            )
+                        }
+                )
+        )
+    }
+
     fun reverseFilter() {
         applyFilter(ImageColorFilter.REVERSE)
     }

@@ -41,4 +41,60 @@ class ContentViewModel : ViewModel() {
     fun snackShort(message: String) {
         _snackbar.postValue(message)
     }
+
+    private val _toTop = MutableLiveData<Unit>()
+
+    val toTop: LiveData<Unit> = _toTop
+
+    fun toTop() {
+        _toTop.postValue(Unit)
+    }
+
+    private val _toBottom = MutableLiveData<Unit>()
+
+    val toBottom: LiveData<Unit> = _toBottom
+
+    fun toBottom() {
+        _toBottom.postValue(Unit)
+    }
+
+    private val _share = MutableLiveData<Unit>()
+
+    val share: LiveData<Unit> = _share
+
+    fun share() {
+        _share.postValue(Unit)
+    }
+
+    private val _webSearch = MutableLiveData<Unit>()
+
+    val webSearch: LiveData<Unit> = _webSearch
+
+    fun webSearch() {
+        _webSearch.postValue(Unit)
+    }
+
+    private val _openPdf = MutableLiveData<Unit>()
+
+    val openPdf: LiveData<Unit> = _openPdf
+
+    fun openPdf() {
+        _openPdf.postValue(Unit)
+    }
+
+    private val _openEditorTab = MutableLiveData<Unit>()
+
+    val openEditorTab: LiveData<Unit> = _openEditorTab
+
+    fun openEditorTab() {
+        _openEditorTab.postValue(Unit)
+    }
+
+    private val _switchPageSearcher = MutableLiveData<Unit>()
+
+    val switchPageSearcher: LiveData<Unit> = _switchPageSearcher
+
+    fun switchPageSearcher() {
+        _switchPageSearcher.postValue(Unit)
+    }
 }

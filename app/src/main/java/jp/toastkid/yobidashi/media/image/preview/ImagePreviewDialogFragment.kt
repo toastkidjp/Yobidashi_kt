@@ -51,6 +51,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
 
+    // TODO Delete it.
     private val rotatedImageFixing = RotatedImageFixing()
 
     private val disposables = CompositeDisposable()
@@ -82,6 +83,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         viewModel.colorFilter.observe(this, Observer {
             binding.photo.colorFilter = it
         })
+
+        initializeContrastSlider()
         initializeAlphaSlider()
 
         binding.imageRotationUseCase =
@@ -105,6 +108,24 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                                 ViewGroup.LayoutParams.MATCH_PARENT)
                     }
                 }
+    }
+
+    private fun initializeContrastSlider() {
+        binding.contrast.progress = 50
+        binding.contrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (!fromUser) {
+                    return
+                }
+
+                binding.colorFilterUseCase?.applyContrast(((progress - 50).toFloat() / 70f))
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+
+        })
     }
 
     private fun initializeAlphaSlider() {

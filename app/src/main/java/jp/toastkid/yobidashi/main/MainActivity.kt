@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.main
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.SearchManager
 import android.content.ClipboardManager
@@ -56,7 +55,6 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.menu.MenuBinder
@@ -81,7 +79,6 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import timber.log.Timber
 import java.io.File
-import kotlin.math.min
 
 /**
  * Main of this calendar app.
@@ -172,8 +169,6 @@ class MainActivity : AppCompatActivity(),
         )
         searchWithClip.invoke()
 
-        setFabListener()
-
         pageSearchPresenter = PageSearcherModule(
                 this,
                 binding.sip as ModuleSearcherBinding
@@ -183,16 +178,7 @@ class MainActivity : AppCompatActivity(),
 
         initializeMenuViewModel()
 
-        contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
-        contentViewModel?.fragmentClass?.observe(this, Observer {
-            replaceFragment(obtainFragment(it))
-        })
-        contentViewModel?.fragment?.observe(this, Observer {
-            replaceFragment(it, true, true)
-        })
-        contentViewModel?.snackbar?.observe(this, Observer {
-            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
-        })
+        initializeContentViewModel()
 
         browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
@@ -295,25 +281,10 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProviders.of(this).get(MenuViewModel::class.java)
 
-        MenuBinder(
-                this,
-                menuViewModel,
-                binding.menusView,
-                binding.menuSwitch
-        )
+        MenuBinder(this, menuViewModel, binding.menusView, binding.menuSwitch)
 
         menuUseCase = MenuUseCase(
                 { this },
-                { findFragment() },
-                { replaceFragment(obtainFragment(it), true, false) },
-                {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        ProcessCleanerInvoker()(binding.root).addTo(disposables)
-                    }
-                },
-                { openPdfTabFromStorage() },
-                { openEditorTab() },
-                { pageSearchPresenter.switch() },
                 { menuViewModel?.close() }
         )
 
@@ -326,32 +297,43 @@ class MainActivity : AppCompatActivity(),
         })
     }
 
-    /**
-     * Set FAB's listener.
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setFabListener() {
-        val listener = DraggableTouchListener()
-        listener.setCallback(object : DraggableTouchListener.OnNewPosition {
-            override fun onNewPosition(x: Float, y: Float) {
-                preferenceApplier.setNewMenuFabPosition(x, y)
+    private fun initializeContentViewModel() {
+        contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
+        contentViewModel?.fragmentClass?.observe(this, Observer {
+            replaceFragment(obtainFragment(it))
+        })
+        contentViewModel?.fragment?.observe(this, Observer {
+            replaceFragment(it, true, true)
+        })
+        contentViewModel?.snackbar?.observe(this, Observer {
+            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+        })
+        contentViewModel?.toTop?.observe(this, Observer {
+            (findFragment() as? ContentScrollable)?.toTop()
+        })
+        contentViewModel?.toBottom?.observe(this, Observer {
+            (findFragment() as? ContentScrollable)?.toBottom()
+        })
+        contentViewModel?.share?.observe(this, Observer {
+            (findFragment() as? CommonFragmentAction)?.share()
+        })
+        contentViewModel?.webSearch?.observe(this, Observer {
+            when (val fragment = findFragment()) {
+                is BrowserFragment ->
+                    fragment.search()
+                else ->
+                    contentViewModel?.nextFragment(SearchFragment::class.java)
             }
         })
-
-        binding.menuSwitch.setOnTouchListener(listener)
-
-        binding.menuSwitch.viewTreeObserver.addOnGlobalLayoutListener {
-            val menuFabPosition = preferenceApplier.menuFabPosition()
-            val displayMetrics = binding.menuSwitch.context.resources.displayMetrics
-            if (binding.menuSwitch.x > displayMetrics.widthPixels) {
-                binding.menuSwitch.x =
-                        min(menuFabPosition?.first ?: 0f, displayMetrics.widthPixels.toFloat())
-            }
-            if (binding.menuSwitch.y > displayMetrics.heightPixels) {
-                binding.menuSwitch.y =
-                        min(menuFabPosition?.second ?: 0f, displayMetrics.heightPixels.toFloat())
-            }
-        }
+        contentViewModel?.openPdf?.observe(this, Observer {
+            openPdfTabFromStorage()
+        })
+        contentViewModel?.openEditorTab?.observe(this, Observer {
+            openEditorTab()
+        })
+        contentViewModel?.switchPageSearcher?.observe(this, Observer {
+            pageSearchPresenter.switch()
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -610,7 +592,7 @@ class MainActivity : AppCompatActivity(),
         super.onResume()
         refresh()
         menuViewModel?.onResume()
-        setFabPosition()
+
         tabs.loadBackgroundTabsFromDirIfNeed()
 
         tabs.setCount()
@@ -625,8 +607,6 @@ class MainActivity : AppCompatActivity(),
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
         binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
-
-        colorPair.applyReverseTo(binding.menuSwitch)
 
         applyBackgrounds()
 
@@ -692,26 +672,6 @@ class MainActivity : AppCompatActivity(),
                         Timber::e
                 )
                 ?.addTo(disposables)
-    }
-
-    private fun setFabPosition() {
-        binding.menuSwitch.let {
-            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
-            val displayMetrics = it.context.resources.displayMetrics
-            val x = when {
-                fabPosition.first > displayMetrics.widthPixels.toFloat() ->
-                    displayMetrics.widthPixels.toFloat()
-                fabPosition.first < 0 -> 0f
-                else -> fabPosition.first
-            }
-            val y = when {
-                fabPosition.second > displayMetrics.heightPixels.toFloat() ->
-                    displayMetrics.heightPixels.toFloat()
-                fabPosition.second < 0 -> 0f
-                else -> fabPosition.second
-            }
-            it.animate().x(x).y(y).setDuration(10).start()
-        }
     }
 
     private fun hideToolbar() {

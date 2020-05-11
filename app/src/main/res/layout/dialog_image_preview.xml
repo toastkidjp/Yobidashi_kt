@@ -32,6 +32,17 @@
             />
 
         <SeekBar
+            android:id="@+id/contrast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="90dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:max="100"
+            />
+
+        <SeekBar
             android:id="@+id/alpha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

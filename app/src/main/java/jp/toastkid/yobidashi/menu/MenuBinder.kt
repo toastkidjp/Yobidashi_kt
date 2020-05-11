@@ -7,16 +7,12 @@
  */
 package jp.toastkid.yobidashi.menu
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.RippleDrawable
-import android.os.Build
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -24,9 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
+import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
+import kotlin.math.min
 
 /**
  * @author toastkidjp
@@ -37,14 +34,15 @@ class MenuBinder(
         private val recyclerView: CircleRecyclerView?,
         private val menuSwitch: FloatingActionButton?
 ) {
+    private val preferenceApplier = PreferenceApplier(fragmentActivity)
 
     private var menuAdapter: MenuAdapter? = null
-
-    private var menuDrawable: Drawable? = null
 
     private var previousIconColor: Int = Color.TRANSPARENT
 
     init {
+        setFabListener()
+
         fragmentActivity.let {
             menuAdapter = MenuAdapter(it, menuViewModel)
         }
@@ -54,19 +52,13 @@ class MenuBinder(
         })
 
         menuViewModel?.onResume?.observe(fragmentActivity, Observer {
-            val activityContext = recyclerView?.context ?: return@Observer
-            val preferenceApplier = PreferenceApplier(activityContext)
-            recyclerView.also {
-                it.requestLayout()
-            }
+            recyclerView?.requestLayout()
 
-            val newColor = preferenceApplier.colorPair().bgColor()
+            val colorPair = preferenceApplier.colorPair()
+            val newColor = colorPair.bgColor()
             if (previousIconColor != newColor) {
-                menuDrawable?.also { drawable ->
-                    DrawableCompat.setTint(drawable, preferenceApplier.colorPair().bgColor())
-                    menuSwitch?.setImageDrawable(drawable)
-                }
                 previousIconColor = newColor
+                colorPair.applyReverseTo(menuSwitch)
             }
         })
 
@@ -81,16 +73,59 @@ class MenuBinder(
         recyclerView?.layoutManager = layoutManager
         layoutManager.scrollToPosition(MenuAdapter.mediumPosition())
         recyclerView?.setNeedLoop(true)
-        menuDrawable = ContextCompat.getDrawable(context, R.drawable.ic_menu)
-        menuSwitch?.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                (it.background as? RippleDrawable)?.also { ripple ->
-                    ripple.state = arrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled)
-                            .toIntArray()
-                    menuSwitch.postDelayed({ ripple.state = IntArray(0) }, 200)
-                }
+    }
+
+    /**
+     * Set FAB's listener.
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setFabListener() {
+        val listener = DraggableTouchListener()
+        listener.setCallback(object : DraggableTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                preferenceApplier.setNewMenuFabPosition(x, y)
             }
-            menuViewModel?.switchVisibility(recyclerView?.isVisible == false)
+        })
+        listener.setOnClick(object : DraggableTouchListener.OnClick {
+            override fun onClick() {
+                menuViewModel?.switchVisibility(recyclerView?.isVisible == false)
+            }
+        })
+
+        menuSwitch?.setOnTouchListener(listener)
+
+        menuSwitch?.viewTreeObserver?.addOnGlobalLayoutListener {
+            val menuFabPosition = preferenceApplier.menuFabPosition()
+            val displayMetrics =
+                    menuSwitch.context?.resources?.displayMetrics ?: return@addOnGlobalLayoutListener
+            if (menuSwitch.x > displayMetrics.widthPixels) {
+                menuSwitch.x =
+                        min(menuFabPosition?.first ?: 0f, displayMetrics.widthPixels.toFloat())
+            }
+            if (menuSwitch.y > displayMetrics.heightPixels) {
+                menuSwitch.y =
+                        min(menuFabPosition?.second ?: 0f, displayMetrics.heightPixels.toFloat())
+            }
+        }
+    }
+
+    private fun setFabPosition() {
+        menuSwitch?.let {
+            val fabPosition = preferenceApplier.menuFabPosition() ?: return@let
+            val displayMetrics = it.context.resources.displayMetrics
+            val x = when {
+                fabPosition.first > displayMetrics.widthPixels.toFloat() ->
+                    displayMetrics.widthPixels.toFloat()
+                fabPosition.first < 0 -> 0f
+                else -> fabPosition.first
+            }
+            val y = when {
+                fabPosition.second > displayMetrics.heightPixels.toFloat() ->
+                    displayMetrics.heightPixels.toFloat()
+                fabPosition.second < 0 -> 0f
+                else -> fabPosition.second
+            }
+            it.animate().x(x).y(y).setDuration(10).start()
         }
     }
 

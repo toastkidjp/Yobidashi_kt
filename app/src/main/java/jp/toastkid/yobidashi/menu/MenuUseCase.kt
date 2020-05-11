@@ -8,37 +8,33 @@
 package jp.toastkid.yobidashi.menu
 
 import android.content.ActivityNotFoundException
+import android.os.Build
 import android.view.View
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import com.journeyapps.barcodescanner.camera.CameraManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
+import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
-import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
-import jp.toastkid.yobidashi.torch.Torch
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import timber.log.Timber
@@ -50,14 +46,11 @@ import java.util.*
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val findCurrentFragment: () -> Fragment?,
-        private val replaceFragment: (Class<out Fragment>) -> Unit,
-        private val cleanProcess: () -> Unit,
-        private val openPdfTabFromStorage: () -> Unit,
-        private val openEditorTab: () -> Unit,
-        private val switchPageSearcher: () -> Unit,
         private val close: () -> Unit
 ) {
+
+    private val contentViewModel =
+            ViewModelProviders.of(activitySupplier()).get(ContentViewModel::class.java)
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
@@ -65,35 +58,21 @@ class MenuUseCase(
 
     private val disposables = CompositeDisposable()
 
-    /**
-     * Torch API facade.
-     */
-    private val torch by lazy {
-        val fragmentActivity = activitySupplier()
-        Torch(CameraManager(fragmentActivity)) {
-            Toaster.snackShort(
-                    fragmentActivity.findViewById(android.R.id.content),
-                    it,
-                    preferenceApplier.colorPair()
-            )
-        }
-    }
-
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
 
     fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
-                (findCurrentFragment() as? ContentScrollable)?.toTop()
+                contentViewModel.toTop()
             }
             Menu.BOTTOM-> {
-                (findCurrentFragment() as? ContentScrollable)?.toBottom()
+                contentViewModel.toBottom()
             }
             Menu.SHARE-> {
-                (findCurrentFragment() as? CommonFragmentAction)?.share()
+                contentViewModel.share()
             }
             Menu.CODE_READER -> {
-                replaceFragment(BarcodeReaderFragment::class.java)
+                contentViewModel.nextFragment(BarcodeReaderFragment::class.java)
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
@@ -103,47 +82,48 @@ class MenuUseCase(
                 }
             }
             Menu.MEMORY_CLEANER -> {
-                cleanProcess()
+                val activity = activitySupplier()
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    contentViewModel.snackShort(activity.getString(R.string.message_cannot_use_under_l))
+                    return
+                }
+                ProcessCleanerInvoker()(activity.findViewById(android.R.id.content)).addTo(disposables)
             }
             Menu.PLANNING_POKER-> {
-                replaceFragment(CardListFragment::class.java)
+                contentViewModel.nextFragment(CardListFragment::class.java)
             }
             Menu.APP_LAUNCHER-> {
-                replaceFragment(LauncherFragment::class.java)
+                contentViewModel.nextFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
-                replaceFragment(RssReaderFragment::class.java)
+                contentViewModel.nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
-                mediaPlayerPopup.show(activitySupplier().findViewById(android.R.id.content))
+                val parent = extractContentView() ?: return
+                mediaPlayerPopup.show(parent)
                 close()
             }
             Menu.BOOKMARK-> {
-                replaceFragment(BookmarkFragment::class.java)
+                contentViewModel.nextFragment(BookmarkFragment::class.java)
             }
             Menu.VIEW_HISTORY-> {
-                replaceFragment(ViewHistoryFragment::class.java)
+                contentViewModel.nextFragment(ViewHistoryFragment::class.java)
             }
             Menu.IMAGE_VIEWER -> {
-                replaceFragment(ImageViewerFragment::class.java)
+                contentViewModel.nextFragment(ImageViewerFragment::class.java)
             }
             Menu.LOAD_HOME-> {
                 ViewModelProviders.of(activitySupplier()).get(BrowserViewModel::class.java)
                         .open(preferenceApplier.homeUrl.toUri())
             }
             Menu.EDITOR-> {
-                openEditorTab()
+                contentViewModel.openEditorTab()
             }
             Menu.PDF-> {
-                openPdfTabFromStorage()
+                contentViewModel.openPdf()
             }
             Menu.WEB_SEARCH -> {
-                when (val fragment = findCurrentFragment()) {
-                    is BrowserFragment ->
-                        fragment.search()
-                    else ->
-                        replaceFragment(SearchFragment::class.java)
-                }
+                contentViewModel.webSearch()
             }
             Menu.VOICE_SEARCH-> {
                 activitySupplier().also {
@@ -204,10 +184,10 @@ class MenuUseCase(
                         .addTo(disposables)
             }
             Menu.VIEW_ARCHIVE -> {
-                replaceFragment(ArchivesFragment::class.java)
+                contentViewModel.nextFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
-                switchPageSearcher()
+                contentViewModel.switchPageSearcher()
             }
         }
     }
@@ -219,9 +199,9 @@ class MenuUseCase(
      * @return true
      */
     fun onMenuLongClick(menu: Menu): Boolean {
+        val view = extractContentView() ?: return true
         Toaster.snackLong(
-                // TODO extract to function.
-                activitySupplier().findViewById(android.R.id.content),
+                view,
                 menu.titleId,
                 R.string.run,
                 View.OnClickListener { onMenuClick(menu) },
@@ -230,8 +210,10 @@ class MenuUseCase(
         return true
     }
 
+    private fun extractContentView(): View? =
+            activitySupplier().findViewById(android.R.id.content)
+
     fun dispose() {
-        torch.dispose()
         disposables.clear()
     }
 

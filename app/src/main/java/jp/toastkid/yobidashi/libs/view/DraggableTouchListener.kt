@@ -25,12 +25,22 @@ class DraggableTouchListener : View.OnTouchListener {
 
     private var onNewPosition: OnNewPosition? = null
 
+    private var onClick: OnClick? = null
+
     interface OnNewPosition {
         fun onNewPosition(x: Float, y: Float)
     }
 
+    interface OnClick {
+        fun onClick()
+    }
+
     fun setCallback(callback: OnNewPosition) {
         onNewPosition = callback
+    }
+
+    fun setOnClick(callback: OnClick) {
+        onClick = callback
     }
 
     override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
@@ -44,7 +54,7 @@ class DraggableTouchListener : View.OnTouchListener {
                 downRawY = motionEvent.rawY
                 dX = view.x - downRawX
                 dY = view.y - downRawY
-                true
+                false
             }
             MotionEvent.ACTION_MOVE -> {
                 val viewWidth = view.width
@@ -67,7 +77,7 @@ class DraggableTouchListener : View.OnTouchListener {
                         .y(newY)
                         .setDuration(0)
                         .start()
-                return true
+                false
             }
             MotionEvent.ACTION_UP -> {
                 val upRawX = motionEvent.rawX
@@ -77,10 +87,11 @@ class DraggableTouchListener : View.OnTouchListener {
                 val upDY = upRawY - downRawY
 
                 if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) {
-                    return view.performClick()
+                    onClick?.onClick()
+                    return false
                 }
                 onNewPosition?.onNewPosition(view.x, view.y)
-                return true
+                false
             }
             else -> false
         }
