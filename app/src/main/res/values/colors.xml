@@ -6,7 +6,7 @@
     <color name="textPrimary">#FFE0E0E0</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000B00</color>
-    <color name="spinner_background">#FFE0E0E0</color>
+    <color name="spinner_background">#DDFFFFFF</color>
     <color name="soft_background">#FFF0F0F0</color>
     <color name="transparent">#00000000</color>
     <color name="darkgray_scale">#66000000</color>
