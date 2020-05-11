@@ -28,14 +28,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
-import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
-import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
@@ -123,7 +122,7 @@ class SearchFragment : Fragment() {
 
     private var headerViewModel: HeaderViewModel? = null
 
-    private var headerBinding: ModuleHeaderSearchBinding? = null
+    private var headerBinding: AppBarSearchBinding? = null
 
     private var currentTitle: String? = null
 
@@ -148,7 +147,7 @@ class SearchFragment : Fragment() {
         currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
         currentUrl = arguments?.getString(EXTRA_KEY_URL)
 
-        headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_header_search, container, false)
+        headerBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_search, container, false)
         headerBinding?.fragment = this
         headerBinding?.searchCategories?.let {
             it.adapter = SearchCategoryAdapter(context)
