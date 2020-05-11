@@ -23,8 +23,8 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
+import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
-import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -66,7 +66,7 @@ class BrowserFragment : Fragment(),
      */
     private var binding: FragmentBrowserBinding? = null
 
-    private var headerBinding: ModuleBrowserHeaderBinding? = null
+    private var headerBinding: AppBarBrowserBinding? = null
 
     private val searchQueryExtractor = SearchQueryExtractor()
 
@@ -85,7 +85,7 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_browser_header, container, false)
+        headerBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_browser, container, false)
         headerBinding?.fragment = this
 
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
