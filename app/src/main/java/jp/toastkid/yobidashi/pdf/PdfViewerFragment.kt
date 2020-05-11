@@ -22,7 +22,6 @@ import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -124,7 +123,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
 
         })
 
-        (context as? FragmentActivity)?.let {
+        activity?.let {
             headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
         }
 
