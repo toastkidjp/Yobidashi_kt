@@ -211,10 +211,6 @@ class SearchFragment : Fragment() {
         return binding?.root
     }
 
-    fun clearInput() {
-        headerBinding?.searchInput?.setText("")
-    }
-
     private fun setQuery(query: String?) {
         headerBinding?.searchInput?.let { input ->
             input.setText(query)
@@ -432,7 +428,6 @@ class SearchFragment : Fragment() {
 
         headerBinding?.also {
             it.searchAction.setColorFilter(fontColor)
-            it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
     }
