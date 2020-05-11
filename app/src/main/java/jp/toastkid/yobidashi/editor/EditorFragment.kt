@@ -36,7 +36,6 @@ import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
@@ -201,8 +200,7 @@ class EditorFragment :
             }
         }
 
-        // TODO move to common initialization.
-        val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
+        val browserViewModel = activity?.let { fragmentActivity ->
             ViewModelProvider(fragmentActivity)
                     .get(BrowserViewModel::class.java)
         }
@@ -276,7 +274,7 @@ class EditorFragment :
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
-        (context as? FragmentActivity)?.let { activity ->
+        activity?.let { activity ->
             val viewModelProvider = ViewModelProvider(activity)
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
