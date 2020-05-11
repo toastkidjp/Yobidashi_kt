@@ -40,6 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginLeft="48dp"
+            android:layout_marginStart="48dp"
             android:layout_marginRight="60dp"
             android:layout_gravity="bottom"
             android:background="@color/white"
@@ -49,6 +51,8 @@
             android:id="@+id/search_categories"
             android:layout_width="@dimen/search_category_spinner_width"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_gravity="left|center_vertical"
             android:spinnerMode="dropdown"
             android:background="@color/spinner_background"
@@ -66,23 +70,18 @@
             app:srcCompat="@drawable/ic_close"
             android:onClick="@{view -> fragment.clearInput()}"
             />
-        <FrameLayout
-            android:id="@+id/search_action_background"
+
+        <ImageView
+            android:id="@+id/search_action"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
+            android:gravity="center"
+            app:srcCompat="@drawable/ic_mic"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ripple_appwidget"
             android:onClick="@{view -> fragment.invokeSearch()}"
-            >
-            <ImageView
-                android:id="@+id/search_action"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                app:srcCompat="@drawable/ic_mic"
-                android:adjustViewBounds="true"
-                android:background="@drawable/ripple_appwidget"
-                />
-        </FrameLayout>
+            />
 
     </FrameLayout>
 </layout>

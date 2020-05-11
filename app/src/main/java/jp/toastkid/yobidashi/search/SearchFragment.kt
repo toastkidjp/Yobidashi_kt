@@ -431,7 +431,6 @@ class SearchFragment : Fragment() {
         EditTextColorSetter().invoke(headerBinding?.searchInput, fontColor)
 
         headerBinding?.also {
-            it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
             it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
