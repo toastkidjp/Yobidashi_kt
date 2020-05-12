@@ -36,10 +36,15 @@ import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.search.SearchAction
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.FileOutputStream
 
@@ -66,6 +71,8 @@ class BarcodeReaderFragment : Fragment() {
      * For showing barcode reader result.
      */
     private lateinit var resultPopup: BarcodeReaderResultPopup
+
+    private var contentViewModel: ContentViewModel? = null
 
     /**
      * Required permission for this fragment(and function).
@@ -115,6 +122,8 @@ class BarcodeReaderFragment : Fragment() {
                     })
                 }
         resultPopup.setViewModel(viewModel)
+
+        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
         initializeFab()
         startDecode()
@@ -211,6 +220,20 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     private fun camera() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result =
+                    RuntimePermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    ?.receive()
+            if (result?.granted == true) {
+                invokeRequest()
+                return@launch
+            }
+
+            contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+        }
+    }
+
+    private fun invokeRequest() {
         val barcodeView = binding?.barcodeView ?: return
 
         barcodeView.barcodeView?.cameraInstance?.requestPreview(object : PreviewCallback {
@@ -227,11 +250,7 @@ class BarcodeReaderFragment : Fragment() {
                         FileOutputStream(output)
                 )
 
-                Toaster.snackShort(
-                        barcodeView,
-                        "Camera saved: ${output.absolutePath}",
-                        preferenceApplier.colorPair()
-                )
+                contentViewModel?.snackShort("Camera saved: ${output.absolutePath}")
             }
 
             private fun getRect(): Rect {
