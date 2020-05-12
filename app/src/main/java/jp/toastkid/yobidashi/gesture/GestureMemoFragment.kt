@@ -17,6 +17,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -37,7 +38,7 @@ class GestureMemoFragment : Fragment() {
     private val canvasStoreScenario = CanvasStoreScenario()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gesture_memo, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_gesture_memo, container, false)
         setHasOptionsMenu(true)
         return binding.root
@@ -135,5 +136,12 @@ class GestureMemoFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_gesture_memo
+
     }
 }
