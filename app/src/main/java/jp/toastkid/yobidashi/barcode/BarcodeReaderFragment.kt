@@ -107,20 +107,22 @@ class BarcodeReaderFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
         viewModel?.also {
-                    it.clip.observe(viewLifecycleOwner, Observer { text -> clip(text) })
-                    it.share.observe(viewLifecycleOwner, Observer { text ->
-                        startActivity(IntentFactory.makeShare(text))
-                        activity?.supportFragmentManager?.popBackStack()
-                    })
-                    it.open.observe(viewLifecycleOwner, Observer { text ->
-                        SearchAction(
-                                requireActivity,
-                                preferenceApplier.getDefaultSearchEngine(),
-                                text
-                        ).invoke()
-                        activity?.supportFragmentManager?.popBackStack()
-                    })
-                }
+            val viewLifecycleOwner = viewLifecycleOwner
+            it.clip.observe(viewLifecycleOwner, Observer { text -> clip(text) })
+            it.share.observe(viewLifecycleOwner, Observer { text ->
+                startActivity(IntentFactory.makeShare(text))
+                activity?.supportFragmentManager?.popBackStack()
+            })
+            it.open.observe(viewLifecycleOwner, Observer { text ->
+                SearchAction(
+                        requireActivity,
+                        preferenceApplier.getDefaultSearchEngine(),
+                        text
+                ).invoke()
+                activity?.supportFragmentManager?.popBackStack()
+            })
+        }
+
         resultPopup.setViewModel(viewModel)
 
         contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
