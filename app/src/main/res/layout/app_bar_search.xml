@@ -68,7 +68,7 @@
             android:adjustViewBounds="true"
             android:background="@drawable/ripple_appwidget"
             android:onClick="@{view -> fragment.invokeSearch()}"
-            />
+            android:contentDescription="@string/title_search_action" />
 
     </FrameLayout>
 </layout>
