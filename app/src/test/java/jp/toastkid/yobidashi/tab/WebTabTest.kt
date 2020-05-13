@@ -32,7 +32,6 @@ class WebTabTest {
     @Throws(IOException::class)
     private fun check_fromJson(tabJsonAdapter: JsonAdapter<WebTab>, json: String) {
         val fromJson = tabJsonAdapter.fromJson(json)
-        assertEquals("file://~~", fromJson?.thumbnailPath)
         assertEquals("Title", fromJson?.latest?.title())
         assertEquals("URL", fromJson?.latest?.url())
     }
@@ -52,7 +51,6 @@ class WebTabTest {
 
     private fun makeTestTab(): WebTab {
         val tab = WebTab()
-        tab.thumbnailPath = "file://~~"
         tab.addHistory(History.make("Title", "URL"))
         return tab
     }

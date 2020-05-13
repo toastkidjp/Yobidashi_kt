@@ -14,8 +14,8 @@ import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
+import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
 import java.util.*
@@ -97,7 +97,8 @@ class SuggestionModule(
         lastSubscription?.dispose()
 
         if (cache.containsKey(key)) {
-            lastSubscription = replace(cache[key]!!).addTo(disposables)
+            val cachedList = cache[key] ?: return
+            lastSubscription = replace(cachedList).addTo(disposables)
             return
         }
 

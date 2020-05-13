@@ -15,6 +15,7 @@
     <string name="search_category_instagram">Instagram</string>
     <string name="search_category_youtube">Video</string>
     <string name="search_category_wikipedia">Wikipedia</string>
+    <string name="search_category_internet_archive">Internet Archive</string>
     <string name="search_category_shopping">Shopping</string>
     <string name="search_category_stack_overflow">Stack Overflow</string>
     <string name="search_category_technology">TechCrunch</string>
@@ -128,6 +129,13 @@
         2. Background image\n
         3. Default search site\n
         4. Start-up activity\n
+        \n
+        \n
+        Resources\n
+        I have used icons which are owned by "Icon Rainbow (https://icon-rainbow.com/)".\n
+        \n
+        - インターネットでの検索アイコン 1: https://icon-rainbow.com/インターネットでの検索アイコン 1/\n
+        - サイト内検索のアイコン素材: https://icon-rainbow.com/サイト内検索のアイコン素材/\n
     </string>
     <string name="message_done_load_ad">It has done loading AD!</string>
     <string name="message_failed_ad_loading">It failed to load AD...</string>
@@ -468,5 +476,8 @@
     <string name="title_context_editor_add_minus">Add minus</string>
     <string name="title_context_editor_add_quote">Add quote</string>
     <string name="title_reset_camera_button_position">Reset camera position</string>
+    <string name="naver">NAVER</string>
+    <string name="daum">Daum</string>
+    <string name="title_search_suggestion">Search suggestion</string>
 
 </resources>

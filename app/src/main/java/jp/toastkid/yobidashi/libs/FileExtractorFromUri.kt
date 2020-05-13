@@ -78,11 +78,15 @@ object FileExtractorFromUri {
             selection: String?,
             selectionArgs: Array<String>?
     ): String? {
+        if (uri == null) {
+            return null
+        }
+
         var cursor: Cursor? = null
         val projection = arrayOf(MediaStore.Files.FileColumns.DATA)
         try {
             cursor = context.contentResolver.query(
-                    uri!!, projection, selection, selectionArgs, null)
+                    uri, projection, selection, selectionArgs, null)
             if (cursor != null && cursor.moveToFirst()) {
                 val columnIndex = cursor.getColumnIndexOrThrow(projection[0])
                 return cursor.getString(columnIndex)

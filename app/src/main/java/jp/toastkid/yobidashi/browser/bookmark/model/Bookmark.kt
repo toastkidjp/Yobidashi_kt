@@ -5,7 +5,10 @@ import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.search.url_suggestion.ViewHolder
 
 /**
  * Bookmark model.
@@ -13,7 +16,7 @@ import jp.toastkid.yobidashi.libs.storage.FilesDir
  * @author toastkidjp
  */
 @Entity(indices = [Index(value = ["parent", "folder"])])
-class Bookmark {
+class Bookmark : UrlItem {
 
     @PrimaryKey(autoGenerate = true)
     var _id: Long = 0
@@ -31,6 +34,18 @@ class Bookmark {
     var viewCount: Int = 0
 
     var lastViewed: Long = 0
+
+    override fun bind(holder: ViewHolder) {
+        holder.setTitle(title)
+        holder.setUrl(url)
+        if (favicon.isEmpty()) {
+            holder.setIconResource(R.drawable.ic_bookmark_black)
+            return
+        }
+        holder.setIconFromPath(favicon)
+    }
+
+    override fun urlString() = url
 
     override fun toString(): String {
         return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', parent='$parent', folder=$folder, viewCount=$viewCount, lastViewed=$lastViewed)"

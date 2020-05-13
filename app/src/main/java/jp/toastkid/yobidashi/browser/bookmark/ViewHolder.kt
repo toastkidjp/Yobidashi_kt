@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.DrawableRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -33,6 +34,7 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
      */
     fun setText(text: String, url: String) {
         binding.title.text = text
+        binding.url.isVisible = url.isNotBlank()
         binding.url.text = url
     }
 

@@ -42,7 +42,6 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
-import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
@@ -303,7 +302,7 @@ class MainActivity : AppCompatActivity(),
             replaceFragment(obtainFragment(it))
         })
         contentViewModel?.fragment?.observe(this, Observer {
-            replaceFragment(it, true, true)
+            replaceFragment(it, withAnimation = true, withSlideIn = true)
         })
         contentViewModel?.snackbar?.observe(this, Observer {
             Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
@@ -447,6 +446,9 @@ class MainActivity : AppCompatActivity(),
     private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
+            if (fragment is EditorFragment) {
+                fragment.reload()
+            }
             return
         }
 

@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi.databinding.ItemPlanningPokerBinding
 /**
  * @author toastkidjp
  */
-internal class CardViewHolder(private val binding: ItemPlanningPokerBinding)
+internal class ViewHolder(private val binding: ItemPlanningPokerBinding)
     : RecyclerView.ViewHolder(binding.root) {
 
     private var viewModel: CardListFragmentViewModel? = null
@@ -26,6 +26,7 @@ internal class CardViewHolder(private val binding: ItemPlanningPokerBinding)
             binding.cardText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 120f)
         }
 
+        // TODO use data-binding #536
         itemView.setOnClickListener {
             open()
         }

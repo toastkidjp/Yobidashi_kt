@@ -63,6 +63,8 @@ class MenuBinder(
         })
 
         initializeWithContext(fragmentActivity)
+
+        setFabPosition()
     }
 
     private fun initializeWithContext(context: Context) {

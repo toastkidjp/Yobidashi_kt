@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:background="@drawable/url_box_background"
+                android:onClick="@{view -> fragment.tapHeader()}"
                 >
 
                 <TextView

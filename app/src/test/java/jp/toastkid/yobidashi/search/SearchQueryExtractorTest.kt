@@ -48,5 +48,17 @@ class SearchQueryExtractorTest {
                 "kotlin",
                 searchQueryExtractor("https://www.quora.com/search?q=kotlin")
         )
+        assertEquals(
+                "train",
+                searchQueryExtractor("https://archive.org/search.php?query=train")
+        )
+        assertEquals(
+                "tomato",
+                searchQueryExtractor("https://search.naver.com/search.naver?ie=utf8&query=tomato")
+        )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://search.daum.net/search?w=tot&q=orange")
+        )
     }
 }

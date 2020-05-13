@@ -7,7 +7,11 @@
  */
 package jp.toastkid.yobidashi.browser.bookmark.model
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 /**
  * @author toastkidjp
@@ -21,8 +25,8 @@ interface BookmarkRepository {
     @Query("SELECT * FROM Bookmark WHERE parent = :folderName")
     fun findByParent(folderName: String): List<Bookmark>
 
-    @Query("SELECT * FROM Bookmark WHERE title LIKE :query")
-    fun search(query: String): List<Bookmark>
+    @Query("SELECT * FROM Bookmark WHERE title LIKE :query LIMIT :limit")
+    fun search(query: String, limit: Int): List<Bookmark>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(bookmark: Bookmark)

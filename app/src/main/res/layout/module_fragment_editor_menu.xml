@@ -5,6 +5,7 @@
     </data>
     <HorizontalScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/editor_menu"
         android:layout_width="match_parent"
@@ -81,7 +82,7 @@
                     android:padding="12dp"
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_tab"
+                    app:srcCompat="@drawable/ic_tab"
                     tools:tint="@color/colorPrimaryDark"
                     android:contentDescription="@string/tab_list"
                     />

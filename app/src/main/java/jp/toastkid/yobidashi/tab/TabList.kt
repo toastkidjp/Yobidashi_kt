@@ -175,20 +175,20 @@ class TabList private constructor() {
 
         internal fun loadOrInit(context: Context): TabList {
             initTabsFile(context)
-            if (tabsFile == null || !tabsFile!!.exists()) {
+            if (tabsFile == null || tabsFile?.exists() == false) {
                 return TabList()
             }
 
             try {
-                val fromJson: TabList? = Okio.buffer(Okio.source(tabsFile as File)).let {
+                val fromJson: TabList = Okio.buffer(Okio.source(tabsFile)).let {
                     val from: TabList? = jsonAdapter.fromJson(it)
                     it.close()
                     return@let from
-                }
+                } ?: TabList()
 
                 loadTabsFromDir()
-                        ?.forEach { it?.let { fromJson?.add(it) } }
-                if (fromJson?.size() as Int <= fromJson.index) {
+                        ?.forEach { it?.let { fromJson.add(it) } }
+                if (fromJson.size() <= fromJson.index) {
                     fromJson.index = fromJson.size() - 1
                 }
                 return fromJson

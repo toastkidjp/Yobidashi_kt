@@ -62,6 +62,7 @@ import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
+import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -297,8 +298,17 @@ class EditorFragment :
             }
         }
 
-        val path = arguments?.getString("path")
-        if (path == null) {
+        reload()
+    }
+
+    fun reload() {
+        Timber.i("reload")
+        if (arguments?.containsKey("path") == true) {
+            path = arguments?.getString("path") ?: ""
+            Timber.i("reset path to $path")
+        }
+
+        if (path.isEmpty()) {
             clearInput()
         } else {
             readFromFile(File(path))
@@ -567,6 +577,10 @@ class EditorFragment :
         val context = context ?: return
 
         FileExtractorFromUri(context, data)?.let {
+            if (TextUtils.equals(it, path)) {
+                return
+            }
+
             readFromFile(File(it))
         }
     }
@@ -580,10 +594,6 @@ class EditorFragment :
         if (!file.exists() || !file.canRead()) {
             snackText(R.string.message_cannot_read_file)
             clearPath()
-            return
-        }
-
-        if (TextUtils.equals(file.absolutePath, path)) {
             return
         }
 

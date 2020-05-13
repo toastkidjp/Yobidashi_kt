@@ -32,7 +32,11 @@ internal class ViewHolder(
      *
      * @param f background image file
      */
-    fun applyContent(f: File) {
+    fun applyContent(f: File?) {
+        if (f == null) {
+            return
+        }
+
         ImageLoader.setImageToImageView(this.binding.image, f.path)
         this.binding.text.text = f.name
         this.binding.remove.setOnClickListener { removeSetImage(f) }

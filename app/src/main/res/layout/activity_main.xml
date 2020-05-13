@@ -75,7 +75,6 @@
             android:layout_gravity="right|bottom"
             app:srcCompat="@drawable/ic_menu_cycle"
             app:backgroundTint="@color/soft_background"
-            android:background="@drawable/ripple_transparent"
             app:rippleColor="@color/aw_ripple"
             android:clickable="true"
             android:focusable="true"

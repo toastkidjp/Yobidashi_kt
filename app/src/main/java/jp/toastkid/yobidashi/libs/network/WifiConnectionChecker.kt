@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 
 /**
  * Wi-Fi connection checker.
- *
+ * TODO Rewrite new API
  * @author toastkidjp
  */
 object WifiConnectionChecker {
@@ -18,7 +18,8 @@ object WifiConnectionChecker {
      */
     fun isNotConnecting(context: Context): Boolean {
         val cm = context.applicationContext
-                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
+
         return when (cm?.activeNetworkInfo?.type) {
             ConnectivityManager.TYPE_WIFI -> false
             ConnectivityManager.TYPE_WIMAX -> false

@@ -31,10 +31,6 @@ enum class Menu(
 
     BOOKMARK(R.string.title_bookmark, R.drawable.ic_bookmark),
 
-    VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
-
-    WEB_SEARCH(R.string.title_search, R.drawable.ic_search_white),
-
     RANDOM_WIKIPEDIA(R.string.menu_random_wikipedia, R.drawable.ic_wikipedia_white),
 
     WHAT_HAPPENED_TODAY(R.string.menu_what_happened_today, R.drawable.ic_what_happened_today),
@@ -58,6 +54,10 @@ enum class Menu(
     OVERLAY_COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
 
     MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),
+
+    VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
+
+    WEB_SEARCH(R.string.title_search, R.drawable.ic_web_search),
     ;
 
 }

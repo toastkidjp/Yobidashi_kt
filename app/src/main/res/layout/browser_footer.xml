@@ -2,6 +2,7 @@
 <layout>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -13,39 +14,39 @@
         <ImageView
             android:id="@+id/back"
             style="@style/FooterButton"
-            android:src="@drawable/ic_back"
+            app:srcCompat="@drawable/ic_back"
             android:contentDescription="@string/title_menu_back"
             />
         <ImageView
             android:id="@+id/forward"
             style="@style/FooterButton"
-            android:src="@drawable/ic_forward"
+            app:srcCompat="@drawable/ic_forward"
             android:contentDescription="@string/title_menu_forward"
             />
         <ImageView
             android:id="@+id/bookmark"
             style="@style/FooterButton"
-            android:src="@drawable/ic_bookmark"
+            app:srcCompat="@drawable/ic_bookmark"
             android:contentDescription="@string/title_bookmark"
             />
         <ImageView
             android:id="@+id/search"
             style="@style/FooterButton"
-            android:src="@drawable/ic_search_white"
+            app:srcCompat="@drawable/ic_search_white"
             android:contentDescription="@string/search"
             />
 
         <ImageView
             android:id="@+id/to_top"
             style="@style/FooterButton"
-            android:src="@drawable/ic_top"
+            app:srcCompat="@drawable/ic_top"
             android:contentDescription="@string/title_menu_to_top"
             />
 
         <ImageView
             android:id="@+id/to_bottom"
             style="@style/FooterButton"
-            android:src="@drawable/ic_bottom"
+            app:srcCompat="@drawable/ic_bottom"
             android:contentDescription="@string/title_menu_to_bottom"
             />
         <FrameLayout
@@ -58,7 +59,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_tab"
+                app:srcCompat="@drawable/ic_tab"
                 android:contentDescription="@string/tab_list"
                 />
             <TextView

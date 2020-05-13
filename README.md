@@ -50,3 +50,9 @@ This software contains following open source softwares. Thanks a lot. :bow:
 
 | Name | License | Comment |
 |:---|:---|:---|
+
+## Resources
+I have used icons which are owned by "[Icon Rainbow](https://icon-rainbow.com/)".
+
+- [インターネットでの検索アイコン 1](https://icon-rainbow.com/インターネットでの検索アイコン 1/)
+- [サイト内検索のアイコン素材](https://icon-rainbow.com/サイト内検索のアイコン素材/)

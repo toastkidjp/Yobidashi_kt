@@ -51,7 +51,7 @@ class CardListFragment : Fragment() {
                             val fromPos = viewHolder.adapterPosition
                             val toPos = target.adapterPosition
                             it.adapter?.notifyItemMoved(fromPos, toPos)
-                            (viewHolder as CardViewHolder).open()
+                            (viewHolder as ViewHolder).open()
                             return true
                         }
 
@@ -59,7 +59,7 @@ class CardListFragment : Fragment() {
                                 viewHolder: RecyclerView.ViewHolder,
                                 direction: Int
                         ) {
-                            (viewHolder as CardViewHolder).open()
+                            (viewHolder as ViewHolder).open()
                         }
                     }).attachToRecyclerView(it)
             LinearSnapHelper().attachToRecyclerView(it)

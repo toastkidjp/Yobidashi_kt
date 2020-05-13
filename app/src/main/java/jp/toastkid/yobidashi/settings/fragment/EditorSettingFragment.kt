@@ -93,11 +93,9 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
             }
             editorModule.fragment = this
 
-            ColorPair(backgroundColor, fontColor)
-                    .setTo(binding.ok as TextView)
+            ColorPair(backgroundColor, fontColor).setTo(binding.ok)
 
-            ColorPair(initialBgColor, initialFontColor)
-                    .setTo(binding.prev as TextView)
+            ColorPair(initialBgColor, initialFontColor).setTo(binding.prev)
 
             editorModule.fontSize.adapter = object : BaseAdapter() {
                 override fun getCount(): Int = EditorFontSize.values().size

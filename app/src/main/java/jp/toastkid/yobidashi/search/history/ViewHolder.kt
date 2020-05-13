@@ -20,7 +20,7 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     private val buttonMargin = binding.root.context.resources
             .getDimensionPixelSize(R.dimen.button_margin)
 
-    fun setText(text: String) {
+    fun setText(text: String?) {
         binding.searchHistoryText.text = text
     }
 

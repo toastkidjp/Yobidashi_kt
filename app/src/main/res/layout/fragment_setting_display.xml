@@ -63,7 +63,7 @@
                 android:layout_marginEnd="@dimen/fab_margin"
                 app:backgroundTint="@color/colorPrimaryDark"
                 app:rippleColor="@color/aw_ripple"
-                android:src="@drawable/ic_add_white"
+                app:srcCompat="@drawable/ic_add_white"
                 android:onClick="@{view -> fragment.launchAdding()}"
                 />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

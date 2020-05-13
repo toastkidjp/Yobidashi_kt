@@ -33,9 +33,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
@@ -64,6 +66,7 @@ import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * @author toastkidjp
@@ -121,6 +124,11 @@ class SearchFragment : Fragment() {
     private var currentUrl: String? = null
 
     /**
+     * Use for handling input action.
+     */
+    private val inputSubject = PublishSubject.create<String>()
+
+    /**
      * Disposables.
      */
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -130,11 +138,9 @@ class SearchFragment : Fragment() {
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding?.activity = this
 
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_header_search, container, false)
-        // TODO use data binding.
-        headerBinding?.searchClear?.setOnClickListener { headerBinding?.searchInput?.setText("") }
+        headerBinding?.fragment = this
         headerBinding?.searchCategories?.let {
             it.adapter = SearchCategoryAdapter(context)
             val index = SearchCategory.findIndex(
@@ -200,6 +206,10 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    fun clearInput() {
+        headerBinding?.searchInput?.setText("")
     }
 
     private fun setQuery() {
@@ -329,41 +339,58 @@ class SearchFragment : Fragment() {
             }
             it.addTextChangedListener(object : TextWatcher {
 
+                private var previous = ""
+
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-                    val key = s.toString()
-
-                    (if (key.isEmpty()|| key == currentUrl) urlModule?.switch(currentTitle, currentUrl)
-                    else urlModule?.hide())
-                            ?.addTo(disposables)
-
-                    setActionButtonState(key.isEmpty())
-
-                    if (preferenceApplier.isEnableSearchHistory) {
-                        historyModule?.query(s)
-                    }
-                    favoriteModule?.query(s)
-                    urlSuggestionModule?.query(s)
-
-                    if (preferenceApplier.isEnableAppSearch()) {
-                        appModule?.request(key)
-                    } else {
-                        appModule?.hide()
-                    }
-
-                    if (preferenceApplier.isDisableSuggestion) {
-                        suggestionModule?.clear()
+                    val newQuery = s.toString()
+                    if (newQuery == previous) {
                         return
                     }
-
-                    suggestionModule?.request(key)
+                    previous = newQuery
+                    inputSubject.onNext(newQuery)
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
             })
+
+            inputSubject.distinctUntilChanged()
+                    .debounce(800L, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { suggest(it) }//TODO error case
+                    .addTo(disposables)
         }
+    }
+
+    private fun suggest(key: String) {
+        if (key.isEmpty()|| key == currentUrl) {
+            urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
+        } else {
+            urlModule?.hide()?.addTo(disposables)
+        }
+
+        setActionButtonState(key.isEmpty())
+
+        if (preferenceApplier.isEnableSearchHistory) {
+            historyModule?.query(key)
+        }
+
+        favoriteModule?.query(key)
+        urlSuggestionModule?.query(key)
+
+        if (preferenceApplier.isEnableAppSearch()) {
+            appModule?.request(key)
+        } else {
+            appModule?.hide()
+        }
+
+        if (preferenceApplier.isDisableSuggestion) {
+            suggestionModule?.clear()
+            return
+        }
+
+        suggestionModule?.request(key)
     }
 
     /**
@@ -389,24 +416,25 @@ class SearchFragment : Fragment() {
         headerBinding?.also {
             it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchAction.setOnClickListener {
-                if (useVoice) {
-                    try {
-                        startActivityForResult(VoiceSearch.makeIntent(requireContext()), VoiceSearch.REQUEST_CODE)
-                    } catch (e: ActivityNotFoundException) {
-                        Timber.e(e)
-                        VoiceSearch.suggestInstallGoogleApp(binding?.root as View, colorPair)
-                    }
-                    return@setOnClickListener
-                }
-                search(
-                        headerBinding?.searchCategories?.selectedItem.toString(),
-                        headerBinding?.searchInput?.text.toString()
-                )
-            }
             it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
+    }
+
+    fun invokeSearch() {
+        if (useVoice) {
+            try {
+                startActivityForResult(VoiceSearch.makeIntent(requireContext()), VoiceSearch.REQUEST_CODE)
+            } catch (e: ActivityNotFoundException) {
+                Timber.e(e)
+                VoiceSearch.suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
+            }
+            return
+        }
+        search(
+                headerBinding?.searchCategories?.selectedItem.toString(),
+                headerBinding?.searchInput?.text.toString()
+        )
     }
 
     /**
@@ -455,15 +483,24 @@ class SearchFragment : Fragment() {
 
         when (requestCode) {
             VoiceSearch.REQUEST_CODE -> {
-                suggestionModule?.run {
-                    show()
-                    val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    if (result?.size == 0) {
-                        return
-                    }
-                    clear()
-                    addAll(result ?: emptyList())
+                val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if (result == null || result.size == 0) {
+                    return
                 }
+                suggestionModule?.clear()
+                suggestionModule?.addAll(result)
+                suggestionModule?.show()
+
+                Completable.timer(200L, TimeUnit.MILLISECONDS, Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                {
+                                    val top = binding?.suggestionModule?.root?.top ?: 0
+                                    binding?.scroll?.smoothScrollTo(0, top)
+                                },
+                                Timber::e
+                        )
+                        .addTo(disposables)
             }
         }
     }

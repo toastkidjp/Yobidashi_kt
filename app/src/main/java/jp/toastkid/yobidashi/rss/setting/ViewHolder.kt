@@ -50,9 +50,10 @@ class ViewHolder(private val binding: ItemRssSettingBinding)
     override fun getFrontView() = binding.front
 
     private fun updateRightMargin(margin: Int) {
-        val marginLayoutParams = binding.front.layoutParams as ViewGroup.MarginLayoutParams
-        marginLayoutParams.rightMargin = margin
+        val marginLayoutParams =
+                binding.front.layoutParams as? ViewGroup.MarginLayoutParams
+        marginLayoutParams?.rightMargin = margin
         binding.front.layoutParams = marginLayoutParams
-        marginLayoutParams.updateMargins()
+        marginLayoutParams?.updateMargins()
     }
 }

@@ -2,6 +2,7 @@
 <layout>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="40dp"
                 android:layout_gravity="right|center_vertical"
-                android:src="@drawable/ic_favorite_gray"
+                app:srcCompat="@drawable/ic_favorite_gray"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
                 />
@@ -66,7 +67,7 @@
                 android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
-                android:src="@drawable/ic_add_circle_search"
+                app:srcCompat="@drawable/ic_add_circle_search"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
                 />

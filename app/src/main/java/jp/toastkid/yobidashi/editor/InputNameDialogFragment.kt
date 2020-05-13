@@ -86,7 +86,7 @@ class InputNameDialogFragment : DialogFragment() {
     }
 
     private fun saveAndClose(inputLayout: TextInputLayout, d: DialogInterface) {
-        if (inputLayout.editText?.text?.isEmpty() as Boolean) {
+        if (inputLayout.editText?.text?.isEmpty() == true) {
             d.dismiss()
             return
         }
@@ -110,7 +110,7 @@ class InputNameDialogFragment : DialogFragment() {
         /**
          * Show dialog.
          *
-         * @param context [Context]
+         * @param target [Fragment]
          */
         fun show(target: Fragment) {
             val dialogFragment = InputNameDialogFragment()

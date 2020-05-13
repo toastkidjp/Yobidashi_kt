@@ -2,6 +2,7 @@
 <layout>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
@@ -15,7 +16,7 @@
             android:layout_marginLeft="@dimen/search_horizontal_margin"
             android:adjustViewBounds="true"
             android:layout_gravity="left"
-            android:src="@drawable/ic_archive"
+            app:srcCompat="@drawable/ic_archive"
             />
         <LinearLayout
             android:orientation="vertical"
@@ -56,7 +57,7 @@
             android:layout_marginRight="@dimen/common_horizontal_margin"
             android:adjustViewBounds="true"
             android:layout_gravity="right"
-            android:src="@drawable/ic_remove_circle_white"
+            app:srcCompat="@drawable/ic_remove_circle_white"
             />
         <View
             android:layout_width="match_parent"

@@ -36,7 +36,6 @@ class TabListTest {
         val tab = WebTab()
         tab.addHistory(History.make("title", "url"))
         tab.addHistory(History.make("title2", "url2"))
-        tab.thumbnailPath = "thumbnailPath"
         return tab
     }
 }
