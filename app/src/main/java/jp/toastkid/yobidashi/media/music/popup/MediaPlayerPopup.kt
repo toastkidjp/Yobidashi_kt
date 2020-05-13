@@ -327,7 +327,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun initializeViewModels() {
         val viewModelProvider = (attemptExtractActivity() as? FragmentActivity)
-                ?.let { owner -> ViewModelProvider(owner) }
+                ?.let { ViewModelProvider(it) }
         browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
         mediaPlayerPopupViewModel = viewModelProvider?.get(MediaPlayerPopupViewModel::class.java)
     }
