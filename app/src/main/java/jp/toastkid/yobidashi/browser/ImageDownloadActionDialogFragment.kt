@@ -15,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
@@ -75,18 +76,8 @@ class ImageDownloadActionDialogFragment : DialogFragment() {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
-        val client = HttpClientFactory.make()
-        client.newCall(Request.Builder().url(url).build()).enqueue(object : okhttp3.Callback {
-            override fun onFailure(call: Call?, e: IOException?) {
-                Timber.e(e)
-            }
 
-            override fun onResponse(call: Call?, response: Response?) {
-                uiThreadHandler.post {
-                    imageView.setImageBitmap(BitmapFactory.decodeStream(response?.body()?.byteStream()))
-                }
-            }
-        })
+        Glide.with(imageView).load(url).override(400).into(imageView)
     }
 
     companion object {
