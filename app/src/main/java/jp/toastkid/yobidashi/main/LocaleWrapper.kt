@@ -21,10 +21,7 @@ object LocaleWrapper {
         }
 
         val locales = configuration.locales
-        if (locales.isEmpty) {
-            return Locale.getDefault().language
-        }
-        return locales.get(0).language
+        return if (locales.isEmpty) Locale.getDefault().language else locales.get(0).language
     }
 
 }
