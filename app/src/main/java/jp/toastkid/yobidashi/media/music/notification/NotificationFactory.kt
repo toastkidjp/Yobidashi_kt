@@ -85,8 +85,8 @@ class NotificationFactory(
                     CHANNEL_ID,
                     context.getString(R.string.title_audio_player),
                     NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = context.getString(R.string.title_audio_player)
+            ).also {
+                it.description = context.getString(R.string.title_audio_player)
             }
             manager?.createNotificationChannel(channel)
         }
