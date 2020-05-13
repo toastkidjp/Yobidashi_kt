@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.editor
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -71,7 +70,7 @@ class InputNameDialogFragment : DialogFragment() {
                 .create()
 
         dialog.setOnShowListener {
-            (activity as? Activity)?.let { activity ->
+            activity?.let { activity ->
                 input.setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_GO) {
                         saveAndClose(input, dialog)
