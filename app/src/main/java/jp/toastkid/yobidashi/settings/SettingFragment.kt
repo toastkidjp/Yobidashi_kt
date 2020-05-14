@@ -34,8 +34,13 @@ class SettingFragment : Fragment() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        val context = context
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(context)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
