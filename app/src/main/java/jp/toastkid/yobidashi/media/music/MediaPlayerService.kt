@@ -158,7 +158,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         }
 
         private fun setNewState(@PlaybackStateCompat.State newState: Int) {
-            Timber.i("MediaPlayerPopup setState ${newState}")
             mediaState = newState
             stateBuilder = PlaybackStateCompat.Builder()
             stateBuilder
