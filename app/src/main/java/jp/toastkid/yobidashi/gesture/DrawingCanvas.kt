@@ -26,37 +26,48 @@ class DrawingCanvas
     ) : View(context, attributeSet, defStyleAttr) {
 
     var isTouchEventListenerEnabled = true
+
     private var isInScale = false
+
     private val pointerIdToPathMap = mutableMapOf<Int, Path>()
+
     private val finishedPointerPaths = mutableListOf<Path>()
+
     private val paint = Paint().apply {
         strokeWidth = 3.toFloat()
         style = Paint.Style.STROKE
     }
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onDoubleTap(e: MotionEvent?): Boolean {
-            return true
-        }
-    })
 
-    private val scaleGestureDetector = ScaleGestureDetector(context, object : ScaleGestureDetector.OnScaleGestureListener {
-        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
-            isInScale = true
-            return true
-        }
-
-        override fun onScaleEnd(detector: ScaleGestureDetector?) {
-            isInScale = false
-        }
-
-        override fun onScale(detector: ScaleGestureDetector?): Boolean {
-            detector?.let {
-                scaleX *= detector.scaleFactor
-                scaleY *= detector.scaleFactor
+    private val gestureDetector = GestureDetector(
+            context,
+            object : GestureDetector.SimpleOnGestureListener() {
+                override fun onDoubleTap(e: MotionEvent?): Boolean {
+                    return true
+                }
             }
-            return true
-        }
-    })
+    )
+
+    private val scaleGestureDetector = ScaleGestureDetector(
+            context,
+            object : ScaleGestureDetector.OnScaleGestureListener {
+                override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+                    isInScale = true
+                    return true
+                }
+
+                override fun onScaleEnd(detector: ScaleGestureDetector?) {
+                    isInScale = false
+                }
+
+                override fun onScale(detector: ScaleGestureDetector?): Boolean {
+                    detector?.let {
+                        scaleX *= detector.scaleFactor
+                        scaleY *= detector.scaleFactor
+                    }
+                    return true
+                }
+            }
+    )
 
     override fun onDraw(canvas: Canvas?) {
         pointerIdToPathMap.forEach { (_, path) ->
