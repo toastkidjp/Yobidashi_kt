@@ -76,7 +76,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
         val builder = AlertDialog.Builder(activityContext)
                 .setTitle(title)
                 .setView(contentView)
-                .setNeutralButton("Clip URL") { d, _ -> clipUrl(d) }
+                .setNeutralButton(R.string.button_clip_url) { d, _ -> clipUrl(d) }
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
         if (favicon != null) {
             builder.setIcon(BitmapDrawable(activityContext.resources, favicon))
