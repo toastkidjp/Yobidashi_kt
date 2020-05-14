@@ -21,12 +21,12 @@ object IntentFactory {
      * @return Intent
      */
     fun makeShare(message: String, subject: String? = null): Intent {
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, message)
+        val intent = Intent().also {
+            it.action = Intent.ACTION_SEND
+            it.type = "text/plain"
+            it.putExtra(Intent.EXTRA_TEXT, message)
             subject?.also { subject ->
-                putExtra(Intent.EXTRA_SUBJECT, subject);
+                it.putExtra(Intent.EXTRA_SUBJECT, subject);
             }
         }
         return Intent.createChooser(intent, "Select app for share")
