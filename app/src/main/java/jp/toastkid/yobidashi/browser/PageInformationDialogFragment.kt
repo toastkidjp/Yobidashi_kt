@@ -71,7 +71,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             val bitmap = withContext(Dispatchers.IO) { encodeBitmap() }
-            setBitmap(bitmap, imageView, contentView)
+            setBitmap(bitmap, imageView, contentView.findViewById<View>(R.id.share)) // TODO remove class
         }
 
         val builder = AlertDialog.Builder(activityContext)
@@ -88,11 +88,11 @@ internal class PageInformationDialogFragment: DialogFragment() {
     private fun encodeBitmap() = BarcodeEncoder()
             .encodeBitmap(url, BarcodeFormat.QR_CODE, BARCODE_SIZE, BARCODE_SIZE)
 
-    private fun setBitmap(bitmap: Bitmap, imageView: ImageView, contentView: View) {
+    private fun setBitmap(bitmap: Bitmap, imageView: ImageView, shareView: View?) {
         val context = imageView.context ?: return
         imageView.setImageBitmap(bitmap)
         imageView.visibility = View.VISIBLE
-        contentView.findViewById<View>(R.id.share).setOnClickListener {
+        shareView?.setOnClickListener {
             val uri = FileProvider.getUriForFile(
                     context,
                      "${BuildConfig.APPLICATION_ID}.fileprovider",
