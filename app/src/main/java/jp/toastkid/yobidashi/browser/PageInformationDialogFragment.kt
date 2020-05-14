@@ -64,7 +64,6 @@ internal class PageInformationDialogFragment: DialogFragment() {
         val contentView = LayoutInflater.from(activityContext)
                 .inflate(R.layout.content_dialog_share_barcode, null)
 
-        contentView.findViewById<TextView>(R.id.title).text = "Title: $title"
         contentView.findViewById<TextView>(R.id.url).text = "URL: $url"
 
         val imageView = contentView.findViewById<ImageView>(R.id.barcode)
@@ -75,7 +74,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
         }
 
         val builder = AlertDialog.Builder(activityContext)
-                .setTitle(R.string.title_menu_page_information)
+                .setTitle(title)
                 .setView(contentView)
                 .setNeutralButton("Clip URL") { d, _ -> clipUrl(d) }
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
