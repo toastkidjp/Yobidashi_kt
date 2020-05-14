@@ -779,9 +779,7 @@ class MainActivity : AppCompatActivity(),
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
-        menuInflater.also {
-            it.inflate(R.menu.main_fab_menu, menu)
-        }
+        menuInflater.inflate(R.menu.main_fab_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
