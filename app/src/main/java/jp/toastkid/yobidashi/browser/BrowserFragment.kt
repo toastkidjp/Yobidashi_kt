@@ -267,10 +267,8 @@ class BrowserFragment : Fragment(),
         browserModule.invokeContentExtraction(ValueCallback(this::showReaderFragment))
     }
 
-    // TODO should implement view model.
     fun tabList() {
-        val mainActivity = activity as? MainActivity
-        mainActivity?.switchTabList()
+        contentViewModel?.switchTabList()
     }
 
     private fun updateForwardButtonState(enable: Boolean) {

@@ -319,6 +319,9 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.switchPageSearcher?.observe(this, Observer {
             pageSearchPresenter.switch()
         })
+        contentViewModel?.switchTabList?.observe(this, Observer {
+            switchTabList()
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
