@@ -66,12 +66,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
         contentView.findViewById<TextView>(R.id.url).text = "URL: $url"
 
-        val imageView = contentView.findViewById<ImageView>(R.id.barcode)
-
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val bitmap = withContext(Dispatchers.IO) { encodeBitmap() }
-            setBitmap(bitmap, imageView, contentView.findViewById<View>(R.id.share)) // TODO remove class
-        }
+        setUpBarcode(contentView)
 
         val builder = AlertDialog.Builder(activityContext)
                 .setTitle(title)
@@ -84,14 +79,23 @@ internal class PageInformationDialogFragment: DialogFragment() {
         return builder.create()
     }
 
-    private fun encodeBitmap() = BarcodeEncoder()
-            .encodeBitmap(url, BarcodeFormat.QR_CODE, BARCODE_SIZE, BARCODE_SIZE)
+    private fun setUpBarcode(contentView: View) {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val imageView = contentView.findViewById<ImageView>(R.id.barcode)
+            val bitmap = withContext(Dispatchers.IO) {
+                BarcodeEncoder()
+                        .encodeBitmap(url, BarcodeFormat.QR_CODE, BARCODE_SIZE, BARCODE_SIZE)
+            }
+            imageView.setImageBitmap(bitmap)
+            imageView.visibility = View.VISIBLE
+            setShareAction(bitmap, contentView.findViewById<View>(R.id.share)) // TODO remove class
+        }
+    }
 
-    private fun setBitmap(bitmap: Bitmap, imageView: ImageView, shareView: View?) {
-        val context = imageView.context ?: return
-        imageView.setImageBitmap(bitmap)
-        imageView.visibility = View.VISIBLE
-        shareView?.setOnClickListener {
+    private fun setShareAction(bitmap: Bitmap, shareView: View?) {
+        val context = shareView?.context ?: return
+
+        shareView.setOnClickListener {
             val uri = FileProvider.getUriForFile(
                     context,
                      "${BuildConfig.APPLICATION_ID}.fileprovider",
