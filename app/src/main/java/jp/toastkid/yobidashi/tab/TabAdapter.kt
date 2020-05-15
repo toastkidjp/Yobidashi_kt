@@ -243,13 +243,6 @@ class TabAdapter(
 
     fun swap(from: Int, to: Int) = tabList.swap(from, to)
 
-    /**
-     * It's simple delegation.
-     */
-    fun loadBackgroundTabsFromDirIfNeed() {
-        tabList.loadBackgroundTabsFromDirIfNeed()
-    }
-
     fun updateWebTab(idAndHistory: Pair<String, History>?) {
         val id = idAndHistory?.first
         if (currentTabId() != id) {

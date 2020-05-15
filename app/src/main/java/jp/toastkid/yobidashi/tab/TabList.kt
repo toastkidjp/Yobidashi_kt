@@ -237,16 +237,6 @@ class TabList private constructor() {
 
     override fun toString(): String = tabs.toString()
 
-    /**
-     * Load background tab from file if needs.
-     */
-    fun loadBackgroundTabsFromDirIfNeed() {
-        BackgroundTabQueue.iterate {
-            tabs.add(WebTab.makeBackground(it.first, it.second.toString()))
-        }
-        save()
-    }
-
     fun updateWithIdAndHistory(idAndHistory: Pair<String, History>) {
         val targetId = idAndHistory.first
         for (i in 0 until tabs.size) {

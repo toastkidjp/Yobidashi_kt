@@ -1,45 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        app:cardElevation="4dp"
         android:minHeight="@dimen/search_item_height"
         android:foreground="@drawable/ripple_transparent"
         >
         <TextView
             android:id="@+id/search_suggest_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="40dp"
-            android:paddingStart="40dp"
-            android:paddingRight="48dp"
-            android:paddingEnd="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="44dp"
+            android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            tools:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajyaaaaaaaaa"
+            tools:text="orange"
             android:textColor="@color/black"
             android:textSize="16sp"
             />
-        <ImageView
-            android:id="@+id/search_suggest_image"
-            android:layout_width="24dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/search_horizontal_margin"
-            android:layout_marginStart="@dimen/search_horizontal_margin"
-            android:adjustViewBounds="true"
-            app:srcCompat="@drawable/ic_search_black"
-            android:contentDescription="@string/image"
-            />
         <TextView
             android:id="@+id/search_suggest_add"
-            android:layout_width="40dp"
+            android:layout_width="36dp"
             android:layout_height="32dp"
-            android:layout_marginRight="@dimen/search_horizontal_margin"
-            android:layout_marginEnd="@dimen/search_horizontal_margin"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_gravity="end|center_vertical"
             android:gravity="center"
             android:text="@string/plus"
@@ -48,14 +40,5 @@
             android:background="@color/search_add_background"
             tools:ignore="SpUsage"
             />
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp"
-            android:background="@color/search_divider"
-            />
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

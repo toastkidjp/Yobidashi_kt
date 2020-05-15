@@ -46,8 +46,8 @@ class PlaybackSpeedAdapter(
             return view
         }
 
-        val viewHolder = convertView.tag as ViewHolder
-        viewHolder.bind(playingSpeed, colorPair)
+        val viewHolder = convertView.tag as? ViewHolder?
+        viewHolder?.bind(playingSpeed, colorPair)
         return convertView
     }
 

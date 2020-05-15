@@ -146,7 +146,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         binding.fontPalette.color = fontColor
 
         val colorPair = ColorPair(backgroundColor, fontColor)
-        colorPair.setTo(binding.ok as TextView)
+        colorPair.setTo(binding.ok)
         Toaster.snackShort(binding.root, R.string.settings_color_done_commit, colorPair)
     }
 
@@ -160,7 +160,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
         binding.backgroundPalette.color = initialBgColor
         binding.fontPalette.color = initialFontColor
 
-        ColorPair(initialBgColor, initialFontColor).setTo(binding.ok as TextView)
+        ColorPair(initialBgColor, initialFontColor).setTo(binding.ok)
 
         Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
     }

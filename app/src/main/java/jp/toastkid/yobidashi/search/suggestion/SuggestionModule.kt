@@ -3,7 +3,11 @@ package jp.toastkid.yobidashi.search.suggestion
 import android.view.LayoutInflater
 import android.widget.EditText
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.flexbox.AlignItems
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -73,7 +77,13 @@ class SuggestionModule(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        binding.searchSuggestions.layoutManager = LinearLayoutManager(binding.root.context)
+        val layoutManager = FlexboxLayoutManager(binding.root.context)
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.flexWrap = FlexWrap.WRAP
+        layoutManager.justifyContent = JustifyContent.FLEX_START
+        layoutManager.alignItems = AlignItems.STRETCH
+
+        binding.searchSuggestions.layoutManager = layoutManager
         binding.searchSuggestions.adapter = adapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
             onClick()

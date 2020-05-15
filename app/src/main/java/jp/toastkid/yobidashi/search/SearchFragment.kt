@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.search
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -355,12 +354,19 @@ class SearchFragment : Fragment() {
                 override fun afterTextChanged(s: Editable) = Unit
             })
 
-            inputSubject.distinctUntilChanged()
-                    .debounce(800L, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { suggest(it) }//TODO error case
-                    .addTo(disposables)
+            invokeSuggestion()
         }
+    }
+
+    private fun invokeSuggestion() {
+        inputSubject.distinctUntilChanged()
+                .debounce(500L, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { suggest(it) },
+                        Timber::e
+                )
+                .addTo(disposables)
     }
 
     private fun suggest(key: String) {
@@ -455,20 +461,15 @@ class SearchFragment : Fragment() {
             )
             return
         }
+
         SearchAction(context, category, query, currentUrl, onBackground)
                 .invoke()
                 .addTo(disposables)
-        if (onBackground) {
-            Toaster.snackShort(
-                    binding?.root as View,
-                    getString(R.string.message_background_search, query),
-                    preferenceApplier.colorPair()
-            )
-        }
     }
 
     /**
      * Hide software keyboard.
+     * TODO should deactivate
      */
     private fun hideKeyboard() {
         headerBinding?.searchInput?.let { Inputs.hideKeyboard(it) }
@@ -546,10 +547,8 @@ class SearchFragment : Fragment() {
 
         /**
          * Make launch [Intent].
-         *
-         * @param context [Context]
          */
-        fun makeWith(context: Context, title: String? = null, url: String? = null) =
+        fun makeWith(title: String? = null, url: String? = null) =
                 SearchFragment()
                         .also { fragment ->
                             fragment.arguments = Bundle().also { bundle ->
@@ -565,13 +564,12 @@ class SearchFragment : Fragment() {
         /**
          * Make launcher [Intent] with query.
          *
-         * @param context [Context]
          * @param query Query
          * @param title Title
          * @param url URL
          */
-        fun makeWithQuery(context: Context, query: String, title: String?, url: String? = null) =
-                makeWith(context, title, url).also { fragment ->
+        fun makeWithQuery(query: String, title: String?, url: String? = null) =
+                makeWith(title, url).also { fragment ->
                     fragment.arguments?.putString(EXTRA_KEY_QUERY, query)
                 }
 

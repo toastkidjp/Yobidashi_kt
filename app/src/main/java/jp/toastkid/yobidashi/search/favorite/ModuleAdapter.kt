@@ -12,7 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.search.BackgroundSearchAction
+import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 import java.util.*
@@ -69,7 +69,13 @@ internal class ModuleAdapter(
 
         holder.setImageRes(SearchCategory.findByCategory(favorite.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
-            BackgroundSearchAction(v, favorite.category, favorite.query).invoke()
+            SearchAction(
+                    v.context,
+                    favorite.category ?: "",
+                    favorite.query ?: "",
+                    onBackground = true,
+                    saveHistory = true
+            ).invoke()
             true
         }
         holder.switchDividerVisibility(position != (itemCount - 1))

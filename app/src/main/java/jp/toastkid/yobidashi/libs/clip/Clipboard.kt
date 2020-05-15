@@ -49,6 +49,6 @@ object Clipboard {
      * @param context
      */
     private fun clipboardManager(context: Context): ClipboardManager? =
-            context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+            context.applicationContext.getSystemService(CLIPBOARD_SERVICE) as? ClipboardManager?
 
 }

@@ -101,10 +101,10 @@ class CustomViewSwitcher(
         customViewCallback = callback
         customView = view
 
-        val decorView = activity.window.decorView as FrameLayout
-        decorView.addView(customViewContainer, customViewParams)
+        val decorView = activity.window.decorView as? FrameLayout
+        decorView?.addView(customViewContainer, customViewParams)
         customViewContainer?.addView(customView, customViewParams)
-        decorView.requestLayout()
+        decorView?.requestLayout()
 
         currentWebViewSupplier()?.visibility = View.INVISIBLE
     }

@@ -595,8 +595,6 @@ class MainActivity : AppCompatActivity(),
         refresh()
         menuViewModel?.onResume()
 
-        tabs.loadBackgroundTabsFromDirIfNeed()
-
         tabs.setCount()
 
         ClippingUrlOpener(binding.root) { browserViewModel?.open(it) }

@@ -14,7 +14,7 @@ import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
-import jp.toastkid.yobidashi.search.BackgroundSearchAction
+import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
 import timber.log.Timber
 import java.util.*
@@ -76,7 +76,13 @@ internal class ModuleAdapter(
 
         holder.setImageRes(SearchCategory.findByCategory(searchHistory.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
-            BackgroundSearchAction(v, searchHistory.category, searchHistory.query).invoke()
+            SearchAction(
+                    v.context,
+                    searchHistory.category ?: "",
+                    searchHistory.query ?: "",
+                    onBackground = true,
+                    saveHistory = true
+            ).invoke()
             true
         }
         holder.setFavorite(searchHistory.category as String, searchHistory.query as String)

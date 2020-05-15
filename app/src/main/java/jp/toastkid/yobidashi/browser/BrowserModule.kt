@@ -56,6 +56,7 @@ import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.HeaderViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import timber.log.Timber
@@ -113,6 +114,8 @@ class BrowserModule(
 
     private var lastId = ""
 
+    private var contentViewModel: ContentViewModel? = null
+
     private val disposables = CompositeDisposable()
 
     init {
@@ -130,6 +133,7 @@ class BrowserModule(
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
+            contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
     }
 
@@ -242,11 +246,9 @@ class BrowserModule(
                                 true
                             } catch (e: ActivityNotFoundException) {
                                 Timber.w(e)
-                                view?.let {
-                                    Toaster.snackShort(it,
-                                            R.string.message_cannot_launch_app,
-                                            preferenceApplier.colorPair()
-                                    )
+
+                                context?.let {
+                                    contentViewModel?.snackShort(context.getString(R.string.message_cannot_launch_app))
                                 }
                                 true
                             }
@@ -352,7 +354,7 @@ class BrowserModule(
         ) {
             currentView ?: return
             autoArchive.load(currentView, idGenerator.from(url)) {
-                Toaster.snackShort(currentView, "Load archive.", preferenceApplier.colorPair())
+                contentViewModel?.snackShort("Load archive.")
             }
             return
         }
@@ -459,11 +461,7 @@ class BrowserModule(
     fun saveArchive() {
         val currentView = currentView() ?: return
         if (Archive.cannotUseArchive()) {
-            Toaster.snackShort(
-                    currentView,
-                    R.string.message_disable_archive,
-                    preferenceApplier.colorPair()
-            )
+            contentViewModel?.snackShort(currentView.context.getString(R.string.message_disable_archive))
             return
         }
         Archive.save(currentView)
@@ -522,7 +520,7 @@ class BrowserModule(
      * @return is disable Pull-to-Refresh
      */
     fun disablePullToRefresh(): Boolean =
-            currentView()?.let { !(it as CustomWebView).enablePullToRefresh || it.scrollY != 0 } ?: false
+            (currentView() as? CustomWebView)?.let { !it.enablePullToRefresh || it.scrollY != 0 } ?: false
 
     /**
      * Stop loading in current tab.

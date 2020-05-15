@@ -45,8 +45,8 @@ class SearchCategoryAdapter(context: Context): BaseAdapter() {
             return view
         }
 
-        val viewHolder = (convertView.tag as ViewHolder)
-        viewHolder.bindItem(searchCategory)
+        val viewHolder = (convertView.tag as? ViewHolder)
+        viewHolder?.bindItem(searchCategory)
         return convertView
     }
 

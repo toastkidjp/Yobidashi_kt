@@ -27,8 +27,8 @@ object NetworkChecker {
      * @return
      */
     fun isAvailable(context: Context): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val info = cm.activeNetworkInfo ?: return false
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
+        val info = cm?.activeNetworkInfo ?: return false
         return info.isConnected
     }
 }

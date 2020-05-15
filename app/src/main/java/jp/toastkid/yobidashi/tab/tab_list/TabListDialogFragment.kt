@@ -203,7 +203,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                     override fun onSwiped(
                             viewHolder: RecyclerView.ViewHolder,
                             direction: Int
-                    ) = (viewHolder as ViewHolder).close()
+                    ) = (viewHolder as? ViewHolder)?.close() ?: Unit
                 }).attachToRecyclerView(recyclerView)
 
         val dragAttachment = DragAttachment()
