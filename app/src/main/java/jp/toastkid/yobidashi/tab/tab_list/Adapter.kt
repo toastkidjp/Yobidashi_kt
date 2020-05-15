@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
@@ -57,7 +58,7 @@ internal class Adapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                DataBindingUtil.inflate(inflater, R.layout.item_tab_list, parent, false))
+                DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -111,5 +112,11 @@ internal class Adapter(
     fun swap(from: Int, to: Int) {
         callback.swapTabsFromTabList(from, to)
         notifyItemMoved(from, to)
+    }
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.item_tab_list
     }
 }
