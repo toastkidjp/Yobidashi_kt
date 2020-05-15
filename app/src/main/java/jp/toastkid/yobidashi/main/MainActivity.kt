@@ -697,7 +697,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * Switch tab list visibility.
      */
-    fun switchTabList() {
+    private fun switchTabList() {
         initTabListIfNeed()
         if (tabListDialogFragment?.isVisible == true) {
             tabListDialogFragment?.dismiss()
