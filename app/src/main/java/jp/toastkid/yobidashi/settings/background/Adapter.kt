@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.SavedImageBinding
+import jp.toastkid.yobidashi.databinding.ItemSavedImageBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 
@@ -23,9 +23,9 @@ internal class Adapter(
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemBinding = DataBindingUtil.inflate<SavedImageBinding>(
+        val itemBinding = DataBindingUtil.inflate<ItemSavedImageBinding>(
                 LayoutInflater.from(parent.context),
-                R.layout.saved_image,
+                R.layout.item_saved_image,
                 parent,
                 false
         )
