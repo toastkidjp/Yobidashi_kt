@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.menu
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
@@ -122,7 +123,7 @@ class MenuBinder(
             recyclerView?.layoutManager = layoutManager
             layoutManager.scrollToPosition(MenuAdapter.mediumPosition())
 
-            menuAdapter = MenuAdapter(it, menuViewModel)
+            menuAdapter = MenuAdapter(LayoutInflater.from(it), preferenceApplier, menuViewModel)
             recyclerView?.adapter = menuAdapter
         }
 

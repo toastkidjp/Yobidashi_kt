@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.menu
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,24 +20,15 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * @author toastkidjp
  */
 internal class MenuAdapter(
-        context: Context,
+        private val inflater: LayoutInflater,
+        private val preferenceApplier: PreferenceApplier,
         private val menuViewModel: MenuViewModel?
 ) : RecyclerView.Adapter<MenuViewHolder>() {
-
-    /**
-     * Layout inflater.
-     */
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     /**
      * Menu.
      */
     private val menus: Array<Menu> = Menu.values()
-
-    /**
-     * Preference wrapper.
-     */
-    private val preferenceApplier = PreferenceApplier(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder =
             MenuViewHolder(
