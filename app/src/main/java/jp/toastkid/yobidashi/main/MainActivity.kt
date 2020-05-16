@@ -79,6 +79,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
@@ -122,8 +123,6 @@ class MainActivity : AppCompatActivity(),
     private var tabListViewModel: TabListViewModel? = null
 
     private var browserViewModel: BrowserViewModel? = null
-
-    private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
     private var floatingPreview: FloatingPreview? = null
 
@@ -236,8 +235,6 @@ class MainActivity : AppCompatActivity(),
                             tabs.saveTabList()
                         }
                 )
-
-        browserFragmentViewModel = activityViewModelProvider.get(BrowserFragmentViewModel::class.java)
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
@@ -464,8 +461,19 @@ class MainActivity : AppCompatActivity(),
                 val browserFragment =
                         (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
-                browserFragmentViewModel
-                        ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    withContext(Dispatchers.Default) {
+                        repeat (10) {
+                            if (browserFragment.context == null) {
+                                Thread.sleep(100L)
+                                return@repeat
+                            }
+                        }
+                    }
+                    ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
+                            .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                    return@launch
+                }
             }
             is EditorTab -> {
                 val editorFragment =

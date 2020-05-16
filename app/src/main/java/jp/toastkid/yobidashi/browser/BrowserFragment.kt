@@ -183,10 +183,9 @@ class BrowserFragment : Fragment(),
                         Observer { browserModule.saveArchiveForAutoArchive() }
                 )
 
-        browserFragmentViewModel = viewModelProvider.get(BrowserFragmentViewModel::class.java)
-        browserFragmentViewModel
-                ?.loadWithNewTab
-                ?.observe(activity, Observer {
+        ViewModelProvider(this).get(BrowserFragmentViewModel::class.java)
+                .loadWithNewTab
+                .observe(activity, Observer {
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
 
