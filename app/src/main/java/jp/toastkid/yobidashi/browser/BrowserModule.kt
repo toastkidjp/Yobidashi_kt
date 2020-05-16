@@ -345,12 +345,12 @@ class BrowserModule(
 
         val context: Context = context
 
-        val currentView = currentView()
-        if (TextUtils.isEmpty(currentUrl())
+        val currentView = currentView() ?: return
+
+        if (TextUtils.isEmpty(currentView.url)
                 && Urls.isValidUrl(url)
                 && NetworkChecker.isNotAvailable(context)
         ) {
-            currentView ?: return
             autoArchive.load(currentView, idGenerator.from(url)) {
                 contentViewModel?.snackShort("Load archive.")
             }
@@ -362,7 +362,7 @@ class BrowserModule(
             return
         }
 
-        currentView?.loadUrl(url)
+        currentView.loadUrl(url)
     }
 
     private fun replaceWebView(tabId: String): Boolean {
