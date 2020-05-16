@@ -30,7 +30,6 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -465,7 +464,7 @@ class BrowserFragment : Fragment(),
 
     override fun onDetach() {
         headerViewModel?.show()
-        browserModule.dispose()
+        browserModule.onPause()
         super.onDetach()
     }
 
