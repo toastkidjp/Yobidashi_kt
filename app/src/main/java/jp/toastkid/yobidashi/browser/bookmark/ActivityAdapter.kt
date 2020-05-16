@@ -121,6 +121,7 @@ internal class ActivityAdapter(
     private fun findByFolderName(title: String) {
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             withContext(Dispatchers.IO) {
+                items.clear()
                 bookmarkRepository.findByParent(title).forEach { items.add(it) }
             }
             notifyDataSetChanged()
