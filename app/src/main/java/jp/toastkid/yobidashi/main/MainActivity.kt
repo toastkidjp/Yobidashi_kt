@@ -421,9 +421,9 @@ class MainActivity : AppCompatActivity(),
     private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
-            if (fragment is EditorFragment) {
+            /*if (fragment is EditorFragment) {
                 fragment.reload()
-            }
+            }*/
             return
         }
 
@@ -480,7 +480,10 @@ class MainActivity : AppCompatActivity(),
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
-                refreshThumbnail()
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    editorFragment.reload()
+                    refreshThumbnail()
+                }
             }
             is PdfTab -> {
                 val url: String = currentTab.getUrl()
