@@ -85,6 +85,8 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     event.offsetLocation(deltaX, deltaY)
                     nestedOffsetX += scrollOffset[0]
                     nestedOffsetY += scrollOffset[1]
+                } else {
+                    lastY = eventY.toFloat()
                 }
                 requestDisallowInterceptTouchEvent(true)
 
