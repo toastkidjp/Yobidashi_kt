@@ -73,8 +73,6 @@ class BrowserFragment : Fragment(),
 
     private var headerViewModel: HeaderViewModel? = null
 
-    private var browserViewModel: BrowserViewModel? = null
-
     private var contentViewModel: ContentViewModel? = null
 
     override fun onCreateView(
@@ -100,8 +98,6 @@ class BrowserFragment : Fragment(),
         browserModule = BrowserModule(activityContext, binding?.webViewContainer)
 
         setHasOptionsMenu(true)
-
-        browserViewModel = ViewModelProvider(this).get(BrowserViewModel::class.java)
 
         return binding?.root
     }
