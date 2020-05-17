@@ -75,8 +75,6 @@ class BrowserFragment : Fragment(),
 
     private var browserViewModel: BrowserViewModel? = null
 
-    private var browserFragmentViewModel: BrowserFragmentViewModel? = null
-
     private var contentViewModel: ContentViewModel? = null
 
     override fun onCreateView(
