@@ -69,8 +69,6 @@ class BrowserFragment : Fragment(),
 
     private val searchQueryExtractor = SearchQueryExtractor()
 
-    private var menuViewModel: MenuViewModel? = null
-
     private var headerViewModel: HeaderViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
@@ -107,8 +105,6 @@ class BrowserFragment : Fragment(),
 
         val activity = requireActivity()
         val activityViewModelProvider = ViewModelProvider(activity)
-        menuViewModel = activityViewModelProvider
-                .get(MenuViewModel::class.java)
 
         initializeHeaderViewModels(activity)
 
