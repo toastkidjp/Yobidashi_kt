@@ -109,6 +109,7 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
      */
     fun dispose() {
         pool.snapshot().values.forEach { it.destroy() }
+        pool.evictAll()
     }
 
     companion object {
