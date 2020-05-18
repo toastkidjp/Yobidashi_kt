@@ -201,7 +201,10 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                         word
                 ).toString()
 
-                loadUrl(url)//TODO open new tab
+                (it as? FragmentActivity)?.let { activity ->
+                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
+                            .open(url.toUri())
+                }
             }
         }
     }
