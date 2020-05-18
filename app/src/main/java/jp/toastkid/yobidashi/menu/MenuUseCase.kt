@@ -209,7 +209,7 @@ class MenuUseCase(
      * @param menu
      * @return true
      */
-    fun onMenuLongClick(menu: Menu): Boolean {
+    private fun onMenuLongClick(menu: Menu): Boolean {
         val view = extractContentView() ?: return true
         Toaster.snackLong(
                 view,
