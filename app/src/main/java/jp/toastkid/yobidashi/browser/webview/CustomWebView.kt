@@ -168,35 +168,12 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                                     return true
                                 }
                                 R.id.preview_search -> {
-                                    selectedTextExtractor.withAction(this@CustomWebView) { word ->
-                                        context?.let {
-                                            val url = urlFactory(
-                                                    it,
-                                                    PreferenceApplier(it).getDefaultSearchEngine(),
-                                                    word
-                                            ).toString()
-
-                                            (it as? FragmentActivity)?.let { activity ->
-                                                ViewModelProvider(activity).get(BrowserViewModel::class.java)
-                                                        .preview(url.toUri())
-                                            }
-                                        }
-                                    }
+                                    searchWithPreview()
                                     mode?.finish()
                                     return true
                                 }
                                 R.id.web_search -> {
-                                    selectedTextExtractor.withAction(this@CustomWebView) { word ->
-                                        context?.let {
-                                            val url = urlFactory(
-                                                    it,
-                                                    PreferenceApplier(it).getDefaultSearchEngine(),
-                                                    word
-                                            ).toString()
-
-                                            loadUrl(url)//TODO open new tab
-                                        }
-                                    }
+                                    search()
                                     mode?.finish()
                                     return true
                                 }
@@ -214,6 +191,37 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     },
                     type
             )
+
+    private fun search() {
+        selectedTextExtractor.withAction(this@CustomWebView) { word ->
+            context?.let {
+                val url = urlFactory(
+                        it,
+                        PreferenceApplier(it).getDefaultSearchEngine(),
+                        word
+                ).toString()
+
+                loadUrl(url)//TODO open new tab
+            }
+        }
+    }
+
+    private fun searchWithPreview() {
+        selectedTextExtractor.withAction(this@CustomWebView) { word ->
+            context?.let {
+                val url = urlFactory(
+                        it,
+                        PreferenceApplier(it).getDefaultSearchEngine(),
+                        word
+                ).toString()
+
+                (it as? FragmentActivity)?.let { activity ->
+                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
+                            .preview(url.toUri())
+                }
+            }
+        }
+    }
 
 
     override fun setNestedScrollingEnabled(enabled: Boolean) {
