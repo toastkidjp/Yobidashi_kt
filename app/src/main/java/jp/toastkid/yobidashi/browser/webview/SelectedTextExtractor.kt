@@ -15,6 +15,6 @@ class SelectedTextExtractor {
     }
 
     companion object {
-        private const val SCRIPT = "(function(){ return document.getSelection().toString(); })()"
+        private const val SCRIPT = "document.getSelection().toString()"
     }
 }
