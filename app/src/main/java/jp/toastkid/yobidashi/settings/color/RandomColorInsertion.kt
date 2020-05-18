@@ -13,6 +13,7 @@ import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import timber.log.Timber
 import java.util.*
 
 /**
@@ -48,7 +49,7 @@ class RandomColorInsertion {
                     .add(SavedColor.make(bg, font))
         }
                 .subscribeOn(Schedulers.io())
-                .subscribe()
+                .subscribe({}, Timber::e)
     }
 
     companion object {

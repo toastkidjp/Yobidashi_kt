@@ -48,7 +48,6 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -114,6 +113,8 @@ class SearchFragment : Fragment() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var contentViewModel: ContentViewModel? = null
+
     private var headerViewModel: HeaderViewModel? = null
 
     private var headerBinding: ModuleHeaderSearchBinding? = null
@@ -167,6 +168,7 @@ class SearchFragment : Fragment() {
                 this::setTextAndMoveCursorToEnd
         )
 
+        // TODO Clean up code.
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
                 headerBinding?.searchInput as EditText,
@@ -175,6 +177,7 @@ class SearchFragment : Fragment() {
                 this::hideKeyboard
         )
 
+        // TODO Clean up code.
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
                 { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion) },
@@ -193,14 +196,10 @@ class SearchFragment : Fragment() {
 
         activity?.also {
             headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+            contentViewModel = ViewModelProviders.of(it).get(ContentViewModel::class.java)
         }
 
-        /* TODO
-        Toaster.snackShort(
-                binding?.background as View,
-                getString(R.string.message_search_on_background),
-                preferenceApplier.colorPair()
-        )*/
+        contentViewModel?.snackShort(R.string.message_search_on_background)
 
         setHasOptionsMenu(true)
 
@@ -454,11 +453,7 @@ class SearchFragment : Fragment() {
     private inline fun search(category: String, query: String, onBackground: Boolean = false) {
         val context = requireContext()
         if (NetworkChecker.isNotAvailable(context)) {
-            Toaster.snackShort(
-                    binding?.root as View,
-                    "Network is not available...",
-                    preferenceApplier.colorPair()
-            )
+            contentViewModel?.snackShort("Network is not available...")
             return
         }
 

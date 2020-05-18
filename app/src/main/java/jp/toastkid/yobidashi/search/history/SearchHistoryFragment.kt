@@ -55,8 +55,7 @@ class SearchHistoryFragment : Fragment(),
         adapter = ModuleAdapter(
                 context,
                 repository,
-                // TODO use elvis
-                { history -> SearchAction(context, history.category as String, history.query as String).invoke()},
+                { SearchAction(context, it.category ?: "", it.query ?: "").invoke()},
                 { },
                 { },
                 false

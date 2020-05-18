@@ -5,11 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
-import android.text.TextUtils
-import android.widget.ImageView
-import timber.log.Timber
-
-import java.io.File
 import java.io.IOException
 
 /**
@@ -62,27 +57,4 @@ object ImageLoader {
         return image
     }
 
-    /**
-     * Set image to passed ImageView.
-
-     * @param iv ImageView
-     *
-     * @param imagePath Image file path
-     */
-    fun setImageToImageView(iv: ImageView, imagePath: String) {
-        if (TextUtils.isEmpty(imagePath)) {
-            iv.setImageDrawable(null)
-            return
-        }
-
-        try {
-            iv.setImageDrawable(readBitmapDrawable(
-                    iv.context,
-                    Uri.parse(File(imagePath).toURI().toString())
-            ))
-        } catch (e: IOException) {
-            Timber.e(e)
-        }
-
-    }
 }

@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,12 +33,12 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import okio.Okio
 import timber.log.Timber
 
@@ -68,6 +69,8 @@ class BookmarkFragment: Fragment(),
 
     private lateinit var bookmarkRepository: BookmarkRepository
 
+    private var contentViewModel: ContentViewModel? = null
+
     /**
      * Composite of disposables.
      */
@@ -89,7 +92,7 @@ class BookmarkFragment: Fragment(),
                 context,
                 bookmarkRepository,
                 { history -> finishWithResult(Uri.parse(history.url)) },
-                { history -> Toaster.snackShort(binding.root, history.title, preferenceApplier.colorPair()) },
+                { history -> contentViewModel?.snackShort(history.title) },
                 binding.historiesView::scheduleLayoutAnimation
         )
         binding.historiesView.adapter = adapter
@@ -125,6 +128,13 @@ class BookmarkFragment: Fragment(),
         setHasOptionsMenu(true)
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as? FragmentActivity)?.let {
+            contentViewModel = ViewModelProviders.of(it).get(ContentViewModel::class.java)
+        }
     }
 
     /**
@@ -185,12 +195,7 @@ class BookmarkFragment: Fragment(),
                         .subscribe(
                                 { granted ->
                                     if (!granted) {
-                                        /* TODO
-                                        Toaster.snackShort(
-                                                binding.root,
-                                                R.string.message_requires_permission_storage,
-                                                preferenceApplier.colorPair()
-                                        )*/
+                                        contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                                         return@subscribe
                                     }
                                     startActivityForResult(
@@ -205,19 +210,14 @@ class BookmarkFragment: Fragment(),
             }
             R.id.export_bookmark -> {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    // TODO Toaster.snackShort(binding.root, R.string.message_disusable_menu, preferenceApplier.colorPair())
+                    contentViewModel?.snackShort(R.string.message_disusable_menu)
                     return true
                 }
                 RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         .subscribe(
                                 { granted ->
                                     if (!granted) {
-                                        /* TODO
-                                        Toaster.snackShort(
-                                                binding.root,
-                                                R.string.message_requires_permission_storage,
-                                                preferenceApplier.colorPair()
-                                        )*/
+                                        contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                                         return@subscribe
                                     }
                                     startActivityForResult(
@@ -243,14 +243,13 @@ class BookmarkFragment: Fragment(),
     }
 
     override fun onClickBookmarkClear() {
-        adapter.clearAll{ Toaster.snackShort(binding.root, R.string.done_clear, preferenceApplier.colorPair())}
+        adapter.clearAll{ contentViewModel?.snackShort(R.string.done_clear) }
     }
 
     override fun onClickAddDefaultBookmark() {
         BookmarkInitializer()(binding.root.context) { adapter.showRoot() }
                 .addTo(disposables)
-
-        Toaster.snackShort(binding.root, R.string.done_addition, preferenceApplier.colorPair())
+        contentViewModel?.snackShort(R.string.done_addition)
     }
 
     override fun onClickAddFolder(title: String?) {
@@ -315,12 +314,7 @@ class BookmarkFragment: Fragment(),
                 .subscribe(
                         {
                             adapter.showRoot()
-                            /*TODO use common parent
-                               Toaster.snackShort(
-                                    binding.root,
-                                    R.string.done_addition,
-                                    preferenceApplier.colorPair()
-                            )*/
+                            contentViewModel?.snackShort(R.string.done_addition)
                         },
                         { Timber.e(it) }
                 ).addTo(disposables)

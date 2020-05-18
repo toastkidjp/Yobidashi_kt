@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchInsertion
 internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     : RecyclerView.ViewHolder(binding.root), SwipeViewHolder {
 
-    private val buttonMargin = binding.root.context.resources
+    private val buttonMargin = binding.root.resources
             .getDimensionPixelSize(R.dimen.button_margin)
 
     fun setText(text: String?) {
@@ -29,9 +29,9 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun setOnClickAdd(history: SearchHistory, onClickAdd: (SearchHistory) -> Unit) {
-        binding.searchHistoryAdd.setOnClickListener ({ _ ->
+        binding.searchHistoryAdd.setOnClickListener {
             onClickAdd(history)
-        })
+        }
     }
 
     fun setOnClickDelete(onClick: () -> Unit) {
@@ -41,7 +41,7 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
     }
 
     fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
+        binding.divider.isVisible = visible
     }
 
     fun setFavorite(category: String, query: String) {
@@ -52,11 +52,6 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
 
     fun setAddIcon(@DrawableRes addIcon: Int) {
         binding.searchHistoryAdd.setImageResource(addIcon)
-    }
-
-    // TODO Delete it.
-    fun hideAddButton() {
-        binding.searchHistoryAdd.visibility = View.GONE
     }
 
     override fun getFrontView(): View = binding.front

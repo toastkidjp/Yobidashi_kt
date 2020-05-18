@@ -145,19 +145,20 @@ class BrowserModule(
             isLoadFinished = false
 
             rssAddingSuggestion(view, url).addTo(disposables)
+            updateBackButtonState(view.canGoBack())
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
             isLoadFinished = true
 
-            loadingViewModel?.finished(lastId, History.make(view.title, view.url))
+            val title = view.title ?: ""
+            val urlStr = url ?: ""
+
+            loadingViewModel?.finished(lastId, History.make(title, urlStr))
 
             headerViewModel?.updateProgress(100)
             headerViewModel?.stopProgress(true)
-
-            val title = view.title ?: ""
-            val urlStr = url ?: ""
 
             try {
                 if (view == currentView()) {
@@ -382,6 +383,7 @@ class BrowserModule(
         currentWebView?.let {
             it.onResume()
             webViewContainer?.addView(it)
+            updateBackButtonState(it.canGoBack())
             updateForwardButtonState(it.canGoForward())
             browserHeaderViewModel?.nextTitle(it.title)
             browserHeaderViewModel?.nextUrl(it.url)
@@ -396,6 +398,10 @@ class BrowserModule(
 
         reloadWebViewSettings().addTo(disposables)
         return currentWebView?.url.isNullOrBlank()
+    }
+
+    private fun updateBackButtonState(newState: Boolean) {
+        browserHeaderViewModel?.setBackButtonEnability(newState)
     }
 
     private fun updateForwardButtonState(newState: Boolean) {
@@ -440,6 +446,7 @@ class BrowserModule(
     fun back() = currentView()?.let {
         return if (it.canGoBack()) {
             it.goBack()
+            updateBackButtonState(it.canGoBack())
             updateForwardButtonState(it.canGoForward())
             true
         } else false
@@ -450,6 +457,7 @@ class BrowserModule(
             it.goForward()
         }
 
+        updateBackButtonState(it.canGoBack())
         updateForwardButtonState(it.canGoForward())
     }
 
@@ -530,11 +538,11 @@ class BrowserModule(
     }
 
     fun onResume() {
-        currentView()?.onResume()
+        webViewPool.onResume()
     }
 
     fun onPause() {
-        currentView()?.onPause()
+        webViewPool.onPause()
     }
 
     /**

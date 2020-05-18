@@ -26,10 +26,7 @@ internal class WebTab: Tab {
     }
 
     fun addHistory(history: History?) {
-        if (history == null
-                || TextUtils.equals(history.url(), "about:blank")
-                || histories.contains(history)
-        ) {
+        if (history == null || TextUtils.equals(history.url(), "about:blank")) {
             return
         }
 

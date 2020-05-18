@@ -7,13 +7,20 @@
  */
 package jp.toastkid.yobidashi.browser.history
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 /**
  * @author toastkidjp
  */
 @Dao
 interface ViewHistoryRepository {
+
+    @Query("SELECT * FROM ViewHistory WHERE url LIKE :query OR title LIKE :query ORDER BY _id DESC")
+    fun search(query: String): List<ViewHistory>
 
     @Query("SELECT * FROM ViewHistory WHERE url LIKE :query ORDER BY _id DESC LIMIT :limit")
     fun search(query: String, limit: Int): List<ViewHistory>

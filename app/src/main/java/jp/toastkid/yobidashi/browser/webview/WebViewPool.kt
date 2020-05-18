@@ -119,6 +119,16 @@ internal class WebViewPool(
         pool.snapshot().values.forEach { it.setBackgroundColor(newAlphaBackground) }
     }
 
+    fun onResume() {
+        getLatest()?.resumeTimers()
+        pool.snapshot().values.forEach { it.onResume() }
+    }
+
+    fun onPause() {
+        getLatest()?.pauseTimers()
+        pool.snapshot().values.forEach { it.onPause() }
+    }
+
     /**
      * Destroy all [WebView].
      */

@@ -299,12 +299,15 @@ class MainActivity : AppCompatActivity(),
     private fun initializeContentViewModel() {
         contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
         contentViewModel?.fragmentClass?.observe(this, Observer {
-            replaceFragment(obtainFragment(it))
+            replaceFragment(obtainFragment(it), withAnimation = true, withSlideIn = true)
         })
         contentViewModel?.fragment?.observe(this, Observer {
-            replaceFragment(it, withAnimation = true, withSlideIn = true)
+            replaceFragment(it, withAnimation = true, withSlideIn = false)
         })
         contentViewModel?.snackbar?.observe(this, Observer {
+            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+        })
+        contentViewModel?.snackbarRes?.observe(this, Observer {
             Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
         })
         contentViewModel?.toTop?.observe(this, Observer {

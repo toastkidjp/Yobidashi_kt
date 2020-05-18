@@ -55,9 +55,9 @@ class SuggestionModule(
     )
 
     /**
-     * Fetcher.
+     * Suggestion API.
      */
-    private val fetcher = SuggestionFetcher()
+    private val suggestionApi = SuggestionApi()
 
     /**
      * Cache.
@@ -122,7 +122,7 @@ class SuggestionModule(
             return
         }
 
-        fetcher.fetchAsync(key) { suggestions ->
+        suggestionApi.fetchAsync(key) { suggestions ->
             if (suggestions.isEmpty()) {
                 Completable.fromAction { hide() }
                         .subscribeOn(AndroidSchedulers.mainThread())

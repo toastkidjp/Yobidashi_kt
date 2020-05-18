@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.main.content
 
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -40,6 +41,14 @@ class ContentViewModel : ViewModel() {
 
     fun snackShort(message: String) {
         _snackbar.postValue(message)
+    }
+
+    private val _snackbarRes = MutableLiveData<Int>()
+
+    val snackbarRes: LiveData<Int> = _snackbarRes
+
+    fun snackShort(@StringRes messageId: Int) {
+        _snackbarRes.postValue(messageId)
     }
 
     private val _toTop = MutableLiveData<Unit>()

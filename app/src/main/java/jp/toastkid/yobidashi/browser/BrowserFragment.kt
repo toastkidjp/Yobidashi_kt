@@ -193,9 +193,9 @@ class BrowserFragment : Fragment(),
                 headerViewModel?.replace(headerView)
             })
 
-            viewModel.enableForward.observe(activity, Observer {
-                updateForwardButtonState(it)
-            })
+            viewModel.enableForward.observe(activity, Observer(::updateForwardButtonState))
+
+            viewModel.enableBack.observe(activity, Observer(::updateBackButtonState))
         }
 
         viewModelProvider.get(LoadingViewModel::class.java)
@@ -296,6 +296,11 @@ class BrowserFragment : Fragment(),
     private fun updateForwardButtonState(enable: Boolean) {
         headerBinding?.forward?.isEnabled = enable
         headerBinding?.forward?.alpha = if (enable) 1f else 0.6f
+    }
+
+    private fun updateBackButtonState(enable: Boolean) {
+        headerBinding?.back?.isEnabled = enable
+        headerBinding?.back?.alpha = if (enable) 1f else 0.6f
     }
 
     private fun showReaderFragment(content: String) {
@@ -441,7 +446,6 @@ class BrowserFragment : Fragment(),
     }
 
     fun tapHeader() {
-        val activityContext = context ?: return
         val currentTitle = browserModule.currentTitle()
         val currentUrl = browserModule.currentUrl()
         val inputText = if (preferenceApplier.enableSearchQueryExtract) {
