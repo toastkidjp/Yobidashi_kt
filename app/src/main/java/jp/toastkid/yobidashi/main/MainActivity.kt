@@ -462,17 +462,8 @@ class MainActivity : AppCompatActivity(),
                         (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    withContext(Dispatchers.Default) {
-                        repeat (10) {
-                            if (browserFragment.context == null) {
-                                Thread.sleep(100L)
-                                return@repeat
-                            }
-                        }
-                    }
                     ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
                             .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
-                    return@launch
                 }
             }
             is EditorTab -> {
