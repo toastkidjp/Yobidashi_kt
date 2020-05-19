@@ -113,26 +113,27 @@ class BrowserFragment : Fragment(),
         val viewModelProvider = ViewModelProvider(activity)
         headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
 
-        headerViewModel?.stopProgress?.observe(activity, Observer { stop ->
-            if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
-                return@Observer
-            }
-            stopSwipeRefresherLoading()
-        })
-
-        headerViewModel?.progress?.observe(activity, Observer { newProgress ->
-            if (70 < newProgress) {
-                headerBinding?.progress?.isVisible = false
-                headerBinding?.reload?.setImageResource(R.drawable.ic_reload)
-                //TODO refreshThumbnail()
-                return@Observer
-            }
-            headerBinding?.progress?.let {
-                it.isVisible = true
-                it.progress = newProgress
-                headerBinding?.reload?.setImageResource(R.drawable.ic_close)
-            }
-        })
+        viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
+            viewModel.stopProgress.observe(activity, Observer { stop ->
+                if (!stop || binding?.swipeRefresher?.isRefreshing == false) {
+                    return@Observer
+                }
+                stopSwipeRefresherLoading()
+            })
+            viewModel.progress.observe(activity, Observer { newProgress ->
+                if (70 < newProgress) {
+                    headerBinding?.progress?.isVisible = false
+                    headerBinding?.reload?.setImageResource(R.drawable.ic_reload)
+                    //TODO refreshThumbnail()
+                    return@Observer
+                }
+                headerBinding?.progress?.let {
+                    it.isVisible = true
+                    it.progress = newProgress
+                    headerBinding?.reload?.setImageResource(R.drawable.ic_close)
+                }
+            })
+        }
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
             viewModel.title.observe(activity, Observer { title ->
