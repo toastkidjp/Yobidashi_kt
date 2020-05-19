@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
@@ -89,7 +90,7 @@ class FloatingPreview(context: Context) {
             viewModel?.progress?.observe(context, Observer(::setNewProgress))
         }
 
-        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
+        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         popupWindow.setOnDismissListener {
             extractWebView()?.also {
