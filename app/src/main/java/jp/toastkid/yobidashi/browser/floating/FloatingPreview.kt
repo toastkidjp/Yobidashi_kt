@@ -217,8 +217,5 @@ class FloatingPreview(context: Context) {
         @LayoutRes
         private val LAYOUT_ID = R.layout.popup_floating_preview
 
-        private const val DURATION_MS = 200L
-
-        private const val SPECIAL_WEB_VIEW_ID = "preview"
     }
 }
