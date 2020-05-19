@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.media.music.popup.SlidingTouchListener
 
 /**
  * Floating preview.
@@ -151,8 +152,8 @@ class FloatingPreview(context: Context) {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        val slidingTouchListener = jp.toastkid.yobidashi.media.music.popup.SlidingTouchListener(binding.contentPanel)
-        slidingTouchListener.setCallback(object : jp.toastkid.yobidashi.media.music.popup.SlidingTouchListener.OnNewPosition {
+        val slidingTouchListener = SlidingTouchListener(binding.contentPanel)
+        slidingTouchListener.setCallback(object : SlidingTouchListener.OnNewPosition {
             override fun onNewPosition(x: Float, y: Float) {
                 if (y > swipeLimit) {
                     return
