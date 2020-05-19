@@ -109,6 +109,21 @@ class FloatingPreview(context: Context) {
         WebViewInitializer()(webView)
 
         setSlidingListener()
+
+        onResume()
+    }
+
+    fun onResume() {
+        binding.progress.progressDrawable.colorFilter =
+                PorterDuffColorFilter(
+                        PreferenceApplier(binding.root.context).fontColor,
+                        PorterDuff.Mode.SRC_IN
+                )
+        webView.onResume()
+    }
+
+    fun onPause() {
+        webView.onPause()
     }
 
     /**
@@ -118,12 +133,6 @@ class FloatingPreview(context: Context) {
      * @param url URL string
      */
     fun show(parent: View, url: String) {
-        binding.progress.progressDrawable.colorFilter =
-                PorterDuffColorFilter(
-                        PreferenceApplier(binding.root.context).fontColor,
-                        PorterDuff.Mode.SRC_IN
-                )
-
         binding.icon.setImageBitmap(null)
 
         darkModeApplier(webView, PreferenceApplier(webView.context).useDarkMode())

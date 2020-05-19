@@ -579,6 +579,7 @@ class MainActivity : AppCompatActivity(),
         super.onResume()
         refresh()
         menuViewModel?.onResume()
+        floatingPreview?.onResume()
 
         tabs.setCount()
     }
@@ -854,6 +855,11 @@ class MainActivity : AppCompatActivity(),
                 VoiceSearch.processResult(this, data)
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        floatingPreview?.onPause()
     }
 
     override fun onStop() {
