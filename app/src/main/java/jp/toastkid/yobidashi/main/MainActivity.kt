@@ -535,6 +535,11 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
+        if (floatingPreview?.isVisible() == true) {
+            floatingPreview?.hide()
+            return
+        }
+
         val currentFragment = findFragment()
         if (currentFragment is CommonFragmentAction && currentFragment.pressBack()) {
             return

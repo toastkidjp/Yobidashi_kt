@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import timber.log.Timber
 
 /**
  * Floating preview.
@@ -46,6 +47,15 @@ class FloatingPreview(context: Context) {
     private val popupWindow = PopupWindow(context)
 
     private val webView = WebView(context)
+
+    private val resources = context.resources
+
+    private val heightPixels = resources.displayMetrics.heightPixels
+
+    private val headerHeight =
+            resources.getDimensionPixelSize(R.dimen.media_player_popup_header_height)
+
+    private val swipeLimit = heightPixels - (headerHeight / 2)
 
     private val binding: PopupFloatingPreviewBinding
 
@@ -88,13 +98,17 @@ class FloatingPreview(context: Context) {
             }
         }
 
-        popupWindow.isOutsideTouchable = true
-        popupWindow.isFocusable = true
-
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
-        popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
+        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        popupWindow.isClippingEnabled = false
+        popupWindow.isOutsideTouchable = false
+
+        popupWindow.animationStyle = R.style.PopupWindowVisibilityAnimation
 
         WebViewInitializer()(webView)
+
+        setSlidingListener()
     }
 
     /**
@@ -104,8 +118,6 @@ class FloatingPreview(context: Context) {
      * @param url URL string
      */
     fun show(parent: View, url: String) {
-        setSlidingListener()
-
         binding.progress.progressDrawable.colorFilter =
                 PorterDuffColorFilter(
                         PreferenceApplier(binding.root.context).fontColor,
@@ -120,23 +132,7 @@ class FloatingPreview(context: Context) {
 
         webView.loadUrl(url)
 
-        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
-
-        startEnterAnimation()
-    }
-
-    private fun startEnterAnimation() {
-        val heightPixels = binding.contentPanel.context.resources.displayMetrics.heightPixels
-
-        binding.contentPanel.animate()
-                .y(heightPixels.toFloat())
-                .setDuration(0)
-                .start()
-
-        binding.contentPanel.animate()
-                .y(heightPixels * 0.6f)
-                .setDuration(DURATION_MS)
-                .start()
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
     }
 
     /**
@@ -156,7 +152,16 @@ class FloatingPreview(context: Context) {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        binding.header.setOnTouchListener(SlidingTouchListener(binding.contentPanel))
+        val slidingTouchListener = jp.toastkid.yobidashi.media.music.popup.SlidingTouchListener(binding.contentPanel)
+        slidingTouchListener.setCallback(object : jp.toastkid.yobidashi.media.music.popup.SlidingTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                if (y > swipeLimit) {
+                    return
+                }
+                popupWindow.update(-1, -(y.toInt() - headerHeight), -1, -1)
+            }
+        })
+        binding.header.setOnTouchListener(slidingTouchListener)
     }
 
     /**
