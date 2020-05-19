@@ -52,10 +52,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private val scrollConsumed = IntArray(2)
 
-    private val urlFactory = UrlFactory()
-
-    private val selectedTextExtractor = SelectedTextExtractor()
-
     private val speechMaker by lazy { SpeechMaker(context) }
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent?): Boolean {
@@ -291,4 +287,11 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         return childHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
     }
 
+    companion object {
+
+        private val urlFactory = UrlFactory()
+
+        private val selectedTextExtractor = SelectedTextExtractor()
+
+    }
 }
