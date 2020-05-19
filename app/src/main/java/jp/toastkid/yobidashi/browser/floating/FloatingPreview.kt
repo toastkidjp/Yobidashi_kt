@@ -21,7 +21,6 @@ import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.core.view.isEmpty
@@ -36,7 +35,6 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import timber.log.Timber
 
 /**
  * Floating preview.
