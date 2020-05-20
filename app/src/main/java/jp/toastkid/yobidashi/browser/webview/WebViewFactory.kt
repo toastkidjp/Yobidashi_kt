@@ -29,8 +29,7 @@ internal class WebViewFactory {
      */
     private val handler = Handler(Handler.Callback { message ->
         message.data?.let { bundle ->
-            longTapItemHolder.title = bundle.get("title")?.toString() ?: ""
-            longTapItemHolder.anchor = bundle.get("url")?.toString() ?: ""
+            longTapItemHolder.extract(bundle)
         }
         true
     })

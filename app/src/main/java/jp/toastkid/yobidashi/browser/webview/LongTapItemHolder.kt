@@ -7,6 +7,8 @@
  */
 package jp.toastkid.yobidashi.browser.webview
 
+import android.os.Bundle
+
 /**
  * @author toastkidjp
  */
@@ -14,5 +16,10 @@ data class LongTapItemHolder(var title: String = "", var anchor: String = "") {
     fun reset() {
         title = ""
         anchor = ""
+    }
+
+    fun extract(bundle: Bundle) {
+        title = bundle.get("title")?.toString() ?: ""
+        anchor = bundle.get("url")?.toString() ?: ""
     }
 }
