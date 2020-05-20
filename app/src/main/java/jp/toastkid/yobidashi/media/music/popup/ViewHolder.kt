@@ -26,7 +26,7 @@ class ViewHolder(
 
     fun bindText(description: MediaDescriptionCompat) {
         binding.title.text = description.title
-        binding.artist.setText(description.subtitle)
+        binding.artist.text = description.subtitle
     }
 
     fun setLyricsIconColor(@ColorInt color: Int) {

@@ -7,11 +7,12 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment.Companion.withBitmap
@@ -62,12 +63,12 @@ internal class ImageDialogFragment: DialogFragment() {
 
         fun withUrl(imageUrl: String): ImageDialogFragment =
                 ImageDialogFragment().also {
-                    it.arguments = Bundle().also { it.putString(KEY_IMAGE_URL, imageUrl) }
+                    it.arguments = bundleOf(KEY_IMAGE_URL to imageUrl)
                 }
 
         fun withBitmap(image: Bitmap): ImageDialogFragment =
                 ImageDialogFragment().also {
-                    it.arguments = Bundle().also { it.putParcelable(KEY_IMAGE, image) }
+                    it.arguments = bundleOf(KEY_IMAGE to image)
                 }
     }
 }
