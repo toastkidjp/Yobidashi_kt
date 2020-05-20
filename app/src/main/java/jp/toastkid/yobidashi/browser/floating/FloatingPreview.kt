@@ -53,7 +53,7 @@ class FloatingPreview(context: Context) {
     private val heightPixels = resources.displayMetrics.heightPixels
 
     private val headerHeight =
-            resources.getDimensionPixelSize(R.dimen.media_player_popup_header_height)
+            resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
 
     private val swipeLimit = heightPixels - (headerHeight / 2)
 
