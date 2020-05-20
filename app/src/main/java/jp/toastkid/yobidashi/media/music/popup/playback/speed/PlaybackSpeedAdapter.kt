@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.annotation.LayoutRes
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 
@@ -35,7 +36,7 @@ class PlaybackSpeedAdapter(
 
         if (convertView == null) {
             val view = layoutInflater.inflate(
-                    R.layout.item_playback_speed_spinner,
+                    ITEM_LAYOUT_ID,
                     parent,
                     false
             )
@@ -51,4 +52,10 @@ class PlaybackSpeedAdapter(
         return convertView
     }
 
+    companion object {
+
+        @LayoutRes
+        private val ITEM_LAYOUT_ID = R.layout.item_playback_speed_spinner
+
+    }
 }
