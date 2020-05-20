@@ -66,7 +66,11 @@ internal class WebViewFactory {
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (context is FragmentActivity) {
                         if (TextUtils.isEmpty(longTapItemHolder.anchor)) {
-                            handler.postDelayed({ showImageAnchorDialog(url, context) }, 300L)
+                            handler.postDelayed({
+                                showImageAnchorDialog(url, context)
+                                longTapItemHolder.reset()
+                            }, 300L)
+
                             return@setOnLongClickListener true
                         }
                         showImageAnchorDialog(url, context)
