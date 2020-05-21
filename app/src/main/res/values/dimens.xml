@@ -19,7 +19,6 @@
     <dimen name="search_category_spinner_width">44dp</dimen>
     <dimen name="browser_menu_size">88dp</dimen>
     <dimen name="browser_menu_margin">4dp</dimen>
-    <dimen name="browser_footer_height">48dp</dimen>
 
     <dimen name="toolbar_activity_content_top_margin">52dp</dimen>
     <dimen name="close_icon_size">32dp</dimen>
