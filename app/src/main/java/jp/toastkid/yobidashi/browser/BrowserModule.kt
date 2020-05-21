@@ -607,13 +607,6 @@ class BrowserModule(
         return webView
     }
 
-    /**
-     * Detach [WebView] with tab ID.
-     *
-     * @param tabId Tab's ID.
-     */
-    fun detachWebView(tabId: String?) = GlobalWebViewPool.remove(tabId)
-
     fun onSaveInstanceState(outState: Bundle) {
         currentView()?.saveState(outState)
     }

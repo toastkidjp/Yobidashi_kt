@@ -10,6 +10,7 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -192,6 +193,7 @@ class TabAdapter(
         val tab = tabList.get(index)
         if (tab is WebTab) {
             autoArchive.delete(IdGenerator().from(tab.getUrl()))
+            GlobalWebViewPool.remove(tab.id())
         }
 
         tabList.closeTab(index)
