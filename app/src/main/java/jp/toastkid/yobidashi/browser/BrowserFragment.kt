@@ -442,6 +442,11 @@ class BrowserFragment : Fragment(),
         binding?.swipeRefresher?.isRefreshing = false
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        browserModule.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onPause() {
         super.onPause()
         stopSwipeRefresherLoading()
