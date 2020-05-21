@@ -74,6 +74,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/close"
                 android:onClick="@{view -> preview.hide()}"
+                android:background="@drawable/ripple_transparent"
                 />
         </androidx.cardview.widget.CardView>
         <ProgressBar
