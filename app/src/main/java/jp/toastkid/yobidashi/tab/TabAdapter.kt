@@ -83,22 +83,6 @@ class TabAdapter(
     }
 
     /**
-     * Delete thumbnail file.
-     *
-     * @param thumbnailPath file path.
-     */
-    fun deleteThumbnail(thumbnailPath: String?) {
-        if (TextUtils.isEmpty(thumbnailPath)) {
-            return
-        }
-
-        val lastScreenshot = File(thumbnailPath)
-        if (lastScreenshot.exists()) {
-            lastScreenshot.delete()
-        }
-    }
-
-    /**
      * Open new tab with URL string.
      *
      * @param url URL (default = homeUrl)
