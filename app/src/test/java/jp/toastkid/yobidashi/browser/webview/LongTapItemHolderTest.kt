@@ -41,4 +41,16 @@ class LongTapItemHolderTest {
         assertEquals("test_title", longTapItemHolder.title)
         assertEquals("https://test.com", longTapItemHolder.anchor)
     }
+
+    @Test
+    fun extractTrim() {
+        val bundle = mockk<Bundle>()
+        every { bundle.get("title") }.returns("  test_title  ")
+        every { bundle.get("url") }.returns("https://test.com")
+
+        longTapItemHolder.extract(bundle)
+
+        assertEquals("test_title", longTapItemHolder.title)
+        assertEquals("https://test.com", longTapItemHolder.anchor)
+    }
 }
