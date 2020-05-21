@@ -20,7 +20,7 @@ class LongTapItemHolderTest {
     }
 
     @Test
-    fun reset() {
+    fun testReset() {
         longTapItemHolder.title = "title"
         longTapItemHolder.anchor = "https://test.com"
 
@@ -31,7 +31,7 @@ class LongTapItemHolderTest {
     }
 
     @Test
-    fun extract() {
+    fun testExtract() {
         val bundle = mockk<Bundle>()
         every { bundle.get("title") }.returns("test_title")
         every { bundle.get("url") }.returns("https://test.com")
@@ -43,7 +43,7 @@ class LongTapItemHolderTest {
     }
 
     @Test
-    fun extractTrim() {
+    fun testExtractTrim() {
         val bundle = mockk<Bundle>()
         every { bundle.get("title") }.returns("  test_title  ")
         every { bundle.get("url") }.returns("https://test.com")
