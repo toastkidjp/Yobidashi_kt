@@ -11,8 +11,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_gravity="bottom"
         tools:ignore="UselessParent"
         >
@@ -39,6 +37,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="52dp"
                 android:layout_marginStart="52dp"
+                android:layout_marginRight="52dp"
+                android:layout_marginEnd="52dp"
                 >
                 <TextView
                     android:id="@+id/title"
@@ -63,6 +63,18 @@
                     tools:text="https://www.title.co.jp"
                     />
             </LinearLayout>
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="@dimen/floating_preview_header_height"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/ic_close_black"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/close"
+                android:onClick="@{view -> preview.hide()}"
+                />
         </androidx.cardview.widget.CardView>
         <ProgressBar
             android:id="@+id/progress"
