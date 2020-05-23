@@ -35,7 +35,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.TabUiFragment
 
 /**
@@ -60,7 +60,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      */
     private lateinit var layoutManager: LinearLayoutManager
 
-    private var headerViewModel: HeaderViewModel? = null
+    private var appBarViewModel: AppBarViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -124,7 +124,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         })
 
         activity?.let {
-            headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
+            appBarViewModel = ViewModelProvider(it).get(AppBarViewModel::class.java)
         }
 
         arguments?.let { arguments ->
@@ -180,7 +180,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
 
     override fun onResume() {
         super.onResume()
-        headerViewModel?.replace(headerBinding.root)
+        appBarViewModel?.replace(headerBinding.root)
         applyColor(PreferenceApplier(requireContext()).colorPair())
     }
 

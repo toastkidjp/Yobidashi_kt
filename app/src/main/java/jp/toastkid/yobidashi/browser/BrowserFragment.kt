@@ -29,7 +29,7 @@ import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
@@ -68,7 +68,7 @@ class BrowserFragment : Fragment(),
 
     private val searchQueryExtractor = SearchQueryExtractor()
 
-    private var headerViewModel: HeaderViewModel? = null
+    private var appBarViewModel: AppBarViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
 
@@ -111,7 +111,7 @@ class BrowserFragment : Fragment(),
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
         val viewModelProvider = ViewModelProvider(activity)
-        headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+        appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
 
         viewModelProvider.get(BrowserHeaderViewModel::class.java).also { viewModel ->
             viewModel.stopProgress.observe(activity, Observer { stop ->
@@ -155,7 +155,7 @@ class BrowserFragment : Fragment(),
                     return@Observer
                 }
                 val headerView = headerBinding?.root ?: return@Observer
-                headerViewModel?.replace(headerView)
+                appBarViewModel?.replace(headerView)
             })
 
             viewModel.enableForward.observe(activity, Observer(::updateForwardButtonState))
@@ -388,8 +388,8 @@ class BrowserFragment : Fragment(),
 
     private fun switchToolbarVisibility() {
         when (preferenceApplier.browserScreenMode()) {
-            ScreenMode.FULL_SCREEN -> headerViewModel?.hide()
-            ScreenMode.EXPANDABLE, ScreenMode.FIXED -> headerViewModel?.show()
+            ScreenMode.FULL_SCREEN -> appBarViewModel?.hide()
+            ScreenMode.EXPANDABLE, ScreenMode.FIXED -> appBarViewModel?.show()
         }
     }
 
@@ -454,7 +454,7 @@ class BrowserFragment : Fragment(),
     }
 
     override fun onDetach() {
-        headerViewModel?.show()
+        appBarViewModel?.show()
         browserModule.onPause()
         super.onDetach()
     }

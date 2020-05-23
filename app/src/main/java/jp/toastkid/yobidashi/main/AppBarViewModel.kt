@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModel
 /**
  * @author toastkidjp
  */
-class HeaderViewModel : ViewModel() {
+class AppBarViewModel : ViewModel() {
 
     private val _content = MutableLiveData<View>()
 

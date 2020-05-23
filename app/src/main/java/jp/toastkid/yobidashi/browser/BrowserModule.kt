@@ -51,7 +51,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
@@ -393,7 +393,7 @@ class BrowserModule(
             val activity = webViewContainer?.context
             if (activity is FragmentActivity
                     && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
-                ViewModelProvider(activity).get(HeaderViewModel::class.java).show()
+                ViewModelProvider(activity).get(AppBarViewModel::class.java).show()
             }
         }
 

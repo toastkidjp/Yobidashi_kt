@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -51,7 +51,7 @@ class TabAdapter(
 
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
-    private var headerViewModel: HeaderViewModel? = null
+    private var appBarViewModel: AppBarViewModel? = null
 
     private val bitmapCompressor = BitmapCompressor()
 
@@ -65,7 +65,7 @@ class TabAdapter(
         if (viewContext is MainActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
-            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+            appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
         }
 

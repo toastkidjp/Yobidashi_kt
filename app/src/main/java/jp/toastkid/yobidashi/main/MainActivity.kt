@@ -255,7 +255,7 @@ class MainActivity : AppCompatActivity(),
                     ?: fragmentClass.newInstance()
 
     private fun initializeHeaderViewModel() {
-        val headerViewModel = ViewModelProvider(this).get(HeaderViewModel::class.java)
+        val headerViewModel = ViewModelProvider(this).get(AppBarViewModel::class.java)
         headerViewModel.content.observe(this, Observer { view ->
             if (view == null) {
                 return@Observer
