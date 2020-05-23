@@ -51,6 +51,7 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentViewModel
@@ -196,13 +197,7 @@ class MainActivity : AppCompatActivity(),
             )
         })
 
-        searchWithClip = SearchWithClip(
-                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
-                binding.content,
-                colorPair,
-                browserViewModel
-        )
-        searchWithClip.invoke()
+        invokeSearchWithClip(colorPair)
 
         activityViewModelProvider.get(LoadingViewModel::class.java)
                 .onPageFinished
@@ -245,6 +240,16 @@ class MainActivity : AppCompatActivity(),
                 moveTaskToBack(true)
             }
         }
+    }
+
+    private fun invokeSearchWithClip(colorPair: ColorPair) {
+        searchWithClip = SearchWithClip(
+                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
+                binding.content,
+                colorPair,
+                browserViewModel
+        )
+        searchWithClip.invoke()
     }
 
     private fun obtainFragment(fragmentClass: Class<out Fragment>) =
