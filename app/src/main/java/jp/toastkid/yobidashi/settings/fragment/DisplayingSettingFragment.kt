@@ -101,6 +101,11 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        preferenceApplier.colorPair().applyReverseTo(binding.fab)
+    }
+
     fun applyDarkMode() {
         DarkModeApplier().invoke(preferenceApplier, binding.fabParent)
     }
