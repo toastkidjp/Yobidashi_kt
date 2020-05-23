@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
-import jp.toastkid.yobidashi.databinding.ModulePdfHeaderBinding
+import jp.toastkid.yobidashi.databinding.AppBarPdfViewerBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -48,7 +48,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      */
     private lateinit var binding: FragmentPdfViewerBinding
 
-    private lateinit var headerBinding: ModulePdfHeaderBinding
+    private lateinit var headerBinding: AppBarPdfViewerBinding
 
     /**
      * Adapter.
@@ -206,7 +206,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         private const val LAYOUT_ID = R.layout.fragment_pdf_viewer
 
         @LayoutRes
-        private const val APP_BAR_CONTENT_LAYOUT_ID = R.layout.module_pdf_header
+        private const val APP_BAR_CONTENT_LAYOUT_ID = R.layout.app_bar_pdf_viewer
 
         private const val KEY_URI = "uri"
 
