@@ -80,7 +80,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
@@ -138,8 +137,6 @@ class MainActivity : AppCompatActivity(),
      * Runtime permission.
      */
     private var runtimePermissions: RuntimePermissions? = null
-
-    private val thumbnailGenerator = ThumbnailGenerator()
 
     /**
      * Preferences wrapper.
@@ -518,11 +515,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun refreshThumbnail() {
-        val findFragment = findFragment()
-        if (findFragment !is TabUiFragment) {
-            return
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val findFragment = findFragment()
+            if (findFragment !is TabUiFragment) {
+                return@launch
+            }
+            tabs.saveNewThumbnail(binding.content)
         }
-        tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
     }
 
     override fun onBackPressed() {
