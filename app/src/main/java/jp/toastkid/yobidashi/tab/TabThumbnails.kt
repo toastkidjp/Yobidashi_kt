@@ -21,12 +21,12 @@ class TabThumbnails(contextSupplier: () -> Context) {
 
     fun clean() = folder.clean()
 
-    fun delete(thumbnailPath: String?) {
-        if (thumbnailPath.isNullOrBlank()) {
+    fun delete(thumbnailName: String?) {
+        if (thumbnailName.isNullOrBlank()) {
             return
         }
 
-        val lastScreenshot = assignNewFile(thumbnailPath)
+        val lastScreenshot = assignNewFile(thumbnailName)
         if (lastScreenshot.exists()) {
             lastScreenshot.delete()
         }
