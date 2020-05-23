@@ -160,14 +160,6 @@ class MainActivity : AppCompatActivity(),
 
         val colorPair = preferenceApplier.colorPair()
 
-        searchWithClip = SearchWithClip(
-                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
-                binding.content,
-                colorPair,
-                browserViewModel
-        )
-        searchWithClip.invoke()
-
         pageSearchPresenter = PageSearcherModule(binding.sip)
 
         initializeHeaderViewModel()
@@ -203,6 +195,14 @@ class MainActivity : AppCompatActivity(),
                     preferenceApplier.colorPair()
             )
         })
+
+        searchWithClip = SearchWithClip(
+                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
+                binding.content,
+                colorPair,
+                browserViewModel
+        )
+        searchWithClip.invoke()
 
         activityViewModelProvider.get(LoadingViewModel::class.java)
                 .onPageFinished
