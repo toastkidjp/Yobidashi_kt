@@ -68,6 +68,10 @@ class TabAdapter(
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
         }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            tabThumbnails.removeUnused(tabList.thumbnailNames())
+        }
     }
     /**
      * Save new thumbnail asynchronously.

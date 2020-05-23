@@ -245,4 +245,6 @@ class TabList private constructor() {
         }
     }
 
+    fun thumbnailNames(): Collection<String> = tabs.map { it.thumbnailPath() }
+
 }

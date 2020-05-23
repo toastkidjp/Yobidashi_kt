@@ -9,8 +9,6 @@ package jp.toastkid.yobidashi.tab
 
 import android.content.Context
 import jp.toastkid.yobidashi.libs.storage.FilesDir
-import timber.log.Timber
-import java.io.File
 
 /**
  * @author toastkidjp
@@ -32,6 +30,12 @@ class TabThumbnails(contextSupplier: () -> Context) {
         if (lastScreenshot.exists()) {
             lastScreenshot.delete()
         }
+    }
+
+    fun removeUnused(exceptionalTabIds: Collection<String>) {
+        folder.listFiles()
+                .filter { !exceptionalTabIds.contains(it.name) }
+                .forEach { it.delete() }
     }
 
     companion object {
