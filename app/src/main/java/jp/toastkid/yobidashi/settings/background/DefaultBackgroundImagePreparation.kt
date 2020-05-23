@@ -28,13 +28,18 @@ class DefaultBackgroundImagePreparation {
     operator fun invoke(context: Context): Job =
             CoroutineScope(Dispatchers.IO).launch {
                 val filesDir = FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory())
+
                 val defaultFile = filesDir.assignNewFile("sakura")
-                BitmapFactory.decodeResource(context.resources, R.mipmap.sakura)
-                        .compress(Bitmap.CompressFormat.PNG, 100,
-                                FileOutputStream(defaultFile))
-                BitmapFactory.decodeResource(context.resources, R.mipmap.toast)
-                        .compress(Bitmap.CompressFormat.PNG, 100,
-                                FileOutputStream(filesDir.assignNewFile("toast")))
+                FileOutputStream(defaultFile).use {
+                    BitmapFactory.decodeResource(context.resources, R.mipmap.sakura)
+                            .compress(Bitmap.CompressFormat.PNG, 100, it)
+                }
+
+                FileOutputStream(filesDir.assignNewFile("toast")).use {
+                    BitmapFactory.decodeResource(context.resources, R.mipmap.toast)
+                            .compress(Bitmap.CompressFormat.PNG, 100, it)
+                }
+
                 PreferenceApplier(context).backgroundImagePath = defaultFile.absolutePath
             }
 }
