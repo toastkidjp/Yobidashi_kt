@@ -173,11 +173,11 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.background_setting_menu, menu)
+        inflater.inflate(R.menu.background_setting_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item?.itemId) {
+        return when (item.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
                 launchAdding()
                 true
