@@ -48,7 +48,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      */
     private lateinit var binding: FragmentPdfViewerBinding
 
-    private lateinit var headerBinding: AppBarPdfViewerBinding
+    private lateinit var appBarBinding: AppBarPdfViewerBinding
 
     /**
      * Adapter.
@@ -70,7 +70,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
                 container,
                 false
         )
-        headerBinding = DataBindingUtil.inflate(
+        appBarBinding = DataBindingUtil.inflate(
                 inflater,
                 APP_BAR_CONTENT_LAYOUT_ID,
                 container,
@@ -89,10 +89,10 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         binding.pdfImages.layoutManager = layoutManager
         PagerSnapHelper().attachToRecyclerView(binding.pdfImages)
 
-        headerBinding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+        appBarBinding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 val progress = p0?.progress ?: 0
-                headerBinding.input.setText((progress + 1).toString())
+                appBarBinding.input.setText((progress + 1).toString())
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -100,7 +100,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
             override fun onStopTrackingTouch(p0: SeekBar?) = Unit
 
         })
-        headerBinding.input.addTextChangedListener(object: TextWatcher {
+        appBarBinding.input.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(p0: Editable?) = Unit
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
@@ -141,7 +141,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
     private fun load(uri: Uri) {
         adapter.load(uri)
         binding.pdfImages.scheduleLayoutAnimation()
-        headerBinding.seek.max = adapter.itemCount - 1
+        appBarBinding.seek.max = adapter.itemCount - 1
     }
 
     /**
@@ -180,7 +180,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
 
     override fun onResume() {
         super.onResume()
-        appBarViewModel?.replace(headerBinding.root)
+        appBarViewModel?.replace(appBarBinding.root)
         applyColor(PreferenceApplier(requireContext()).colorPair())
     }
 
@@ -190,10 +190,10 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      * @param colorPair
      */
     private fun applyColor(colorPair: ColorPair) {
-        headerBinding.header.setBackgroundColor(colorPair.bgColor())
-        headerBinding.seek.progressDrawable.colorFilter =
+        appBarBinding.appBar.setBackgroundColor(colorPair.bgColor())
+        appBarBinding.seek.progressDrawable.colorFilter =
                 PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
-        EditTextColorSetter().invoke(headerBinding.input, colorPair.fontColor())
+        EditTextColorSetter().invoke(appBarBinding.input, colorPair.fontColor())
     }
 
     fun setInitialArguments(uri: Uri?, scrolled: Int) {
