@@ -136,7 +136,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         ClearImagesDialogFragment().also {
             it.setTargetFragment(this, IMAGE_READ_REQUEST)
             it.show(
-                    requireFragmentManager(),
+                    parentFragmentManager,
                     ClearImagesDialogFragment::class.java.simpleName
             )
         }
