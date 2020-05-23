@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -260,6 +261,11 @@ class MainActivity : AppCompatActivity(),
                 return@Observer
             }
             binding.toolbarContent.removeAllViews()
+
+            if (view.parent != null) {
+                (view.parent as? ViewGroup)?.removeAllViews()
+            }
+
             binding.toolbar.layoutParams.height = view.layoutParams.height
             binding.toolbarContent.addView(view, 0)
         })
