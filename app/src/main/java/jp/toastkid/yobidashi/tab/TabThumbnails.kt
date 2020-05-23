@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.tab
 
 import android.content.Context
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -27,7 +28,7 @@ class TabThumbnails(contextSupplier: () -> Context) {
             return
         }
 
-        val lastScreenshot = File(thumbnailPath)
+        val lastScreenshot = assignNewFile(thumbnailPath)
         if (lastScreenshot.exists()) {
             lastScreenshot.delete()
         }
