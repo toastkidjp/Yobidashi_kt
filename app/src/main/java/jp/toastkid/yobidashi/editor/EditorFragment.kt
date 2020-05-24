@@ -63,7 +63,6 @@ import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
-import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -277,42 +276,40 @@ class EditorFragment :
 
         lastSavedTitle = context.getString(R.string.last_saved)
 
-        // TODO extract viewmoodelProviders to common variable
         (context as? FragmentActivity)?.let { activity ->
-            headerViewModel = ViewModelProviders.of(activity).get(HeaderViewModel::class.java)
-            tabListViewModel = ViewModelProviders.of(activity).get(TabListViewModel::class.java)
+            val viewModelProvider = ViewModelProviders.of(activity)
+            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+            tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
 
             tabListViewModel
                     ?.tabCount
                     ?.observe(activity, Observer { menuBinding.tabCount.setText(it.toString()) })
 
-            (ViewModelProviders.of(activity).get(PageSearcherViewModel::class.java)).let { viewModel ->
+            (viewModelProvider.get(PageSearcherViewModel::class.java)).let { viewModel ->
                 var currentWord = ""
                 viewModel.find.observe(activity, Observer {
                     currentWord = it ?: ""
                     finder.findDown(currentWord)
                 })
 
-                viewModel.upward.observe(activity, Observer { keyword ->
+                viewModel.upward.observe(activity, Observer {
                     finder.findUp(currentWord)
                 })
 
-                viewModel.downward.observe(activity, Observer { keyword ->
+                viewModel.downward.observe(activity, Observer {
                     finder.findDown(currentWord)
                 })
             }
 
-            contentViewModel = ViewModelProviders.of(activity).get(ContentViewModel::class.java)
+            contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
         reload()
     }
 
     fun reload() {
-        Timber.i("reload")// TODO delete
         if (arguments?.containsKey("path") == true) {
             path = arguments?.getString("path") ?: ""
-            Timber.i("reset path to $path")
         }
 
         if (path.isEmpty()) {
@@ -452,13 +449,6 @@ class EditorFragment :
     }
 
     /**
-     * Return root view.
-     * TODO merge it.
-     * @return [View]
-     */
-    fun view(): View = binding.root
-
-    /**
      * Save current content to file.
      */
     fun save() {
@@ -497,7 +487,7 @@ class EditorFragment :
     /**
      * Call from fragment's onPause().
      */
-    fun saveIfNeed() {
+    private fun saveIfNeed() {
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
@@ -621,7 +611,7 @@ class EditorFragment :
     private fun setLastSaved(ms: Long) {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = ms
-        menuBinding.lastSaved?.setText(lastSavedTitle + dateFormatHolder.get()?.format(calendar.time))
+        menuBinding.lastSaved?.text = lastSavedTitle + dateFormatHolder.get()?.format(calendar.time)
     }
 
     /**
@@ -630,7 +620,7 @@ class EditorFragment :
     private fun clearPath() {
         path = ""
         clearInput()
-        menuBinding.lastSaved?.setText("")
+        menuBinding.lastSaved?.text = ""
     }
 
     /**
@@ -661,7 +651,7 @@ class EditorFragment :
      * @param animation
      */
     fun animate(animation: Animation) {
-        view().startAnimation(animation)
+        binding.root.startAnimation(animation)
     }
 
     /**

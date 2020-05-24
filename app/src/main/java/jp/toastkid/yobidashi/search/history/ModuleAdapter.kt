@@ -60,6 +60,7 @@ internal class ModuleAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val searchHistory = selected[position]
+        holder.hideButton()
         holder.setText(searchHistory.query)
         holder.itemView.setOnClickListener {
             try {
@@ -70,7 +71,7 @@ internal class ModuleAdapter(
         }
         holder.setOnClickAdd(searchHistory, onClickAdd)
 
-        holder.setOnClickDelete { removeAt(position) }
+        holder.setOnClickDelete { remove(searchHistory) }
 
         holder.setAddIcon(R.drawable.ic_add_circle_search)
 
@@ -140,7 +141,7 @@ internal class ModuleAdapter(
             if (s.isNotBlank()) {
                 repository.select("$s%")
             } else {
-                repository.find(maxItemCount)
+                repository.findAll()
             }
         }
                 .subscribeOn(Schedulers.newThread())
@@ -156,20 +157,24 @@ internal class ModuleAdapter(
                 )
     }
 
+    override fun removeAt(position: Int): Disposable {
+        return remove(selected[position])
+    }
+
     /**
      * Remove item with position.
      *
-     * @param position
+     * @param item [SearchHistory]
      * @return [Disposable]
      */
-    override fun removeAt(position: Int): Disposable {
-        val item = selected[position]
+    private fun remove(item: SearchHistory): Disposable {
         return Completable.fromAction { repository.delete(item) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    val index = selected.indexOf(item)
                     selected.remove(item)
-                    notifyItemRemoved(position)
+                    notifyItemRemoved(index)
                     if (isEmpty) {
                         onVisibilityChanged(false)
                     }

@@ -23,45 +23,46 @@
                 android:layout_height="match_parent"
                 android:visibility="gone"
                 />
-            <Button
+            <TextView
                 android:id="@+id/load"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
                 android:text="@string/load"
+                android:gravity="center_horizontal"
                 android:drawableTop="@drawable/ic_load"
                 android:foreground="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.load()}"
                 android:onLongClick="@{fragment::showName}"
                 />
-            <Button
+            <TextView
                 android:id="@+id/save"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
                 android:text="@string/save"
+                android:gravity="center_horizontal"
                 android:drawableTop="@drawable/ic_save"
                 android:foreground="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.save()}"
                 android:onLongClick="@{fragment::showName}"
                 />
-            <Button
+            <TextView
                 android:id="@+id/backup"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 style="?android:attr/buttonBarStyle"
                 android:text="@string/save_backup"
+                android:gravity="center_horizontal"
                 android:drawableTop="@drawable/ic_backup"
                 android:foreground="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.backup()}"
                 android:onLongClick="@{fragment::showName}"
                 />
-            <Button
+            <TextView
                 android:id="@+id/save_as"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
                 android:text="@string/save_as"
+                android:gravity="center_horizontal"
                 android:drawableTop="@drawable/ic_save_as"
                 android:foreground="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.saveAs()}"
@@ -101,12 +102,12 @@
                     />
             </FrameLayout>
 
-            <Button
+            <TextView
                 android:id="@+id/load_as"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
                 android:text="@string/load_as"
+                android:gravity="center_horizontal"
                 android:drawableTop="@drawable/ic_load_as"
                 android:foreground="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.loadAs()}"
@@ -134,12 +135,12 @@
                 android:textSize="14sp"
                 tools:text="Last saved:\n 2017/12/22 11:18:19"
                 />
-            <Button
+            <TextView
                 android:id="@+id/clear"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                style="?android:attr/buttonBarStyle"
                 android:text="@string/clear_all"
+                android:gravity="center_horizontal"
                 android:drawableTop="@drawable/ic_clear_form"
                 android:foreground="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.clear()}"

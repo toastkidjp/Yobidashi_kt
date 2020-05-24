@@ -1,16 +1,14 @@
 package jp.toastkid.yobidashi.browser.webview
 
-import android.content.Context
 import android.os.Build
 import android.util.LruCache
-import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.webkit.WebViewClient
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import androidx.annotation.ColorInt
 
 /**
  * [WebView] pool.
  *
+ * // TODO clean up comments
  * @param context Use for make [WebViewFactory] instance.
  * @param webViewClientSupplier
  * @param webChromeClientSupplier
@@ -20,23 +18,12 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-internal class WebViewPool(
-        private val context: Context,
-        private val webViewClientSupplier: () -> WebViewClient,
-        private val webChromeClientSupplier: () -> WebChromeClient,
-        poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE
-) {
+internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
 
     /**
      * Containing [WebView] instance.
      */
     private val pool: LruCache<String, WebView>
-
-    private val darkThemeApplier = DarkModeApplier()
-
-    private val preferenceApplier = PreferenceApplier(context)
-
-    private val alphaConverter = AlphaConverter()
 
     /**
      * Latest tab's ID.
@@ -60,20 +47,7 @@ internal class WebViewPool(
 
         latestTabId = tabId
 
-        val extract = pool[tabId]
-        if (extract != null) {
-            darkThemeApplier(extract, preferenceApplier.useDarkMode())
-            return extract
-        }
-
-        val webView = WebViewFactory.make(context)
-        webView.webViewClient = webViewClientSupplier()
-        webView.webChromeClient = webChromeClientSupplier()
-
-        darkThemeApplier(webView, preferenceApplier.useDarkMode())
-
-        pool.put(tabId, webView)
-        return webView
+        return pool[tabId]
     }
 
     /**
@@ -81,11 +55,13 @@ internal class WebViewPool(
      *
      * @return [WebView] (Nullable)
      */
-    fun getLatest(): WebView? = latestTabId?.let {
-        val webView = pool.get(it)
-        darkThemeApplier(webView, preferenceApplier.useDarkMode())
-        webView
+    fun getLatest(): WebView? = latestTabId?.let { return@let pool.get(it) }
+
+    fun put(tabId: String, webView: WebView) {
+        pool.put(tabId, webView)
     }
+
+    fun containsKey(tabId: String?) = tabId != null && pool.snapshot().containsKey(tabId)
 
     /**
      * Remove [WebView] by tab ID.
@@ -105,17 +81,16 @@ internal class WebViewPool(
      * @param newSize new pool size
      */
     fun resize(newSize: Int) {
-        if (newSize == pool.maxSize()) {
+        if (newSize == pool.maxSize() || newSize <= 0) {
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-            && 0 < newSize) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             pool.resize(newSize)
         }
     }
 
-    fun applyNewAlpha() {
-        val newAlphaBackground = alphaConverter.readBackground(context)
+    fun applyNewAlpha(@ColorInt newAlphaBackground: Int) {
         pool.snapshot().values.forEach { it.setBackgroundColor(newAlphaBackground) }
     }
 

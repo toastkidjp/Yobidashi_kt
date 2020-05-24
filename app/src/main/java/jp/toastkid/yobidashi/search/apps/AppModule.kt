@@ -54,6 +54,7 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
      */
     fun request(key: String) {
         if (TextUtils.isEmpty(key)) {
+            hide()
             return
         }
 

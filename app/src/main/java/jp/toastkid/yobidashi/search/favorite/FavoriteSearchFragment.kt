@@ -150,8 +150,8 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
         inflater.inflate(R.menu.favorite_toolbar_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) =
-            when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) =
+            when (item.itemId) {
                 R.id.favorite_toolbar_menu_clear -> {
                     fragmentManager?.let {
                         ClearFavoriteSearchDialogFragment.show(it, this)
@@ -198,7 +198,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     private fun invokeAddition() {
         FavoriteSearchAdditionDialogFragment()
                 .also { it.setTargetFragment(this, 0) }
-                .show(fragmentManager, "addition")
+                .show(requireFragmentManager(), "addition")
     }
 
     private fun colorPair() = preferenceApplier.colorPair()

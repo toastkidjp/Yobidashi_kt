@@ -34,7 +34,6 @@ import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.image.Image
-import jp.toastkid.yobidashi.settings.background.RotatedImageFixing
 import timber.log.Timber
 import java.io.File
 
@@ -50,9 +49,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private var path: String? = null
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
-
-    // TODO Delete it.
-    private val rotatedImageFixing = RotatedImageFixing()
 
     private val disposables = CompositeDisposable()
 
@@ -195,12 +191,12 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         }
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         disposables.clear()
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         disposables.clear()
     }

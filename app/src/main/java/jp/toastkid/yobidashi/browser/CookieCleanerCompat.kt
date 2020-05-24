@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-object CookieCleanerCompat {
+class CookieCleanerCompat {
 
     /**
      * Invoke action.

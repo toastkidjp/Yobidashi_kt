@@ -213,17 +213,17 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         RecyclerViewScroller.toBottom(binding.images, adapter?.itemCount ?: 0)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.image_viewer, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.excluding_items_setting -> {
                 val fragment = ExcludingSettingFragment()
                 fragment.setTargetFragment(this, 1)
-                fragment.show(fragmentManager, "setting")
+                fragment.show(requireFragmentManager(), "setting")
             }
             R.id.sort_by_date -> {
                 preferenceApplier.setImageViewerSort(Sort.DATE)

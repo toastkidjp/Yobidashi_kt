@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.search
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -23,6 +24,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
@@ -227,16 +229,16 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater?.inflate(R.menu.search_menu, menu)
-        // TODO Move onResume
-        menu?.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
-        menu?.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
+        inflater.inflate(R.menu.search_menu, menu)
+
+        menu.findItem(R.id.suggestion_check)?.isChecked = preferenceApplier.isEnableSuggestion
+        menu.findItem(R.id.history_check)?.isChecked = preferenceApplier.isEnableSearchHistory
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean = when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.suggestion_check -> {
             preferenceApplier.switchEnableSuggestion()
             item.isChecked = preferenceApplier.isEnableSuggestion
@@ -311,7 +313,6 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        activity?.let { Inputs.toggle(it) }
 
         suggestionModule?.enable = preferenceApplier.isEnableSuggestion
         historyModule?.enable = preferenceApplier.isEnableSearchHistory
@@ -322,6 +323,26 @@ class SearchFragment : Fragment() {
 
         val headerView = headerBinding?.root ?: return
         headerViewModel?.replace(headerView)
+
+        showKeyboard()
+    }
+
+    private fun showKeyboard() {
+        activity?.let {
+            val input = headerBinding?.searchInput ?: return@let
+            if (!input.requestFocus()) {
+                return@let
+            }
+
+            val inputMethodManager =
+                    it.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                            ?: return@let
+
+            input.postDelayed(
+                    { inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT) },
+                    100L
+            )
+        }
     }
 
     /**

@@ -49,12 +49,9 @@ class SearchHistoryFragment : Fragment(),
         binding.historiesView.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        // TODO move it.
-        val repository = DatabaseFinder().invoke(context).searchHistoryRepository()
-
         adapter = ModuleAdapter(
                 context,
-                repository,
+                DatabaseFinder().invoke(context).searchHistoryRepository(),
                 { SearchAction(context, it.category ?: "", it.query ?: "").invoke()},
                 { },
                 { },
@@ -79,13 +76,13 @@ class SearchHistoryFragment : Fragment(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.search_history, menu)
+        inflater.inflate(R.menu.search_history, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.clear -> {
                 val fragmentManager = fragmentManager ?: return true
                 SearchHistoryClearDialogFragment.show(

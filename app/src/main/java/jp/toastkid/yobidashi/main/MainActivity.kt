@@ -287,6 +287,7 @@ class MainActivity : AppCompatActivity(),
                 { menuViewModel?.close() }
         )
 
+        // TODO Attempt to move to binder.
         menuViewModel?.click?.observe(this, Observer {
             menuUseCase.onMenuClick(it)
         })
@@ -455,14 +456,12 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        val transaction = supportFragmentManager.beginTransaction()
         val fragments = supportFragmentManager.fragments
-        if (fragments.size != 0) {
-            if (fragments.contains(fragment)) {
-                fragments.remove(fragment)
-            }
+        if (fragments.size != 0 && fragments.contains(fragment)) {
+            fragments.remove(fragment)
         }
 
+        val transaction = supportFragmentManager.beginTransaction()
         if (withAnimation) {
             transaction.setCustomAnimations(
                     if (withSlideIn) R.anim.slide_in_right else R.anim.slide_up,
@@ -488,7 +487,8 @@ class MainActivity : AppCompatActivity(),
     private fun replaceToCurrentTab(withAnimation: Boolean = true) {
         when (val currentTab = tabs.currentTab()) {
             is WebTab -> {
-                val browserFragment = (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
+                val browserFragment =
+                        (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
                 browserFragmentViewModel
                         ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
@@ -530,6 +530,7 @@ class MainActivity : AppCompatActivity(),
      */
     private fun showTabList() {
         refreshThumbnail()
+        // TODO Remove unused elvis operator.
         val fragmentManager = supportFragmentManager ?: return
         tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
     }
@@ -563,7 +564,7 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        if (currentFragment is BrowserFragment) {
+        if (currentFragment is BrowserFragment || currentFragment is PdfViewerFragment) {
             tabs.closeTab(tabs.index())
 
             if (tabs.isEmpty()) {
@@ -576,7 +577,7 @@ class MainActivity : AppCompatActivity(),
 
         val fragment = findFragment()
         if (fragment !is EditorFragment) {
-            supportFragmentManager?.popBackStackImmediate()
+            supportFragmentManager.popBackStackImmediate()
             return
         }
 
@@ -811,6 +812,7 @@ class MainActivity : AppCompatActivity(),
         return super.onCreateOptionsMenu(menu)
     }
 
+    // TODO Use Non-null
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         R.id.open_tabs -> {
             switchTabList()
@@ -821,11 +823,7 @@ class MainActivity : AppCompatActivity(),
             true
         }
         R.id.reset_menu_position -> {
-            binding.menuSwitch.let {
-                it.translationX = 0f
-                it.translationY = 0f
-                preferenceApplier.clearMenuFabPosition()
-            }
+            menuViewModel?.resetPosition()
             true
         }
         R.id.about_this_app -> {

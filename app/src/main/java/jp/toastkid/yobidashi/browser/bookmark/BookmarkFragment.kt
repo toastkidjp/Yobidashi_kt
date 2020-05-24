@@ -151,12 +151,13 @@ class BookmarkFragment: Fragment(),
         activity?.supportFragmentManager?.popBackStack()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.bookmark, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val fragmentManager = fragmentManager ?: return true
         return when (item?.itemId) {
             R.id.clear -> {
                 BookmarkClearDialogFragment()

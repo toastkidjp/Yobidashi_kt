@@ -33,9 +33,8 @@ enum class PlayingSpeed(@StringRes val textId: Int, val speed: Float) {
     }
 
     companion object {
-        fun findById(id: Long): PlayingSpeed {
-            return values().firstOrNull { it.textId.toLong() == id } ?: NORMAL
-        }
+        fun findById(id: Long): PlayingSpeed =
+                values().firstOrNull { it.textId.toLong() == id } ?: NORMAL
 
         fun getDefault() = NORMAL
     }

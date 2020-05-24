@@ -25,7 +25,7 @@ interface SearchHistoryRepository {
     @Query("SELECT * FROM SearchHistory WHERE `query` LIKE :keyword ORDER BY timestamp DESC LIMIT 5")
     fun select(keyword: String): List<SearchHistory>
 
-    @Query("SELECT * FROM SearchHistory")
+    @Query("SELECT * FROM SearchHistory ORDER BY timestamp DESC")
     fun findAll(): List<SearchHistory>
 
     @Query("SELECT * FROM SearchHistory ORDER BY timestamp DESC LIMIT :count")

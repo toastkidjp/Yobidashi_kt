@@ -39,7 +39,11 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
     private var contentViewModel: ContentViewModel? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val context = requireContext()
@@ -47,7 +51,8 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        binding.historiesView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.historiesView.layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         contentViewModel = ViewModelProviders.of(requireActivity()).get(ContentViewModel::class.java)
 
@@ -131,18 +136,18 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.view_history, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item?.itemId) {
             R.id.clear -> {
                 val clearDialogFragment = ClearDialogFragment()
                 clearDialogFragment.setTargetFragment(this, clearDialogFragment.id)
                 clearDialogFragment.show(
-                        fragmentManager,
+                        requireFragmentManager(),
                         ClearDialogFragment::class.java.simpleName
                 )
                 true
@@ -170,6 +175,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
     }
 
     companion object {
+
         @LayoutRes
         private const val LAYOUT_ID: Int = R.layout.fragment_view_history
 

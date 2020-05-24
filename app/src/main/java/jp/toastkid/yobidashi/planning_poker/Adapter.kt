@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.planning_poker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -17,7 +18,7 @@ internal class Adapter : RecyclerView.Adapter<ViewHolder>() {
             ViewHolder(
                     DataBindingUtil.inflate(
                             LayoutInflater.from(parent.context),
-                            R.layout.item_planning_poker,
+                            LAYOUT_ID,
                             parent,
                             false
                     )
@@ -31,6 +32,9 @@ internal class Adapter : RecyclerView.Adapter<ViewHolder>() {
     override fun getItemCount(): Int = MAXIMUM_SIZE
 
     companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.item_planning_poker
 
         /**
          * Maximum size.

@@ -116,7 +116,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:text="@string/settings_color_commit"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         style="?android:attr/buttonBarStyle"
                         android:onClick="@{view -> fragment.ok()}"
                         />
@@ -131,7 +131,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:text="@string/settings_color_reset"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         style="?android:attr/buttonBarStyle"
                         android:onClick="@{view -> fragment.reset()}"
                         />

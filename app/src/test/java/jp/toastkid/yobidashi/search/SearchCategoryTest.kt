@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi.search
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -45,6 +47,7 @@ class SearchCategoryTest {
         assertSame(SearchCategory.GOOGLE, SearchCategory.findByHostOrNull("www.google.com"))
         assertSame(SearchCategory.YAHOO_JAPAN, SearchCategory.findByHostOrNull("search.yahoo.co.jp"))
         assertSame(SearchCategory.FLICKR, SearchCategory.findByHostOrNull("www.flickr.com"))
+        assertSame(SearchCategory.AOL, SearchCategory.findByHostOrNull("www.aolsearch.com"))
     }
 
 }

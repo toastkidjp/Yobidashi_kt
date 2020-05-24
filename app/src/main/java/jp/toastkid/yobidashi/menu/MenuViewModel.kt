@@ -15,27 +15,34 @@ import androidx.lifecycle.ViewModel
  * @author toastkidjp
  */
 class MenuViewModel : ViewModel() {
+
     private val _click = MutableLiveData<Menu>()
-    private val _longClick = MutableLiveData<Menu>()
-    private val _visibility = MutableLiveData<Boolean>()
-    private val _onResume = MutableLiveData<Unit>()
 
     val click: LiveData<Menu> = _click
-    val longClick: LiveData<Menu> = _longClick
-    val visibility: LiveData<Boolean> = _visibility
-    val onResume: LiveData<Unit> = _onResume
 
     fun click(menu: Menu) {
         _click.postValue(menu)
     }
 
+    private val _longClick = MutableLiveData<Menu>()
+
+    val longClick: LiveData<Menu> = _longClick
+
     fun longClick(menu: Menu) {
         _longClick.postValue(menu)
     }
 
+    private val _onResume = MutableLiveData<Unit>()
+
+    val onResume: LiveData<Unit> = _onResume
+
     fun onResume() {
         _onResume.postValue(Unit)
     }
+
+    private val _visibility = MutableLiveData<Boolean>()
+
+    val visibility: LiveData<Boolean> = _visibility
 
     fun switchVisibility(state: Boolean) {
         _visibility.postValue(state)
@@ -43,5 +50,13 @@ class MenuViewModel : ViewModel() {
 
     fun close() {
         _visibility.postValue(false)
+    }
+
+    private val _resetPosition = MutableLiveData<Unit>()
+
+    val resetPosition: LiveData<Unit> = _resetPosition
+
+    fun resetPosition() {
+        _resetPosition.postValue(Unit)
     }
 }

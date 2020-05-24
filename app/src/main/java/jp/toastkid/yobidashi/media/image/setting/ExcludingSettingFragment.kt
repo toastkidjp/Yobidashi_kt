@@ -61,14 +61,14 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
 
         val adapter = Adapter(preferenceApplier, viewModel)
         binding.excludingItems.adapter = adapter
-        RightSwipeActionAttachment().invoke(binding.excludingItems, {
+        RightSwipeActionAttachment().invoke(binding.excludingItems) {
             adapter.removeAt(it)
-        })
+        }
         adapter.addAll(excludedItems)
         adapter.notifyDataSetChanged()
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         val targetFragment = targetFragment ?: return
         ViewModelProviders.of(targetFragment).get(ImageViewerFragmentViewModel::class.java)

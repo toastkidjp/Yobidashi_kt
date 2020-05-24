@@ -62,6 +62,14 @@ class MenuBinder(
             }
         })
 
+        menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {
+            menuSwitch?.let {
+                it.translationX = 0f
+                it.translationY = 0f
+                preferenceApplier.clearMenuFabPosition()
+            }
+        })
+
         initializeWithContext(fragmentActivity)
 
         setFabPosition()

@@ -16,10 +16,11 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.notification.morning.DailyNotificationWorker
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
@@ -40,6 +41,8 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private lateinit var contentViewModel: ContentViewModel
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -50,6 +53,9 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
+
+        contentViewModel = ViewModelProviders.of(requireActivity()).get(ContentViewModel::class.java)
+
         return binding.root
     }
 
@@ -79,7 +85,8 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
             NotificationWidget.hide(activityContext)
             R.string.message_remove_notification_widget
         }
-        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+
+        contentViewModel.snackShort(messageId)
     }
 
     fun switchDailyNotification() {
@@ -88,12 +95,9 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
         binding.useDailyNotificationCheck.isChecked = newState
 
         @StringRes val messageId =
-                if (newState) {
-                    R.string.message_stay_tuned
-                } else {
-                    R.string.message_remove_notification_widget
-                }
-        Toaster.snackShort(binding.root, messageId, preferenceApplier.colorPair())
+                if (newState) R.string.message_stay_tuned
+                else R.string.message_remove_notification_widget
+        contentViewModel.snackShort(messageId)
 
         val context = context ?: return
         if (preferenceApplier.useDailyNotification()) {

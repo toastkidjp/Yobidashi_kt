@@ -14,7 +14,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
- * TODO Rename MainActivityViewModel and add snackbar
  * @author toastkidjp
  */
 class ContentViewModel : ViewModel() {
