@@ -66,9 +66,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 /**
- * TODO Modify behavior on switched new tab.
  * @author toastkidjp
  */
 class EditorFragment :
