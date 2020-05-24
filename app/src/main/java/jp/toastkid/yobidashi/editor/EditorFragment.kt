@@ -57,7 +57,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.AppBarViewModel
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
