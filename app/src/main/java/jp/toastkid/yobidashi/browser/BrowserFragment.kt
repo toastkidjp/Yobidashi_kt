@@ -80,7 +80,7 @@ class BrowserFragment : Fragment(),
         appBarBinding = DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
         appBarBinding?.fragment = this
 
-        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding?.fragment = this
 
         binding?.swipeRefresher?.let {
@@ -465,7 +465,7 @@ class BrowserFragment : Fragment(),
          * Layout ID.
          */
         @LayoutRes
-        private const val layoutId = R.layout.fragment_browser
+        private const val LAYOUT_ID = R.layout.fragment_browser
 
         @LayoutRes
         private const val APP_BAR_LAYOUT_ID = R.layout.app_bar_browser
