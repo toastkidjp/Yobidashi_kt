@@ -429,9 +429,6 @@ class MainActivity : AppCompatActivity(),
     private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
-            /*if (fragment is EditorFragment) {
-                fragment.reload()
-            }*/
             return
         }
 
