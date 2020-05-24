@@ -123,7 +123,11 @@ class EditorFragment :
 
     private var contentViewModel: ContentViewModel? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         menuBinding = DataBindingUtil.inflate(
