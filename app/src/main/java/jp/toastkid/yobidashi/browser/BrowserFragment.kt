@@ -77,7 +77,7 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_browser, container, false)
+        appBarBinding = DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
         appBarBinding?.fragment = this
 
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
@@ -466,6 +466,9 @@ class BrowserFragment : Fragment(),
          */
         @LayoutRes
         private const val layoutId = R.layout.fragment_browser
+
+        @LayoutRes
+        private const val APP_BAR_LAYOUT_ID = R.layout.app_bar_browser
 
     }
 
