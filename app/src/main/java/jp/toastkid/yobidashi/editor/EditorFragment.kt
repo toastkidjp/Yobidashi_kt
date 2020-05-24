@@ -32,6 +32,7 @@ import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.Dimension
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
@@ -126,7 +127,7 @@ class EditorFragment :
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_editor, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         menuBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.module_fragment_editor_menu,
@@ -752,6 +753,9 @@ class EditorFragment :
     }
 
     companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_editor
 
         /**
          * Request code of specifying file.
