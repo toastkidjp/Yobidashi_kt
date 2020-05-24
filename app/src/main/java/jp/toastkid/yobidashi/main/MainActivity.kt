@@ -479,9 +479,11 @@ class MainActivity : AppCompatActivity(),
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    editorFragment.reload()
-                    refreshThumbnail()
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread {
+                        editorFragment.reload()
+                        refreshThumbnail()
+                    }
                 }
             }
             is PdfTab -> {
