@@ -99,7 +99,7 @@ internal class ModuleAdapter(
             }
 
             items.forEach { add(it) }
-            onVisibilityChanged(!isEmpty)
+            onVisibilityChanged(!isEmpty())
             notifyDataSetChanged()
         }
     }
@@ -118,7 +118,7 @@ internal class ModuleAdapter(
             }
 
             notifyItemRemoved(position)
-            if (isEmpty) {
+            if (isEmpty()) {
                 onVisibilityChanged(false)
             }
         }
@@ -129,8 +129,7 @@ internal class ModuleAdapter(
      *
      * @return if this adapter is empty, return true
      */
-    private val isEmpty: Boolean
-        get() = itemCount == 0
+    private fun isEmpty(): Boolean = itemCount == 0
 
     /**
      * Clear selected items.
