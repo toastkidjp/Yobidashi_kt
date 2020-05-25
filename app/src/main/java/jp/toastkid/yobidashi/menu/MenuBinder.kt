@@ -12,7 +12,7 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.CircleRecyclerView
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
 import kotlin.math.min
 
@@ -42,7 +41,7 @@ class MenuBinder(
 
     private var previousIconColor: Int = Color.TRANSPARENT
 
-    private var recyclerView: CircleRecyclerView? = null
+    private var recyclerView: RecyclerView? = null
 
     init {
         setFabListener()
@@ -119,15 +118,13 @@ class MenuBinder(
         LinearSnapHelper().attachToRecyclerView(recyclerView)
         (recyclerView?.context as? FragmentActivity)?.let {
             val layoutManager =
-                    LinearLayoutManager(it, RecyclerView.VERTICAL, false)
+                    LinearLayoutManager(it, RecyclerView.HORIZONTAL, false)
             recyclerView?.layoutManager = layoutManager
             layoutManager.scrollToPosition(MenuAdapter.mediumPosition())
 
             menuAdapter = MenuAdapter(LayoutInflater.from(it), preferenceApplier, menuViewModel)
             recyclerView?.adapter = menuAdapter
         }
-
-        recyclerView?.setNeedLoop(true)
     }
 
     private fun setFabPosition() {
@@ -154,12 +151,11 @@ class MenuBinder(
         val menuX: Float = menuSwitch?.x ?: 1000f
         val useLeft = menuX < 200f
         menuStub.root?.layoutParams =
-                (menuStub.root?.layoutParams as? FrameLayout.LayoutParams)?.also {
-                    it.gravity = if (useLeft) Gravity.LEFT else Gravity.RIGHT
+                (menuStub.root?.layoutParams as? CoordinatorLayout.LayoutParams)?.also {
+                    it.gravity = (if (useLeft) Gravity.LEFT else Gravity.RIGHT) or Gravity.BOTTOM
                 }
         menuStub.root?.visibility = View.VISIBLE
 
-        recyclerView?.setMode(useLeft)
         recyclerView?.scheduleLayoutAnimation()
     }
 
