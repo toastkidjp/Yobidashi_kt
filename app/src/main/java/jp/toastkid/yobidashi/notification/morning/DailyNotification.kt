@@ -24,7 +24,7 @@ class DailyNotification {
 
     fun show(context: Context) {
         val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+                context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
                         ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.title_show_daily_notification)
