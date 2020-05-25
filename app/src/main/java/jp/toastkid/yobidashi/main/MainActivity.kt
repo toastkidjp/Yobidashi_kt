@@ -519,12 +519,14 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun refreshThumbnail() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val findFragment = findFragment()
-            if (findFragment !is TabUiFragment) {
-                return@launch
+        CoroutineScope(Dispatchers.Default).launch(disposables) {
+            runOnUiThread {
+                val findFragment = findFragment()
+                if (findFragment !is TabUiFragment) {
+                    return@runOnUiThread
+                }
+                tabs.saveNewThumbnail(binding.content)
             }
-            tabs.saveNewThumbnail(binding.content)
         }
     }
 

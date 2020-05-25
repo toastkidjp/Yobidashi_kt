@@ -82,15 +82,13 @@ class TabAdapter(
      * Save new thumbnail asynchronously.
      */
     @UiThread
-    suspend fun saveNewThumbnail(view: View?) {
+    fun saveNewThumbnail(view: View?) {
         val bitmap = thumbnailGenerator(view) ?: return
 
         val currentTab = tabList.currentTab() ?: return
 
-        withContext(Dispatchers.Default) {
-            val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
-            bitmapCompressor(bitmap, file)
-        }
+        val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
+        bitmapCompressor(bitmap, file)
     }
 
     /**
