@@ -78,35 +78,6 @@ class SettingFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.setting_tab_shortcut, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.menu_search -> {
-            binding.container.currentItem = 2
-            true
-        }
-        R.id.menu_browser -> {
-            binding.container.currentItem = 3
-            true
-        }
-        R.id.menu_editor -> {
-            binding.container.currentItem = 4
-            true
-        }
-        R.id.menu_notification -> {
-            binding.container.currentItem = 6
-            true
-        }
-        R.id.menu_other -> {
-            binding.container.currentItem = 7
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
-
     companion object {
 
         /**
