@@ -17,7 +17,8 @@ import java.io.File
  *
  * @author toastkidjp
  */
-internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerView.ViewHolder(binding.root) {
+internal class ViewHolder(private val binding: ItemTabListBinding)
+    : RecyclerView.ViewHolder(binding.root) {
 
     /**
      * Set tab's title.
