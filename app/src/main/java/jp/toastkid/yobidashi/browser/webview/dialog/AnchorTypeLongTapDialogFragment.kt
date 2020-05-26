@@ -43,6 +43,7 @@ class AnchorTypeLongTapDialogFragment : DialogFragment() {
                         1 -> viewModel.openBackground(title, uri)
                         2 -> viewModel.preview(uri)
                         3 -> Clipboard.clip(activityContext, url)
+                        4 -> Clipboard.clip(activityContext, title)
                     }
                 })
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
