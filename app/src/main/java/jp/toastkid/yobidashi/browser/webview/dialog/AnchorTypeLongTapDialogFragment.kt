@@ -36,7 +36,7 @@ class AnchorTypeLongTapDialogFragment : DialogFragment() {
         val uri = url.toUri()
 
         return AlertDialog.Builder(activityContext)
-                .setTitle("Title: $title URL: $url")
+                .setTitle("$title URL: $url")
                 .setItems(R.array.url_menu, { _, which ->
                     when (which) {
                         0 -> viewModel.open(uri)
