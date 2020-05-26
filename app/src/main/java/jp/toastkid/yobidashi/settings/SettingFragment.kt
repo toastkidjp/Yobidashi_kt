@@ -47,15 +47,13 @@ class SettingFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
 
-        childFragmentManager.let { fragmentManager ->
-            val pagerAdapter = PagerAdapter(this) { getString(it) }
-            binding.container.adapter = pagerAdapter
-            binding.container.offscreenPageLimit = 3
-            val mediator = TabLayoutMediator(binding.tabStrip, binding.container) { tab, position ->
-                tab.text = pagerAdapter.getPageTitle(position)
-            }
-            mediator.attach()
+        val pagerAdapter = PagerAdapter(this) { getString(it) }
+        binding.container.adapter = pagerAdapter
+        binding.container.offscreenPageLimit = 3
+        val mediator = TabLayoutMediator(binding.tabStrip, binding.container) { tab, position ->
+            tab.text = pagerAdapter.getPageTitle(position)
         }
+        mediator.attach()
 
         setHasOptionsMenu(true)
 
