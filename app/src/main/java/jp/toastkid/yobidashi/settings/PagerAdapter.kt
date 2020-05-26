@@ -7,9 +7,11 @@
  */
 package jp.toastkid.yobidashi.settings
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.BrowserSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.ColorFilterSettingFragment
@@ -28,13 +30,13 @@ import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
  * @author toastkidjp
  */
 class PagerAdapter(
-        private val fragmentManager: FragmentManager,
+        private val fragment: Fragment,
         private val titleResolver: (Int) -> String
-) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+) : FragmentStateAdapter(fragment) {
 
-    override fun getCount(): Int = 8
+    override fun getItemCount(): Int = 8
 
-    override fun getItem(position: Int): Fragment = obtainFragment(
+    override fun createFragment(position: Int): Fragment = obtainFragment(
             when (position) {
                 0 -> DisplayingSettingFragment::class.java
                 1 -> ColorSettingFragment::class.java
@@ -49,11 +51,11 @@ class PagerAdapter(
     )
 
     private fun obtainFragment(fragmentClass: Class<out Fragment>) =
-            fragmentManager.findFragmentByTag(fragmentClass.canonicalName)
+            fragment.childFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
                     ?: fragmentClass.newInstance()
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        val item = getItem(position)
+    fun getPageTitle(position: Int): CharSequence? {
+        val item = createFragment(position)
         return if (item is TitleIdSupplier) titleResolver(item.titleId()) else ""
     }
 

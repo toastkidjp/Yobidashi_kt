@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayoutMediator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -47,9 +48,13 @@ class SettingFragment : Fragment() {
         binding.fragment = this
 
         childFragmentManager.let { fragmentManager ->
-            binding.container.adapter = PagerAdapter(fragmentManager) { getString(it) }
+            val pagerAdapter = PagerAdapter(this) { getString(it) }
+            binding.container.adapter = pagerAdapter
             binding.container.offscreenPageLimit = 3
-            binding.tabStrip.setupWithViewPager(binding.container)
+            val mediator = TabLayoutMediator(binding.tabStrip, binding.container) { tab, position ->
+                tab.text = pagerAdapter.getPageTitle(position)
+            }
+            mediator.attach()
         }
 
         setHasOptionsMenu(true)
