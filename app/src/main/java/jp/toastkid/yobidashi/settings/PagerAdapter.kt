@@ -7,10 +7,7 @@
  */
 package jp.toastkid.yobidashi.settings
 
-import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.BrowserSettingFragment
@@ -25,7 +22,7 @@ import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 /**
  * Setting fragments pager adapter.
  *
- * @param fragmentManager [FragmentManager]
+ * @param fragment [Fragment]
  * @param titleResolver Title string resource resolve consumer.
  * @author toastkidjp
  */
