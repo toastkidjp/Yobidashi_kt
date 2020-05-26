@@ -29,7 +29,11 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
 
     private lateinit var binding: FragmentRssSettingBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_rss_setting, container, false)
         return binding.root
@@ -45,7 +49,8 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
 
         val adapter = Adapter(preferenceApplier)
         binding.rssSettingList.adapter = adapter
-        binding.rssSettingList.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.rssSettingList.layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         SwipeActionAttachment().invoke(binding.rssSettingList)
 
         val rssReaderTargets = preferenceApplier.readRssReaderTargets()
