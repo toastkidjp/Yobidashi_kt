@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
 
 /**
  * Show confirmation of "Paste as".
@@ -64,7 +63,7 @@ class PasteAsConfirmationDialogFragment : DialogFragment() {
             if (context is FragmentActivity) {
                 val supportFragmentManager = context.supportFragmentManager
                 val target = supportFragmentManager
-                        .findFragmentByTag(BrowserFragment::class.java.canonicalName)
+                        .findFragmentByTag(EditorFragment::class.java.canonicalName)
                 dialogFragment.setTargetFragment(target, 1)
                 dialogFragment.show(
                         supportFragmentManager,
