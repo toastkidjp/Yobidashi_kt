@@ -141,6 +141,9 @@ class SearchFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
+        currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
+        currentUrl = arguments?.getString(EXTRA_KEY_URL)
+
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_header_search, container, false)
         headerBinding?.fragment = this
         headerBinding?.searchCategories?.let {
@@ -151,9 +154,6 @@ class SearchFragment : Fragment() {
             )
             it.setSelection(index)
         }
-
-        currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
-        currentUrl = arguments?.getString(EXTRA_KEY_URL)
 
         preferenceApplier = PreferenceApplier(context)
 

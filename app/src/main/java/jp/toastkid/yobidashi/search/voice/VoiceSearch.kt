@@ -50,7 +50,7 @@ object VoiceSearch {
      */
     fun processResult(context: Context, data: Intent): Disposable {
         val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        if (result.size == 0) {
+        if (result.isNullOrEmpty()) {
             return Disposables.empty()
         }
         return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine(), result[0])

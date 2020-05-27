@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(),
 
         searchWithClip = SearchWithClip(
                 applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
-                binding.root,
+                binding.content,
                 colorPair,
                 browserViewModel
         )
@@ -188,10 +188,7 @@ class MainActivity : AppCompatActivity(),
             }
             floatingPreview?.show(binding.root, it.toString())
         })
-        browserViewModel?.open?.observe(this, Observer {
-            tabs.openNewWebTab(it.toString())
-            replaceToCurrentTab(true)
-        })
+        browserViewModel?.open?.observe(this, Observer(::openNewWebTab))
         browserViewModel?.openBackground?.observe(this, Observer {
             tabs.openBackgroundTab(it.toString(), it.toString())
             Toaster.snackShort(
@@ -282,19 +279,7 @@ class MainActivity : AppCompatActivity(),
 
         MenuBinder(this, menuViewModel, binding.menusView, binding.menuSwitch)
 
-        menuUseCase = MenuUseCase(
-                { this },
-                { menuViewModel?.close() }
-        )
-
-        // TODO Attempt to move to binder.
-        menuViewModel?.click?.observe(this, Observer {
-            menuUseCase.onMenuClick(it)
-        })
-
-        menuViewModel?.longClick?.observe(this, Observer {
-            menuUseCase.onMenuLongClick(it)
-        })
+        menuUseCase = MenuUseCase({ this }, menuViewModel)
     }
 
     private fun initializeContentViewModel() {
@@ -354,7 +339,7 @@ class MainActivity : AppCompatActivity(),
             RandomWikipedia().fetchWithAction { title, uri ->
                 openNewWebTab(uri)
                 Toaster.snackShort(
-                        binding.root,
+                        binding.content,
                         getString(R.string.message_open_random_wikipedia, title),
                         preferenceApplier.colorPair()
                 )
@@ -364,7 +349,7 @@ class MainActivity : AppCompatActivity(),
 
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
-                calledIntent.data?.let { loadUri(it) }
+                calledIntent.data?.let { openNewWebTab(it) }
                 return
             }
             Intent.ACTION_SEND -> {
@@ -374,7 +359,7 @@ class MainActivity : AppCompatActivity(),
                         search(preferenceApplier.getDefaultSearchEngine(), query)
                         return
                     }
-                    loadUri(query.toUri())
+                    openNewWebTab(query.toUri())
                 }
                 return
             }
@@ -430,16 +415,6 @@ class MainActivity : AppCompatActivity(),
     private fun openNewWebTab(uri: Uri) {
         tabs.openNewWebTab(uri.toString())
         replaceToCurrentTab(true)
-    }
-
-    /**
-     * Load Uri.
-     *
-     * @param uri
-     */
-    private fun loadUri(uri: Uri) {
-        tabs.openNewWebTab(uri.toString())
-        replaceToCurrentTab()
     }
 
     /**
@@ -601,7 +576,7 @@ class MainActivity : AppCompatActivity(),
 
         tabs.setCount()
 
-        ClippingUrlOpener(binding.root) { browserViewModel?.open(it) }
+        ClippingUrlOpener(binding.content) { browserViewModel?.open(it) }
     }
 
     /**
@@ -847,11 +822,11 @@ class MainActivity : AppCompatActivity(),
                 val result: IntentResult? =
                         IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
                 if (result?.contents == null) {
-                    Toaster.snackShort(binding.root, "Cancelled", preferenceApplier.colorPair())
+                    Toaster.snackShort(binding.content, "Cancelled", preferenceApplier.colorPair())
                     return
                 }
                 Toaster.snackLong(
-                        binding.root,
+                        binding.content,
                         "Scanned: ${result.contents}",
                         R.string.clip,
                         View.OnClickListener { Clipboard.clip(this, result.contents) },
@@ -866,11 +841,8 @@ class MainActivity : AppCompatActivity(),
                 }
 
                 tabs.openNewPdfTab(uri)
-
-                (obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment)?.let {
-                    it.arguments = bundleOf("uri" to uri)
-                    replaceFragment(it)
-                }
+                replaceToCurrentTab(true)
+                tabListDialogFragment?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(this, data).addTo(disposables)

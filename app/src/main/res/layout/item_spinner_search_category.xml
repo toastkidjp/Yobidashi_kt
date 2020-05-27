@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/common_horizontal_margin"
-    android:background="@drawable/ripple_soft"
+    android:layout_marginStart="@dimen/common_horizontal_margin"
+    android:background="@drawable/ripple_transparent"
     >
     <ImageView
         android:id="@+id/search_category_image"
@@ -11,6 +13,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/search_category"
         />
     <TextView
         android:id="@+id/search_category_text"
@@ -19,6 +22,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="44dp"
+        android:layout_marginStart="44dp"
         android:gravity="center_vertical"
         android:textSize="20sp"
         android:textColor="@color/black"

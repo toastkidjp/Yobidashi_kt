@@ -11,15 +11,15 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import com.google.android.material.textfield.TextInputLayout
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.yobidashi.libs.TextInputs
 
 /**
  * Dialog for input name dialog.
@@ -53,45 +53,47 @@ class InputNameDialogFragment : DialogFragment() {
             callback = targetFragment
         }
 
-        val inputLayout = TextInputs.withDefaultInput(activityContext, DEFAULT_FILE_NAME)
+        val input = EditText(activityContext).also {
+            it.maxLines   = 1
+            it.inputType  = InputType.TYPE_CLASS_TEXT
+            it.imeOptions = EditorInfo.IME_ACTION_GO
+            it.setText(DEFAULT_FILE_NAME)
+            it.setSelection(DEFAULT_FILE_NAME.length)
+        }
 
         val dialog = AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.title_dialog_input_file_name))
-                .setView(inputLayout)
+                .setView(input)
                 .setPositiveButton(R.string.save) { d, _ ->
-                    saveAndClose(inputLayout, d)
+                    saveAndClose(input, d)
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .create()
+
         dialog.setOnShowListener {
             (activity as? Activity)?.let { activity ->
-                inputLayout.editText?.let { editText ->
-                    Inputs.showKeyboard(activity, editText)
+                input.setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_GO) {
+                        saveAndClose(input, dialog)
+                        return@setOnEditorActionListener true
+                    }
+                    return@setOnEditorActionListener false
                 }
+                input.requestFocus()
+                Inputs.showKeyboard(activity, input)
             }
         }
 
-        inputLayout.editText?.let {
-            it.imeOptions = EditorInfo.IME_ACTION_GO
-            it.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    saveAndClose(inputLayout, dialog)
-                    return@setOnEditorActionListener true
-                }
-                return@setOnEditorActionListener false
-            }
-            it.requestFocus()
-        }
         return dialog
     }
 
-    private fun saveAndClose(inputLayout: TextInputLayout, d: DialogInterface) {
-        if (inputLayout.editText?.text?.isEmpty() == true) {
+    private fun saveAndClose(editText: EditText?, d: DialogInterface) {
+        if (editText?.text?.isEmpty() == true) {
             d.dismiss()
             return
         }
 
-        callback?.onClickInputName("${inputLayout.editText?.text.toString()}.txt")
+        callback?.onClickInputName("${editText?.text.toString()}.txt")
         d.dismiss()
     }
 

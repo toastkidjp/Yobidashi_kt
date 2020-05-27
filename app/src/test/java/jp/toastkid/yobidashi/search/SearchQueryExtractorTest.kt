@@ -60,5 +60,13 @@ class SearchQueryExtractorTest {
                 "orange",
                 searchQueryExtractor("https://search.daum.net/search?w=tot&q=orange")
         )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://www.wolframalpha.com/input/?i=orange")
+        )
+        assertEquals(
+                "Yahoo",
+                searchQueryExtractor("https://www.linkedin.com/jobs/search?keywords=Yahoo")
+        )
     }
 }

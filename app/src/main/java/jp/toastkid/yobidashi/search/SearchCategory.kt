@@ -40,10 +40,10 @@ enum class SearchCategory(
             R.drawable.ic_yahoo_japan_logo,
             "https://search.yahoo.co.jp/search?p="
     ),
-    AOL(
-            R.string.aol,
-            R.drawable.ic_aol,
-            "https://www.aolsearch.com/search?s_chn=prt_bon-mobile&q="
+    WOLFRAM_ALPHA(
+            R.string.wolfram_alpha,
+            R.drawable.ic_wolfram_alpha,
+            "https://www.wolframalpha.com/input/?i="
     ),
     BING(
             R.string.bing,
@@ -55,6 +55,11 @@ enum class SearchCategory(
             R.drawable.ic_duckduckgo,
             "https://duckduckgo.com/%s?ia=web",
             { _, h, q -> String.format(h, q)}
+    ),
+    AOL(
+            R.string.aol,
+            R.drawable.ic_aol,
+            "https://www.aolsearch.com/search?s_chn=prt_bon-mobile&q="
     ),
     ASK_COM(
             R.string.search_category_ask_com,
@@ -107,6 +112,11 @@ enum class SearchCategory(
             R.drawable.ic_internet_archive,
             "https://archive.org/search.php?query=",
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
+    ),
+    LINKED_IN(
+            R.string.linked_in,
+            R.drawable.ic_linked_in,
+            "https://www.linkedin.com/jobs/search?keywords="
     ),
     TWITTER(
             R.string.search_category_twitter,

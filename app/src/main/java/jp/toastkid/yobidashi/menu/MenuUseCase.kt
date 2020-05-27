@@ -12,6 +12,7 @@ import android.os.Build
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -46,7 +47,7 @@ import java.util.*
  */
 class MenuUseCase(
         private val activitySupplier: () -> FragmentActivity,
-        private val close: () -> Unit
+        private val menuViewModel: MenuViewModel?
 ) {
 
     private val contentViewModel =
@@ -59,6 +60,17 @@ class MenuUseCase(
     private val disposables = CompositeDisposable()
 
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
+
+    init {
+        val activity = activitySupplier()
+        menuViewModel?.click?.observe(activity, Observer {
+            onMenuClick(it)
+        })
+
+        menuViewModel?.longClick?.observe(activity, Observer {
+            onMenuLongClick(it)
+        })
+    }
 
     fun onMenuClick(menu: Menu) {
         when (menu) {
@@ -87,7 +99,7 @@ class MenuUseCase(
                     contentViewModel.snackShort(activity.getString(R.string.message_cannot_use_under_l))
                     return
                 }
-                ProcessCleanerInvoker()(activity.findViewById(android.R.id.content)).addTo(disposables)
+                ProcessCleanerInvoker()(activity.findViewById(R.id.content)).addTo(disposables)
             }
             Menu.PLANNING_POKER-> {
                 contentViewModel.nextFragment(CardListFragment::class.java)
@@ -101,7 +113,7 @@ class MenuUseCase(
             Menu.AUDIO -> {
                 val parent = extractContentView() ?: return
                 mediaPlayerPopup.show(parent)
-                close()
+                menuViewModel?.close()
             }
             Menu.BOOKMARK-> {
                 contentViewModel.nextFragment(BookmarkFragment::class.java)
@@ -135,7 +147,7 @@ class MenuUseCase(
                     } catch (e: ActivityNotFoundException) {
                         Timber.e(e)
                         VoiceSearch.suggestInstallGoogleApp(
-                                it.findViewById(android.R.id.content),
+                                it.findViewById(R.id.content),
                                 preferenceApplier.colorPair()
                         )
                     }
@@ -160,7 +172,7 @@ class MenuUseCase(
                 if (preferenceApplier.wifiOnly &&
                         WifiConnectionChecker.isNotConnecting(activity)) {
                     Toaster.snackShort(
-                            activity.findViewById<View>(android.R.id.content),
+                            activity.findViewById<View>(R.id.content),
                             activity.getString(R.string.message_wifi_not_connecting),
                             preferenceApplier.colorPair()
                     )
@@ -176,7 +188,7 @@ class MenuUseCase(
                                     .open(link)
                             val fragmentActivity = activitySupplier()
                             Toaster.snackShort(
-                                    fragmentActivity.findViewById<View>(android.R.id.content),
+                                    fragmentActivity.findViewById<View>(R.id.content),
                                     fragmentActivity.getString(R.string.message_open_random_wikipedia, title),
                                     preferenceApplier.colorPair()
                             )
@@ -211,7 +223,7 @@ class MenuUseCase(
     }
 
     private fun extractContentView(): View? =
-            activitySupplier().findViewById(android.R.id.content)
+            activitySupplier().findViewById(R.id.content)
 
     fun dispose() {
         disposables.clear()
