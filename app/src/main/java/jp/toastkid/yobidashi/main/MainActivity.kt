@@ -466,9 +466,11 @@ class MainActivity : AppCompatActivity(),
                 val browserFragment =
                         (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
-                            .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread {
+                        ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
+                                .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                    }
                 }
             }
             is EditorTab -> {
