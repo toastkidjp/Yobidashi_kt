@@ -98,7 +98,7 @@ class EditorFragment :
         }
     }
 
-    private lateinit var speechMaker: SpeechMaker
+    private var speechMaker: SpeechMaker? = null
 
     /**
      * Last saved text.
@@ -186,7 +186,7 @@ class EditorFragment :
                             return true
                         }
                         R.id.context_edit_speech -> {
-                            speechMaker.invoke(content())
+                            speechMaker?.invoke(content())
                             actionMode?.finish()
                             return true
                         }
@@ -253,7 +253,7 @@ class EditorFragment :
                         return true
                     }
                     R.id.context_edit_speech -> {
-                        speechMaker.invoke(text)
+                        speechMaker?.invoke(text)
                         actionMode?.finish()
                         return true
                     }
@@ -335,7 +335,7 @@ class EditorFragment :
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
-        speechMaker.dispose()
+        speechMaker?.dispose()
         super.onDetach()
     }
 
