@@ -50,6 +50,7 @@ class SettingFragment : Fragment() {
         val pagerAdapter = PagerAdapter(this) { getString(it) }
         binding.container.adapter = pagerAdapter
         binding.container.offscreenPageLimit = 3
+
         val mediator = TabLayoutMediator(binding.tabStrip, binding.container) { tab, position ->
             tab.text = pagerAdapter.getPageTitle(position)
         }
