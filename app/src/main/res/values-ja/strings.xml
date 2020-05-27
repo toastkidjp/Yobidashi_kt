@@ -469,6 +469,7 @@
     <string name="title_context_editor_add_order">順序リスト</string>
     <string name="title_context_editor_add_minus">リスト</string>
     <string name="title_context_editor_add_quote">引用符</string>
+    <string name="title_context_editor_double_quote">ダブルクォート</string>
     <string name="title_reset_camera_button_position">Reset camera position</string>
     <string name="naver">NAVER</string>
     <string name="daum">Daum</string>

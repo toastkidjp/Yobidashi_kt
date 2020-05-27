@@ -236,6 +236,10 @@ class EditorFragment :
                         listHeadAdder(binding.editorInput, ">")
                         return true
                     }
+                    R.id.context_edit_double_quote -> {
+                        StringSurroundingUseCase()(binding.editorInput, '"')
+                        return true
+                    }
                     R.id.context_edit_url_open_new -> {
                         browserViewModel?.open(text.toUri())
                         actionMode?.finish()
