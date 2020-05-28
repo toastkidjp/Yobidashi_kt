@@ -274,7 +274,7 @@ class EditorFragment :
      * @param context Context
      */
     private fun setContentTextLengthCount(context: Context) {
-        menuBinding.counter?.text =
+        menuBinding.counter.text =
                 context.getString(R.string.message_character_count, content().length)
     }
 
