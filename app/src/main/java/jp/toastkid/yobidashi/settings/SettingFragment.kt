@@ -71,8 +71,10 @@ class SettingFragment : Fragment() {
 
         binding.tabStrip.also {
             it.setBackgroundColor(colorPair.bgColor())
-            it.tabTextColors = ColorStateList.valueOf(colorPair.fontColor())
-            it.setSelectedTabIndicatorColor(colorPair.fontColor())
+
+            val fontColor = colorPair.fontColor()
+            it.tabTextColors = ColorStateList.valueOf(fontColor)
+            it.setSelectedTabIndicatorColor(fontColor)
         }
     }
 
