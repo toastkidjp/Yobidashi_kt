@@ -153,7 +153,9 @@ class BrowserModule(
             val title = view.title ?: ""
             val urlStr = url ?: ""
 
-            loadingViewModel?.finished(lastId, History.make(title, urlStr))
+            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
+                loadingViewModel?.finished(lastId, History.make(title, urlStr))
+            }
 
             browserHeaderViewModel?.updateProgress(100)
             browserHeaderViewModel?.stopProgress(true)
