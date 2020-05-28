@@ -36,7 +36,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, TitleIdSupplier {
+class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
 
     /**
      * Data Binding object.
@@ -312,13 +312,13 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
         binding.userAgentValue.text = userAgent.title()
     }
 
-    @StringRes
-    override fun titleId() = R.string.subhead_setting_browser
-
-    companion object {
+    companion object : TitleIdSupplier {
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_setting_browser
+
+        @StringRes
+        override fun titleId() = R.string.subhead_setting_browser
 
     }
 }

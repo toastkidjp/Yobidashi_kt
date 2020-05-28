@@ -25,7 +25,7 @@ import jp.toastkid.yobidashi.settings.ClearSettingConfirmDialogFragment
 /**
  * @author toastkidjp
  */
-class OtherSettingFragment : Fragment(), TitleIdSupplier {
+class OtherSettingFragment : Fragment() {
 
     /**
      * View Data Binding object.
@@ -133,12 +133,13 @@ class OtherSettingFragment : Fragment(), TitleIdSupplier {
         startActivity(intentFactory.allApps())
     }
 
-    @StringRes
-    override fun titleId() = R.string.subhead_others
-
-    companion object {
+    companion object : TitleIdSupplier {
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_setting_other
+
+        @StringRes
+        override fun titleId() = R.string.subhead_others
+
     }
 }

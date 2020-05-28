@@ -29,7 +29,7 @@ import jp.toastkid.yobidashi.notification.widget.NotificationWidget
  *
  * @author toastkidjp
  */
-class NotificationSettingFragment : Fragment(), TitleIdSupplier {
+class NotificationSettingFragment : Fragment() {
 
     /**
      * View data binding object.
@@ -107,12 +107,13 @@ class NotificationSettingFragment : Fragment(), TitleIdSupplier {
         }
     }
 
-    @StringRes
-    override fun titleId() = R.string.subhead_notification
-
-    companion object {
+    companion object : TitleIdSupplier {
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_setting_notification
+
+        @StringRes
+        override fun titleId() = R.string.subhead_notification
+
     }
 }

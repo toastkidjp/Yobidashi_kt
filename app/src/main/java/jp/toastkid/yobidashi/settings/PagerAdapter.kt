@@ -18,6 +18,7 @@ import jp.toastkid.yobidashi.settings.fragment.NotificationSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OtherSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.SearchSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
+import timber.log.Timber
 
 /**
  * Setting fragments pager adapter.
@@ -47,13 +48,30 @@ class PagerAdapter(
             }
     )
 
-    private fun obtainFragment(fragmentClass: Class<out Fragment>) =
-            fragment.childFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
-                    ?: fragmentClass.newInstance()
+    private fun obtainFragment(fragmentClass: Class<out Fragment>): Fragment {
+        val f = fragment.childFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
+        if (f != null) {
+            Timber.i("tomato found ${fragmentClass.canonicalName}")
+            return f
+        }
+        Timber.i("tomato new ${fragmentClass.canonicalName}")
+        return fragmentClass.newInstance()
+    }
 
     fun getPageTitle(position: Int): CharSequence? {
-        val item = createFragment(position)
-        return if (item is TitleIdSupplier) titleResolver(item.titleId()) else ""
+        return getTitleIdByPosition(position)?.let { titleResolver(it) } ?: ""
     }
+
+    private fun getTitleIdByPosition(position: Int): Int? = (when (position) {
+        0 -> DisplayingSettingFragment
+        1 -> ColorSettingFragment
+        2 -> SearchSettingFragment
+        3 -> BrowserSettingFragment
+        4 -> EditorSettingFragment
+        5 -> ColorFilterSettingFragment
+        6 -> NotificationSettingFragment
+        7 -> OtherSettingFragment
+        else -> OtherSettingFragment
+    } as? TitleIdSupplier)?.titleId()
 
 }

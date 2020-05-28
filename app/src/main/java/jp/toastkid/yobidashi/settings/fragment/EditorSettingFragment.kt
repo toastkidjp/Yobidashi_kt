@@ -36,7 +36,7 @@ import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragmentViewModel
  *
  * @author toastkidjp
  */
-class EditorSettingFragment : Fragment(), TitleIdSupplier {
+class EditorSettingFragment : Fragment() {
 
     /**
      * View data binding object.
@@ -197,13 +197,13 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                 })
     }
 
-    @StringRes
-    override fun titleId() = R.string.subhead_editor
-
-    companion object {
+    companion object : TitleIdSupplier {
 
         @LayoutRes
         private val LAYOUT_ID = R.layout.fragment_setting_editor
+
+        @StringRes
+        override fun titleId() = R.string.subhead_editor
 
     }
 }

@@ -34,7 +34,6 @@ import kotlinx.coroutines.withContext
  */
 class ColorSettingFragment : Fragment(),
         CommonFragmentAction,
-        TitleIdSupplier,
         ClearColorsDialogFragment.Callback {
 
     /**
@@ -231,8 +230,6 @@ class ColorSettingFragment : Fragment(),
         snackShort(R.string.settings_color_done_reset)
     }
 
-    override fun titleId(): Int = R.string.title_settings_color
-
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -332,4 +329,9 @@ class ColorSettingFragment : Fragment(),
         super.onDetach()
     }
 
+    companion object : TitleIdSupplier {
+
+        override fun titleId(): Int = R.string.title_settings_color
+
+    }
 }
