@@ -28,8 +28,7 @@ import timber.log.Timber
  * @author toastkidjp
  */
 class PagerAdapter(
-        private val fragment: Fragment,
-        private val titleResolver: (Int) -> String
+        private val fragment: Fragment
 ) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 8
@@ -59,7 +58,7 @@ class PagerAdapter(
     }
 
     fun getPageTitle(position: Int): CharSequence? {
-        return getTitleIdByPosition(position)?.let { titleResolver(it) } ?: ""
+        return getTitleIdByPosition(position)?.let { fragment.getString(it) } ?: ""
     }
 
     private fun getTitleIdByPosition(position: Int): Int? = (when (position) {

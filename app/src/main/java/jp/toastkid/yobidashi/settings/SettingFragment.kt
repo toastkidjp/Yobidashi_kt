@@ -44,7 +44,7 @@ class SettingFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
 
-        val pagerAdapter = PagerAdapter(this) { getString(it) }
+        val pagerAdapter = PagerAdapter(this)
         binding.container.adapter = pagerAdapter
         binding.container.offscreenPageLimit = 3
 
