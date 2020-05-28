@@ -32,7 +32,7 @@ class TabThumbnails(contextSupplier: () -> Context) {
         }
     }
 
-    fun removeUnused(exceptionalTabIds: Collection<String>) {
+    fun deleteUnused(exceptionalTabIds: Collection<String>) {
         folder.listFiles()
                 .filter { !exceptionalTabIds.contains(it.name) }
                 .forEach { it.delete() }
