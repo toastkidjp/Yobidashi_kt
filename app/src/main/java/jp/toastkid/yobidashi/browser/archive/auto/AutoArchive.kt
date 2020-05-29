@@ -11,6 +11,7 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.WebView
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
+import jp.toastkid.yobidashi.libs.storage.CacheDir
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.storage.StorageWrapper
 import timber.log.Timber
@@ -59,7 +60,7 @@ class AutoArchive(private val filesDir: StorageWrapper) {
 
         private const val EXTENSION = ".mht"
 
-        fun make(context: Context) = AutoArchive(FilesDir(context, FOLDER))
+        fun make(context: Context) = AutoArchive(CacheDir(context, FOLDER))
 
         fun shouldNotUpdateTab(url: String?) = url?.contains("/files/auto_archives/") == true
     }
