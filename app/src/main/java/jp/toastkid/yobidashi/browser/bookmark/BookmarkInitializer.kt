@@ -33,7 +33,8 @@ class BookmarkInitializer {
                     "Amazon" to "https://www.amazon.com/",
                     "Project Gutenberg" to "http://www.gutenberg.org/",
                     "Expedia" to "https://www.expedia.com",
-                    "Slashdot" to "https://m.slashdot.org"
+                    "Slashdot" to "https://m.slashdot.org",
+                    "Financial Times" to "https://www.ft.com/"
                     ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
