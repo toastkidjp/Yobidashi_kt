@@ -30,19 +30,7 @@ class PagerAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragme
 
     override fun getItemCount(): Int = 8
 
-    override fun createFragment(position: Int): Fragment = obtainFragment(
-            when (position) {
-                0 -> DisplayingSettingFragment::class.java
-                1 -> ColorSettingFragment::class.java
-                2 -> SearchSettingFragment::class.java
-                3 -> BrowserSettingFragment::class.java
-                4 -> EditorSettingFragment::class.java
-                5 -> ColorFilterSettingFragment::class.java
-                6 -> NotificationSettingFragment::class.java
-                7 -> OtherSettingFragment::class.java
-                else -> OtherSettingFragment::class.java
-            }
-    )
+    override fun createFragment(position: Int): Fragment = obtainFragment(pages[position].first)
 
     private fun obtainFragment(fragmentClass: Class<out Fragment>): Fragment {
         val f = fragment.childFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
@@ -58,16 +46,18 @@ class PagerAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragme
         return getTitleIdByPosition(position)?.let { fragment.getString(it) } ?: ""
     }
 
-    private fun getTitleIdByPosition(position: Int): Int? = (when (position) {
-        0 -> DisplayingSettingFragment
-        1 -> ColorSettingFragment
-        2 -> SearchSettingFragment
-        3 -> BrowserSettingFragment
-        4 -> EditorSettingFragment
-        5 -> ColorFilterSettingFragment
-        6 -> NotificationSettingFragment
-        7 -> OtherSettingFragment
-        else -> OtherSettingFragment
-    } as? TitleIdSupplier)?.titleId()
+    private fun getTitleIdByPosition(position: Int): Int? = pages[position].second.titleId()
 
+    companion object {
+        private val pages = listOf(
+                DisplayingSettingFragment::class.java to DisplayingSettingFragment,
+                ColorSettingFragment::class.java to ColorSettingFragment,
+                SearchSettingFragment::class.java to SearchSettingFragment,
+                BrowserSettingFragment::class.java to BrowserSettingFragment,
+                EditorSettingFragment::class.java to EditorSettingFragment,
+                ColorFilterSettingFragment::class.java to ColorFilterSettingFragment,
+                NotificationSettingFragment::class.java to NotificationSettingFragment,
+                OtherSettingFragment::class.java to OtherSettingFragment
+        )
+    }
 }
