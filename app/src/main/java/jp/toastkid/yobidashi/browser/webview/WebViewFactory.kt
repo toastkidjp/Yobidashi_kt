@@ -16,6 +16,7 @@ import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragmen
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import timber.log.Timber
 
 /**
  * [WebView] factory.
@@ -126,6 +127,7 @@ internal class WebViewFactory {
             settings.safeBrowsingEnabled = true
         }
         settings.setSupportMultipleWindows(true)
+        settings.domStorageEnabled = true
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
         return webView
