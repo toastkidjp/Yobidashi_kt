@@ -71,6 +71,7 @@ class TabAdapter(
 
         CoroutineScope(Dispatchers.IO).launch {
             tabThumbnails.deleteUnused(tabList.thumbnailNames())
+            autoArchive.deleteUnused(tabList.archiveIds())
         }
     }
 

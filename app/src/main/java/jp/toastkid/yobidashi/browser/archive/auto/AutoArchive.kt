@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.browser.archive.auto
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebView
+import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import jp.toastkid.yobidashi.libs.storage.StorageWrapper
 import timber.log.Timber
@@ -28,6 +29,17 @@ class AutoArchive(private val filesDir: StorageWrapper) {
             return
         }
         filesDir.delete("$tabId$EXTENSION")
+    }
+
+    fun deleteUnused(archiveIds: Collection<String>) {
+        filesDir.listFiles()
+                .filter { !archiveIds.contains(removeExtension(it.name)) }
+                .forEach { it.delete() }
+    }
+
+    private fun removeExtension(fileName: String): String? {
+        val endIndex = fileName.lastIndexOf(".")
+        return if (endIndex == -1) fileName else fileName.substring(0, endIndex)
     }
 
     fun load(webView: WebView?, id: String?, callback: () -> Unit) {
