@@ -48,7 +48,7 @@ class SettingFragment : Fragment() {
         binding.container.adapter = pagerAdapter
         binding.container.offscreenPageLimit = 3
 
-        val mediator = TabLayoutMediator(binding.tabStrip, binding.container) { tab, position ->
+        val mediator = TabLayoutMediator(binding.tabLayout, binding.container) { tab, position ->
             tab.text = pagerAdapter.getPageTitle(position)
         }
         mediator.attach()
@@ -69,7 +69,7 @@ class SettingFragment : Fragment() {
 
         val colorPair = preferenceApplier.colorPair()
 
-        binding.tabStrip.also {
+        binding.tabLayout.also {
             it.setBackgroundColor(colorPair.bgColor())
 
             val fontColor = colorPair.fontColor()
