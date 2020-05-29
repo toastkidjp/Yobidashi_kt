@@ -33,6 +33,7 @@ import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
+import jp.toastkid.yobidashi.gesture.GestureMemoFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
@@ -136,6 +137,9 @@ class MenuUseCase(
             }
             Menu.WEB_SEARCH -> {
                 contentViewModel.webSearch()
+            }
+            Menu.GESTURE_MEMO -> {
+                contentViewModel.nextFragment(GestureMemoFragment::class.java)
             }
             Menu.VOICE_SEARCH-> {
                 activitySupplier().also {

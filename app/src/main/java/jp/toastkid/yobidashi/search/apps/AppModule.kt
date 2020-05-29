@@ -59,7 +59,7 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
         }
 
         disposable?.dispose()
-        disposable = Completable.fromAction { adapter.filter(key, 5, { onResult() }) }
+        disposable = Completable.fromAction { adapter.filter(key, 5) { onResult() } }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

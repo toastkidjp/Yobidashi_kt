@@ -263,10 +263,7 @@ class MainActivity : AppCompatActivity(),
             }
             binding.toolbarContent.removeAllViews()
             binding.toolbar.layoutParams.height = view.layoutParams.height
-            binding.toolbarContent.addView(
-                    view,
-                    0
-            )
+            binding.toolbarContent.addView(view, 0)
         })
 
         headerViewModel.visibility.observe(this, Observer { isVisible ->
@@ -787,8 +784,7 @@ class MainActivity : AppCompatActivity(),
         return super.onCreateOptionsMenu(menu)
     }
 
-    // TODO Use Non-null
-    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.open_tabs -> {
             switchTabList()
             true

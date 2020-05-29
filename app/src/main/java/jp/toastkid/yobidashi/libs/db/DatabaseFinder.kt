@@ -19,9 +19,13 @@ class DatabaseFinder {
         return Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
-                "yobidashi2.db"
+                DATABASE_FILE_NAME
         )
                 .fallbackToDestructiveMigration()
                 .build()
+    }
+
+    companion object {
+        private const val DATABASE_FILE_NAME = "yobidashi2.db"
     }
 }

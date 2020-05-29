@@ -10,7 +10,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 
 /**
@@ -39,8 +38,6 @@ class SearchAction(
     private val preferenceApplier: PreferenceApplier = PreferenceApplier(activityContext)
 
     private val urlFactory = UrlFactory()
-
-    private val mainActivityIntentFactory = MainActivityIntentFactory()
 
     /**
      * Invoke action.

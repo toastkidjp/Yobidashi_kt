@@ -99,9 +99,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
             it.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
             it.saveViewHistoryCheck.jumpDrawablesToCurrentState()
 
-            it.useInversionCheck.isChecked = preferenceApplier.useInversion
-            it.useInversionCheck.jumpDrawablesToCurrentState()
-
             it.adRemoveCheck.isChecked = preferenceApplier.adRemove
             it.adRemoveCheck.jumpDrawablesToCurrentState()
 
@@ -109,7 +106,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
                     val newSize = bar?.progress ?: 0
                     preferenceApplier.poolSize = newSize + 1
-                    it.poolSizeText.setText((newSize + 1).toString())
+                    it.poolSizeText.text = "${newSize + 1}"
                 }
 
                 override fun onStartTrackingTouch(p0: SeekBar?) = Unit
@@ -205,16 +202,6 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback, Tit
                 getString(R.string.message_commit_home, input),
                 preferenceApplier.colorPair()
         )
-    }
-
-    /**
-     * Switch content inversion enabling.
-     */
-    fun switchUseInversion() {
-        val preferenceApplier = preferenceApplier
-        val newState = !preferenceApplier.useInversion
-        preferenceApplier.useInversion = newState
-        binding.useInversionCheck.isChecked = newState
     }
 
     /**

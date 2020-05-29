@@ -186,10 +186,6 @@ class BrowserModule(
                         )
                         .invoke()
             }
-
-            if (preferenceApplier.useInversion) {
-                InversionScript()(view)
-            }
         }
 
         override fun onReceivedError(
