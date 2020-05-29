@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragmen
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import timber.log.Timber
 
 /**
  * [WebView] factory.
@@ -119,17 +117,12 @@ internal class WebViewFactory {
                 }
             }
         }
-        val settings = webView.settings
-        settings.builtInZoomControls = true
-        settings.displayZoomControls = false
-        settings.javaScriptCanOpenWindowsAutomatically = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            settings.safeBrowsingEnabled = true
-        }
-        settings.setSupportMultipleWindows(true)
-        settings.domStorageEnabled = true
+
+        WebSettingApplier(preferenceApplier).invoke(webView.settings)
+
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
+
         return webView
     }
 
