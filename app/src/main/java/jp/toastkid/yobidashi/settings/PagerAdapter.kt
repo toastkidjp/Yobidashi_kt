@@ -24,12 +24,9 @@ import timber.log.Timber
  * Setting fragments pager adapter.
  *
  * @param fragment [Fragment]
- * @param titleResolver Title string resource resolve consumer.
  * @author toastkidjp
  */
-class PagerAdapter(
-        private val fragment: Fragment
-) : FragmentStateAdapter(fragment) {
+class PagerAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 8
 
