@@ -493,5 +493,6 @@
     <string name="title_gesture_memo">Gesture memo</string>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">Clip URL</string>
+    <string name="financial_times">Financial Times</string>
 
 </resources>
