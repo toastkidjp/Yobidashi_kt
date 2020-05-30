@@ -49,6 +49,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("text")
             host.endsWith(".yelp.com") ->
                 uri.getQueryParameter("find_desc")
+            host.equals("www.tumblr.com")
+                    or host.equals("web.archive.org")-> uri.lastPathSegment
             host.startsWith("facebook.com")
                     or host.endsWith("archive.org")
                     or host.endsWith("search.naver.com") ->
@@ -68,7 +70,6 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("wd")
             host == "www.wolframalpha.com" ->
                 uri.getQueryParameter("i")
-            host.equals("www.tumblr.com") -> uri.lastPathSegment
             host.equals("www.instagram.com") -> Uri.decode(uri.lastPathSegment)
             else -> uri.getQueryParameter(
                     commonQueryParameterNames

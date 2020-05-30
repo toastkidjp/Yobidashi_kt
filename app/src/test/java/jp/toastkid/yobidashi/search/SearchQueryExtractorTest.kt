@@ -72,5 +72,9 @@ class SearchQueryExtractorTest {
                 "Yahoo",
                 searchQueryExtractor("https://www.ft.com/search?q=Yahoo")
         )
+        assertEquals(
+                "Yahoo",
+                searchQueryExtractor("https://web.archive.org/web/*/Yahoo")
+        )
     }
 }
