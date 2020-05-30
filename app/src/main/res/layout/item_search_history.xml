@@ -36,8 +36,9 @@
             >
             <ImageView
                 android:id="@+id/search_history_image"
-                android:layout_width="24dp"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
                 android:layout_gravity="left|center_vertical"
                 android:adjustViewBounds="true"
                 />
@@ -45,7 +46,7 @@
                 android:id="@+id/search_history_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="48dp"
                 android:layout_marginRight="76dp"
                 tools:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajyaaaaaaaaa"
                 android:maxLines="3"
