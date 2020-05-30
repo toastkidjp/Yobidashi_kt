@@ -113,6 +113,11 @@ enum class SearchCategory(
             "https://archive.org/search.php?query=",
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
     ),
+    WAYBACK_MACHINE(
+            R.string.wayback_machine,
+            R.drawable.ic_wayback_machine,
+            "https://web.archive.org/web/*/"
+    ),
     LINKED_IN(
             R.string.linked_in,
             R.drawable.ic_linked_in,

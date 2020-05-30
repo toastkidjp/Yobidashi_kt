@@ -488,5 +488,6 @@
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">URL をコピー</string>
     <string name="financial_times">Financial Times</string>
+    <string name="wayback_machine">Wayback Machine</string>
 
 </resources>
