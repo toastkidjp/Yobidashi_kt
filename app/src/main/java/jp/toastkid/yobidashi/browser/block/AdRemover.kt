@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.browser.block
 
+import android.content.res.AssetManager
 import android.webkit.WebResourceResponse
 import okio.Okio
 import java.io.ByteArrayInputStream
@@ -50,5 +51,9 @@ class AdRemover(inputStream: InputStream) {
                 "UTF-8",
                 ByteArrayInputStream(byteArrayOf())
         )
+
+        fun make(assetManager: AssetManager): AdRemover {
+            return AdRemover(assetManager.open("ad_hosts.txt"))
+        }
     }
 }

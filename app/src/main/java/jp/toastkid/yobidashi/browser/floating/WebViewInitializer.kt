@@ -36,7 +36,7 @@ class WebViewInitializer {
 
         val preferenceApplier = PreferenceApplier(context)
 
-        val adRemover = AdRemover(context.assets.open("ad_hosts.txt"))
+        val adRemover = AdRemover.make(context.assets)
 
         val viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
