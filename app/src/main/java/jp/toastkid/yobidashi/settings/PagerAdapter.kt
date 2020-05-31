@@ -30,7 +30,7 @@ import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 class PagerAdapter(
         private val fragmentManager: FragmentManager,
         private val titleResolver: (Int) -> String
-) : FragmentPagerAdapter(fragmentManager) {
+) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getCount(): Int = 8
 

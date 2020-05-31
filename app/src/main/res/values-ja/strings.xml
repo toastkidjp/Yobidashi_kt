@@ -484,5 +484,6 @@
     <string name="touch_listener_scale_gesture_detector">Scale Gesture Detector</string>
     <string name="touch_listener_default">Default</string>
     <string name="title_gesture_memo">Gesture memo</string>
+    <string name="message_store_gesture_memo">Save current canvas to %s</string>
 
 </resources>

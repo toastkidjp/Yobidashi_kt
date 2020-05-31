@@ -15,7 +15,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -35,6 +34,8 @@ class GestureMemoFragment : Fragment() {
 
     private lateinit var appBarBinding: AppBarGestureMemoBinding
 
+    private val canvasStoreScenario = CanvasStoreScenario()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gesture_memo, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_gesture_memo, container, false)
@@ -50,7 +51,6 @@ class GestureMemoFragment : Fragment() {
             when (checkedId) {
                 R.id.defaultTouch -> setUpDefaultTouchListener()
                 R.id.gestureDetector -> setUpGestureDetector()
-                R.id.scaleGestureDetector -> setUpScaleGestureDetector()
             }
         }
     }
@@ -111,28 +111,6 @@ class GestureMemoFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setUpScaleGestureDetector() {
-        val scaleGestureDetectorListener = object : ScaleGestureDetector.OnScaleGestureListener {
-            override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
-                return true
-            }
-
-            override fun onScale(detector: ScaleGestureDetector?): Boolean {
-                return true
-            }
-
-            override fun onScaleEnd(detector: ScaleGestureDetector?) {
-            }
-        }
-
-        val scaleGestureDetector = ScaleGestureDetector(requireContext(), scaleGestureDetectorListener)
-
-        binding.canvas.setOnTouchListener { _, event ->
-            scaleGestureDetector.onTouchEvent(event)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         ViewModelProviders.of(requireActivity()).get(HeaderViewModel::class.java)
@@ -148,6 +126,11 @@ class GestureMemoFragment : Fragment() {
         return when (item.itemId) {
             R.id.clear_canvas -> {
                 binding.canvas.clear()
+                true
+            }
+            R.id.save_canvas -> {
+                val activity = activity ?: return true
+                canvasStoreScenario.invoke(activity, binding.canvas)
                 true
             }
             else -> super.onOptionsItemSelected(item)
