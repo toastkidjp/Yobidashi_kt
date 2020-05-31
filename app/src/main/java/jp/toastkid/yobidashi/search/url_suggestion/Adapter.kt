@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
  */
 class Adapter(
         private val layoutInflater: LayoutInflater,
-        private val removeAt: (Int) -> Unit,
+        private val removeAt: (UrlItem) -> Unit,
         private val browseCallback: (String) -> Unit,
         private val browseBackgroundCallback: (String) -> Unit
 ): RecyclerView.Adapter<ViewHolder>() {
@@ -49,7 +49,7 @@ class Adapter(
             browseBackgroundCallback(item.urlString())
             true
         })
-        holder.setDelete(View.OnClickListener { removeAt(position) })
+        holder.setDelete(View.OnClickListener { removeAt(item) })
     }
 
     override fun getItemCount(): Int = suggestions.size
@@ -92,9 +92,13 @@ class Adapter(
      * @return disposable
      */
     fun removeAt(viewHistoryRepository: ViewHistoryRepository, index: Int): Job {
+        return remove(get(index), index)
+    }
+
+    fun remove(item: UrlItem, passedIndex: Int = -1): Job {
         return CoroutineScope(Dispatchers.Main).launch {
+            val index = if (passedIndex == -1) suggestions.indexOf(item) else passedIndex
             withContext(Dispatchers.IO) {
-                val item = get(index)
                 //TODO consider it. viewHistoryRepository.delete(item)
                 suggestions.remove(item)
             }
@@ -102,4 +106,5 @@ class Adapter(
             notifyItemRemoved(index)
         }
     }
+
 }
