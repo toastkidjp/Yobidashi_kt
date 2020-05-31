@@ -355,8 +355,7 @@ class BrowserModule(
             return
         }
 
-        // TODO Use field.
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+        if (preferenceApplier.wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
