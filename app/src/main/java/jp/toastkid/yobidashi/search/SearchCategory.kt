@@ -66,6 +66,11 @@ enum class SearchCategory(
             R.drawable.ic_ask_com,
             "https://www.ask.com/web?q="
     ),
+    QWANT(
+            R.string.search_category_qwant,
+            R.drawable.ic_qwant,
+            "https://www.qwant.com/?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,

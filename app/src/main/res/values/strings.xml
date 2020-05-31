@@ -495,5 +495,6 @@
     <string name="button_clip_url">Clip URL</string>
     <string name="financial_times">Financial Times</string>
     <string name="wayback_machine">Wayback Machine</string>
+    <string name="search_category_qwant">Qwant</string>
 
 </resources>
