@@ -361,7 +361,7 @@
     <string name="ad">広告</string>
     <string name="title_use_favorite_search">お気に入り検索を使う</string>
     <string name="invert_content_coloring">コンテンツの色を反転させる</string>
-    <string name="title_clear_coolie">Coolie を削除</string>
+    <string name="title_clear_coolie">Cookie を削除</string>
     <string name="title_wifi_only">Wi-Fi 接続時だけ通信する</string>
     <string name="message_wifi_not_connecting">Wi-Fi に接続していません。</string>
     <string name="wikipedia">Wikipedia</string>
