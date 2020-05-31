@@ -85,8 +85,7 @@ class BrowserModule(
 
     private var customViewSwitcher: CustomViewSwitcher? = null
 
-    private val adRemover: AdRemover =
-            AdRemover(context.assets.open("ad_hosts.txt"))
+    private val adRemover: AdRemover = AdRemover.make(context.assets)
 
     private val autoArchive = AutoArchive.make(context)
 
