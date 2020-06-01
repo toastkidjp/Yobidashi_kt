@@ -12,12 +12,16 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.VectorToBitmap
 import jp.toastkid.yobidashi.main.MainActivity
+import timber.log.Timber
 
 
 /**
@@ -44,12 +48,15 @@ class ShortcutUseCase(private val context: Context) {
     ) {
         val applicationContext = context.applicationContext
 
+        val iconBitmap = bitmap ?: VectorToBitmap(context).invoke(R.drawable.ic_yobidashi)
+
         val shortcut = ShortcutInfo.Builder(applicationContext, title)
                 .setShortLabel(title)
                 .setLongLabel(title)
-                .setIcon(Icon.createWithBitmap(bitmap))
+                .setIcon(Icon.createWithBitmap(iconBitmap))
                 .setIntent(shortcutIntent)
                 .build()
+
         val shortcutManager = getSystemService(applicationContext, ShortcutManager::class.java)
         shortcutManager?.requestPinShortcut(shortcut, null)
     }
