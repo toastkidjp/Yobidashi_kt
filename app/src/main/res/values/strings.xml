@@ -497,5 +497,6 @@
     <string name="wayback_machine">Wayback Machine</string>
     <string name="search_category_qwant">Qwant</string>
     <string name="search_category_startpage">Startpage</string>
+    <string name="add_to_home_screen">Add to Home screen</string>
 
 </resources>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add_to_home"
-        android:title="Add to Home screen"
+        android:title="@string/add_to_home_screen"
         android:orderInCategory="100"
         app:showAsAction="never"
         />
