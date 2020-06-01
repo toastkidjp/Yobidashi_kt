@@ -20,6 +20,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
@@ -80,9 +81,10 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.imagesView.layoutManager = LinearLayoutManager(
+        binding.imagesView.layoutManager = GridLayoutManager(
                 view.context,
-                LinearLayoutManager.HORIZONTAL,
+                2,
+                LinearLayoutManager.VERTICAL,
                 false
         )
 
