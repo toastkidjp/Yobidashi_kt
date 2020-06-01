@@ -71,6 +71,11 @@ enum class SearchCategory(
             R.drawable.ic_qwant,
             "https://www.qwant.com/?q="
     ),
+    STARTPAGE(
+            R.string.search_category_startpage,
+            R.drawable.ic_startpage,
+            "https://www.startpage.com/sp/search?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
