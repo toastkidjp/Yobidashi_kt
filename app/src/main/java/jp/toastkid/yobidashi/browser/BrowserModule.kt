@@ -419,10 +419,6 @@ class BrowserModule(
         currentView()?.reload()
     }
 
-    fun animate(animation: Animation?) {
-        animation?.let { currentView()?.startAnimation(it) }
-    }
-
     fun find(keyword: String?) {
         currentView()?.findAllAsync(keyword)
     }
