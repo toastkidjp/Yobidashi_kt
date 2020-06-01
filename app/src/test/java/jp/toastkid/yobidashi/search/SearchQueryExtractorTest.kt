@@ -80,5 +80,9 @@ class SearchQueryExtractorTest {
                 "tomato",
                 searchQueryExtractor("https://www.qwant.com/?q=tomato")
         )
+        assertEquals(
+                "tomato",
+                searchQueryExtractor("https://www.startpage.com/sp/search?q=tomato")
+        )
     }
 }
