@@ -23,12 +23,12 @@ class AdRemover(inputStream: InputStream) {
     /**
      * Blacklist of AD hosts.
      */
-    private var blackList: List<String> =
+    private var blackList: Set<String> =
             Okio.buffer(Okio.source(inputStream)).use { bufferedSource ->
                 bufferedSource.readUtf8().split("\n")
                         .filter { it.isNotBlank() }
                         .map { it.trim() }
-                        .toList()
+                        .toHashSet()
             }
 
     /**
