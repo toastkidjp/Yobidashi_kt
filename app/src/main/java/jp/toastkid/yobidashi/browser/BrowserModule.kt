@@ -617,8 +617,9 @@ class BrowserModule(
      */
     fun detachWebView(tabId: String?) = GlobalWebViewPool.remove(tabId)
 
-    fun onSaveInstanceState(outState: Bundle) {
-        currentView()?.saveState(outState)
+    fun onSaveInstanceState(id: String) {
+        val webView = currentView() ?: return
+        StateRepository(context.filesDir).save(id, webView)
     }
 
     fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->
