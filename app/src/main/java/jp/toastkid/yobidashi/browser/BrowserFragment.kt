@@ -213,7 +213,7 @@ class BrowserFragment : Fragment(),
                         .invoke(
                                 uri,
                                 browserModule.currentTitle(),
-                                BitmapFactory.decodeFile(FaviconApplier(requireContext()).makePath(uri.toString()))
+                                FaviconApplier(requireContext()).load(uri)
                         )
             }
             R.id.add_bookmark -> {
