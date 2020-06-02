@@ -11,6 +11,8 @@ import android.webkit.WebView
 import androidx.annotation.ColorInt
 
 /**
+ * Implements for retaining [WebView] instances on global.
+ *
  * @author toastkidjp
  */
 object GlobalWebViewPool {

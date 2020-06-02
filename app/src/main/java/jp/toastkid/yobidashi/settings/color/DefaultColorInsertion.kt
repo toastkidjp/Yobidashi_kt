@@ -6,12 +6,12 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.collection.ArraySet
 import androidx.core.content.ContextCompat
-import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * Default colors.
@@ -47,16 +47,11 @@ class DefaultColorInsertion {
      * @param context
      */
     @SuppressLint("CheckResult")
-    fun insert(context: Context): Disposable =
-            Completable.fromAction {
+    fun insert(context: Context): Job =
+            CoroutineScope(Dispatchers.IO).launch {
                 val repository = DatabaseFinder().invoke(context).savedColorRepository()
                 make(context).forEach { repository.add(it) }
             }
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                            {},
-                            Timber::e
-                    )
 
     private fun make(context: Context): ArraySet<SavedColor> {
         val models = ArraySet<SavedColor>()

@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.browser
 
 import android.app.ActivityOptions
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -17,8 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
@@ -57,11 +54,6 @@ class BrowserFragment : Fragment(),
 {
 
     /**
-     * RxPermissions.
-     */
-    private var rxPermissions: RxPermissions? = null
-
-    /**
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
@@ -80,11 +72,6 @@ class BrowserFragment : Fragment(),
 
     private val searchQueryExtractor = SearchQueryExtractor()
 
-    /**
-     * Composite disposer.
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
-
     private var menuViewModel: MenuViewModel? = null
 
     private var headerViewModel: HeaderViewModel? = null
@@ -96,13 +83,6 @@ class BrowserFragment : Fragment(),
     private var contentViewModel: ContentViewModel? = null
 
     private val activityOptionsFactory = ActivityOptionsFactory()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        activity?.let {
-            rxPermissions = RxPermissions(it)
-        }
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -495,9 +475,9 @@ class BrowserFragment : Fragment(),
         browserModule.onPause()
     }
 
+    // TODO Should be replaced to onDetach.
     override fun onDestroy() {
         super.onDestroy()
-        disposables.clear()
         headerViewModel?.show()
         browserModule.dispose()
     }

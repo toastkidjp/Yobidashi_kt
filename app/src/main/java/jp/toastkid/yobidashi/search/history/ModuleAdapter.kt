@@ -6,16 +6,15 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.toObservable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 import kotlin.math.min
@@ -94,70 +93,56 @@ internal class ModuleAdapter(
      * Clear all items.
      *
      * @param onComplete Callback
-     * @return [Disposable]
+     * @return [Job]
      */
-    fun clearAll(onComplete: () -> Unit): Disposable =
-            Completable.fromAction {
-                repository.deleteAll()
-                selected.clear()
-            }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {
-                                onComplete()
-                                notifyDataSetChanged()
-                            },
-                            Timber::e
-                    )
+    fun clearAll(onComplete: () -> Unit): Job =
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.IO) {
+                    repository.deleteAll()
+                    selected.clear()
+                }
 
-    fun refresh(onComplete: () -> Unit): Disposable {
-        return Maybe.fromCallable { repository.findAll() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            if (it.isEmpty()) {
-                                onComplete()
-                                return@subscribe
-                            }
-                            selected.addAll(it)
-                            notifyDataSetChanged()
-                        },
-                        Timber::e
-                )
+                onComplete()
+                notifyDataSetChanged()
+            }
+
+    // TODO rename argument
+    fun refresh(onComplete: () -> Unit) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val items = withContext(Dispatchers.IO) { repository.findAll() }
+            if (items.isEmpty()) {
+                onComplete()
+                return@launch
+            }
+            selected.addAll(items)
+            notifyDataSetChanged()
+        }
     }
 
     /**
      * Execute query.
      *
      * @param s
-     * @return [Disposable]
+     * @return [Job]
      */
-    fun query(s: CharSequence): Disposable {
+    fun query(s: CharSequence): Job {
         clear()
 
-        return Maybe.fromCallable {
-            if (s.isNotBlank()) {
-                repository.select("$s%")
-            } else {
-                repository.findAll()
+        return CoroutineScope(Dispatchers.Main).launch {
+            val items = withContext(Dispatchers.IO) {
+                if (s.isNotBlank()) {
+                    repository.select("$s%")
+                } else {
+                    repository.findAll()
+                }
             }
+            items.forEach { add(it) }
+            onVisibilityChanged(!isEmpty)
+            notifyDataSetChanged()
         }
-                .subscribeOn(Schedulers.newThread())
-                .flatMapObservable { it.toObservable() }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { this.add(it) },
-                        Timber::e,
-                        {
-                            onVisibilityChanged(!isEmpty)
-                            notifyDataSetChanged()
-                        }
-                )
     }
 
-    override fun removeAt(position: Int): Disposable {
+    override fun removeAt(position: Int): Job {
         return remove(selected[position])
     }
 
@@ -165,20 +150,21 @@ internal class ModuleAdapter(
      * Remove item with position.
      *
      * @param item [SearchHistory]
-     * @return [Disposable]
+     * @return [Job]
      */
-    private fun remove(item: SearchHistory): Disposable {
-        return Completable.fromAction { repository.delete(item) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    val index = selected.indexOf(item)
-                    selected.remove(item)
-                    notifyItemRemoved(index)
-                    if (isEmpty) {
-                        onVisibilityChanged(false)
-                    }
-                }
+    private fun remove(item: SearchHistory): Job {
+        return CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                repository.delete(item)
+            }
+
+            val index = selected.indexOf(item)
+            selected.remove(item)
+            notifyItemRemoved(index)
+            if (isEmpty) {
+                onVisibilityChanged(false)
+            }
+        }
     }
 
     /**

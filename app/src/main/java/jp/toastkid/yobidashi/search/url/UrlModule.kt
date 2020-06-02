@@ -8,17 +8,15 @@
 package jp.toastkid.yobidashi.search.url
 
 import android.view.View
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -70,9 +68,8 @@ class UrlModule(
      *
      * @param title site's title
      * @param url URL
-     * @return [Disposable]
      */
-    fun switch(title: String?, url: String?): Disposable =
+    fun switch(title: String?, url: String?) =
             if (url.isNullOrBlank() || !enable) {
                 clearContent()
                 hide()
@@ -85,21 +82,19 @@ class UrlModule(
     /**
      * Show this module.
      */
-    private fun show(): Disposable {
+    private fun show() {
         if (binding.root.visibility == View.GONE && enable) {
-            return runOnMainThread { binding.root.visibility = View.VISIBLE }
+            runOnMainThread { binding.root.visibility = View.VISIBLE }
         }
-        return Disposables.disposed()
     }
 
     /**
      * Hide this module.
      */
-    fun hide(): Disposable {
+    fun hide() {
         if (binding.root.visibility == View.VISIBLE) {
-            return runOnMainThread { binding.root.visibility = View.GONE }
+            runOnMainThread { binding.root.visibility = View.GONE }
         }
-        return Disposables.disposed()
     }
 
     /**
@@ -128,10 +123,5 @@ class UrlModule(
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            Completable.fromAction { action() }
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {},
-                            Timber::e
-                    )
+            CoroutineScope(Dispatchers.Main).launch { action() }
 }

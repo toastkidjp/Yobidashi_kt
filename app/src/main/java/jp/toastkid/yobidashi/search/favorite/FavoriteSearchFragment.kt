@@ -15,11 +15,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
@@ -28,6 +23,11 @@ import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Favorite search fragment.
@@ -48,10 +48,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    /**
-     * [CompositeDisposable].
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -136,7 +133,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
      */
     private fun startSearch(category: SearchCategory, query: String) {
         activity?.let {
-            SearchAction(it, category.name, query).invoke().addTo(disposables)
+            SearchAction(it, category.name, query).invoke()
         }
     }
 
@@ -168,21 +165,20 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     private fun clear() {
         val context = requireContext()
         val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
-        Completable.fromAction {
-            repository.deleteAll()
-            adapter?.clear()
+
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) {
+                repository.deleteAll()
+                adapter?.clear()
+            }
+
+            Toaster.snackShort(
+                    binding?.root as View,
+                    R.string.settings_color_delete,
+                    colorPair()
+            )
+            activity?.supportFragmentManager?.popBackStack()
         }
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe {
-                    Toaster.snackShort(
-                            binding?.root as View,
-                            R.string.settings_color_delete,
-                            colorPair()
-                    )
-                    activity?.supportFragmentManager?.popBackStack()
-                }
-                ?.addTo(disposables)
     }
 
     /**
@@ -204,8 +200,8 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onDetach() {
+        disposables.cancel()
         super.onDetach()
-        disposables.clear()
     }
 
     companion object {

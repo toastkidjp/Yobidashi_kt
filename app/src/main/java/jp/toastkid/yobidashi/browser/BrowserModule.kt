@@ -30,12 +30,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
@@ -62,9 +56,12 @@ import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.File
-import java.io.IOException
 
 /**
  * @author toastkidjp
@@ -123,7 +120,7 @@ class BrowserModule(
 
     private val alphaConverter = AlphaConverter()
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
@@ -148,7 +145,7 @@ class BrowserModule(
             headerViewModel?.updateProgress(0)
             isLoadFinished = false
 
-            rssAddingSuggestion(view, url).addTo(disposables)
+            rssAddingSuggestion(view, url)
             updateBackButtonState(view.canGoBack())
         }
 
@@ -379,7 +376,6 @@ class BrowserModule(
             }
         }
 
-        Timber.i("tomato set webview ${tabId}")
         setWebView(currentWebView)
         return currentWebView?.url.isNullOrBlank()
     }
@@ -404,7 +400,7 @@ class BrowserModule(
             }
         }
 
-        reloadWebViewSettings().addTo(disposables)
+        reloadWebViewSettings()
     }
 
     private fun updateBackButtonState(newState: Boolean) {
@@ -499,7 +495,7 @@ class BrowserModule(
      * TODO make private.
      * @return subscription
      */
-    fun reloadWebViewSettings(): Disposable {
+    fun reloadWebViewSettings() {
         val settings = currentView()?.settings?.also {
             it.javaScriptEnabled = preferenceApplier.useJavaScript()
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -509,19 +505,19 @@ class BrowserModule(
             it.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
         }
 
-        return Single.fromCallable { preferenceApplier.userAgent() }
-                .map { uaName ->
-                    val text = UserAgent.valueOf(uaName).text()
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val text = withContext(Dispatchers.IO) {
+                UserAgent.valueOf(preferenceApplier.userAgent()).text()
+            }
 
-                    if (text.isNotEmpty()) {
-                        text
-                    } else {
-                        WebView(context).settings.userAgentString
-                    }
-                }
-                .filter { settings?.userAgentString != it }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe { resetUserAgent(it) }
+            val ua =
+                    if (text.isNotEmpty()) text else WebView(context).settings.userAgentString
+
+            if (settings?.userAgentString == ua) {
+                return@launch
+            }
+            resetUserAgent(ua)
+        }
     }
 
     fun resetUserAgent(userAgentText: String) {
@@ -557,7 +553,7 @@ class BrowserModule(
      */
     fun dispose() {
         GlobalWebViewPool.dispose()
-        disposables.clear()
+        disposables.cancel()
     }
 
     /**

@@ -1,20 +1,12 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
-import jp.toastkid.yobidashi.libs.ImageLoader
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -52,23 +44,15 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
      *
      * @param faviconPath favicon path
      */
-    fun setImage(faviconPath: String): Disposable {
+    fun setImage(faviconPath: String) {
         if (faviconPath.isEmpty()) {
             setDefaultIcon()
-            return Disposables.empty()
+            return
         }
-        return Single.fromCallable { File(faviconPath) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .map { ImageLoader.loadBitmap(binding.root.context, Uri.fromFile(it)) as Bitmap }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { binding.icon.setImageBitmap(it) },
-                        { e ->
-                            Timber.e(e)
-                            setDefaultIcon()
-                        }
-                )
+
+        Glide.with(binding.icon)
+                .load(File(faviconPath))
+                .into(binding.icon)
     }
 
     /**

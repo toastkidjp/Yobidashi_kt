@@ -9,11 +9,11 @@ package jp.toastkid.yobidashi.settings.color
 
 import android.content.Context
 import android.graphics.Color
-import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**
@@ -28,7 +28,7 @@ class RandomColorInsertion {
      *
      * @param context
      */
-    operator fun invoke(context: Context): Disposable {
+    operator fun invoke(context: Context): Job {
         val bg = Color.argb(
                 random.nextInt(COLOR_CODE_MAX),
                 random.nextInt(COLOR_CODE_MAX),
@@ -43,13 +43,11 @@ class RandomColorInsertion {
                 random.nextInt(COLOR_CODE_MAX)
         )
 
-        return Completable.fromAction {
+        return CoroutineScope(Dispatchers.IO).launch {
             DatabaseFinder().invoke(context)
                     .savedColorRepository()
                     .add(SavedColor.make(bg, font))
         }
-                .subscribeOn(Schedulers.io())
-                .subscribe({}, Timber::e)
     }
 
     companion object {

@@ -10,18 +10,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.toObservable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
@@ -47,10 +44,7 @@ internal class ActivityAdapter(
      */
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    /**
-     * [CompositeDisposable].
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     /**
      * Folder moving history.
@@ -59,6 +53,7 @@ internal class ActivityAdapter(
 
     /**
      * Use for run on main thread.
+     * TODO Delete it.
      */
     private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
@@ -84,7 +79,7 @@ internal class ActivityAdapter(
         if (bookmark.folder) {
             holder.setImageId(R.drawable.ic_folder_black)
         } else {
-            holder.setImage(bookmark.favicon).addTo(disposables)
+            holder.setImage(bookmark.favicon)
         }
 
         val browserViewModel = (holder.itemView.context as? FragmentActivity)?.let {
@@ -124,31 +119,13 @@ internal class ActivityAdapter(
     }
 
     private fun findByFolderName(title: String) {
-        displayItems(Maybe.fromCallable { bookmarkRepository.findByParent(title) })
-    }
-
-    /**
-     * Query with specified title.
-     *
-     * @param itemCall
-     */
-    private fun displayItems(itemCall: Maybe<List<Bookmark>>) {
-        itemCall
-                .subscribeOn(Schedulers.io())
-                .flatMapObservable { it.toObservable() }
-                .observeOn(Schedulers.computation())
-                .doOnSubscribe { items.clear() }
-                .subscribe(
-                        { items.add(it) },
-                        Timber::e,
-                        {
-                            mainThreadHandler.post {
-                                notifyDataSetChanged()
-                                onRefresh()
-                            }
-                        }
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) {
+                bookmarkRepository.findByParent(title).forEach { items.add(it) }
+            }
+            notifyDataSetChanged()
+            onRefresh()
+        }
     }
 
     /**
@@ -173,14 +150,12 @@ internal class ActivityAdapter(
      * @param position position
      */
     fun remove(item: Bookmark, position: Int = items.indexOf(item)) {
-        Completable.fromAction { bookmarkRepository.delete(item) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    items.remove(item)
-                    notifyItemRemoved(position)
-                }
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) { bookmarkRepository.delete(item) }
+
+            items.remove(item)
+            notifyItemRemoved(position)
+        }
     }
 
     /**
@@ -189,15 +164,13 @@ internal class ActivityAdapter(
      * @param onComplete callback
      */
     fun clearAll(onComplete: () -> Unit) {
-        Completable.fromAction { bookmarkRepository.clear() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    onComplete()
-                    items.clear()
-                    notifyDataSetChanged()
-                }
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) { bookmarkRepository.clear() }
+
+            onComplete()
+            items.clear()
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int = items.size
@@ -206,7 +179,7 @@ internal class ActivityAdapter(
      * Dispose all disposable instances.
      */
     fun dispose() {
-        disposables.clear()
+        disposables.cancel()
     }
 
 }

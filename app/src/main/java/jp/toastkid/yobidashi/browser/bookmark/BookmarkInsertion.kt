@@ -1,13 +1,12 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
-import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -21,23 +20,18 @@ class BookmarkInsertion (
         private val folder: Boolean = false
 ) {
 
-    fun insert(): Disposable {
+    fun insert(): Job {
         if (title.isEmpty()) {
-            return Disposables.empty()
+            return Job()
         }
         return insert(Bookmark.make(title, url, faviconPath, parent, folder))
     }
 
-    private fun insert(bookmark: Bookmark): Disposable {
-        return Completable.fromAction {
+    private fun insert(bookmark: Bookmark): Job {
+        return CoroutineScope(Dispatchers.IO).launch {
             DatabaseFinder().invoke(context).bookmarkRepository()
                     .add(bookmark)
         }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        {},
-                        Timber::e
-                )
     }
 
 }

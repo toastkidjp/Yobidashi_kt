@@ -23,21 +23,22 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Completable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentImageViewerBinding
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -58,7 +59,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private val parentExtractor = ParentExtractor()
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -89,10 +90,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         adapter = Adapter(fragmentManager, viewModel)
 
         viewModel.onClick.observe(this, Observer {
-            Completable.fromAction { loadImages(it) }
-                    .subscribeOn(Schedulers.io())
-                    .subscribe()
-                    .addTo(disposables)
+            CoroutineScope(Dispatchers.IO).launch(disposables) { loadImages(it) }
         })
 
         viewModel.onLongClick.observe(this, Observer {
@@ -141,26 +139,24 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     private fun attemptLoad() {
-        RxPermissions(requireActivity())
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .observeOn(Schedulers.io())
-                .subscribe(
-                        {
-                            if (it) {
-                                loadImages()
-                                return@subscribe
-                            }
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            RuntimePermissions(requireActivity())
+                    .request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    ?.receiveAsFlow()
+                    ?.collect {
+                        if (it.granted) {
+                            loadImages()
+                            return@collect
+                        }
 
-                            Toaster.snackShort(
-                                    binding.root,
-                                    R.string.message_audio_file_is_not_found,
-                                    PreferenceApplier(binding.root.context).colorPair()
-                            )
-                            activity?.supportFragmentManager?.popBackStack()
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
+                        Toaster.snackShort(
+                                binding.root,
+                                R.string.message_audio_file_is_not_found,
+                                PreferenceApplier(binding.root.context).colorPair()
+                        )
+                        activity?.supportFragmentManager?.popBackStack()
+                    }
+        }
     }
 
     private fun loadImages(bucket: String? = null) {
@@ -242,8 +238,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     override fun onDetach() {
+        disposables.cancel()
         super.onDetach()
-        disposables.clear()
     }
 
     companion object {

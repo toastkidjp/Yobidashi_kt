@@ -10,7 +10,6 @@ import android.webkit.WebView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
@@ -24,11 +23,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  * @author toastkidjp
  */
 internal class WebViewFactory {
-
-    /**
-     * [CompositeDisposable].
-     */
-    private val disposables = CompositeDisposable()
 
     /**
      * Use for only extract anchor URL.
@@ -176,10 +170,4 @@ internal class WebViewFactory {
         )
     }
 
-    /**
-     * Dispose subscriptions.
-     */
-    fun dispose() {
-        disposables.clear()
-    }
 }

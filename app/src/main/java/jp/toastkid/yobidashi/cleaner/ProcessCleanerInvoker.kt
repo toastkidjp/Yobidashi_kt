@@ -17,15 +17,13 @@ import android.provider.Settings
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -33,7 +31,7 @@ import timber.log.Timber
 class ProcessCleanerInvoker {
     
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    operator fun invoke(snackbarParent: View): Disposable {
+    operator fun invoke(snackbarParent: View) {
         val context = snackbarParent.context
         val preferenceApplier = PreferenceApplier(context)
 
@@ -43,32 +41,27 @@ class ProcessCleanerInvoker {
                                 context.packageName)
         ) {
             snackConfirmRequirePermission(snackbarParent, preferenceApplier)
-            return Disposables.disposed()
+            return
         }
 
         var snackbar: Snackbar? = null
 
-        return Single.fromCallable {
-            snackbar = Toaster.snackIndefinite(
-                    snackbarParent,
-                    "Start cleaning...",
-                    preferenceApplier.colorPair()
-            )
-            ProcessCleaner().invoke(
-                    context.packageManager,
-                    context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager,
-                    context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager
-            )
-        }
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            snackbar?.dismiss()
-                            onSuccess(snackbarParent, it, preferenceApplier)
-                        },
-                        Timber::e
+        CoroutineScope(Dispatchers.Main).launch {
+            val cleaner = withContext(Dispatchers.Default) {
+                snackbar = Toaster.snackIndefinite(
+                        snackbarParent,
+                        "Start cleaning...",
+                        preferenceApplier.colorPair()
                 )
+                ProcessCleaner().invoke(
+                        context.packageManager,
+                        context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager,
+                        context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager
+                )
+            }
+            snackbar?.dismiss()
+            onSuccess(snackbarParent, cleaner, preferenceApplier)
+        }
     }
 
     private fun onSuccess(

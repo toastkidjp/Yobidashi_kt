@@ -21,13 +21,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -35,12 +28,19 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.content.ContentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okio.Okio
-import timber.log.Timber
 
 /**
  * Bookmark list activity.
@@ -71,10 +71,7 @@ class BookmarkFragment: Fragment(),
 
     private var contentViewModel: ContentViewModel? = null
 
-    /**
-     * Composite of disposables.
-     */
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -192,21 +189,22 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.import_bookmark -> {
-                RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .subscribe(
-                                { granted ->
-                                    if (!granted) {
-                                        contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                        return@subscribe
-                                    }
-                                    startActivityForResult(
-                                            IntentFactory.makeGetContent("text/html"),
-                                            REQUEST_CODE_IMPORT_BOOKMARK
-                                    )
-                                },
-                                { Timber.e(it) }
-                        )
-                        .addTo(disposables)
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    RuntimePermissions(requireActivity())
+                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            ?.receiveAsFlow()
+                            ?.collect { permissionResult ->
+                                if (!permissionResult.granted) {
+                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                                    return@collect
+                                }
+
+                                startActivityForResult(
+                                        IntentFactory.makeGetContent("text/html"),
+                                        REQUEST_CODE_IMPORT_BOOKMARK
+                                )
+                            }
+                }
                 true
             }
             R.id.export_bookmark -> {
@@ -214,22 +212,23 @@ class BookmarkFragment: Fragment(),
                     contentViewModel?.snackShort(R.string.message_disusable_menu)
                     return true
                 }
-                RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .subscribe(
-                                { granted ->
-                                    if (!granted) {
-                                        contentViewModel?.snackShort(R.string.message_requires_permission_storage)
-                                        return@subscribe
-                                    }
-                                    startActivityForResult(
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    RuntimePermissions(requireActivity())
+                            .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            ?.receiveAsFlow()
+                            ?.collect { permissionResult ->
+                                if (!permissionResult.granted) {
+                                    contentViewModel?.snackShort(R.string.message_requires_permission_storage)
+                                    return@collect
+                                }
+
+                                startActivityForResult(
                                         IntentFactory.makeDocumentOnStorage(
                                                 "text/html", "bookmark.html"),
                                         REQUEST_CODE_EXPORT_BOOKMARK
-                                    )
-                                },
-                                { Timber.e(it) }
-                        )
-                        .addTo(disposables)
+                                )
+                            }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -249,7 +248,6 @@ class BookmarkFragment: Fragment(),
 
     override fun onClickAddDefaultBookmark() {
         BookmarkInitializer()(binding.root.context) { adapter.showRoot() }
-                .addTo(disposables)
         contentViewModel?.snackShort(R.string.done_addition)
     }
 
@@ -257,17 +255,17 @@ class BookmarkFragment: Fragment(),
         if (TextUtils.isEmpty(title)) {
             return
         }
-        Completable.fromAction {
+
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
             BookmarkInsertion(
                     binding.root.context,
                     title ?: "", // This value is always non-null, because it has checked at above statement.
                     parent = adapter.currentFolderName(),
                     folder = true
-            ).insert() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { adapter.reload() }
-                .addTo(disposables)
+            ).insert()
+
+            adapter.reload()
+        }
     }
 
     override fun toTop() {
@@ -301,24 +299,14 @@ class BookmarkFragment: Fragment(),
         val context = context ?: return
         val inputStream = context.contentResolver?.openInputStream(uri) ?: return
 
-        Completable.using(
-                { inputStream },
-                {
-                    Completable.fromAction {
-                        ExportedFileParser()(it).forEach { bookmarkRepository.add(it) }
-                    }
-                },
-                { it.close() }
-        )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            adapter.showRoot()
-                            contentViewModel?.snackShort(R.string.done_addition)
-                        },
-                        { Timber.e(it) }
-                ).addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) {
+                ExportedFileParser()(inputStream).forEach { bookmarkRepository.add(it) }
+
+                adapter.showRoot()
+                contentViewModel?.snackShort(R.string.done_addition)
+            }
+        }
     }
 
     /**
@@ -327,23 +315,18 @@ class BookmarkFragment: Fragment(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        Maybe.fromCallable { bookmarkRepository.all() }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        { bookmarks ->
-                            val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@subscribe
-                            Okio.buffer(Okio.sink(outputStream)).use {
-                                it.writeUtf8(Exporter(bookmarks).invoke())
-                            }
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val items = withContext(Dispatchers.IO) { bookmarkRepository.all() }
+            val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@launch
+            Okio.buffer(Okio.sink(outputStream)).use {
+                it.writeUtf8(Exporter(items).invoke())
+            }
+        }
     }
 
     override fun onDetach() {
         adapter.dispose()
-        disposables.clear()
+        disposables.cancel()
         super.onDetach()
     }
 

@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.disposables.CompositeDisposable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssSettingBinding
@@ -29,8 +28,6 @@ import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 class RssSettingFragment : Fragment(), CommonFragmentAction {
 
     private lateinit var binding: FragmentRssSettingBinding
-
-    private val disposables = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -66,11 +63,6 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
     override fun pressBack(): Boolean {
         activity?.supportFragmentManager?.popBackStack()
         return true
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        disposables.clear()
     }
 
 }

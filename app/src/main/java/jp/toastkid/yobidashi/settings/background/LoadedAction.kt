@@ -8,11 +8,6 @@ import android.graphics.Rect
 import android.net.Uri
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -20,9 +15,14 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * Action of loaded new background image.
@@ -50,31 +50,30 @@ internal class LoadedAction (
     /**
      * Invoke action.
      */
-    operator fun invoke(): Disposable {
+    operator fun invoke() {
         if (uri == null) {
-            return Disposables.empty()
+            return
         }
 
         val context = parent.context
 
-        return Maybe.fromCallable {
-            val image = ImageLoader.loadBitmap(context, uri)
-            val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
-            fixedImage?.let { storeImageToFile(context, it, uri) }
-            fixedImage
+        CoroutineScope(Dispatchers.Main).launch {
+            val bitmap = try {
+                withContext(Dispatchers.IO) {
+                    val image = ImageLoader.loadBitmap(context, uri)
+                    val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
+                    fixedImage?.let { storeImageToFile(context, it, uri) }
+                    fixedImage
+                }
+            } catch (e: IOException) {
+                Timber.e(e)
+                informFailed()
+                return@launch
+            }
+
+            onLoadedAction()
+            bitmap?.let { informDone(it) }
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { bitmap ->
-                            onLoadedAction()
-                            bitmap?.let { informDone(it) }
-                        },
-                        {
-                            Timber.e(it)
-                            informFailed()
-                        }
-                )
     }
 
     /**

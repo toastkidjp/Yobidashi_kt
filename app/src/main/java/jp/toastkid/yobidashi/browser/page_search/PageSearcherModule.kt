@@ -9,19 +9,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Module for find in page.
@@ -48,12 +48,7 @@ class PageSearcherModule(
      */
     private val editText: EditText
 
-    private val inputSubject = PublishSubject.create<String>()
-
-    /**
-     * Use for disposing subscriptions.
-     */
-    private val disposables = CompositeDisposable()
+    private val channel = Channel<String>()
 
     init {
         TextInputs.setEmptyAlert(binding.inputLayout)
@@ -79,15 +74,21 @@ class PageSearcherModule(
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    inputSubject.onNext(p0.toString())
+                    CoroutineScope(Dispatchers.Default).launch {
+                        channel.send(p0.toString())
+                    }
                 }
             })
 
-            inputSubject.distinctUntilChanged()
-                    .subscribeOn(Schedulers.io())
-                    .debounce(1000L, TimeUnit.MILLISECONDS)
-                    .subscribe { viewModel.find(it) }
-                    .addTo(disposables)
+            CoroutineScope(Dispatchers.Default).launch {
+                channel.receiveAsFlow()
+                        .debounce(1000)
+                        .collect {
+                            withContext(Dispatchers.Main) {
+                                viewModel.find(it)
+                            }
+                        }
+            }
         }
 
         (context as? FragmentActivity)?.let { activity ->
@@ -168,22 +169,18 @@ class PageSearcherModule(
     }
 
     private fun switchVisibility(from: Int, to: Int) {
-        Maybe.fromCallable { binding.root.visibility == from }
-                .subscribeOn(Schedulers.computation())
-                .filter { visible -> visible }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { binding.root.visibility = to },
-                        Timber::e
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            if (binding.root.visibility == from) {
+                binding.root.visibility = to
+            }
+        }
     }
 
     /**
      * Close subscriptions.
      */
     fun dispose() {
-        disposables.clear()
+        channel.cancel()
     }
 
     companion object {

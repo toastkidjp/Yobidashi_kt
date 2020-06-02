@@ -16,17 +16,17 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageCache
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -44,7 +44,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
     private val imageCache = ImageCache()
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun setArguments(args: Bundle?) {
         super.setArguments(args)
@@ -65,11 +65,10 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
         val imageView = contentView.findViewById<ImageView>(R.id.barcode)
 
-        Single.fromCallable { encodeBitmap() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ setBitmap(it, imageView, contentView) }, Timber::e)
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val bitmap = withContext(Dispatchers.IO) { encodeBitmap() }
+            setBitmap(bitmap, imageView, contentView)
+        }
 
         val builder = AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_menu_page_information)
@@ -120,13 +119,13 @@ internal class PageInformationDialogFragment: DialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
+        disposables.cancel()
         super.onDismiss(dialog)
-        disposables.clear()
     }
 
     override fun onCancel(dialog: DialogInterface) {
+        disposables.cancel()
         super.onCancel(dialog)
-        disposables.clear()
     }
 
     companion object {

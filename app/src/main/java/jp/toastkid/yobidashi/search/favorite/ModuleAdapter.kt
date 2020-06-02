@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchCategory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 import kotlin.math.min
@@ -85,26 +84,24 @@ internal class ModuleAdapter(
      * Execute query.
      *
      * @param s query word [String]
-     * @return [Disposable]
+     * @return [Job]
      */
-    fun query(s: CharSequence): Disposable {
+    fun query(s: CharSequence): Job {
         clear()
 
-        return Maybe.fromCallable {
-            if (s.isNotBlank()) {
-                favoriteSearchRepository.select("$s%")
-            } else {
-                favoriteSearchRepository.find(maxItemCount)
-            }
-        }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMapObservable { Observable.fromIterable(it) }
-                .doOnTerminate {
-                    onVisibilityChanged(!isEmpty)
-                    notifyDataSetChanged()
+        return CoroutineScope(Dispatchers.Main).launch {
+            val items = withContext(Dispatchers.IO) {
+                if (s.isNotBlank()) {
+                    favoriteSearchRepository.select("$s%")
+                } else {
+                    favoriteSearchRepository.find(maxItemCount)
                 }
-                .subscribe(this::add, Timber::e)
+            }
+
+            items.forEach { add(it) }
+            onVisibilityChanged(!isEmpty)
+            notifyDataSetChanged()
+        }
     }
 
     /**
@@ -112,23 +109,19 @@ internal class ModuleAdapter(
      *
      * @param position
      */
-    fun removeAt(position: Int): Disposable {
+    fun removeAt(position: Int): Job {
         val item = selected[position]
-        return Completable.fromAction {
-            favoriteSearchRepository.delete(item)
-            selected.remove(item)
+        return CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                favoriteSearchRepository.delete(item)
+                selected.remove(item)
+            }
+
+            notifyItemRemoved(position)
+            if (isEmpty) {
+                onVisibilityChanged(false)
+            }
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            notifyItemRemoved(position)
-                            if (isEmpty) {
-                                onVisibilityChanged(false)
-                            }
-                        },
-                        Timber::e
-                )
     }
 
     /**
@@ -155,18 +148,14 @@ internal class ModuleAdapter(
         selected.add(history)
     }
 
-    fun refresh(): Disposable {
+    fun refresh(): Job {
         selected.clear()
-        return Maybe.fromCallable { favoriteSearchRepository.findAll() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            selected.addAll(it)
-                            notifyDataSetChanged()
-                        },
-                        Timber::e
-                )
+
+        return CoroutineScope(Dispatchers.Main).launch {
+            val items = withContext(Dispatchers.IO) { favoriteSearchRepository.findAll() }
+            items.forEach { selected.add(it) }
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int {

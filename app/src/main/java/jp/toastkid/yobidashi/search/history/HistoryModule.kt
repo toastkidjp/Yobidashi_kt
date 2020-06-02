@@ -11,14 +11,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * Search history module.
@@ -45,12 +43,7 @@ class HistoryModule(
     /**
      * Last subscription.
      */
-    private var disposable: Disposable? = null
-
-    /**
-     * Use for disposing.
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private var disposable: Job? = null
 
     init {
         binding.module = this
@@ -72,10 +65,9 @@ class HistoryModule(
         )
         binding.searchHistories.adapter = moduleAdapter
 
-        Completable.fromAction { SwipeActionAttachment().invoke(binding.searchHistories) }
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            SwipeActionAttachment().invoke(binding.searchHistories)
+        }
     }
 
     /**
@@ -84,7 +76,7 @@ class HistoryModule(
      * @param s query string
      */
     fun query(s: CharSequence) {
-        disposable?.dispose()
+        disposable?.cancel()
         disposable = moduleAdapter.query(s)
     }
 
@@ -112,7 +104,6 @@ class HistoryModule(
     fun show() {
         if (!binding.root.isVisible && enable) {
             runOnMainThread { binding.root.isVisible = true }
-                    .addTo(disposables)
         }
     }
 
@@ -122,23 +113,17 @@ class HistoryModule(
     fun hide() {
         if (binding.root.isVisible) {
             runOnMainThread { binding.root.isVisible = false }
-                    .addTo(disposables)
         }
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            Completable.fromAction { action() }
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {},
-                            Timber::e
-                    )
+            CoroutineScope(Dispatchers.Main).launch { action() }
 
     /**
      * Dispose last subscription.
      */
     fun dispose() {
-        disposable?.dispose()
+        disposable?.cancel()
     }
 
 }

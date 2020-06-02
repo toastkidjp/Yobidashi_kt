@@ -11,13 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -26,7 +19,11 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Color setting activity.
@@ -67,7 +64,7 @@ class ColorSettingFragment : Fragment(),
     /**
      * Subscribed disposables.
      */
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(
@@ -163,16 +160,10 @@ class ColorSettingFragment : Fragment(),
         color.setTo(holder.textView)
         holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
         holder.remove.setOnClickListener {
-            Completable.fromAction {
+            CoroutineScope(Dispatchers.IO).launch(disposables) {
                 repository.delete(color)
                 adapter?.deleteAt(color)
             }
-                    ?.subscribeOn(Schedulers.io())
-                    ?.subscribe(
-                            { },
-                            Timber::e
-                    )
-                    ?.addTo(disposables)
             snackShort(R.string.settings_color_delete)
         }
     }
@@ -199,18 +190,15 @@ class ColorSettingFragment : Fragment(),
 
         commitNewColor(bgColor, fontColor)
 
-        Completable.fromAction {
-            val savedColor = SavedColor.make(bgColor, fontColor)
-            repository.add(savedColor)
-            adapter?.add(savedColor)
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            withContext(Dispatchers.IO) {
+                val savedColor = SavedColor.make(bgColor, fontColor)
+                repository.add(savedColor)
+                adapter?.add(savedColor)
+            }
+
+            adapter?.notifyDataSetChanged()
         }
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(
-                        { adapter?.notifyDataSetChanged() },
-                        Timber::e
-                )
-                ?.addTo(disposables)
     }
 
     /**
@@ -264,7 +252,7 @@ class ColorSettingFragment : Fragment(),
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_random)
                     ?.setOnMenuItemClickListener {
                         val activityContext = context ?: return@setOnMenuItemClickListener true
-                        RandomColorInsertion()(activityContext).addTo(disposables)
+                        RandomColorInsertion()(activityContext)
                         snackShort(R.string.done_addition)
                         true
                     }
@@ -299,35 +287,22 @@ class ColorSettingFragment : Fragment(),
 
         override fun getItemCount(): Int = items.count()
 
-        fun refresh(): Disposable {
+        fun refresh() {
             items.clear()
-            return Maybe.fromCallable { repository.findAll() }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {
-                                items.addAll(it)
-                                notifyDataSetChanged()
-                            },
-                            Timber::e
-                    )
-        }
-
-        fun deleteAt(savedColor: SavedColor): Disposable {
-            return delete(savedColor)
-        }
-
-        private fun delete(favoriteSearch: SavedColor): Disposable {
-            return Completable.fromAction {
-                repository.delete(favoriteSearch)
-                items.remove(favoriteSearch)
+            CoroutineScope(Dispatchers.Main).launch(disposables) {
+                withContext(Dispatchers.IO) { repository.findAll().forEach { items.add(it) } }
+                notifyDataSetChanged()
             }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { notifyDataSetChanged() },
-                            Timber::e
-                    )
+        }
+
+        fun deleteAt(savedColor: SavedColor) {
+            CoroutineScope(Dispatchers.Main).launch(disposables) {
+                withContext(Dispatchers.IO) {
+                    repository.delete(savedColor)
+                    items.remove(savedColor)
+                }
+                notifyDataSetChanged()
+            }
         }
 
         fun add(savedColor: SavedColor) {
@@ -335,32 +310,27 @@ class ColorSettingFragment : Fragment(),
         }
 
         fun clear() {
-            Completable.fromAction {
-                repository.deleteAll()
-                items.clear()
+            CoroutineScope(Dispatchers.Main).launch(disposables) {
+                withContext(Dispatchers.IO) {
+                    repository.deleteAll()
+                    items.clear()
+                }
+
+                notifyDataSetChanged()
+                val root = binding?.root ?: return@launch
+                Toaster.snackShort(
+                        root,
+                        R.string.settings_color_delete,
+                        colorPair()
+                )
             }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {
-                                notifyDataSetChanged()
-                                val root = binding?.root ?: return@subscribe
-                                Toaster.snackShort(
-                                        root,
-                                        R.string.settings_color_delete,
-                                        colorPair()
-                                )
-                            },
-                            Timber::e
-                    )
-                    .addTo(disposables)
         }
     }
 
     private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onDetach() {
-        disposables.clear()
+        disposables.cancel()
         super.onDetach()
     }
 

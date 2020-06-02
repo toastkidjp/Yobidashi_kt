@@ -8,15 +8,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.internal.operators.completable.CompletableLift
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,17 +44,14 @@ internal class ActivityAdapter(
     private val items = mutableListOf<ViewHistory>()
 
     /**
-     * Disposables.
-     */
-    private val disposables: CompositeDisposable = CompositeDisposable()
-
-    /**
      * Date format holder.
      */
     private val dateFormat: ThreadLocal<DateFormat> = object: ThreadLocal<DateFormat>() {
         override fun initialValue(): DateFormat =
                 SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
     }
+
+    private val parent = Job()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_view_history, parent, false))
@@ -76,7 +71,7 @@ internal class ActivityAdapter(
         }
         holder.setOnClickBookmark(viewHistory)
 
-        holder.setImage(viewHistory.favicon).addTo(disposables)
+        holder.setImage(viewHistory.favicon)
 
         val browserViewModel = (holder.itemView.context as? FragmentActivity)?.let {
             ViewModelProviders.of(it).get(BrowserViewModel::class.java)
@@ -98,29 +93,25 @@ internal class ActivityAdapter(
         }
 
         items.clear()
-        CompletableLift.fromAction { items.addAll(viewHistoryRepository.search("%$query%")) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { notifyDataSetChanged() },
-                        Timber::e
-                )
-                .addTo(disposables)
+
+        CoroutineScope(Dispatchers.Main).launch(parent) {
+            withContext(Dispatchers.IO) {
+                items.addAll(viewHistoryRepository.search("%$query%"))
+            }
+
+            notifyDataSetChanged()
+        }
     }
 
     fun refresh(onComplete: () -> Unit = {}) {
         items.clear()
-        CompletableLift.fromAction { items.addAll(viewHistoryRepository.reversed()) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            notifyDataSetChanged()
-                            onComplete()
-                        },
-                        Timber::e
-                )
-                .addTo(disposables)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) { items.addAll(viewHistoryRepository.reversed()) }
+
+            notifyDataSetChanged()
+            onComplete()
+        }
     }
 
     /**
@@ -130,14 +121,15 @@ internal class ActivityAdapter(
      */
     fun removeAt(position: Int) {
         val item = items[position]
-        Completable.fromAction {
-            viewHistoryRepository.delete(item)
-            items.remove(item)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                viewHistoryRepository.delete(item)
+                items.remove(item)
+            }
+
+            notifyItemRemoved(position)
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { notifyItemRemoved(position) }
-                .addTo(disposables)
     }
 
     /**
@@ -146,21 +138,17 @@ internal class ActivityAdapter(
      * @param onComplete
      */
     fun clearAll(onComplete: () -> Unit) {
-        Completable.fromAction { viewHistoryRepository.deleteAll() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    onComplete()
-                    notifyDataSetChanged()
-                }
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                viewHistoryRepository.deleteAll()
+            }
+
+            onComplete()
+            notifyDataSetChanged()
+        }
     }
 
-    /**
-     * Dispose all disposables.
-     */
     fun dispose() {
-        disposables.clear()
+        parent.cancel()
     }
-
 }

@@ -33,12 +33,6 @@ import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
@@ -65,8 +59,18 @@ import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
 import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * @author toastkidjp
@@ -128,12 +132,12 @@ class SearchFragment : Fragment() {
     /**
      * Use for handling input action.
      */
-    private val inputSubject = PublishSubject.create<String>()
+    private val channel = Channel<String>()
 
     /**
      * Disposables.
      */
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
@@ -213,11 +217,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun setQuery() {
-        arguments?.getString(EXTRA_KEY_QUERY)?.let { query ->
-            headerBinding?.searchInput?.let { input ->
-                input.setText(query)
-                input.selectAll()
-            }
+        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
+        headerBinding?.searchInput?.let { input ->
+            input.setText(query)
+            input.selectAll()
         }
     }
 
@@ -270,17 +273,16 @@ class SearchFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun initFavoriteModule() {
-        Completable.fromAction {
-            favoriteModule = FavoriteSearchModule(
-                    binding?.favoriteModule as ModuleSearchFavoriteBinding,
-                    { fav -> search(fav.category as String, fav.query as String) },
-                    this::hideKeyboard,
-                    { setTextAndMoveCursorToEnd("${it.query} ") }
-            )
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            favoriteModule = withContext(Dispatchers.Default) {
+                FavoriteSearchModule(
+                        binding?.favoriteModule as ModuleSearchFavoriteBinding,
+                        { fav -> search(fav.category as String, fav.query as String) }, // TODO use elvis
+                        this@SearchFragment::hideKeyboard,
+                        { setTextAndMoveCursorToEnd("${it.query} ") }
+                )
+            }
         }
-                .subscribeOn(Schedulers.newThread())
-                .subscribe( { favoriteModule?.query("") }, { Timber.e(it) })
-                .addTo(disposables)
     }
 
     private fun setTextAndMoveCursorToEnd(text: String) {
@@ -293,22 +295,19 @@ class SearchFragment : Fragment() {
      */
     @SuppressLint("SetTextI18n")
     private fun initHistoryModule() {
-        Completable.fromAction {
-            historyModule = HistoryModule(
-                    binding?.historyModule as ModuleSearchHistoryBinding,
-                    { history -> search(history.category as String, history.query as String) },
-                    { searchHistory ->
-                        headerBinding?.searchInput?.setText("${searchHistory.query} ")
-                        headerBinding?.searchInput?.setSelection(
-                                headerBinding?.searchInput?.text.toString().length)
-                    }
-            )
-        }.subscribeOn(Schedulers.newThread())
-                .subscribe(
-                        { if (preferenceApplier.isEnableSearchHistory) { historyModule?.query("") } },
-                        { Timber.e(it) }
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            historyModule = withContext(Dispatchers.Default) {
+                HistoryModule(
+                        binding?.historyModule as ModuleSearchHistoryBinding,
+                        { history -> search(history.category as String, history.query as String) }, // TODO use elvis
+                        { searchHistory ->
+                            headerBinding?.searchInput?.setText("${searchHistory.query} ")
+                            headerBinding?.searchInput?.setSelection(
+                                    headerBinding?.searchInput?.text.toString().length)
+                        }
                 )
-                .addTo(disposables)
+            }
+        }
     }
 
     override fun onResume() {
@@ -358,17 +357,10 @@ class SearchFragment : Fragment() {
             }
             it.addTextChangedListener(object : TextWatcher {
 
-                private var previous = ""
-
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    val newQuery = s.toString()
-                    if (newQuery == previous) {
-                        return
-                    }
-                    previous = newQuery
-                    inputSubject.onNext(newQuery)
+                    CoroutineScope(Dispatchers.Default).launch(disposables) { channel.send(s.toString()) }
                 }
 
                 override fun afterTextChanged(s: Editable) = Unit
@@ -379,21 +371,21 @@ class SearchFragment : Fragment() {
     }
 
     private fun invokeSuggestion() {
-        inputSubject.distinctUntilChanged()
-                .debounce(500L, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { suggest(it) },
-                        Timber::e
-                )
-                .addTo(disposables)
+        CoroutineScope(Dispatchers.Default).launch(disposables) {
+            channel.receiveAsFlow()
+                    .distinctUntilChanged()
+                    .debounce(400)
+                    .collect {
+                        withContext(Dispatchers.Main) { suggest(it) }
+                    }
+        }
     }
 
     private fun suggest(key: String) {
         if (key.isEmpty()|| key == currentUrl) {
-            urlModule?.switch(currentTitle, currentUrl)?.addTo(disposables)
+            urlModule?.switch(currentTitle, currentUrl)
         } else {
-            urlModule?.hide()?.addTo(disposables)
+            urlModule?.hide()
         }
 
         setActionButtonState(key.isEmpty())
@@ -478,9 +470,7 @@ class SearchFragment : Fragment() {
             return
         }
 
-        SearchAction(context, category, query, currentUrl, onBackground)
-                .invoke()
-                .addTo(disposables)
+        SearchAction(context, category, query, currentUrl, onBackground).invoke()
     }
 
     /**
@@ -508,16 +498,13 @@ class SearchFragment : Fragment() {
                 suggestionModule?.addAll(result)
                 suggestionModule?.show()
 
-                Completable.timer(200L, TimeUnit.MILLISECONDS, Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                {
-                                    val top = binding?.suggestionModule?.root?.top ?: 0
-                                    binding?.scroll?.smoothScrollTo(0, top)
-                                },
-                                Timber::e
-                        )
-                        .addTo(disposables)
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    delay(200)
+                    withContext(Dispatchers.Main) {
+                        val top = binding?.suggestionModule?.root?.top ?: 0
+                        binding?.scroll?.smoothScrollTo(0, top)
+                    }
+                }
             }
         }
     }
@@ -528,11 +515,11 @@ class SearchFragment : Fragment() {
     }
 
     override fun onDetach() {
-        disposables.clear()
+        disposables.cancel()
+        channel.cancel()
         favoriteModule?.dispose()
         historyModule?.dispose()
         suggestionModule?.dispose()
-        urlSuggestionModule?.dispose()
         appModule?.dispose()
         super.onDetach()
     }

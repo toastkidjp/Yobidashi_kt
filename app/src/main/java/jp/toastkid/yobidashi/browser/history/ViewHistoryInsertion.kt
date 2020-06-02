@@ -1,12 +1,11 @@
 package jp.toastkid.yobidashi.browser.history
 
 import android.content.Context
-import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -18,21 +17,16 @@ class ViewHistoryInsertion private constructor(
         private val faviconPath: String
 ) {
 
-    operator fun invoke(): Disposable =
-            if (title.isEmpty() || url.isEmpty()) Disposables.disposed()
+    operator fun invoke(): Job =
+            if (title.isEmpty() || url.isEmpty()) Job()
             else insert(makeItem(title, url, faviconPath))
 
-    private fun insert(searchHistory: ViewHistory): Disposable {
-        return Completable.fromAction {
+    private fun insert(searchHistory: ViewHistory): Job {
+        return CoroutineScope(Dispatchers.IO).launch {
             DatabaseFinder().invoke(context)
                     .viewHistoryRepository()
                     .add(searchHistory)
         }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        {},
-                        Timber::e
-                )
     }
 
     private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory {

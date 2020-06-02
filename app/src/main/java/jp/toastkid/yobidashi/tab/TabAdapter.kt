@@ -5,11 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.ViewModelProviders
-
-import io.reactivex.Completable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -25,7 +20,10 @@ import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -48,7 +46,7 @@ class TabAdapter(
 
     private val autoArchive = AutoArchive.make(contextSupplier())
 
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables = Job()
 
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
@@ -76,12 +74,10 @@ class TabAdapter(
     fun saveNewThumbnailAsync(makeDrawingCache: () -> Bitmap?) {
         val currentTab = tabList.currentTab() ?: return
         makeDrawingCache()?.let {
-            Completable.fromAction {
+            CoroutineScope(Dispatchers.Default).launch(disposables) {
                 val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
                 bitmapCompressor(it, file)
-            }.subscribeOn(Schedulers.io())
-                    .subscribe({}, Timber::e)
-                    .addTo(disposables)
+            }
         }
     }
 
@@ -220,8 +216,7 @@ class TabAdapter(
             tabList.clear()
             tabThumbnails.clean()
         }
-        disposables.clear()
-        tabList.dispose()
+        disposables.cancel()
     }
 
     internal fun clear() {

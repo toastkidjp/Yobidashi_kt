@@ -10,15 +10,12 @@ package jp.toastkid.yobidashi.search.apps
 import android.text.TextUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.launcher.Adapter
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * App search module in [SearchActivity].
@@ -36,9 +33,9 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
     /**
      * Disposable of last query.
      */
-    private var disposable: Disposable? = null
+    private var disposable: Job? = null
 
-    private val disposables = CompositeDisposable()
+    private val disposables: Job by lazy { Job() }
 
     var enable = false
 
@@ -58,14 +55,10 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
             return
         }
 
-        disposable?.dispose()
-        disposable = Completable.fromAction { adapter.filter(key, 5) { onResult() } }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {},
-                        Timber::e
-                )
+        disposable?.cancel()
+        disposable = CoroutineScope(Dispatchers.Default).launch {
+            adapter.filter(key, 5) { onResult() }
+        }
     }
 
     /**
@@ -85,7 +78,6 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
     fun show() {
         if (!binding.root.isVisible && enable) {
             runOnMainThread { binding.root.isVisible = true }
-                    .addTo(disposables)
         }
     }
 
@@ -95,24 +87,18 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
     fun hide() {
         if (binding.root.isVisible) {
             runOnMainThread { binding.root.isVisible = false }
-                    .addTo(disposables)
         }
     }
 
     private fun runOnMainThread(action: () -> Unit) =
-            Completable.fromAction { action() }
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            {},
-                            Timber::e
-                    )
+            CoroutineScope(Dispatchers.Main).launch(disposables) { action() }
 
     /**
      * Dispose last query's disposable.
      */
     fun dispose() {
-        disposable?.dispose()
-        disposables.clear()
+        disposable?.cancel()
+        disposables.cancel()
     }
 
 }

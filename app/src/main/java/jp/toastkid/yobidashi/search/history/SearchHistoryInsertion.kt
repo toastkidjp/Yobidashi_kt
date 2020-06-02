@@ -1,12 +1,11 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
-import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  *
@@ -25,20 +24,16 @@ class SearchHistoryInsertion private constructor(
     private val repository =
             DatabaseFinder().invoke(context).searchHistoryRepository()
 
-    fun insert(): Disposable {
+    fun insert(): Job {
         if (category.isEmpty() || query.isEmpty()) {
-            return Disposables.empty()
+            return Job()
         }
-        return insert(SearchHistory.make(category, query))
-    }
 
-    private fun insert(searchHistory: SearchHistory) =
-            Completable.fromAction { repository.insert(searchHistory) }
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                            {},
-                            Timber::e
-                    )
+        // TODO Fix return type.
+        return CoroutineScope(Dispatchers.IO).launch {
+            repository.insert(SearchHistory.make(category, query))
+        }
+    }
 
     companion object {
 
