@@ -89,16 +89,17 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         adapter = Adapter(fragmentManager, viewModel)
 
-        viewModel.onClick.observe(this, Observer {
+        val viewLifecycleOwner = viewLifecycleOwner
+        viewModel.onClick.observe(viewLifecycleOwner, Observer {
             CoroutineScope(Dispatchers.IO).launch(disposables) { loadImages(it) }
         })
 
-        viewModel.onLongClick.observe(this, Observer {
+        viewModel.onLongClick.observe(viewLifecycleOwner, Observer {
             preferenceApplier.addExcludeItem(it)
             loadImages()
         })
 
-        viewModel.refresh.observe(this, Observer {
+        viewModel.refresh.observe(viewLifecycleOwner, Observer {
             attemptLoad()
         })
 
