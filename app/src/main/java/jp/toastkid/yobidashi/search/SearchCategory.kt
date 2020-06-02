@@ -183,6 +183,11 @@ enum class SearchCategory(
             R.drawable.ic_yelp,
             "https://www.yelp.com/search?find_desc="
     ),
+    IMDB(
+            R.string.imdb,
+            R.drawable.ic_imdb,
+            "https://www.imdb.com/find?q="
+    ),
     GUTENBERG(
             R.string.gutenberg,
             R.drawable.ic_local_library_black,
