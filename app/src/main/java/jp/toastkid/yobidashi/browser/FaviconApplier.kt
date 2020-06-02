@@ -1,6 +1,9 @@
 package jp.toastkid.yobidashi.browser
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.libs.storage.FilesDir
 import java.io.File
@@ -30,4 +33,12 @@ class FaviconApplier(context: Context) {
      * @param urlStr URL string
      */
     fun makePath(urlStr: String): String = assignFile(urlStr).absolutePath
+
+    fun load(uri: Uri?): Bitmap? {
+        if (uri == null) {
+            return null
+        }
+
+        return BitmapFactory.decodeFile(makePath(uri.toString()))
+    }
 }
