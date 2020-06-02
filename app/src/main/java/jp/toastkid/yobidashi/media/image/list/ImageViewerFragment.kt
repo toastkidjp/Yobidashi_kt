@@ -87,7 +87,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         val viewModel =
                 viewModelProvider.get(ImageViewerFragmentViewModel::class.java)
 
-        adapter = Adapter(fragmentManager, viewModel)
+        adapter = Adapter(parentFragmentManager, viewModel)
 
         val viewLifecycleOwner = viewLifecycleOwner
         viewModel.onClick.observe(viewLifecycleOwner, Observer {
