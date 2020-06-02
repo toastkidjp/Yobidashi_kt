@@ -40,8 +40,8 @@ object FileExtractorFromUri {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private fun getForKitKat(context: Context, uri: Uri): String? {
-        when {
-            "com.android.externalstorage.documents" == uri.authority -> {// ExternalStorageProvider
+        when (uri.authority) {
+            "com.android.externalstorage.documents" -> {// ExternalStorageProvider
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val type = split[0]
@@ -54,13 +54,13 @@ object FileExtractorFromUri {
                         "/storage/$type/${split[1]}"
                 }
             }
-            "com.android.providers.downloads.documents" == uri.authority -> {// DownloadsProvider
+            "com.android.providers.downloads.documents" -> {// DownloadsProvider
                 val id = DocumentsContract.getDocumentId(uri)
                 val contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
                 return getDataColumn(context, contentUri, null, null)
             }
-            "com.android.providers.media.documents" == uri.authority -> {// MediaProvider
+            "com.android.providers.media.documents" -> {// MediaProvider
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val contentUri: Uri? = MediaStore.Files.getContentUri("external")
