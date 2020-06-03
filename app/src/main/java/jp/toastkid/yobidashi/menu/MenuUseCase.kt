@@ -69,7 +69,7 @@ class MenuUseCase(
         })
     }
 
-    fun onMenuClick(menu: Menu) {
+    private fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
                 contentViewModel.toTop()
