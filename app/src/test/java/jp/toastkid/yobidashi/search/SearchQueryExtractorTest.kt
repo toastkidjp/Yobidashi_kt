@@ -88,5 +88,9 @@ class SearchQueryExtractorTest {
                 "poirot",
                 searchQueryExtractor("https://www.imdb.com/find?q=poirot")
         )
+        assertEquals(
+                "poirot",
+                searchQueryExtractor("https://m.facebook.com/public/poirot")
+        )
     }
 }

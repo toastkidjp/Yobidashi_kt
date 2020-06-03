@@ -141,7 +141,7 @@ enum class SearchCategory(
     FACEBOOK(
             R.string.search_category_facebook,
             R.drawable.ic_facebook,
-            "https://m.facebook.com/search?query="
+            "https://m.facebook.com/public/"
     ),
     INSTAGRAM(
             R.string.search_category_instagram,
