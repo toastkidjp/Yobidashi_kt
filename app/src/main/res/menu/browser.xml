@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/translate"
+        android:title="Translate"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/add_to_home"
         android:title="@string/add_to_home_screen"
         android:orderInCategory="100"
