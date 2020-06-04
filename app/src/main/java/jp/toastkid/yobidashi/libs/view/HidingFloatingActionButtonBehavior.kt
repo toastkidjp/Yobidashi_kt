@@ -15,13 +15,7 @@ import androidx.annotation.Keep
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import timber.log.Timber
-import java.lang.RuntimeException
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * @author toastkidjp
@@ -30,11 +24,15 @@ import kotlin.math.min
 class HidingFloatingActionButtonBehavior<V : View>(context: Context, attrs: AttributeSet) :
         CoordinatorLayout.Behavior<V>(context, attrs) {
 
-    override fun onInterceptTouchEvent(parent: CoordinatorLayout, child: V, ev: MotionEvent): Boolean {
+    override fun onInterceptTouchEvent(
+            parent: CoordinatorLayout,
+            child: V,
+            motionEvent: MotionEvent
+    ): Boolean {
         if (child is FloatingActionButton && child.isGone) {
             child.show()
         }
-        return super.onInterceptTouchEvent(parent, child, ev)
+        return super.onInterceptTouchEvent(parent, child, motionEvent)
     }
 
     override fun onStartNestedScroll(
