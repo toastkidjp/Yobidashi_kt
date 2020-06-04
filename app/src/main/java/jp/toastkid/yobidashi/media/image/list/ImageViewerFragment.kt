@@ -212,11 +212,11 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.image_viewer, menu)
+        inflater.inflate(R.menu.image_viewer, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
+        when (item.itemId) {
             R.id.excluding_items_setting -> {
                 val fragment = ExcludingSettingFragment()
                 fragment.setTargetFragment(this, 1)
