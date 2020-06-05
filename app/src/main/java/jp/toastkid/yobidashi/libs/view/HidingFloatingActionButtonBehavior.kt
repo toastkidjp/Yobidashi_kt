@@ -16,6 +16,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlin.math.abs
 
 /**
  * @author toastkidjp
@@ -24,14 +25,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class HidingFloatingActionButtonBehavior<V : View>(context: Context, attrs: AttributeSet) :
         CoordinatorLayout.Behavior<V>(context, attrs) {
 
+    private var lastY = 0f
+
     override fun onInterceptTouchEvent(
             parent: CoordinatorLayout,
             child: V,
             motionEvent: MotionEvent
     ): Boolean {
-        if (child is FloatingActionButton && child.isGone) {
+        if (child is FloatingActionButton
+                && child.isGone
+                && (lastY != 0f)
+                && abs(lastY - motionEvent.y) > 10f
+        ) {
             child.show()
         }
+        lastY = motionEvent.y
         return super.onInterceptTouchEvent(parent, child, motionEvent)
     }
 
