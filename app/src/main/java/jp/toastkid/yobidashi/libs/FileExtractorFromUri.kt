@@ -47,9 +47,9 @@ object FileExtractorFromUri {
                 val type = split[0]
                 return when {
                     "primary".equals(type, ignoreCase = true) ->
-                        Environment.getExternalStorageDirectory().resolve(split[1]).absolutePath
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.resolve(split[1])?.absolutePath
                     "home".equals(type, ignoreCase = true) ->
-                        Environment.getExternalStorageDirectory().resolve("documents/${split[1]}").absolutePath
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.resolve("documents/${split[1]}")?.absolutePath
                     else ->
                         "/storage/$type/${split[1]}"
                 }
