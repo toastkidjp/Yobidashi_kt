@@ -183,6 +183,11 @@ enum class SearchCategory(
             R.drawable.ic_yelp,
             "https://www.yelp.com/search?find_desc="
     ),
+    ESPN(
+            R.string.espn,
+            R.drawable.ic_espn,
+            "https://www.espn.com/search/_/q/"
+    ),
     IMDB(
             R.string.imdb,
             R.drawable.ic_imdb,
