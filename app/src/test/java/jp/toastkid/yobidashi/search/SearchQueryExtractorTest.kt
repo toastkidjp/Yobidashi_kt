@@ -92,5 +92,9 @@ class SearchQueryExtractorTest {
                 "poirot",
                 searchQueryExtractor("https://m.facebook.com/public/poirot")
         )
+        assertEquals(
+                "Soccer",
+                searchQueryExtractor("https://www.espn.com/search/_/q/Soccer")
+        )
     }
 }

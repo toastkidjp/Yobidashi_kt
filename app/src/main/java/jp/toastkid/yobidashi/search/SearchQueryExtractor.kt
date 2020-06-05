@@ -73,7 +73,9 @@ class SearchQueryExtractor {
             host == "www.wolframalpha.com" ->
                 uri.getQueryParameter("i")
             host.endsWith("facebook.com")
-                    or host.equals("www.instagram.com") -> Uri.decode(uri.lastPathSegment)
+                    or host.equals("www.instagram.com")
+                    or host.equals("www.espn.com") ->
+                Uri.decode(uri.lastPathSegment)
             else -> uri.getQueryParameter(
                     commonQueryParameterNames
                             .find { uri.queryParameterNames.contains(it) } ?: ""
