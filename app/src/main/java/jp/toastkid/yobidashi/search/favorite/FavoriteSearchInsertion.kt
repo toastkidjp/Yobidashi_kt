@@ -44,9 +44,9 @@ class FavoriteSearchInsertion(
      * @param q Query
      */
     private fun makeFavoriteSearch(c: String, q: String): FavoriteSearch {
-        return FavoriteSearch().apply {
-            category = c
-            query = q
+        return FavoriteSearch().also {
+            it.category = c
+            it.query = q
         }
     }
 
