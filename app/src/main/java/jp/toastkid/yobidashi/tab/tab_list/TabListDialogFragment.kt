@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -100,7 +101,12 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         }
 
         initializeContentView(activityContext)
-        applyBackgrounds()
+
+        BackgroundImageLoaderUseCase().invoke(
+                binding.background,
+                PreferenceApplier(requireContext()).backgroundImagePath
+        )
+
         return binding.root
     }
 
@@ -234,19 +240,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     private fun startDrag(viewHolder: RecyclerView.ViewHolder) {
         rightTouchHelper?.startDrag(viewHolder)
         leftTouchHelper?.startDrag(viewHolder)
-    }
-
-    // TODO extract class
-    private fun applyBackgrounds() {
-        val backgroundImagePath = PreferenceApplier(requireContext()).backgroundImagePath
-        if (backgroundImagePath.isEmpty()) {
-            return
-        }
-
-        Glide.with(this)
-                .load(File(backgroundImagePath).toURI().toString().toUri())
-                .override(binding.root.measuredWidth, binding.root.measuredHeight)
-                .into(binding.background)
     }
 
     companion object {

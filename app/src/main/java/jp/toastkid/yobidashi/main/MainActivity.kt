@@ -49,6 +49,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
+import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -98,6 +99,8 @@ class MainActivity : AppCompatActivity(),
      * Data binding object.
      */
     private lateinit var binding: ActivityMainBinding
+
+    private val backgroundImageLoaderUseCase by lazy { BackgroundImageLoaderUseCase() }
 
     /**
      * Disposables.
@@ -614,7 +617,7 @@ class MainActivity : AppCompatActivity(),
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
         binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
 
-        applyBackgrounds()
+        backgroundImageLoaderUseCase.invoke(binding.background, preferenceApplier.backgroundImagePath)
 
         updateColorFilter()
     }
@@ -623,21 +626,6 @@ class MainActivity : AppCompatActivity(),
         binding.foreground.foreground =
                 if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor())
                 else null
-    }
-
-    /**
-     * Apply background appearance.
-     */
-    private fun applyBackgrounds() {
-        val backgroundImagePath = preferenceApplier.backgroundImagePath
-        if (backgroundImagePath.isEmpty()) {
-            binding.background.setImageDrawable(null)
-            return
-        }
-
-        Glide.with(this)
-                .load(File(backgroundImagePath).toURI().toString().toUri())
-                .into(binding.background)
     }
 
     /**
