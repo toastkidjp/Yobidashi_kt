@@ -26,7 +26,7 @@ class EditTextColorSetterTest {
         EditTextColorSetter().invoke(editText, Color.BLACK)
 
         verify(atLeast = 1) { editText.setTextColor(Color.BLACK) }
-        verify(atLeast = 1) { editText.setHintTextColor(Color.BLACK) }
+        verify(atLeast = 1) { editText.setHintTextColor(ColorUtils.setAlphaComponent(Color.BLACK, 196)) }
         verify(atLeast = 1) {
             editText.highlightColor = ColorUtils.setAlphaComponent(Color.BLACK, 128)
         }

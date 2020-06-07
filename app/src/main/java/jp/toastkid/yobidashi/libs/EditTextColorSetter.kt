@@ -20,7 +20,7 @@ class EditTextColorSetter {
     operator fun invoke(editText: EditText?, @ColorInt fontColor: Int) {
         editText?.also {
             it.setTextColor(fontColor)
-            it.setHintTextColor(fontColor)
+            it.setHintTextColor(ColorUtils.setAlphaComponent(fontColor, 196))
             it.highlightColor = ColorUtils.setAlphaComponent(fontColor, 128)
         }
     }
