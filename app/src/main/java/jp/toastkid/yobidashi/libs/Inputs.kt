@@ -29,20 +29,6 @@ object Inputs {
     }
 
     /**
-     * For Fragment.
-     *
-     * @param activity
-     */
-    fun toggle(activity: Activity) {
-        val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.toggleSoftInput(
-                InputMethodManager.SHOW_IMPLICIT,
-                InputMethodManager.HIDE_NOT_ALWAYS
-        )
-    }
-
-    /**
      * Hide software keyboard.
      * @param v
      */
