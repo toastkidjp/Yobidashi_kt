@@ -9,12 +9,11 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
-import kotlinx.coroutines.Job
 import okio.Okio
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.Collections
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
