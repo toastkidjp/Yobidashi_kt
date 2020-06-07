@@ -20,6 +20,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.yobidashi.R
@@ -28,6 +29,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
@@ -187,6 +189,11 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDetach() {
+        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).refresh()
+        super.onDetach()
     }
 
     companion object : TitleIdSupplier {

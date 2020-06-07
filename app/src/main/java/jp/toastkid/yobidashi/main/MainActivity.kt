@@ -331,6 +331,9 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.switchTabList?.observe(this, Observer {
             switchTabList()
         })
+        contentViewModel?.refresh?.observe(this, Observer {
+            refresh()
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {

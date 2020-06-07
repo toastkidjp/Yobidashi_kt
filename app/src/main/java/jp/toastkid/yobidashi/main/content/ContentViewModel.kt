@@ -114,4 +114,11 @@ class ContentViewModel : ViewModel() {
         _switchTabList.postValue(Unit)
     }
 
+    private val _refresh = MutableLiveData<Unit>()
+
+    val refresh: LiveData<Unit> = _refresh
+
+    fun refresh() {
+        _refresh.postValue(Unit)
+    }
 }
