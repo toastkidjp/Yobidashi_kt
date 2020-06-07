@@ -318,7 +318,7 @@
     <string name="title_dialog_input_file_name">ファイル名入力</string>
     <string name="message_requires_permission_storage">
         メモを使用するにはストレージの権限が必要です。</string>
-    <string name="load">ファイルを開く</string>
+    <string name="load">開く</string>
     <string name="clip">クリップボードにコピー</string>
     <string name="tab_list">タブ一覧</string>
     <string name="message_cannot_read_file">ファイルを読み込めませんでした。</string>
@@ -446,11 +446,11 @@
     <string name="title_show_morning_notification">Show morning notification</string>
     <string name="title_show_daily_notification">Report daily information.</string>
     <string name="message_stay_tuned">お楽しみに！</string>
-    <string name="action_pause">Pause</string>
-    <string name="action_play">Play</string>
-    <string name="insert_as_plain">Insert as plain</string>
-    <string name="action_shuffle">Shuffle</string>
-    <string name="title_image_viewer">Image Viewer</string>
+    <string name="action_pause">一時停止</string>
+    <string name="action_play">再生</string>
+    <string name="insert_as_plain">テキストを挿入</string>
+    <string name="action_shuffle">シャッフル</string>
+    <string name="title_image_viewer">画像ビューアー</string>
 
     <string name="title_playing_speed_0_5">x0.5</string>
     <string name="title_playing_speed_0_7">x0.7</string>
@@ -465,15 +465,15 @@
     <string name="title_playing_speed_5">x5</string>
     <string name="title_excluding_item_setting">除外設定</string>
     <string name="title_dark_mode">ダークモードを使う</string>
-    <string name="undo">undo</string>
+    <string name="undo">戻す</string>
     <string name="title_context_editor_add_order">順序リスト</string>
     <string name="title_context_editor_add_minus">リスト</string>
     <string name="title_context_editor_add_quote">引用符</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
-    <string name="title_reset_camera_button_position">Reset camera position</string>
+    <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
     <string name="naver">NAVER</string>
     <string name="daum">Daum</string>
-    <string name="title_search_suggestion">Search suggestion</string>
+    <string name="title_search_suggestion">検索サジェスト</string>
     <string name="aol">AOL.</string>
     <string name="wolfram_alpha">Wolfram Alpha</string>
     <string name="linked_in">LinkedIn</string>
@@ -484,14 +484,14 @@
     <string name="touch_listener_gesture_detector">Gesture Detector</string>
     <string name="touch_listener_scale_gesture_detector">Scale Gesture Detector</string>
     <string name="touch_listener_default">Default</string>
-    <string name="title_gesture_memo">Gesture memo</string>
+    <string name="title_gesture_memo">ジェスチャーメモ</string>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">URL をコピー</string>
     <string name="financial_times">Financial Times</string>
     <string name="wayback_machine">Wayback Machine</string>
     <string name="search_category_qwant">Qwant</string>
     <string name="search_category_startpage">Startpage</string>
-    <string name="add_to_home_screen">Add to Home screen</string>
+    <string name="add_to_home_screen">ショートカットを設置</string>
     <string name="imdb">IMDb</string>
     <string name="espn">ESPN</string>
     <string name="horizontal_rule">水平線</string>
