@@ -299,21 +299,19 @@ class BrowserFragment : Fragment(),
     }
 
     fun showUserAgentSetting() {
-        val fragmentManager = fragmentManager ?: return
         val dialogFragment = UserAgentDialogFragment()
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(
-                fragmentManager,
+                parentFragmentManager,
                 UserAgentDialogFragment::class.java.simpleName
         )
     }
 
     fun showPageInformation() {
-        val fragmentManager = fragmentManager ?: return
         PageInformationDialogFragment()
                 .also { it.arguments = browserModule.makeCurrentPageInformation() }
                 .show(
-                        fragmentManager,
+                        parentFragmentManager,
                         PageInformationDialogFragment::class.java.simpleName
                 )
     }

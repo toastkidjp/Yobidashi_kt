@@ -40,7 +40,6 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Inputs
@@ -172,10 +171,7 @@ class MainActivity : AppCompatActivity(),
         )
         searchWithClip.invoke()
 
-        pageSearchPresenter = PageSearcherModule(
-                this,
-                binding.sip as ModuleSearcherBinding
-        )
+        pageSearchPresenter = PageSearcherModule(binding.sip)
 
         initializeHeaderViewModel()
 

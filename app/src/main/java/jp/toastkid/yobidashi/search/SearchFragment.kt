@@ -165,8 +165,6 @@ class SearchFragment : Fragment() {
 
         initHistoryModule()
 
-        initSearchInput()
-
         applyColor()
 
         urlModule = UrlModule(
@@ -194,11 +192,14 @@ class SearchFragment : Fragment() {
 
         setListenerForKeyboardHiding()
 
+        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
+        setQuery(query)
+
+        initSearchInput()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             headerBinding?.searchBar?.transitionName = "share"
         }
-
-        setQuery()
 
         activity?.also {
             headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
@@ -216,11 +217,11 @@ class SearchFragment : Fragment() {
         headerBinding?.searchInput?.setText("")
     }
 
-    private fun setQuery() {
-        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
+    private fun setQuery(query: String?) {
         headerBinding?.searchInput?.let { input ->
             input.setText(query)
             input.selectAll()
+            suggest(query ?: "")
         }
     }
 

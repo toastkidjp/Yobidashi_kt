@@ -24,15 +24,15 @@
             tools:context="jp.toastkid.yobidashi.main.MainActivity"
             >
 
-            <FrameLayout
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
 
-            <include
+            <ViewStub
                 android:id="@+id/sip"
-                layout="@layout/module_searcher"
+                android:layout="@layout/module_searcher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
