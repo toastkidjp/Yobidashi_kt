@@ -110,11 +110,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        setStyle(STYLE_NORMAL, R.style.TabListBottomSheetDialog);
-        return super.onCreateDialog(savedInstanceState)
-    }
-
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         callback?.onCloseTabListDialogFragment(lastTabId)
