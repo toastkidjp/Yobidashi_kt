@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.libs.image
 import android.widget.ImageView
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -22,7 +21,6 @@ class BackgroundImageLoaderUseCase {
 
     operator fun invoke(target: ImageView, backgroundImagePath: String?) {
         if (backgroundImagePath.isNullOrEmpty() || backgroundImagePath.equals(lastPath)) {
-            Timber.i("tomato skip")
             return
         }
 
