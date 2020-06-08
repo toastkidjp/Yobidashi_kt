@@ -119,9 +119,8 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
 
     /**
      * Clear background setting.
-     * TODO rename to remove.
      */
-    fun clearBackgroundSettings() {
+    fun removeBackgroundSettings() {
         preferenceApplier.removeBackgroundImagePath()
         contentViewModel?.snackShort(R.string.message_reset_bg_image)
     }
