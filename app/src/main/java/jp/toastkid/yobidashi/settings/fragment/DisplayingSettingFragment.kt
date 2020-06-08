@@ -52,6 +52,8 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private var contentViewModel: ContentViewModel? = null
+
     /**
      * ModuleAdapter.
      */
@@ -77,6 +79,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
+        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -116,14 +119,11 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
 
     /**
      * Clear background setting.
+     * TODO rename to remove.
      */
     fun clearBackgroundSettings() {
         preferenceApplier.removeBackgroundImagePath()
-        Toaster.snackShort(
-                binding.fabParent,
-                R.string.message_reset_bg_image,
-                preferenceApplier.colorPair()
-        )
+        contentViewModel?.snackShort(R.string.message_reset_bg_image)
     }
 
     /**
@@ -145,12 +145,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
 
     override fun onClickClearImages() {
         filesDir.clean()
-        // TODO use ContentViewModel.
-        Toaster.snackShort(
-                binding.fabParent,
-                R.string.message_success_image_removal,
-                preferenceApplier.colorPair()
-        )
+        contentViewModel?.snackShort(R.string.message_success_image_removal)
         adapter?.notifyDataSetChanged()
     }
 
@@ -192,7 +187,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
     }
 
     override fun onDetach() {
-        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).refresh()
+        contentViewModel?.refresh()
         super.onDetach()
     }
 
