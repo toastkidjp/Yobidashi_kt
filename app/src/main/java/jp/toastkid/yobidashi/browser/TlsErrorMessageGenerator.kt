@@ -37,5 +37,5 @@ class TlsErrorMessageGenerator {
     }
 
     private fun dateToString(date: Date?) =
-            dateFormat.format(date)
+            if (date == null) "" else dateFormat.format(date)
 }
