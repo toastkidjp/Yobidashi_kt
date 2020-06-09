@@ -305,10 +305,8 @@ class BarcodeReaderFragment : Fragment() {
             return
         }
 
-        activity?.let {
-            Toaster.tShort(it, R.string.message_requires_permission_camera)
-            parentFragmentManager.popBackStack()
-        }
+        contentViewModel?.snackShort(R.string.message_requires_permission_camera)
+        parentFragmentManager.popBackStack()
     }
 
     companion object {
