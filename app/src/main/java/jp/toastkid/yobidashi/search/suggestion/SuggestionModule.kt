@@ -75,6 +75,13 @@ class SuggestionModule(
         layoutManager.justifyContent = JustifyContent.FLEX_START
         layoutManager.alignItems = AlignItems.STRETCH
 
+        initializeSearchSuggestionList(layoutManager, onClick)
+    }
+
+    private fun initializeSearchSuggestionList(
+            layoutManager: FlexboxLayoutManager,
+            onClick: () -> Unit
+    ) {
         binding.searchSuggestions.layoutManager = layoutManager
         binding.searchSuggestions.adapter = adapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
@@ -88,6 +95,7 @@ class SuggestionModule(
      */
     fun clear() {
         adapter.clear()
+        adapter.notifyDataSetChanged()
     }
 
     /**
@@ -146,8 +154,8 @@ class SuggestionModule(
      */
     private fun replace(suggestions: Iterable<String>): Job {
         return CoroutineScope(Dispatchers.Main).launch {
-            adapter.clear()// TODO consider to implement replace to adapter.
             withContext(Dispatchers.Default) {
+                adapter.clear()
                 suggestions.forEach { adapter.add(it) }
             }
             show()

@@ -624,9 +624,14 @@ class BrowserModule(
 
     fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->
         return currentView()?.let {
+            val url = it.url
+            if (url.isNullOrBlank()) {
+                return@let bundleOf()
+            }
+
+            bundle.putString("url", url)
             bundle.putParcelable("favicon", it.favicon)
             bundle.putString("title", it.title)
-            bundle.putString("url", it.url)
             bundle
         } ?: bundleOf()
     }

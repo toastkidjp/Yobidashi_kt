@@ -136,11 +136,10 @@ class ColorSettingFragment : Fragment(),
         binding?.savedColors?.layoutManager =
                 LinearLayoutManager(activityContext, LinearLayoutManager.HORIZONTAL, false)
         binding?.clearSavedColor?.setOnClickListener{
-            val fragmentManager = fragmentManager ?: return@setOnClickListener
             val clearColorsDialogFragment = ClearColorsDialogFragment()
             clearColorsDialogFragment.setTargetFragment(this, 1)
             clearColorsDialogFragment.show(
-                    fragmentManager,
+                    parentFragmentManager,
                     ClearColorsDialogFragment::class.java.simpleName
             )
         }
@@ -242,9 +241,8 @@ class ColorSettingFragment : Fragment(),
         menu.let { menuNonNull ->
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_recommend)
                     ?.setOnMenuItemClickListener {
-                        val fragmentManager = fragmentManager ?: return@setOnMenuItemClickListener false
                         RecommendColorDialogFragment().show(
-                                fragmentManager,
+                                parentFragmentManager,
                                 RecommendColorDialogFragment::class.java.simpleName
                         )
                         true

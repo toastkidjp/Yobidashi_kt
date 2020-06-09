@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser
 
-import android.app.ActivityOptions
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -26,7 +25,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.databinding.ModuleBrowserHeaderBinding
-import jp.toastkid.yobidashi.libs.ActivityOptionsFactory
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -81,8 +79,6 @@ class BrowserFragment : Fragment(),
     private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
-
-    private val activityOptionsFactory = ActivityOptionsFactory()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -196,7 +192,7 @@ class BrowserFragment : Fragment(),
 
         viewModelProvider.get(TabListViewModel::class.java)
                 .tabCount
-                .observe(activity, Observer { headerBinding?.tabCount?.setText(it.toString()) })
+                .observe(activity, Observer { headerBinding?.tabCount?.text = it.toString() })
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(activity, Observer {
@@ -308,8 +304,13 @@ class BrowserFragment : Fragment(),
     }
 
     fun showPageInformation() {
+        val pageInformation = browserModule.makeCurrentPageInformation()
+        if (pageInformation.isEmpty) {
+            return
+        }
+
         PageInformationDialogFragment()
-                .also { it.arguments = browserModule.makeCurrentPageInformation() }
+                .also { it.arguments = pageInformation }
                 .show(
                         parentFragmentManager,
                         PageInformationDialogFragment::class.java.simpleName
@@ -338,29 +339,19 @@ class BrowserFragment : Fragment(),
      * TODO implement ViewModel.
      */
     fun search() {
-        search(activityOptionsFactory.makeScaleUpBundle(binding?.root as View))
-    }
+        val currentTitle = browserModule.currentTitle()
+        val currentUrl = browserModule.currentUrl()
+        val query = searchQueryExtractor.invoke(currentUrl)
+        val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
+            SearchFragment.makeWith(currentTitle, currentUrl)
+        } else {
+            SearchFragment.makeWithQuery(query ?: "", currentTitle, currentUrl)
+        }
 
-    /**
-     * Show search activity.
-     *
-     * @param option [ActivityOptions]
-     */
-    private fun search(option: ActivityOptions) {
-        context?.let {
-            val currentTitle = browserModule.currentTitle()
-            val currentUrl = browserModule.currentUrl()
-            val query = searchQueryExtractor.invoke(currentUrl)
-            val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
-                SearchFragment.makeWith(currentTitle, currentUrl)
-            } else {
-                SearchFragment.makeWithQuery(query ?: "", currentTitle, currentUrl)
-            }
-            activity?.also { activity ->
-                ViewModelProviders.of(activity)
-                        .get(ContentViewModel::class.java)
-                        .nextFragment(makeIntent)
-            }
+        activity?.also  { activity ->
+            ViewModelProviders.of(activity)
+                    .get(ContentViewModel::class.java)
+                    .nextFragment(makeIntent)
         }
     }
 
@@ -418,7 +409,7 @@ class BrowserFragment : Fragment(),
         }
     }
 
-    override fun pressBack(): Boolean = hideOption() || back()
+    override fun pressBack(): Boolean = back()
 
     override fun share() {
         startActivity(
@@ -473,11 +464,10 @@ class BrowserFragment : Fragment(),
         browserModule.onPause()
     }
 
-    // TODO Should be replaced to onDetach.
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         headerViewModel?.show()
         browserModule.dispose()
+        super.onDetach()
     }
 
     companion object {

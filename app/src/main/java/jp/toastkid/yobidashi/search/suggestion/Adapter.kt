@@ -26,7 +26,9 @@ internal class Adapter (
         private val onLongClicked: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
-    /** Suggestion items.  */
+    /**
+     * Suggestion items.
+     */
     private val suggestions: MutableList<String> = mutableListOf()
 
     /**
@@ -34,11 +36,11 @@ internal class Adapter (
      */
     fun clear() {
         suggestions.clear()
-        notifyDataSetChanged()
     }
 
     /**
      * Add item.
+     *
      * @param s
      */
     fun add(s: String) {
@@ -67,6 +69,7 @@ internal class Adapter (
 
     /**
      * Add(+) clicked action.
+     *
      * @param suggestion
      */
     @SuppressLint("SetTextI18n")
@@ -77,6 +80,7 @@ internal class Adapter (
 
     /**
      * Item clicked action.
+     *
      * @param suggest
      */
     private fun onItemClicked(suggest: String) {
@@ -87,6 +91,5 @@ internal class Adapter (
         } catch (e: Exception) {
             Timber.e(e)
         }
-
     }
 }
