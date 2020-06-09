@@ -51,12 +51,6 @@ internal class ActivityAdapter(
      */
     private val folderHistory: Stack<String> = Stack()
 
-    /**
-     * Use for run on main thread.
-     * TODO Delete it.
-     */
-    private val mainThreadHandler: Handler = Handler(Looper.getMainLooper())
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_bookmark, parent, false))
 
