@@ -15,6 +15,8 @@ enum class Menu(
         @param:StringRes val titleId: Int,
         @param:DrawableRes val iconId: Int
 ) {
+    WEB_SEARCH(R.string.title_search, R.drawable.ic_web_search),
+
     TOP(R.string.title_menu_to_top, R.drawable.ic_top),
 
     BOTTOM(R.string.title_menu_to_bottom, R.drawable.ic_bottom),
@@ -58,8 +60,6 @@ enum class Menu(
     MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
-
-    WEB_SEARCH(R.string.title_search, R.drawable.ic_web_search),
     ;
 
 }
