@@ -63,7 +63,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
                     .setDuration(ANIMATION_DURATION)
                     .withStartAction { switchVisibility(View.GONE, View.VISIBLE) }
                     .withEndAction {
-                        val editText = binding.inputLayout?.editText ?: return@withEndAction
+                        val editText = binding.inputLayout.editText ?: return@withEndAction
                         editText.requestFocus()
                         (binding.root.context as? Activity)?.also { activity ->
                             Inputs.showKeyboard(activity, editText)
@@ -83,7 +83,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
                     .setDuration(ANIMATION_DURATION)
                     .withStartAction {
                         clearInput()
-                        Inputs.hideKeyboard(binding.inputLayout?.editText)
+                        Inputs.hideKeyboard(binding.inputLayout.editText)
                     }
                     .withEndAction { switchVisibility(View.VISIBLE, View.GONE) }
                     .start()
@@ -157,7 +157,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
     }
 
     private fun clearInput() {
-        binding.inputLayout?.editText?.setText("")
+        binding.inputLayout.editText?.setText("")
     }
 
     /**
