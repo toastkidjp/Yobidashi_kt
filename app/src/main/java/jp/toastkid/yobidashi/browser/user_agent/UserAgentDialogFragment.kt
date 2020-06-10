@@ -61,7 +61,7 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
             }
         }
         binding.list.adapter = adapter
-        binding.list.setOnItemClickListener { parent, view, position, id ->
+        binding.list.setOnItemClickListener { _, _, position, _ ->
             val userAgent = UserAgent.values()[position]
             preferenceApplier.setUserAgent(userAgent.name)
             onClick?.onClickUserAgent(userAgent)
