@@ -171,18 +171,16 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         inflater.inflate(R.menu.background_setting_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.background_settings_toolbar_menu_add -> {
-                launchAdding()
-                true
-            }
-            R.id.background_settings_toolbar_menu_clear -> {
-                clearImages()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.background_settings_toolbar_menu_add -> {
+            launchAdding()
+            true
         }
+        R.id.background_settings_toolbar_menu_clear -> {
+            clearImages()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onDetach() {
