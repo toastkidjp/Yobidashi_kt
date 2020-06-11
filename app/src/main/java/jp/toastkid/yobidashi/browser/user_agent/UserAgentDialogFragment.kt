@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
@@ -41,7 +42,7 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         val preferenceApplier = PreferenceApplier(activityContext)
 
         val binding: DialogUserAgentBinding =
-                DataBindingUtil.inflate(inflater, R.layout.dialog_user_agent, container, false)
+                DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
         binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
         val currentIndex = UserAgent.findCurrentIndex(preferenceApplier.userAgent())
@@ -70,4 +71,8 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    companion object {
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.dialog_user_agent
+    }
 }
