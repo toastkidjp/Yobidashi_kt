@@ -245,15 +245,19 @@ class TabList private constructor() {
         }
     }
 
-    fun thumbnailNames(): Collection<String> = tabs.map { it.thumbnailPath() }
+    fun thumbnailNames(): Collection<String> = makeCopyTabs().map { it.thumbnailPath() }
 
     fun archiveIds(): Collection<String> {
         val idGenerator = IdGenerator()
-        return tabs.map { idGenerator.from(it.getUrl()) ?: "" }
+        return makeCopyTabs().map { idGenerator.from(it.getUrl()) ?: "" }
     }
 
     fun ids(): Collection<String> {
-        return tabs.map { it.id() }
+        return makeCopyTabs().map { it.id() }
+    }
+
+    private fun makeCopyTabs(): MutableList<Tab> {
+        return mutableListOf<Tab>().also { it.addAll(tabs) }
     }
 
 }
