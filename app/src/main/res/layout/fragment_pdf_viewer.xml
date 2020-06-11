@@ -11,7 +11,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
         <requestFocus/>
     </androidx.recyclerview.widget.RecyclerView>
