@@ -220,7 +220,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             R.id.excluding_items_setting -> {
                 val fragment = ExcludingSettingFragment()
                 fragment.setTargetFragment(this, 1)
-                fragment.show(requireFragmentManager(), "setting")
+                fragment.show(parentFragmentManager, "setting")
             }
             R.id.sort_by_date -> {
                 preferenceApplier.setImageViewerSort(Sort.DATE)
