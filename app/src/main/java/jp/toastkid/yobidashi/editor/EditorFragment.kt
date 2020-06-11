@@ -36,8 +36,8 @@ import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
+import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
-import jp.toastkid.yobidashi.databinding.ModuleFragmentEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -72,7 +72,7 @@ class EditorFragment :
 
     private lateinit var binding: FragmentEditorBinding
 
-    private lateinit var menuBinding: ModuleFragmentEditorMenuBinding
+    private lateinit var menuBinding: AppBarEditorBinding
 
     /**
      * Preferences wrapper.
@@ -125,7 +125,7 @@ class EditorFragment :
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         menuBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
-                R.layout.module_fragment_editor_menu,
+                R.layout.app_bar_editor,
                 container,
                 false
         )
