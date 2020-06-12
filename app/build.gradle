@@ -12,7 +12,7 @@ android {
     buildToolsVersion '29.0.0'
     byte verMajor  = 1
     byte verMiddle = 4
-    byte verMinor  = 19
+    byte verMinor  = 20
 
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
