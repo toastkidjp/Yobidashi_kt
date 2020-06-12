@@ -53,7 +53,7 @@ android {
 }
 
 play {
-    track = 'beta'
+    track = 'alpha'
     serviceAccountEmail = 'tk-bot@api-6327630184664180575-715630.iam.gserviceaccount.com'
     serviceAccountCredentials = file('signing/api-6327630184664180575-715630-73af1e35d196.p12')
 }
