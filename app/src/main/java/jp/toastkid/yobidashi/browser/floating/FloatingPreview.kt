@@ -195,7 +195,7 @@ class FloatingPreview(context: Context) {
         if (binding.previewContainer.isEmpty()) {
             return null
         }
-        val view = binding.previewContainer.get(0)
+        val view = binding.previewContainer[0]
         return view as? WebView
     }
 
