@@ -31,8 +31,13 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
 
     private var onClick: Callback? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val activityContext = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        val activityContext = context
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         val targetFragment = targetFragment
         if (targetFragment is Callback) {
@@ -72,7 +77,9 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
+
         @LayoutRes
         private val LAYOUT_ID = R.layout.dialog_user_agent
+
     }
 }
