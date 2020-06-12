@@ -13,7 +13,7 @@ import android.view.View
 /**
  * @author toastkidjp
  */
-class SlidingTouchListener(private val targetView: View) : View.OnTouchListener {
+class SlidingTapListener(private val targetView: View) : View.OnTouchListener {
 
     private var downRawY = 0f
 
