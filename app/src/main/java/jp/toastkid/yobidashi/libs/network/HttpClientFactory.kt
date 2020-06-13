@@ -10,8 +10,6 @@ import java.util.concurrent.TimeUnit
  */
 object HttpClientFactory {
 
-    fun make(): OkHttpClient = withTimeout(5L)
-
     fun withTimeout(seconds: Long): OkHttpClient =
             OkHttpClient.Builder()
                     .cookieJar(WebViewCookieHandler)
