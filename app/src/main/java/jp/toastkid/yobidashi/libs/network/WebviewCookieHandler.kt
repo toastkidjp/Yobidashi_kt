@@ -21,7 +21,7 @@ object WebViewCookieHandler : CookieJar {
     private val cookieManager = CookieManager.getInstance()
 
     override fun saveFromResponse(url: HttpUrl?, cookies: MutableList<Cookie>?) {
-        val urlString = url.toString()
+        val urlString = url?.toString() ?: return
         cookies?.forEach { cookieManager.setCookie(urlString, it.toString()) }
     }
 
