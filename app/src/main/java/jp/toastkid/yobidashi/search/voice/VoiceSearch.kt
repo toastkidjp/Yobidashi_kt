@@ -31,12 +31,12 @@ object VoiceSearch {
      * @return [Intent]
      */
     fun makeIntent(context: Context): Intent =
-            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                putExtra(
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
+                it.putExtra(
                         RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                         RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
                 )
-                putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+                it.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
             }
 
     /**
