@@ -32,12 +32,22 @@ class DefaultBackgroundImagePreparation {
                 val defaultFile = filesDir.assignNewFile("sakura")
                 FileOutputStream(defaultFile).use {
                     BitmapFactory.decodeResource(context.resources, R.mipmap.sakura)
-                            .compress(Bitmap.CompressFormat.PNG, 100, it)
+                            .compress(Bitmap.CompressFormat.WEBP, 100, it)
                 }
 
                 FileOutputStream(filesDir.assignNewFile("toast")).use {
                     BitmapFactory.decodeResource(context.resources, R.mipmap.toast)
-                            .compress(Bitmap.CompressFormat.PNG, 100, it)
+                            .compress(Bitmap.CompressFormat.WEBP, 100, it)
+                }
+
+                FileOutputStream(filesDir.assignNewFile("rose")).use {
+                    BitmapFactory.decodeResource(context.resources, R.mipmap.rose)
+                            .compress(Bitmap.CompressFormat.WEBP, 100, it)
+                }
+
+                FileOutputStream(filesDir.assignNewFile("night_of_tokyo")).use {
+                    BitmapFactory.decodeResource(context.resources, R.mipmap.night_of_tokyo)
+                            .compress(Bitmap.CompressFormat.WEBP, 100, it)
                 }
 
                 PreferenceApplier(context).backgroundImagePath = defaultFile.absolutePath
