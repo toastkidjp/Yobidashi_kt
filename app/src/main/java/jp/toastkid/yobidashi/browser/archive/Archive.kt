@@ -59,16 +59,4 @@ internal object Archive {
      */
     private fun canUseArchive(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
-    /**
-     * Load archive.
-     *
-     * @param webView
-     * @param file
-     *
-     * @throws IOException
-     */
-    @Throws(IOException::class)
-    fun loadArchive(webView: WebView, file: File) {
-        webView.loadUrl(Uri.fromFile(file).toString())
-    }
 }
