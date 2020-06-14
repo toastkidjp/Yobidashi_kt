@@ -44,19 +44,6 @@ internal object Archive {
     /**
      * Supporting archive file extension.
      */
-    private val fileExtension: String
-        get() = if (canUseArchive()) ".mht" else ".xml"
-
-    /**
-     * Return can use archive.
-     * @return If runtime environment SDK is Kitkat and upper, return false.
-     */
-    fun cannotUseArchive(): Boolean = !canUseArchive()
-
-    /**
-     * Return can use archive.
-     * @return If runtime environment SDK is Kitkat and upper, return true.
-     */
-    private fun canUseArchive(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+    private val fileExtension: String = ".mht"
 
 }
