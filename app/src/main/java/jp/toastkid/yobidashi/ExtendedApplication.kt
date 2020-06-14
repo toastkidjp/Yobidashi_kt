@@ -25,10 +25,7 @@ class ExtendedApplication : Application() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                WebView.setWebContentsDebuggingEnabled(true)
-            }
+            WebView.setWebContentsDebuggingEnabled(true)
         }
 
         val preferenceApplier = PreferenceApplier(this)
