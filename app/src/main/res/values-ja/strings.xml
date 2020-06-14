@@ -495,5 +495,6 @@
     <string name="imdb">IMDb</string>
     <string name="espn">ESPN</string>
     <string name="horizontal_rule">水平線</string>
+    <string name="title_add_default_background">デフォルトの背景を追加</string>
 
 </resources>

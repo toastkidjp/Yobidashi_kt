@@ -9,7 +9,7 @@
         />
     <item
         android:id="@+id/background_settings_add_default"
-        android:title="Add default background"
+        android:title="@string/title_add_default_background"
         android:orderInCategory="100"
         app:showAsAction="never"
         />
