@@ -850,10 +850,8 @@ class MainActivity : AppCompatActivity(),
             }
             REQUEST_CODE_OPEN_PDF -> {
                 val uri = data.data ?: return
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val takeFlags: Int = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    contentResolver?.takePersistableUriPermission(uri, takeFlags)
-                }
+                val takeFlags: Int = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                contentResolver?.takePersistableUriPermission(uri, takeFlags)
 
                 tabs.openNewPdfTab(uri)
                 replaceToCurrentTab(true)
