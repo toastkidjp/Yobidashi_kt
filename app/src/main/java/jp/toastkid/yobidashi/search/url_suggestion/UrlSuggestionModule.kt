@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
+import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,10 +52,7 @@ class UrlSuggestionModule(
         binding.urlSuggestions.adapter = adapter
         binding.urlSuggestions.layoutManager =
                 LinearLayoutManager(binding.root.context, RecyclerView.VERTICAL, false)
-        RightSwipeActionAttachment()(
-                binding.urlSuggestions,
-                this::removeAt
-        )
+        SwipeActionAttachment().invoke(binding.urlSuggestions)
     }
 
     /**

@@ -2,18 +2,25 @@ package jp.toastkid.yobidashi.browser.history
 
 
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.view.updateMargins
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
+import jp.toastkid.yobidashi.libs.view.SwipeViewHolder
 import java.io.File
 
 /**
  * @author toastkidjp
  */
 internal class ViewHolder(private val binding: ItemViewHistoryBinding)
-    : RecyclerView.ViewHolder(binding.root) {
+    : RecyclerView.ViewHolder(binding.root), SwipeViewHolder {
+
+    private val buttonMargin = binding.root.resources
+            .getDimensionPixelSize(R.dimen.button_margin)
 
     fun setText(text: String, url: String, time: String) {
         binding.title.text = text
@@ -51,8 +58,25 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
         binding.delete.setOnClickListener { onClickAdd(history) }
     }
 
-    fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.visibility = if (visible) { View.VISIBLE } else { View.GONE }
+    override fun getFrontView(): View = binding.front
+
+    override fun isButtonVisible(): Boolean = binding.delete.isVisible
+
+    override fun showButton() {
+        binding.delete.visibility = View.VISIBLE
+        updateRightMargin(buttonMargin)
+    }
+
+    override fun hideButton() {
+        binding.delete.visibility = View.INVISIBLE
+        updateRightMargin(0)
+    }
+
+    private fun updateRightMargin(margin: Int) {
+        val marginLayoutParams = binding.front.layoutParams as? ViewGroup.MarginLayoutParams
+        marginLayoutParams?.rightMargin = margin
+        binding.front.layoutParams = marginLayoutParams
+        marginLayoutParams?.updateMargins()
     }
 
 }
