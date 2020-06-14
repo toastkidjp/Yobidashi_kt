@@ -11,7 +11,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.libs.HtmlCompat
@@ -37,7 +37,7 @@ class ClearSettingConfirmDialogFragment : DialogFragment() {
                 .setPositiveButton(R.string.ok) { d, _ ->
                     preferenceApplier.clear()
                     Updater.update(fragmentActivity)
-                    ViewModelProviders.of(fragmentActivity).get(ContentViewModel::class.java)
+                    ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
                             .snackShort(R.string.done_clear)
                     d.dismiss()
                 }

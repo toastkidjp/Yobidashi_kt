@@ -19,7 +19,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
@@ -96,7 +96,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
         activity?.also { activity ->
             val finder = TextViewHighlighter(binding.textContent)
 
-            ViewModelProviders.of(activity)
+            ViewModelProvider(activity)
                     .get(PageSearcherViewModel::class.java)
                     .find.observe(activity, Observer { finder(it ?: "") })
         }

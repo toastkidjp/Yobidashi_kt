@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
@@ -106,7 +106,7 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
         binding = viewStubProxy.binding as? ModuleSearcherBinding ?: return
 
         val viewModel = (context as? FragmentActivity)?.let {
-            ViewModelProviders.of(it).get(PageSearcherViewModel::class.java)
+            ViewModelProvider(it).get(PageSearcherViewModel::class.java)
         }
 
         binding.viewModel = viewModel

@@ -25,7 +25,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -98,7 +98,7 @@ class BarcodeReaderFragment : Fragment() {
 
         val requireActivity = requireActivity()
 
-        viewModel = ViewModelProviders.of(this).get(BarcodeReaderResultPopupViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
         viewModel?.also {
                     it.clip.observe(this, Observer { text -> clip(text) })
                     it.share.observe(this, Observer { text ->

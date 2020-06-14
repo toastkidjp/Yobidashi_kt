@@ -28,14 +28,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
-import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
-import jp.toastkid.yobidashi.databinding.ModuleHeaderSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
@@ -123,7 +122,7 @@ class SearchFragment : Fragment() {
 
     private var headerViewModel: HeaderViewModel? = null
 
-    private var headerBinding: ModuleHeaderSearchBinding? = null
+    private var headerBinding: AppBarSearchBinding? = null
 
     private var currentTitle: String? = null
 
@@ -148,7 +147,7 @@ class SearchFragment : Fragment() {
         currentTitle = arguments?.getString(EXTRA_KEY_TITLE)
         currentUrl = arguments?.getString(EXTRA_KEY_URL)
 
-        headerBinding = DataBindingUtil.inflate(inflater, R.layout.module_header_search, container, false)
+        headerBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_search, container, false)
         headerBinding?.fragment = this
         headerBinding?.searchCategories?.let {
             it.adapter = SearchCategoryAdapter(context)
@@ -172,20 +171,18 @@ class SearchFragment : Fragment() {
                 this::setTextAndMoveCursorToEnd
         )
 
-        // TODO Clean up code.
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
                 headerBinding?.searchInput as EditText,
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion) },
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion, true) },
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it) },
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it, true) },
                 this::hideKeyboard
         )
 
-        // TODO Clean up code.
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion) },
-                { suggestion -> search(headerBinding?.searchCategories?.selectedItem.toString(), suggestion, true) }
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it) },
+                { search(headerBinding?.searchCategories?.selectedItem.toString(), it, true) }
         )
 
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding)
@@ -202,8 +199,8 @@ class SearchFragment : Fragment() {
         }
 
         activity?.also {
-            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
-            contentViewModel = ViewModelProviders.of(it).get(ContentViewModel::class.java)
+            headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
+            contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
         }
 
         contentViewModel?.snackShort(R.string.message_search_on_background)
@@ -211,10 +208,6 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding?.root
-    }
-
-    fun clearInput() {
-        headerBinding?.searchInput?.setText("")
     }
 
     private fun setQuery(query: String?) {
@@ -255,7 +248,7 @@ class SearchFragment : Fragment() {
         }
         R.id.open_favorite_search -> {
             activity?.also {
-                ViewModelProviders.of(it)
+                ViewModelProvider(it)
                         .get(ContentViewModel::class.java)
                         .nextFragment(FavoriteSearchFragment::class.java)
             }
@@ -263,7 +256,7 @@ class SearchFragment : Fragment() {
         }
         R.id.open_search_history -> {
             activity?.also {
-                ViewModelProviders.of(it)
+                ViewModelProvider(it)
                         .get(ContentViewModel::class.java)
                         .nextFragment(SearchHistoryFragment::class.java)
             }
@@ -433,9 +426,7 @@ class SearchFragment : Fragment() {
         EditTextColorSetter().invoke(headerBinding?.searchInput, fontColor)
 
         headerBinding?.also {
-            it.searchActionBackground.setBackgroundColor(ColorUtils.setAlphaComponent(bgColor, 128))
             it.searchAction.setColorFilter(fontColor)
-            it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
     }

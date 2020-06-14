@@ -17,7 +17,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -129,8 +129,8 @@ class BookmarkFragment: Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? FragmentActivity)?.let {
-            contentViewModel = ViewModelProviders.of(it).get(ContentViewModel::class.java)
+        (activity as? FragmentActivity)?.let { // TODO fix
+            contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
         }
     }
 
@@ -141,7 +141,7 @@ class BookmarkFragment: Fragment(),
      */
     private fun finishWithResult(uri: Uri) {
         popBackStack()
-        ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java).open(uri)
+        ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).open(uri)
     }
 
     private fun popBackStack() {

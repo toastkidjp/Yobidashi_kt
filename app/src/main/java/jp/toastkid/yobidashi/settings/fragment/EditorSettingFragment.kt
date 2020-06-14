@@ -21,7 +21,7 @@ import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
@@ -172,7 +172,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                         activity.supportFragmentManager,
                         ColorChooserDialogFragment::class.java.canonicalName
                 )
-        ViewModelProviders.of(activity)
+        ViewModelProvider(activity)
                 .get(ColorChooserDialogFragmentViewModel::class.java)
                 .color
                 .observe(activity, Observer {
@@ -188,7 +188,7 @@ class EditorSettingFragment : Fragment(), TitleIdSupplier {
                         activity.supportFragmentManager,
                         ColorChooserDialogFragment::class.java.canonicalName
                 )
-        ViewModelProviders.of(activity)
+        ViewModelProvider(activity)
                 .get(ColorChooserDialogFragmentViewModel::class.java)
                 .color
                 .observe(activity, Observer {

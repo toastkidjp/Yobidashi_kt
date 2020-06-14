@@ -9,6 +9,7 @@
     </array>
     <array name="image_menu">
         <item name="image_search">Image search</item>
+        <item name="preview">Preview</item>
         <item name="download">Download this image file</item>
     </array>
     <array name="url_menu">

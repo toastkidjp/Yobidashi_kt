@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -23,7 +22,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -179,12 +178,13 @@ class MainActivity : AppCompatActivity(),
 
         initializeContentViewModel()
 
-        browserViewModel = ViewModelProviders.of(this).get(BrowserViewModel::class.java)
+        val activityViewModelProvider = ViewModelProvider(this)
+        browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
             Inputs.hideKeyboard(binding.content)
 
             if (floatingPreview == null) {
-                floatingPreview = FloatingPreview(WebView(this))
+                floatingPreview = FloatingPreview(this)
             }
             floatingPreview?.show(binding.root, it.toString())
         })
@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity(),
             )
         })
 
-        ViewModelProviders.of(this).get(LoadingViewModel::class.java)
+        activityViewModelProvider.get(LoadingViewModel::class.java)
                 .onPageFinished
                 .observe(
                         this,
@@ -218,13 +218,13 @@ class MainActivity : AppCompatActivity(),
                         }
                 )
 
-        ViewModelProviders.of(this).get(OverlayColorFilterViewModel::class.java)
+        activityViewModelProvider.get(OverlayColorFilterViewModel::class.java)
                 .newColor
                 .observe(this, Observer {
                     updateColorFilter()
                 })
 
-        tabListViewModel = ViewModelProviders.of(this).get(TabListViewModel::class.java)
+        tabListViewModel = activityViewModelProvider.get(TabListViewModel::class.java)
         tabListViewModel
                 ?.saveEditorTab
                 ?.observe(
@@ -236,7 +236,7 @@ class MainActivity : AppCompatActivity(),
                         }
                 )
 
-        browserFragmentViewModel = ViewModelProviders.of(this).get(BrowserFragmentViewModel::class.java)
+        browserFragmentViewModel = activityViewModelProvider.get(BrowserFragmentViewModel::class.java)
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
@@ -256,7 +256,7 @@ class MainActivity : AppCompatActivity(),
                     ?: fragmentClass.newInstance()
 
     private fun initializeHeaderViewModel() {
-        val headerViewModel = ViewModelProviders.of(this).get(HeaderViewModel::class.java)
+        val headerViewModel = ViewModelProvider(this).get(HeaderViewModel::class.java)
         headerViewModel.content.observe(this, Observer { view ->
             if (view == null) {
                 return@Observer
@@ -272,7 +272,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initializeMenuViewModel() {
-        menuViewModel = ViewModelProviders.of(this).get(MenuViewModel::class.java)
+        menuViewModel = ViewModelProvider(this).get(MenuViewModel::class.java)
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
@@ -280,7 +280,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initializeContentViewModel() {
-        contentViewModel = ViewModelProviders.of(this).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(this).get(ContentViewModel::class.java)
         contentViewModel?.fragmentClass?.observe(this, Observer {
             replaceFragment(obtainFragment(it), withAnimation = true, withSlideIn = true)
         })
@@ -478,7 +478,7 @@ class MainActivity : AppCompatActivity(),
 
                         val pdfViewerFragment =
                                 obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment ?: return
-                        pdfViewerFragment.arguments = bundleOf("uri" to uri, "scrollY" to currentTab.getScrolled())
+                        pdfViewerFragment.setInitialArguments(uri, currentTab.getScrolled())
                         replaceFragment(pdfViewerFragment, withAnimation)
                         refreshThumbnail()
                     } catch (e: SecurityException) {

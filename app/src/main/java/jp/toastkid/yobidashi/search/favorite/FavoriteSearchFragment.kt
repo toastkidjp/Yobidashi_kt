@@ -11,7 +11,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -120,7 +120,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel =
-                ViewModelProviders.of(this).get(FavoriteSearchFragmentViewModel::class.java)
+                ViewModelProvider(this).get(FavoriteSearchFragmentViewModel::class.java)
         viewModel.reload.observe(this, Observer { adapter?.refresh() })
         viewModel.clear.observe(this, Observer { clear() })
     }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.text.TextUtils
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -62,7 +62,7 @@ class TabAdapter(
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
         if (viewContext is MainActivity) {
-            val viewModelProvider = ViewModelProviders.of(viewContext)
+            val viewModelProvider = ViewModelProvider(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)

@@ -20,7 +20,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -69,7 +69,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
         val context = view.context
 
         val fragmentActivity = requireActivity()
-        viewModel = ViewModelProviders.of(this).get(RssReaderFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(RssReaderFragmentViewModel::class.java)
         observeViewModelEvent(fragmentActivity)
 
         val adapter = Adapter(LayoutInflater.from(context), viewModel)
@@ -103,7 +103,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
             }
 
             activity?.supportFragmentManager?.popBackStack()
-            ViewModelProviders.of(requireActivity())
+            ViewModelProvider(requireActivity())
                     .get(BrowserViewModel::class.java)
                     .open(it.toUri())
         })
@@ -116,7 +116,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item?.itemId == R.id.action_rss_setting) {
-            ViewModelProviders.of(requireActivity())
+            ViewModelProvider(requireActivity())
                     .get(ContentViewModel::class.java)
                     .nextFragment(RssSettingFragment::class.java)
             return true

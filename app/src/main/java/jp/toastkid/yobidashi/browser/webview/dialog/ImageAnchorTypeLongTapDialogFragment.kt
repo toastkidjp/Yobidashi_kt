@@ -13,7 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
@@ -38,7 +38,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
         val anchor = arguments?.getString(KEY_ANCHOR)
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
 
         val uri = anchor.toUri()
 

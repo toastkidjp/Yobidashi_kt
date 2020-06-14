@@ -19,10 +19,10 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.SeekBar
 import androidx.annotation.LayoutRes
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -123,12 +123,14 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
 
         })
 
-        (context as? FragmentActivity)?.let {
-            headerViewModel = ViewModelProviders.of(it).get(HeaderViewModel::class.java)
+        activity?.let {
+            headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
         }
 
-        arguments?.getParcelable<Uri>("uri")?.also { load(it) }
-        arguments?.getInt("scrollY")?.also { scrollTo(it) }
+        arguments?.let { arguments ->
+            arguments.getParcelable<Uri>(KEY_URI)?.also { load(it) }
+            arguments.getInt(KEY_SCROLL_Y).also { scrollTo(it) }
+        }
     }
 
     /**
@@ -194,6 +196,10 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         EditTextColorSetter().invoke(headerBinding.input, colorPair.fontColor())
     }
 
+    fun setInitialArguments(uri: Uri?, scrolled: Int) {
+        arguments = bundleOf(KEY_URI to uri, KEY_SCROLL_Y to scrolled)
+    }
+
     companion object {
 
         @LayoutRes
@@ -201,5 +207,10 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
 
         @LayoutRes
         private const val APP_BAR_CONTENT_LAYOUT_ID = R.layout.module_pdf_header
+
+        private const val KEY_URI = "uri"
+
+        private const val KEY_SCROLL_Y = "scrollY"
+
     }
 }

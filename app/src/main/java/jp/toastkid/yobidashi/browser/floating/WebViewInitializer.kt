@@ -15,7 +15,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 
 /**
  * @author toastkidjp
@@ -31,7 +31,7 @@ class WebViewInitializer {
     operator fun invoke(webView: WebView) {
         val context = webView.context as? FragmentActivity ?: return
 
-        val viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
+        val viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
         webView.webViewClient = object : WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -43,6 +43,7 @@ class WebViewInitializer {
                 super.onPageStarted(view, url, favicon)
                 viewModel.newUrl(url)
             }
+
         }
 
         webView.webChromeClient = object : WebChromeClient() {
@@ -54,6 +55,12 @@ class WebViewInitializer {
             override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
                 super.onReceivedIcon(view, icon)
                 viewModel.newIcon(icon)
+            }
+
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                super.onProgressChanged(view, newProgress)
+
+                viewModel.newProgress(newProgress)
             }
         }
     }

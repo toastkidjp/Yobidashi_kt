@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
@@ -51,8 +51,7 @@ internal class Adapter(
 
     init {
         if (context is FragmentActivity) {
-            viewModel = ViewModelProviders.of(context)
-                    .get(TabListViewModel::class.java)
+            viewModel = ViewModelProvider(context).get(TabListViewModel::class.java)
         }
     }
 

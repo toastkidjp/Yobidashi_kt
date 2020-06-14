@@ -13,7 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
@@ -32,14 +32,15 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
         val url = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle("Image: $url")
                 .setItems(R.array.image_menu, { _, which ->
                     when (which) {
                         0 -> viewModel.open("https://www.google.co.jp/searchbyimage?image_url=$url".toUri())
-                        1 -> downloadImage(url)
+                        1 -> ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).preview(url.toUri())
+                        2 -> downloadImage(url)
                     }
                 })
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }

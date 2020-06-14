@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -225,7 +225,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         recyclerView.adapter = adapter
 
         val activity = requireActivity()
-        ViewModelProviders.of(activity)
+        ViewModelProvider(activity)
                 .get(TabListViewModel::class.java)
                 .startDrag
                 .observe(activity, Observer { startDrag(it) })

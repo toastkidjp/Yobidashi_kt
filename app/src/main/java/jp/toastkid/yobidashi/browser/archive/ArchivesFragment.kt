@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
@@ -36,7 +36,7 @@ class ArchivesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val browserViewModel =
-                ViewModelProviders.of(requireActivity()).get(BrowserViewModel::class.java)
+                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
 
         val adapter = Adapter(view.context) { filePath ->
             popBackStack()

@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -72,7 +72,7 @@ class CardListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.also { fragmentActivity ->
-            viewModel = ViewModelProviders.of(fragmentActivity)
+            viewModel = ViewModelProvider(fragmentActivity)
                     .get(CardListFragmentViewModel::class.java)
             viewModel
                     ?.nextCard

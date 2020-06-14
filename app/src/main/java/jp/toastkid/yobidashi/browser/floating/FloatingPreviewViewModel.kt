@@ -41,4 +41,11 @@ class FloatingPreviewViewModel : ViewModel() {
         url?.let { _url.postValue(it) }
     }
 
+    private val _progress = MutableLiveData<Int>()
+
+    val progress: LiveData<Int> = _progress
+
+    fun newProgress(progress: Int) {
+        _progress.postValue(progress)
+    }
 }

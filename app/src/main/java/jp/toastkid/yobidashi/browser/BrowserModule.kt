@@ -29,7 +29,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
@@ -130,7 +130,7 @@ class BrowserModule(
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
 
         if (context is MainActivity) {
-            val viewModelProvider = ViewModelProviders.of(context)
+            val viewModelProvider = ViewModelProvider(context)
             headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
@@ -322,7 +322,7 @@ class BrowserModule(
             view.stopLoading()
 
             (context as? FragmentActivity)?.also { fragmentActivity ->
-                ViewModelProviders.of(fragmentActivity)
+                ViewModelProvider(fragmentActivity)
                         .get(BrowserViewModel::class.java)
                         .open(url)
             }
@@ -396,7 +396,7 @@ class BrowserModule(
             val activity = webViewContainer?.context
             if (activity is FragmentActivity
                     && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
-                ViewModelProviders.of(activity).get(HeaderViewModel::class.java).show()
+                ViewModelProvider(activity).get(HeaderViewModel::class.java).show()
             }
         }
 

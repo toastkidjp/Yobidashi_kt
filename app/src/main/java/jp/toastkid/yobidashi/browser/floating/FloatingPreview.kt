@@ -8,7 +8,11 @@
 package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -20,10 +24,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.core.view.isEmpty
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
@@ -35,9 +41,11 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
  *
  * @author toastkidjp
  */
-class FloatingPreview(private val webView: WebView) {
+class FloatingPreview(context: Context) {
 
-    private val popupWindow = PopupWindow(webView.context)
+    private val popupWindow = PopupWindow(context)
+
+    private val webView = WebView(context)
 
     private val binding: PopupFloatingPreviewBinding
 
@@ -46,7 +54,6 @@ class FloatingPreview(private val webView: WebView) {
     private var viewModel: FloatingPreviewViewModel? = null
 
     init {
-        val context = webView.context
         val layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, LAYOUT_ID, null, false)
         binding.preview = this
@@ -55,7 +62,7 @@ class FloatingPreview(private val webView: WebView) {
         popupWindow.contentView = binding.root
 
         (context as? FragmentActivity)?.also {
-            viewModel = ViewModelProviders.of(context).get(FloatingPreviewViewModel::class.java)
+            viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
             viewModel?.title?.observe(context, Observer {
                 binding.title.text = it
@@ -68,6 +75,8 @@ class FloatingPreview(private val webView: WebView) {
             viewModel?.url?.observe(context, Observer {
                 binding.url.text = it
             })
+
+            viewModel?.progress?.observe(context, Observer(::setNewProgress))
         }
 
         popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
@@ -91,11 +100,17 @@ class FloatingPreview(private val webView: WebView) {
     /**
      * Invoke floating preview.
      *
-     * @param webView [WebView]
+     * @param parent Parent [View] for Snackbar
      * @param url URL string
      */
     fun show(parent: View, url: String) {
         setSlidingListener()
+
+        binding.progress.progressDrawable.colorFilter =
+                PorterDuffColorFilter(
+                        PreferenceApplier(binding.root.context).fontColor,
+                        PorterDuff.Mode.SRC_IN
+                )
 
         binding.icon.setImageBitmap(null)
 
@@ -151,7 +166,7 @@ class FloatingPreview(private val webView: WebView) {
      */
     private fun openNewTabWithUrl(url: String) {
         (binding.root.context as? FragmentActivity)?.also { fragmentActivity ->
-            ViewModelProviders.of(fragmentActivity)
+            ViewModelProvider(fragmentActivity)
                     .get(BrowserViewModel::class.java)
                     .open(url.toUri())
         }
@@ -165,6 +180,25 @@ class FloatingPreview(private val webView: WebView) {
         }
         val view = binding.previewContainer.get(0)
         return view as? WebView
+    }
+
+    private fun setNewProgress(newProgress: Int) {
+        if (newProgress > 85) {
+            if (binding.progress.isVisible) {
+                binding.progress.isGone = true
+            }
+            return
+        }
+
+        if (binding.progress.isGone) {
+            binding.progress.isVisible = true
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            binding.progress.setProgress(newProgress, true)
+        } else {
+            binding.progress.progress = newProgress
+        }
     }
 
     fun isVisible() = popupWindow.isShowing
