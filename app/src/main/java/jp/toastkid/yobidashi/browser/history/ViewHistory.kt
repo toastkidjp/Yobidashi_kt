@@ -38,7 +38,7 @@ class ViewHistory : UrlItem {
             return
         }
         holder.setIconFromPath(favicon)
-
+        holder.setTime(lastViewed)
     }
 
     override fun urlString() = url
