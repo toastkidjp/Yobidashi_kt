@@ -69,19 +69,4 @@ object TextInputs  {
                             LAYOUT_PARAMS
                     )
                 }
-
-    /**
-     * Make [TextInputLayout] instance with default input text.
-     *
-     * @param context [Context] Use for make instance.
-     * @param defaultInput Default input text
-     */
-    fun withDefaultInput(context: Context, defaultInput: CharSequence): TextInputLayout {
-        val inputLayout = make(context)
-        inputLayout.editText?.also {
-            it.setText(defaultInput)
-            it.setSelection(defaultInput.length)
-        }
-        return inputLayout
-    }
 }
