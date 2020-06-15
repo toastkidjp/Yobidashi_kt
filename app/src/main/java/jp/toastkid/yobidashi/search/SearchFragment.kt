@@ -448,6 +448,19 @@ class SearchFragment : Fragment() {
         )
     }
 
+    fun invokeBackgroundSearch(): Boolean {
+        if (useVoice) {
+            return true
+        }
+
+        search(
+                headerBinding?.searchCategories?.selectedItem.toString(),
+                headerBinding?.searchInput?.text.toString(),
+                true
+        )
+        return true
+    }
+
     /**
      * Open search result.
      *
