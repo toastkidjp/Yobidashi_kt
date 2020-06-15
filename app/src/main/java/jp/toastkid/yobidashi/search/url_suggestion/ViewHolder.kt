@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
+import jp.toastkid.yobidashi.libs.DateFormatHolder
 import jp.toastkid.yobidashi.libs.view.SwipeViewHolder
+import java.util.Calendar
 
 /**
  * ViewHolder.
@@ -98,5 +100,11 @@ class ViewHolder(private val binding: ItemViewHistoryBinding):
         marginLayoutParams?.rightMargin = margin
         binding.front.layoutParams = marginLayoutParams
         marginLayoutParams?.updateMargins()
+    }
+
+    fun setTime(timeMs: Long) {
+        binding.time.text =
+                DateFormatHolder(binding.root.context)
+                        ?.format(Calendar.getInstance().also { it.timeInMillis = timeMs }.time)
     }
 }
