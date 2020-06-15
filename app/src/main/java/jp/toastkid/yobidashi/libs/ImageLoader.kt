@@ -15,30 +15,6 @@ import java.io.IOException
 object ImageLoader {
 
     /**
-     * Read uri image content.
-
-     * <pre>
-     * Uri.invoke(new File(backgroundImagePath).toURI().toString())
-    </pre> *
-
-     * @param context Context
-     *
-     * @param uri Image path uri
-     *
-     * @return [BitmapDrawable]
-     *
-     * @throws IOException
-     */
-    @Throws(IOException::class)
-    fun readBitmapDrawable(
-            context: Context,
-            uri: Uri
-    ): BitmapDrawable? {
-        val image = loadBitmap(context, uri) ?: return null
-        return BitmapDrawable(context.resources, image)
-    }
-
-    /**
 
      * @param context
      *
