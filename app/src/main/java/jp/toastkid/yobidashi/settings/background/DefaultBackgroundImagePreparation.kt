@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.FileOutputStream
 
 /**
@@ -26,19 +27,23 @@ class DefaultBackgroundImagePreparation {
      * @param context [Context]
      */
     operator fun invoke(context: Context): Job =
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Default).launch {
                 val filesDir = FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory())
 
                 val defaultFile = filesDir.assignNewFile("rose")
 
-                FileOutputStream(filesDir.assignNewFile("rose")).use {
-                    BitmapFactory.decodeResource(context.resources, R.mipmap.rose)
-                            .compress(Bitmap.CompressFormat.WEBP, 100, it)
+                withContext(Dispatchers.IO) {
+                    FileOutputStream(filesDir.assignNewFile("rose")).use {
+                        BitmapFactory.decodeResource(context.resources, R.mipmap.rose)
+                                .compress(Bitmap.CompressFormat.WEBP, 100, it)
+                    }
                 }
 
-                FileOutputStream(filesDir.assignNewFile("night_of_tokyo")).use {
-                    BitmapFactory.decodeResource(context.resources, R.mipmap.night_of_tokyo)
-                            .compress(Bitmap.CompressFormat.WEBP, 100, it)
+                withContext(Dispatchers.IO) {
+                    FileOutputStream(filesDir.assignNewFile("night_of_tokyo")).use {
+                        BitmapFactory.decodeResource(context.resources, R.mipmap.night_of_tokyo)
+                                .compress(Bitmap.CompressFormat.WEBP, 100, it)
+                    }
                 }
 
                 PreferenceApplier(context).backgroundImagePath = defaultFile.absolutePath
