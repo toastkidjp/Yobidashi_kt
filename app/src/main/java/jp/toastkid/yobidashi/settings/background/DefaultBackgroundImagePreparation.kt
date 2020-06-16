@@ -34,8 +34,9 @@ class DefaultBackgroundImagePreparation {
 
                 val defaultFile = filesDir.assignNewFile("rose")
 
-                copyImageToFilesDir(filesDir, context.resources, "rose", R.mipmap.rose)
-                copyImageToFilesDir(filesDir, context.resources, "night_of_tokyo", R.mipmap.night_of_tokyo)
+                images.entries.forEach {
+                    copyImageToFilesDir(filesDir, context.resources, it.key, it.value)
+                }
 
                 callback(defaultFile)
             }
@@ -54,4 +55,12 @@ class DefaultBackgroundImagePreparation {
         }
     }
 
+    companion object {
+
+        private val images = mapOf(
+                "rose" to R.mipmap.rose,
+                "night_of_tokyo" to R.mipmap.night_of_tokyo
+        )
+
+    }
 }
