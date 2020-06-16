@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser.webview
 
-import android.os.Build
 import android.webkit.WebView
 
 /**
@@ -9,9 +8,7 @@ import android.webkit.WebView
 class SelectedTextExtractor {
 
     fun withAction(webView: WebView, callback: (String) -> Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript(SCRIPT) { callback(it) }
-        }
+        webView.evaluateJavascript(SCRIPT) { callback(it) }
     }
 
     companion object {
