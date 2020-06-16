@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.settings.background
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import jp.toastkid.yobidashi.R
@@ -32,20 +33,24 @@ class DefaultBackgroundImagePreparation {
 
                 val defaultFile = filesDir.assignNewFile("rose")
 
-                withContext(Dispatchers.IO) {
-                    FileOutputStream(filesDir.assignNewFile("rose")).use {
-                        BitmapFactory.decodeResource(context.resources, R.mipmap.rose)
-                                .compress(Bitmap.CompressFormat.WEBP, 100, it)
-                    }
-                }
-
-                withContext(Dispatchers.IO) {
-                    FileOutputStream(filesDir.assignNewFile("night_of_tokyo")).use {
-                        BitmapFactory.decodeResource(context.resources, R.mipmap.night_of_tokyo)
-                                .compress(Bitmap.CompressFormat.WEBP, 100, it)
-                    }
-                }
+                copyImageToFilesDir(filesDir, context.resources, "rose", R.mipmap.rose)
+                copyImageToFilesDir(filesDir, context.resources, "night_of_tokyo", R.mipmap.night_of_tokyo)
 
                 PreferenceApplier(context).backgroundImagePath = defaultFile.absolutePath
             }
+
+    private suspend fun copyImageToFilesDir(
+            filesDir: FilesDir,
+            resources: Resources?,
+            fileName: String,
+            imageResource: Int
+    ) {
+        withContext(Dispatchers.IO) {
+            FileOutputStream(filesDir.assignNewFile(fileName)).use {
+                BitmapFactory.decodeResource(resources, imageResource)
+                        .compress(Bitmap.CompressFormat.WEBP, 100, it)
+            }
+        }
+    }
+
 }
