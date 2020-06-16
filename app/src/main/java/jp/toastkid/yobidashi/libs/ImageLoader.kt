@@ -9,19 +9,17 @@ import java.io.IOException
 
 /**
  * Image file loader.
-
+ *
  * @author toastkidjp
  */
 object ImageLoader {
 
     /**
-
+     * Load image to [Bitmap].
+     *
      * @param context
-     *
      * @param uri
-     *
-     * @return
-     *
+     * @return [Bitmap] (nullable)
      * @throws IOException
      */
     @Throws(IOException::class)
