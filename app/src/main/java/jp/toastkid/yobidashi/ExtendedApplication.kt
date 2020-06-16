@@ -52,7 +52,9 @@ class ExtendedApplication : Application() {
         DefaultColorInsertion().insert(this)
         preferenceApplier.updateLastAd()
         BookmarkInitializer()(this)
-        DefaultBackgroundImagePreparation()(this)
+        DefaultBackgroundImagePreparation()(this) {
+            preferenceApplier.backgroundImagePath = it.absolutePath
+        }
     }
 
 }

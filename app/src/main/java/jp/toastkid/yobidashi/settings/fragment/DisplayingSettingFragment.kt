@@ -35,6 +35,8 @@ import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.background.LoadedAction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Display setting fragment.
@@ -178,7 +180,9 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
             true
         }
         R.id.background_settings_add_default -> {
-            DefaultBackgroundImagePreparation().invoke(binding.root.context)
+            DefaultBackgroundImagePreparation().invoke(binding.root.context) {
+                activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
+            }
             true
         }
         R.id.background_settings_toolbar_menu_clear -> {

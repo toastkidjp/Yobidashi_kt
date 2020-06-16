@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.FileOutputStream
 
 /**
@@ -27,7 +28,7 @@ class DefaultBackgroundImagePreparation {
      *
      * @param context [Context]
      */
-    operator fun invoke(context: Context): Job =
+    operator fun invoke(context: Context, callback: (File) -> Unit): Job =
             CoroutineScope(Dispatchers.Default).launch {
                 val filesDir = FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory())
 
@@ -36,7 +37,7 @@ class DefaultBackgroundImagePreparation {
                 copyImageToFilesDir(filesDir, context.resources, "rose", R.mipmap.rose)
                 copyImageToFilesDir(filesDir, context.resources, "night_of_tokyo", R.mipmap.night_of_tokyo)
 
-                PreferenceApplier(context).backgroundImagePath = defaultFile.absolutePath
+                callback(defaultFile)
             }
 
     private suspend fun copyImageToFilesDir(
