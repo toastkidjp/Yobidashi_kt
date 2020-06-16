@@ -21,7 +21,9 @@ class AlbumArtFinder(private val contentResolver: ContentResolver) {
 
     operator fun invoke(album1Uri: Uri): Bitmap? {
         try {
-            return BitmapFactory.decodeStream(contentResolver.openInputStream(album1Uri))
+            return contentResolver.openInputStream(album1Uri).use {
+                BitmapFactory.decodeStream(it)
+            }
         } catch (e: FileNotFoundException) {
             Timber.e(e)
         }

@@ -79,16 +79,16 @@ class NotificationFactory(
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
-        val manager = context.getSystemService(NotificationManager::class.java)
-        if (manager.getNotificationChannel(CHANNEL_ID) == null) {
+        val manager: NotificationManager? = context.getSystemService(NotificationManager::class.java)
+        if (manager?.getNotificationChannel(CHANNEL_ID) == null) {
             val channel = NotificationChannel(
                     CHANNEL_ID,
                     context.getString(R.string.title_audio_player),
                     NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = context.getString(R.string.title_audio_player)
+            ).also {
+                it.description = context.getString(R.string.title_audio_player)
             }
-            manager.createNotificationChannel(channel)
+            manager?.createNotificationChannel(channel)
         }
     }
 

@@ -64,25 +64,11 @@ class BookmarkInitializer {
             withContext(Dispatchers.IO) {
                 defaultBookmarks.forEach {
                     val parent = it.key
-                    bookmarkRepository.add(
-                            Bookmark().also {
-                                it.title = parent
-                                it.parent = Bookmark.getRootFolderName()
-                                it.folder = true
-                            }
-                    )
+
+                    bookmarkRepository.add(makeFolder(parent))
+
                     it.value.entries.forEach { entry ->
-                        bookmarkRepository.add(
-                                Bookmark().also {
-                                    it.title = entry.key
-                                    it.url = entry.value
-                                    it.favicon =
-                                            favicons.assignNewFile("${entry.value.toUri().host}.png")
-                                                    .absolutePath
-                                    it.parent = parent
-                                    it.folder = false
-                                }
-                        )
+                        bookmarkRepository.add(makeItem(entry, favicons, parent))
                     }
                 }
             }
@@ -90,4 +76,22 @@ class BookmarkInitializer {
             onComplete()
         }
     }
+
+    private fun makeItem(entry: Map.Entry<String, String>, favicons: FilesDir, parent: String) =
+            Bookmark().also {
+                it.title = entry.key
+                it.url = entry.value
+                it.favicon =
+                        favicons.assignNewFile("${entry.value.toUri().host}.png")
+                                .absolutePath
+                it.parent = parent
+                it.folder = false
+            }
+
+    private fun makeFolder(parent: String) =
+            Bookmark().also {
+                it.title = parent
+                it.parent = Bookmark.getRootFolderName()
+                it.folder = true
+            }
 }

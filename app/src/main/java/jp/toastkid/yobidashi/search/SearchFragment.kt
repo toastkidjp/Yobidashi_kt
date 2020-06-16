@@ -199,8 +199,9 @@ class SearchFragment : Fragment() {
         }
 
         activity?.also {
-            headerViewModel = ViewModelProvider(it).get(HeaderViewModel::class.java)
-            contentViewModel = ViewModelProvider(it).get(ContentViewModel::class.java)
+            val activityViewModelProvider = ViewModelProvider(it)
+            headerViewModel = activityViewModelProvider.get(HeaderViewModel::class.java)
+            contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
         }
 
         contentViewModel?.snackShort(R.string.message_search_on_background)
