@@ -17,12 +17,8 @@ import java.io.File
  */
 class ExternalFileAssignment {
 
-    private val type =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) Environment.DIRECTORY_DOCUMENTS
-            else Environment.DIRECTORY_DOWNLOADS
-
     fun assignFile(context: Context, fileName: String): File {
-        val externalFilesDir = context.getExternalFilesDir(type)
+        val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
 
         if (externalFilesDir?.exists() != false) {
             externalFilesDir?.mkdirs()
