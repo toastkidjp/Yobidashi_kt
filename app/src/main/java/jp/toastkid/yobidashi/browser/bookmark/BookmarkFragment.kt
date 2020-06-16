@@ -207,10 +207,6 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.export_bookmark -> {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    contentViewModel?.snackShort(R.string.message_disusable_menu)
-                    return true
-                }
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
                     RuntimePermissions(requireActivity())
                             .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
