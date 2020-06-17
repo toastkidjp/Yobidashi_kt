@@ -56,10 +56,8 @@ internal class Adapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-                DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+            ViewHolder(DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tab = callback.getTabByIndexFromTabList(position) ?: return
