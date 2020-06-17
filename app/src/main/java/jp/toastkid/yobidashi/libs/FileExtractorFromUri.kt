@@ -27,8 +27,7 @@ object FileExtractorFromUri {
      * @return [File] (Nullable)
      */
     operator fun invoke(context: Context, uri: Uri): String? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             return getForKitKat(context, uri)
         } else if ("content".equals(uri.scheme, ignoreCase = true)) {
             return getDataColumn(context, uri, null, null)
