@@ -82,14 +82,20 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         fun tabIndexOfFromTabList(tab: Tab): Int
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         val preferenceApplier = PreferenceApplier(activityContext)
         colorPair = preferenceApplier.colorPair()
 
-        val target = activity ?: return super.onCreateView(inflater, container, savedInstanceState)
+        val target = activity
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
+
         if (target is Callback) {
             callback = target
         } else {
