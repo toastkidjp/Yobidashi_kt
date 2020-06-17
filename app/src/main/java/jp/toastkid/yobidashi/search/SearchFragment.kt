@@ -422,7 +422,6 @@ class SearchFragment : Fragment() {
      */
     private fun applyColor() {
         val colorPair : ColorPair = preferenceApplier.colorPair()
-        @ColorInt val bgColor:   Int = colorPair.bgColor()
         @ColorInt val fontColor: Int = colorPair.fontColor()
         EditTextColorSetter().invoke(headerBinding?.searchInput, fontColor)
 
