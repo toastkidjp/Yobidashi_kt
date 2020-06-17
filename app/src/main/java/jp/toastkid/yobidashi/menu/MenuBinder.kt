@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
+import timber.log.Timber
 import kotlin.math.min
 
 /**
@@ -156,6 +157,9 @@ class MenuBinder(
                 }
         menuStub.root?.visibility = View.VISIBLE
 
+        if (recyclerView?.isVisible == true) {
+            menuSwitch?.y?.let { recyclerView?.y = it }
+        }
         recyclerView?.scheduleLayoutAnimation()
     }
 
