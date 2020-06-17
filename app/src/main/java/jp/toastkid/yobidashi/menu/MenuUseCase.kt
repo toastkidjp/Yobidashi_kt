@@ -174,11 +174,7 @@ class MenuUseCase(
                 val activity = activitySupplier()
                 if (preferenceApplier.wifiOnly &&
                         WifiConnectionChecker.isNotConnecting(activity)) {
-                    Toaster.snackShort(
-                            activity.findViewById<View>(R.id.content),
-                            activity.getString(R.string.message_wifi_not_connecting),
-                            preferenceApplier.colorPair()
-                    )
+                    contentViewModel.snackShort(R.string.message_wifi_not_connecting)
                     return
                 }
 
@@ -190,10 +186,8 @@ class MenuUseCase(
                             ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
                                     .open(link)
                             val fragmentActivity = activitySupplier()
-                            Toaster.snackShort(
-                                    fragmentActivity.findViewById<View>(R.id.content),
-                                    fragmentActivity.getString(R.string.message_open_random_wikipedia, title),
-                                    preferenceApplier.colorPair()
+                            contentViewModel.snackShort(
+                                    fragmentActivity.getString(R.string.message_open_random_wikipedia, title)
                             )
                         }
             }
