@@ -7,14 +7,12 @@
  */
 package jp.toastkid.yobidashi.settings.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.BaseAdapter
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -106,14 +104,25 @@ class EditorSettingFragment : Fragment() {
                 override fun getItemId(position: Int): Long
                         = EditorFontSize.values()[position].ordinal.toLong()
 
-                @SuppressLint("ViewHolder")
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                     val item = EditorFontSize.values()[position]
-                    val itemView = LayoutInflater.from(context)
-                            .inflate(android.R.layout.simple_spinner_item, parent, false)
-                    val textView = itemView.findViewById<TextView>(android.R.id.text1)
-                    textView.text = item.size.toString()
-                    return itemView
+
+                    if (convertView == null) {
+                        val newView = layoutInflater.inflate(
+                                android.R.layout.simple_spinner_item,
+                                parent,
+                                false
+                        )
+
+                        val viewHolder = FontSpinnerViewHolder(newView)
+                        newView.tag = viewHolder
+                        viewHolder.bind(item)
+                        return newView
+                    }
+
+                    val viewHolder = convertView.tag as? FontSpinnerViewHolder?
+                    viewHolder?.bind(item)
+                    return convertView
                 }
             }
             editorModule.fontSize.setSelection(
