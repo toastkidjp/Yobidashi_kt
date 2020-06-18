@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
@@ -48,14 +46,6 @@ internal class Adapter(
      */
     private var index = -1
 
-    private var viewModel: TabListViewModel? = null
-
-    init {
-        if (context is FragmentActivity) {
-            viewModel = ViewModelProvider(context).get(TabListViewModel::class.java)
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(inflater, LAYOUT_ID, parent, false))
 
@@ -67,7 +57,6 @@ internal class Adapter(
         }
 
         holder.itemView.setOnLongClickListener {
-            viewModel?.sendStartDrag(holder)
             Toaster.snackShort(
                     holder.itemView,
                     "Start to move tab \"${tab.title()}\".",
