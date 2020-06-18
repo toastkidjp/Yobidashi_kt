@@ -149,12 +149,6 @@ class MenuBinder(
     }
 
     private fun open() {
-        val menuX: Float = menuSwitch?.x ?: 1000f
-        val useLeft = menuX < 200f
-        menuStub.root?.layoutParams =
-                (menuStub.root?.layoutParams as? CoordinatorLayout.LayoutParams)?.also {
-                    it.gravity = (if (useLeft) Gravity.LEFT else Gravity.RIGHT) or Gravity.BOTTOM
-                }
         menuStub.root?.visibility = View.VISIBLE
 
         if (recyclerView?.isVisible == true) {
