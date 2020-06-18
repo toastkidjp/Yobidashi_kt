@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.SavedImageBinding
+import jp.toastkid.yobidashi.databinding.ItemSavedImageBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import timber.log.Timber
@@ -22,7 +22,7 @@ import java.io.IOException
  * @author toastkidjp
  */
 internal class ViewHolder(
-        private val binding: SavedImageBinding,
+        private val binding: ItemSavedImageBinding,
         private val preferenceApplier: PreferenceApplier,
         private val onRemoved: () -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {

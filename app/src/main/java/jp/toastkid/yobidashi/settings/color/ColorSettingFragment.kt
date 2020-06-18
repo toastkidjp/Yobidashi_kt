@@ -276,7 +276,7 @@ class ColorSettingFragment : Fragment(),
                 viewType: Int
         ): SavedColorHolder {
             val inflater = LayoutInflater.from(context)
-            return SavedColorHolder(inflater.inflate(R.layout.saved_color, parent, false))
+            return SavedColorHolder(inflater.inflate(R.layout.item_saved_color, parent, false))
         }
 
         override fun onBindViewHolder(holder: SavedColorHolder, position: Int) {

@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import android.text.format.DateFormat
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
+import jp.toastkid.yobidashi.databinding.ItemAppLauncherBinding
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
@@ -13,7 +13,7 @@ import jp.toastkid.yobidashi.libs.HtmlCompat
  * @param binding Binding object
  * @author toastkidjp
  */
-internal class ViewHolder(private val binding: AppLauncherItemBinding)
+internal class ViewHolder(private val binding: ItemAppLauncherBinding)
     : RecyclerView.ViewHolder(binding.root) {
 
     /**

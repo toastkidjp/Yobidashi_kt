@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.AppLauncherItemBinding
+import jp.toastkid.yobidashi.databinding.ItemAppLauncherBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
@@ -67,9 +67,9 @@ internal class Adapter(private val context: Context, private val parent: View)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemBinding = DataBindingUtil.inflate<AppLauncherItemBinding>(
+        val itemBinding = DataBindingUtil.inflate<ItemAppLauncherBinding>(
                 layoutInflater,
-                R.layout.app_launcher_item,
+                R.layout.item_app_launcher,
                 parent,
                 false
         )

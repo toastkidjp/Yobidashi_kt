@@ -319,6 +319,9 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.switchPageSearcher?.observe(this, Observer {
             pageSearchPresenter.switch()
         })
+        contentViewModel?.switchTabList?.observe(this, Observer {
+            switchTabList()
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -694,7 +697,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * Switch tab list visibility.
      */
-    fun switchTabList() {
+    private fun switchTabList() {
         initTabListIfNeed()
         if (tabListDialogFragment?.isVisible == true) {
             tabListDialogFragment?.dismiss()
@@ -779,9 +782,7 @@ class MainActivity : AppCompatActivity(),
     override fun tabIndexOfFromTabList(tab: Tab): Int = tabs.indexOf(tab)
 
     override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
-        menuInflater.also {
-            it.inflate(R.menu.main_fab_menu, menu)
-        }
+        menuInflater.inflate(R.menu.main_fab_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

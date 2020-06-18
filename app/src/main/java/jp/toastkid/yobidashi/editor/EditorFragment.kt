@@ -393,9 +393,8 @@ class EditorFragment :
                 context.getString(R.string.message_character_count, content().length)
     }
 
-    // TODO should implement view model.
     fun tabList() {
-        (activity as? MainActivity)?.switchTabList()
+        contentViewModel?.switchTabList()
     }
 
     /**
