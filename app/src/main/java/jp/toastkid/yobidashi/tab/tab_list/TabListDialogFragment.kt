@@ -64,8 +64,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     private var rightTouchHelper: ItemTouchHelper? = null
 
-    private var leftTouchHelper: ItemTouchHelper? = null
-
     interface Callback {
         fun onCloseOnly()
         fun onCloseTabListDialogFragment(lastTabId: String)
@@ -220,23 +218,11 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                 }).attachToRecyclerView(recyclerView)
 
         val dragAttachment = DragAttachment()
-        rightTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.RIGHT)
-        leftTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.LEFT)
+        rightTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
 
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 
         recyclerView.adapter = adapter
-
-        val activity = requireActivity()
-        ViewModelProvider(activity)
-                .get(TabListViewModel::class.java)
-                .startDrag
-                .observe(activity, Observer { startDrag(it) })
-    }
-
-    private fun startDrag(viewHolder: RecyclerView.ViewHolder) {
-        rightTouchHelper?.startDrag(viewHolder)
-        leftTouchHelper?.startDrag(viewHolder)
     }
 
     companion object {
