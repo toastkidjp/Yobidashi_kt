@@ -375,7 +375,7 @@
     <string name="plus">+</string>
     <string name="sample_date_time">2017/12/12 08:08:08</string>
     <string name="sample_number">20</string>
-    <string name="sample_a">A</string>
+    <string name="sample_a">あ</string>
     <string name="title_remove_ad">広告を消す</string>
     <string name="run">実行</string>
     <string name="message_cannot_launch_app">アプリを起動できませんでした。</string>
@@ -383,7 +383,7 @@
 
     <string name="message_tab_open_new">新しいタブで開きました: \n%s</string>
     <string name="message_tab_open_background">バックグラウンドタブで開きました: \n%s</string>
-    <string name="thumbnail">thumbnail</string>
+    <string name="thumbnail">サムネイル</string>
     <string name="title_use_search_query_extractor">検索キーワードを抜き出す</string>
     <string name="message_unabled_voice_search">音声検索を利用できません。設定を見直してください。</string>
     <string name="hint_editor_input">ここにテキストを入力します。</string>
