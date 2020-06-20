@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.settings
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -63,11 +64,8 @@ class SettingFragment : Fragment() {
         }
         mediator.attach()
 
-        adView = AdView(context)
+        makeAdView(context)
         adView?.adSize = AdSize.LARGE_BANNER
-        adView?.adUnitId =
-                if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111"
-                else "ca-app-pub-5751262573448755/3489764085"
 
         adView?.let {
             ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
@@ -77,6 +75,13 @@ class SettingFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding.root
+    }
+
+    private fun makeAdView(context: Context) {
+        adView = AdView(context)
+        adView?.adUnitId =
+                if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111"
+                else "ca-app-pub-5751262573448755/3489764085"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
