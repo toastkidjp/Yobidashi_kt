@@ -18,9 +18,15 @@ class AdViewFactory {
 
     operator fun invoke(context: Context): AdView {
         val adView = AdView(context)
-        adView.adUnitId =
-                if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111"
-                else "ca-app-pub-5751262573448755/3489764085"
+        adView.adUnitId = if (BuildConfig.DEBUG) TEST_AD_UNIT_ID else PRODUCTION_AD_UNIT_ID
         return adView
+    }
+
+    companion object {
+
+        private const val TEST_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"
+
+        private const val PRODUCTION_AD_UNIT_ID = "ca-app-pub-5751262573448755/3489764085"
+
     }
 }
