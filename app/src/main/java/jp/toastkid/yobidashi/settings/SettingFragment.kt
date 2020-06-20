@@ -12,13 +12,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.material.tabs.TabLayoutMediator
+import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 
 /**
  * @author toastkidjp
@@ -31,6 +39,8 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private var adView: AdView? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -53,6 +63,17 @@ class SettingFragment : Fragment() {
         }
         mediator.attach()
 
+        adView = AdView(context)
+        adView?.adSize = AdSize.LARGE_BANNER
+        adView?.adUnitId =
+                if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111"
+                else "ca-app-pub-5751262573448755/3489764085"
+
+        adView?.let {
+            ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
+                    .replace(it)
+        }
+
         setHasOptionsMenu(true)
 
         return binding.root
@@ -62,6 +83,9 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.container.currentItem = 0
+
+        val adRequest = AdRequest.Builder().build()
+        adView?.loadAd(adRequest)
     }
 
     override fun onResume() {
@@ -76,6 +100,11 @@ class SettingFragment : Fragment() {
             it.tabTextColors = ColorStateList.valueOf(fontColor)
             it.setSelectedTabIndicatorColor(fontColor)
         }
+    }
+
+    override fun onDetach() {
+        adView?.destroy()
+        super.onDetach()
     }
 
     companion object {

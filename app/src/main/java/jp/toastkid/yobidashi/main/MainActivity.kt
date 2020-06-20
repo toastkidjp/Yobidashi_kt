@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -84,6 +85,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import kotlin.system.measureTimeMillis
 
 /**
  * Main of this calendar app.
@@ -153,6 +155,10 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
         setContentView(LAYOUT_ID)
+
+        println("tomato " + measureTimeMillis {
+            MobileAds.initialize(this) {}
+        })
 
         preferenceApplier = PreferenceApplier(this)
 
@@ -271,7 +277,9 @@ class MainActivity : AppCompatActivity(),
                 (view.parent as? ViewGroup)?.removeAllViews()
             }
 
-            binding.toolbar.layoutParams.height = view.layoutParams.height
+            if (view.layoutParams != null) {
+                binding.toolbar.layoutParams.height = view.layoutParams.height
+            }
             binding.toolbarContent.addView(view, 0)
         })
 
