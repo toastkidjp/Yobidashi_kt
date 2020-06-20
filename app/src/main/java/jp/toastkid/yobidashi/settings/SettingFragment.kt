@@ -25,6 +25,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
+import jp.toastkid.yobidashi.libs.ad.AdViewFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.content.ContentViewModel
@@ -64,9 +65,8 @@ class SettingFragment : Fragment() {
         }
         mediator.attach()
 
-        makeAdView(context)
+        adView = AdViewFactory()(context)
         adView?.adSize = AdSize.LARGE_BANNER
-
         adView?.let {
             ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                     .replace(it)
@@ -75,13 +75,6 @@ class SettingFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding.root
-    }
-
-    private fun makeAdView(context: Context) {
-        adView = AdView(context)
-        adView?.adUnitId =
-                if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111"
-                else "ca-app-pub-5751262573448755/3489764085"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
