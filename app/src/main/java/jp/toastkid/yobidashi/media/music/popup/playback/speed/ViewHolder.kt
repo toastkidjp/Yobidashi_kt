@@ -17,7 +17,6 @@ class ViewHolder(private val text: TextView) {
 
     fun bind(playingSpeed: PlayingSpeed, colorPair: ColorPair) {
         text.setText(playingSpeed.textId)
-        text.setBackgroundColor(colorPair.bgColor())
-        text.setTextColor(colorPair.fontColor())
+        colorPair.setTo(text)
     }
 }
