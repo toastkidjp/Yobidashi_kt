@@ -102,7 +102,7 @@ class EditorSettingFragment : Fragment() {
                         = EditorFontSize.values()[position]
 
                 override fun getItemId(position: Int): Long
-                        = EditorFontSize.values()[position].ordinal.toLong()
+                        = getItem(position).ordinal.toLong()
 
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                     val item = EditorFontSize.values()[position]
