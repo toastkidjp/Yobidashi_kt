@@ -85,6 +85,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.system.measureTimeMillis
 
 /**
@@ -150,6 +151,8 @@ class MainActivity : AppCompatActivity(),
     private lateinit var preferenceApplier: PreferenceApplier
 
     private lateinit var menuUseCase: MenuUseCase
+
+    private var isTabListShowing = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -532,10 +535,15 @@ class MainActivity : AppCompatActivity(),
      * Show tab list.
      */
     private fun showTabList() {
+        if (isTabListShowing.get()) {
+            return
+        }
+        isTabListShowing.set(true)
         refreshThumbnail()
         // TODO Remove unused elvis operator.
         val fragmentManager = supportFragmentManager ?: return
         tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
+        binding.root.postDelayed({ isTabListShowing.set(false) }, 1000L)
     }
 
     private fun refreshThumbnail() {
