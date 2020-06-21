@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Drag attachment to specified [RecyclerView].
+ * This class attach [ItemTouchHelper] to specified [RecyclerView].
  *
  * @author toastkidjp
  */
-class DragAttachment {
+class ItemTouchHelperAttachment {
 
     /**
      * Invoke action.

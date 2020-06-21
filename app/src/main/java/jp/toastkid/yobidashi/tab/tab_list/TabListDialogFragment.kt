@@ -199,7 +199,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         recyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        DragAttachment()(recyclerView)
+        ItemTouchHelperAttachment()(recyclerView)
 
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 
