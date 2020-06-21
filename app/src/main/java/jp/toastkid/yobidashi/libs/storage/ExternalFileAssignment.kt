@@ -17,7 +17,7 @@ import java.io.File
  */
 class ExternalFileAssignment {
 
-    fun assignFile(context: Context, fileName: String): File {
+    operator fun invoke(context: Context, fileName: String): File {
         val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
 
         if (externalFilesDir?.exists() != false) {

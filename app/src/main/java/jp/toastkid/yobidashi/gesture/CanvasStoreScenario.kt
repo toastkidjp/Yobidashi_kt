@@ -31,7 +31,7 @@ class CanvasStoreScenario {
     operator fun invoke(activity: FragmentActivity, canvasView: View) {
         val bitmap = thumbnailGenerator.invoke(canvasView) ?: return
 
-        val file = externalFileAssignment.assignFile(
+        val file = externalFileAssignment(
                 activity,
                 "GestureMemo_${System.currentTimeMillis()}.png"
         )
