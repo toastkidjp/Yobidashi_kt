@@ -25,8 +25,8 @@ class DragAttachment {
     operator fun invoke(recyclerView: RecyclerView): ItemTouchHelper {
         val itemTouchHelper = ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(
-                        ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
-                        ItemTouchHelper.UP
+                        DRAG_DIRECTIONS,
+                        SWIPE_DIRECTION
                 ) {
                     override fun onMove(
                             rv: RecyclerView,
@@ -44,7 +44,7 @@ class DragAttachment {
                             viewHolder: RecyclerView.ViewHolder,
                             direction: Int
                     ) {
-                        if (direction != ItemTouchHelper.UP) {
+                        if (direction != SWIPE_DIRECTION) {
                             return
                         }
                         (viewHolder as? ViewHolder)?.close()
@@ -53,5 +53,13 @@ class DragAttachment {
         )
         itemTouchHelper.attachToRecyclerView(recyclerView)
         return itemTouchHelper
+    }
+
+    companion object {
+
+        private const val DRAG_DIRECTIONS = ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+
+        private const val SWIPE_DIRECTION = ItemTouchHelper.UP
+
     }
 }
