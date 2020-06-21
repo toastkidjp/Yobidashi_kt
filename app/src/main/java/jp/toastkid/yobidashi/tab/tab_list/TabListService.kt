@@ -25,7 +25,7 @@ class TabListService(
 
     fun switch() {
         if (tabListDialogFragment.isVisible) {
-            tabListDialogFragment.dismiss()
+            dismiss()
         } else {
             showTabList()
         }
