@@ -21,7 +21,6 @@ class DragAttachment {
      * Invoke action.
      *
      * @param recyclerView [RecyclerView]
-     * @param direction [ItemTouchHelper]'s constant
      */
     operator fun invoke(recyclerView: RecyclerView): ItemTouchHelper {
         val itemTouchHelper = ItemTouchHelper(
