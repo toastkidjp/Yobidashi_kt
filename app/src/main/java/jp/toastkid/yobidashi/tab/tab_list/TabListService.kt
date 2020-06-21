@@ -9,23 +9,19 @@ package jp.toastkid.yobidashi.tab.tab_list
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * @author toastkidjp
  */
 class TabListService(
         private val fragmentManager: FragmentManager,
-        private val thumbnailRefresher: () -> Unit,
-        private val postDelayed: (Runnable, Long) -> Unit
+        private val thumbnailRefresher: () -> Unit
 ) {
 
     /**
      * Tab list dialog fragment.
      */
     private var tabListDialogFragment: DialogFragment = TabListDialogFragment()
-
-    private var isTabListShowing = AtomicBoolean(false)
 
     fun switch() {
         if (tabListDialogFragment.isVisible) {
@@ -43,13 +39,8 @@ class TabListService(
      * Show tab list.
      */
     private fun showTabList() {
-        if (isTabListShowing.get()) {
-            return
-        }
-        isTabListShowing.set(true)
         thumbnailRefresher()
         tabListDialogFragment.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
-        postDelayed(Runnable { isTabListShowing.set(false) }, 1000L)
     }
 
     fun onBackPressed(): Boolean {

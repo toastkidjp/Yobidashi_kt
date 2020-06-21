@@ -713,10 +713,7 @@ class MainActivity : AppCompatActivity(),
      */
     private fun switchTabList() {
         if (tabListService == null) {
-            tabListService = TabListService(
-                    supportFragmentManager,
-                    this::refreshThumbnail
-            ) { action, delayMs -> binding.root.postDelayed(action, delayMs) }
+            tabListService = TabListService(supportFragmentManager, this::refreshThumbnail)
         }
         tabListService?.switch()
     }
