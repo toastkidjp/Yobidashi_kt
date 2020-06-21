@@ -96,9 +96,9 @@ class SettingFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
+    override fun onDestroyView() {
         adView?.destroy()
-        super.onDetach()
+        super.onDestroyView()
     }
 
     companion object {
