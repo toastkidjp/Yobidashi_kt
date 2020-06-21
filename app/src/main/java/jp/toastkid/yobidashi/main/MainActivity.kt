@@ -75,11 +75,13 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.tab.tab_list.TabListService
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -109,11 +111,6 @@ class MainActivity : AppCompatActivity(),
      * Disposables.
      */
     private val disposables: Job by lazy { Job() }
-
-    /**
-     * Tab list dialog fragment.
-     */
-    private var tabListDialogFragment: DialogFragment? = null
 
     /**
      * Find-in-page module.
@@ -152,7 +149,7 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var menuUseCase: MenuUseCase
 
-    private var isTabListShowing = AtomicBoolean(false)
+    private var tabListService: TabListService? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -531,21 +528,6 @@ class MainActivity : AppCompatActivity(),
         tabs.saveTabList()
     }
 
-    /**
-     * Show tab list.
-     */
-    private fun showTabList() {
-        if (isTabListShowing.get()) {
-            return
-        }
-        isTabListShowing.set(true)
-        refreshThumbnail()
-        // TODO Remove unused elvis operator.
-        val fragmentManager = supportFragmentManager ?: return
-        tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
-        binding.root.postDelayed({ isTabListShowing.set(false) }, 1000L)
-    }
-
     private fun refreshThumbnail() {
         CoroutineScope(Dispatchers.Default).launch(disposables) {
             runOnUiThread {
@@ -559,8 +541,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        if (tabListDialogFragment?.isVisible == true) {
-            tabListDialogFragment?.dismiss()
+        if (tabListService?.onBackPressed() == true) {
             return
         }
 
@@ -731,26 +712,20 @@ class MainActivity : AppCompatActivity(),
      * Switch tab list visibility.
      */
     private fun switchTabList() {
-        initTabListIfNeed()
-        if (tabListDialogFragment?.isVisible == true) {
-            tabListDialogFragment?.dismiss()
-        } else {
-            showTabList()
+        if (tabListService == null) {
+            tabListService = TabListService(
+                    supportFragmentManager,
+                    this::refreshThumbnail
+            ) { action, delayMs -> binding.root.postDelayed(action, delayMs) }
         }
-    }
-
-    /**
-     * Initialize tab list.
-     */
-    private fun initTabListIfNeed() {
-        tabListDialogFragment = TabListDialogFragment()
+        tabListService?.switch()
     }
 
     /**
      * Action on empty tabs.
      */
     private fun onEmptyTabs() {
-        tabListDialogFragment?.dismiss()
+        tabListService?.dismiss()
         openNewTab()
     }
 
@@ -760,7 +735,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onCloseOnly() {
-        tabListDialogFragment?.dismiss()
+        tabListService?.dismiss()
     }
 
     override fun onCloseTabListDialogFragment(lastTabId: String) {
@@ -871,7 +846,7 @@ class MainActivity : AppCompatActivity(),
 
                 tabs.openNewPdfTab(uri)
                 replaceToCurrentTab(true)
-                tabListDialogFragment?.dismiss()
+                tabListService?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(this, data)
