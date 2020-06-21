@@ -15,7 +15,6 @@ import androidx.annotation.Keep
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import com.google.android.material.snackbar.Snackbar
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -47,9 +46,6 @@ class BottomNavigationBehavior<V : View>(context: Context, attrs: AttributeSet) 
             type: Int
     ) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
-        if (abs(dy) < abs(dx)) {
-            return
-        }
         child.translationY = max(0f, min(child.height.toFloat(), child.translationY + dy))
     }
 

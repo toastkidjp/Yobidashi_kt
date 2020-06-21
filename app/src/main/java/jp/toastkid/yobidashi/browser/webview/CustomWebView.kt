@@ -8,12 +8,17 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.webkit.WebView
 import androidx.annotation.Size
+import androidx.core.net.toUri
 import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.search.UrlFactory
 
 /**
@@ -46,10 +51,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     private val scrollOffset = IntArray(2)
 
     private val scrollConsumed = IntArray(2)
-
-    private val urlFactory = UrlFactory()
-
-    private val selectedTextExtractor = SelectedTextExtractor()
 
     private val speechMaker by lazy { SpeechMaker(context) }
 
@@ -85,6 +86,8 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     event.offsetLocation(deltaX, deltaY)
                     nestedOffsetX += scrollOffset[0]
                     nestedOffsetY += scrollOffset[1]
+                } else {
+                    lastY = eventY.toFloat()
                 }
                 requestDisallowInterceptTouchEvent(true)
 
@@ -160,18 +163,13 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                                     mode?.finish()
                                     return true
                                 }
+                                R.id.preview_search -> {
+                                    searchWithPreview()
+                                    mode?.finish()
+                                    return true
+                                }
                                 R.id.web_search -> {
-                                    selectedTextExtractor.withAction(this@CustomWebView) { word ->
-                                        context?.let {
-                                            val url = urlFactory(
-                                                    it,
-                                                    PreferenceApplier(it).getDefaultSearchEngine(),
-                                                    word
-                                            ).toString()
-
-                                            loadUrl(url)
-                                        }
-                                    }
+                                    search()
                                     mode?.finish()
                                     return true
                                 }
@@ -189,6 +187,40 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                     },
                     type
             )
+
+    private fun search() {
+        selectedTextExtractor.withAction(this@CustomWebView) { word ->
+            context?.let {
+                val url = urlFactory(
+                        it,
+                        PreferenceApplier(it).getDefaultSearchEngine(),
+                        word
+                ).toString()
+
+                (it as? FragmentActivity)?.let { activity ->
+                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
+                            .open(url.toUri())
+                }
+            }
+        }
+    }
+
+    private fun searchWithPreview() {
+        selectedTextExtractor.withAction(this@CustomWebView) { word ->
+            context?.let {
+                val url = urlFactory(
+                        it,
+                        PreferenceApplier(it).getDefaultSearchEngine(),
+                        word
+                ).toString()
+
+                (it as? FragmentActivity)?.let { activity ->
+                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
+                            .preview(url.toUri())
+                }
+            }
+        }
+    }
 
 
     override fun setNestedScrollingEnabled(enabled: Boolean) {
@@ -255,4 +287,11 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         return childHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow, type)
     }
 
+    companion object {
+
+        private val urlFactory = UrlFactory()
+
+        private val selectedTextExtractor = SelectedTextExtractor()
+
+    }
 }

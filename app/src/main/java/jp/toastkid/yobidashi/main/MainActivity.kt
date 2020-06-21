@@ -38,6 +38,7 @@ import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
@@ -78,6 +79,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
@@ -121,8 +123,6 @@ class MainActivity : AppCompatActivity(),
     private var tabListViewModel: TabListViewModel? = null
 
     private var browserViewModel: BrowserViewModel? = null
-
-    private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
     private var floatingPreview: FloatingPreview? = null
 
@@ -235,8 +235,6 @@ class MainActivity : AppCompatActivity(),
                             tabs.saveTabList()
                         }
                 )
-
-        browserFragmentViewModel = activityViewModelProvider.get(BrowserFragmentViewModel::class.java)
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
@@ -423,9 +421,9 @@ class MainActivity : AppCompatActivity(),
     private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
-            if (fragment is EditorFragment) {
+            /*if (fragment is EditorFragment) {
                 fragment.reload()
-            }
+            }*/
             return
         }
 
@@ -463,15 +461,20 @@ class MainActivity : AppCompatActivity(),
                 val browserFragment =
                         (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
-                browserFragmentViewModel
-                        ?.loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
+                            .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                }
             }
             is EditorTab -> {
                 val editorFragment =
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
-                refreshThumbnail()
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    editorFragment.reload()
+                    refreshThumbnail()
+                }
             }
             is PdfTab -> {
                 val url: String = currentTab.getUrl()
@@ -859,6 +862,7 @@ class MainActivity : AppCompatActivity(),
         searchWithClip.dispose()
         pageSearchPresenter.dispose()
         floatingPreview?.dispose()
+        GlobalWebViewPool.dispose()
         super.onDestroy()
     }
 

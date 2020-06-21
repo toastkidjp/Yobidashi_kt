@@ -30,10 +30,8 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.HeaderViewModel
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
-import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
@@ -70,13 +68,7 @@ class BrowserFragment : Fragment(),
 
     private val searchQueryExtractor = SearchQueryExtractor()
 
-    private var menuViewModel: MenuViewModel? = null
-
     private var headerViewModel: HeaderViewModel? = null
-
-    private var browserViewModel: BrowserViewModel? = null
-
-    private var browserFragmentViewModel: BrowserFragmentViewModel? = null
 
     private var contentViewModel: ContentViewModel? = null
 
@@ -94,8 +86,6 @@ class BrowserFragment : Fragment(),
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
-            it.setDistanceToTriggerSync(8000)
-            it.setSlingshotDistance(150)
         }
 
         val activityContext = context ?: return null
@@ -106,8 +96,6 @@ class BrowserFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
-        browserViewModel = ViewModelProvider(this).get(BrowserViewModel::class.java)
-
         return binding?.root
     }
 
@@ -115,13 +103,10 @@ class BrowserFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         val activity = requireActivity()
-        val activityViewModelProvider = ViewModelProvider(activity)
-        menuViewModel = activityViewModelProvider
-                .get(MenuViewModel::class.java)
 
         initializeHeaderViewModels(activity)
 
-        contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(activity).get(ContentViewModel::class.java)
     }
 
     private fun initializeHeaderViewModels(activity: FragmentActivity) {
@@ -184,10 +169,9 @@ class BrowserFragment : Fragment(),
                         Observer { browserModule.saveArchiveForAutoArchive() }
                 )
 
-        browserFragmentViewModel = viewModelProvider.get(BrowserFragmentViewModel::class.java)
-        browserFragmentViewModel
-                ?.loadWithNewTab
-                ?.observe(activity, Observer {
+        ViewModelProvider(this).get(BrowserFragmentViewModel::class.java)
+                .loadWithNewTab
+                .observe(activity, Observer {
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
 
@@ -465,7 +449,7 @@ class BrowserFragment : Fragment(),
 
     override fun onDetach() {
         headerViewModel?.show()
-        browserModule.dispose()
+        browserModule.onPause()
         super.onDetach()
     }
 

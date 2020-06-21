@@ -59,8 +59,8 @@ internal class WebTab: Tab {
 
     companion object {
 
-        fun make(title: String, url: String): WebTab = WebTab().apply {
-            addHistory(History.make(title, url))
+        fun make(title: String, url: String): WebTab = WebTab().also {
+            it.addHistory(History.make(title, url))
         }
 
         /**
@@ -69,9 +69,9 @@ internal class WebTab: Tab {
          * @param title Title
          * @param url URL
          */
-        fun makeBackground(title: String, url: String): WebTab = WebTab().apply {
-            addHistory(History.make(title, url))
-            background = true
+        fun makeBackground(title: String, url: String): WebTab = WebTab().also {
+            it.addHistory(History.make(title, url))
+            it.background = true
         }
     }
 
