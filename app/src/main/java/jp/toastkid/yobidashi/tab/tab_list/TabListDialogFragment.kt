@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -199,21 +198,8 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     private fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
-                    override fun onMove(
-                            rv: RecyclerView,
-                            viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder
-                    ): Boolean = true
 
-                    override fun onSwiped(
-                            viewHolder: RecyclerView.ViewHolder,
-                            direction: Int
-                    ) = (viewHolder as? ViewHolder)?.close() ?: Unit
-                }).attachToRecyclerView(recyclerView)
-
-        DragAttachment()(recyclerView, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
+        DragAttachment()(recyclerView)
 
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 
