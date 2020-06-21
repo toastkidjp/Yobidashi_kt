@@ -11,6 +11,7 @@ import android.content.ActivityNotFoundException
 import android.os.Build
 import android.view.View
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -83,7 +84,7 @@ class MenuUseCase(
                 contentViewModel.share()
             }
             Menu.CODE_READER -> {
-                contentViewModel.nextFragment(BarcodeReaderFragment::class.java)
+                nextFragment(BarcodeReaderFragment::class.java)
             }
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
@@ -102,13 +103,13 @@ class MenuUseCase(
                 ProcessCleanerInvoker()(activity.findViewById(R.id.content))
             }
             Menu.PLANNING_POKER-> {
-                contentViewModel.nextFragment(CardListFragment::class.java)
+                nextFragment(CardListFragment::class.java)
             }
             Menu.APP_LAUNCHER-> {
-                contentViewModel.nextFragment(LauncherFragment::class.java)
+                nextFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
-                contentViewModel.nextFragment(RssReaderFragment::class.java)
+                nextFragment(RssReaderFragment::class.java)
             }
             Menu.AUDIO -> {
                 val parent = extractContentView() ?: return
@@ -116,13 +117,13 @@ class MenuUseCase(
                 menuViewModel?.close()
             }
             Menu.BOOKMARK-> {
-                contentViewModel.nextFragment(BookmarkFragment::class.java)
+                nextFragment(BookmarkFragment::class.java)
             }
             Menu.VIEW_HISTORY-> {
-                contentViewModel.nextFragment(ViewHistoryFragment::class.java)
+                nextFragment(ViewHistoryFragment::class.java)
             }
             Menu.IMAGE_VIEWER -> {
-                contentViewModel.nextFragment(ImageViewerFragment::class.java)
+                nextFragment(ImageViewerFragment::class.java)
             }
             Menu.LOAD_HOME-> {
                 ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
@@ -138,7 +139,7 @@ class MenuUseCase(
                 contentViewModel.webSearch()
             }
             Menu.GESTURE_MEMO -> {
-                contentViewModel.nextFragment(GestureMemoFragment::class.java)
+                nextFragment(GestureMemoFragment::class.java)
             }
             Menu.VOICE_SEARCH-> {
                 activitySupplier().also {
@@ -192,13 +193,17 @@ class MenuUseCase(
                         }
             }
             Menu.VIEW_ARCHIVE -> {
-                contentViewModel.nextFragment(ArchivesFragment::class.java)
+                nextFragment(ArchivesFragment::class.java)
             }
             Menu.FIND_IN_PAGE-> {
                 contentViewModel.switchPageSearcher()
             }
         }
         menuViewModel?.close()
+    }
+
+    private fun nextFragment(fragmentClass: Class<out Fragment>) {
+        contentViewModel.nextFragment(fragmentClass)
     }
 
     /**
