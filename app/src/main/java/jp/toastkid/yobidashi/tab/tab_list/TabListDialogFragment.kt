@@ -60,8 +60,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
      */
     private var lastTabId: String = ""
 
-    private var itemTouchHelper: ItemTouchHelper? = null
-
     interface Callback {
         fun onCloseOnly()
         fun onCloseTabListDialogFragment(lastTabId: String)
@@ -215,8 +213,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                     ) = (viewHolder as? ViewHolder)?.close() ?: Unit
                 }).attachToRecyclerView(recyclerView)
 
-        val dragAttachment = DragAttachment()
-        itemTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
+        DragAttachment()(recyclerView, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
 
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 
