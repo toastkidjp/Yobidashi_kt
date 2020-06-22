@@ -24,7 +24,7 @@ class TlsErrorDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_ssl_connection_error)
                 .setMessage(arguments?.getString(KEY_MESSAGE))
-                .setPositiveButton(R.string.ok, { d, _ -> d.dismiss() })
+                .setPositiveButton(R.string.ok) { d, _ -> d.dismiss() }
                 .create()
     }
 
