@@ -107,6 +107,19 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/restore"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="@string/restore"
+                android:textSize="@dimen/menu_font_size"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_restore"
+                android:foreground="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.restore()}"
+                android:onLongClick="@{fragment::showName}"
+                />
+
+            <TextView
                 android:id="@+id/load_as"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"

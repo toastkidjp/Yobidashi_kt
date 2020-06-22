@@ -103,6 +103,8 @@ class EditorFragment :
      */
     private var path: String = ""
 
+    private var lastContent: String = ""
+
     /**
      * Text finder for [EditText].
      */
@@ -234,6 +236,7 @@ class EditorFragment :
                 menuBinding.saveAs,
                 menuBinding.load,
                 menuBinding.loadAs,
+                menuBinding.restore,
                 menuBinding.lastSaved,
                 menuBinding.counter,
                 menuBinding.backup,
@@ -349,6 +352,14 @@ class EditorFragment :
         startActivityForResult(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD_AS)
     }
 
+    fun restore() {
+        if (lastContent.isBlank()) {
+            contentViewModel?.snackShort("Backup is empty.")
+            return
+        }
+        setContentText(lastContent)
+    }
+
     /**
      * Share current content.
      */
@@ -395,10 +406,13 @@ class EditorFragment :
             return
         }
 
+        val content = content()
+        lastContent = content
         Okio.buffer(Okio.sink(file)).use {
-            it.writeUtf8(content())
+            it.writeUtf8(content)
             it.flush()
         }
+
         val context = context ?: return
         MediaScannerConnection.scanFile(
                 context,
@@ -491,6 +505,7 @@ class EditorFragment :
     private fun setContentText(contentStr: String) {
         binding.editorInput.setText(contentStr)
         context?.let { setContentTextLengthCount(it) }
+        lastContent = contentStr
     }
 
     /**
