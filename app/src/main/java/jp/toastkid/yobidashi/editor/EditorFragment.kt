@@ -103,7 +103,7 @@ class EditorFragment :
      */
     private var path: String = ""
 
-    private var lastContent: String = ""
+    private val contentHolderService = ContentHolderService()
 
     /**
      * Text finder for [EditText].
@@ -353,11 +353,11 @@ class EditorFragment :
     }
 
     fun restore() {
-        if (lastContent.isBlank()) {
+        if (contentHolderService.isBlank()) {
             contentViewModel?.snackShort("Backup is empty.")
             return
         }
-        setContentText(lastContent)
+        setContentText(contentHolderService.getContent())
     }
 
     /**
@@ -407,7 +407,7 @@ class EditorFragment :
         }
 
         val content = content()
-        lastContent = content
+        contentHolderService.setContent(content)
         Okio.buffer(Okio.sink(file)).use {
             it.writeUtf8(content)
             it.flush()
@@ -505,7 +505,7 @@ class EditorFragment :
     private fun setContentText(contentStr: String) {
         binding.editorInput.setText(contentStr)
         context?.let { setContentTextLengthCount(it) }
-        lastContent = contentStr
+        contentHolderService.setContent(contentStr)
     }
 
     /**
