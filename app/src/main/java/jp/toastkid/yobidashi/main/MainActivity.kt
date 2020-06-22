@@ -149,9 +149,9 @@ class MainActivity : AppCompatActivity(),
         setTheme(R.style.AppTheme_NoActionBar)
         setContentView(LAYOUT_ID)
 
-        println("tomato " + measureTimeMillis {
-            MobileAds.initialize(this) {}
-        })
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            MobileAds.initialize(this@MainActivity) {}
+        }
 
         preferenceApplier = PreferenceApplier(this)
 
