@@ -16,13 +16,10 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
-import jp.toastkid.yobidashi.libs.ad.AdViewFactory
+import jp.toastkid.yobidashi.libs.ad.AdService
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.AppBarViewModel
 
@@ -38,7 +35,7 @@ class SettingFragment : Fragment() {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private var adView: AdView? = null
+    private var adService: AdService? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -61,12 +58,8 @@ class SettingFragment : Fragment() {
         }
         mediator.attach()
 
-        adView = AdViewFactory()(context)
-        adView?.adSize = AdSize.LARGE_BANNER
-        adView?.let {
-            ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
-                    .replace(it)
-        }
+        adService = AdService { context }
+        adService?.sendWith(ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java))
 
         setHasOptionsMenu(true)
 
@@ -78,8 +71,7 @@ class SettingFragment : Fragment() {
 
         binding.container.currentItem = 0
 
-        val adRequest = AdRequest.Builder().build()
-        adView?.loadAd(adRequest)
+        adService?.load()
     }
 
     override fun onResume() {
@@ -97,7 +89,7 @@ class SettingFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        adView?.destroy()
+        adService?.destroy()
         super.onDestroyView()
     }
 
