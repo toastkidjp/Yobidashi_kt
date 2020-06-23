@@ -48,6 +48,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
+import jp.toastkid.yobidashi.libs.view.TextViewColorApplier
 import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.TabUiFragment
@@ -231,7 +232,7 @@ class EditorFragment :
      */
     private fun applySettings() {
         val colorPair = preferenceApplier.colorPair()
-        applyButtonColor(
+        TextViewColorApplier()(
                 colorPair.fontColor(),
                 menuBinding.save,
                 menuBinding.saveAs,
@@ -255,21 +256,6 @@ class EditorFragment :
 
         CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor())
         binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor()
-    }
-
-    /**
-     * Apply button color to multiple [TextView].
-     *
-     * @param fontColor [ColorInt]
-     * @param textViews multiple [TextView]
-     */
-    private fun applyButtonColor(@ColorInt fontColor: Int, vararg textViews: TextView) {
-        textViews.forEach { textView ->
-            textView.setTextColor(fontColor)
-            textView.compoundDrawables.forEach {
-                it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
-            }
-        }
     }
 
     /**
