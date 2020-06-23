@@ -42,9 +42,14 @@ internal class LoadedAction (
         private val fileDir: String
 ) {
 
-    /** Image file URI.  */
+    /**
+     * Image file URI.
+     */
     private val uri: Uri? = data.data
 
+    /**
+     * For fixing rotated image.
+     */
     private val rotatedImageFixing = RotatedImageFixing()
 
     /**
@@ -78,8 +83,8 @@ internal class LoadedAction (
 
     /**
      * Store image file.
-     * @param context
      *
+     * @param context
      * @param image
      *
      * @throws FileNotFoundException
