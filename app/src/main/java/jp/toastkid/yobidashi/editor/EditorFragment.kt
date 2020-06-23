@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -231,7 +232,7 @@ class EditorFragment :
     private fun applySettings() {
         val colorPair = preferenceApplier.colorPair()
         applyButtonColor(
-                colorPair,
+                colorPair.fontColor(),
                 menuBinding.save,
                 menuBinding.saveAs,
                 menuBinding.load,
@@ -259,11 +260,10 @@ class EditorFragment :
     /**
      * Apply button color to multiple [TextView].
      *
-     * @param colorPair [ColorPair]
+     * @param fontColor [ColorInt]
      * @param textViews multiple [TextView]
      */
-    private fun applyButtonColor(colorPair: ColorPair, vararg textViews: TextView) {
-        val fontColor = colorPair.fontColor()
+    private fun applyButtonColor(@ColorInt fontColor: Int, vararg textViews: TextView) {
         textViews.forEach { textView ->
             textView.setTextColor(fontColor)
             textView.compoundDrawables.forEach {
