@@ -343,7 +343,10 @@ class EditorFragment :
             contentViewModel?.snackShort("Backup is empty.")
             return
         }
+
+        val selectionStart = binding.editorInput.selectionStart
         setContentText(contentHolderService.getContent())
+        binding.editorInput.setSelection(selectionStart)
     }
 
     /**
