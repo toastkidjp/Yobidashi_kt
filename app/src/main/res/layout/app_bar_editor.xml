@@ -31,7 +31,7 @@
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_load"
-                android:foreground="@drawable/ripple_transparent"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.load()}"
                 android:onLongClick="@{fragment::showName}"
                 />
@@ -43,7 +43,7 @@
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_save"
-                android:foreground="@drawable/ripple_transparent"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.save()}"
                 android:onLongClick="@{fragment::showName}"
                 />
@@ -56,7 +56,7 @@
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_backup"
-                android:foreground="@drawable/ripple_transparent"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.backup()}"
                 android:onLongClick="@{fragment::showName}"
                 />
@@ -68,7 +68,7 @@
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_save_as"
-                android:foreground="@drawable/ripple_transparent"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.saveAs()}"
                 android:onLongClick="@{fragment::showName}"
                 />
@@ -114,7 +114,7 @@
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_restore"
-                android:foreground="@drawable/ripple_transparent"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.restore()}"
                 android:onLongClick="@{fragment::showName}"
                 />
@@ -127,7 +127,7 @@
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_load_as"
-                android:foreground="@drawable/ripple_transparent"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.loadAs()}"
                 android:onLongClick="@{fragment::showName}"
                 />
@@ -161,7 +161,7 @@
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_clear_form"
-                android:foreground="@drawable/ripple_transparent"
+                android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> fragment.clear()}"
                 android:onLongClick="@{fragment::showName}"
                 />
