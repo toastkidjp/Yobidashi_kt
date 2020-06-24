@@ -177,11 +177,14 @@ class TabList private constructor() {
             }
 
             try {
-                val fromJson: TabList = Okio.buffer(Okio.source(tabsFile)).let {
-                    val from: TabList? = jsonAdapter.fromJson(it)
-                    it.close()
-                    return@let from
-                } ?: TabList()
+                val file = tabsFile
+                val fromJson: TabList =
+                        if (file == null) TabList() 
+                        else Okio.buffer(Okio.source(file)).let {
+                            val from: TabList? = jsonAdapter.fromJson(it)
+                            it.close()
+                            return@let from
+                        } ?: TabList()
 
                 loadTabsFromDir()
                         ?.forEach { it?.let { fromJson.add(it) } }
