@@ -49,7 +49,8 @@ class Bookmark : UrlItem {
     override fun urlString() = url
 
     override fun toString(): String {
-        return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', parent='$parent', folder=$folder, viewCount=$viewCount, lastViewed=$lastViewed)"
+        return "Bookmark(_id=$_id, title='$title', url='$url', favicon='$favicon', " +
+                "parent='$parent', folder=$folder, viewCount=$viewCount, lastViewed=$lastViewed)"
     }
 
     companion object {
