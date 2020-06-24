@@ -90,8 +90,10 @@ internal class LoadedAction (
         PreferenceApplier(context).backgroundImagePath = output.path
         val size = Rect()
         (context as? Activity)?.windowManager?.defaultDisplay?.getRectSize(size)
+        val fileOutputStream = FileOutputStream(output)
         BitmapScaling(image, size.width().toDouble(), size.height().toDouble())
-                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(output))
+                .compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        fileOutputStream.close()
     }
 
     /**

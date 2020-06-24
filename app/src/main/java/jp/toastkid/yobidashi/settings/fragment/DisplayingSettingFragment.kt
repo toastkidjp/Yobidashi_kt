@@ -101,6 +101,11 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        preferenceApplier.colorPair().applyReverseTo(binding.fab)
+    }
+
     fun applyDarkMode() {
         DarkModeApplier().invoke(preferenceApplier, binding.fabParent)
     }
@@ -130,10 +135,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
     private fun clearImages() {
         ClearImagesDialogFragment().also {
             it.setTargetFragment(this, IMAGE_READ_REQUEST)
-            it.show(
-                    requireFragmentManager(),
-                    ClearImagesDialogFragment::class.java.simpleName
-            )
+            it.show(parentFragmentManager, ClearImagesDialogFragment::class.java.simpleName)
         }
     }
 
@@ -168,11 +170,11 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.background_setting_menu, menu)
+        inflater.inflate(R.menu.background_setting_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item?.itemId) {
+        return when (item.itemId) {
             R.id.background_settings_toolbar_menu_add -> {
                 launchAdding()
                 true

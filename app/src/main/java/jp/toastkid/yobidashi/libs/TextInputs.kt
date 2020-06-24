@@ -58,12 +58,12 @@ object TextInputs  {
      */
     fun make(context: Context): TextInputLayout =
             TextInputLayout(context)
-                .apply {
-                    addView(
-                            EditText(context).apply {
-                                maxLines   = 1
-                                inputType  = InputType.TYPE_CLASS_TEXT
-                                imeOptions = EditorInfo.IME_ACTION_SEARCH
+                .also { layout ->
+                    layout.addView(
+                            EditText(context).also {
+                                it.maxLines   = 1
+                                it.inputType  = InputType.TYPE_CLASS_TEXT
+                                it.imeOptions = EditorInfo.IME_ACTION_SEARCH
                             },
                             0,
                             LAYOUT_PARAMS

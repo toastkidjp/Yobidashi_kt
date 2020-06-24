@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi.tab
 
 import android.content.Context
 import jp.toastkid.yobidashi.libs.storage.FilesDir
-import java.io.File
 
 /**
  * @author toastkidjp
@@ -22,15 +21,21 @@ class TabThumbnails(contextSupplier: () -> Context) {
 
     fun clean() = folder.clean()
 
-    fun delete(thumbnailPath: String?) {
-        if (thumbnailPath.isNullOrBlank()) {
+    fun delete(thumbnailName: String?) {
+        if (thumbnailName.isNullOrBlank()) {
             return
         }
 
-        val lastScreenshot = File(thumbnailPath)
+        val lastScreenshot = assignNewFile(thumbnailName)
         if (lastScreenshot.exists()) {
             lastScreenshot.delete()
         }
+    }
+
+    fun removeUnused(exceptionalTabIds: Collection<String>) {
+        folder.listFiles()
+                .filter { !exceptionalTabIds.contains(it.name) }
+                .forEach { it.delete() }
     }
 
     companion object {

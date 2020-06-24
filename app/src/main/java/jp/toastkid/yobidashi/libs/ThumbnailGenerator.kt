@@ -19,7 +19,7 @@ class ThumbnailGenerator {
 
     @UiThread
     operator fun invoke(view: View?): Bitmap? {
-        if (view == null) {
+        if (view == null || view.measuredWidth == 0 || view.measuredHeight == 0) {
             return null
         }
 

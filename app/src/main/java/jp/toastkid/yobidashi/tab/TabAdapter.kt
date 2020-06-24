@@ -1,19 +1,21 @@
 package jp.toastkid.yobidashi.tab
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
-import android.text.TextUtils
+import android.view.View
+import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.BitmapCompressor
+import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -24,7 +26,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.File
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 /**
  * ModuleAdapter of [Tab].
@@ -50,7 +53,7 @@ class TabAdapter(
 
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
-    private var headerViewModel: HeaderViewModel? = null
+    private var appBarViewModel: AppBarViewModel? = null
 
     private val bitmapCompressor = BitmapCompressor()
 
@@ -64,36 +67,29 @@ class TabAdapter(
         if (viewContext is MainActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
-            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+            appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
         }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            tabThumbnails.removeUnused(tabList.thumbnailNames())
+        }
     }
+
+    private val thumbnailGenerator = ThumbnailGenerator()
+
     /**
      * Save new thumbnail asynchronously.
      */
-    fun saveNewThumbnailAsync(makeDrawingCache: () -> Bitmap?) {
+    @UiThread
+    suspend fun saveNewThumbnail(view: View?) {
+        val bitmap = thumbnailGenerator(view) ?: return
+
         val currentTab = tabList.currentTab() ?: return
-        makeDrawingCache()?.let {
-            CoroutineScope(Dispatchers.Default).launch(disposables) {
-                val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
-                bitmapCompressor(it, file)
-            }
-        }
-    }
 
-    /**
-     * Delete thumbnail file.
-     *
-     * @param thumbnailPath file path.
-     */
-    fun deleteThumbnail(thumbnailPath: String?) {
-        if (TextUtils.isEmpty(thumbnailPath)) {
-            return
-        }
-
-        val lastScreenshot = File(thumbnailPath)
-        if (lastScreenshot.exists()) {
-            lastScreenshot.delete()
+        withContext(Dispatchers.Default) {
+            val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
+            bitmapCompressor(bitmap, file)
         }
     }
 
@@ -192,6 +188,7 @@ class TabAdapter(
         val tab = tabList.get(index)
         if (tab is WebTab) {
             autoArchive.delete(IdGenerator().from(tab.getUrl()))
+            GlobalWebViewPool.remove(tab.id())
         }
 
         tabList.closeTab(index)

@@ -72,7 +72,7 @@ object IntentFactory {
      */
     fun authorsApp(): Intent =
             Intent(Intent.ACTION_VIEW)
-                    .apply { data = Uri.parse("market://search?q=pub:toastkidjp") }
+                    .also { it.data = Uri.parse("market://search?q=pub:toastkidjp") }
 
     /**
      * Share image uri.

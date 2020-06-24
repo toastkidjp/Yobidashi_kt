@@ -28,10 +28,7 @@ internal class WebViewFactory {
      * Use for only extract anchor URL.
      */
     private val handler = Handler(Handler.Callback { message ->
-        message.data?.let { bundle ->
-            longTapItemHolder.title = bundle.get("title")?.toString() ?: ""
-            longTapItemHolder.anchor = bundle.get("url")?.toString() ?: ""
-        }
+        message.data?.let(longTapItemHolder::extract)
         true
     })
 
@@ -66,7 +63,11 @@ internal class WebViewFactory {
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (context is FragmentActivity) {
                         if (TextUtils.isEmpty(longTapItemHolder.anchor)) {
-                            handler.postDelayed({ showImageAnchorDialog(url, context) }, 300L)
+                            handler.postDelayed({
+                                showImageAnchorDialog(url, context)
+                                longTapItemHolder.reset()
+                            }, 300L)
+
                             return@setOnLongClickListener true
                         }
                         showImageAnchorDialog(url, context)

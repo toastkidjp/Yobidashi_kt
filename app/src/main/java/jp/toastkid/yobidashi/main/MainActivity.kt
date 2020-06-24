@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -50,6 +51,7 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
+import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
 import jp.toastkid.yobidashi.main.content.ContentViewModel
@@ -79,7 +81,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 
@@ -138,8 +139,6 @@ class MainActivity : AppCompatActivity(),
      */
     private var runtimePermissions: RuntimePermissions? = null
 
-    private val thumbnailGenerator = ThumbnailGenerator()
-
     /**
      * Preferences wrapper.
      */
@@ -161,14 +160,6 @@ class MainActivity : AppCompatActivity(),
         runtimePermissions = RuntimePermissions(this)
 
         val colorPair = preferenceApplier.colorPair()
-
-        searchWithClip = SearchWithClip(
-                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
-                binding.content,
-                colorPair,
-                browserViewModel
-        )
-        searchWithClip.invoke()
 
         pageSearchPresenter = PageSearcherModule(binding.sip)
 
@@ -205,6 +196,8 @@ class MainActivity : AppCompatActivity(),
                     preferenceApplier.colorPair()
             )
         })
+
+        invokeSearchWithClip(colorPair)
 
         activityViewModelProvider.get(LoadingViewModel::class.java)
                 .onPageFinished
@@ -249,17 +242,32 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+    private fun invokeSearchWithClip(colorPair: ColorPair) {
+        searchWithClip = SearchWithClip(
+                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
+                binding.content,
+                colorPair,
+                browserViewModel
+        )
+        searchWithClip.invoke()
+    }
+
     private fun obtainFragment(fragmentClass: Class<out Fragment>) =
             supportFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
                     ?: fragmentClass.newInstance()
 
     private fun initializeHeaderViewModel() {
-        val headerViewModel = ViewModelProvider(this).get(HeaderViewModel::class.java)
+        val headerViewModel = ViewModelProvider(this).get(AppBarViewModel::class.java)
         headerViewModel.content.observe(this, Observer { view ->
             if (view == null) {
                 return@Observer
             }
             binding.toolbarContent.removeAllViews()
+
+            if (view.parent != null) {
+                (view.parent as? ViewGroup)?.removeAllViews()
+            }
+
             binding.toolbar.layoutParams.height = view.layoutParams.height
             binding.toolbarContent.addView(view, 0)
         })
@@ -471,9 +479,11 @@ class MainActivity : AppCompatActivity(),
                         obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
                 editorFragment.arguments = bundleOf("path" to currentTab.path)
                 replaceFragment(editorFragment, withAnimation)
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    editorFragment.reload()
-                    refreshThumbnail()
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread {
+                        editorFragment.reload()
+                        refreshThumbnail()
+                    }
                 }
             }
             is PdfTab -> {
@@ -512,11 +522,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun refreshThumbnail() {
-        val findFragment = findFragment()
-        if (findFragment !is TabUiFragment) {
-            return
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val findFragment = findFragment()
+            if (findFragment !is TabUiFragment) {
+                return@launch
+            }
+            tabs.saveNewThumbnail(binding.content)
         }
-        tabs.saveNewThumbnailAsync { thumbnailGenerator(binding.content) }
     }
 
     override fun onBackPressed() {
@@ -532,6 +544,11 @@ class MainActivity : AppCompatActivity(),
 
         if (pageSearchPresenter.isVisible()) {
             pageSearchPresenter.hide()
+            return
+        }
+
+        if (floatingPreview?.isVisible() == true) {
+            floatingPreview?.hide()
             return
         }
 
@@ -574,6 +591,7 @@ class MainActivity : AppCompatActivity(),
         super.onResume()
         refresh()
         menuViewModel?.onResume()
+        floatingPreview?.onResume()
 
         tabs.setCount()
     }
@@ -849,6 +867,11 @@ class MainActivity : AppCompatActivity(),
                 VoiceSearch.processResult(this, data)
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        floatingPreview?.onPause()
     }
 
     override fun onStop() {

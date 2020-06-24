@@ -51,7 +51,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
@@ -93,8 +93,6 @@ class BrowserModule(
 
     private val autoArchive = AutoArchive.make(context)
 
-    private var headerViewModel: HeaderViewModel? = null
-
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
 
     private var loadingViewModel: LoadingViewModel? = null
@@ -131,7 +129,6 @@ class BrowserModule(
 
         if (context is MainActivity) {
             val viewModelProvider = ViewModelProvider(context)
-            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
@@ -142,7 +139,7 @@ class BrowserModule(
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            headerViewModel?.updateProgress(0)
+            browserHeaderViewModel?.updateProgress(0)
             isLoadFinished = false
 
             rssAddingSuggestion(view, url)
@@ -158,8 +155,8 @@ class BrowserModule(
 
             loadingViewModel?.finished(lastId, History.make(title, urlStr))
 
-            headerViewModel?.updateProgress(100)
-            headerViewModel?.stopProgress(true)
+            browserHeaderViewModel?.updateProgress(100)
+            browserHeaderViewModel?.stopProgress(true)
 
             try {
                 if (view == currentView()) {
@@ -188,8 +185,8 @@ class BrowserModule(
         override fun onReceivedError(
                 view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
-            headerViewModel?.updateProgress(100)
-            headerViewModel?.stopProgress(true)
+            browserHeaderViewModel?.updateProgress(100)
+            browserHeaderViewModel?.stopProgress(true)
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
@@ -275,8 +272,8 @@ class BrowserModule(
         override fun onProgressChanged(view: WebView, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
 
-            headerViewModel?.updateProgress(newProgress)
-            headerViewModel?.stopProgress(newProgress < 65)
+            browserHeaderViewModel?.updateProgress(newProgress)
+            browserHeaderViewModel?.stopProgress(newProgress < 65)
 
             if (isLoadFinished) {
                 return
@@ -396,7 +393,7 @@ class BrowserModule(
             val activity = webViewContainer?.context
             if (activity is FragmentActivity
                     && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
-                ViewModelProvider(activity).get(HeaderViewModel::class.java).show()
+                ViewModelProvider(activity).get(AppBarViewModel::class.java).show()
             }
         }
 
@@ -610,16 +607,8 @@ class BrowserModule(
         return webView
     }
 
-    /**
-     * Detach [WebView] with tab ID.
-     *
-     * @param tabId Tab's ID.
-     */
-    fun detachWebView(tabId: String?) = GlobalWebViewPool.remove(tabId)
-
-    fun onSaveInstanceState(id: String) {
-        val webView = currentView() ?: return
-        StateRepository(context.filesDir).save(id, webView)
+    fun onSaveInstanceState(outState: Bundle) {
+        currentView()?.saveState(outState)
     }
 
     fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->

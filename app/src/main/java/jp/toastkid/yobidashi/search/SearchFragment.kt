@@ -46,7 +46,7 @@ import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
@@ -120,7 +120,7 @@ class SearchFragment : Fragment() {
 
     private var contentViewModel: ContentViewModel? = null
 
-    private var headerViewModel: HeaderViewModel? = null
+    private var appBarViewModel: AppBarViewModel? = null
 
     private var headerBinding: AppBarSearchBinding? = null
 
@@ -200,7 +200,7 @@ class SearchFragment : Fragment() {
 
         activity?.also {
             val activityViewModelProvider = ViewModelProvider(it)
-            headerViewModel = activityViewModelProvider.get(HeaderViewModel::class.java)
+            appBarViewModel = activityViewModelProvider.get(AppBarViewModel::class.java)
             contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
         }
 
@@ -316,7 +316,7 @@ class SearchFragment : Fragment() {
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
         val headerView = headerBinding?.root ?: return
-        headerViewModel?.replace(headerView)
+        appBarViewModel?.replace(headerView)
 
         showKeyboard()
     }

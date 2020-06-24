@@ -3,87 +3,92 @@
     <data>
         <variable name="preview" type="jp.toastkid.yobidashi.browser.floating.FloatingPreview" />
     </data>
-    <FrameLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/preview_background"
+        android:id="@+id/content_panel"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/darkgray_scale"
-        android:onClick="@{view -> preview.hide()}"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        tools:ignore="UselessParent"
         >
-        <LinearLayout
-            android:id="@+id/content_panel"
-            android:orientation="vertical"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_gravity="bottom"
-            tools:ignore="UselessParent"
+            android:layout_height="@dimen/floating_preview_header_height"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp"
+            android:onClick="@{view -> preview.openCurrentWithNewTab()}"
             >
-            <androidx.cardview.widget.CardView
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/floating_preview_header_height"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="2dp"
-                android:onClick="@{view -> preview.openCurrentWithNewTab()}"
-                >
-                <ImageView
-                    android:id="@+id/icon"
-                    android:layout_width="@dimen/floating_preview_header_height"
-                    android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:scaleType="centerInside"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/image"
-                    />
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="52dp"
-                    android:layout_marginStart="52dp"
-                    >
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="match_parent"
-                        android:layout_height="24dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:gravity="center_vertical"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        tools:text="Title JAPAN"
-                        />
-                    <TextView
-                        android:id="@+id/url"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:gravity="center_vertical"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        tools:text="https://www.title.co.jp"
-                        />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:visibility="gone"
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/floating_preview_header_height"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/image"
                 />
-            <FrameLayout
-                android:id="@+id/preview_container"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/darkgray_scale"
+                android:layout_marginLeft="52dp"
+                android:layout_marginStart="52dp"
+                android:layout_marginRight="52dp"
+                android:layout_marginEnd="52dp"
+                >
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Title JAPAN"
+                    />
+                <TextView
+                    android:id="@+id/url"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="https://www.title.co.jp"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="@dimen/floating_preview_header_height"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/ic_close_black"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/close"
+                android:onClick="@{view -> preview.hide()}"
+                android:background="@drawable/ripple_transparent"
                 />
-        </LinearLayout>
-    </FrameLayout>
+        </androidx.cardview.widget.CardView>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:visibility="gone"
+            />
+        <FrameLayout
+            android:id="@+id/preview_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/darkgray_scale"
+            />
+    </LinearLayout>
 </layout>

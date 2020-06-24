@@ -56,7 +56,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.main.HeaderViewModel
+import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
@@ -119,7 +119,7 @@ class EditorFragment :
 
     private lateinit var runtimePermissions: RuntimePermissions
 
-    private var headerViewModel: HeaderViewModel? = null
+    private var appBarViewModel: AppBarViewModel? = null
 
     private var tabListViewModel: TabListViewModel? = null
 
@@ -276,7 +276,7 @@ class EditorFragment :
 
         activity?.let { activity ->
             val viewModelProvider = ViewModelProvider(activity)
-            headerViewModel = viewModelProvider.get(HeaderViewModel::class.java)
+            appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
 
             tabListViewModel
@@ -321,7 +321,7 @@ class EditorFragment :
         super.onResume()
         applySettings()
         val view = menuBinding.root
-        headerViewModel?.replace(view)
+        appBarViewModel?.replace(view)
     }
 
     override fun onPause() {

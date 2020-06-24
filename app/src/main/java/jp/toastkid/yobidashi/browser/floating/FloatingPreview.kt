@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.browser.floating
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
@@ -20,7 +21,6 @@ import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.core.view.isEmpty
@@ -35,6 +35,7 @@ import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.media.music.popup.SlidingTouchListener
 
 /**
  * Floating preview.
@@ -46,6 +47,15 @@ class FloatingPreview(context: Context) {
     private val popupWindow = PopupWindow(context)
 
     private val webView = WebView(context)
+
+    private val resources = context.resources
+
+    private val heightPixels = resources.displayMetrics.heightPixels
+
+    private val headerHeight =
+            resources.getDimensionPixelSize(R.dimen.floating_preview_header_height)
+
+    private val swipeLimit = heightPixels - (headerHeight / 2)
 
     private val binding: PopupFloatingPreviewBinding
 
@@ -79,7 +89,7 @@ class FloatingPreview(context: Context) {
             viewModel?.progress?.observe(context, Observer(::setNewProgress))
         }
 
-        popupWindow.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.transparent)))
+        popupWindow.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         popupWindow.setOnDismissListener {
             extractWebView()?.also {
@@ -88,13 +98,32 @@ class FloatingPreview(context: Context) {
             }
         }
 
-        popupWindow.isOutsideTouchable = true
-        popupWindow.isFocusable = true
-
         popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
-        popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
+        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        popupWindow.isClippingEnabled = false
+        popupWindow.isOutsideTouchable = false
+
+        popupWindow.animationStyle = R.style.PopupWindowVisibilityAnimation
 
         WebViewInitializer()(webView)
+
+        setSlidingListener()
+
+        onResume()
+    }
+
+    fun onResume() {
+        binding.progress.progressDrawable.colorFilter =
+                PorterDuffColorFilter(
+                        PreferenceApplier(binding.root.context).fontColor,
+                        PorterDuff.Mode.SRC_IN
+                )
+        webView.onResume()
+    }
+
+    fun onPause() {
+        webView.onPause()
     }
 
     /**
@@ -104,14 +133,6 @@ class FloatingPreview(context: Context) {
      * @param url URL string
      */
     fun show(parent: View, url: String) {
-        setSlidingListener()
-
-        binding.progress.progressDrawable.colorFilter =
-                PorterDuffColorFilter(
-                        PreferenceApplier(binding.root.context).fontColor,
-                        PorterDuff.Mode.SRC_IN
-                )
-
         binding.icon.setImageBitmap(null)
 
         darkModeApplier(webView, PreferenceApplier(webView.context).useDarkMode())
@@ -120,23 +141,7 @@ class FloatingPreview(context: Context) {
 
         webView.loadUrl(url)
 
-        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
-
-        startEnterAnimation()
-    }
-
-    private fun startEnterAnimation() {
-        val heightPixels = binding.contentPanel.context.resources.displayMetrics.heightPixels
-
-        binding.contentPanel.animate()
-                .y(heightPixels.toFloat())
-                .setDuration(0)
-                .start()
-
-        binding.contentPanel.animate()
-                .y(heightPixels * 0.6f)
-                .setDuration(DURATION_MS)
-                .start()
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
     }
 
     /**
@@ -156,7 +161,16 @@ class FloatingPreview(context: Context) {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        binding.header.setOnTouchListener(SlidingTouchListener(binding.contentPanel))
+        val slidingTouchListener = SlidingTouchListener(binding.contentPanel)
+        slidingTouchListener.setCallback(object : SlidingTouchListener.OnNewPosition {
+            override fun onNewPosition(x: Float, y: Float) {
+                if (y > swipeLimit) {
+                    return
+                }
+                popupWindow.update(-1, -(y.toInt() - headerHeight), -1, -1)
+            }
+        })
+        binding.header.setOnTouchListener(slidingTouchListener)
     }
 
     /**
@@ -212,8 +226,5 @@ class FloatingPreview(context: Context) {
         @LayoutRes
         private val LAYOUT_ID = R.layout.popup_floating_preview
 
-        private const val DURATION_MS = 200L
-
-        private const val SPECIAL_WEB_VIEW_ID = "preview"
     }
 }

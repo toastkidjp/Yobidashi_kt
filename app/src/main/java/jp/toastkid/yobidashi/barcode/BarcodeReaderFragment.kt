@@ -246,11 +246,13 @@ class BarcodeReaderFragment : Fragment() {
                 )
 
                 sourceData?.cropRect = getRect()
+                val fileOutputStream = FileOutputStream(output)
                 sourceData?.bitmap?.compress(
                         Bitmap.CompressFormat.PNG,
                         100,
-                        FileOutputStream(output)
+                        fileOutputStream
                 )
+                fileOutputStream.close()
 
                 contentViewModel?.snackShort("Camera saved: ${output.absolutePath}")
             }
