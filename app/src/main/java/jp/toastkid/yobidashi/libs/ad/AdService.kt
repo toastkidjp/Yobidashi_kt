@@ -15,9 +15,9 @@ import jp.toastkid.yobidashi.main.AppBarViewModel
 /**
  * @author toastkidjp
  */
-class AdService(contextSupplier: () -> Context) {
+class AdService(adViewFactory: AdViewFactory, context: Context) {
 
-    private var adView = AdViewFactory()(contextSupplier())
+    private var adView = adViewFactory(context)
 
     init {
         adView.adSize = AdSize.LARGE_BANNER
