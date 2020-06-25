@@ -61,8 +61,10 @@ class MenuUseCase(
 
     init {
         val activity = activitySupplier()
-        menuViewModel?.click?.observe(activity, Observer {
-            onMenuClick(it)
+        menuViewModel?.click?.observe(activity, Observer { event ->
+            event.getContentIfNotHandled()?.let {
+                onMenuClick(it)
+            }
         })
 
         menuViewModel?.longClick?.observe(activity, Observer {

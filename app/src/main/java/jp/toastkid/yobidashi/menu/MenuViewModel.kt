@@ -10,18 +10,19 @@ package jp.toastkid.yobidashi.menu
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.yobidashi.libs.lifecycle.Event
 
 /**
  * @author toastkidjp
  */
 class MenuViewModel : ViewModel() {
 
-    private val _click = MutableLiveData<Menu>()
+    private val _click = MutableLiveData<Event<Menu>>()
 
-    val click: LiveData<Menu> = _click
+    val click: LiveData<Event<Menu>> = _click
 
     fun click(menu: Menu) {
-        _click.postValue(menu)
+        _click.value = Event(menu)
     }
 
     private val _longClick = MutableLiveData<Menu>()
