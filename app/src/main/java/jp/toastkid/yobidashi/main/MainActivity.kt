@@ -310,6 +310,10 @@ class MainActivity : AppCompatActivity(),
             (findFragment() as? ContentScrollable)?.toBottom()
         })
         contentViewModel?.share?.observe(this, Observer {
+            if (it.hasBeenHandled) {
+                return@Observer
+            }
+            it.getContentIfNotHandled()
             (findFragment() as? CommonFragmentAction)?.share()
         })
         contentViewModel?.webSearch?.observe(this, Observer {
