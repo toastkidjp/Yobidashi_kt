@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.search.suggestion
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.widget.EditText
 import androidx.core.view.isVisible
@@ -78,6 +79,7 @@ class SuggestionModule(
         initializeSearchSuggestionList(layoutManager, onClick)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initializeSearchSuggestionList(
             layoutManager: FlexboxLayoutManager,
             onClick: () -> Unit
