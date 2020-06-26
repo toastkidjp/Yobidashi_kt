@@ -21,7 +21,7 @@ class ListHeadAdderTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         val text = mockk<Editable>()
         every { text.subSequence(any(), any()) }.returns("tomato")
         every { text.replace(any(), any(), any<String>()) }.returns(mockk())
