@@ -111,11 +111,11 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.rss_reader, menu)
+        inflater.inflate(R.menu.rss_reader, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item?.itemId == R.id.action_rss_setting) {
+        if (item.itemId == R.id.action_rss_setting) {
             ViewModelProvider(requireActivity())
                     .get(ContentViewModel::class.java)
                     .nextFragment(RssSettingFragment::class.java)
