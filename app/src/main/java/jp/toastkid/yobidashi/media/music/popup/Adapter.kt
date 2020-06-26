@@ -44,7 +44,7 @@ class Adapter(
 
         val placeholder = ContextCompat.getDrawable(binding.root.context, R.drawable.ic_music)
         if (placeholder != null) {
-            DrawableCompat.setTint(placeholder, preferenceApplier.colorPair().bgColor())
+            DrawableCompat.setTint(placeholder, preferenceApplier.color)
         }
 
         return ViewHolder(binding, placeholder)
