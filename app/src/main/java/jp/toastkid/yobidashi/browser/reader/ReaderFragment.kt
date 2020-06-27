@@ -27,6 +27,7 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.view.TextViewHighlighter
 
 /**
  * @author toastkidjp

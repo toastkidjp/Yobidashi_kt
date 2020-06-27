@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.browser.reader
+package jp.toastkid.lib.view
 
 import android.text.Spannable
 import android.text.SpannableString

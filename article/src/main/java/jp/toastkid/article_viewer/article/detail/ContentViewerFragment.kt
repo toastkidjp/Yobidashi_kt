@@ -20,6 +20,7 @@ import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
+import jp.toastkid.lib.view.TextViewHighlighter
 
 /**
  * @author toastkidjp
@@ -29,6 +30,8 @@ class ContentViewerFragment : Fragment(), SearchFunction {
     private lateinit var binding: FragmentContentBinding
 
     private lateinit var appBarBinding: AppBarArticleListBinding
+
+    private lateinit var textViewHighlighter: TextViewHighlighter
 
     private var progressCallback: ProgressCallback? = null
 
@@ -44,6 +47,7 @@ class ContentViewerFragment : Fragment(), SearchFunction {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
+        textViewHighlighter = TextViewHighlighter(binding.content)
         return binding.root
     }
 
@@ -57,7 +61,7 @@ class ContentViewerFragment : Fragment(), SearchFunction {
     }
 
     override fun search(keyword: String?) {
-        TextViewHighlighter(binding.content, keyword.toString())
+        textViewHighlighter(keyword.toString())
     }
 
     override fun filter(keyword: String?) = Unit
