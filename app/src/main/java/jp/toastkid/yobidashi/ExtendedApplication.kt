@@ -1,10 +1,10 @@
 package jp.toastkid.yobidashi
 
 import android.app.Application
-import android.os.Build
 import android.webkit.WebView
+import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
@@ -29,6 +29,7 @@ class ExtendedApplication : Application() {
         }
 
         val preferenceApplier = PreferenceApplier(this)
+        preferenceApplier.color = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
         CoroutineScope(Dispatchers.Default).launch {
             processForFirstLaunch(preferenceApplier)

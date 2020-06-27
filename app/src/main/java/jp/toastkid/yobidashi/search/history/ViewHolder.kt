@@ -8,7 +8,7 @@ import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
-import jp.toastkid.yobidashi.libs.view.SwipeViewHolder
+import jp.toastkid.lib.view.SwipeViewHolder
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchInsertion
 
 /**

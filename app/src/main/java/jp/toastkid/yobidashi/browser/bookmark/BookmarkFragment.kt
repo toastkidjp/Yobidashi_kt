@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -27,11 +26,11 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -192,7 +191,8 @@ class BookmarkFragment: Fragment(),
                     RuntimePermissions(requireActivity())
                             .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             ?.receiveAsFlow()
-                            ?.collect { permissionResult ->
+                            ?.collect {
+                                permissionResult ->
                                 if (!permissionResult.granted) {
                                     contentViewModel?.snackShort(R.string.message_requires_permission_storage)
                                     return@collect

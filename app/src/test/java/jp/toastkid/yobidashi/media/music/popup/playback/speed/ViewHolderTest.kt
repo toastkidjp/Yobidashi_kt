@@ -4,7 +4,7 @@ import android.widget.TextView
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.lib.preference.ColorPair
 import org.junit.Test
 
 /**

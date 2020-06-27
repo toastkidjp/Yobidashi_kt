@@ -15,8 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.libs.HtmlCompat
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.ContentViewModel
 
 /**
  * @author toastkidjp

@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingImageExcludingBinding
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.RightSwipeActionAttachment
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RightSwipeActionAttachment
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragmentViewModel
 
 /**

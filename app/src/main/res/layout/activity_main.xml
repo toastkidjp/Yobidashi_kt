@@ -57,7 +57,7 @@
                 app:hideOnScroll="true"
                 app:layout_scrollFlags="scroll|enterAlways"
                 style="@style/Widget.MaterialComponents.BottomAppBar"
-                app:layout_behavior="jp.toastkid.yobidashi.libs.view.BottomNavigationBehavior"
+                app:layout_behavior="jp.toastkid.lib.view.BottomNavigationBehavior"
                 >
                 <FrameLayout
                     android:id="@+id/toolbar_content"
@@ -77,7 +77,7 @@
                 app:rippleColor="@color/aw_ripple"
                 android:clickable="true"
                 android:focusable="true"
-                app:layout_behavior="jp.toastkid.yobidashi.libs.view.HidingFloatingActionButtonBehavior"
+                app:layout_behavior="jp.toastkid.lib.view.HidingFloatingActionButtonBehavior"
                 />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

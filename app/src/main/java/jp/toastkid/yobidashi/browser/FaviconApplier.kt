@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.lib.storage.FilesDir
 import java.io.File
 
 /**

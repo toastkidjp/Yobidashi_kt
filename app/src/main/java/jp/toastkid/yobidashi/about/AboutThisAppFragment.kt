@@ -16,8 +16,8 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.ContentScrollable
 
 /**
  * About this app.

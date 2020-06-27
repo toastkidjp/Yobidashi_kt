@@ -8,7 +8,8 @@
 package jp.toastkid.yobidashi.settings
 
 import androidx.annotation.ColorInt
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import androidx.core.content.ContextCompat
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -34,14 +35,14 @@ data class Theme(
     }
 
     companion object {
-        fun extract(preferenceApplier: PreferenceApplier): Theme {
+        fun extract(preferenceApplier: PreferenceApplier, substituteCursorColor: Int, substituteHilightColor: Int): Theme {
             return Theme(
                     preferenceApplier.color,
                     preferenceApplier.fontColor,
                     preferenceApplier.editorBackgroundColor(),
                     preferenceApplier.editorFontColor(),
-                    preferenceApplier.editorCursorColor(),
-                    preferenceApplier.editorHighlightColor(),
+                    preferenceApplier.editorCursorColor(substituteCursorColor),
+                    preferenceApplier.editorHighlightColor(substituteHilightColor),
                     preferenceApplier.useDarkMode()
             )
         }

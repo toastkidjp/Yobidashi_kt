@@ -22,7 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -85,7 +85,7 @@ class ColorFilterSettingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val filterColor = preferenceApplier.filterColor()
+        val filterColor = preferenceApplier.filterColor(ContextCompat.getColor(binding.root.context, R.color.default_color_filter))
         binding.sample.setBackgroundColor(filterColor)
         binding.alpha.progress = Color.alpha(filterColor)
         binding.useColorFilterCheck.let {

@@ -8,7 +8,7 @@
 package jp.toastkid.yobidashi.rss.extractor
 
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import okhttp3.Request
 import okhttp3.Response

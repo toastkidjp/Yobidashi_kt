@@ -44,10 +44,10 @@ import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.AppBarViewModel
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
@@ -153,7 +153,7 @@ class SearchFragment : Fragment() {
             it.adapter = SearchCategoryAdapter(context)
             val index = SearchCategory.findIndex(
                     SearchCategory.findByHostOrNull(currentUrl?.toUri()?.host)?.name
-                            ?: PreferenceApplier(context).getDefaultSearchEngine()
+                            ?: PreferenceApplier(context).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
             )
             it.setSelection(index)
         }

@@ -8,7 +8,7 @@
 package jp.toastkid.yobidashi.tab
 
 import android.content.Context
-import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.lib.storage.FilesDir
 
 /**
  * @author toastkidjp

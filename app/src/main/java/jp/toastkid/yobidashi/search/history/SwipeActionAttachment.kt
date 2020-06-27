@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.search.history
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.libs.view.SwipeViewHolder
+import jp.toastkid.lib.view.SwipeViewHolder
 
 /**
  * @author toastkidjp

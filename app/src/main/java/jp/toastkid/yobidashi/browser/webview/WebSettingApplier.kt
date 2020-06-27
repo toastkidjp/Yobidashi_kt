@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.browser.webview
 import android.os.Build
 import android.webkit.WebSettings
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp

@@ -19,8 +19,8 @@ import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

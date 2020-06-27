@@ -21,8 +21,8 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.ad.AdService
 import jp.toastkid.yobidashi.libs.ad.AdViewFactory
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.AppBarViewModel
 
 /**
  * @author toastkidjp

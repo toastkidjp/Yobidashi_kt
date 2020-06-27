@@ -8,7 +8,7 @@
 package jp.toastkid.yobidashi.browser.archive
 
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 
 /**
  * @author toastkidjp

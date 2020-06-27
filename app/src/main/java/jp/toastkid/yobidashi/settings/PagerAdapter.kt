@@ -35,10 +35,8 @@ class PagerAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragme
     private fun obtainFragment(fragmentClass: Class<out Fragment>): Fragment {
         val f = fragment.childFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
         if (f != null) {
-            Timber.i("tomato found ${fragmentClass.canonicalName}")
             return f
         }
-        Timber.i("tomato new ${fragmentClass.canonicalName}")
         return fragmentClass.newInstance()
     }
 

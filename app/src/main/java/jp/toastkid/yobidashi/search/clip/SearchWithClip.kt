@@ -7,10 +7,11 @@ import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.UrlFactory
 
 /**
@@ -94,7 +95,7 @@ class SearchWithClip(
 
         val url =
                 if (Urls.isValidUrl(query)) query
-                else UrlFactory()(context, PreferenceApplier(context).getDefaultSearchEngine(), query).toString()
+                else UrlFactory()(context, PreferenceApplier(context).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(), query).toString()
         browserViewModel?.preview(url.toUri())
     }
 

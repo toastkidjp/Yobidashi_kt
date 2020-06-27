@@ -4,7 +4,7 @@ import android.view.View
 import android.webkit.WebView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import java.io.File
 
 /**

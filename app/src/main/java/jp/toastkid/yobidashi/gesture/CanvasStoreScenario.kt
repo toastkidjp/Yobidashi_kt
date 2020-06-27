@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
-import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.storage.ExternalFileAssignment
+import jp.toastkid.lib.ContentViewModel
 
 /**
  * @author toastkidjp

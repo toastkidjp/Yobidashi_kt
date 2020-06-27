@@ -11,8 +11,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
@@ -25,10 +23,10 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
-import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -39,20 +37,19 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
-import jp.toastkid.yobidashi.libs.FileExtractorFromUri
+import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
-import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
-import jp.toastkid.yobidashi.libs.view.TextViewColorApplier
-import jp.toastkid.yobidashi.main.AppBarViewModel
-import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.lib.storage.ExternalFileAssignment
+import jp.toastkid.lib.view.TextViewColorApplier
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.yobidashi.main.TabUiFragment
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import okio.Okio
 import java.io.File
@@ -254,8 +251,8 @@ class EditorFragment :
         binding.editorInput.setTextColor(preferenceApplier.editorFontColor())
         binding.editorInput.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
 
-        CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor())
-        binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor()
+        CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor(ContextCompat.getColor(binding.root.context, R.color.colorAccent)))
+        binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor(ContextCompat.getColor(binding.root.context, R.color.light_blue_200_dd))
     }
 
     /**

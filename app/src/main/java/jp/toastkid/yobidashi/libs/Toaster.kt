@@ -6,7 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
-import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.lib.preference.ColorPair
 
 /**
  * Simple toasting utilities.

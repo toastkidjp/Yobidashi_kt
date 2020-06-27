@@ -23,10 +23,10 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
-import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.lib.ContentScrollable
 
 /**
  * @author toastkidjp

@@ -16,9 +16,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserViewModel
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.UrlFactory
 
 /**
@@ -193,7 +193,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             context?.let {
                 val url = urlFactory(
                         it,
-                        PreferenceApplier(it).getDefaultSearchEngine(),
+                        PreferenceApplier(it).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(),
                         word
                 ).toString()
 
@@ -210,7 +210,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             context?.let {
                 val url = urlFactory(
                         it,
-                        PreferenceApplier(it).getDefaultSearchEngine(),
+                        PreferenceApplier(it).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(),
                         word
                 ).toString()
 

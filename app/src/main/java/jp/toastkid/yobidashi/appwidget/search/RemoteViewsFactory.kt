@@ -5,7 +5,7 @@ import android.widget.RemoteViews
 import androidx.annotation.ColorInt
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.intent.PendingIntentFactory
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * App Widget's RemoteViews factory.

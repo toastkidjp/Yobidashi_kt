@@ -36,12 +36,13 @@ import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
-import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.storage.ExternalFileAssignment
+import jp.toastkid.lib.view.DraggableTouchListener
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.SearchCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -116,7 +117,7 @@ class BarcodeReaderFragment : Fragment() {
             it.open.observe(viewLifecycleOwner, Observer { text ->
                 SearchAction(
                         requireActivity,
-                        preferenceApplier.getDefaultSearchEngine(),
+                        preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(),
                         text
                 ).invoke()
                 activity?.supportFragmentManager?.popBackStack()

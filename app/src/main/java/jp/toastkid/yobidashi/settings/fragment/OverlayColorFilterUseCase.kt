@@ -9,9 +9,10 @@ package jp.toastkid.yobidashi.settings.fragment
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -65,14 +66,14 @@ class OverlayColorFilterUseCase(
     }
 
     fun setAlpha(alpha: Int) {
-        setNewColor(alpha, preferenceApplier.filterColor())
+        setNewColor(alpha, preferenceApplier.filterColor(Color.TRANSPARENT))
     }
 
     fun setDefault() {
         setNewColor(DEFAULT_ALPHA, yellowBase)
     }
 
-    private fun currentAlpha(): Int = Color.alpha(preferenceApplier.filterColor())
+    private fun currentAlpha(): Int = Color.alpha(preferenceApplier.filterColor(Color.TRANSPARENT))
 
     private fun setNewColor(alpha: Int, @ColorInt newBaseColor: Int) {
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)

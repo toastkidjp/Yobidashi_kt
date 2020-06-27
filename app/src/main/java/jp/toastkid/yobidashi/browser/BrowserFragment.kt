@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser
 
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -29,14 +28,13 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
-import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.yobidashi.main.TabUiFragment
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.SearchQueryExtractor
@@ -409,7 +407,7 @@ class BrowserFragment : Fragment(),
     }
 
     private fun switchToolbarVisibility() {
-        when (preferenceApplier.browserScreenMode()) {
+        when (ScreenMode.find(preferenceApplier.browserScreenMode())) {
             ScreenMode.FULL_SCREEN -> appBarViewModel?.hide()
             ScreenMode.EXPANDABLE, ScreenMode.FIXED -> appBarViewModel?.show()
         }

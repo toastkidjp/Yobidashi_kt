@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 
@@ -47,7 +47,7 @@ class SearchSettingFragment : Fragment() {
 
         binding.searchCategories.adapter = SearchCategoryAdapter(activityContext)
         val index = SearchCategory.findIndex(
-                PreferenceApplier(activityContext).getDefaultSearchEngine()
+                PreferenceApplier(activityContext).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
         )
         binding.searchCategories.setSelection(index)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
