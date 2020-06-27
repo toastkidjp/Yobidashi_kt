@@ -39,7 +39,6 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
-import jp.toastkid.article_viewer.common.FragmentControl
 import jp.toastkid.article_viewer.common.ProgressCallback
 import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
@@ -48,7 +47,6 @@ import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.article_viewer.zip.ZipLoaderService
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
@@ -103,11 +101,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
      */
     private lateinit var progressCallback: ProgressCallback
 
-    /**
-     * Use for switching fragment.
-     */
-    private var fragmentControl: FragmentControl? = null
-
     private val tokenizer = NgramTokenizer()
 
     /**
@@ -126,10 +119,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
                 progressBroadcastReceiver,
                 ZipLoaderService.makeProgressBroadcastIntentFilter()
         )
-
-        if (context is FragmentControl) {
-            fragmentControl = context
-        }
 
         retainInstance = true
     }
