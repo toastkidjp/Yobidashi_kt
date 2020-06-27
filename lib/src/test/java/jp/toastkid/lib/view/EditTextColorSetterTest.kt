@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.lib.view
 
 import android.graphics.Color
 import android.widget.EditText
@@ -6,6 +6,7 @@ import androidx.core.graphics.ColorUtils
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import jp.toastkid.lib.view.EditTextColorSetter
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

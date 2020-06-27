@@ -41,7 +41,7 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
-import jp.toastkid.yobidashi.libs.EditTextColorSetter
+import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.lib.preference.ColorPair

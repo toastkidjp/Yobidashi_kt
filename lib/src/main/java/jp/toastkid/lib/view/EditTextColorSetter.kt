@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.libs
+package jp.toastkid.lib.view
 
 import android.widget.EditText
 import androidx.annotation.ColorInt
