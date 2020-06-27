@@ -252,10 +252,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
     }
 
     override fun filter(keyword: String?) {
-        /*if (!preferencesWrapper.useTitleFilter()) {
-            return
-        }*/
-
         if (keyword.isNullOrBlank()) {
             all()
             return
@@ -360,13 +356,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
         if (target == null) {
             return
         }
-
-        /*
-        val file = File(FileExtractorFromUri(requireContext(), target.toUri()))
-        if (preferencesWrapper.getLastUpdated() == file.lastModified()) {
-            articleListFragment.all()
-            return
-        }*/
 
         showProgress()
 
