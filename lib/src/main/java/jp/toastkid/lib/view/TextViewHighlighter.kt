@@ -17,8 +17,8 @@ import android.widget.TextView
  */
 class TextViewHighlighter(private val textView: TextView) {
 
-    operator fun invoke(textToHighlight: String) {
-        if (textToHighlight.length <= 1) {
+    operator fun invoke(textToHighlight: String?) {
+        if (textToHighlight.isNullOrBlank()) {
             textView.text = textView.text.toString()
             return
         }
