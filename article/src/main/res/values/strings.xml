@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Articles</string>
+    <string name="action_all_article">All article</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_set_target">Set target</string>
+    <string name="action_find">Find in page</string>
+    <string name="action_close">Close</string>
+    <string name="action_to_top">↑</string>
+    <string name="action_to_bottom">↓</string>
+    <string name="message_search_in_progress">Search in progress…</string>
+    <string name="content_description_find_downward">Find downward</string>
+    <string name="content_description_find_upward">Find upward</string>
+    <string name="content_description_clear_input">Clear input</string>
+    <string name="content_description_close_find_area">Close find area</string>
+    <string name="action_switch_title_filter">Use title filter</string>
+    <string name="action_calendar">Calendar</string>
+    <string name="action_bookmark">Bookmark</string>
+</resources>
