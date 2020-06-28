@@ -15,16 +15,13 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.JobIntentService
-import androidx.core.net.toFile
-import androidx.core.net.toUri
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.lib.FileExtractorFromUri
-import okio.Okio
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.File
+import java.io.IOException
 
 /**
  * @author toastkidjp
@@ -41,30 +38,26 @@ class ZipLoaderService : JobIntentService() {
         val file = intent.getParcelableExtra<Uri>("target") ?: return
 
         val zipLoader = ZipLoader(articleRepository)
-        Completable.fromAction {
-            val inputStream = contentResolver.openInputStream(file) ?: return@fromAction
-            zipLoader.invoke(inputStream)
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    // TODO PreferencesWrapper(this).setLastUpdated(file.lastModified())
-                    /*progress.visibility = View.GONE
-                    progress_circular.visibility = View.GONE
-                    all()*/
-                    val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
-                    progressIntent.putExtra("progress", 100)
-                    sendBroadcast(progressIntent)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    val inputStream = contentResolver.openInputStream(file) ?: return@withContext
+                    zipLoader.invoke(inputStream)
+                } catch (e: IOException) {
+                    Timber.e(e)
                     zipLoader.dispose()
-                },
-                {
-                    Timber.e(it)
-                    zipLoader.dispose()
-                    /*progress.visibility = View.GONE
-                    progress_circular.visibility = View.GONE*/
                 }
-            )
+            }
+
+            // TODO PreferencesWrapper(this).setLastUpdated(file.lastModified())
+            /*progress.visibility = View.GONE
+            progress_circular.visibility = View.GONE
+            all()*/
+            val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
+            progressIntent.putExtra("progress", 100)
+            sendBroadcast(progressIntent)
+            zipLoader.dispose()
+        }
     }
 
     companion object {
