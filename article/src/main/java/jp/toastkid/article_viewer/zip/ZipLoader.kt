@@ -2,13 +2,13 @@ package jp.toastkid.article_viewer.zip
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import io.reactivex.Completable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import okio.Okio
 import timber.log.Timber
 import java.io.InputStream
@@ -31,7 +31,7 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
 
     private val items = mutableListOf<Article>()
 
-    private val disposable = CompositeDisposable()
+    private val disposable = Job()
 
     @RequiresApi(Build.VERSION_CODES.N)
     operator fun invoke(inputStream: InputStream) {
@@ -91,14 +91,13 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
         }
         items.clear()
 
-        Completable.fromAction { articleRepository.insertAll(updateItems) }
-            .subscribeOn(Schedulers.io())
-            .subscribe({ }, Timber::e)
-            .addTo(disposable)
+        CoroutineScope(Dispatchers.IO).launch(disposable) {
+            articleRepository.insertAll(updateItems)
+        }
     }
 
     private fun extractFileName(name: String) = name.substring(name.indexOf("/") + 1, name.lastIndexOf("."))
 
-    fun dispose() = disposable.clear()
+    fun dispose() = disposable.cancel()
 
 }
