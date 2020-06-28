@@ -27,14 +27,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.toObservable
-import io.reactivex.schedulers.Schedulers
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
@@ -51,6 +43,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -58,7 +51,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 /**
  * Article list fragment.
@@ -106,7 +98,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
     /**
      * [CompositeDisposable].
      */
-    private val disposables = CompositeDisposable()
+    private val disposables = Job()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -158,20 +150,16 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
         adapter = Adapter(
                 LayoutInflater.from(context),
                 { title ->
-                    Maybe.fromCallable { articleRepository.findContentByTitle(title) }
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                    { content ->
-                                        if (content.isNullOrBlank()) {
-                                            return@subscribe
-                                        }
-                                        contentViewModel
-                                                ?.nextFragment(ContentViewerFragment.make(title, content))
-                                    },
-                                    Timber::e
-                            )
-                            .addTo(disposables)
+                    CoroutineScope(Dispatchers.Main).launch(disposables) {
+                        val content = withContext(Dispatchers.IO) {
+                            articleRepository.findContentByTitle(title)
+                        }
+                        if (content.isNullOrBlank()) {
+                            return@launch
+                        }
+                        contentViewModel
+                                ?.nextFragment(ContentViewerFragment.make(title, content))
+                    }
                 },
                 {
                     /*if (preferencesWrapper.containsBookmark(it)) {
@@ -230,12 +218,9 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
     }
 
     fun all() {
-        query(
-            Maybe.fromCallable { articleRepository.getAll() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .flatMapObservable { it.toObservable() }
-        )
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            query(articleRepository.getAll())
+        }
     }
 
     override fun search(keyword: String?) {
@@ -243,12 +228,9 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
             return
         }
 
-        query(
-            Maybe.fromCallable { articleRepository.search("${tokenizer(keyword, 2)}") }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .flatMapObservable { it.toObservable() }
-        )
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            query(articleRepository.search("${tokenizer(keyword, 2)}"))
+        }
     }
 
     override fun filter(keyword: String?) {
@@ -257,30 +239,26 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
             return
         }
 
-        query(
-            Maybe.fromCallable { articleRepository.search("${tokenizer(keyword, 2)}") }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .flatMapObservable { it.toObservable() }
-        )
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            query(articleRepository.search("${tokenizer(keyword, 2)}"))
+        }
     }
 
-    private fun query(results: Observable<SearchResult>) {
-        adapter.clear()
-        setSearchStart()
+    private fun query(results: List<SearchResult>) {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            adapter.clear()
+            setSearchStart()
 
-        val start = System.currentTimeMillis()
-        results
-            .doOnTerminate { setSearchEnded(System.currentTimeMillis() - start) }
-            .subscribe(
-                adapter::add,
-                {
-                    Timber.e(it)
-                    progressCallback.hideProgress()
-                },
-                { setSearchEnded(System.currentTimeMillis() - start) }
-            )
-            .addTo(disposables)
+            val start = System.currentTimeMillis()
+
+            withContext(Dispatchers.Default) {
+                results.forEach(adapter::add)
+            }
+
+            adapter.notifyDataSetChanged()
+            progressCallback.hideProgress()
+            setSearchEnded(System.currentTimeMillis() - start)
+        }
     }
 
     private fun setSearchStart() {
@@ -290,14 +268,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
 
     @UiThread
     private fun setSearchEnded(duration: Long) {
-        Completable.fromAction {
-            progressCallback.hideProgress()
-            adapter.notifyDataSetChanged()
-            progressCallback.setProgressMessage("${adapter.itemCount} Articles / $duration[ms]")
-        }
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-            .addTo(disposables)
+        progressCallback.hideProgress()
+        progressCallback.setProgressMessage("${adapter.itemCount} Articles / $duration[ms]")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -376,8 +348,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        disposables.clear()
+        disposables.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
+        super.onDestroy()
     }
 }
