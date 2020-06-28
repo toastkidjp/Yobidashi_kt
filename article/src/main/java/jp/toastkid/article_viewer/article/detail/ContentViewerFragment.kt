@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.article_viewer.common.ProgressCallback
@@ -58,10 +59,14 @@ class ContentViewerFragment : Fragment(), SearchFunction {
         arguments?.getString("title")?.also {
             appBarBinding.searchResult.text = it
         }
+
+        appBarBinding.input.addTextChangedListener {
+            search(it.toString())
+        }
     }
 
     override fun search(keyword: String?) {
-        textViewHighlighter(keyword.toString())
+        textViewHighlighter(keyword)
     }
 
     override fun filter(keyword: String?) = Unit
