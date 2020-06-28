@@ -13,6 +13,7 @@
             android:layout_height="0dp"
             android:inputType="textCapSentences"
             android:imeOptions="actionSearch"
+            android:hint="@string/hint_search_articles"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/search_result"
             tools:ignore="Autofill,LabelFor"/>
