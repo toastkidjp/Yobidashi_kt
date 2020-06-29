@@ -21,12 +21,13 @@ import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.view.TextViewHighlighter
 
 /**
  * @author toastkidjp
  */
-class ContentViewerFragment : Fragment(), SearchFunction {
+class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
     private lateinit var binding: FragmentContentBinding
 
@@ -70,6 +71,14 @@ class ContentViewerFragment : Fragment(), SearchFunction {
     }
 
     override fun filter(keyword: String?) = Unit
+
+    override fun toTop() {
+        binding.contentScroll.smoothScrollTo(0, 0)
+    }
+
+    override fun toBottom() {
+        binding.contentScroll.smoothScrollTo(0, binding.content.measuredHeight)
+    }
 
     companion object {
         fun make(title: String, content: String): Fragment
