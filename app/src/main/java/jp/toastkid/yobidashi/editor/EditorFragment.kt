@@ -21,19 +21,15 @@ import android.os.Environment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.ActionMode
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.Dimension
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -41,14 +37,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserViewModel
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.databinding.ModuleFragmentEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
-import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
@@ -57,7 +50,6 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.AppBarViewModel
-import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
@@ -66,9 +58,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 /**
- * TODO Modify behavior on switched new tab.
  * @author toastkidjp
  */
 class EditorFragment :
@@ -100,7 +90,7 @@ class EditorFragment :
         }
     }
 
-    private lateinit var speechMaker: SpeechMaker
+    private var speechMaker: SpeechMaker? = null
 
     /**
      * Last saved text.
@@ -125,9 +115,13 @@ class EditorFragment :
 
     private var contentViewModel: ContentViewModel? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_editor, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         menuBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
                 R.layout.module_fragment_editor_menu,
@@ -161,118 +155,9 @@ class EditorFragment :
 
         })
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            binding.editorInput.customInsertionActionModeCallback = object : ActionMode.Callback {
-
-                override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
-                    val menuInflater = MenuInflater(context)
-                    menuInflater.inflate(R.menu.context_editor, menu)
-                    menuInflater.inflate(R.menu.context_speech, menu)
-                    return true
-                }
-
-                override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    when (menu?.itemId) {
-                        R.id.context_edit_insert_as_plain -> {
-                            insertAsPlain()
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_paste_as_quotation -> {
-                            PasteAsConfirmationDialogFragment.show(context)
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_speech -> {
-                            speechMaker.invoke(content())
-                            actionMode?.finish()
-                            return true
-                        }
-                        else -> Unit
-                    }
-                    return false
-                }
-
-                override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
-
-                override fun onDestroyActionMode(p0: ActionMode?) = Unit
-
-            }
-        }
-
-        val browserViewModel = activity?.let { fragmentActivity ->
-            ViewModelProvider(fragmentActivity)
-                    .get(BrowserViewModel::class.java)
-        }
-
-        binding.editorInput.customSelectionActionModeCallback = object : ActionMode.Callback {
-
-            private val listHeadAdder = ListHeadAdder()
-
-            override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
-                val text = extractSelectedText()
-                if (Urls.isValidUrl(text)) {
-                    MenuInflater(context).inflate(R.menu.context_editor_url, menu)
-                }
-                MenuInflater(context).inflate(R.menu.context_editor_selected, menu)
-                MenuInflater(context).inflate(R.menu.context_speech, menu)
-                return true
-            }
-
-            override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
-                val text = extractSelectedText()
-                when (menuItem?.itemId) {
-                    R.id.context_edit_add_order -> {
-                        listHeadAdder(binding.editorInput, "1.")
-                        return true
-                    }
-                    R.id.context_edit_add_minus -> {
-                        listHeadAdder(binding.editorInput, "-")
-                        return true
-                    }
-                    R.id.context_edit_add_quote -> {
-                        listHeadAdder(binding.editorInput, ">")
-                        return true
-                    }
-                    R.id.context_edit_url_open_new -> {
-                        browserViewModel?.open(text.toUri())
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_url_open_background -> {
-                        browserViewModel?.openBackground(text.toUri())
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_url_preview -> {
-                        browserViewModel?.preview(text.toUri())
-                        Inputs.hideKeyboard(binding.root)
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_speech -> {
-                        speechMaker.invoke(text)
-                        actionMode?.finish()
-                        return true
-                    }
-                    else -> Unit
-                }
-                return false
-            }
-
-            private fun extractSelectedText(): String {
-                return binding.editorInput.text
-                        .subSequence(binding.editorInput.selectionStart, binding.editorInput.selectionEnd)
-                        .toString()
-            }
-
-            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
-
-            override fun onDestroyActionMode(p0: ActionMode?) = Unit
-
-        }
-
         lastSavedTitle = context.getString(R.string.last_saved)
+
+        EditorContextMenuInitializer().invoke(binding.editorInput, speechMaker)
 
         activity?.let { activity ->
             val viewModelProvider = ViewModelProvider(activity)
@@ -333,7 +218,7 @@ class EditorFragment :
         if (path.isNotEmpty()) {
             saveToFile(path)
         }
-        speechMaker.dispose()
+        speechMaker?.dispose()
         super.onDetach()
     }
 
@@ -389,7 +274,7 @@ class EditorFragment :
      * @param context Context
      */
     private fun setContentTextLengthCount(context: Context) {
-        menuBinding.counter?.text =
+        menuBinding.counter.text =
                 context.getString(R.string.message_character_count, content().length)
     }
 
@@ -411,14 +296,6 @@ class EditorFragment :
 
     fun clear() {
         ClearTextDialogFragment.show(this)
-    }
-
-    fun insertAsPlain() {
-        val primary = Clipboard.getPrimary(binding.root.context)
-        if (TextUtils.isEmpty(primary)) {
-            return
-        }
-        insert(primary)
     }
 
     /**
@@ -753,6 +630,9 @@ class EditorFragment :
     }
 
     companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_editor
 
         /**
          * Request code of specifying file.

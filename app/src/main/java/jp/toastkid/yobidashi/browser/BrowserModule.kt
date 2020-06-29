@@ -37,13 +37,13 @@ import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
-import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
+import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -56,11 +56,7 @@ import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -153,7 +149,9 @@ class BrowserModule(
             val title = view.title ?: ""
             val urlStr = url ?: ""
 
-            loadingViewModel?.finished(lastId, History.make(title, urlStr))
+            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
+                loadingViewModel?.finished(lastId, History.make(title, urlStr))
+            }
 
             browserHeaderViewModel?.updateProgress(100)
             browserHeaderViewModel?.stopProgress(true)
@@ -493,28 +491,7 @@ class BrowserModule(
      * @return subscription
      */
     fun reloadWebViewSettings() {
-        val settings = currentView()?.settings?.also {
-            it.javaScriptEnabled = preferenceApplier.useJavaScript()
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                @Suppress("DEPRECATION")
-                it.saveFormData = preferenceApplier.doesSaveForm()
-            }
-            it.loadsImagesAutomatically = preferenceApplier.doesLoadImage()
-        }
-
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val text = withContext(Dispatchers.IO) {
-                UserAgent.valueOf(preferenceApplier.userAgent()).text()
-            }
-
-            val ua =
-                    if (text.isNotEmpty()) text else WebView(context).settings.userAgentString
-
-            if (settings?.userAgentString == ua) {
-                return@launch
-            }
-            resetUserAgent(ua)
-        }
+        WebSettingApplier(preferenceApplier).invoke(currentView()?.settings)
     }
 
     fun resetUserAgent(userAgentText: String) {

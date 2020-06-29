@@ -37,7 +37,7 @@ import jp.toastkid.yobidashi.settings.background.LoadedAction
  *
  * @author toastkidjp
  */
-class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialogFragment.Callback {
+class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback {
 
     /**
      * View binding.
@@ -187,10 +187,7 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         }
     }
 
-    @StringRes
-    override fun titleId() = R.string.title_settings_display
-
-    companion object {
+    companion object : TitleIdSupplier {
 
         /**
          * Background image dir.
@@ -206,6 +203,9 @@ class DisplayingSettingFragment : Fragment(), TitleIdSupplier, ClearImagesDialog
         private const val LAYOUT_ID = R.layout.fragment_setting_display
 
         fun getBackgroundDirectory() = BACKGROUND_DIR
+
+        @StringRes
+        override fun titleId(): Int = R.string.title_settings_display
 
     }
 }

@@ -10,14 +10,12 @@ package jp.toastkid.yobidashi.settings
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayoutMediator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
@@ -46,11 +44,14 @@ class SettingFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
 
-        childFragmentManager.let { fragmentManager ->
-            binding.container.adapter = PagerAdapter(fragmentManager) { getString(it) }
-            binding.container.offscreenPageLimit = 3
-            binding.tabStrip.setupWithViewPager(binding.container)
+        val pagerAdapter = PagerAdapter(this)
+        binding.container.adapter = pagerAdapter
+        binding.container.offscreenPageLimit = 3
+
+        val mediator = TabLayoutMediator(binding.tabLayout, binding.container) { tab, position ->
+            tab.text = pagerAdapter.getPageTitle(position)
         }
+        mediator.attach()
 
         setHasOptionsMenu(true)
 
@@ -68,40 +69,13 @@ class SettingFragment : Fragment() {
 
         val colorPair = preferenceApplier.colorPair()
 
-        binding.tabStrip.also {
+        binding.tabLayout.also {
             it.setBackgroundColor(colorPair.bgColor())
-            it.tabTextColors = ColorStateList.valueOf(colorPair.fontColor())
-            it.setSelectedTabIndicatorColor(colorPair.fontColor())
-        }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.setting_tab_shortcut, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.menu_search -> {
-            binding.container.currentItem = 2
-            true
+            val fontColor = colorPair.fontColor()
+            it.tabTextColors = ColorStateList.valueOf(fontColor)
+            it.setSelectedTabIndicatorColor(fontColor)
         }
-        R.id.menu_browser -> {
-            binding.container.currentItem = 3
-            true
-        }
-        R.id.menu_editor -> {
-            binding.container.currentItem = 4
-            true
-        }
-        R.id.menu_notification -> {
-            binding.container.currentItem = 6
-            true
-        }
-        R.id.menu_other -> {
-            binding.container.currentItem = 7
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {

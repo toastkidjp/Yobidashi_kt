@@ -26,7 +26,7 @@ import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 /**
  * @author toastkidjp
  */
-class SearchSettingFragment : Fragment(), TitleIdSupplier {
+class SearchSettingFragment : Fragment() {
 
     /**
      * View Data Binding object.
@@ -168,12 +168,13 @@ class SearchSettingFragment : Fragment(), TitleIdSupplier {
         binding.useAppSearchCheck.isChecked = newState
     }
 
-    @StringRes
-    override fun titleId() = R.string.subhead_search
-
-    companion object {
+    companion object : TitleIdSupplier {
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_setting_search
+
+        @StringRes
+        override fun titleId() = R.string.subhead_search
+
     }
 }

@@ -64,7 +64,7 @@ class BrowserFragment : Fragment(),
      */
     private var binding: FragmentBrowserBinding? = null
 
-    private var headerBinding: AppBarBrowserBinding? = null
+    private var appBarBinding: AppBarBrowserBinding? = null
 
     private val searchQueryExtractor = SearchQueryExtractor()
 
@@ -77,15 +77,16 @@ class BrowserFragment : Fragment(),
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        headerBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_browser, container, false)
-        headerBinding?.fragment = this
+        appBarBinding = DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
+        appBarBinding?.fragment = this
 
-        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding?.fragment = this
 
         binding?.swipeRefresher?.let {
             it.setOnRefreshListener { reload() }
             it.setOnChildScrollUpCallback { _, _ -> browserModule.disablePullToRefresh() }
+            it.setDistanceToTriggerSync(500)
         }
 
         val activityContext = context ?: return null
@@ -122,15 +123,15 @@ class BrowserFragment : Fragment(),
             })
             viewModel.progress.observe(activity, Observer { newProgress ->
                 if (70 < newProgress) {
-                    headerBinding?.progress?.isVisible = false
-                    headerBinding?.reload?.setImageResource(R.drawable.ic_reload)
+                    appBarBinding?.progress?.isVisible = false
+                    appBarBinding?.reload?.setImageResource(R.drawable.ic_reload)
                     //TODO refreshThumbnail()
                     return@Observer
                 }
-                headerBinding?.progress?.let {
+                appBarBinding?.progress?.let {
                     it.isVisible = true
                     it.progress = newProgress
-                    headerBinding?.reload?.setImageResource(R.drawable.ic_close)
+                    appBarBinding?.reload?.setImageResource(R.drawable.ic_close)
                 }
             })
         }
@@ -140,21 +141,21 @@ class BrowserFragment : Fragment(),
                 if (title.isNullOrBlank()) {
                     return@Observer
                 }
-                headerBinding?.mainText?.text = title
+                appBarBinding?.mainText?.text = title
             })
 
             viewModel.url.observe(activity, Observer { url ->
                 if (url.isNullOrBlank()) {
                     return@Observer
                 }
-                headerBinding?.subText?.text = url
+                appBarBinding?.subText?.text = url
             })
 
             viewModel.reset.observe(activity, Observer {
                 if (!isVisible) {
                     return@Observer
                 }
-                val headerView = headerBinding?.root ?: return@Observer
+                val headerView = appBarBinding?.root ?: return@Observer
                 appBarViewModel?.replace(headerView)
             })
 
@@ -178,7 +179,7 @@ class BrowserFragment : Fragment(),
 
         viewModelProvider.get(TabListViewModel::class.java)
                 .tabCount
-                .observe(activity, Observer { headerBinding?.tabCount?.text = it.toString() })
+                .observe(activity, Observer { appBarBinding?.tabCount?.text = it.toString() })
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(activity, Observer {
@@ -241,7 +242,7 @@ class BrowserFragment : Fragment(),
     }
 
     fun reload() {
-        if (headerBinding?.progress?.isVisible == true) {
+        if (appBarBinding?.progress?.isVisible == true) {
             browserModule.stopLoading()
         } else {
             browserModule.reload()
@@ -257,13 +258,13 @@ class BrowserFragment : Fragment(),
     }
 
     private fun updateForwardButtonState(enable: Boolean) {
-        headerBinding?.forward?.isEnabled = enable
-        headerBinding?.forward?.alpha = if (enable) 1f else 0.6f
+        appBarBinding?.forward?.isEnabled = enable
+        appBarBinding?.forward?.alpha = if (enable) 1f else 0.6f
     }
 
     private fun updateBackButtonState(enable: Boolean) {
-        headerBinding?.back?.isEnabled = enable
-        headerBinding?.back?.alpha = if (enable) 1f else 0.6f
+        appBarBinding?.back?.isEnabled = enable
+        appBarBinding?.back?.alpha = if (enable) 1f else 0.6f
     }
 
     private fun showReaderFragment(content: String) {
@@ -362,7 +363,7 @@ class BrowserFragment : Fragment(),
 
         val fontColor = colorPair.fontColor()
 
-        headerBinding?.also {
+        appBarBinding?.also {
             it.icon.setColorFilter(fontColor)
             it.mainText.setTextColor(fontColor)
             it.subText.setTextColor(fontColor)
@@ -465,7 +466,10 @@ class BrowserFragment : Fragment(),
          * Layout ID.
          */
         @LayoutRes
-        private const val layoutId = R.layout.fragment_browser
+        private const val LAYOUT_ID = R.layout.fragment_browser
+
+        @LayoutRes
+        private const val APP_BAR_LAYOUT_ID = R.layout.app_bar_browser
 
     }
 

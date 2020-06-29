@@ -429,9 +429,6 @@ class MainActivity : AppCompatActivity(),
     private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
-            /*if (fragment is EditorFragment) {
-                fragment.reload()
-            }*/
             return
         }
 
@@ -469,9 +466,11 @@ class MainActivity : AppCompatActivity(),
                 val browserFragment =
                         (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
                 replaceFragment(browserFragment, false)
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
-                            .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread {
+                        ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
+                                .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
+                    }
                 }
             }
             is EditorTab -> {
@@ -522,12 +521,14 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun refreshThumbnail() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val findFragment = findFragment()
-            if (findFragment !is TabUiFragment) {
-                return@launch
+        CoroutineScope(Dispatchers.Default).launch(disposables) {
+            runOnUiThread {
+                val findFragment = findFragment()
+                if (findFragment !is TabUiFragment) {
+                    return@runOnUiThread
+                }
+                tabs.saveNewThumbnail(binding.content)
             }
-            tabs.saveNewThumbnail(binding.content)
         }
     }
 

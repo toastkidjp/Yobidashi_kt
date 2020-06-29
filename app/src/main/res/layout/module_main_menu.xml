@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <jp.toastkid.yobidashi.libs.view.CircleRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/menus_view"
         android:layout_width="match_parent"

@@ -8,8 +8,7 @@
 package jp.toastkid.yobidashi.settings
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import jp.toastkid.yobidashi.settings.color.ColorSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.BrowserSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.ColorFilterSettingFragment
@@ -19,42 +18,46 @@ import jp.toastkid.yobidashi.settings.fragment.NotificationSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OtherSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.SearchSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
+import timber.log.Timber
 
 /**
  * Setting fragments pager adapter.
  *
- * @param fragmentManager [FragmentManager]
- * @param titleResolver Title string resource resolve consumer.
+ * @param fragment [Fragment]
  * @author toastkidjp
  */
-class PagerAdapter(
-        private val fragmentManager: FragmentManager,
-        private val titleResolver: (Int) -> String
-) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class PagerAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getCount(): Int = 8
+    override fun getItemCount(): Int = 8
 
-    override fun getItem(position: Int): Fragment = obtainFragment(
-            when (position) {
-                0 -> DisplayingSettingFragment::class.java
-                1 -> ColorSettingFragment::class.java
-                2 -> SearchSettingFragment::class.java
-                3 -> BrowserSettingFragment::class.java
-                4 -> EditorSettingFragment::class.java
-                5 -> ColorFilterSettingFragment::class.java
-                6 -> NotificationSettingFragment::class.java
-                7 -> OtherSettingFragment::class.java
-                else -> OtherSettingFragment::class.java
-            }
-    )
+    override fun createFragment(position: Int): Fragment = obtainFragment(pages[position].first)
 
-    private fun obtainFragment(fragmentClass: Class<out Fragment>) =
-            fragmentManager.findFragmentByTag(fragmentClass.canonicalName)
-                    ?: fragmentClass.newInstance()
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        val item = getItem(position)
-        return if (item is TitleIdSupplier) titleResolver(item.titleId()) else ""
+    private fun obtainFragment(fragmentClass: Class<out Fragment>): Fragment {
+        val f = fragment.childFragmentManager.findFragmentByTag(fragmentClass.canonicalName)
+        if (f != null) {
+            Timber.i("tomato found ${fragmentClass.canonicalName}")
+            return f
+        }
+        Timber.i("tomato new ${fragmentClass.canonicalName}")
+        return fragmentClass.newInstance()
     }
 
+    fun getPageTitle(position: Int): CharSequence? {
+        return getTitleIdByPosition(position)?.let { fragment.getString(it) } ?: ""
+    }
+
+    private fun getTitleIdByPosition(position: Int): Int? = pages[position].second.titleId()
+
+    companion object {
+        private val pages = listOf(
+                DisplayingSettingFragment::class.java to DisplayingSettingFragment,
+                ColorSettingFragment::class.java to ColorSettingFragment,
+                SearchSettingFragment::class.java to SearchSettingFragment,
+                BrowserSettingFragment::class.java to BrowserSettingFragment,
+                EditorSettingFragment::class.java to EditorSettingFragment,
+                ColorFilterSettingFragment::class.java to ColorFilterSettingFragment,
+                NotificationSettingFragment::class.java to NotificationSettingFragment,
+                OtherSettingFragment::class.java to OtherSettingFragment
+        )
+    }
 }

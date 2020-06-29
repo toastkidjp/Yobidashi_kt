@@ -253,6 +253,11 @@ enum class SearchCategory(
             R.drawable.ic_speakerdeck,
             "https://cse.google.com/cse?cx=010150859881542981030%3Ahqhxyxpwtc4&q="
     ),
+    FT(
+            R.string.financial_times,
+            R.drawable.ic_financial_times,
+            "https://www.ft.com/search?q="
+    ),
     BUZZFEED(
             R.string.buzzfeed,
             R.drawable.ic_buzzfeed,

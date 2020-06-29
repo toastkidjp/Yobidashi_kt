@@ -36,13 +36,14 @@ class AnchorTypeLongTapDialogFragment : DialogFragment() {
         val uri = url.toUri()
 
         return AlertDialog.Builder(activityContext)
-                .setTitle("Title: $title URL: $url")
+                .setTitle("$title URL: $url")
                 .setItems(R.array.url_menu, { _, which ->
                     when (which) {
                         0 -> viewModel.open(uri)
                         1 -> viewModel.openBackground(title, uri)
                         2 -> viewModel.preview(uri)
                         3 -> Clipboard.clip(activityContext, url)
+                        4 -> Clipboard.clip(activityContext, title)
                     }
                 })
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }

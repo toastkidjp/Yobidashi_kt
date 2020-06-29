@@ -27,7 +27,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 /**
  * @author toastkidjp
  */
-class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
+class ColorFilterSettingFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingColorFilterBinding
 
@@ -105,11 +105,13 @@ class ColorFilterSettingFragment : Fragment(), TitleIdSupplier {
         overlayColorFilterViewModel?.update()
     }
 
-    @StringRes
-    override fun titleId() = R.string.title_color_filter
+    companion object : TitleIdSupplier {
 
-    companion object {
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_setting_color_filter
+
+        @StringRes
+        override fun titleId() = R.string.title_color_filter
+
     }
 }

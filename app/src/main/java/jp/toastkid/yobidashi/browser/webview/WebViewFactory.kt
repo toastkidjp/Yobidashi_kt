@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
 import android.view.ViewGroup
@@ -118,16 +117,12 @@ internal class WebViewFactory {
                 }
             }
         }
-        val settings = webView.settings
-        settings.builtInZoomControls = true
-        settings.displayZoomControls = false
-        settings.javaScriptCanOpenWindowsAutomatically = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            settings.safeBrowsingEnabled = true
-        }
-        settings.setSupportMultipleWindows(true)
+
+        WebSettingApplier(preferenceApplier).invoke(webView.settings)
+
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
+
         return webView
     }
 

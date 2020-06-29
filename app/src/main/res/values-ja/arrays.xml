@@ -16,6 +16,7 @@
         <item name="open_article">新規タブで開く</item>
         <item name="add_schedule">バックグラウンドで開く</item>
         <item name="preview">ちょっと見る</item>
-        <item name="copy">コピー</item>
+        <item name="copy">URL をコピー</item>
+        <item name="copy_text">テキストをコピー</item>
     </array>
 </resources>

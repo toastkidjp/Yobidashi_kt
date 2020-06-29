@@ -26,8 +26,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 /**
  * ModuleAdapter of [Tab].
@@ -72,7 +70,8 @@ class TabAdapter(
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            tabThumbnails.removeUnused(tabList.thumbnailNames())
+            tabThumbnails.deleteUnused(tabList.thumbnailNames())
+            autoArchive.deleteUnused(tabList.archiveIds())
         }
     }
 
@@ -82,15 +81,13 @@ class TabAdapter(
      * Save new thumbnail asynchronously.
      */
     @UiThread
-    suspend fun saveNewThumbnail(view: View?) {
+    fun saveNewThumbnail(view: View?) {
         val bitmap = thumbnailGenerator(view) ?: return
 
         val currentTab = tabList.currentTab() ?: return
 
-        withContext(Dispatchers.Default) {
-            val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
-            bitmapCompressor(bitmap, file)
-        }
+        val file = tabThumbnails.assignNewFile(currentTab.thumbnailPath())
+        bitmapCompressor(bitmap, file)
     }
 
     /**

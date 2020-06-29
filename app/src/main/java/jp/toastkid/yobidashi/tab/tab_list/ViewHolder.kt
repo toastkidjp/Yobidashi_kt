@@ -6,6 +6,7 @@ import androidx.annotation.ColorInt
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemTabListBinding
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -16,7 +17,8 @@ import java.io.File
  *
  * @author toastkidjp
  */
-internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerView.ViewHolder(binding.root) {
+internal class ViewHolder(private val binding: ItemTabListBinding)
+    : RecyclerView.ViewHolder(binding.root) {
 
     /**
      * Set tab's title.
@@ -42,6 +44,8 @@ internal class ViewHolder(private val binding: ItemTabListBinding) : RecyclerVie
         Glide.with(binding.image)
                 .load(File(thumbnailPath).toURI().toString().toUri())
                 .override(binding.image.measuredWidth, binding.image.measuredHeight)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(binding.image)
     }
 

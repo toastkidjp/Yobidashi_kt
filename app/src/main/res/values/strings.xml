@@ -475,6 +475,7 @@
     <string name="title_context_editor_add_order">Add order</string>
     <string name="title_context_editor_add_minus">Add minus</string>
     <string name="title_context_editor_add_quote">Add quote</string>
+    <string name="title_context_editor_double_quote">Double quote</string>
     <string name="title_reset_camera_button_position">Reset camera position</string>
     <string name="naver">NAVER</string>
     <string name="daum">Daum</string>
@@ -492,5 +493,6 @@
     <string name="title_gesture_memo">Gesture memo</string>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">Clip URL</string>
+    <string name="financial_times">Financial Times</string>
 
 </resources>

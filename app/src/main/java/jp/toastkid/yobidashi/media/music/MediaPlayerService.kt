@@ -172,7 +172,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
 
         preferenceApplier = PreferenceApplier(this)
         notificationManager = NotificationManagerCompat.from(baseContext)
-        notificationFactory = NotificationFactory(this) { mediaSession }
+        notificationFactory = NotificationFactory(applicationContext) { mediaSession }
 
         mediaSession = MediaSessionCompat(this, javaClass.simpleName).also {
             stateBuilder = PlaybackStateCompat.Builder()

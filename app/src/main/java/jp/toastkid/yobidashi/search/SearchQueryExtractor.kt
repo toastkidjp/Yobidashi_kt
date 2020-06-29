@@ -26,6 +26,7 @@ class SearchQueryExtractor {
                     or host.endsWith("mvnrepository.com")
                     or host.endsWith("searchcode.com")
                     or host.equals("www.reddit.com")
+                    or host.equals("www.ft.com")
                     or host.endsWith("medium.com")
                     or host.endsWith("ted.com")
                     or host.endsWith(".slideshare.net")

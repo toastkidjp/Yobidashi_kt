@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.Keep
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
+import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -246,5 +247,10 @@ class TabList private constructor() {
     }
 
     fun thumbnailNames(): Collection<String> = tabs.map { it.thumbnailPath() }
+
+    fun archiveIds(): Collection<String> {
+        val idGenerator = IdGenerator()
+        return tabs.map { idGenerator.from(it.getUrl()) ?: "" }
+    }
 
 }
