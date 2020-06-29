@@ -358,7 +358,7 @@ enum class SearchCategory(
          * @return index
          */
         fun findIndex(category: String): Int =
-                values().find { it.name == category.toUpperCase(locale) } ?.ordinal ?: 0
+                values().find { it.name == category.toUpperCase(locale) } ?.ordinal ?: getDefault().ordinal
 
         /**
          * Get default object.
