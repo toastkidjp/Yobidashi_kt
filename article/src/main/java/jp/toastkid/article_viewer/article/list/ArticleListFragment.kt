@@ -292,14 +292,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
                 startActivityForResult(intent, 1)
                 true
             }
-            R.id.action_to_top -> {
-                RecyclerViewScroller.toTop(binding.results, adapter.itemCount)
-                true
-            }
-            R.id.action_to_bottom -> {
-                RecyclerViewScroller.toBottom(binding.results, adapter.itemCount)
-                true
-            }
             R.id.action_switch_title_filter -> {
                 val newState = !item.isChecked
                 // TODO preferencesWrapper.switchUseTitleFilter(newState)
