@@ -38,6 +38,7 @@ import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.article_viewer.zip.ZipLoaderService
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
@@ -57,7 +58,7 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
+class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, ContentScrollable {
 
     /**
      * List item adapter.
@@ -347,9 +348,18 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback {
         appBarBinding.searchResult.text = message
     }
 
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.results, adapter.itemCount)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.results, adapter.itemCount)
+    }
+
     override fun onDestroy() {
         disposables.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
         super.onDestroy()
     }
+
 }
