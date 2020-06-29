@@ -31,6 +31,7 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
+import jp.toastkid.article_viewer.calendar.CalendarFragment
 import jp.toastkid.article_viewer.common.ProgressCallback
 import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
@@ -283,6 +284,10 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
         return when (item.itemId) {
             R.id.action_all_article -> {
                 all()
+                true
+            }
+            R.id.action_calendar -> {
+                contentViewModel?.nextFragment(CalendarFragment())
                 true
             }
             R.id.action_set_target -> {

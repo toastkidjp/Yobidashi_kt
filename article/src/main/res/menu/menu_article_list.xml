@@ -9,6 +9,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_calendar"
+        android:orderInCategory="100"
+        android:title="@string/action_calendar"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_set_target"
         android:orderInCategory="100"
         android:title="@string/action_set_target"
