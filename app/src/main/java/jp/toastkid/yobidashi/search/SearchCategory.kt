@@ -53,8 +53,7 @@ enum class SearchCategory(
     DUCKDUCKGO(
             R.string.search_category_web,
             R.drawable.ic_duckduckgo,
-            "https://duckduckgo.com/%s?ia=web",
-            { _, h, q -> String.format(h, q)}
+            "https://duckduckgo.com/?ia=web&q="
     ),
     AOL(
             R.string.aol,
