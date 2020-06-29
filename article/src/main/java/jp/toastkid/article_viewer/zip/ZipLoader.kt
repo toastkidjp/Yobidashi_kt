@@ -23,8 +23,6 @@ import java.util.zip.ZipInputStream
  */
 class ZipLoader(private val articleRepository: ArticleRepository) {
 
-    private val CHARSET = Charset.forName("UTF-8")
-
     private val tokenizer = NgramTokenizer()
 
     private val id = AtomicInteger()
@@ -100,4 +98,7 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
 
     fun dispose() = disposable.cancel()
 
+    companion object {
+        private val CHARSET = Charset.forName("UTF-8")
+    }
 }
