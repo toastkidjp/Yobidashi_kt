@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.View
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker

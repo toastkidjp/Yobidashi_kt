@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.lib.preference.PreferenceApplier

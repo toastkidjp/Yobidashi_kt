@@ -34,7 +34,7 @@ import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
-import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment

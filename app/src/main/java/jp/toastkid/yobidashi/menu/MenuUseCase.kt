@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.article.list.ArticleListFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
-import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker

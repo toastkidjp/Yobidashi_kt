@@ -52,6 +52,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
