@@ -61,7 +61,7 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
         zipInputStream: ZipInputStream,
         nextEntry: ZipEntry
     ) {
-        // use() occur java.io.IOException: Stream closed
+        // You don't use `use()` because it makes occur "java.io.IOException: Stream closed".
         Okio.buffer(Okio.source(zipInputStream)).let {
             val start = System.currentTimeMillis()
             val content = it.readUtf8()
