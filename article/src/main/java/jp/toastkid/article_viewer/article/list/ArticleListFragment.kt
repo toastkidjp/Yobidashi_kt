@@ -95,6 +95,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
      */
     private lateinit var progressCallback: ProgressCallback
 
+    private var contentViewModel: ContentViewModel? = null
+
     private val tokenizer = NgramTokenizer()
 
     /**
@@ -139,8 +141,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
         return binding.root
     }
-
-    private var contentViewModel: ContentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
