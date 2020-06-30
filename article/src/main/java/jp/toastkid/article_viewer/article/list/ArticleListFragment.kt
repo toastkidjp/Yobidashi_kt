@@ -236,6 +236,10 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
     }
 
     override fun filter(keyword: String?) {
+        if (!preferencesWrapper.useTitleFilter()) {
+            return
+        }
+
         if (keyword.isNullOrBlank()) {
             all()
             return
@@ -277,7 +281,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater)
         menuInflater.inflate(R.menu.menu_article_list, menu)
-        // TODO menu.findItem(R.id.action_switch_title_filter)?.isChecked = preferencesWrapper.useTitleFilter()
+        menu.findItem(R.id.action_switch_title_filter)?.isChecked = preferencesWrapper.useTitleFilter()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -299,7 +303,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
             }
             R.id.action_switch_title_filter -> {
                 val newState = !item.isChecked
-                // TODO preferencesWrapper.switchUseTitleFilter(newState)
+                preferencesWrapper.switchUseTitleFilter(newState)
                 item.isChecked = newState
                 true
             }

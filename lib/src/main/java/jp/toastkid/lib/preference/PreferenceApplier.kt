@@ -36,7 +36,7 @@ class PreferenceApplier(private val context: Context) {
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
-        IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE
+        IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER
     }
 
     private val preferences: SharedPreferences =
@@ -421,6 +421,14 @@ class PreferenceApplier(private val context: Context) {
 
     fun setUseDarkMode(newState: Boolean) {
         preferences.edit().putBoolean(Key.BROWSER_DARK_MODE.name, newState).apply()
+    }
+
+    fun switchUseTitleFilter(checked: Boolean) {
+        preferences.edit().putBoolean(Key.USE_TITLE_FILTER.name, checked).apply()
+    }
+
+    fun useTitleFilter(): Boolean {
+        return preferences.getBoolean(Key.USE_TITLE_FILTER.name, true)
     }
 
 }
