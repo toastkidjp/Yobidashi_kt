@@ -12,7 +12,6 @@ import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
@@ -27,11 +26,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.view.TextViewHighlighter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.regex.Pattern
 
 /**
@@ -53,35 +48,24 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
         textViewHighlighter = TextViewHighlighter(binding.content)
 
-        val repository = AppDatabase.find(requireContext()).diaryRepository()
+        val linkBehaviorService = makeLinkBehaviorService()
 
         val linkMovementMethod = ContentLinkMovementMethod { url ->
-            if (url.isNullOrBlank()) {
-                return@ContentLinkMovementMethod
-            }
-
-            val viewModelProvider = ViewModelProvider(requireActivity())
-
-            if (url.startsWith(INTERNAL_LINK_SCHEME)) {
-                val title = url.substring(INTERNAL_LINK_SCHEME.length)
-                CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    val content = withContext(Dispatchers.IO) {
-                        repository.findContentByTitle(title)
-                    }
-                    if (content.isNullOrBlank()) {
-                        return@launch
-                    }
-                    viewModelProvider.get(ContentViewModel::class.java)
-                            .nextFragment(make(title, content))
-                }
-                return@ContentLinkMovementMethod
-            }
-
-            viewModelProvider.get(BrowserViewModel::class.java)
-                    .open(url.toUri())
+            linkBehaviorService.invoke(url)
         }
         binding.content.movementMethod = linkMovementMethod
         return binding.root
+    }
+
+    private fun makeLinkBehaviorService(): LinkBehaviorService {
+        val repository = AppDatabase.find(requireContext()).diaryRepository()
+        val viewModelProvider = ViewModelProvider(requireActivity())
+        val linkBehaviorService = LinkBehaviorService(
+                repository,
+                viewModelProvider.get(ContentViewModel::class.java),
+                viewModelProvider.get(BrowserViewModel::class.java)
+        )
+        return linkBehaviorService
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -101,7 +85,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
         embedLinks(
                 internalLinkPattern,
                 Linkify.TransformFilter { matcher, s ->
-                    "$INTERNAL_LINK_SCHEME${matcher.group(1)}"
+                    InternalLinkScheme.makeLink(matcher.group(1))
                 }
         )
 
@@ -135,7 +119,6 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
     }
 
     companion object {
-        private const val INTERNAL_LINK_SCHEME = "internal-article://"
 
         private val internalLinkPattern =
                 Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL)
