@@ -115,7 +115,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
         }
 
         binding.content.linksClickable = true
-        val pattern = Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL)
+
         Linkify.addLinks(
                 binding.content,
                 pattern,
@@ -124,7 +124,6 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
                 { matcher, s -> "$INTERNAL_LINK_SCHEME${matcher.group(1)}" }
         )
 
-        val httpPattern = Pattern.compile("https?://[a-zA-Z0-9/:%#&~=_!'\\\\\$\\\\?\\\\.\\\\+\\\\*\\\\-]+")
         Linkify.addLinks(
                 binding.content,
                 httpPattern,
@@ -155,6 +154,12 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
     companion object {
         private const val INTERNAL_LINK_SCHEME = "internal-article://"
+
+        private val pattern =
+                Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL)
+
+        private val httpPattern =
+                Pattern.compile("https?://[a-zA-Z0-9/:%#&~=_!'\\\\\$\\\\?\\\\.\\\\+\\\\*\\\\-]+")
 
         fun make(title: String, content: String): Fragment
                 = ContentViewerFragment().also {
