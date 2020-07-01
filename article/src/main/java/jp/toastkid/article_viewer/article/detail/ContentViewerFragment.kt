@@ -73,7 +73,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
         val repository = AppDatabase.find(requireContext()).diaryRepository()
 
-        val linkMovementMethod = ContentLinkMovementMethod({ url ->
+        val linkMovementMethod = ContentLinkMovementMethod { url ->
             if (url.isNullOrBlank()) {
                 return@ContentLinkMovementMethod
             }
@@ -97,7 +97,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
             viewModelProvider.get(BrowserViewModel::class.java)
                     .open(url.toUri())
-        })
+        }
         binding.content.movementMethod = linkMovementMethod
         return binding.root
     }
