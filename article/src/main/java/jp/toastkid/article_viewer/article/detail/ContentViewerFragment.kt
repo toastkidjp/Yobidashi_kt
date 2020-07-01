@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
-import android.content.Context
 import android.os.Bundle
 import android.text.util.Linkify
 import android.view.LayoutInflater
@@ -21,7 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.common.ProgressCallback
 import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
@@ -47,18 +45,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
     private lateinit var textViewHighlighter: TextViewHighlighter
 
-    // TODO Delete it.
-    private var progressCallback: ProgressCallback? = null
-
     private val disposables = Job()
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        if (context is ProgressCallback) {
-            progressCallback = context
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
