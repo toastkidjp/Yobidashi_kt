@@ -9,14 +9,10 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Spannable
-import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
@@ -38,7 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.util.regex.Pattern
 
 /**
@@ -118,7 +113,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
         Linkify.addLinks(
                 binding.content,
-                pattern,
+                internalLinkPattern,
                 null,
                 null,
                 { matcher, s -> "$INTERNAL_LINK_SCHEME${matcher.group(1)}" }
@@ -155,7 +150,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
     companion object {
         private const val INTERNAL_LINK_SCHEME = "internal-article://"
 
-        private val pattern =
+        private val internalLinkPattern =
                 Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL)
 
         private val httpPattern =
