@@ -111,21 +111,21 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
         binding.content.linksClickable = true
 
-        Linkify.addLinks(
-                binding.content,
+        embedLinks(
                 internalLinkPattern,
-                null,
-                null,
-                { matcher, s -> "$INTERNAL_LINK_SCHEME${matcher.group(1)}" }
+                Linkify.TransformFilter { matcher, s ->
+                    "$INTERNAL_LINK_SCHEME${matcher.group(1)}"
+                }
         )
 
-        Linkify.addLinks(
-                binding.content,
+        embedLinks(
                 httpPattern,
-                null,
-                null,
-                { matcher, s -> matcher.group(0) }
+                Linkify.TransformFilter { matcher, s -> matcher.group(0) }
         )
+    }
+
+    private fun embedLinks(pattern: Pattern, transformFilter: Linkify.TransformFilter) {
+        Linkify.addLinks(binding.content, pattern, null, null, transformFilter)
     }
 
     override fun search(keyword: String?) {
