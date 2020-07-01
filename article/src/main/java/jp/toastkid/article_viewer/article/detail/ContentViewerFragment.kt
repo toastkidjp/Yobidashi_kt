@@ -80,8 +80,8 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
             val viewModelProvider = ViewModelProvider(requireActivity())
 
-            if (url.startsWith("internal-article://")) {
-                val title = url.substring("internal-article://".length)
+            if (url.startsWith(INTERNAL_LINK_SCHEME)) {
+                val title = url.substring(INTERNAL_LINK_SCHEME.length)
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
                     val content = withContext(Dispatchers.IO) {
                         repository.findContentByTitle(title)
@@ -156,6 +156,8 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
     }
 
     companion object {
+        private const val INTERNAL_LINK_SCHEME = "internal-article://"
+
         fun make(title: String, content: String): Fragment
                 = ContentViewerFragment().also {
                     it.arguments = bundleOf(
