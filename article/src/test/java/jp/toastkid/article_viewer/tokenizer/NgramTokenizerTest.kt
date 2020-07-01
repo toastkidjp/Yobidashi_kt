@@ -1,6 +1,7 @@
 package jp.toastkid.article_viewer.tokenizer
 
 import org.junit.Assert.assertEquals
+import org.junit.Ignore
 import org.junit.Test
 import kotlin.system.measureTimeMillis
 
@@ -17,7 +18,7 @@ class NgramTokenizerTest {
         assertEquals("東京特 京特許 特許許 許許可 許可局", tokenizer("東京特許許可局", 3))
     }
 
-    @Test
+    @Ignore
     fun bench() {
         val tokenizer = NgramTokenizer()
         println(measureTimeMillis {
