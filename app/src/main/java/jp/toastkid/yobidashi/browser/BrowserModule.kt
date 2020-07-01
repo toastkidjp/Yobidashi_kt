@@ -44,6 +44,7 @@ import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
+import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
@@ -113,6 +114,8 @@ class BrowserModule(
     private val darkThemeApplier = DarkModeApplier()
 
     private val alphaConverter = AlphaConverter()
+
+    private val webViewStateUseCase = WebViewStateUseCase.make(context)
 
     private val disposables: Job by lazy { Job() }
 
@@ -352,6 +355,7 @@ class BrowserModule(
             return
         }
 
+        // TODO Use field.
         if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
@@ -519,6 +523,7 @@ class BrowserModule(
     }
 
     fun onPause() {
+        GlobalWebViewPool.storeStates(context)
         GlobalWebViewPool.onPause()
     }
 
@@ -574,7 +579,9 @@ class BrowserModule(
         if (!GlobalWebViewPool.containsKey(tabId) && tabId != null) {
             GlobalWebViewPool.put(tabId, makeWebView())
         }
-        return GlobalWebViewPool.get(tabId)
+        val webView = GlobalWebViewPool.get(tabId)
+        webViewStateUseCase.restore(webView, tabId)
+        return webView
     }
 
     private fun makeWebView(): WebView {

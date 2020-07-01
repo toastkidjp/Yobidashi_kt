@@ -144,7 +144,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         scrolling += vertical
     }
 
-    override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode =
+    override fun startActionMode(callback: ActionMode.Callback?, type: Int): ActionMode? =
             super.startActionMode(
                     object : ActionMode.Callback {
                         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {

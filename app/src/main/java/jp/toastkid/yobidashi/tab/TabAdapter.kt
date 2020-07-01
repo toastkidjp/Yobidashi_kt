@@ -11,6 +11,7 @@ import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.preference.ColorPair
@@ -47,6 +48,8 @@ class TabAdapter(
 
     private val autoArchive = AutoArchive.make(contextSupplier())
 
+    private val webViewStateUseCase = WebViewStateUseCase.make(contextSupplier())
+
     private val disposables = Job()
 
     private var browserHeaderViewModel: BrowserHeaderViewModel? = null
@@ -72,6 +75,7 @@ class TabAdapter(
         CoroutineScope(Dispatchers.IO).launch {
             tabThumbnails.deleteUnused(tabList.thumbnailNames())
             autoArchive.deleteUnused(tabList.archiveIds())
+            webViewStateUseCase.deleteUnused(tabList.ids())
         }
     }
 
@@ -185,6 +189,7 @@ class TabAdapter(
         val tab = tabList.get(index)
         if (tab is WebTab) {
             autoArchive.delete(IdGenerator().from(tab.getUrl()))
+            webViewStateUseCase.delete(tab.id())
             GlobalWebViewPool.remove(tab.id())
         }
 

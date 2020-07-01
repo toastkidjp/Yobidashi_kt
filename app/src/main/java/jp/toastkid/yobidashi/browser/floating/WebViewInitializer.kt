@@ -12,10 +12,13 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.yobidashi.browser.block.AdRemover
+import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -31,6 +34,10 @@ class WebViewInitializer {
     operator fun invoke(webView: WebView) {
         val context = webView.context as? FragmentActivity ?: return
 
+        val preferenceApplier = PreferenceApplier(context)
+
+        val adRemover = AdRemover(context.assets.open("ad_hosts.txt"))
+
         val viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
         webView.webViewClient = object : WebViewClient() {
@@ -44,6 +51,23 @@ class WebViewInitializer {
                 viewModel.newUrl(url)
             }
 
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
+                    if (preferenceApplier.adRemove) {
+                        adRemover(request.url.toString())
+                    } else {
+                        super.shouldInterceptRequest(view, request)
+                    }
+
+            @Suppress("OverridingDeprecatedMember")
+            @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+            override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
+                    if (preferenceApplier.adRemove) {
+                        adRemover(url)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        super.shouldInterceptRequest(view, url)
+                    }
         }
 
         webView.webChromeClient = object : WebChromeClient() {

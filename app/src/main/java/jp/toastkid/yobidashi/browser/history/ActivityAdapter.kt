@@ -66,7 +66,7 @@ internal class ActivityAdapter(
         )
         holder.itemView.setOnClickListener { onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->
-            removeAt(position)
+            remove(viewHistory)
             onDelete.invoke(history)
         }
         holder.setOnClickBookmark(viewHistory)
@@ -120,15 +120,18 @@ internal class ActivityAdapter(
      * @param position
      */
     fun removeAt(position: Int) {
-        val item = items[position]
+        remove(items[position], position)
+    }
 
+    private fun remove(item: ViewHistory, position: Int = -1) {
         CoroutineScope(Dispatchers.Main).launch {
+            val index = if (position == -1) items.indexOf(item) else position
             withContext(Dispatchers.IO) {
                 viewHistoryRepository.delete(item)
                 items.remove(item)
             }
 
-            notifyItemRemoved(position)
+            notifyItemRemoved(index)
         }
     }
 

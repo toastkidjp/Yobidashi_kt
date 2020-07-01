@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.webview
 
+import android.content.Context
 import android.os.Build
 import android.util.LruCache
 import android.webkit.WebView
@@ -102,6 +103,13 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
     fun onPause() {
         getLatest()?.pauseTimers()
         pool.snapshot().values.forEach { it.onPause() }
+    }
+
+    fun storeStates(context: Context) {
+        val useCase = WebViewStateUseCase.make(context)
+        pool.snapshot().entries.forEach {
+            useCase.store(it.value, it.key)
+        }
     }
 
     /**

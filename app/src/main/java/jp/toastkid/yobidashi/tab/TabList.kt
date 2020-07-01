@@ -253,4 +253,8 @@ class TabList private constructor() {
         return tabs.map { idGenerator.from(it.getUrl()) ?: "" }
     }
 
+    fun ids(): Collection<String> {
+        return tabs.map { it.id() }
+    }
+
 }

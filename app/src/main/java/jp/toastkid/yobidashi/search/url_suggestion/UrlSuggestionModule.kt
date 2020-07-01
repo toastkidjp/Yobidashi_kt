@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
@@ -28,7 +29,7 @@ class UrlSuggestionModule(
      */
     private val adapter = Adapter(
             LayoutInflater.from(binding.root.context),
-            this::removeAt,
+            this::remove,
             browseCallback,
             browseBackgroundCallback
             )
@@ -64,6 +65,10 @@ class UrlSuggestionModule(
      */
     private fun removeAt(index: Int) {
         adapter.removeAt(viewHistoryRepository, index)
+    }
+
+    private fun remove(item: UrlItem) {
+        adapter.remove(item)
     }
 
     /**

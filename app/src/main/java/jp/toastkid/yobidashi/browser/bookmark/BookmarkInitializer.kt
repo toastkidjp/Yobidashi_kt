@@ -34,8 +34,9 @@ class BookmarkInitializer {
                     "Project Gutenberg" to "http://www.gutenberg.org/",
                     "Expedia" to "https://www.expedia.com",
                     "Slashdot" to "https://m.slashdot.org",
-                    "Financial Times" to "https://www.ft.com/"
-                    ),
+                    "Financial Times" to "https://www.ft.com/",
+                    "THE WALL STREET JOURNAL" to "https://www.wsj.com"
+            ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
                     "Bing" to "https://www.bing.com/",
