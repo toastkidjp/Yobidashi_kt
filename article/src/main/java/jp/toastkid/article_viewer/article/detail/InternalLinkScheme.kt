@@ -21,6 +21,9 @@ object InternalLinkScheme {
     }
 
     fun extract(url: String): String {
+        if (url.length <= INTERNAL_LINK_SCHEME.length || !url.startsWith(INTERNAL_LINK_SCHEME)) {
+            return url
+        }
         return url.substring(INTERNAL_LINK_SCHEME.length)
     }
 
