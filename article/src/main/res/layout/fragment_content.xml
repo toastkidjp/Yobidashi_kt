@@ -17,7 +17,6 @@
             android:layout_marginEnd="4dp"
             android:textSize="14sp"
             android:textIsSelectable="true"
-            android:autoLink="web"
             />
 
     </androidx.core.widget.NestedScrollView>
