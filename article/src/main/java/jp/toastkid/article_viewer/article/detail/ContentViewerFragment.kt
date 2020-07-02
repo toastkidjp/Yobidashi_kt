@@ -48,6 +48,11 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
         textViewHighlighter = TextViewHighlighter(binding.content)
 
+        ContextMenuInitializer(
+                binding.content,
+                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+        ).invoke()
+
         val linkBehaviorService = makeLinkBehaviorService()
 
         val linkMovementMethod = ContentLinkMovementMethod { url ->
