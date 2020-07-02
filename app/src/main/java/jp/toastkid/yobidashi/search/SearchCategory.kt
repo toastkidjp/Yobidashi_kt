@@ -330,7 +330,7 @@ enum class SearchCategory(
 
         private val hostAndCategories =
                 values()
-                        .filter { it != SITE_SEARCH }
+                        .filter { it != SITE_SEARCH && it != MAP && it != IMAGE  }
                         .map { it.host.toUri().host to it }
                         .toMap()
 
