@@ -22,6 +22,6 @@ object RecyclerViewScroller {
             recyclerView.scrollToPosition(itemCount - 1)
             return
         }
-        recyclerView.smoothScrollToPosition(itemCount)
+        recyclerView.smoothScrollToPosition(itemCount - 1)
     }
 }
