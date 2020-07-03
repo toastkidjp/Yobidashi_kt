@@ -37,6 +37,7 @@ import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
+import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoaderService
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -295,10 +296,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
                 true
             }
             R.id.action_set_target -> {
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.type = "application/zip"
-                startActivityForResult(intent, 1)
+                startActivityForResult(ZipFileChooserIntentFactory()(), 1)
                 true
             }
             R.id.action_switch_title_filter -> {
