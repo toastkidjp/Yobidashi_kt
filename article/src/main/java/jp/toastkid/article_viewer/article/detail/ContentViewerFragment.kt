@@ -87,21 +87,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
 
         binding.content.linksClickable = true
 
-        embedLinks(
-                internalLinkPattern,
-                Linkify.TransformFilter { matcher, s ->
-                    InternalLinkScheme.makeLink(matcher.group(1))
-                }
-        )
-
-        embedLinks(
-                httpPattern,
-                Linkify.TransformFilter { matcher, s -> matcher.group(0) }
-        )
-    }
-
-    private fun embedLinks(pattern: Pattern, transformFilter: Linkify.TransformFilter) {
-        Linkify.addLinks(binding.content, pattern, null, null, transformFilter)
+        LinkGeneratorService().invoke(binding.content)
     }
 
     override fun search(keyword: String?) {
@@ -124,12 +110,6 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
     }
 
     companion object {
-
-        private val internalLinkPattern =
-                Pattern.compile("\\[\\[(.+?)\\]\\]", Pattern.DOTALL)
-
-        private val httpPattern =
-                Pattern.compile("https?://[a-zA-Z0-9/:%#&~=_!'\\\\\$\\\\?\\\\.\\\\+\\\\*\\\\-]+")
 
         fun make(title: String, content: String): Fragment
                 = ContentViewerFragment().also {
