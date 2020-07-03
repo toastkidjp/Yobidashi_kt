@@ -212,11 +212,11 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                         it,
                         PreferenceApplier(it).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(),
                         word
-                ).toString()
+                )
 
                 (it as? FragmentActivity)?.let { activity ->
                     ViewModelProvider(activity).get(BrowserViewModel::class.java)
-                            .preview(url.toUri())
+                            .preview(url)
                 }
             }
         }
