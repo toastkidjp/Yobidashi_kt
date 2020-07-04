@@ -16,6 +16,8 @@ import androidx.core.net.toUri
 import jp.toastkid.article_viewer.R
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.UrlFactory
 
 /**
  * @author toastkidjp
@@ -32,9 +34,11 @@ class ContextMenuInitializer(
 
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val text = extractSelectedText()
+                val menuInflater = MenuInflater(context)
                 if (Urls.isValidUrl(text)) {
-                    MenuInflater(context).inflate(R.menu.context_article_content_url, menu)
+                    menuInflater.inflate(R.menu.context_article_content_url, menu)
                 }
+                menuInflater.inflate(R.menu.context_article_content_search, menu)
                 return true
             }
 
@@ -53,6 +57,20 @@ class ContextMenuInitializer(
                     }
                     R.id.context_article_content_url_preview -> {
                         browserViewModel.preview(text.toUri())
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.preview_search -> {
+                        val category = PreferenceApplier(context).getDefaultSearchEngine() ?: ""
+                        val uri = UrlFactory().invoke(category, text, null)
+                        browserViewModel.preview(uri)
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.web_search -> {
+                        val category = PreferenceApplier(context).getDefaultSearchEngine() ?: ""
+                        val uri = UrlFactory().invoke(category, text, null)
+                        browserViewModel.open(uri)
                         actionMode?.finish()
                         return true
                     }
