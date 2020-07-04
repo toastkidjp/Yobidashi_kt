@@ -69,7 +69,7 @@ class CalendarFragment : Fragment() {
                 val article = withContext(Dispatchers.IO) {
                     articleRepository.findFirst(TitleFilterGenerator(year, month + 1, date))
                 } ?: return@launch
-                contentViewModel?.nextFragment(ContentViewerFragment.make(article.title, article.contentText))
+                contentViewModel?.newArticle(article.title, article.contentText)
             }
         }
     }

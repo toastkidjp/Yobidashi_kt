@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -68,6 +69,7 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -341,6 +343,11 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.refresh?.observe(this, Observer {
             refresh()
         })
+        contentViewModel?.newArticle?.observe(this, Observer {
+            val titleAndContent = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openNewArticleTab(titleAndContent.first, titleAndContent.second)
+            replaceToCurrentTab()
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -519,6 +526,16 @@ class MainActivity : AppCompatActivity(),
                     } catch (e: IllegalStateException) {
                         Timber.e(e)
                         return
+                    }
+                }
+            }
+            is ArticleTab -> {
+                val fragment = obtainFragment(ContentViewerFragment::class.java)
+                replaceFragment(fragment, withAnimation)
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread {
+                        (fragment as? ContentViewerFragment)?.setContent(currentTab.content())
+                        refreshThumbnail()
                     }
                 }
             }

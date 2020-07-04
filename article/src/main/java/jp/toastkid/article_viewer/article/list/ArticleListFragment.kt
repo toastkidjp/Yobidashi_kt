@@ -160,8 +160,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
                         if (content.isNullOrBlank()) {
                             return@launch
                         }
-                        contentViewModel
-                                ?.nextFragment(ContentViewerFragment.make(title, content))
+                        contentViewModel?.newArticle(title, content)
                     }
                 },
                 {

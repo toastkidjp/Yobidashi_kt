@@ -76,17 +76,21 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        binding.content.text = arguments?.getString("content")
+        binding.content.linksClickable = true
         arguments?.getString("title")?.also {
             appBarBinding.searchResult.text = it
+        }
+        arguments?.getString("content")?.let {
+            setContent(it)
         }
 
         appBarBinding.input.addTextChangedListener {
             search(it.toString())
         }
+    }
 
-        binding.content.linksClickable = true
-
+    fun setContent(content: String) {
+        binding.content.text = content
         LinkGeneratorService().invoke(binding.content)
     }
 

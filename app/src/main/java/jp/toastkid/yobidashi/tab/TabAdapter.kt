@@ -18,6 +18,7 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -141,6 +142,15 @@ class TabAdapter(
         tabList.add(pdfTab)
         setCount()
         setIndexByTab(pdfTab)
+    }
+
+    fun openNewArticleTab(title: String, content: String) {
+        val articleTab = ArticleTab()
+        articleTab.setTitle(title)
+        articleTab.setContent(content)
+        tabList.add(articleTab)
+        setCount()
+        setIndexByTab(articleTab)
     }
 
     /**
