@@ -16,7 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.search.SearchCategory
+import jp.toastkid.search.SearchCategory
 
 /**
  * @author toastkidjp

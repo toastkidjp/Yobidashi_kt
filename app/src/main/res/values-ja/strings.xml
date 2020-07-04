@@ -6,26 +6,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="search_category_web">DuckDuckGo</string>
-    <string name="search_category_image">画像</string>
-    <string name="search_category_map">地図</string>
-    <string name="search_category_apps">アプリ</string>
-    <string name="search_category_twitter">Twitter</string>
-    <string name="search_category_facebook">Facebook</string>
-    <string name="search_category_instagram">Instagram</string>
-    <string name="search_category_youtube">動画</string>
-    <string name="search_category_wikipedia">Wikipedia</string>
-    <string name="search_category_internet_archive">Internet Archive</string>
-    <string name="search_category_shopping">ショッピング</string>
-    <string name="search_category_stack_overflow">Stack Overflow</string>
-    <string name="search_category_technology">TechCrunch</string>
-    <string name="search_category_github">GitHub</string>
-    <string name="search_category_mvnrepository">MvnRepository</string>
-    <string name="search_category_grep_code">GrepCode</string>
-    <string name="search_category_yandex">Yandex</string>
-    <string name="search_category_yahoo">Yahoo!</string>
-    <string name="search_category_yahoo_japan">Yahoo! JAPAN</string>
-
     <string name="close">閉じる</string>
     <string name="display">表示</string>
     <string name="image">画像</string>
@@ -224,10 +204,6 @@
     <string name="title_open_chrome">Chrome で開く</string>
     <string name="title_archive">現在のページを保存</string>
     <string name="title_archives">保存したページ一覧</string>
-    <string name="google">Google</string>
-    <string name="bing">Bing</string>
-    <string name="yelp">Yelp</string>
-    <string name="gutenberg">Gutenberg</string>
     <string name="all">すべて</string>
 
     <string name="close_menu">メニューを閉じる</string>
@@ -237,7 +213,6 @@
     <string name="message_enable_color_filter">カラーフィルタを有効にしました。</string>
     <string name="message_stop_color_filter">カラーフィルタをオフにしました。</string>
     <string name="title_color_filter">カラーフィルタ</string>
-    <string name="title_site_search_by_google">サイト内をGoogleで検索</string>
     <string name="title_clear_form_data">フォームデータを削除</string>
     <string name="title_voice_search">音声検索</string>
     <string name="delete">削除</string>
@@ -400,28 +375,12 @@
     <string name="is_center">center</string>
     <string name="title_icon">アイコン</string>
     <string name="reset_button_position">ボタンの位置をリセット</string>
-    <string name="medium">Medium</string>
-    <string name="ted">TED</string>
-    <string name="buzzfeed">BuzzFeed</string>
-    <string name="slideshare">SlideShare</string>
-    <string name="speakerdeck">Speaker Deck</string>
-    <string name="baidu">Baidu</string>
-    <string name="search_category_flickr">Flickr</string>
-    <string name="search_category_wikimedia_commons">Wikimedia Commons</string>
-    <string name="livejournal">LiveJournal</string>
-    <string name="search_category_slashdot">Slashdot</string>
-    <string name="search_category_reddit">reddit</string>
-    <string name="search_category_tiktok">TikTok</string>
-    <string name="search_category_open_weather">Open Weather</string>
     <string name="title_dialog_color_chooser">色を選択</string>
     <string name="current_color">現在の色:</string>
     <string name="title_cursor_color">カーソルの色</string>
     <string name="title_highlight_color">テキスト選択の色</string>
     <string name="menu_random_wikipedia">ランダム Wikipedia</string>
     <string name="message_open_random_wikipedia">Wikipedia の「%s」を開きました。</string>
-    <string name="tumblr">Tumblr</string>
-    <string name="search_category_open_street_map">OpenStreetMap</string>
-    <string name="search_category_quora">Quora</string>
     <string name="title_menu_reader_mode">リーダーモード</string>
     <string name="title_menu_html_source">HTML source</string>
     <string name="launcher">アプリ起動</string>
@@ -443,7 +402,6 @@
     <string name="title_memory_cleaner">メモリークリーナー</string>
     <string name="message_cannot_use_under_l">This function can be used on Android 5.x and over.</string>
     <string name="message_require_usage_stats_permission">If you use this function, You should allow permission.</string>
-    <string name="search_category_ask_com">Ask.com</string>
     <string name="title_show_morning_notification">Show morning notification</string>
     <string name="title_show_daily_notification">Report daily information.</string>
     <string name="message_stay_tuned">お楽しみに！</string>
@@ -472,12 +430,7 @@
     <string name="title_context_editor_add_quote">引用符</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
     <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
-    <string name="naver">NAVER</string>
-    <string name="daum">Daum</string>
     <string name="title_search_suggestion">検索サジェスト</string>
-    <string name="aol">AOL.</string>
-    <string name="wolfram_alpha">Wolfram Alpha</string>
-    <string name="linked_in">LinkedIn</string>
     <string name="search_category">検索種別</string>
 
     <string name="touch_listener_single_touch">Single Touch</string>
@@ -488,13 +441,7 @@
     <string name="title_gesture_memo">ジェスチャーメモ</string>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">URL をコピー</string>
-    <string name="financial_times">Financial Times</string>
-    <string name="wayback_machine">Wayback Machine</string>
-    <string name="search_category_qwant">Qwant</string>
-    <string name="search_category_startpage">Startpage</string>
     <string name="add_to_home_screen">ショートカットを設置</string>
-    <string name="imdb">IMDb</string>
-    <string name="espn">ESPN</string>
     <string name="horizontal_rule">水平線</string>
     <string name="title_add_default_background">デフォルトの背景を追加</string>
     <string name="title_article_viewer">記事</string>

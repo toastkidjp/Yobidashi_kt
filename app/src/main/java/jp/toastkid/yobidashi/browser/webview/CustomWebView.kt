@@ -18,8 +18,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.yobidashi.search.SearchCategory
-import jp.toastkid.yobidashi.search.UrlFactory
+import jp.toastkid.search.UrlFactory
 
 /**
  * Extend for disabling pull-to-refresh on Google map.
@@ -193,7 +192,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             context?.let {
                 val url = urlFactory(
                         it,
-                        PreferenceApplier(it).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(),
+                        PreferenceApplier(it).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
                         word
                 ).toString()
 
@@ -210,7 +209,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
             context?.let {
                 val url = urlFactory(
                         it,
-                        PreferenceApplier(it).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(),
+                        PreferenceApplier(it).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
                         word
                 )
 

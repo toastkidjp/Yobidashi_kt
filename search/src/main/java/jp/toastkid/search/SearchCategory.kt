@@ -1,12 +1,10 @@
-package jp.toastkid.yobidashi.search
+package jp.toastkid.search
 
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.main.LocaleWrapper
 import java.util.*
 
 /**
@@ -307,7 +305,7 @@ enum class SearchCategory(
             return SiteSearchUrlGenerator().invoke(currentUrl, query)
         }
         return generate(
-                LocaleWrapper.getLocale(context.resources.configuration),
+                Locale.getDefault().language,
                 host,
                 query
         )
@@ -330,7 +328,7 @@ enum class SearchCategory(
 
         private val hostAndCategories =
                 values()
-                        .filter { it != SITE_SEARCH && it != MAP && it != IMAGE  }
+                        .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
                         .map { it.host.toUri().host to it }
                         .toMap()
 

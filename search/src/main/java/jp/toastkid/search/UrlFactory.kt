@@ -1,8 +1,9 @@
-package jp.toastkid.yobidashi.search
+package jp.toastkid.search
 
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
+import jp.toastkid.search.SearchCategory
 
 /**
  * @author toastkidjp

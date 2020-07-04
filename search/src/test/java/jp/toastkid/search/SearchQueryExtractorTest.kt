@@ -1,5 +1,6 @@
-package jp.toastkid.yobidashi.search
+package jp.toastkid.search
 
+import jp.toastkid.search.SearchQueryExtractor
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

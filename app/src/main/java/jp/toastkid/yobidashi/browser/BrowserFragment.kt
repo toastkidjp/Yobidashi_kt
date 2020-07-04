@@ -38,7 +38,7 @@ import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
-import jp.toastkid.yobidashi.search.SearchQueryExtractor
+import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 
 /**

@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.search
+package jp.toastkid.search
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

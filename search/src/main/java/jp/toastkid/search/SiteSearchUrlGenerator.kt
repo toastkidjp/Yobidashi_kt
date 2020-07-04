@@ -5,11 +5,11 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.search
+package jp.toastkid.search
 
 import android.net.Uri
 import androidx.core.net.toUri
-import java.util.*
+import java.util.Formatter
 
 /**
  * @author toastkidjp

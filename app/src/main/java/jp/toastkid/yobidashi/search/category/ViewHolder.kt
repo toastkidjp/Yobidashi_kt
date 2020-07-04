@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.search.category
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
-import jp.toastkid.yobidashi.search.SearchCategory
+import jp.toastkid.search.SearchCategory
 
 /**
  * @author toastkidjp

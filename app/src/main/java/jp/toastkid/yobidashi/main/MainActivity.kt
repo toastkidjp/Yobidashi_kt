@@ -61,7 +61,6 @@ import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
@@ -376,7 +375,7 @@ class MainActivity : AppCompatActivity(),
                 calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
                     val query = it.toString()
                     if (Urls.isInvalidUrl(query)) {
-                        search(preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(), query)
+                        search(preferenceApplier.getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), query)
                         return
                     }
                     openNewWebTab(query.toUri())
@@ -387,7 +386,7 @@ class MainActivity : AppCompatActivity(),
                 val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
                 } else {
-                    preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
+                    preferenceApplier.getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
                 }
                 search(category, calledIntent.getStringExtra(SearchManager.QUERY))
                 return
