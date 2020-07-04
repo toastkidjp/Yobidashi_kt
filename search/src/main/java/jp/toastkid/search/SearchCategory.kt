@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
-import java.util.*
+import java.util.Locale
 
 /**
  * Web search category.
