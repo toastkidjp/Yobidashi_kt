@@ -25,6 +25,7 @@ import jp.toastkid.article_viewer.databinding.FragmentContentBinding
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.TextViewHighlighter
 import kotlinx.coroutines.Job
 import java.util.regex.Pattern
@@ -32,7 +33,7 @@ import java.util.regex.Pattern
 /**
  * @author toastkidjp
  */
-class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
+class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, TabUiFragment {
 
     private lateinit var binding: FragmentContentBinding
 
