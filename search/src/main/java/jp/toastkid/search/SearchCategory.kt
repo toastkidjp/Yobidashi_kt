@@ -295,12 +295,11 @@ enum class SearchCategory(
     /**
      * Make search URL with query.
      *
-     * @param context [Context]
      * @param query Query string
      * @param currentUrl
      * @return Search result URL
      */
-    fun make(context: Context, query: String, currentUrl: String?): String {
+    fun make(query: String, currentUrl: String?): String {
         if (this == SITE_SEARCH && currentUrl != null) {
             return SiteSearchUrlGenerator().invoke(currentUrl, query)
         }

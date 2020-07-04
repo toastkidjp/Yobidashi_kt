@@ -3,7 +3,6 @@ package jp.toastkid.search
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
-import jp.toastkid.search.SearchCategory
 
 /**
  * @author toastkidjp
@@ -23,6 +22,6 @@ class UrlFactory {
             category: String,
             query: String,
             currentUrl: String? = null
-    ): Uri = SearchCategory.findByCategory(category).make(context, query, currentUrl).toUri()
+    ): Uri = SearchCategory.findByCategory(category).make(query, currentUrl).toUri()
 
 }
