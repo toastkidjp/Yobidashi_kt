@@ -36,7 +36,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.AppBarViewModel
-import jp.toastkid.yobidashi.main.TabUiFragment
+import jp.toastkid.lib.tab.TabUiFragment
 
 /**
  * @author toastkidjp

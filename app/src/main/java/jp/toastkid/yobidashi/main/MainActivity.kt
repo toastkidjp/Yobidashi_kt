@@ -57,6 +57,7 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel

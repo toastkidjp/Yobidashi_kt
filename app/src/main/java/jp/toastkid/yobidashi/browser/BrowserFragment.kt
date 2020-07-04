@@ -34,7 +34,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.yobidashi.main.TabUiFragment
+import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
