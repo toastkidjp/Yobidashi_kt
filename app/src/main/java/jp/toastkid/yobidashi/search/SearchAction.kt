@@ -80,7 +80,7 @@ class SearchAction(
             return
         }
 
-        val searchUri = urlFactory(activityContext, category, query, currentUrl)
+        val searchUri = urlFactory(category, query, currentUrl)
 
         if (onBackground) {
             browserViewModel?.openBackground(

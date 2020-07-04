@@ -191,8 +191,8 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
             context?.let {
                 val url = urlFactory(
-                        it,
-                        PreferenceApplier(it).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
+                        PreferenceApplier(it).getDefaultSearchEngine()
+                                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
                         word
                 ).toString()
 
@@ -208,8 +208,8 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
             context?.let {
                 val url = urlFactory(
-                        it,
-                        PreferenceApplier(it).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
+                        PreferenceApplier(it).getDefaultSearchEngine()
+                                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
                         word
                 )
 

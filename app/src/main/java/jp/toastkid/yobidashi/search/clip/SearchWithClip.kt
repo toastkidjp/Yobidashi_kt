@@ -94,7 +94,8 @@ class SearchWithClip(
 
         val url =
                 if (Urls.isValidUrl(query)) query
-                else UrlFactory()(context, PreferenceApplier(context).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), query).toString()
+                else UrlFactory()(PreferenceApplier(context).getDefaultSearchEngine()
+                        ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), query).toString()
         browserViewModel?.preview(url.toUri())
     }
 

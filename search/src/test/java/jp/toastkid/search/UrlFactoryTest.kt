@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 /**
  * Test cases of [UrlFactory].
@@ -22,11 +21,11 @@ class UrlFactoryTest {
         val urlFactory = UrlFactory()
         assertEquals(
                 "https://www.google.com/search?q=tomato",
-                urlFactory(RuntimeEnvironment.application, "GOOGLE", "tomato").toString()
+                urlFactory("GOOGLE", "tomato").toString()
         )
         assertEquals(
                 "https://www.google.com/search?q=tomato",
-                urlFactory(RuntimeEnvironment.application, "tomato", "tomato").toString()
+                urlFactory("tomato", "tomato").toString()
         )
     }
 
