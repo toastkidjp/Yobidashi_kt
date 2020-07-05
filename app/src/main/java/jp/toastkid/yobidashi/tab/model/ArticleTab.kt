@@ -7,12 +7,16 @@
  */
 package jp.toastkid.yobidashi.tab.model
 
+import androidx.annotation.Keep
 import java.util.UUID
 
 /**
  * @author toastkidjp
  */
 class ArticleTab : Tab {
+
+    @Keep
+    private val articleTab = true
 
     private var id = UUID.randomUUID().toString()
 
