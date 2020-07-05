@@ -167,13 +167,11 @@ class EditorContextMenuInitializer {
                 return false
             }
 
-            private fun makeSearchResultUrl(text: String): Uri {
-                return UrlFactory().invoke(
-                        PreferenceApplier(context).getDefaultSearchEngine()
-                                ?: SearchCategory.getDefaultCategoryName(),
-                        text
-                )
-            }
+            private fun makeSearchResultUrl(text: String): Uri = UrlFactory().invoke(
+                    PreferenceApplier(context).getDefaultSearchEngine()
+                            ?: SearchCategory.getDefaultCategoryName(),
+                    text
+            )
 
             private fun extractSelectedText(): String {
                 return editText.text
