@@ -27,7 +27,7 @@
         />
     <item
         android:id="@+id/context_edit_preview_search"
-        android:title="Preview search"
+        android:title="@string/preview_search"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
