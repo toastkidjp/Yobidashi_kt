@@ -15,9 +15,7 @@ import retrofit2.Converter
 /**
  * @author toastkidjp
  */
-class RssResponseConverter : Converter<ResponseBody, Rss> {
-
-    private val parser = Parser()
+class RssResponseConverter(private val parser: Parser) : Converter<ResponseBody, Rss> {
 
     override fun convert(responseBody: ResponseBody): Rss? {
         val bodyString = responseBody.string()
