@@ -8,7 +8,6 @@
 package jp.toastkid.article_viewer.article.detail
 
 import androidx.core.net.toUri
-import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 
@@ -16,7 +15,6 @@ import jp.toastkid.lib.ContentViewModel
  * @author toastkidjp
  */
 class LinkBehaviorService(
-        private val repository: ArticleRepository,
         private val contentViewModel: ContentViewModel,
         private val browserViewModel: BrowserViewModel
 ) {

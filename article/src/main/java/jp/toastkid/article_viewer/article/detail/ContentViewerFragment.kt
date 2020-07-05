@@ -72,10 +72,8 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
     }
 
     private fun makeLinkBehaviorService(): LinkBehaviorService {
-        val repository = AppDatabase.find(requireContext()).diaryRepository()
         val viewModelProvider = ViewModelProvider(requireActivity())
         val linkBehaviorService = LinkBehaviorService(
-                repository,
                 viewModelProvider.get(ContentViewModel::class.java),
                 viewModelProvider.get(BrowserViewModel::class.java)
         )
