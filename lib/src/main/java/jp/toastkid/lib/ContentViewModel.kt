@@ -123,12 +123,12 @@ class ContentViewModel : ViewModel() {
         _refresh.postValue(Unit)
     }
 
-    private val _newArticle = MutableLiveData<Event<Pair<String, String>>>()
+    private val _newArticle = MutableLiveData<Event<String>>()
 
-    val newArticle: LiveData<Event<Pair<String, String>>> = _newArticle
+    val newArticle: LiveData<Event<String>> = _newArticle
 
-    fun newArticle(title: String, content: String) {
-        _newArticle.postValue(Event(title to content))
+    fun newArticle(title: String) {
+        _newArticle.postValue(Event(title))
     }
 
 }

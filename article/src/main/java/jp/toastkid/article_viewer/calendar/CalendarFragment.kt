@@ -67,9 +67,10 @@ class CalendarFragment : Fragment() {
         binding.calendar.setOnDateChangeListener { _, year, month, date ->
             CoroutineScope(Dispatchers.Main).launch(disposables) {
                 val article = withContext(Dispatchers.IO) {
+                    // TODO make efficient.
                     articleRepository.findFirst(TitleFilterGenerator(year, month + 1, date))
                 } ?: return@launch
-                contentViewModel?.newArticle(article.title, article.contentText)
+                contentViewModel?.newArticle(article.title)
             }
         }
     }

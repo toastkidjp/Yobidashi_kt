@@ -22,8 +22,6 @@ class ArticleTab : Tab {
 
     private var titleStr = ""
 
-    private var contentStr = ""
-
     private var scrollY = 0
 
     override fun id() = id
@@ -40,17 +38,10 @@ class ArticleTab : Tab {
         titleStr = title
     }
 
-    fun content() = contentStr
-
-    fun setContent(content: String) {
-        contentStr = content
-    }
-
     companion object {
-        fun make(title: String, content: String): ArticleTab {
+        fun make(title: String): ArticleTab {
             val articleTab = ArticleTab()
             articleTab.setTitle(title)
-            articleTab.setContent(content)
             return articleTab
         }
     }

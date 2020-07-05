@@ -18,6 +18,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
+import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
@@ -27,7 +28,11 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.TextViewHighlighter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.regex.Pattern
 
 /**
@@ -41,6 +46,8 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
 
     private lateinit var textViewHighlighter: TextViewHighlighter
 
+    private lateinit var repository: ArticleRepository
+
     private val disposables = Job()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,6 +55,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
         textViewHighlighter = TextViewHighlighter(binding.content)
+        repository = AppDatabase.find(binding.root.context).diaryRepository()
 
         ContextMenuInitializer(
                 binding.content,
@@ -80,9 +88,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         binding.content.linksClickable = true
         arguments?.getString("title")?.also {
             appBarBinding.searchResult.text = it
-        }
-        arguments?.getString("content")?.let {
-            setContent(it)
+            loadContent(it)
         }
 
         appBarBinding.input.addTextChangedListener {
@@ -90,9 +96,12 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         }
     }
 
-    fun setContent(content: String) {
-        binding.content.text = content
-        LinkGeneratorService().invoke(binding.content)
+    fun loadContent(title: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) } ?: return@launch
+            binding.content.text = content
+            LinkGeneratorService().invoke(binding.content)
+        }
     }
 
     override fun search(keyword: String?) {

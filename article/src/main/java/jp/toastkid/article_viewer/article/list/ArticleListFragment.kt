@@ -152,17 +152,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
 
         adapter = Adapter(
                 LayoutInflater.from(context),
-                { title ->
-                    CoroutineScope(Dispatchers.Main).launch(disposables) {
-                        val content = withContext(Dispatchers.IO) {
-                            articleRepository.findContentByTitle(title)
-                        }
-                        if (content.isNullOrBlank()) {
-                            return@launch
-                        }
-                        contentViewModel?.newArticle(title, content)
-                    }
-                },
+                { title -> contentViewModel?.newArticle(title) },
                 {
                     /*if (preferencesWrapper.containsBookmark(it)) {
                         Snackbar.make(results, "「$it」 is already added.", Snackbar.LENGTH_SHORT).show()

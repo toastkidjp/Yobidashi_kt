@@ -144,8 +144,8 @@ class TabAdapter(
         setIndexByTab(pdfTab)
     }
 
-    fun openNewArticleTab(title: String, content: String) {
-        val articleTab = ArticleTab.make(title, content)
+    fun openNewArticleTab(title: String) {
+        val articleTab = ArticleTab.make(title)
         tabList.add(articleTab)
         setCount()
         setIndexByTab(articleTab)

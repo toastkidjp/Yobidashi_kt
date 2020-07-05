@@ -345,8 +345,8 @@ class MainActivity : AppCompatActivity(),
             refresh()
         })
         contentViewModel?.newArticle?.observe(this, Observer {
-            val titleAndContent = it?.getContentIfNotHandled() ?: return@Observer
-            tabs.openNewArticleTab(titleAndContent.first, titleAndContent.second)
+            val title = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openNewArticleTab(title)
             replaceToCurrentTab()
         })
     }
@@ -535,7 +535,7 @@ class MainActivity : AppCompatActivity(),
                 replaceFragment(fragment, withAnimation)
                 CoroutineScope(Dispatchers.Default).launch(disposables) {
                     runOnUiThread {
-                        (fragment as? ContentViewerFragment)?.setContent(currentTab.content())
+                        (fragment as? ContentViewerFragment)?.loadContent(currentTab.title())
                         refreshThumbnail()
                     }
                 }
