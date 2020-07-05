@@ -7,8 +7,11 @@
  */
 package jp.toastkid.yobidashi.wikipedia.random
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
+import jp.toastkid.yobidashi.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,4 +38,13 @@ class RandomWikipedia {
         }
     }
 
+    companion object {
+
+        fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
+                .also {
+                    it.action = Intent.ACTION_VIEW
+                    it.putExtra("random_wikipedia", true)
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
+    }
 }
