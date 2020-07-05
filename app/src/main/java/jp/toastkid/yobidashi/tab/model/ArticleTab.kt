@@ -46,4 +46,12 @@ class ArticleTab : Tab {
         contentStr = content
     }
 
+    companion object {
+        fun make(title: String, content: String): ArticleTab {
+            val articleTab = ArticleTab()
+            articleTab.setTitle(title)
+            articleTab.setContent(content)
+            return articleTab
+        }
+    }
 }

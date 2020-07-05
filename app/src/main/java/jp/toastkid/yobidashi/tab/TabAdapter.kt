@@ -145,9 +145,7 @@ class TabAdapter(
     }
 
     fun openNewArticleTab(title: String, content: String) {
-        val articleTab = ArticleTab()
-        articleTab.setTitle(title)
-        articleTab.setContent(content)
+        val articleTab = ArticleTab.make(title, content)
         tabList.add(articleTab)
         setCount()
         setIndexByTab(articleTab)
