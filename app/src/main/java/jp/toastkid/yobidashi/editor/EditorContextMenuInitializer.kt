@@ -95,8 +95,7 @@ class EditorContextMenuInitializer {
         }
 
         val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
-            ViewModelProvider(fragmentActivity)
-                    .get(BrowserViewModel::class.java)
+            ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
         }
 
         editText.customSelectionActionModeCallback = object : ActionMode.Callback {
