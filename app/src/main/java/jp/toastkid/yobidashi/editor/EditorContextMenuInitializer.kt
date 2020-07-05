@@ -20,6 +20,9 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.SearchCategory
+import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
@@ -141,6 +144,28 @@ class EditorContextMenuInitializer {
                     R.id.context_edit_url_preview -> {
                         browserViewModel?.preview(text.toUri())
                         Inputs.hideKeyboard(editText)
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.context_edit_preview_search -> {
+                        browserViewModel?.preview(
+                                UrlFactory().invoke(
+                                        PreferenceApplier(context).getDefaultSearchEngine()
+                                                ?: SearchCategory.getDefaultCategoryName(),
+                                        text
+                                )
+                        )
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.context_edit_web_search -> {
+                        browserViewModel?.open(
+                                UrlFactory().invoke(
+                                        PreferenceApplier(context).getDefaultSearchEngine()
+                                                ?: SearchCategory.getDefaultCategoryName(),
+                                        text
+                                )
+                        )
                         actionMode?.finish()
                         return true
                     }
