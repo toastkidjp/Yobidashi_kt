@@ -153,14 +153,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
         adapter = Adapter(
                 LayoutInflater.from(context),
                 { title -> contentViewModel?.newArticle(title) },
-                {
-                    /*if (preferencesWrapper.containsBookmark(it)) {
-                        Snackbar.make(results, "「$it」 is already added.", Snackbar.LENGTH_SHORT).show()
-                        return@Adapter
-                    }
-                    preferencesWrapper.addBookmark(it)
-                    Snackbar.make(results, "It has added $it.", Snackbar.LENGTH_SHORT).show()*/
-                }
+                { title -> contentViewModel?.newArticleOnBackground(title) }
         )
 
         binding.results.adapter = adapter

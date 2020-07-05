@@ -345,9 +345,15 @@ class MainActivity : AppCompatActivity(),
             refresh()
         })
         contentViewModel?.newArticle?.observe(this, Observer {
-            val title = it?.getContentIfNotHandled() ?: return@Observer
-            tabs.openNewArticleTab(title)
-            replaceToCurrentTab()
+            val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openNewArticleTab(titleAndOnBackground.first, titleAndOnBackground.second)
+            if (titleAndOnBackground.second) {
+                contentViewModel?.snackShort(
+                        getString(R.string.message_tab_open_background, titleAndOnBackground.first)
+                )
+            } else {
+                replaceToCurrentTab()
+            }
         })
     }
 
