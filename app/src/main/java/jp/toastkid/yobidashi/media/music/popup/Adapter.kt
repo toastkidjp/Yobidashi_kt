@@ -51,7 +51,7 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items.get(position)
+        val item = items.get(position % items.size)
         holder.bindText(item.description)
 
         val iconColor = preferenceApplier.colorPair().bgColor()
@@ -71,7 +71,7 @@ class Adapter(
         })
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = items.size * 20
 
     fun add(item: MediaBrowserCompat.MediaItem) {
         items.add(item)

@@ -28,7 +28,7 @@ import timber.log.Timber
  */
 class PagerAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 8
+    override fun getItemCount(): Int = pages.size
 
     override fun createFragment(position: Int): Fragment = obtainFragment(pages[position].first)
 

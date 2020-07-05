@@ -19,7 +19,7 @@ class ExternalFileAssignment {
 
     fun assignFile(context: Context, fileName: String): File {
         val externalFilesDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+            context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
         } else {
             context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         }

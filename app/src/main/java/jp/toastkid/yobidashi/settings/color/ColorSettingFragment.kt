@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -133,7 +134,7 @@ class ColorSettingFragment : Fragment(),
         adapter = SavedColorAdapter(repository)
         binding?.savedColors?.adapter = adapter
         binding?.savedColors?.layoutManager =
-                LinearLayoutManager(activityContext, LinearLayoutManager.HORIZONTAL, false)
+                GridLayoutManager(activityContext, 3, LinearLayoutManager.VERTICAL, false)
         binding?.clearSavedColor?.setOnClickListener{
             val clearColorsDialogFragment = ClearColorsDialogFragment()
             clearColorsDialogFragment.setTargetFragment(this, 1)
@@ -247,7 +248,9 @@ class ColorSettingFragment : Fragment(),
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_random)
                     ?.setOnMenuItemClickListener {
                         val activityContext = context ?: return@setOnMenuItemClickListener true
-                        RandomColorInsertion()(activityContext)
+                        RandomColorInsertion()(activityContext) {
+                            adapter?.refresh()
+                        }
                         snackShort(R.string.done_addition)
                         true
                     }

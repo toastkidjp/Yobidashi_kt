@@ -65,9 +65,10 @@ class LauncherFragment : Fragment(), ContentScrollable {
             }
         }
 
-        activity?.also {
-            val viewModel = ViewModelProvider(it).get(PageSearcherViewModel::class.java)
-            viewModel.find.observe(it, Observer {
+        activity?.also { activity ->
+            val viewModel =
+                    ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
+            viewModel.find.observe(activity, Observer {
                 if (TextUtils.equals(prev, it)) {
                     return@Observer
                 }

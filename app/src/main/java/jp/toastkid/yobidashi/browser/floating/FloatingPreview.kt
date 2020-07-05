@@ -36,7 +36,7 @@ import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.media.music.popup.SlidingTouchListener
+import jp.toastkid.yobidashi.libs.view.SlidingTouchListener
 
 /**
  * Floating preview.

@@ -41,6 +41,7 @@ import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.libs.view.SlidingTouchListener
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapter
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed

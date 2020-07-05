@@ -76,5 +76,25 @@ class SearchQueryExtractorTest {
                 "Yahoo",
                 searchQueryExtractor("https://web.archive.org/web/*/Yahoo")
         )
+        assertEquals(
+                "tomato",
+                searchQueryExtractor("https://www.qwant.com/?q=tomato")
+        )
+        assertEquals(
+                "tomato",
+                searchQueryExtractor("https://www.startpage.com/sp/search?q=tomato")
+        )
+        assertEquals(
+                "poirot",
+                searchQueryExtractor("https://www.imdb.com/find?q=poirot")
+        )
+        assertEquals(
+                "poirot",
+                searchQueryExtractor("https://m.facebook.com/public/poirot")
+        )
+        assertEquals(
+                "Soccer",
+                searchQueryExtractor("https://www.espn.com/search/_/q/Soccer")
+        )
     }
 }

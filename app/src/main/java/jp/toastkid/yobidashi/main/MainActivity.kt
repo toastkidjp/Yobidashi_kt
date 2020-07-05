@@ -426,7 +426,11 @@ class MainActivity : AppCompatActivity(),
      *
      * @param fragment {@link BaseFragment} instance
      */
-    private fun replaceFragment(fragment: Fragment, withAnimation: Boolean = true, withSlideIn: Boolean = false) {
+    private fun replaceFragment(
+            fragment: Fragment,
+            withAnimation: Boolean = true,
+            withSlideIn: Boolean = false
+    ) {
         val currentFragment = findFragment()
         if (currentFragment == fragment) {
             return

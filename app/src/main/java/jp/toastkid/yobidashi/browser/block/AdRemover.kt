@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.browser.block
 
+import android.content.res.AssetManager
 import android.webkit.WebResourceResponse
 import okio.Okio
 import java.io.ByteArrayInputStream
@@ -22,12 +23,12 @@ class AdRemover(inputStream: InputStream) {
     /**
      * Blacklist of AD hosts.
      */
-    private var blackList: List<String> =
+    private var blackList: Set<String> =
             Okio.buffer(Okio.source(inputStream)).use { bufferedSource ->
                 bufferedSource.readUtf8().split("\n")
                         .filter { it.isNotBlank() }
                         .map { it.trim() }
-                        .toList()
+                        .toHashSet()
             }
 
     /**
@@ -50,5 +51,9 @@ class AdRemover(inputStream: InputStream) {
                 "UTF-8",
                 ByteArrayInputStream(byteArrayOf())
         )
+
+        fun make(assetManager: AssetManager): AdRemover {
+            return AdRemover(assetManager.open("ad_hosts.txt"))
+        }
     }
 }

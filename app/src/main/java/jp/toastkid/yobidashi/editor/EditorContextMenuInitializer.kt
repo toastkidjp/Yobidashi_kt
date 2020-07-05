@@ -65,6 +65,14 @@ class EditorContextMenuInitializer {
                             actionMode?.finish()
                             return true
                         }
+                        R.id.context_edit_horizontal_rule -> {
+                            editText.text.insert(
+                                    editText.selectionStart,
+                                    "----${System.getProperty("line.separator")}"
+                            )
+                            actionMode?.finish()
+                            return true
+                        }
                         R.id.context_edit_speech -> {
                             speechMaker?.invoke(editText.text.toString())
                             actionMode?.finish()

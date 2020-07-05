@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.ValueCallback
 import androidx.annotation.LayoutRes
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,11 +24,13 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
+import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.ContentScrollable
@@ -203,6 +208,22 @@ class BrowserFragment : Fragment(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.translate -> {
+                val uri = "https://translate.googleusercontent.com/translate_c" +
+                        "?depth=1&nv=1&pto=aue&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=" +
+                        Uri.encode(browserModule.currentUrl())
+                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+                        .open(uri.toUri())
+            }
+            R.id.add_to_home -> {
+                val uri = browserModule.currentUrl()?.toUri() ?: return true
+                ShortcutUseCase(requireContext())
+                        .invoke(
+                                uri,
+                                browserModule.currentTitle(),
+                                FaviconApplier(requireContext()).load(uri)
+                        )
+            }
             R.id.add_bookmark -> {
                 val context = context ?: return true
                 val faviconApplier = FaviconApplier(context)

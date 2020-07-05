@@ -66,6 +66,16 @@ enum class SearchCategory(
             R.drawable.ic_ask_com,
             "https://www.ask.com/web?q="
     ),
+    QWANT(
+            R.string.search_category_qwant,
+            R.drawable.ic_qwant,
+            "https://www.qwant.com/?q="
+    ),
+    STARTPAGE(
+            R.string.search_category_startpage,
+            R.drawable.ic_startpage,
+            "https://www.startpage.com/sp/search?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
@@ -131,7 +141,7 @@ enum class SearchCategory(
     FACEBOOK(
             R.string.search_category_facebook,
             R.drawable.ic_facebook,
-            "https://m.facebook.com/search?query="
+            "https://m.facebook.com/public/"
     ),
     INSTAGRAM(
             R.string.search_category_instagram,
@@ -172,6 +182,16 @@ enum class SearchCategory(
             R.string.yelp,
             R.drawable.ic_yelp,
             "https://www.yelp.com/search?find_desc="
+    ),
+    ESPN(
+            R.string.espn,
+            R.drawable.ic_espn,
+            "https://www.espn.com/search/_/q/"
+    ),
+    IMDB(
+            R.string.imdb,
+            R.drawable.ic_imdb,
+            "https://www.imdb.com/find?q="
     ),
     GUTENBERG(
             R.string.gutenberg,

@@ -17,4 +17,11 @@
         android:icon="@drawable/ic_quote"
         tools:ignore="AlwaysShowAction"
         />
+    <item
+        android:id="@+id/context_edit_horizontal_rule"
+        android:title="Horizontal rule"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
+        />
 </menu>

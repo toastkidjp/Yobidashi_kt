@@ -69,13 +69,15 @@ class MenuUseCase(
         })
     }
 
-    fun onMenuClick(menu: Menu) {
+    private fun onMenuClick(menu: Menu) {
         when (menu) {
             Menu.TOP-> {
                 contentViewModel.toTop()
+                return
             }
             Menu.BOTTOM-> {
                 contentViewModel.toBottom()
+                return
             }
             Menu.SHARE-> {
                 contentViewModel.share()
@@ -89,6 +91,7 @@ class MenuUseCase(
                     ViewModelProvider(it).get(OverlayColorFilterViewModel::class.java)
                             .newColor(preferenceApplier.filterColor())
                 }
+                return
             }
             Menu.MEMORY_CLEANER -> {
                 val activity = activitySupplier()
@@ -201,6 +204,7 @@ class MenuUseCase(
                 contentViewModel.switchPageSearcher()
             }
         }
+        menuViewModel?.close()
     }
 
     /**

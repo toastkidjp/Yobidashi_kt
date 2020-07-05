@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 /**
@@ -28,26 +29,26 @@ class RandomColorInsertion {
      *
      * @param context
      */
-    operator fun invoke(context: Context): Job {
-        val bg = Color.argb(
-                random.nextInt(COLOR_CODE_MAX),
-                random.nextInt(COLOR_CODE_MAX),
-                random.nextInt(COLOR_CODE_MAX),
-                random.nextInt(COLOR_CODE_MAX)
-        )
+    operator fun invoke(context: Context, afterInserted: () -> Unit): Job {
+        val bg = makeRandomColor()
 
-        val font = Color.argb(
-                random.nextInt(COLOR_CODE_MAX),
-                random.nextInt(COLOR_CODE_MAX),
-                random.nextInt(COLOR_CODE_MAX),
-                random.nextInt(COLOR_CODE_MAX)
-        )
+        val font = makeRandomColor()
 
         return CoroutineScope(Dispatchers.IO).launch {
             DatabaseFinder().invoke(context)
                     .savedColorRepository()
                     .add(SavedColor.make(bg, font))
+            afterInserted()
         }
+    }
+
+    private fun makeRandomColor(): Int {
+        return Color.argb(
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX),
+                random.nextInt(COLOR_CODE_MAX)
+        )
     }
 
     companion object {

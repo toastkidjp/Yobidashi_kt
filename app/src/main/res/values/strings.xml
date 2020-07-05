@@ -367,7 +367,7 @@
     <string name="ad">AD</string>
     <string name="title_use_favorite_search">Use Favorite Search</string>
     <string name="invert_content_coloring">Invert content coloring</string>
-    <string name="title_clear_coolie">Clear Coolie</string>
+    <string name="title_clear_coolie">Clear Cookie</string>
     <string name="title_wifi_only">Wi-Fi Only Mode</string>
     <string name="message_wifi_not_connecting">It isn\'t connecting Wi-Fi.</string>
     <string name="wikipedia">Wikipedia</string>
@@ -495,5 +495,10 @@
     <string name="button_clip_url">Clip URL</string>
     <string name="financial_times">Financial Times</string>
     <string name="wayback_machine">Wayback Machine</string>
+    <string name="search_category_qwant">Qwant</string>
+    <string name="search_category_startpage">Startpage</string>
+    <string name="add_to_home_screen">Add to Home screen</string>
+    <string name="imdb">IMDb</string>
+    <string name="espn">ESPN</string>
 
 </resources>

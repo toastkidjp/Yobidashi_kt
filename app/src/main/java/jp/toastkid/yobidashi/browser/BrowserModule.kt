@@ -85,8 +85,7 @@ class BrowserModule(
 
     private var customViewSwitcher: CustomViewSwitcher? = null
 
-    private val adRemover: AdRemover =
-            AdRemover(context.assets.open("ad_hosts.txt"))
+    private val adRemover: AdRemover = AdRemover.make(context.assets)
 
     private val autoArchive = AutoArchive.make(context)
 
@@ -355,8 +354,7 @@ class BrowserModule(
             return
         }
 
-        // TODO Use field.
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+        if (preferenceApplier.wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
@@ -419,10 +417,6 @@ class BrowserModule(
             return
         }
         currentView()?.reload()
-    }
-
-    fun animate(animation: Animation?) {
-        animation?.let { currentView()?.startAnimation(it) }
     }
 
     fun find(keyword: String?) {
