@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.editor
 
+import android.net.Uri
 import android.os.Build
 import android.view.ActionMode
 import android.view.Menu
@@ -148,24 +149,12 @@ class EditorContextMenuInitializer {
                         return true
                     }
                     R.id.context_edit_preview_search -> {
-                        browserViewModel?.preview(
-                                UrlFactory().invoke(
-                                        PreferenceApplier(context).getDefaultSearchEngine()
-                                                ?: SearchCategory.getDefaultCategoryName(),
-                                        text
-                                )
-                        )
+                        browserViewModel?.preview(makeSearchResultUrl(text))
                         actionMode?.finish()
                         return true
                     }
                     R.id.context_edit_web_search -> {
-                        browserViewModel?.open(
-                                UrlFactory().invoke(
-                                        PreferenceApplier(context).getDefaultSearchEngine()
-                                                ?: SearchCategory.getDefaultCategoryName(),
-                                        text
-                                )
-                        )
+                        browserViewModel?.open(makeSearchResultUrl(text))
                         actionMode?.finish()
                         return true
                     }
@@ -177,6 +166,14 @@ class EditorContextMenuInitializer {
                     else -> Unit
                 }
                 return false
+            }
+
+            private fun makeSearchResultUrl(text: String): Uri {
+                return UrlFactory().invoke(
+                        PreferenceApplier(context).getDefaultSearchEngine()
+                                ?: SearchCategory.getDefaultCategoryName(),
+                        text
+                )
             }
 
             private fun extractSelectedText(): String {
