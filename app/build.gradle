@@ -12,11 +12,11 @@ android {
     buildToolsVersion '29.0.0'
     byte verMajor  = 1
     byte verMiddle = 4
-    byte verMinor  = 17
+    byte verMinor  = 18
 
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 29
         if (verMiddle >= 100 || verMinor >= 10_000) {
             throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
