@@ -7,6 +7,7 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
+import android.net.Uri
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
@@ -61,22 +62,24 @@ class ContextMenuInitializer(
                         return true
                     }
                     R.id.preview_search -> {
-                        val category = PreferenceApplier(context).getDefaultSearchEngine() ?: ""
-                        val uri = UrlFactory().invoke(category, text, null)
-                        browserViewModel.preview(uri)
+                        browserViewModel.preview(makeSearchUrl(text))
                         actionMode?.finish()
                         return true
                     }
                     R.id.web_search -> {
-                        val category = PreferenceApplier(context).getDefaultSearchEngine() ?: ""
-                        val uri = UrlFactory().invoke(category, text, null)
-                        browserViewModel.open(uri)
+                        browserViewModel.open(makeSearchUrl(text))
                         actionMode?.finish()
                         return true
                     }
                     else -> Unit
                 }
                 return false
+            }
+
+            private fun makeSearchUrl(text: String): Uri {
+                val category = PreferenceApplier(context).getDefaultSearchEngine() ?: ""
+                val uri = UrlFactory().invoke(category, text, null)
+                return uri
             }
 
             private fun extractSelectedText(): String {
