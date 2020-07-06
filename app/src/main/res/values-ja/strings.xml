@@ -318,9 +318,9 @@
     <string name="title_stop_loading">ロード中止</string>
     <string name="message_fail_to_connect_to_camera">カメラを利用できないため、起動できませんでした。</string>
     <string name="title_tab_background_search">「%s」の検索結果</string>
-    <string name="message_background_search">「%s」をバックグラウンドで検索します。</string>
-    <string name="message_background_tab">「%s」をバックグラウンドで開きます。</string>
-    <string name="message_search_on_background">検索候補をロングタップすると、複数のキーワードをバックグラウンドで検索できます。</string>
+    <string name="message_background_search">「%s」を別タブで検索します。</string>
+    <string name="message_background_tab">「%s」を別タブで開きます。</string>
+    <string name="message_search_on_background">検索候補をロングタップすると、複数のキーワードを別タブで検索できます。</string>
 
     <string name="title_open_pdf">PDF を開く</string>
     <string name="message_illegal_image_path">画像の指定が不正です。</string>
@@ -358,7 +358,7 @@
     <string name="title_tab_retaining_size">タブを保持する枚数</string>
 
     <string name="message_tab_open_new">新しいタブで開きました: \n%s</string>
-    <string name="message_tab_open_background">バックグラウンドタブで開きました: \n%s</string>
+    <string name="message_tab_open_background">別タブで開きました: \n%s</string>
     <string name="thumbnail">サムネイル</string>
     <string name="title_use_search_query_extractor">検索キーワードを抜き出す</string>
     <string name="message_unabled_voice_search">音声検索を利用できません。設定を見直してください。</string>
