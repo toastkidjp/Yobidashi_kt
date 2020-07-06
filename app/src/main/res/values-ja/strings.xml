@@ -99,11 +99,11 @@
         1. Web 検索\n
         2. バーコードリーダー\n
         3. アプリランチャー\n
-        4. 簡易タブブラウザ\n
+        4. 簡易タブブラウザー\n
         5. カレンダー\n
         6. Planning Poker\n
         7. カラーフィルタ\n
-        8. ブラウザ内エディタ\n
+        8. ブラウザー内エディター\n
         9. 懐中電灯\n
         \n
         【カスタマイズ】\n
@@ -154,7 +154,7 @@
     <string name="title_adding_favorite_search">お気に入り検索に追加</string>
     <string name="exit">終了</string>
     <string name="format_message_done_adding_favorite_search">「%s」をお気に入り検索に追加しました。</string>
-    <string name="title_browser">ブラウザ</string>
+    <string name="title_browser">ブラウザー</string>
     <string name="title_show_notification_widget">通知領域にウィジェットを表示</string>
     <string name="title_planning_poker">Planning Poker</string>
     <string name="message_confirm_back">戻りますか？</string>
@@ -176,7 +176,7 @@
     <string name="right">右</string>
     <string name="title_enable_javascript">JavaScript を有効にする</string>
     <string name="subhead_displaying">表示</string>
-    <string name="subhead_setting_browser">ブラウザ</string>
+    <string name="subhead_setting_browser">ブラウザー</string>
     <string name="subhead_others">その他</string>
     <string name="subhead_notification">通知</string>
     <string name="prefix_loading">ロード中: </string>
@@ -231,7 +231,7 @@
     <string name="title_retain_tabs">アプリ終了後もタブを保持</string>
     <string name="title_default_search_engine">デフォルトの検索エンジン</string>
     <string name="subhead_search">検索</string>
-    <string name="subhead_browser">ブラウザ</string>
+    <string name="subhead_browser">ブラウザー</string>
     <string name="title_enable_search_with_clip">「クリップボードで検索」を使う</string>
     <string name="message_enable_swc">「クリップボードで検索」を有効にしました。</string>
     <string name="message_disable_swc">「クリップボードで検索」を無効にしました。</string>
@@ -249,8 +249,8 @@
     <string name="message_cannot_replace_home_url">このページはホームに設定できません。</string>
     <string name="message_replace_home_url">ホームページを変更しました。: %s</string>
     <string name="title_clear_view_history">履歴をすべて削除</string>
-    <string name="title_view_history">ブラウザの履歴</string>
-    <string name="title_save_view_history">ブラウザの履歴を保存</string>
+    <string name="title_view_history">ブラウザーの履歴</string>
+    <string name="title_save_view_history">ブラウザーの履歴を保存</string>
     <string name="title_clear_all_tabs">タブをすべて削除</string>
     <string name="name_default_bookmark_folder">デフォルト</string>
     <string name="title_bookmark">ブックマーク</string>
@@ -365,7 +365,7 @@
     <string name="hint_editor_input">ここにテキストを入力します。</string>
     <string name="paste_as_quotation">引用貼付</string>
     <string name="title_font_size">文字の大きさ</string>
-    <string name="subhead_editor">エディタ</string>
+    <string name="subhead_editor">エディター</string>
     <string name="retry">やり直す</string>
     <string name="message_preview_failed">エラーが発生しました。やり直してください</string>
     <string name="message_paste_as_dialog">クリップボードに保持している内容を貼り付けますか？</string>
