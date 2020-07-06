@@ -121,14 +121,4 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         super.onDetach()
     }
 
-    companion object {
-
-        fun make(title: String, content: String): Fragment
-                = ContentViewerFragment().also {
-                    it.arguments = bundleOf(
-                        "content" to content,
-                        "title" to title
-                    )
-                }
-    }
 }
