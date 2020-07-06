@@ -152,8 +152,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
 
         adapter = Adapter(
                 LayoutInflater.from(context),
-                { title -> contentViewModel?.newArticle(title) },
-                { title -> contentViewModel?.newArticleOnBackground(title) }
+                { contentViewModel?.newArticle(it) },
+                { contentViewModel?.newArticleOnBackground(it) }
         )
 
         binding.results.adapter = adapter
