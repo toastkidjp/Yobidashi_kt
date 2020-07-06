@@ -29,7 +29,6 @@ import java.io.IOException
 @RequiresApi(Build.VERSION_CODES.N)
 class ZipLoaderService : JobIntentService() {
 
-    @SuppressLint("CheckResult")
     override fun onHandleWork(intent: Intent) {
         val dataBase = AppDatabase.find(this)
 
