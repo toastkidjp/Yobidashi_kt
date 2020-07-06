@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.article_viewer.calendar.CalendarFragment
 import jp.toastkid.article_viewer.common.ProgressCallback
 import jp.toastkid.article_viewer.common.SearchFunction
@@ -133,7 +132,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
     private fun initializeRepository(activityContext: Context) {
         val dataBase = AppDatabase.find(activityContext)
 
-        articleRepository = dataBase.diaryRepository()
+        articleRepository = dataBase.articleRepository()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.zip
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -32,7 +31,7 @@ class ZipLoaderService : JobIntentService() {
     override fun onHandleWork(intent: Intent) {
         val dataBase = AppDatabase.find(this)
 
-        val articleRepository = dataBase.diaryRepository()
+        val articleRepository = dataBase.articleRepository()
 
         val file = intent.getParcelableExtra<Uri>("target") ?: return
 

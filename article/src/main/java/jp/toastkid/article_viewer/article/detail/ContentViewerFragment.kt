@@ -8,11 +8,9 @@
 package jp.toastkid.article_viewer.article.detail
 
 import android.os.Bundle
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -33,7 +31,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.regex.Pattern
 
 /**
  * @author toastkidjp
@@ -55,7 +52,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
         textViewHighlighter = TextViewHighlighter(binding.content)
-        repository = AppDatabase.find(binding.root.context).diaryRepository()
+        repository = AppDatabase.find(binding.root.context).articleRepository()
 
         ContextMenuInitializer(
                 binding.content,

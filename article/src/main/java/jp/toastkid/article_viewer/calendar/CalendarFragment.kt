@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.article_viewer.databinding.FragmentCalendarBinding
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -58,7 +57,7 @@ class CalendarFragment : Fragment() {
             ViewModelProvider(it).get(ContentViewModel::class.java)
         }
 
-        articleRepository = AppDatabase.find(activityContext).diaryRepository()
+        articleRepository = AppDatabase.find(activityContext).articleRepository()
 
         setSelectedAction()
     }
