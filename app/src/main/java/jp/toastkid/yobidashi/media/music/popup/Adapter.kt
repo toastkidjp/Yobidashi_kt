@@ -73,6 +73,8 @@ class Adapter(
 
     override fun getItemCount() = items.size * 20
 
+    fun mediumPosition() = itemCount / 2
+
     fun add(item: MediaBrowserCompat.MediaItem) {
         items.add(item)
     }
