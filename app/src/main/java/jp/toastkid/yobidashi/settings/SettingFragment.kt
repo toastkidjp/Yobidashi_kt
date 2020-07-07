@@ -23,6 +23,7 @@ import jp.toastkid.yobidashi.libs.ad.AdService
 import jp.toastkid.yobidashi.libs.ad.AdViewFactory
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentViewModel
 
 /**
  * @author toastkidjp
@@ -87,6 +88,11 @@ class SettingFragment : Fragment() {
             it.tabTextColors = ColorStateList.valueOf(fontColor)
             it.setSelectedTabIndicatorColor(fontColor)
         }
+    }
+
+    override fun onDetach() {
+        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).refresh()
+        super.onDetach()
     }
 
     override fun onDestroyView() {
