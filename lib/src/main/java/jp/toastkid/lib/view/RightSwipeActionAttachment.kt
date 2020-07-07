@@ -35,7 +35,6 @@ class RightSwipeActionAttachment {
                         onSwipedAction(viewHolder.adapterPosition)
                     }
                 }).attachToRecyclerView(recyclerView)
-
     }
 
     companion object {
