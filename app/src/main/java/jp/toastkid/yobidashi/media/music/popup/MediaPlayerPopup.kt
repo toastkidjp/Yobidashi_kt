@@ -132,7 +132,7 @@ class MediaPlayerPopup(private val context: Context) {
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             when (state?.state) {
                 PlaybackStateCompat.STATE_PLAYING -> setPauseIcon()
-                PlaybackStateCompat.STATE_PAUSED -> setPlayIcon()
+                PlaybackStateCompat.STATE_PAUSED,
                 PlaybackStateCompat.STATE_STOPPED -> setPlayIcon()
                 else -> Unit
             }
