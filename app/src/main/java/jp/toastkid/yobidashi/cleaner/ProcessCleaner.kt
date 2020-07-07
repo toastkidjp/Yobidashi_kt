@@ -38,15 +38,15 @@ class ProcessCleaner {
         }
 
         val targetProcessFilter = TargetProcessFilter(packageManager, notIgnoreProcessFilter)
-        val killingTargetProcesses = runningAppProcesses.filter { targetProcessFilter(it) }
+        val targetProcesses = runningAppProcesses.filter { targetProcessFilter(it) }
 
-        if (killingTargetProcesses.isEmpty()) {
+        if (targetProcesses.isEmpty()) {
             return "Target processes are not found."
         }
 
-        killingTargetProcesses.forEach { activityManager.killBackgroundProcesses(it) }
+        targetProcesses.forEach { activityManager.killBackgroundProcesses(it) }
 
-        val targets = killingTargetProcesses.reduce { base, item -> "$base$lineSeparator$item" }
+        val targets = targetProcesses.reduce { base, item -> "$base$lineSeparator$item" }
 
         val postInformation = getMemoryInformation(activityManager)
         val availableMemories = (postInformation.availMem / 1024 / 1024).toInt()
