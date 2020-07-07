@@ -1,4 +1,4 @@
-package jp.toastkid.article.calendar
+package jp.toastkid.article_viewer.calendar
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
