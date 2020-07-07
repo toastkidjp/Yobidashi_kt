@@ -7,6 +7,7 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ import jp.toastkid.article_viewer.databinding.FragmentContentBinding
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.TextViewHighlighter
 import kotlinx.coroutines.CoroutineScope
@@ -89,6 +91,22 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         appBarBinding.input.addTextChangedListener {
             search(it.toString())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val preferenceApplier = PreferenceApplier(binding.root.context)
+        binding.contentScroll.setBackgroundColor(preferenceApplier.editorBackgroundColor())
+
+        val editorFontColor = preferenceApplier.editorFontColor()
+        binding.content.setTextColor(editorFontColor)
+        binding.content.setLinkTextColor(
+                Color.rgb(
+                        Color.green(editorFontColor),
+                        Color.blue(editorFontColor),
+                        Color.red(editorFontColor)
+                )
+        )
     }
 
     fun loadContent(title: String) {
