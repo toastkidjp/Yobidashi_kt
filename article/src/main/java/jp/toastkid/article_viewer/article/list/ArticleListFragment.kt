@@ -337,11 +337,11 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
         RecyclerViewScroller.toBottom(binding.results, adapter.itemCount)
     }
 
-    override fun onDestroy() {
+    override fun onDetach() {
         disposables.cancel()
         inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
-        super.onDestroy()
+        super.onDetach()
     }
 
 }
