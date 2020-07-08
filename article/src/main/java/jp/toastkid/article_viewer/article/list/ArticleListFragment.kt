@@ -99,6 +99,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
 
     private val tokenizer = NgramTokenizer()
 
+    private val inputChannel = Channel<String>()
+
     /**
      * [CompositeDisposable].
      */
@@ -167,7 +169,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
             true
         }
 
-        val inputChannel = Channel<String>()
         appBarBinding.input.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) = Unit
 
@@ -338,6 +339,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
 
     override fun onDestroy() {
         disposables.cancel()
+        inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
         super.onDestroy()
     }
