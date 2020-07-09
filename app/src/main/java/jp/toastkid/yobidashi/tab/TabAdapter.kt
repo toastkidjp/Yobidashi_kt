@@ -23,7 +23,7 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
-import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
+import jp.toastkid.lib.TabListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

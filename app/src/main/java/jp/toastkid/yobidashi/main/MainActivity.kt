@@ -78,7 +78,7 @@ import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListService
-import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
+import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

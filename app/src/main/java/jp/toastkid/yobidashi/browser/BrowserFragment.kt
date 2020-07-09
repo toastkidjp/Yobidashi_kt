@@ -39,7 +39,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.search.SearchQueryExtractor
-import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
+import jp.toastkid.lib.TabListViewModel
 
 /**
  * Internal browser fragment.
