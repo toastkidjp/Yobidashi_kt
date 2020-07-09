@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,19 +14,20 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.common.SearchFunction
-import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.color.LinkColorGenerator
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
@@ -100,7 +100,10 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
             search(it.toString())
         }
 
-        // TODO tab list binding.
+        val activity = activity ?: return
+        ViewModelProvider(activity).get(TabListViewModel::class.java)
+                .tabCount
+                .observe(activity, Observer { appBarBinding.tabCount.text = it.toString() })
     }
 
     override fun onResume() {
