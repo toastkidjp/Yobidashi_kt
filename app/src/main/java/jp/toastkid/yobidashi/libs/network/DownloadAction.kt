@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
@@ -48,7 +49,7 @@ class DownloadAction(
     }
 
     private fun enqueue() {
-        val uri = Uri.parse(url)
+        val uri = url.toUri()
         val request = DownloadManager.Request(uri)
 
         request.setNotificationVisibility(

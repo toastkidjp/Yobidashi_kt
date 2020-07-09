@@ -4,7 +4,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:card_view="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         card_view:elevation="4dp"
         android:layout_margin="4dp"
@@ -12,7 +12,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_gravity="bottom"
             >

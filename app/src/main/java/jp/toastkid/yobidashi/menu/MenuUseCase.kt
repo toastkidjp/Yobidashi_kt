@@ -38,7 +38,7 @@ import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import timber.log.Timber
-import java.util.*
+import java.util.Calendar
 
 /**
  * TODO clean up duplicated codes.

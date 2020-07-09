@@ -33,9 +33,9 @@ class DrawingCanvas
 
     private val finishedPointerPaths = mutableListOf<Path>()
 
-    private val paint = Paint().apply {
-        strokeWidth = 3.toFloat()
-        style = Paint.Style.STROKE
+    private val paint = Paint().also {
+        it.strokeWidth = 3.toFloat()
+        it.style = Paint.Style.STROKE
     }
 
     private val gestureDetector = GestureDetector(

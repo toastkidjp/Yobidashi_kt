@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -17,16 +15,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.tab.model.Tab
-import java.io.File
 
 /**
  * Tab list dialog fragment.
@@ -100,13 +97,13 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         }
 
         initializeContentView(activityContext)
-        applyBackgrounds()
-        return binding.root
-    }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        setStyle(STYLE_NORMAL, R.style.TabListBottomSheetDialog);
-        return super.onCreateDialog(savedInstanceState)
+        BackgroundImageLoaderUseCase().invoke(
+                binding.background,
+                PreferenceApplier(requireContext()).backgroundImagePath
+        )
+
+        return binding.root
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -234,19 +231,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     private fun startDrag(viewHolder: RecyclerView.ViewHolder) {
         rightTouchHelper?.startDrag(viewHolder)
         leftTouchHelper?.startDrag(viewHolder)
-    }
-
-    // TODO extract class
-    private fun applyBackgrounds() {
-        val backgroundImagePath = PreferenceApplier(requireContext()).backgroundImagePath
-        if (backgroundImagePath.isEmpty()) {
-            return
-        }
-
-        Glide.with(this)
-                .load(File(backgroundImagePath).toURI().toString().toUri())
-                .override(binding.root.measuredWidth, binding.root.measuredHeight)
-                .into(binding.background)
     }
 
     companion object {

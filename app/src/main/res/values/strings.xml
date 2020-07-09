@@ -500,5 +500,6 @@
     <string name="add_to_home_screen">Add to Home screen</string>
     <string name="imdb">IMDb</string>
     <string name="espn">ESPN</string>
+    <string name="horizontal_rule">Horizontal rule</string>
 
 </resources>

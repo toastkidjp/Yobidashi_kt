@@ -2,12 +2,13 @@ package jp.toastkid.yobidashi.settings.background
 
 import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSavedImageBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -43,11 +44,7 @@ internal class ViewHolder(
         binding.remove.setOnClickListener { removeSetImage(f) }
         binding.root.setOnClickListener {
             preferenceApplier.backgroundImagePath = f.path
-            Toaster.snackShort(
-                    binding.image,
-                    R.string.message_change_background_image,
-                    preferenceApplier.colorPair()
-            )
+            snack(R.string.message_change_background_image)
         }
         binding.root.setOnLongClickListener { v ->
             try {
@@ -92,10 +89,8 @@ internal class ViewHolder(
      * @param messageId Message ID
      */
     private fun snack(@StringRes messageId: Int) {
-        Toaster.snackShort(
-                binding.text,
-                messageId,
-                preferenceApplier.colorPair()
-        )
+        (binding.root.context as? FragmentActivity)?.also {
+            ViewModelProvider(it).get(ContentViewModel::class.java).snackShort(messageId)
+        }
     }
 }

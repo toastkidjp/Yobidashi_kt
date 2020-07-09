@@ -20,6 +20,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.yobidashi.R
@@ -28,6 +29,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
@@ -49,6 +51,8 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private var contentViewModel: ContentViewModel? = null
 
     /**
      * ModuleAdapter.
@@ -75,6 +79,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
+        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -94,7 +99,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         binding.imagesView.adapter = adapter
         if (adapter?.itemCount == 0) {
             Toaster.withAction(
-                    binding.fabParent,
+                    requireActivity().findViewById(android.R.id.content),
                     R.string.message_snackbar_suggestion_select_background_image,
                     R.string.select,
                     View.OnClickListener { launchAdding() },
@@ -115,13 +120,9 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
     /**
      * Clear background setting.
      */
-    fun clearBackgroundSettings() {
+    fun removeBackgroundSettings() {
         preferenceApplier.removeBackgroundImagePath()
-        Toaster.snackShort(
-                binding.fabParent,
-                R.string.message_reset_bg_image,
-                preferenceApplier.colorPair()
-        )
+        contentViewModel?.snackShort(R.string.message_reset_bg_image)
     }
 
     /**
@@ -143,12 +144,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
 
     override fun onClickClearImages() {
         filesDir.clean()
-        // TODO use ContentViewModel.
-        Toaster.snackShort(
-                binding.fabParent,
-                R.string.message_success_image_removal,
-                preferenceApplier.colorPair()
-        )
+        contentViewModel?.snackShort(R.string.message_success_image_removal)
         adapter?.notifyDataSetChanged()
     }
 
@@ -175,18 +171,21 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         inflater.inflate(R.menu.background_setting_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.background_settings_toolbar_menu_add -> {
-                launchAdding()
-                true
-            }
-            R.id.background_settings_toolbar_menu_clear -> {
-                clearImages()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.background_settings_toolbar_menu_add -> {
+            launchAdding()
+            true
         }
+        R.id.background_settings_toolbar_menu_clear -> {
+            clearImages()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onDetach() {
+        contentViewModel?.refresh()
+        super.onDetach()
     }
 
     companion object : TitleIdSupplier {

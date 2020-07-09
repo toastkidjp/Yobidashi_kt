@@ -37,8 +37,13 @@ class SearchHistoryFragment : Fragment(),
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        val context = context
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(context)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
@@ -99,7 +104,9 @@ class SearchHistoryFragment : Fragment(),
                 DatabaseFinder().invoke(context).searchHistoryRepository().deleteAll()
             }
 
-            adapter.clearAll { Toaster.snackShort(binding.root, R.string.settings_color_delete, preferenceApplier.colorPair()) }
+            adapter.clearAll {
+                Toaster.snackShort(binding.root, R.string.settings_color_delete, preferenceApplier.colorPair())
+            }
             activity?.supportFragmentManager?.popBackStack()
         }
     }

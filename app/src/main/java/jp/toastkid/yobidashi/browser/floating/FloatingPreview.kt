@@ -115,6 +115,8 @@ class FloatingPreview(context: Context) {
     }
 
     fun onResume() {
+        binding.previewContainer.foreground =
+                ColorDrawable(PreferenceApplier(binding.root.context).filterColor())
         binding.progress.progressDrawable.colorFilter =
                 PorterDuffColorFilter(
                         PreferenceApplier(binding.root.context).fontColor,

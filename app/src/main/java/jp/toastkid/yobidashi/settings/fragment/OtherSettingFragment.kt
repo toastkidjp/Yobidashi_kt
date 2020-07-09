@@ -81,12 +81,10 @@ class OtherSettingFragment : Fragment() {
 
     /**
      * Clear all settings.
-     *
-     * @param v
      */
     fun clearSettings() {
         ClearSettingConfirmDialogFragment().show(
-                requireFragmentManager(),
+                parentFragmentManager,
                 ClearSettingConfirmDialogFragment::class.java.canonicalName
         )
     }

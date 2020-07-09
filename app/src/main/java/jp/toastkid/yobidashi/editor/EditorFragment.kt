@@ -15,9 +15,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -38,8 +36,8 @@ import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
+import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
-import jp.toastkid.yobidashi.databinding.ModuleFragmentEditorMenuBinding
 import jp.toastkid.yobidashi.libs.FileExtractorFromUri
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -48,8 +46,9 @@ import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
 import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.TabUiFragment
 import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
@@ -73,12 +72,14 @@ class EditorFragment :
 
     private lateinit var binding: FragmentEditorBinding
 
-    private lateinit var menuBinding: ModuleFragmentEditorMenuBinding
+    private lateinit var menuBinding: AppBarEditorBinding
 
     /**
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private val externalFileAssignment = ExternalFileAssignment()
 
     /**
      * Default date format holder.
@@ -124,7 +125,7 @@ class EditorFragment :
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         menuBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(context),
-                R.layout.module_fragment_editor_menu,
+                R.layout.app_bar_editor,
                 container,
                 false
         )
@@ -291,7 +292,7 @@ class EditorFragment :
             return
         }
         val fileName = removeExtension(File(path).name) + "_backup.txt"
-        saveToFile(assignFile(binding.root.context, fileName).absolutePath)
+        saveToFile(externalFileAssignment.assignFile(binding.root.context, fileName).absolutePath)
     }
 
     fun clear() {
@@ -376,26 +377,6 @@ class EditorFragment :
     private fun removeExtension(fileName: String): String {
         val endIndex = fileName.lastIndexOf(".")
         return if (endIndex == -1) fileName else fileName.substring(0, endIndex)
-    }
-
-    /**
-     * Assign file in environment download directory.
-     *
-     * @param context
-     * @param fileName
-     * @return [File]
-     */
-    private fun assignFile(context: Context, fileName: String): File {
-        val externalFilesDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-        } else {
-            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-        }
-
-        if (externalFilesDir?.exists() == false) {
-            externalFilesDir.mkdirs()
-        }
-        return File(externalFilesDir, fileName)
     }
 
     /**
@@ -535,9 +516,9 @@ class EditorFragment :
      */
     fun assignNewFile(fileName: String) {
         val context = context ?: return
-        var newFile = assignFile(context, fileName)
+        var newFile = externalFileAssignment.assignFile(context, fileName)
         while (newFile.exists()) {
-            newFile = assignFile(
+            newFile = externalFileAssignment.assignFile(
                     context,
                     "${removeExtension(newFile.name)}_.txt"
             )

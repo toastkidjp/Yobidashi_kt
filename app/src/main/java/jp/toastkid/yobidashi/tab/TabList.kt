@@ -9,12 +9,11 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
-import kotlinx.coroutines.Job
 import okio.Okio
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.Collections
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -246,15 +245,19 @@ class TabList private constructor() {
         }
     }
 
-    fun thumbnailNames(): Collection<String> = tabs.map { it.thumbnailPath() }
+    fun thumbnailNames(): Collection<String> = makeCopyTabs().map { it.thumbnailPath() }
 
     fun archiveIds(): Collection<String> {
         val idGenerator = IdGenerator()
-        return tabs.map { idGenerator.from(it.getUrl()) ?: "" }
+        return makeCopyTabs().map { idGenerator.from(it.getUrl()) ?: "" }
     }
 
     fun ids(): Collection<String> {
-        return tabs.map { it.id() }
+        return makeCopyTabs().map { it.id() }
+    }
+
+    private fun makeCopyTabs(): MutableList<Tab> {
+        return mutableListOf<Tab>().also { it.addAll(tabs) }
     }
 
 }

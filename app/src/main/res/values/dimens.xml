@@ -34,4 +34,6 @@
     <dimen name="music_list_icon_width">32dp</dimen>
     <dimen name="media_player_popup_header_height">52dp</dimen>
 
+    <dimen name="menu_font_size">12sp</dimen>
+
 </resources>

@@ -64,6 +64,8 @@ internal class ModuleAdapter(
         }
         holder.setOnClickAdd(favorite, onClickAdd)
 
+        holder.setOnClickDelete { remove(favorite) }
+
         holder.setAddIcon(R.drawable.ic_add_circle_search)
 
         holder.setImageRes(SearchCategory.findByCategory(favorite.category as String).iconId)
@@ -111,13 +113,18 @@ internal class ModuleAdapter(
      */
     fun removeAt(position: Int): Job {
         val item = selected[position]
+        return remove(item, position)
+    }
+
+    private fun remove(item: FavoriteSearch, position: Int = -1): Job {
         return CoroutineScope(Dispatchers.Main).launch {
+            val removedIndex = if (position != -1 ) position else selected.indexOf(item)
             withContext(Dispatchers.IO) {
                 favoriteSearchRepository.delete(item)
                 selected.remove(item)
             }
 
-            notifyItemRemoved(position)
+            notifyItemRemoved(removedIndex)
             if (isEmpty()) {
                 onVisibilityChanged(false)
             }

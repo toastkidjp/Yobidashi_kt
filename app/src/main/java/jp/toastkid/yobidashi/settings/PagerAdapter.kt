@@ -43,7 +43,7 @@ class PagerAdapter(private val fragment: Fragment) : FragmentStateAdapter(fragme
     }
 
     fun getPageTitle(position: Int): CharSequence? {
-        return getTitleIdByPosition(position)?.let { fragment.getString(it) } ?: ""
+        return getTitleIdByPosition(position)?.let { fragment.getString(it) }
     }
 
     private fun getTitleIdByPosition(position: Int): Int? = pages[position].second.titleId()

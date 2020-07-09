@@ -3,9 +3,11 @@ package jp.toastkid.yobidashi.browser.history
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.url_suggestion.ViewHolder
+import java.io.File
 
 /**
  * ViewHistory model.
@@ -31,7 +33,12 @@ class ViewHistory : UrlItem {
     override fun bind(holder: ViewHolder) {
         holder.setTitle(title)
         holder.setUrl(url)
-        holder.setIconResource(R.drawable.ic_history_black)
+        if (favicon.isEmpty()) {
+            holder.setIconResource(R.drawable.ic_history_black)
+            return
+        }
+        holder.setIconFromPath(favicon)
+
     }
 
     override fun urlString() = url
