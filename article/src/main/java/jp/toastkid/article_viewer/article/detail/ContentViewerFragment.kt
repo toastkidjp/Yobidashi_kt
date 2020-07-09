@@ -28,6 +28,7 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.color.LinkColorGenerator
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.TextViewHighlighter
@@ -109,13 +110,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
 
         val editorFontColor = preferenceApplier.editorFontColor()
         binding.content.setTextColor(editorFontColor)
-        binding.content.setLinkTextColor(
-                Color.rgb(
-                        Color.green(editorFontColor),
-                        Color.blue(editorFontColor),
-                        Color.red(editorFontColor)
-                )
-        )
+        binding.content.setLinkTextColor(LinkColorGenerator().invoke(editorFontColor))
 
         appBarBinding.searchResult.setTextColor(preferenceApplier.fontColor)
         appBarBinding.input.setTextColor(preferenceApplier.fontColor)
