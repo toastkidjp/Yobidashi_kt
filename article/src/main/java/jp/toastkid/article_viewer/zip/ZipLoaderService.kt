@@ -51,9 +51,7 @@ class ZipLoaderService : JobIntentService() {
             /*progress.visibility = View.GONE
             progress_circular.visibility = View.GONE
             all()*/
-            val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
-            progressIntent.putExtra("progress", 100)
-            sendBroadcast(progressIntent)
+            sendBroadcast(makeBroadcastIntent(100))
             zipLoader.dispose()
         }
     }
@@ -61,6 +59,12 @@ class ZipLoaderService : JobIntentService() {
     companion object {
 
         private const val ACTION_PROGRESS_BROADCAST = "jp.toastkid.articles.importing.progress"
+
+        private fun makeBroadcastIntent(progress: Int): Intent {
+            val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
+            progressIntent.putExtra("progress", progress)
+            return progressIntent
+        }
 
         fun makeProgressBroadcastIntentFilter() = IntentFilter(ACTION_PROGRESS_BROADCAST)
 
