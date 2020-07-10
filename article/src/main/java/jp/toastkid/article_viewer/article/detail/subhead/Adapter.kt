@@ -10,6 +10,7 @@ package jp.toastkid.article_viewer.article.detail.subhead
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -21,7 +22,7 @@ class Adapter(private val layoutInflater: LayoutInflater) : RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-                layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false)
+                layoutInflater.inflate(ITEM_ID, parent, false)
                         as? TextView ?: TextView(parent.context)
         return ViewHolder(view)
     }
@@ -39,4 +40,10 @@ class Adapter(private val layoutInflater: LayoutInflater) : RecyclerView.Adapter
         }
     }
 
+    companion object {
+
+        @LayoutRes
+        private val ITEM_ID = android.R.layout.simple_list_item_1
+
+    }
 }
