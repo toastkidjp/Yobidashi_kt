@@ -146,6 +146,7 @@ class MenuBinder(
     }
 
     private fun open() {
+        recyclerView?.scheduleLayoutAnimation()
         menuStub.root?.visibility = View.VISIBLE
 
         recyclerView?.post {
@@ -156,7 +157,6 @@ class MenuBinder(
                     else -> it
                 }
             }
-            recyclerView?.scheduleLayoutAnimation()
         }
     }
 
