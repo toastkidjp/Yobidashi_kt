@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        tools:background="@color/cardview_dark_background"
+        tools:background="@color/design_default_color_secondary_variant"
         >
         <EditText
             android:id="@+id/input"
