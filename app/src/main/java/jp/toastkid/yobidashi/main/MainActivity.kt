@@ -57,6 +57,7 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -382,7 +383,11 @@ class MainActivity : AppCompatActivity(),
 
         when (calledIntent.action) {
             Intent.ACTION_VIEW -> {
-                calledIntent.data?.let { openNewWebTab(it) }
+                val uri = calledIntent.data ?: return
+                when (uri.scheme) {
+                    "content" -> openEditorTab(FileExtractorFromUri(this, uri))
+                    else -> openNewWebTab(uri)
+                }
                 return
             }
             Intent.ACTION_SEND -> {

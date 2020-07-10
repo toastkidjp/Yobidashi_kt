@@ -91,6 +91,20 @@
             </intent-filter>
         </activity-alias>
 
+        <activity-alias
+            android:name=".edit.EditActivity"
+            android:targetActivity=".main.MainActivity"
+            android:label="@string/title_editor"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="content"/>
+                <data android:mimeType="text/*" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar"
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
