@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.detail.subhead
 
-import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
