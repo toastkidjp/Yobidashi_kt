@@ -25,7 +25,7 @@ class SubheadDialogFragment : BottomSheetDialogFragment() {
         val requireContext = requireContext()
         val recyclerView = RecyclerView(requireContext)
         recyclerView.adapter = Adapter(layoutInflater).also {
-            it.addAll(arguments?.getStringArrayList("items"))
+            it.addAll(arguments?.getStringArrayList(KEY_EXTRA_ITEM))
         }
         recyclerView.layoutManager = LinearLayoutManager(requireContext, LinearLayoutManager.VERTICAL, false)
         return recyclerView
@@ -33,11 +33,11 @@ class SubheadDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
 
+        private const val KEY_EXTRA_ITEM = "items"
+
         fun make(items: List<String>): SubheadDialogFragment {
             return SubheadDialogFragment().also {
-                it.arguments = bundleOf(
-                        "items" to items
-                )
+                it.arguments = bundleOf(KEY_EXTRA_ITEM to items)
             }
         }
 
