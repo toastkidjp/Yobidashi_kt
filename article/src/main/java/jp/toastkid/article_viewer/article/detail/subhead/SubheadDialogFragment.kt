@@ -34,8 +34,6 @@ class SubheadDialogFragment : BottomSheetDialogFragment() {
                 Adapter(layoutInflater, viewModel)
                         .also { it.addAll(arguments?.getStringArrayList(KEY_EXTRA_ITEM)) }
         recyclerView.layoutManager = LinearLayoutManager(requireContext, LinearLayoutManager.VERTICAL, false)
-
-        setStyle(STYLE_NORMAL, R.style.SubheadBottomSheetDialog);
         return recyclerView
     }
 
