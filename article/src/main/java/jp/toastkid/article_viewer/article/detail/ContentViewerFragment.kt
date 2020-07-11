@@ -8,9 +8,12 @@
 package jp.toastkid.article_viewer.article.detail
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.Selection
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,6 +23,7 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
+import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
 import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
@@ -87,6 +91,19 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         return linkBehaviorService
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        ViewModelProvider(this)
+                .get(SubheadDialogFragmentViewModel::class.java)
+                .subhead
+                .observe(viewLifecycleOwner, Observer {
+                    val subhead = it?.getContentIfNotHandled() ?: return@Observer
+                    val indexOf = binding.content.editableText.indexOf(subhead)
+                    Selection.setSelection(binding.content.editableText, indexOf)
+                })
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -129,7 +146,8 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         CoroutineScope(Dispatchers.Main).launch {
             appBarBinding.searchResult.text = title
             val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) } ?: return@launch
-            binding.content.text = content
+            val editable = Editable.Factory.getInstance().newEditable(content)
+            binding.content.setText(editable, TextView.BufferType.EDITABLE)
             LinkGeneratorService().invoke(binding.content)
 
             withContext(Dispatchers.Default) {
@@ -159,9 +177,9 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
             return
         }
 
-        SubheadDialogFragment
-                .make(subheads)
-                .show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
+        val dialogFragment = SubheadDialogFragment.make(subheads)
+        dialogFragment.setTargetFragment(this, 1)
+        dialogFragment.show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
     }
 
     override fun toBottom() {
