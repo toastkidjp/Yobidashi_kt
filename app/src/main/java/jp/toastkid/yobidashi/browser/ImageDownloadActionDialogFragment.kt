@@ -54,7 +54,7 @@ class ImageDownloadActionDialogFragment : DialogFragment() {
                 .setView(contentView)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    DownloadAction(activityContext, url)()
+                    DownloadAction(activityContext)(url)
                     d.dismiss()
                 }
                 .create()
