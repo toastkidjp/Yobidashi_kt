@@ -621,7 +621,7 @@ class BrowserModule(
     }
 
     fun downloadAllImages() {
-        AllImageDownloaderService().invoke(currentView())
+        AllImageDownloaderService(DownloadAction(context)).invoke(currentView())
     }
 
     companion object {

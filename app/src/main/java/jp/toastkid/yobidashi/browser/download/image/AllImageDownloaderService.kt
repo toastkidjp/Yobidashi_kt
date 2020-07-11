@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.libs.network.DownloadAction
 /**
  * @author toastkidjp
  */
-class AllImageDownloaderService {
+class AllImageDownloaderService(private val downloadAction: DownloadAction) {
 
     operator fun invoke(webView: WebView?) {
         webView?.evaluateJavascript(SCRIPT) { result ->
@@ -22,8 +22,7 @@ class AllImageDownloaderService {
                 return@evaluateJavascript
             }
 
-            DownloadAction(webView.context)
-                    .invoke(result.split(DELIMITER).filter { Urls.isValidUrl(it) })
+            downloadAction.invoke(result.split(DELIMITER).filter { Urls.isValidUrl(it) })
         }
     }
 
