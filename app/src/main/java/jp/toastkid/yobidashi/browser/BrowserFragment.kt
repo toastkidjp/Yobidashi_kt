@@ -214,6 +214,9 @@ class BrowserFragment : Fragment(),
                 ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
                         .open(uri.toUri())
             }
+            R.id.download_all_images -> {
+                browserModule.downloadAllImages()
+            }
             R.id.add_to_home -> {
                 val uri = browserModule.currentUrl()?.toUri() ?: return true
                 ShortcutUseCase(requireContext())

@@ -8,6 +8,12 @@
         app:showAsAction="never"
         />
     <item
+        android:id="@+id/download_all_images"
+        android:title="Download all images"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/add_to_home"
         android:title="@string/add_to_home_screen"
         android:orderInCategory="100"
