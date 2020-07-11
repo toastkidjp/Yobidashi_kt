@@ -18,16 +18,17 @@ class AllImageDownloaderService {
 
     operator fun invoke(webView: WebView?) {
         webView?.evaluateJavascript(SCRIPT) { result ->
-            if (result.isNullOrBlank() || !result.contains(",")) {
+            if (result.isNullOrBlank() || !result.contains(DELIMITER)) {
                 return@evaluateJavascript
             }
 
             DownloadAction(webView.context)
-                    .invoke(result.split(",").filter { Urls.isValidUrl(it) })
+                    .invoke(result.split(DELIMITER).filter { Urls.isValidUrl(it) })
         }
     }
 
     companion object {
+        private const val DELIMITER = ","
 
         private val SCRIPT =
                 """
