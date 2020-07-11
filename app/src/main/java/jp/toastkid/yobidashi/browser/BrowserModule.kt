@@ -55,6 +55,7 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
@@ -620,23 +621,7 @@ class BrowserModule(
     }
 
     fun downloadAllImages() {
-        currentView()?.evaluateJavascript(
-                """
-        var images = document.getElementsByTagName('img');
-        var content = "";
-        for (var i = 0; i < images.length; i++) {
-            content = content + images[i].src + ',';
-        }
-        content;
-                """.trimIndent()
-        ) { result ->
-            if (result.isNullOrBlank() || !result.contains(",")) {
-                return@evaluateJavascript
-            }
-
-            DownloadAction(context)
-                    .invoke(result.split(",").filter { Urls.isValidUrl(it) })
-        }
+        AllImageDownloaderService().invoke(currentView())
     }
 
     companion object {
