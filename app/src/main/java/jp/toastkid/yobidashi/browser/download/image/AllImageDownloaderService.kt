@@ -35,7 +35,7 @@ class AllImageDownloaderService {
                 var images = document.getElementsByTagName('img');
                 var content = "";
                 for (var i = 0; i < images.length; i++) {
-                    content = content + images[i].src + ',';
+                    content = content + images[i].src + '$DELIMITER';
                 }
                 content;
                 """.trimIndent()
