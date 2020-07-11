@@ -628,16 +628,15 @@ class BrowserModule(
             content = content + images[i].src + ',';
         }
         content;
-                """.trimIndent(),
-                { result ->
-                    if (result.isNullOrBlank() || !result.contains(",")) {
-                        return@evaluateJavascript
-                    }
+                """.trimIndent()
+        ) { result ->
+            if (result.isNullOrBlank() || !result.contains(",")) {
+                return@evaluateJavascript
+            }
 
-                    DownloadAction(context)
-                            .invoke(result.split(",").filter { Urls.isValidUrl(it) })
-                }
-        )
+            DownloadAction(context)
+                    .invoke(result.split(",").filter { Urls.isValidUrl(it) })
+        }
     }
 
     companion object {
