@@ -16,4 +16,6 @@
     <string name="action_calendar">Calendar</string>
     <string name="action_bookmark">Bookmark</string>
     <string name="hint_search_articles">Search articles</string>
+    <string name="subhead">Subhead</string>
+    <string name="tab">Tab</string>
 </resources>
