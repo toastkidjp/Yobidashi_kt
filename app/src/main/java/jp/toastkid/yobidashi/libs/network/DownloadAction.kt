@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 /**
  * Method object of downloading.
  *
+ * @param context [Context]
  * @author toastkidjp
  */
 class DownloadAction(val context: Context) {
