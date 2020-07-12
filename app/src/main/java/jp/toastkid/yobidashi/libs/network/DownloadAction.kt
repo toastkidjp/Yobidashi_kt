@@ -63,8 +63,10 @@ class DownloadAction(val context: Context) {
 
     private fun makeRequest(uri: Uri): DownloadManager.Request {
         val request = DownloadManager.Request(uri)
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
+        request.setAllowedOverMetered(false)
+        request.setAllowedOverRoaming(false)
         return request
     }
 }
