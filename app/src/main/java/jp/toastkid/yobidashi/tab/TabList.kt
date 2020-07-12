@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 /**
- * First collection of [Tab].
+ * First class collection of [Tab].
  *
  * @author toastkidjp
  */

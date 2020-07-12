@@ -13,6 +13,8 @@ import java.util.*
  */
 object WebViewCookieHandler : CookieJar {
 
+    private const val DELIMITER = ";"
+
     /**
      * Use for extract [WebView]'s cookies.
      */
@@ -29,7 +31,7 @@ object WebViewCookieHandler : CookieJar {
 
         return if (cookiesString != null && cookiesString.isNotEmpty()) {
             cookiesString
-                    .split(";")
+                    .split(DELIMITER)
                     .mapNotNull { Cookie.parse(url, it) }
         } else {
             Collections.emptyList()

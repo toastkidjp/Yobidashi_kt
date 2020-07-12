@@ -8,7 +8,9 @@
 package jp.toastkid.yobidashi.editor
 
 import android.content.res.Resources
+import android.graphics.ColorFilter
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.widget.EditText
@@ -48,7 +50,7 @@ class CursorColorSetter {
             Timber.d(e)
             null
         } ?: return null
-        drawable.setColorFilter(newColor, PorterDuff.Mode.SRC_IN)
+        drawable.colorFilter = PorterDuffColorFilter(newColor, PorterDuff.Mode.SRC_IN)
         return arrayOf(drawable, drawable)
     }
 
