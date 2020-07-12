@@ -25,15 +25,21 @@ import jp.toastkid.article_viewer.R
  */
 class SubheadDialogFragment : BottomSheetDialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         val target = targetFragment ?: return null
         val requireContext = requireContext()
         val recyclerView = RecyclerView(requireContext)
-        val viewModel = ViewModelProvider(target).get(SubheadDialogFragmentViewModel::class.java)
+        val viewModel =
+                ViewModelProvider(target).get(SubheadDialogFragmentViewModel::class.java)
         recyclerView.adapter =
                 Adapter(layoutInflater, viewModel)
                         .also { it.addAll(arguments?.getStringArrayList(KEY_EXTRA_ITEM)) }
-        recyclerView.layoutManager = LinearLayoutManager(requireContext, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager =
+                LinearLayoutManager(requireContext, LinearLayoutManager.VERTICAL, false)
         return recyclerView
     }
 
