@@ -7,6 +7,7 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.Selection
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -131,6 +133,7 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         val editorFontColor = preferenceApplier.editorFontColor()
         binding.content.setTextColor(editorFontColor)
         binding.content.setLinkTextColor(LinkColorGenerator().invoke(editorFontColor))
+        binding.content.highlightColor = preferenceApplier.editorHighlightColor(Color.CYAN)
 
         appBarBinding.searchResult.setTextColor(preferenceApplier.fontColor)
         appBarBinding.input.setTextColor(preferenceApplier.fontColor)
