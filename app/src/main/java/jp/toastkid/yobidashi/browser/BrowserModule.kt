@@ -135,6 +135,7 @@ class BrowserModule(
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             browserHeaderViewModel?.updateProgress(0)
+            browserHeaderViewModel?.nextUrl(url)
 
             rssAddingSuggestion(view, url)
             updateBackButtonState(view.canGoBack())
@@ -269,16 +270,6 @@ class BrowserModule(
 
             browserHeaderViewModel?.updateProgress(newProgress)
             browserHeaderViewModel?.stopProgress(newProgress < 65)
-
-            try {
-                // TODO
-                val progressTitle =
-                        view.context.getString(R.string.prefix_loading) + newProgress + "%"
-                browserHeaderViewModel?.nextTitle(progressTitle)
-                browserHeaderViewModel?.nextUrl(view.url)
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
         }
 
         override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
