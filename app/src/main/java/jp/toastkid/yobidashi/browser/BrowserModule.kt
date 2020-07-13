@@ -80,11 +80,6 @@ class BrowserModule(
 
     private val htmlSourceExtractionUseCase by lazy { HtmlSourceExtractionUseCase() }
 
-    /**
-     * Loading flag.
-     */
-    private var isLoadFinished: Boolean = false
-
     private var customViewSwitcher: CustomViewSwitcher? = null
 
     private val adRemover: AdRemover = AdRemover.make(context.assets)
@@ -140,7 +135,6 @@ class BrowserModule(
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             browserHeaderViewModel?.updateProgress(0)
-            isLoadFinished = false
 
             rssAddingSuggestion(view, url)
             updateBackButtonState(view.canGoBack())
@@ -148,7 +142,6 @@ class BrowserModule(
 
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
-            isLoadFinished = true
 
             val title = view.title ?: ""
             val urlStr = url ?: ""
@@ -277,11 +270,8 @@ class BrowserModule(
             browserHeaderViewModel?.updateProgress(newProgress)
             browserHeaderViewModel?.stopProgress(newProgress < 65)
 
-            if (isLoadFinished) {
-                return
-            }
-
             try {
+                // TODO
                 val progressTitle =
                         view.context.getString(R.string.prefix_loading) + newProgress + "%"
                 browserHeaderViewModel?.nextTitle(progressTitle)
