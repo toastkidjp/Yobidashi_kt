@@ -149,7 +149,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      *
      * @param position
      */
-    fun scrollTo(position: Int) {
+    private fun scrollTo(position: Int) {
         layoutManager.scrollToPosition(getSafeIndex(position))
     }
 
