@@ -130,11 +130,13 @@ class BrowserFragment : Fragment(),
                     appBarBinding?.progress?.isVisible = false
                     appBarBinding?.reload?.setImageResource(R.drawable.ic_reload)
                     //TODO refreshThumbnail()
-                    val progressTitle =
-                            getString(R.string.prefix_loading) + newProgress + "%"
-                    appBarBinding?.mainText?.text = progressTitle
                     return@Observer
                 }
+
+                val progressTitle =
+                        getString(R.string.prefix_loading) + newProgress + "%"
+                appBarBinding?.mainText?.text = progressTitle
+
                 appBarBinding?.progress?.let {
                     it.isVisible = true
                     it.progress = newProgress
