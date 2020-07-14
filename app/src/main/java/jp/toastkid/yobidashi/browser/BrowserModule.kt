@@ -440,8 +440,6 @@ class BrowserModule(
         updateForwardButtonState(it.canGoForward())
     }
 
-    fun canCurrentTabGoesBack() = currentView()?.canGoBack() == true
-
     /**
      * Save archive file.
      */
