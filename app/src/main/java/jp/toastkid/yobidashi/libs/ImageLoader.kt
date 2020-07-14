@@ -14,21 +14,4 @@ import java.io.IOException
  */
 object ImageLoader {
 
-    /**
-     * Load image to [Bitmap].
-     *
-     * @param context
-     * @param uri
-     * @return [Bitmap] (nullable)
-     * @throws IOException
-     */
-    @Throws(IOException::class)
-    fun loadBitmap(context: Context, uri: Uri): Bitmap? {
-        val parcelFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r")
-        val fileDescriptor = parcelFileDescriptor?.fileDescriptor
-        val image = BitmapFactory.decodeFileDescriptor(fileDescriptor) ?: return null
-        parcelFileDescriptor?.close()
-        return image
-    }
-
 }
