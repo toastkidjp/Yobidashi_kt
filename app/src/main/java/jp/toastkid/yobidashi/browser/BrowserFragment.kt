@@ -129,7 +129,6 @@ class BrowserFragment : Fragment(),
                 if (70 < newProgress) {
                     appBarBinding?.progress?.isVisible = false
                     appBarBinding?.reload?.setImageResource(R.drawable.ic_reload)
-                    //TODO refreshThumbnail()
                     return@Observer
                 }
 
