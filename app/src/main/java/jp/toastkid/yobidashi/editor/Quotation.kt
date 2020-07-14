@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi.editor
 
-import android.text.TextUtils
-
 /**
  * Converter of quotation style(Markdown).
  *
