@@ -34,7 +34,7 @@ import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
-import jp.toastkid.yobidashi.settings.background.LoadedAction
+import jp.toastkid.yobidashi.settings.background.load.LoadedAction
 
 /**
  * Display setting fragment.

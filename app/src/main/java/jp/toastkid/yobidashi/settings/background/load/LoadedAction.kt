@@ -1,8 +1,7 @@
-package jp.toastkid.yobidashi.settings.background
+package jp.toastkid.yobidashi.settings.background.load
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
@@ -15,6 +14,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.settings.background.ImageDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
