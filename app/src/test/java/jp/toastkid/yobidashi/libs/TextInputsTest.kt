@@ -22,15 +22,4 @@ class TextInputsTest {
         assertNotNull(textInputLayout.editText)
     }
 
-    @Test
-    fun testWithDefaultInput() {
-        val defaultInput = "default"
-        val textInputLayout = TextInputs.withDefaultInput(RuntimeEnvironment.application, defaultInput)
-        val editText = textInputLayout.editText
-
-        assertNotNull(editText)
-        assertEquals(defaultInput, editText?.text.toString())
-        assertEquals(defaultInput.length, editText?.selectionStart)
-        assertEquals(defaultInput.length, editText?.selectionEnd)
-    }
 }

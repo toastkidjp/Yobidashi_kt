@@ -33,7 +33,10 @@ import jp.toastkid.yobidashi.main.content.ContentViewModel
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
+import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.background.LoadedAction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Display setting fragment.
@@ -174,6 +177,12 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.background_settings_toolbar_menu_add -> {
             launchAdding()
+            true
+        }
+        R.id.background_settings_add_default -> {
+            DefaultBackgroundImagePreparation().invoke(binding.root.context) {
+                activity?.runOnUiThread { adapter?.notifyDataSetChanged() }
+            }
             true
         }
         R.id.background_settings_toolbar_menu_clear -> {

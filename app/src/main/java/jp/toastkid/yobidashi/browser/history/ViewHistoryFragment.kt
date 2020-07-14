@@ -25,6 +25,7 @@ import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 
 /**
  * @author toastkidjp
@@ -64,33 +65,8 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         )
 
         binding.historiesView.adapter = adapter
-        binding.historiesView.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean = false
-        }
-        ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
-                    override fun onMove(
-                            rv: RecyclerView,
-                            viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder
-                    ): Boolean {
-                        val fromPos = viewHolder.adapterPosition
-                        val toPos = target.adapterPosition
-                        adapter.notifyItemMoved(fromPos, toPos)
-                        return true
-                    }
-
-                    override fun onSwiped(
-                            viewHolder: RecyclerView.ViewHolder,
-                            direction: Int
-                    ) {
-                        if (direction != ItemTouchHelper.RIGHT) {
-                            return
-                        }
-                        adapter.removeAt(viewHolder.adapterPosition)
-                    }
-                }).attachToRecyclerView(binding.historiesView)
-
+        SwipeActionAttachment().invoke(binding.historiesView)
+        
         setHasOptionsMenu(true)
 
         return binding.root

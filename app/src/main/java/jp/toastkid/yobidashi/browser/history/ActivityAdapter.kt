@@ -81,7 +81,6 @@ internal class ActivityAdapter(
             browserViewModel?.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
             true
         }
-        holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
     override fun getItemCount(): Int = items.size

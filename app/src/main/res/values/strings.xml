@@ -501,5 +501,6 @@
     <string name="imdb">IMDb</string>
     <string name="espn">ESPN</string>
     <string name="horizontal_rule">Horizontal rule</string>
+    <string name="title_add_default_background">Add default background</string>
 
 </resources>

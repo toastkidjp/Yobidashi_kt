@@ -464,10 +464,6 @@ class BrowserModule(
      */
     fun saveArchive() {
         val currentView = currentView() ?: return
-        if (Archive.cannotUseArchive()) {
-            contentViewModel?.snackShort(currentView.context.getString(R.string.message_disable_archive))
-            return
-        }
         Archive.save(currentView)
     }
 
@@ -475,10 +471,6 @@ class BrowserModule(
      * Save archive file.
      */
     fun saveArchiveForAutoArchive() {
-        if (Archive.cannotUseArchive()) {
-            return
-        }
-
         val webView = currentView()
         autoArchive.save(webView, idGenerator.from(webView?.url))
     }
@@ -619,15 +611,11 @@ class BrowserModule(
     fun makeShareMessage() = "${currentTitle()}$lineSeparator${currentUrl()}"
 
     fun invokeContentExtraction(callback: ValueCallback<String>) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            readerModeUseCase(currentView(), callback)
-        }
+        readerModeUseCase(currentView(), callback)
     }
 
     fun invokeHtmlSourceExtraction(callback: ValueCallback<String>) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            htmlSourceExtractionUseCase(currentView(), callback)
-        }
+        htmlSourceExtractionUseCase(currentView(), callback)
     }
 
     companion object {

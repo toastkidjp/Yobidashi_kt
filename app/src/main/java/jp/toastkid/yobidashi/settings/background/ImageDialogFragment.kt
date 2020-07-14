@@ -4,15 +4,15 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment.Companion.withBitmap
@@ -30,29 +30,36 @@ internal class ImageDialogFragment: DialogFragment() {
         val activityContext: Context = context
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val drawable: Drawable = when {
-            arguments?.containsKey(KEY_IMAGE) ?: false -> {
-                BitmapDrawable(activityContext.resources, arguments?.getParcelable<Bitmap>(KEY_IMAGE))
-            }
-            arguments?.containsKey(KEY_IMAGE_URL) ?: false -> {
-                val uriString = arguments?.getString(KEY_IMAGE_URL)
-                val uri = uriString?.toUri()
-                        ?: return super.onCreateDialog(savedInstanceState)
-                ImageLoader.readBitmapDrawable(activityContext, uri)
-            }
-            else -> null
-        } ?: return super.onCreateDialog(savedInstanceState)
-
         val contentView = LayoutInflater.from(activityContext)
                 .inflate(R.layout.content_dialog_image, null)
 
-        contentView.findViewById<ImageView>(R.id.image)?.setImageDrawable(drawable)
+        val arguments = arguments ?: return super.onCreateDialog(savedInstanceState)
+
+        loadImage(contentView, arguments)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.image)
                 .setView(contentView)
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
                 .create()
+    }
+
+    private fun loadImage(contentView: View, arguments: Bundle) {
+        val imageView = contentView.findViewById<ImageView>(R.id.image)
+        when {
+            arguments.containsKey(KEY_IMAGE) -> {
+                val bitmap = arguments.getParcelable<Bitmap>(KEY_IMAGE)
+                Glide.with(imageView)
+                        .load(bitmap)
+                        .into(imageView)
+            }
+            arguments.containsKey(KEY_IMAGE_URL) -> {
+                val uriString = arguments.getString(KEY_IMAGE_URL)
+                Glide.with(imageView)
+                        .load(uriString)
+                        .into(imageView)
+            }
+        }
     }
 
     companion object {

@@ -31,7 +31,7 @@ class SwipeActionAttachment {
                         direction: Int
                 ) {
                     val holder = viewHolder as? SwipeViewHolder?
-                    if (holder?.isButtonVisible() == true) {
+                    if (holder?.isButtonVisible() == false) {
                         return
                     }
                     val adapter = recyclerView.adapter

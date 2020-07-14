@@ -41,7 +41,7 @@ import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.SlidingTouchListener
+import jp.toastkid.yobidashi.libs.view.SlidingTapListener
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapter
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed
@@ -285,8 +285,8 @@ class MediaPlayerPopup(private val context: Context) {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setSlidingListener() {
-        val slidingTouchListener = SlidingTouchListener(binding.popupBackground)
-        slidingTouchListener.setCallback(object : SlidingTouchListener.OnNewPosition {
+        val slidingTouchListener = SlidingTapListener(binding.popupBackground)
+        slidingTouchListener.setCallback(object : SlidingTapListener.OnNewPosition {
             override fun onNewPosition(x: Float, y: Float) {
                 if (y > swipeLimit) {
                     return

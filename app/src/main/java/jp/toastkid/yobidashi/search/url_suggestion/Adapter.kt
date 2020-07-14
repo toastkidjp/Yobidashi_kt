@@ -37,7 +37,7 @@ class Adapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(
-                layoutInflater, R.layout.item_bookmark, parent, false
+                layoutInflater, R.layout.item_view_history, parent, false
         ));
     }
 

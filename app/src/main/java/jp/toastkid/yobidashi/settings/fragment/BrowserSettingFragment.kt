@@ -298,12 +298,10 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      * UserAgent setting.
      */
     fun userAgent() {
-        val fragmentManager = fragmentManager ?: return
-
         val dialogFragment = UserAgentDialogFragment()
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.show(
-                fragmentManager,
+                parentFragmentManager,
                 UserAgentDialogFragment::class.java.simpleName
         )
     }
