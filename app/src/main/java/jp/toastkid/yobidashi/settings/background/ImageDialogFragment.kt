@@ -14,7 +14,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment.Companion.withBitmap
 
 /**
