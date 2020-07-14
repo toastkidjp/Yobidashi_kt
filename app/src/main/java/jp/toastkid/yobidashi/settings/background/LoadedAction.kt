@@ -27,7 +27,7 @@ import java.io.IOException
 /**
  * Action of loaded new background image.
  *
- * @param data
+ * @param uri Image file URI.
  * @param parent Snackbar's parent.
  * @param colorPair Color pair.
  * @param onLoadedAction On loaded action.
@@ -35,17 +35,12 @@ import java.io.IOException
  * @author toastkidjp
  */
 internal class LoadedAction (
-        data: Intent,
+        private val uri: Uri?,
         private val parent: View,
         private val colorPair: ColorPair,
         private val onLoadedAction: () -> Unit,
         private val fileDir: String
 ) {
-
-    /**
-     * Image file URI.
-     */
-    private val uri: Uri? = data.data
 
     /**
      * For fixing rotated image.

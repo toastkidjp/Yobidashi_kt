@@ -156,7 +156,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
     ) {
         if (requestCode == IMAGE_READ_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             LoadedAction(
-                    data,
+                    data.data,
                     binding.fabParent,
                     preferenceApplier.colorPair(),
                     { adapter?.notifyDataSetChanged() },
