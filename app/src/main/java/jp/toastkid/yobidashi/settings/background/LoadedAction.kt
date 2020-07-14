@@ -8,6 +8,7 @@ import android.graphics.Rect
 import android.net.Uri
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.ImageLoader
@@ -65,7 +66,7 @@ internal class LoadedAction (
         CoroutineScope(Dispatchers.Main).launch {
             val bitmap = try {
                 withContext(Dispatchers.IO) {
-                    val image = ImageLoader.loadBitmap(context, uri)
+                    val image = Glide.with(context).asBitmap().load(uri).submit().get()
                     val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
                     fixedImage?.let { storeImageToFile(context, it, uri) }
                     fixedImage
