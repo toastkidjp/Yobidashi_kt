@@ -284,7 +284,7 @@ class ColorSettingFragment : Fragment(),
         }
 
         override fun onBindViewHolder(holder: SavedColorHolder, position: Int) {
-            bindView(holder, items.get(position))
+            bindView(holder, items[position])
         }
 
         override fun getItemCount(): Int = items.count()
