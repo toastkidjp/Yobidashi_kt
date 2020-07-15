@@ -1,15 +1,12 @@
 package jp.toastkid.yobidashi.settings.background.load
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Rect
 import android.net.Uri
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.BitmapScaling
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -20,8 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
 
 /**
@@ -62,7 +57,12 @@ internal class LoadedAction (
                 withContext(Dispatchers.IO) {
                     val image = Glide.with(context).asBitmap().load(uri).submit().get()
                     val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
-                    fixedImage?.let { storeImageToFile(context, it, uri) }
+                    fixedImage?.let {
+                        ImageStoreService(
+                                FilesDir(context, fileDir),
+                                PreferenceApplier(context)
+                        )(it, uri, (context as? Activity)?.windowManager?.defaultDisplay)
+                    }
                     fixedImage
                 }
             } catch (e: IOException) {
@@ -74,26 +74,6 @@ internal class LoadedAction (
             onLoadedAction()
             bitmap?.let { informDone(it) }
         }
-    }
-
-    /**
-     * Store image file.
-     *
-     * @param context
-     * @param image
-     *
-     * @throws FileNotFoundException
-     */
-    @Throws(FileNotFoundException::class)
-    private fun storeImageToFile(context: Context, image: Bitmap, uri: Uri) {
-        val output = FilesDir(context, fileDir).assignNewFile(uri)
-        PreferenceApplier(context).backgroundImagePath = output.path
-        val size = Rect()
-        (context as? Activity)?.windowManager?.defaultDisplay?.getRectSize(size)
-        val fileOutputStream = FileOutputStream(output)
-        BitmapScaling(image, size.width().toDouble(), size.height().toDouble())
-                .compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-        fileOutputStream.close()
     }
 
     /**
