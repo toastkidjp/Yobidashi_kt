@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.settings.color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ import kotlinx.coroutines.withContext
 internal class SavedColorAdapter(
         private val layoutInflater: LayoutInflater,
         private val repository: SavedColorRepository,
+        private val contentViewModel: ContentViewModel,
         private val commitNewColor: (Int, Int) -> Unit
 ) : RecyclerView.Adapter<SavedColorHolder>() {
 
@@ -52,7 +54,7 @@ internal class SavedColorAdapter(
                 repository.delete(color)
                 deleteAt(color)
             }
-            // TODO snackShort(R.string.settings_color_delete)
+            contentViewModel.snackShort(R.string.settings_color_delete)
         }
     }
 
@@ -89,14 +91,7 @@ internal class SavedColorAdapter(
 
             notifyDataSetChanged()
 
-            /*TODO
-            val root = binding?.root ?: return@launch
-            Toaster.snackShort(
-                    root,
-                    R.string.settings_color_delete,
-                    colorPair()
-            )
-             */
+            contentViewModel.snackShort(R.string.settings_color_delete)
         }
     }
 }

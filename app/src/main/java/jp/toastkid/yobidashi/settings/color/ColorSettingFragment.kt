@@ -10,8 +10,10 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -135,7 +137,13 @@ class ColorSettingFragment : Fragment(),
 
         repository = DatabaseFinder().invoke(activityContext).savedColorRepository()
 
-        adapter = SavedColorAdapter(LayoutInflater.from(activityContext), repository, this::commitNewColor)
+        adapter = SavedColorAdapter(
+                LayoutInflater.from(activityContext),
+                repository,
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java),
+                this::commitNewColor
+        )
+
         binding?.savedColors?.adapter = adapter
         binding?.savedColors?.layoutManager =
                 GridLayoutManager(activityContext, 3, LinearLayoutManager.VERTICAL, false)
