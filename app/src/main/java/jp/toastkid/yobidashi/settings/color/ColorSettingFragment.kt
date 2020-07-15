@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -73,7 +74,7 @@ class ColorSettingFragment : Fragment(),
     ): View? {
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_settings_color,
+                LAYOUT_ID,
                 container,
                 false
         )
@@ -337,6 +338,9 @@ class ColorSettingFragment : Fragment(),
     }
 
     companion object : TitleIdSupplier {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_settings_color
 
         override fun titleId(): Int = R.string.title_settings_color
 
