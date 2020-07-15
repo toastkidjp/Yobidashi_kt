@@ -248,7 +248,7 @@ class ColorSettingFragment : Fragment(),
             menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_random)
                     ?.setOnMenuItemClickListener {
                         val activityContext = context ?: return@setOnMenuItemClickListener true
-                        RandomColorInsertion()(activityContext) {
+                        RandomColorInsertion(repository)() {
                             adapter?.refresh()
                         }
                         snackShort(R.string.done_addition)

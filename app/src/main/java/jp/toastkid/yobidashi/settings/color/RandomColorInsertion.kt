@@ -7,20 +7,17 @@
  */
 package jp.toastkid.yobidashi.settings.color
 
-import android.content.Context
 import android.graphics.Color
-import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Random
 
 /**
  * @author toastkidjp
  */
-class RandomColorInsertion {
+class RandomColorInsertion(private val repository: SavedColorRepository) {
 
     private val random = Random()
 
@@ -29,15 +26,13 @@ class RandomColorInsertion {
      *
      * @param context
      */
-    operator fun invoke(context: Context, afterInserted: () -> Unit): Job {
+    operator fun invoke(afterInserted: () -> Unit): Job {
         val bg = makeRandomColor()
 
         val font = makeRandomColor()
 
         return CoroutineScope(Dispatchers.IO).launch {
-            DatabaseFinder().invoke(context)
-                    .savedColorRepository()
-                    .add(SavedColor.make(bg, font))
+            repository.add(SavedColor.make(bg, font))
             afterInserted()
         }
     }
