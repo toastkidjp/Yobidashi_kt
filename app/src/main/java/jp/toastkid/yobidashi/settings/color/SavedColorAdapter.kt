@@ -68,7 +68,7 @@ internal class SavedColorAdapter(
         }
     }
 
-    fun deleteAt(savedColor: SavedColor) {
+    private fun deleteAt(savedColor: SavedColor) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 repository.delete(savedColor)
