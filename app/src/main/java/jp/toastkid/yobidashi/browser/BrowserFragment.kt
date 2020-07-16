@@ -133,7 +133,7 @@ class BrowserFragment : Fragment(),
                 }
 
                 val progressTitle =
-                        getString(R.string.prefix_loading) + newProgress + "%"
+                        activity.getString(R.string.prefix_loading) + newProgress + "%"
                 appBarBinding?.mainText?.text = progressTitle
 
                 appBarBinding?.progress?.let {
