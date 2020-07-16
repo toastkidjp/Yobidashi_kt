@@ -41,7 +41,7 @@ class ImageStoreService(
         val size = getDisplayScale(display)
         val fileOutputStream = FileOutputStream(output)
         BitmapScaling(image, size.width().toDouble(), size.height().toDouble())
-                .compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+                .compress(Bitmap.CompressFormat.WEBP, 100, fileOutputStream)
         fileOutputStream.close()
     }
 
