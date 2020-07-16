@@ -240,7 +240,7 @@ class MainActivity : AppCompatActivity(),
             val findFragment = findFragment()
 
             if (findFragment !is TabUiFragment && supportFragmentManager.backStackEntryCount == 0) {
-                moveTaskToBack(true)
+                finish()
             }
         }
     }
@@ -821,7 +821,7 @@ class MainActivity : AppCompatActivity(),
             true
         }
         R.id.menu_exit -> {
-            moveTaskToBack(true)
+            finish()
             true
         }
         else -> super.onOptionsItemSelected(item)

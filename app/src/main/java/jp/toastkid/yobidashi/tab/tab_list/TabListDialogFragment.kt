@@ -64,8 +64,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     private var rightTouchHelper: ItemTouchHelper? = null
 
-    private var leftTouchHelper: ItemTouchHelper? = null
-
     interface Callback {
         fun onCloseOnly()
         fun onCloseTabListDialogFragment(lastTabId: String)
@@ -82,14 +80,20 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         fun tabIndexOfFromTabList(tab: Tab): Int
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
         val preferenceApplier = PreferenceApplier(activityContext)
         colorPair = preferenceApplier.colorPair()
 
-        val target = activity ?: return super.onCreateView(inflater, container, savedInstanceState)
+        val target = activity
+                ?: return super.onCreateView(inflater, container, savedInstanceState)
+
         if (target is Callback) {
             callback = target
         } else {
@@ -214,23 +218,11 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
                 }).attachToRecyclerView(recyclerView)
 
         val dragAttachment = DragAttachment()
-        rightTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.RIGHT)
-        leftTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.LEFT)
+        rightTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
 
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 
         recyclerView.adapter = adapter
-
-        val activity = requireActivity()
-        ViewModelProvider(activity)
-                .get(TabListViewModel::class.java)
-                .startDrag
-                .observe(activity, Observer { startDrag(it) })
-    }
-
-    private fun startDrag(viewHolder: RecyclerView.ViewHolder) {
-        rightTouchHelper?.startDrag(viewHolder)
-        leftTouchHelper?.startDrag(viewHolder)
     }
 
     companion object {

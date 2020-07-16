@@ -17,14 +17,6 @@ import java.io.File
  */
 internal class TabListViewModel : ViewModel() {
 
-    private val _startDrag = MutableLiveData<ViewHolder>()
-
-    val startDrag: LiveData<ViewHolder> = _startDrag
-
-    fun sendStartDrag(viewHolder: ViewHolder) {
-        _startDrag.postValue(viewHolder)
-    }
-
     private val _saveEditorTab = MutableLiveData<File>()
 
     val saveEditorTab: LiveData<File> = _saveEditorTab

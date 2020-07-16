@@ -174,15 +174,15 @@ class SearchFragment : Fragment() {
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
                 headerBinding?.searchInput as EditText,
-                { search(headerBinding?.searchCategories?.selectedItem.toString(), it) },
-                { search(headerBinding?.searchCategories?.selectedItem.toString(), it, true) },
+                { search(extractCurrentSearchCategory(), it) },
+                { search(extractCurrentSearchCategory(), it, true) },
                 this::hideKeyboard
         )
 
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                { search(headerBinding?.searchCategories?.selectedItem.toString(), it) },
-                { search(headerBinding?.searchCategories?.selectedItem.toString(), it, true) }
+                { search(extractCurrentSearchCategory(), it) },
+                { search(extractCurrentSearchCategory(), it, true) }
         )
 
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding)
@@ -346,7 +346,7 @@ class SearchFragment : Fragment() {
         headerBinding?.searchInput?.let {
             it.setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    search(headerBinding?.searchCategories?.selectedItem.toString(), v.text.toString())
+                    search(extractCurrentSearchCategory(), v.text.toString())
                 }
                 true
             }
@@ -422,7 +422,6 @@ class SearchFragment : Fragment() {
      */
     private fun applyColor() {
         val colorPair : ColorPair = preferenceApplier.colorPair()
-        @ColorInt val bgColor:   Int = colorPair.bgColor()
         @ColorInt val fontColor: Int = colorPair.fontColor()
         EditTextColorSetter().invoke(headerBinding?.searchInput, fontColor)
 
@@ -443,7 +442,7 @@ class SearchFragment : Fragment() {
             return
         }
         search(
-                headerBinding?.searchCategories?.selectedItem.toString(),
+                extractCurrentSearchCategory(),
                 headerBinding?.searchInput?.text.toString()
         )
     }
@@ -454,7 +453,7 @@ class SearchFragment : Fragment() {
         }
 
         search(
-                headerBinding?.searchCategories?.selectedItem.toString(),
+                extractCurrentSearchCategory(),
                 headerBinding?.searchInput?.text.toString(),
                 true
         )
@@ -486,6 +485,9 @@ class SearchFragment : Fragment() {
     private fun hideKeyboard() {
         headerBinding?.searchInput?.let { Inputs.hideKeyboard(it) }
     }
+
+    private fun extractCurrentSearchCategory() =
+            headerBinding?.searchCategories?.selectedItem.toString()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

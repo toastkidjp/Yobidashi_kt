@@ -52,7 +52,7 @@
             android:id="@+id/close"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="right|top"
+            android:layout_gravity="end|top"
             android:padding="16dp"
             app:srcCompat="@drawable/ic_close_black"
             android:scaleType="centerInside"
