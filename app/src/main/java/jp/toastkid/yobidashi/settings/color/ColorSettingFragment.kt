@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -227,26 +228,26 @@ class ColorSettingFragment : Fragment(),
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
         inflater.inflate(R.menu.color_setting_toolbar_menu, menu)
+    }
 
-        menu.let { menuNonNull ->
-            menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_recommend)
-                    ?.setOnMenuItemClickListener {
-                        RecommendColorDialogFragment().show(
-                                parentFragmentManager,
-                                RecommendColorDialogFragment::class.java.simpleName
-                        )
-                        true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.color_settings_toolbar_menu_add_recommend -> {
+                RecommendColorDialogFragment().show(
+                        parentFragmentManager,
+                        RecommendColorDialogFragment::class.java.simpleName
+                )
+                true
             }
-            menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_random)
-                    ?.setOnMenuItemClickListener {
-                        RandomColorInsertion(repository)() {
-                            adapter?.refresh()
-                        }
-                        snackShort(R.string.done_addition)
-                        true
-                    }
+            R.id.color_settings_toolbar_menu_add_random -> {
+                RandomColorInsertion(repository)() {
+                    adapter?.refresh()
+                }
+                snackShort(R.string.done_addition)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
