@@ -40,6 +40,12 @@ import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.storage.CacheDir
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okio.Okio
 
 /**
  * Internal browser fragment.
@@ -297,13 +303,19 @@ class BrowserFragment : Fragment(),
     private fun showReaderFragment(content: String) {
         val lineSeparator = System.getProperty("line.separator") ?: ""
         val replacedContent = content.replace("\\n", lineSeparator)
+        CoroutineScope(Dispatchers.Main).launch {
+            val file = CacheDir(requireContext(), "content").assignNewFile("reader")
+            withContext(Dispatchers.IO) {
+                Okio.buffer(Okio.sink(file)).use { it.writeUtf8(replacedContent) }
+            }
 
-        val readerFragment =
-                activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
-                        ?: ReaderFragment()
-        (readerFragment as? ReaderFragment)?.setContent(browserModule.currentTitle(), replacedContent)
+            val readerFragment =
+                    activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
+                            ?: ReaderFragment()
+            (readerFragment as? ReaderFragment)?.setContent(browserModule.currentTitle(), file)
 
-        contentViewModel?.nextFragment(readerFragment)
+            contentViewModel?.nextFragment(readerFragment)
+        }
     }
 
     fun showUserAgentSetting() {

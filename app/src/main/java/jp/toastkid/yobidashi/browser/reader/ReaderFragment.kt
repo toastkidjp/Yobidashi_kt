@@ -27,7 +27,12 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.storage.CacheDir
 import jp.toastkid.lib.view.TextViewHighlighter
+import okio.Okio
+import timber.log.Timber
+import java.io.File
+import java.io.IOException
 
 /**
  * @author toastkidjp
@@ -54,7 +59,10 @@ class ReaderFragment : Fragment(), ContentScrollable {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { arguments ->
             arguments.getString(KEY_TITLE)?.also { binding.title.text = it }
-            arguments.getString(KEY_CONTENT)?.also { binding.textContent.text = it }
+            arguments.getSerializable(KEY_CONTENT)?.also { serializable ->
+                val file = serializable as? File ?: return@also
+                binding.textContent.text = Okio.buffer(Okio.source(file)).use { it.readUtf8() }
+            }
         }
 
         binding.textContent.customSelectionActionModeCallback = object : ActionMode.Callback {
@@ -105,14 +113,14 @@ class ReaderFragment : Fragment(), ContentScrollable {
         setHasOptionsMenu(true)
     }
 
-    fun setContent(title: String, content: String) {
+    fun setContent(title: String, content: File) {
         if (arguments == null) {
             arguments = Bundle()
         }
 
         arguments?.also {
             it.putString(KEY_TITLE, title)
-            it.putString(KEY_CONTENT, content)
+            it.putSerializable(KEY_CONTENT, content)
         }
     }
 
@@ -163,6 +171,18 @@ class ReaderFragment : Fragment(), ContentScrollable {
     override fun onDetach() {
         speechMaker.dispose()
         super.onDetach()
+    }
+
+    override fun onDestroy() {
+        try {
+            val tempFile = CacheDir(requireContext(), "content").assignNewFile("reader")
+            if (tempFile.exists()) {
+                tempFile.delete()
+            }
+        } catch (e: IOException) {
+            Timber.e(e)
+        }
+        super.onDestroy()
     }
 
     companion object {
