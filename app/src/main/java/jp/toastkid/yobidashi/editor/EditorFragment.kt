@@ -389,6 +389,7 @@ class EditorFragment :
 
         if (runtimePermissions.isRevoked(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             snackText(R.string.message_requires_permission_storage)
+            runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             return
         }
 
