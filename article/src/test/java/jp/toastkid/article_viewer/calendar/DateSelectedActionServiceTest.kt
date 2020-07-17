@@ -9,6 +9,7 @@ import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
@@ -29,6 +30,7 @@ class DateSelectedActionServiceTest {
         MockKAnnotations.init(this)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun test() {
         every { repository.findFirst(any()) }.answers { Article(1).also { it.title = "test" } }
