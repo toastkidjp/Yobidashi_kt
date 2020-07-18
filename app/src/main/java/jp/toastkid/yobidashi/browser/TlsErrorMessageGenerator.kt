@@ -21,7 +21,12 @@ class TlsErrorMessageGenerator {
 
         val cert: SslCertificate = error.certificate
 
-        val cause = when (error.primaryError) {
+        return context.getString(R.string.message_ssl_error_first_line) +
+                makeCause(error, context, cert)
+    }
+
+    private fun makeCause(error: SslError, context: Context, cert: SslCertificate): String {
+        return when (error.primaryError) {
             SslError.SSL_EXPIRED ->
                 context.getString(R.string.message_ssl_error_expired) + dateToString(cert.validNotAfterDate)
             SslError.SSL_IDMISMATCH ->
@@ -33,7 +38,6 @@ class TlsErrorMessageGenerator {
             else ->
                 context.getString(R.string.message_ssl_error_unknown)
         }
-        return context.getString(R.string.message_ssl_error_first_line) + cause
     }
 
     private fun dateToString(date: Date?) =

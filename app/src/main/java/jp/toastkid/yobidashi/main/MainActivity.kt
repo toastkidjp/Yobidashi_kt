@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -20,11 +19,10 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
+import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -44,7 +42,6 @@ import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -74,6 +71,7 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
+import jp.toastkid.yobidashi.tab.tab_list.TabListService
 import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
@@ -83,7 +81,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
+import kotlin.system.measureTimeMillis
 
 /**
  * Main of this calendar app.
@@ -106,11 +104,6 @@ class MainActivity : AppCompatActivity(),
      * Disposables.
      */
     private val disposables: Job by lazy { Job() }
-
-    /**
-     * Tab list dialog fragment.
-     */
-    private var tabListDialogFragment: DialogFragment? = null
 
     /**
      * Find-in-page module.
@@ -149,10 +142,16 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var menuUseCase: MenuUseCase
 
+    private var tabListService: TabListService? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme_NoActionBar)
         setContentView(LAYOUT_ID)
+
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            MobileAds.initialize(this@MainActivity) {}
+        }
 
         preferenceApplier = PreferenceApplier(this)
 
@@ -271,7 +270,9 @@ class MainActivity : AppCompatActivity(),
                 (view.parent as? ViewGroup)?.removeAllViews()
             }
 
-            binding.toolbar.layoutParams.height = view.layoutParams.height
+            if (view.layoutParams != null) {
+                binding.toolbar.layoutParams.height = view.layoutParams.height
+            }
             binding.toolbarContent.addView(view, 0)
         })
 
@@ -520,16 +521,6 @@ class MainActivity : AppCompatActivity(),
         tabs.saveTabList()
     }
 
-    /**
-     * Show tab list.
-     */
-    private fun showTabList() {
-        refreshThumbnail()
-        // TODO Remove unused elvis operator.
-        val fragmentManager = supportFragmentManager ?: return
-        tabListDialogFragment?.show(fragmentManager, TabListDialogFragment::class.java.canonicalName)
-    }
-
     private fun refreshThumbnail() {
         CoroutineScope(Dispatchers.Default).launch(disposables) {
             runOnUiThread {
@@ -543,8 +534,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        if (tabListDialogFragment?.isVisible == true) {
-            tabListDialogFragment?.dismiss()
+        if (tabListService?.onBackPressed() == true) {
             return
         }
 
@@ -715,26 +705,17 @@ class MainActivity : AppCompatActivity(),
      * Switch tab list visibility.
      */
     private fun switchTabList() {
-        initTabListIfNeed()
-        if (tabListDialogFragment?.isVisible == true) {
-            tabListDialogFragment?.dismiss()
-        } else {
-            showTabList()
+        if (tabListService == null) {
+            tabListService = TabListService(supportFragmentManager, this::refreshThumbnail)
         }
-    }
-
-    /**
-     * Initialize tab list.
-     */
-    private fun initTabListIfNeed() {
-        tabListDialogFragment = TabListDialogFragment()
+        tabListService?.switch()
     }
 
     /**
      * Action on empty tabs.
      */
     private fun onEmptyTabs() {
-        tabListDialogFragment?.dismiss()
+        tabListService?.dismiss()
         openNewTab()
     }
 
@@ -744,7 +725,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onCloseOnly() {
-        tabListDialogFragment?.dismiss()
+        tabListService?.dismiss()
     }
 
     override fun onCloseTabListDialogFragment(lastTabId: String) {
@@ -855,7 +836,7 @@ class MainActivity : AppCompatActivity(),
 
                 tabs.openNewPdfTab(uri)
                 replaceToCurrentTab(true)
-                tabListDialogFragment?.dismiss()
+                tabListService?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(this, data)

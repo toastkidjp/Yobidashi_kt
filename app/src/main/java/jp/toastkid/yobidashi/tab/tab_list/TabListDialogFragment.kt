@@ -9,9 +9,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -61,8 +58,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
      * Tab ID when this module opened.
      */
     private var lastTabId: String = ""
-
-    private var rightTouchHelper: ItemTouchHelper? = null
 
     interface Callback {
         fun onCloseOnly()
@@ -203,22 +198,8 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     private fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
-                    override fun onMove(
-                            rv: RecyclerView,
-                            viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder
-                    ): Boolean = true
 
-                    override fun onSwiped(
-                            viewHolder: RecyclerView.ViewHolder,
-                            direction: Int
-                    ) = (viewHolder as? ViewHolder)?.close() ?: Unit
-                }).attachToRecyclerView(recyclerView)
-
-        val dragAttachment = DragAttachment()
-        rightTouchHelper = dragAttachment(recyclerView, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)
+        ItemTouchHelperAttachment()(recyclerView)
 
         LinearSnapHelper().attachToRecyclerView(recyclerView)
 

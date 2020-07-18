@@ -15,10 +15,13 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
+import jp.toastkid.yobidashi.libs.ad.AdService
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.yobidashi.main.AppBarViewModel
 
 /**
  * @author toastkidjp
@@ -31,6 +34,8 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private var adService: AdService? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -53,6 +58,9 @@ class SettingFragment : Fragment() {
         }
         mediator.attach()
 
+        adService = AdService { context }
+        adService?.sendWith(ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java))
+
         setHasOptionsMenu(true)
 
         return binding.root
@@ -62,6 +70,8 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.container.currentItem = 0
+
+        adService?.load()
     }
 
     override fun onResume() {
@@ -76,6 +86,11 @@ class SettingFragment : Fragment() {
             it.tabTextColors = ColorStateList.valueOf(fontColor)
             it.setSelectedTabIndicatorColor(fontColor)
         }
+    }
+
+    override fun onDestroyView() {
+        adService?.destroy()
+        super.onDestroyView()
     }
 
     companion object {

@@ -29,6 +29,10 @@
         >
 
         <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5751262573448755~1704109822"/>
+
+        <meta-data
             android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="true"
             />

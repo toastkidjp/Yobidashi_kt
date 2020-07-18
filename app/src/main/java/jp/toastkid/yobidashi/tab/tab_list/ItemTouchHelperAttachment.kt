@@ -11,21 +11,23 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Drag attachment to specified [RecyclerView].
+ * This class attach [ItemTouchHelper] to specified [RecyclerView].
  *
  * @author toastkidjp
  */
-class DragAttachment {
+class ItemTouchHelperAttachment {
 
     /**
      * Invoke action.
      *
      * @param recyclerView [RecyclerView]
-     * @param direction [ItemTouchHelper]'s constant
      */
-    operator fun invoke(recyclerView: RecyclerView, direction: Int): ItemTouchHelper {
+    operator fun invoke(recyclerView: RecyclerView): ItemTouchHelper {
         val itemTouchHelper = ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(direction, 0) {
+                object : ItemTouchHelper.SimpleCallback(
+                        DRAG_DIRECTIONS,
+                        SWIPE_DIRECTION
+                ) {
                     override fun onMove(
                             rv: RecyclerView,
                             viewHolder: RecyclerView.ViewHolder,
@@ -41,10 +43,23 @@ class DragAttachment {
                     override fun onSwiped(
                             viewHolder: RecyclerView.ViewHolder,
                             direction: Int
-                    ) = Unit
+                    ) {
+                        if (direction != SWIPE_DIRECTION) {
+                            return
+                        }
+                        (viewHolder as? ViewHolder)?.close()
+                    }
                 }
         )
         itemTouchHelper.attachToRecyclerView(recyclerView)
         return itemTouchHelper
+    }
+
+    companion object {
+
+        private const val DRAG_DIRECTIONS = ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+
+        private const val SWIPE_DIRECTION = ItemTouchHelper.UP
+
     }
 }

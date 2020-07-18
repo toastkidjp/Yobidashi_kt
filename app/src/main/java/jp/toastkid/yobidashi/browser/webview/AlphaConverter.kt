@@ -5,6 +5,7 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import kotlin.math.roundToInt
 
 /**
  * @author toastkidjp
@@ -15,6 +16,6 @@ class AlphaConverter {
     fun readBackground(context: Context) =
             ColorUtils.setAlphaComponent(
                     Color.WHITE,
-                    Math.round((255f * PreferenceApplier(context).getWebViewBackgroundAlpha()))
+                    (255f * PreferenceApplier(context).getWebViewBackgroundAlpha()).roundToInt()
             )
 }

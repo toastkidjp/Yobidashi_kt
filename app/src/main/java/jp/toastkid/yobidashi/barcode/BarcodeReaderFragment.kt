@@ -240,7 +240,7 @@ class BarcodeReaderFragment : Fragment() {
 
         barcodeView.barcodeView?.cameraInstance?.requestPreview(object : PreviewCallback {
             override fun onPreview(sourceData: SourceData?) {
-                val output = ExternalFileAssignment().assignFile(
+                val output = ExternalFileAssignment()(
                         requireContext(),
                         "shoot_${System.currentTimeMillis()}.png"
                 )

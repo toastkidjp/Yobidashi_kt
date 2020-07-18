@@ -281,8 +281,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun setTextAndMoveCursorToEnd(text: String) {
-        headerBinding?.searchInput?.setText(text)
-        headerBinding?.searchInput?.setSelection(text.length)
+        headerBinding?.searchInput?.also {
+            it.setText(text)
+            it.setSelection(text.length)
+        }
     }
 
     /**

@@ -292,7 +292,7 @@ class EditorFragment :
             return
         }
         val fileName = removeExtension(File(path).name) + "_backup.txt"
-        saveToFile(externalFileAssignment.assignFile(binding.root.context, fileName).absolutePath)
+        saveToFile(externalFileAssignment(binding.root.context, fileName).absolutePath)
     }
 
     fun clear() {
@@ -516,9 +516,9 @@ class EditorFragment :
      */
     fun assignNewFile(fileName: String) {
         val context = context ?: return
-        var newFile = externalFileAssignment.assignFile(context, fileName)
+        var newFile = externalFileAssignment(context, fileName)
         while (newFile.exists()) {
-            newFile = externalFileAssignment.assignFile(
+            newFile = externalFileAssignment(
                     context,
                     "${removeExtension(newFile.name)}_.txt"
             )
