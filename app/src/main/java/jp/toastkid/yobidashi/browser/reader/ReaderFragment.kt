@@ -29,6 +29,10 @@ import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.storage.CacheDir
 import jp.toastkid.lib.view.TextViewHighlighter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okio.Okio
 import timber.log.Timber
 import java.io.File
@@ -113,14 +117,21 @@ class ReaderFragment : Fragment(), ContentScrollable {
         setHasOptionsMenu(true)
     }
 
-    fun setContent(title: String, content: File) {
+    fun setContent(title: String, content: String) {
         if (arguments == null) {
             arguments = Bundle()
         }
 
-        arguments?.also {
-            it.putString(KEY_TITLE, title)
-            it.putSerializable(KEY_CONTENT, content)
+        CoroutineScope(Dispatchers.Main).launch {
+            val file = assignCacheFile()
+            withContext(Dispatchers.IO) {
+                Okio.buffer(Okio.sink(file)).use { it.writeUtf8(content) }
+            }
+
+            arguments?.also {
+                it.putString(KEY_TITLE, title)
+                it.putSerializable(KEY_CONTENT, file)
+            }
         }
     }
 
@@ -175,7 +186,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
     override fun onDestroy() {
         try {
-            val tempFile = CacheDir(requireContext(), "content").assignNewFile("reader")
+            val tempFile = assignCacheFile()
             if (tempFile.exists()) {
                 tempFile.delete()
             }
@@ -184,6 +195,8 @@ class ReaderFragment : Fragment(), ContentScrollable {
         }
         super.onDestroy()
     }
+
+    private fun assignCacheFile() = CacheDir(requireContext(), "content").assignNewFile("reader")
 
     companion object {
 
