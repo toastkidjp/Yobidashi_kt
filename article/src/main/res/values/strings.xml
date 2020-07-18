@@ -18,4 +18,6 @@
     <string name="hint_search_articles">Search articles</string>
     <string name="subhead">Subhead</string>
     <string name="tab">Tab</string>
+    <string name="message_done_import">Completed import.</string>
+    <string name="reload">Reload</string>
 </resources>
