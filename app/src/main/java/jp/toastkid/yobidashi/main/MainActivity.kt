@@ -304,7 +304,18 @@ class MainActivity : AppCompatActivity(),
             replaceFragment(it, withAnimation = true, withSlideIn = false)
         })
         contentViewModel?.snackbar?.observe(this, Observer {
-            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+            val snackbarEvent = it.getContentIfNotHandled() ?: return@Observer
+            if (snackbarEvent.actionLabel == null) {
+                Toaster.snackShort(binding.content, snackbarEvent.message, preferenceApplier.colorPair())
+            } else {
+                Toaster.withAction(
+                        binding.content,
+                        snackbarEvent.message,
+                        snackbarEvent.actionLabel ?: "",
+                        View.OnClickListener { snackbarEvent.action() },
+                        preferenceApplier.colorPair()
+                )
+            }
         })
         contentViewModel?.snackbarRes?.observe(this, Observer {
             Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
