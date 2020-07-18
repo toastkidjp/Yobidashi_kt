@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 /**
  * Article list fragment.
@@ -86,7 +87,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
     private val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             progressCallback.hideProgress()
-            all()
+            contentViewModel?.snackWithAction("Completed import.", "Reload", { all() })
         }
     }
 
