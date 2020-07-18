@@ -87,7 +87,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
     private val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             progressCallback.hideProgress()
-            contentViewModel?.snackWithAction("Completed import.", "Reload", { all() })
+            contentViewModel?.snackWithAction("Completed import.", "Reload") { all() }
         }
     }
 
