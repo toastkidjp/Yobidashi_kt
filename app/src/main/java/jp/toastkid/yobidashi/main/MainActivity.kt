@@ -306,16 +306,21 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.snackbar?.observe(this, Observer {
             val snackbarEvent = it.getContentIfNotHandled() ?: return@Observer
             if (snackbarEvent.actionLabel == null) {
-                Toaster.snackShort(binding.content, snackbarEvent.message, preferenceApplier.colorPair())
-            } else {
-                Toaster.withAction(
+                Toaster.snackShort(
                         binding.content,
                         snackbarEvent.message,
-                        snackbarEvent.actionLabel ?: "",
-                        View.OnClickListener { snackbarEvent.action() },
                         preferenceApplier.colorPair()
                 )
+                return@Observer
             }
+
+            Toaster.withAction(
+                    binding.content,
+                    snackbarEvent.message,
+                    snackbarEvent.actionLabel ?: "",
+                    View.OnClickListener { snackbarEvent.action() },
+                    preferenceApplier.colorPair()
+            )
         })
         contentViewModel?.snackbarRes?.observe(this, Observer {
             Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
