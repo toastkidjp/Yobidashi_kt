@@ -80,6 +80,7 @@ import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListService
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -410,7 +411,8 @@ class MainActivity : AppCompatActivity(),
                 calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
                     val query = it.toString()
                     if (Urls.isInvalidUrl(query)) {
-                        search(preferenceApplier.getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), query)
+                        search(preferenceApplier.getDefaultSearchEngine()
+                                ?: SearchCategory.getDefaultCategoryName(), query)
                         return
                     }
                     openNewWebTab(query.toUri())
@@ -421,7 +423,7 @@ class MainActivity : AppCompatActivity(),
                 val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
                 } else {
-                    preferenceApplier.getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
+                    preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
                 }
                 search(category, calledIntent.getStringExtra(SearchManager.QUERY))
                 return
