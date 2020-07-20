@@ -6,8 +6,6 @@ import jp.toastkid.yobidashi.tab.model.WebTab
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 
 /**
@@ -15,7 +13,6 @@ import java.io.IOException
  *
  * @author toastkidjp
  */
-@RunWith(RobolectricTestRunner::class)
 class WebTabTest {
 
     @Test
