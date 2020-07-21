@@ -141,9 +141,14 @@ class SearchQueryExtractorTest {
                 "orange",
                 searchQueryExtractor("https://ja.wikipedia.org/wiki/orange")
         )
+    }
+
+    @Test
+    fun testElseCase() {
         assertEquals(
                 "orange",
                 searchQueryExtractor("https://www.sample-search.com/search?q=orange")
         )
     }
+
 }
