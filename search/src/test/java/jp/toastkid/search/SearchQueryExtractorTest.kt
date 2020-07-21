@@ -23,8 +23,12 @@ class SearchQueryExtractorTest {
     }
 
     @Test
-    fun testInvoke() {
+    fun testNull() {
         assertNull(searchQueryExtractor("/search?q=orange"))
+    }
+
+    @Test
+    fun testInvoke() {
         assertEquals(
                 "かもめ",
                 searchQueryExtractor("https://www.google.com/search?q=%E3%81%8B%E3%82%82%E3%82%81")
