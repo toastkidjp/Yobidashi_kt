@@ -42,9 +42,6 @@ class ImageStoreServiceTest {
     @MockK
     private lateinit var scaledBitmap: Bitmap
 
-    @MockK
-    private lateinit var fileOutputStream: FileOutputStream
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -52,14 +49,15 @@ class ImageStoreServiceTest {
 
     @Test
     fun test() {
-        val file = spyk(File("test"))
+        val file = mockk<File>()
         every { file.getPath() }.answers { "test" }
+        every { file["isInvalid"]() }.answers { false }
         every { filesDir.assignNewFile(any<Uri>()) }.answers { file }
         every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
         every { display.getRectSize(any()) }.answers { Unit }
 
         mockkConstructor(FileOutputStream::class)
-        every { fileOutputStream.close() }.answers { Unit }
+        every { anyConstructed<FileOutputStream>().close() }.answers { Unit }
 
         every { scaledBitmap.compress(any(), any(), any()) }.answers { true }
 
