@@ -2,6 +2,7 @@ package jp.toastkid.search
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -14,9 +15,15 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class SearchQueryExtractorTest {
 
+    private lateinit var searchQueryExtractor: SearchQueryExtractor
+
+    @Before
+    fun setUp() {
+        searchQueryExtractor = SearchQueryExtractor()
+    }
+
     @Test
     fun testInvoke() {
-        val searchQueryExtractor = SearchQueryExtractor()
         assertNull(searchQueryExtractor("/search?q=orange"))
         assertEquals(
                 "かもめ",
