@@ -1,4 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: "jacoco"
+
+jacoco {
+    toolVersion = "0.8.5"
+}
 
 buildscript {
 
@@ -31,4 +36,34 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task mergeJacocoFiles(
+    type: JacocoMerge,
+    group: "verification"
+) {
+    gradle.afterProject { project, _ ->
+        if (project.rootProject != project && project.plugins.hasPlugin('jacoco')) {
+            executionData "${project.buildDir}/jacoco/testDebugUnitTest.exec"
+        }
+    }
+}
+
+task jacocoMergedTestReport(
+    type: JacocoReport,
+    dependsOn: [tasks.mergeJacocoFiles],
+    group: "verification"
+) {
+    getExecutionData().from = mergeJacocoFiles.destinationFile
+
+    gradle.afterProject { project, _ ->
+        if (project.rootProject != project && project.plugins.hasPlugin('jacoco')) {
+            getSourceDirectories().from += "${project.projectDir}/src/main/java"
+            getClassDirectories().from += project.fileTree(dir: "${project.buildDir}/tmp/kotlin-classes/debug")
+        }
+    }
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
