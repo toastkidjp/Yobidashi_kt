@@ -30,5 +30,4 @@ class Article(
 
     var bigram: String = ""
 
-    fun toSearchResult() = SearchResult(id, title, lastModified, length)
 }
