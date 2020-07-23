@@ -22,8 +22,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -85,7 +87,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
      */
     private val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            hideProgress()
+            viewModel?.hideProgress()
             contentViewModel?.snackWithAction(
                     getString(R.string.message_done_import),
                     getString(R.string.reload)
@@ -94,6 +96,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
     }
 
     private var contentViewModel: ContentViewModel? = null
+
+    private var viewModel: ArticleListFragmentViewModel? = null
 
     private val tokenizer = NgramTokenizer()
 
@@ -189,6 +193,18 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
                     }
         }
 
+        viewModel = ViewModelProvider(this).get(ArticleListFragmentViewModel::class.java)
+        viewModel?.progressVisibility?.observe(viewLifecycleOwner, Observer {
+            it?.getContentIfNotHandled()?.let { isVisible ->
+                binding.progressCircular.isVisible = isVisible
+            }
+        })
+        viewModel?.progress?.observe(viewLifecycleOwner, Observer {
+            it?.getContentIfNotHandled()?.let { message ->
+                appBarBinding.searchResult.text = message
+            }
+        })
+
         all()
     }
 
@@ -241,20 +257,20 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
             }
 
             adapter.notifyDataSetChanged()
-            hideProgress()
+            viewModel?.hideProgress()
             setSearchEnded(System.currentTimeMillis() - start)
         }
     }
 
     private fun setSearchStart() {
-        showProgress()
-        setProgressMessage(getString(R.string.message_search_in_progress))
+        viewModel?.showProgress()
+        viewModel?.setProgressMessage(getString(R.string.message_search_in_progress))
     }
 
     @UiThread
     private fun setSearchEnded(duration: Long) {
-        hideProgress()
-        setProgressMessage("${adapter.itemCount} Articles / $duration[ms]")
+        viewModel?.hideProgress()
+        viewModel?.setProgressMessage("${adapter.itemCount} Articles / $duration[ms]")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -303,22 +319,9 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
             return
         }
 
-        showProgress()
+        viewModel?.showProgress()
 
         ZipLoaderService.start(requireContext(), target)
-    }
-
-    private fun showProgress() {
-        binding.progressCircular.progress = 0
-        binding.progressCircular.visibility = View.VISIBLE
-    }
-
-    private fun hideProgress() {
-        binding.progressCircular.visibility = View.GONE
-    }
-
-    private fun setProgressMessage(message: String) {
-        appBarBinding.searchResult.text = message
     }
 
     override fun toTop() {
