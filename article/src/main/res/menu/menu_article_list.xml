@@ -8,6 +8,11 @@
         android:title="@string/action_all_article"
         app:showAsAction="never" />
 
+    <item android:id="@+id/action_bookmark"
+        android:title="@string/action_bookmark"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_set_target"
         android:orderInCategory="100"
