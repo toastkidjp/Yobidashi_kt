@@ -19,10 +19,10 @@ interface ArticleRepository {
     @Query("SELECT * FROM article ORDER BY lastModified DESC")
     fun getAllWithContent(): List<Article>
 
-    @Query("SELECT title, lastModified, length FROM article ORDER BY lastModified DESC LIMIT 500")
+    @Query("SELECT id, title, lastModified, length FROM article ORDER BY lastModified DESC LIMIT 500")
     fun getAll(): List<SearchResult>
 
-    @Query("SELECT title, lastModified, length FROM article WHERE title LIKE :title ORDER BY lastModified DESC")
+    @Query("SELECT id, title, lastModified, length FROM article WHERE title LIKE :title ORDER BY lastModified DESC")
     fun filter(title: String): List<SearchResult>
 
     @Query("SELECT contentText FROM article WHERE title = :title LIMIT 1")
@@ -31,7 +31,7 @@ interface ArticleRepository {
     @Query("SELECT * FROM article WHERE title LIKE :title LIMIT 1")
     fun findFirst(title: String): Article?
 
-    @Query("SELECT article.title, article.lastModified, article.length FROM article JOIN articleFts ON (article.id = articleFts.docid) WHERE articleFts MATCH :query")
+    @Query("SELECT article.id, article.title, article.lastModified, article.length FROM article JOIN articleFts ON (article.id = articleFts.docid) WHERE articleFts MATCH :query")
     fun search(query: String): List<SearchResult>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -43,4 +43,8 @@ interface ArticleRepository {
 
     @Query("DELETE FROM article")
     fun deleteAll()
+
+    @Query("SELECT article.id, article.title, article.lastModified, article.length FROM article WHERE article.id IN (:articleIds)")
+    fun findByIds(articleIds: List<Int>): List<SearchResult>
+
 }

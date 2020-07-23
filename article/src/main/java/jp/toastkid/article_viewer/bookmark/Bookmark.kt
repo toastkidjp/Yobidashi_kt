@@ -5,30 +5,13 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.article_viewer.article
+package jp.toastkid.article_viewer.bookmark
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import jp.toastkid.article_viewer.article.list.SearchResult
 
 /**
  * @author toastkidjp
  */
 @Entity
-class Article(
-    @PrimaryKey
-    var id: Int
-) {
-
-    var title: String = ""
-
-    var contentText: String = ""
-
-    var lastModified: Long = 0L
-
-    var length: Int = 0
-
-    var bigram: String = ""
-
-    fun toSearchResult() = SearchResult(id, title, lastModified, length)
-}
+data class Bookmark(@PrimaryKey(autoGenerate = false) var id: Int)
