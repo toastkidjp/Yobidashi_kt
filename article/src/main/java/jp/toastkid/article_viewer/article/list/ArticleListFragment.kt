@@ -59,7 +59,7 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, ContentScrollable {
+class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
 
     /**
      * List item adapter.
@@ -85,18 +85,13 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
      */
     private val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            progressCallback.hideProgress()
+            hideProgress()
             contentViewModel?.snackWithAction(
                     getString(R.string.message_done_import),
                     getString(R.string.reload)
             ) { all() }
         }
     }
-
-    /**
-     * Progress callback.
-     */
-    private lateinit var progressCallback: ProgressCallback
 
     private var contentViewModel: ContentViewModel? = null
 
@@ -113,8 +108,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
         super.onAttach(context)
 
         preferencesWrapper = PreferenceApplier(context)
-
-        progressCallback = this
 
         context.registerReceiver(
                 progressBroadcastReceiver,
@@ -248,20 +241,20 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
             }
 
             adapter.notifyDataSetChanged()
-            progressCallback.hideProgress()
+            hideProgress()
             setSearchEnded(System.currentTimeMillis() - start)
         }
     }
 
     private fun setSearchStart() {
-        progressCallback.showProgress()
-        progressCallback.setProgressMessage(getString(R.string.message_search_in_progress))
+        showProgress()
+        setProgressMessage(getString(R.string.message_search_in_progress))
     }
 
     @UiThread
     private fun setSearchEnded(duration: Long) {
-        progressCallback.hideProgress()
-        progressCallback.setProgressMessage("${adapter.itemCount} Articles / $duration[ms]")
+        hideProgress()
+        setProgressMessage("${adapter.itemCount} Articles / $duration[ms]")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -315,16 +308,16 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
         ZipLoaderService.start(requireContext(), target)
     }
 
-    override fun showProgress() {
+    private fun showProgress() {
         binding.progressCircular.progress = 0
         binding.progressCircular.visibility = View.VISIBLE
     }
 
-    override fun hideProgress() {
+    private fun hideProgress() {
         binding.progressCircular.visibility = View.GONE
     }
 
-    override fun setProgressMessage(message: String) {
+    private fun setProgressMessage(message: String) {
         appBarBinding.searchResult.text = message
     }
 
