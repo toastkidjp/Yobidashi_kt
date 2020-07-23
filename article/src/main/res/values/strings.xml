@@ -20,4 +20,5 @@
     <string name="tab">Tab</string>
     <string name="message_done_import">Completed import.</string>
     <string name="reload">Reload</string>
+    <string name="action_add_to_bookmark">Add to bookmark</string>
 </resources>

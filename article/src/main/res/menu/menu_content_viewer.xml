@@ -8,6 +8,11 @@
           android:orderInCategory="100"
           app:showAsAction="never"/>
 
+    <item android:id="@+id/action_add_to_bookmark"
+        android:title="@string/action_add_to_bookmark"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/action_close"
           android:title="@string/action_close"
           android:orderInCategory="100"

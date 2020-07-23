@@ -12,6 +12,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Selection
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -25,6 +28,7 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
+import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
 import jp.toastkid.lib.AppBarViewModel
@@ -79,6 +83,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, TabUiFragment {
         }
         binding.content.movementMethod = linkMovementMethod
 
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -185,6 +190,25 @@ class ContentViewerFragment : Fragment(), ContentScrollable, TabUiFragment {
 
     override fun toBottom() {
         binding.contentScroll.smoothScrollTo(0, binding.content.measuredHeight)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_content_viewer, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add_to_bookmark -> {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val title = appBarBinding.searchResult.text.toString()
+                    val article = repository.findFirst(title) ?: return@launch
+                    AppDatabase.find(requireContext()).bookmarkRepository().add(Bookmark(article.id))
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDetach() {
