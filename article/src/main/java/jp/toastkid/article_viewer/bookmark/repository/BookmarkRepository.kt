@@ -9,6 +9,7 @@ package jp.toastkid.article_viewer.bookmark.repository
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import jp.toastkid.article_viewer.bookmark.Bookmark
 
@@ -21,7 +22,7 @@ interface BookmarkRepository {
     @Query("SELECT id FROM bookmark")
     fun allArticleIds(): List<Int>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(articleId: Bookmark)
 
 }
