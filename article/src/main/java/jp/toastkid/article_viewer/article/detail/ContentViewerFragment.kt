@@ -25,7 +25,6 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
-import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
 import jp.toastkid.lib.AppBarViewModel
@@ -46,7 +45,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, TabUiFragment {
+class ContentViewerFragment : Fragment(), ContentScrollable, TabUiFragment {
 
     private lateinit var binding: FragmentContentBinding
 
@@ -164,11 +163,11 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, Tab
         ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).switchTabList()
     }
 
-    override fun search(keyword: String?) {
+    private fun search(keyword: String?) {
         textViewHighlighter(keyword)
     }
 
-    override fun filter(keyword: String?) = Unit
+    private fun filter(keyword: String?) = Unit
 
     override fun toTop() {
         binding.contentScroll.smoothScrollTo(0, 0)
