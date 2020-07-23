@@ -21,7 +21,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.UiThread
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -32,12 +31,8 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.calendar.CalendarFragment
-import jp.toastkid.article_viewer.common.ProgressCallback
-import jp.toastkid.article_viewer.common.SearchFunction
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
-import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
 import jp.toastkid.article_viewer.zip.ZipLoaderService
 import jp.toastkid.lib.AppBarViewModel
@@ -47,7 +42,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
@@ -61,7 +55,7 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
+class ArticleListFragment : Fragment(), ContentScrollable {
 
     /**
      * List item adapter.
@@ -91,7 +85,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
             contentViewModel?.snackWithAction(
                     getString(R.string.message_done_import),
                     getString(R.string.reload)
-            ) { all() }
+            ) { searchUseCase?.all() }
         }
     }
 
@@ -99,14 +93,9 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
 
     private var viewModel: ArticleListFragmentViewModel? = null
 
-    private val tokenizer = NgramTokenizer()
+    private var searchUseCase: ArticleSearchUseCase? = null
 
     private val inputChannel = Channel<String>()
-
-    /**
-     * [CompositeDisposable].
-     */
-    private val disposables = Job()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -165,7 +154,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
             if (keyword.isBlank()) {
                 return@setOnEditorActionListener true
             }
-            search(keyword)
+            searchUseCase?.search(keyword)
             true
         }
 
@@ -188,7 +177,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
                     .debounce(1400L)
                     .collect {
                         withContext(Dispatchers.Main) {
-                            filter(it)
+                            searchUseCase?.filter(it)
                         }
                     }
         }
@@ -204,73 +193,21 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
                 appBarBinding.searchResult.text = message
             }
         })
+        viewModel?.messageId?.observe(viewLifecycleOwner, Observer {
+            it?.getContentIfNotHandled()?.let { messageId ->
+                appBarBinding.searchResult.setText(messageId)
+            }
+        })
 
-        all()
+        searchUseCase = ArticleSearchUseCase(articleRepository, viewModel, adapter, preferencesWrapper)
+
+        searchUseCase?.all()
     }
 
     override fun onResume() {
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java).replace(appBarBinding.root)
-    }
-
-    fun all() {
-        CoroutineScope(Dispatchers.IO).launch(disposables) {
-            query(articleRepository.getAll())
-        }
-    }
-
-    override fun search(keyword: String?) {
-        if (keyword.isNullOrBlank()) {
-            return
-        }
-
-        CoroutineScope(Dispatchers.IO).launch(disposables) {
-            query(articleRepository.search("${tokenizer(keyword, 2)}"))
-        }
-    }
-
-    override fun filter(keyword: String?) {
-        if (!preferencesWrapper.useTitleFilter()) {
-            return
-        }
-
-        if (keyword.isNullOrBlank()) {
-            all()
-            return
-        }
-
-        CoroutineScope(Dispatchers.IO).launch(disposables) {
-            query(articleRepository.search("${tokenizer(keyword, 2)}"))
-        }
-    }
-
-    private fun query(results: List<SearchResult>) {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            adapter.clear()
-            setSearchStart()
-
-            val start = System.currentTimeMillis()
-
-            withContext(Dispatchers.Default) {
-                results.forEach(adapter::add)
-            }
-
-            adapter.notifyDataSetChanged()
-            viewModel?.hideProgress()
-            setSearchEnded(System.currentTimeMillis() - start)
-        }
-    }
-
-    private fun setSearchStart() {
-        viewModel?.showProgress()
-        viewModel?.setProgressMessage(getString(R.string.message_search_in_progress))
-    }
-
-    @UiThread
-    private fun setSearchEnded(duration: Long) {
-        viewModel?.hideProgress()
-        viewModel?.setProgressMessage("${adapter.itemCount} Articles / $duration[ms]")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -282,7 +219,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_all_article -> {
-                all()
+                searchUseCase?.all()
                 true
             }
             R.id.action_set_target -> {
@@ -333,7 +270,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ContentScrollable {
     }
 
     override fun onDetach() {
-        disposables.cancel()
+        searchUseCase?.dispose()
         inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
         super.onDetach()

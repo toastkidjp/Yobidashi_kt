@@ -20,9 +20,6 @@ class ArticleListFragmentViewModel : ViewModel() {
     private val _progressVisibility = MutableLiveData<Event<Boolean>>()
     val progressVisibility : LiveData<Event<Boolean>> = _progressVisibility
 
-    private val _progress = MutableLiveData<Event<String>>()
-    val progress : LiveData<Event<String>> = _progress
-
     fun showProgress() {
         _progressVisibility.postValue(Event(true))
     }
@@ -31,7 +28,18 @@ class ArticleListFragmentViewModel : ViewModel() {
         _progressVisibility.postValue(Event(false))
     }
 
+    private val _progress = MutableLiveData<Event<String>>()
+    val progress : LiveData<Event<String>> = _progress
+
     fun setProgressMessage(message: String) {
         _progress.postValue(Event(message))
     }
+
+    private val _messageId = MutableLiveData<Event<Int>>()
+    val messageId : LiveData<Event<Int>> = _messageId
+
+    fun setProgressMessageId(messageId: Int) {
+        _messageId.postValue(Event(messageId))
+    }
+
 }
