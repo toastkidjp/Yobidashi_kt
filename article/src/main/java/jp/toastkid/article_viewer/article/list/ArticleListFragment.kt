@@ -276,10 +276,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
                 all()
                 true
             }
-            R.id.action_calendar -> {
-                contentViewModel?.nextFragment(CalendarFragment())
-                true
-            }
             R.id.action_set_target -> {
                 startActivityForResult(ZipFileChooserIntentFactory()(), 1)
                 true
