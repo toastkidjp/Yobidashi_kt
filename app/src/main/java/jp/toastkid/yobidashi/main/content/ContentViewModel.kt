@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.yobidashi.libs.lifecycle.Event
 
 /**
  * @author toastkidjp
@@ -66,12 +67,12 @@ class ContentViewModel : ViewModel() {
         _toBottom.postValue(Unit)
     }
 
-    private val _share = MutableLiveData<Unit>()
+    private val _share = MutableLiveData<Event<Unit>>()
 
-    val share: LiveData<Unit> = _share
+    val share: LiveData<Event<Unit>> = _share
 
     fun share() {
-        _share.postValue(Unit)
+        _share.value = Event(Unit)
     }
 
     private val _webSearch = MutableLiveData<Unit>()

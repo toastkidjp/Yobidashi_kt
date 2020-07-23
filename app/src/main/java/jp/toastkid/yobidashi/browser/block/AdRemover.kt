@@ -37,7 +37,7 @@ class AdRemover(inputStream: InputStream) {
      * @param requestUrl URL for loading ad content.
      */
     operator fun invoke(requestUrl: String): WebResourceResponse? =
-            if (isAdHost(requestUrl)) { EMPTY } else { null }
+            if (isAdHost(requestUrl)) EMPTY else null
 
     private fun isAdHost(url: String): Boolean = blackList.any { url.contains(it) }
 

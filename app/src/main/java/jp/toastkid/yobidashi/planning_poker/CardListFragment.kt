@@ -85,11 +85,11 @@ class CardListFragment : Fragment() {
             return
         }
 
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
-        transaction?.add(R.id.content, CardFragment.makeWithNumber(text))
-        transaction?.addToBackStack(CardFragment::class.java.canonicalName)
-        transaction?.commit()
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
+        transaction.add(R.id.content, CardFragment.makeWithNumber(text))
+        transaction.addToBackStack(CardFragment::class.java.canonicalName)
+        transaction.commit()
     }
 
     override fun onDetach() {

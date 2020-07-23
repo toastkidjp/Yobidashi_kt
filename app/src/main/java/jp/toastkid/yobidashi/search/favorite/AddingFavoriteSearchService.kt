@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
 
@@ -15,10 +16,13 @@ class AddingFavoriteSearchService : Service() {
         if (intent == null) {
             return Service.START_STICKY_COMPATIBILITY
         }
+        val query = intent.getStringExtra(EXTRA_KEY_QUERY)
+                ?: return Service.START_STICKY_COMPATIBILITY
+
         FavoriteSearchInsertion(
                 applicationContext,
-                intent.getStringExtra(EXTRA_KEY_CATEGORY),
-                intent.getStringExtra(EXTRA_KEY_QUERY)
+                intent.getStringExtra(EXTRA_KEY_CATEGORY) ?: SearchCategory.getDefaultCategoryName(),
+                query
         ).invoke()
         return Service.START_STICKY_COMPATIBILITY
     }

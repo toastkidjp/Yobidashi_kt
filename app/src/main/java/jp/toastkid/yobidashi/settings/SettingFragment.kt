@@ -20,6 +20,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
 import jp.toastkid.yobidashi.libs.ad.AdService
+import jp.toastkid.yobidashi.libs.ad.AdViewFactory
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.AppBarViewModel
 
@@ -58,7 +59,7 @@ class SettingFragment : Fragment() {
         }
         mediator.attach()
 
-        adService = AdService { context }
+        adService = AdService(AdViewFactory(), context)
         adService?.sendWith(ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java))
 
         setHasOptionsMenu(true)

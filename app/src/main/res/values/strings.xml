@@ -322,6 +322,7 @@
     <string name="save">Save</string>
     <string name="save_as">Save as</string>
     <string name="load_as">Load As</string>
+    <string name="restore">Restore</string>
     <string name="title_dialog_input_file_name">Input file name</string>
     <string name="message_requires_permission_storage" >
         If you want to use this function, you should permit using storage to this app.</string>

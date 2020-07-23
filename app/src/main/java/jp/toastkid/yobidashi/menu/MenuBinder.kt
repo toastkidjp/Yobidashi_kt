@@ -151,10 +151,16 @@ class MenuBinder(
     private fun open() {
         menuStub.root?.visibility = View.VISIBLE
 
-        if (recyclerView?.isVisible == true) {
-            menuSwitch?.y?.let { recyclerView?.y = it }
+        recyclerView?.post {
+            menuSwitch?.y?.let {
+                recyclerView?.y = when {
+                    it > menuSwitch.rootView.height -> menuSwitch.rootView.height.toFloat()
+                    it < 0 -> 0f
+                    else -> it
+                }
+            }
+            recyclerView?.scheduleLayoutAnimation()
         }
-        recyclerView?.scheduleLayoutAnimation()
     }
 
     private fun close() {

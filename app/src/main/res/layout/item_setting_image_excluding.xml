@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="end|center_vertical"
-            android:paddingRight="8dp"
             android:paddingEnd="8dp"
             android:text="@string/delete"
             android:textColor="@color/white"
@@ -35,7 +34,7 @@
                 android:id="@+id/icon"
                 android:layout_width="24dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="left|center_vertical"
+                android:layout_gravity="start|center_vertical"
                 android:adjustViewBounds="true"
                 />
             <TextView
@@ -53,7 +52,7 @@
                 android:id="@+id/delete_button"
                 android:layout_width="32dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end|center_vertical"
                 app:srcCompat="@drawable/ic_remove_circle"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"

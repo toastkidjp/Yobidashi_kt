@@ -131,7 +131,7 @@ internal class Adapter(private val context: Context, private val parent: View)
      *
      * @param str filter query
      */
-    fun filter(str: String, limit: Long = -1L, onResult: () -> Unit = {}) {
+    fun filter(str: String, limit: Int = -1, onResult: () -> Unit = {}) {
         installedApps.clear()
         if (TextUtils.isEmpty(str)) {
             installedApps.addAll(master)
@@ -142,7 +142,7 @@ internal class Adapter(private val context: Context, private val parent: View)
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             master.asFlow()
                     .filter { appInfo -> appInfo.packageName.contains(str) }
-                    .take(if (limit == -1L) Int.MAX_VALUE else limit.toInt())// TODO to Int
+                    .take(if (limit == -1) Int.MAX_VALUE else limit)
                     .collect {
                         installedApps.add(it)
                     }

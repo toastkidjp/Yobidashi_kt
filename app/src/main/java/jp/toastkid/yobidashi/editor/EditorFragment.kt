@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -47,6 +48,7 @@ import jp.toastkid.yobidashi.libs.preference.ColorPair
 import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.yobidashi.libs.storage.ExternalFileAssignment
+import jp.toastkid.yobidashi.libs.view.TextViewColorApplier
 import jp.toastkid.yobidashi.main.AppBarViewModel
 import jp.toastkid.yobidashi.main.ContentScrollable
 import jp.toastkid.yobidashi.main.TabUiFragment
@@ -102,6 +104,8 @@ class EditorFragment :
      * File path.
      */
     private var path: String = ""
+
+    private val contentHolderService = ContentHolderService()
 
     /**
      * Text finder for [EditText].
@@ -228,12 +232,13 @@ class EditorFragment :
      */
     private fun applySettings() {
         val colorPair = preferenceApplier.colorPair()
-        applyButtonColor(
-                colorPair,
+        TextViewColorApplier()(
+                colorPair.fontColor(),
                 menuBinding.save,
                 menuBinding.saveAs,
                 menuBinding.load,
                 menuBinding.loadAs,
+                menuBinding.restore,
                 menuBinding.lastSaved,
                 menuBinding.counter,
                 menuBinding.backup,
@@ -251,22 +256,6 @@ class EditorFragment :
 
         CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor())
         binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor()
-    }
-
-    /**
-     * Apply button color to multiple [TextView].
-     *
-     * @param colorPair [ColorPair]
-     * @param textViews multiple [TextView]
-     */
-    private fun applyButtonColor(colorPair: ColorPair, vararg textViews: TextView) {
-        val fontColor = colorPair.fontColor()
-        textViews.forEach { textView ->
-            textView.setTextColor(fontColor)
-            textView.compoundDrawables.forEach {
-                it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)
-            }
-        }
     }
 
     /**
@@ -349,6 +338,17 @@ class EditorFragment :
         startActivityForResult(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD_AS)
     }
 
+    fun restore() {
+        if (contentHolderService.isBlank()) {
+            contentViewModel?.snackShort("Backup is empty.")
+            return
+        }
+
+        val selectionStart = binding.editorInput.selectionStart
+        setContentText(contentHolderService.getContent())
+        binding.editorInput.setSelection(selectionStart)
+    }
+
     /**
      * Share current content.
      */
@@ -395,10 +395,13 @@ class EditorFragment :
             return
         }
 
+        val content = content()
+        contentHolderService.setContent(content)
         Okio.buffer(Okio.sink(file)).use {
-            it.writeUtf8(content())
+            it.writeUtf8(content)
             it.flush()
         }
+
         val context = context ?: return
         MediaScannerConnection.scanFile(
                 context,
@@ -491,6 +494,7 @@ class EditorFragment :
     private fun setContentText(contentStr: String) {
         binding.editorInput.setText(contentStr)
         context?.let { setContentTextLengthCount(it) }
+        contentHolderService.setContent(contentStr)
     }
 
     /**
