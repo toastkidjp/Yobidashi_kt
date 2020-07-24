@@ -61,13 +61,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let { arguments ->
-            arguments.getString(KEY_TITLE)?.also { binding.title.text = it }
-            arguments.getSerializable(KEY_CONTENT)?.also { serializable ->
-                val file = serializable as? File ?: return@also
-                binding.textContent.text = Okio.buffer(Okio.source(file)).use { it.readUtf8() }
-            }
-        }
 
         binding.textContent.customSelectionActionModeCallback = object : ActionMode.Callback {
 
@@ -118,21 +111,8 @@ class ReaderFragment : Fragment(), ContentScrollable {
     }
 
     fun setContent(title: String, content: String) {
-        if (arguments == null) {
-            arguments = Bundle()
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
-            val file = assignCacheFile()
-            withContext(Dispatchers.IO) {
-                Okio.buffer(Okio.sink(file)).use { it.writeUtf8(content) }
-            }
-
-            arguments?.also {
-                it.putString(KEY_TITLE, title)
-                it.putSerializable(KEY_CONTENT, file)
-            }
-        }
+        binding.title.text = title
+        binding.textContent.text = content
     }
 
     fun close() {
