@@ -36,7 +36,8 @@ class PreferenceApplier(private val context: Context) {
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
-        IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER
+        IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER,
+        ARTICLE_LIST_SORT_TYPE
     }
 
     private val preferences: SharedPreferences =
@@ -431,4 +432,11 @@ class PreferenceApplier(private val context: Context) {
         return preferences.getBoolean(Key.USE_TITLE_FILTER.name, true)
     }
 
+    fun setArticleSort(name: String) {
+        preferences.edit().putString(Key.ARTICLE_LIST_SORT_TYPE.name, name).apply()
+    }
+
+    fun articleSort(): String {
+        return preferences.getString(Key.ARTICLE_LIST_SORT_TYPE.name, "") ?: ""
+    }
 }

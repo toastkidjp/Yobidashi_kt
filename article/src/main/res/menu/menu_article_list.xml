@@ -20,6 +20,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_sort"
+        android:orderInCategory="100"
+        android:title="@string/action_sort"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_switch_title_filter"
         android:checkable="true"
         android:checked="true"
