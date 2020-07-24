@@ -19,8 +19,7 @@ class ImageLoader(private val contentResolver: ContentResolver) {
 
     operator fun invoke(sort: Sort, bucket: String): List<Image> {
         return extractImages(
-                MediaStore.Images.Media.query(
-                        contentResolver,
+                contentResolver.query(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         columns,
                         "bucket_display_name = ?",
@@ -32,8 +31,7 @@ class ImageLoader(private val contentResolver: ContentResolver) {
 
     fun filterBy(name: String?): List<Image> {
         return extractImages(
-                MediaStore.Images.Media.query(
-                        contentResolver,
+                contentResolver.query(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         columns,
                         "${MediaStore.Images.Media.DISPLAY_NAME} LIKE ?",
