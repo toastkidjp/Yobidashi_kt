@@ -53,11 +53,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private lateinit var preferenceApplier: PreferenceApplier
 
+    private lateinit var imageLoaderUseCase: ImageLoaderUseCase
+
     private var adapter: Adapter? = null
-
-    private var currentBucket: String? = null
-
-    private val parentExtractor = ParentExtractor()
 
     private val disposables: Job by lazy { Job() }
 
@@ -91,12 +89,12 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         val viewLifecycleOwner = viewLifecycleOwner
         viewModel.onClick.observe(viewLifecycleOwner, Observer {
-            CoroutineScope(Dispatchers.IO).launch(disposables) { loadImages(it) }
+            CoroutineScope(Dispatchers.IO).launch(disposables) { imageLoaderUseCase(it) }
         })
 
         viewModel.onLongClick.observe(viewLifecycleOwner, Observer {
             preferenceApplier.addExcludeItem(it)
-            loadImages()
+            imageLoaderUseCase()
         })
 
         viewModel.refresh.observe(viewLifecycleOwner, Observer {
@@ -108,6 +106,14 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         binding.images.adapter = adapter
         binding.images.layoutManager =
                 GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+
+        imageLoaderUseCase = ImageLoaderUseCase(
+                preferenceApplier,
+                adapter,
+                BucketLoader(contentResolver),
+                imageLoader,
+                this::refreshContent
+        )
     }
 
     private fun observePageSearcherViewModel() {
@@ -128,7 +134,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         if (adapter?.isBucketMode() == true) {
             activity?.supportFragmentManager?.popBackStack()
         } else {
-            loadImages()
+            imageLoaderUseCase.clearCurrentBucket()
+            imageLoaderUseCase()
         }
         return true
     }
@@ -146,7 +153,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                     ?.receiveAsFlow()
                     ?.collect {
                         if (it.granted) {
-                            loadImages()
+                            imageLoaderUseCase()
                             return@collect
                         }
 
@@ -160,27 +167,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         }
     }
 
-    private fun loadImages(bucket: String? = null) {
-        adapter?.clear()
-
-        val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
-
-        val sort = Sort.findByName(preferenceApplier.imageViewerSort())
-
-        if (bucket.isNullOrBlank()) {
-            bucketLoader(sort)
-                    .filter { excludedItemFilter(parentExtractor(it.path)) }
-        } else {
-            imageLoader(sort, bucket).filter { excludedItemFilter(it.path) }
-        }
-                .forEach { adapter?.add(it) }
-        currentBucket = bucket
-        refreshContent()
-    }
-
     private fun filterByName(keyword: String?) {
         if (keyword.isNullOrBlank()) {
-            loadImages()
+            imageLoaderUseCase()
             return
         }
 
@@ -191,7 +180,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         imageLoader.filterBy(keyword)
                 .filter { excludedItemFilter(it.path) }
                 .forEach { adapter?.add(it) }
-        currentBucket = null
+
+        imageLoaderUseCase.clearCurrentBucket()
+
         refreshContent()
     }
 
@@ -224,15 +215,15 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
             }
             R.id.sort_by_date -> {
                 preferenceApplier.setImageViewerSort(Sort.DATE.name)
-                loadImages(currentBucket)
+                imageLoaderUseCase()
             }
             R.id.sort_by_name -> {
                 preferenceApplier.setImageViewerSort(Sort.NAME.name)
-                loadImages(currentBucket)
+                imageLoaderUseCase()
             }
             R.id.sort_by_count -> {
                 preferenceApplier.setImageViewerSort(Sort.ITEM_COUNT.name)
-                loadImages(currentBucket)
+                imageLoaderUseCase()
             }
         }
         return super.onOptionsItemSelected(item)
