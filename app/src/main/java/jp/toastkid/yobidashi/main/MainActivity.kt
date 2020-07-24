@@ -7,8 +7,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -898,6 +900,17 @@ class MainActivity : AppCompatActivity(),
                 VoiceSearch.processResult(this, data)
             }
         }
+    }
+
+    /**
+     * Workaround appcompat-1.1.0 bug.
+     * @link https://issuetracker.google.com/issues/141132133
+     */
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
+        if (Build.VERSION.SDK_INT in 21..22) {
+            return
+        }
+        super.applyOverrideConfiguration(overrideConfiguration)
     }
 
     override fun onPause() {
