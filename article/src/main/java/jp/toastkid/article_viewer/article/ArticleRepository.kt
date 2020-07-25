@@ -7,7 +7,11 @@
  */
 package jp.toastkid.article_viewer.article
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Transaction
 import jp.toastkid.article_viewer.article.list.SearchResult
 
 /**
