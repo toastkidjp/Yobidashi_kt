@@ -20,22 +20,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.storage.CacheDir
+import jp.toastkid.lib.view.TextViewHighlighter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
-import jp.toastkid.lib.Urls
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.storage.CacheDir
-import jp.toastkid.lib.view.TextViewHighlighter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okio.Okio
 import timber.log.Timber
-import java.io.File
 import java.io.IOException
 
 /**
