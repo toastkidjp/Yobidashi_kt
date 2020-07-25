@@ -906,12 +906,11 @@ class MainActivity : AppCompatActivity(),
      * Workaround appcompat-1.1.0 bug.
      * @link https://issuetracker.google.com/issues/141132133
      */
-    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) {
-        if (Build.VERSION.SDK_INT in 21..22) {
-            return
-        }
-        super.applyOverrideConfiguration(overrideConfiguration)
-    }
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) =
+            when (Build.VERSION.SDK_INT) {
+                in 21..22 -> Unit
+                else -> super.applyOverrideConfiguration(overrideConfiguration)
+            }
 
     override fun onPause() {
         super.onPause()
