@@ -105,12 +105,16 @@ class ReaderFragment : Fragment(), ContentScrollable {
             ViewModelProvider(activity)
                     .get(PageSearcherViewModel::class.java)
                     .find.observe(activity, Observer { finder(it ?: "") })
+
+            ViewModelProvider(activity).get(ReaderFragmentViewModel::class.java)
+                    .content
+                    .observe(activity, Observer { setContent(it.first, it.second) })
         }
 
         setHasOptionsMenu(true)
     }
 
-    fun setContent(title: String, content: String) {
+    private fun setContent(title: String, content: String) {
         binding.title.text = title
         binding.textContent.text = content
     }
