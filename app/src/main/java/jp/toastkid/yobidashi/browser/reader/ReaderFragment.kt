@@ -187,10 +187,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
         @LayoutRes
         private val LAYOUT_ID = R.layout.fragment_reader_mode
 
-        private const val KEY_TITLE = "title"
-
-        private const val KEY_CONTENT = "content"
-
         private val lineSeparator = System.lineSeparator()
 
     }
