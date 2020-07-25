@@ -99,15 +99,13 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
             ViewModelProvider(activity).get(ReaderFragmentViewModel::class.java)
                     .content
-                    .observe(activity, Observer { setContent(it.first, it.second) })
+                    .observe(activity, Observer {
+                        binding.title.text = it.first
+                        binding.textContent.text = it.second
+                    })
         }
 
         setHasOptionsMenu(true)
-    }
-
-    private fun setContent(title: String, content: String) {
-        binding.title.text = title
-        binding.textContent.text = content
     }
 
     fun close() {
