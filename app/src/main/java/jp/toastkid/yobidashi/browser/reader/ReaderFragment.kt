@@ -93,11 +93,12 @@ class ReaderFragment : Fragment(), ContentScrollable {
         activity?.also { activity ->
             val finder = TextViewHighlighter(binding.textContent)
 
-            ViewModelProvider(activity)
-                    .get(PageSearcherViewModel::class.java)
-                    .find.observe(activity, Observer { finder(it ?: "") })
+            val viewModelProvider = ViewModelProvider(activity)
+            viewModelProvider.get(PageSearcherViewModel::class.java)
+                    .find
+                    .observe(activity, Observer { finder(it ?: "") })
 
-            ViewModelProvider(activity).get(ReaderFragmentViewModel::class.java)
+            viewModelProvider.get(ReaderFragmentViewModel::class.java)
                     .content
                     .observe(activity, Observer {
                         binding.title.text = it.first
