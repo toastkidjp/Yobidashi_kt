@@ -23,14 +23,11 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.storage.CacheDir
 import jp.toastkid.lib.view.TextViewHighlighter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import timber.log.Timber
-import java.io.IOException
 
 /**
  * @author toastkidjp
@@ -161,20 +158,6 @@ class ReaderFragment : Fragment(), ContentScrollable {
         speechMaker.dispose()
         super.onDetach()
     }
-
-    override fun onDestroy() {
-        try {
-            val tempFile = assignCacheFile()
-            if (tempFile.exists()) {
-                tempFile.delete()
-            }
-        } catch (e: IOException) {
-            Timber.e(e)
-        }
-        super.onDestroy()
-    }
-
-    private fun assignCacheFile() = CacheDir(requireContext(), "content").assignNewFile("reader")
 
     companion object {
 
