@@ -49,6 +49,10 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
         this.images.addAll(images)
     }
 
+    fun getPath(position: Int): String? {
+        return images.get(position).path
+    }
+
     companion object {
         private val layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,

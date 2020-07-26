@@ -23,6 +23,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
@@ -40,7 +41,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private lateinit var contentResolver: ContentResolver
 
-    private var path: String? = null
+    private var pathFinder: () -> String? = { null }
 
     private val imageEditChooserFactory = ImageEditChooserFactory()
 
@@ -66,6 +67,12 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val adapter = Adapter()
         binding.photo.adapter = adapter
         LinearSnapHelper().attachToRecyclerView(binding.photo)
+
+        pathFinder = {
+            (binding.photo.layoutManager as? LinearLayoutManager)?.let {
+                adapter.getPath(it.findFirstVisibleItemPosition())
+            }
+        }
 
         val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
@@ -160,6 +167,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     fun edit() {
+        val path = pathFinder()
         if (path == null) {
             Toaster.snackShort(
                     binding.root,

@@ -8,11 +8,12 @@
 package jp.toastkid.yobidashi.media.image
 
 import jp.toastkid.yobidashi.media.image.list.ParentExtractor
+import java.io.Serializable
 
 /**
  * @author toastkidjp
  */
-data class Image(val path: String, val name: String, var itemCount: Int = 0, val isBucket: Boolean = false) {
+data class Image(val path: String, val name: String, var itemCount: Int = 0, val isBucket: Boolean = false): Serializable {
 
     fun makeExcludingId() = if (isBucket) parentExtractor(path) else path
 
