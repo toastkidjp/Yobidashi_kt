@@ -27,7 +27,7 @@ data class Image(
     companion object {
         private val parentExtractor = ParentExtractor()
 
-        fun makeBucket(bucketName: String, path: String, itemCount: Int) =
+        fun makeBucket(bucketName: String, path: String) =
                 Image(path, bucketName, 0, true)
     }
 }
