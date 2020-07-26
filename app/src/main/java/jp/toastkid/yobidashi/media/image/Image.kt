@@ -13,7 +13,12 @@ import java.io.Serializable
 /**
  * @author toastkidjp
  */
-data class Image(val path: String, val name: String, var itemCount: Int = 0, val isBucket: Boolean = false): Serializable {
+data class Image(
+        val path: String,
+        val name: String,
+        var itemCount: Int = 0,
+        val isBucket: Boolean = false
+): Serializable {
 
     fun makeExcludingId() = if (isBucket) parentExtractor(path) else path
 
