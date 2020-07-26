@@ -10,31 +10,26 @@ package jp.toastkid.yobidashi.media.image.preview
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ContentResolver
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.bumptech.glide.Glide
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.image.Image
 import timber.log.Timber
-import java.io.File
 
 /**
  * @author toastkidjp
@@ -162,16 +157,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         binding.rotateRight.setColorFilter(fontColor)
         binding.edit.setColorFilter(fontColor)
         binding.close.setColorFilter(fontColor)
-    }
-
-    private fun loadImageAsync(activityContext: Context, path: String?) {
-        if (path == null) {
-            return
-        }
-
-        Glide.with(activityContext)
-                .load(Uri.parse(File(path).toURI().toString()))
-                //.into(binding.photo)
     }
 
     fun edit() {
