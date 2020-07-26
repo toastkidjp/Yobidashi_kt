@@ -53,8 +53,7 @@ enum class SearchCategory(
     DUCKDUCKGO(
             R.string.search_category_web,
             R.drawable.ic_duckduckgo,
-            "https://duckduckgo.com/%s?ia=web",
-            { _, h, q -> String.format(h, q)}
+            "https://duckduckgo.com/?ia=web&q="
     ),
     AOL(
             R.string.aol,
@@ -331,7 +330,7 @@ enum class SearchCategory(
 
         private val hostAndCategories =
                 values()
-                        .filter { it != SITE_SEARCH }
+                        .filter { it != SITE_SEARCH && it != MAP && it != IMAGE  }
                         .map { it.host.toUri().host to it }
                         .toMap()
 
@@ -358,7 +357,7 @@ enum class SearchCategory(
          * @return index
          */
         fun findIndex(category: String): Int =
-                values().find { it.name == category.toUpperCase(locale) } ?.ordinal ?: 0
+                values().find { it.name == category.toUpperCase(locale) } ?.ordinal ?: getDefault().ordinal
 
         /**
          * Get default object.

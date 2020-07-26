@@ -30,12 +30,12 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
 import jp.toastkid.yobidashi.databinding.AppBarPdfViewerBinding
-import jp.toastkid.yobidashi.libs.EditTextColorSetter
-import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.main.ContentScrollable
-import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.lib.view.EditTextColorSetter
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.yobidashi.main.TabUiFragment
 
 /**

@@ -28,10 +28,10 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentImageViewerBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.RecyclerViewScroller
-import jp.toastkid.yobidashi.main.ContentScrollable
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -165,7 +165,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
         val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
 
-        val sort = preferenceApplier.imageViewerSort()
+        val sort = Sort.findByName(preferenceApplier.imageViewerSort())
 
         if (bucket.isNullOrBlank()) {
             bucketLoader(sort)
@@ -223,15 +223,15 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                 fragment.show(parentFragmentManager, "setting")
             }
             R.id.sort_by_date -> {
-                preferenceApplier.setImageViewerSort(Sort.DATE)
+                preferenceApplier.setImageViewerSort(Sort.DATE.name)
                 loadImages(currentBucket)
             }
             R.id.sort_by_name -> {
-                preferenceApplier.setImageViewerSort(Sort.NAME)
+                preferenceApplier.setImageViewerSort(Sort.NAME.name)
                 loadImages(currentBucket)
             }
             R.id.sort_by_count -> {
-                preferenceApplier.setImageViewerSort(Sort.ITEM_COUNT)
+                preferenceApplier.setImageViewerSort(Sort.ITEM_COUNT.name)
                 loadImages(currentBucket)
             }
         }

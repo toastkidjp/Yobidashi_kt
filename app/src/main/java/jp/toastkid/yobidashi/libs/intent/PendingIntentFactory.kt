@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.libs.intent
 import android.app.PendingIntent
 import android.content.Context
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivityIntentFactory
 
 /**

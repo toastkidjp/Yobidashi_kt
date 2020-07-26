@@ -10,26 +10,28 @@ package jp.toastkid.yobidashi.menu
 import android.content.ActivityNotFoundException
 import android.os.Build
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.article_viewer.article.list.ArticleListFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
-import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
-import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.gesture.GestureMemoFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
@@ -92,7 +94,7 @@ class MenuUseCase(
                 preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
                 (activitySupplier() as? MainActivity)?.let {
                     ViewModelProvider(it).get(OverlayColorFilterViewModel::class.java)
-                            .newColor(preferenceApplier.filterColor())
+                            .newColor(preferenceApplier.filterColor(ContextCompat.getColor(activitySupplier(), R.color.default_color_filter)))
                 }
                 return
             }
@@ -136,6 +138,9 @@ class MenuUseCase(
             }
             Menu.PDF-> {
                 contentViewModel.openPdf()
+            }
+            Menu.ARTICLE_VIEWER -> {
+                contentViewModel.nextFragment(ArticleListFragment::class.java)
             }
             Menu.WEB_SEARCH -> {
                 contentViewModel.webSearch()

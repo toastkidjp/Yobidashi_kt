@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
-import jp.toastkid.yobidashi.libs.view.SwipeViewHolder
+import jp.toastkid.lib.view.SwipeViewHolder
 import java.io.File
 
 /**

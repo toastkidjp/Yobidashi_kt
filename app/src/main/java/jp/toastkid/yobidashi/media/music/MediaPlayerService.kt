@@ -23,7 +23,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
 import androidx.core.app.NotificationManagerCompat
 import androidx.media.MediaBrowserServiceCompat
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.music.notification.NotificationFactory
 import timber.log.BuildConfig
 import timber.log.Timber

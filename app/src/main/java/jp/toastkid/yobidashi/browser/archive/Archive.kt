@@ -1,12 +1,8 @@
 package jp.toastkid.yobidashi.browser.archive
 
 import android.content.Context
-import android.net.Uri
-import android.os.Build
 import android.webkit.WebView
-import jp.toastkid.yobidashi.libs.storage.FilesDir
-import java.io.File
-import java.io.IOException
+import jp.toastkid.lib.storage.FilesDir
 
 /**
  * Archive dir.

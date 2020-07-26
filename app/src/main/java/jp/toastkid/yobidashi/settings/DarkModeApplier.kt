@@ -9,9 +9,10 @@ package jp.toastkid.yobidashi.settings
 
 import android.graphics.Color
 import android.view.View
+import androidx.core.content.ContextCompat
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -22,7 +23,12 @@ class DarkModeApplier {
             preferenceApplier: PreferenceApplier,
             parent: View
     ) {
-        val currentTheme = Theme.extract(preferenceApplier)
+        val context = parent.context
+        val currentTheme = Theme.extract(
+                preferenceApplier,
+                ContextCompat.getColor(context, R.color.colorAccent),
+                ContextCompat.getColor(context, R.color.light_blue_200_dd)
+        )
         darkTheme.apply(preferenceApplier)
         Toaster.snackLong(
                 parent,

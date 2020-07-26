@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -25,13 +26,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
-import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
@@ -43,21 +46,22 @@ import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
-import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.ToolbarColorApplier
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.ToolbarColorApplier
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.search.SearchAction
+import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
@@ -81,7 +85,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.system.measureTimeMillis
 
 /**
  * Main of this calendar app.
@@ -373,7 +376,7 @@ class MainActivity : AppCompatActivity(),
                 calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
                     val query = it.toString()
                     if (Urls.isInvalidUrl(query)) {
-                        search(preferenceApplier.getDefaultSearchEngine(), query)
+                        search(preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(), query)
                         return
                     }
                     openNewWebTab(query.toUri())
@@ -384,7 +387,7 @@ class MainActivity : AppCompatActivity(),
                 val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
                 } else {
-                    preferenceApplier.getDefaultSearchEngine()
+                    preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
                 }
                 search(category, calledIntent.getStringExtra(SearchManager.QUERY))
                 return
@@ -621,7 +624,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun updateColorFilter() {
         binding.foreground.foreground =
-                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor())
+                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(ContextCompat.getColor(this, R.color.default_color_filter)))
                 else null
     }
 
@@ -666,7 +669,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun hideToolbar() {
-        when (preferenceApplier.browserScreenMode()) {
+        when (ScreenMode.find(preferenceApplier.browserScreenMode())) {
             ScreenMode.FIXED -> Unit
             ScreenMode.FULL_SCREEN -> {
                 binding.toolbar.visibility = View.GONE
@@ -687,7 +690,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun showToolbar() {
-        when (preferenceApplier.browserScreenMode()) {
+        when (ScreenMode.find(preferenceApplier.browserScreenMode())) {
             ScreenMode.FIXED -> {
                 binding.toolbar.visibility = View.VISIBLE
             }
@@ -747,7 +750,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun openNewTab() {
-        when (preferenceApplier.startUp) {
+        when (StartUp.findByName(preferenceApplier.startUp)) {
             StartUp.SEARCH -> {
                 replaceFragment(obtainFragment(SearchFragment::class.java))
             }

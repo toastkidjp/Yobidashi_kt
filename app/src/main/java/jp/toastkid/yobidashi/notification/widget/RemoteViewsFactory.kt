@@ -6,7 +6,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.VectorToBitmap
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * App Widget's RemoteViews factory.

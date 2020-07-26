@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.media.session.MediaButtonReceiver
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.media.music.AlbumArtFinder
 
 /**

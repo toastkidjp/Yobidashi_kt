@@ -16,6 +16,7 @@ import android.widget.BaseAdapter
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,8 +25,8 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.ColorPair
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragment
 import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragmentViewModel
 
@@ -136,8 +137,9 @@ class EditorSettingFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
 
-            editorModule.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor())
-            editorModule.highlightPreview.setBackgroundColor(preferenceApplier.editorHighlightColor())
+            val context = binding.root.context
+            editorModule.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor(ContextCompat.getColor(context, R.color.colorAccent)))
+            editorModule.highlightPreview.setBackgroundColor(preferenceApplier.editorHighlightColor(ContextCompat.getColor(context, R.color.light_blue_200_dd)))
         }
     }
 
@@ -176,7 +178,7 @@ class EditorSettingFragment : Fragment() {
 
     fun showCursorColorSetting() {
         val activity = requireActivity()
-        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorCursorColor())
+        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorCursorColor(ContextCompat.getColor(activity, R.color.colorAccent)))
                 .show(
                         activity.supportFragmentManager,
                         ColorChooserDialogFragment::class.java.canonicalName
@@ -192,7 +194,7 @@ class EditorSettingFragment : Fragment() {
 
     fun showHighlightColorSetting() {
         val activity = requireActivity()
-        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorHighlightColor())
+        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorHighlightColor(ContextCompat.getColor(activity, R.color.light_blue_200_dd)))
                 .show(
                         activity.supportFragmentManager,
                         ColorChooserDialogFragment::class.java.canonicalName

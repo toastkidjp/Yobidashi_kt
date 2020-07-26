@@ -10,11 +10,8 @@ package jp.toastkid.yobidashi.browser.archive.auto
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebView
-import jp.toastkid.yobidashi.browser.archive.IdGenerator
-import jp.toastkid.yobidashi.libs.storage.CacheDir
-import jp.toastkid.yobidashi.libs.storage.FilesDir
-import jp.toastkid.yobidashi.libs.storage.StorageWrapper
-import timber.log.Timber
+import jp.toastkid.lib.storage.CacheDir
+import jp.toastkid.lib.storage.StorageWrapper
 
 /**
  * @author toastkidjp

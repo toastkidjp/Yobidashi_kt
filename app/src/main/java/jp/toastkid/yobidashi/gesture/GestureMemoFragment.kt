@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarGestureMemoBinding
 import jp.toastkid.yobidashi.databinding.FragmentGestureMemoBinding
-import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.lib.AppBarViewModel
 
 /*+
  * @author toastkidjp

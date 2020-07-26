@@ -34,8 +34,8 @@ class SearchCategoryTest {
 
     @Test
     fun test_findIndex() {
-        assertEquals("18", "${SearchCategory.findIndex("github")}")
-        assertEquals("0", "${SearchCategory.findIndex("none")}")
+        assertEquals(SearchCategory.GITHUB.ordinal, SearchCategory.findIndex("github"))
+        assertEquals(SearchCategory.getDefault().ordinal, SearchCategory.findIndex("none"))
     }
 
     @Test

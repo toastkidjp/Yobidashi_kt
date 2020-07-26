@@ -96,5 +96,9 @@ class SearchQueryExtractorTest {
                 "Soccer",
                 searchQueryExtractor("https://www.espn.com/search/_/q/Soccer")
         )
+        assertEquals(
+                "ラーメン",
+                searchQueryExtractor("https://duckduckgo.com/?q=%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3&ia=web")
+        )
     }
 }

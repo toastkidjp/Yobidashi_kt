@@ -9,10 +9,8 @@ package jp.toastkid.yobidashi.menu
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
@@ -22,9 +20,8 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.DraggableTouchListener
-import timber.log.Timber
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.DraggableTouchListener
 import kotlin.math.min
 
 /**

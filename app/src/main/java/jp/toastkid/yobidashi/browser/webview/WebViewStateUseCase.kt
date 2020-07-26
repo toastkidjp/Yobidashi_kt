@@ -11,7 +11,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcel
 import android.webkit.WebView
-import jp.toastkid.yobidashi.libs.storage.CacheDir
+import jp.toastkid.lib.storage.CacheDir
 import okio.Okio
 
 /**

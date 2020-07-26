@@ -8,9 +8,9 @@ import androidx.core.net.toUri
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Clipping URL opener, this class invoked containing URL in clipboard.

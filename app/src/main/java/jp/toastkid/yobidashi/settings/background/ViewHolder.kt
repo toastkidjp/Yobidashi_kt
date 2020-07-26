@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSavedImageBinding
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.ContentViewModel
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

@@ -41,6 +41,8 @@ enum class Menu(
 
     PDF(R.string.title_open_pdf, R.drawable.ic_pdf),
 
+    ARTICLE_VIEWER(R.string.title_article_viewer, R.drawable.ic_article),
+
     CODE_READER(R.string.title_code_reader, R.drawable.ic_barcode),
 
     PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),

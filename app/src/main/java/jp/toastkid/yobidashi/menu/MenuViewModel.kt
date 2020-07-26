@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.menu
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.toastkid.yobidashi.libs.lifecycle.Event
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * @author toastkidjp

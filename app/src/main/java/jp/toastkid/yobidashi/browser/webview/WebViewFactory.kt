@@ -14,7 +14,8 @@ import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragm
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.search.SearchCategory
 
 /**
  * [WebView] factory.
@@ -107,7 +108,7 @@ internal class WebViewFactory {
 
                     if (context is FragmentActivity) {
                         ElseCaseLongTapDialogFragment
-                                .make(preferenceApplier.getDefaultSearchEngine(), extra)
+                                .make(preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(), extra)
                                 .show(
                                         context.supportFragmentManager,
                                         ElseCaseLongTapDialogFragment::class.java.simpleName

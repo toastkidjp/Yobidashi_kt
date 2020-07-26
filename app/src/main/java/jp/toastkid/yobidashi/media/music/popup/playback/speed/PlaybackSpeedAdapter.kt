@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.annotation.LayoutRes
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.lib.preference.ColorPair
 
 /**
  * @author toastkidjp

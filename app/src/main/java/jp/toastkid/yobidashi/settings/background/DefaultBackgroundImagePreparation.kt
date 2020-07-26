@@ -5,8 +5,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

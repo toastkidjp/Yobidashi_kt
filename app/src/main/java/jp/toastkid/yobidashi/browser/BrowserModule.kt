@@ -13,7 +13,6 @@ import android.os.Message
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.SslErrorHandler
 import android.webkit.ValueCallback
@@ -47,14 +46,15 @@ import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.main.content.ContentViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.Job
@@ -392,7 +392,7 @@ class BrowserModule(
 
             val activity = webViewContainer?.context
             if (activity is FragmentActivity
-                    && preferenceApplier.browserScreenMode() != ScreenMode.FULL_SCREEN) {
+                    && ScreenMode.find(preferenceApplier.browserScreenMode()) != ScreenMode.FULL_SCREEN) {
                 ViewModelProvider(activity).get(AppBarViewModel::class.java).show()
             }
         }

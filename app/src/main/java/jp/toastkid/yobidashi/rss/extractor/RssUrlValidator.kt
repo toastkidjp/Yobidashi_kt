@@ -7,7 +7,7 @@
  */
 package jp.toastkid.yobidashi.rss.extractor
 
-import jp.toastkid.yobidashi.libs.Urls
+import jp.toastkid.lib.Urls
 
 /**
  * @author toastkidjp

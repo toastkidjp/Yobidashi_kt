@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.appwidget.search
 
 import android.content.ContextWrapper
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**

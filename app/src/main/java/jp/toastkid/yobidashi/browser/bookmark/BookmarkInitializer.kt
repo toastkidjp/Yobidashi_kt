@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.storage.FilesDir
+import jp.toastkid.lib.storage.FilesDir
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

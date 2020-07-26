@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.libs.ad
 import android.content.Context
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
-import jp.toastkid.yobidashi.main.AppBarViewModel
+import jp.toastkid.lib.AppBarViewModel
 
 /**
  * @author toastkidjp

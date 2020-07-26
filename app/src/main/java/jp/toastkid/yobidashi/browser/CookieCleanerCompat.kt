@@ -8,7 +8,7 @@ import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Cookie cleaner for backward compatible.

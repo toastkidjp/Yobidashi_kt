@@ -12,7 +12,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
-import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.lib.preference.ColorPair
 
 /**
  * @author toastkidjp

@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.main.boot
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**

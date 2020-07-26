@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -19,14 +18,8 @@ import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
-import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import okhttp3.Call
-import okhttp3.Request
-import okhttp3.Response
-import timber.log.Timber
-import java.io.IOException
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Method object of downloading image file.

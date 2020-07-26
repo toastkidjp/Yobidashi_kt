@@ -16,7 +16,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingOtherBinding
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.settings.ClearSettingConfirmDialogFragment
 
@@ -51,7 +51,7 @@ class OtherSettingFragment : Fragment() {
         binding.fragment = this
 
         binding.startUpItems.startUpSelector.setOnCheckedChangeListener { _, checkedId ->
-            preferenceApplier.startUp = StartUp.findById(checkedId)
+            preferenceApplier.startUp = StartUp.findById(checkedId).name
         }
 
         return binding.root
@@ -60,7 +60,7 @@ class OtherSettingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.startUpItems.startUpSelector.let {
-            it.check(preferenceApplier.startUp.radioButtonId)
+            it.check(StartUp.findByName(preferenceApplier.startUp).radioButtonId)
             it.jumpDrawablesToCurrentState()
         }
         binding.wifiOnlyCheck.let {

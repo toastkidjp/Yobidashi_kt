@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupBarcodeResultBinding
-import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.lib.preference.ColorPair
 
 /**
  * Popup for showing barcode reader's result.

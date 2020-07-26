@@ -28,8 +28,8 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.Urls
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Setting fragment of WEB browser.
@@ -144,7 +144,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
         }
 
         binding.browserExpand.screenMode.let {
-            it.check(preferenceApplier.browserScreenMode().id())
+            it.check(ScreenMode.find(preferenceApplier.browserScreenMode()).id())
             it.jumpDrawablesToCurrentState()
         }
     }
@@ -160,7 +160,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
                 R.id.fixed       -> ScreenMode.FIXED
                 else             -> ScreenMode.EXPANDABLE
             }
-            preferenceApplier.setBrowserScreenMode(screenMode)
+            preferenceApplier.setBrowserScreenMode(screenMode.name)
         }
     }
 

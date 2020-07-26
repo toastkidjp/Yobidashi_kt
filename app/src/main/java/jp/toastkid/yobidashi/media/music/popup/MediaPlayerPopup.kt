@@ -36,12 +36,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.PopupMediaPlayerBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.permission.RuntimePermissions
-import jp.toastkid.yobidashi.libs.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.view.SlidingTapListener
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.SlidingTapListener
 import jp.toastkid.yobidashi.media.music.MediaPlayerService
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlaybackSpeedAdapter
 import jp.toastkid.yobidashi.media.music.popup.playback.speed.PlayingSpeed

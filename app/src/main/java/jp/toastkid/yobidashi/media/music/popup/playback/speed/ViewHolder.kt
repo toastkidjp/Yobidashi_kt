@@ -8,7 +8,7 @@
 package jp.toastkid.yobidashi.media.music.popup.playback.speed
 
 import android.widget.TextView
-import jp.toastkid.yobidashi.libs.preference.ColorPair
+import jp.toastkid.lib.preference.ColorPair
 
 /**
  * @author toastkidjp
