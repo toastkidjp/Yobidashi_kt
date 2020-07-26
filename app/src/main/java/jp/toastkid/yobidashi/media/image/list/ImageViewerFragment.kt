@@ -55,6 +55,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
 
     private lateinit var imageLoaderUseCase: ImageLoaderUseCase
 
+    private lateinit var imageFilterUseCase: ImageFilterUseCase
+
     private var adapter: Adapter? = null
 
     private val disposables: Job by lazy { Job() }
@@ -114,6 +116,14 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                 imageLoader,
                 this::refreshContent
         )
+
+        imageFilterUseCase = ImageFilterUseCase(
+                preferenceApplier,
+                adapter,
+                imageLoaderUseCase,
+                imageLoader,
+                this::refreshContent
+        )
     }
 
     private fun observePageSearcherViewModel() {
@@ -121,7 +131,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
                 .also { viewModel ->
                     viewModel.find.observe(activity, Observer {
-                        filterByName(it)
+                        imageFilterUseCase(it)
                     })
                 }
     }
@@ -165,25 +175,6 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                         activity?.supportFragmentManager?.popBackStack()
                     }
         }
-    }
-
-    private fun filterByName(keyword: String?) {
-        if (keyword.isNullOrBlank()) {
-            imageLoaderUseCase()
-            return
-        }
-
-        adapter?.clear()
-
-        val excludedItemFilter = ExcludingItemFilter(preferenceApplier.excludedItems())
-
-        imageLoader.filterBy(keyword)
-                .filter { excludedItemFilter(it.path) }
-                .forEach { adapter?.add(it) }
-
-        imageLoaderUseCase.clearCurrentBucket()
-
-        refreshContent()
     }
 
     private fun refreshContent() {
