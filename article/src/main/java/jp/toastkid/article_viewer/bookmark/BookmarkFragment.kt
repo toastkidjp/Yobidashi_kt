@@ -103,7 +103,12 @@ class BookmarkFragment : Fragment(), ContentScrollable {
                             .newArticle(title)
                 }
             },
-            { }
+            { title ->
+                CoroutineScope(Dispatchers.Main).launch(disposables) {
+                    ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+                            .newArticleOnBackground(title)
+                }
+            }
         )
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
