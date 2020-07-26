@@ -53,7 +53,7 @@ internal class Adapter(
                 imageViewerFragmentViewModel?.click(it.name)
             } else {
                 val fragmentManager = fragmentManager ?: return@applyContent
-                ImagePreviewDialogFragment.withImage(it)
+                ImagePreviewDialogFragment.withImage(images, position)
                         .show(fragmentManager, ImagePreviewDialogFragment::class.java.simpleName)
             }
         }

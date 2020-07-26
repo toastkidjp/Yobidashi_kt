@@ -12,11 +12,12 @@
         android:layout_height="match_parent"
         android:onClick="@{view -> dialog.dismiss()}"
         >
-        <com.github.chrisbanes.photoview.PhotoView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerInside"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
 
         <ImageView

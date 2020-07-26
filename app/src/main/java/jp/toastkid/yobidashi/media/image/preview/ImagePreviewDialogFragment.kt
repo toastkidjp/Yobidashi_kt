@@ -26,6 +26,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
@@ -54,9 +55,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val activityContext = context
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        path = arguments?.getString(KEY_IMAGE)
-                ?: return super.onCreateDialog(savedInstanceState)
-
         binding = DataBindingUtil.inflate(
                 LayoutInflater.from(activityContext),
                 LAYOUT_ID,
@@ -70,25 +68,36 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         applyColorToButtons()
 
+        val adapter = Adapter()
+        binding.photo.adapter = adapter
+        LinearSnapHelper().attachToRecyclerView(binding.photo)
+
         val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
-            binding.photo.colorFilter = it
+            adapter.setColorFilter(it)
         })
 
         initializeContrastSlider()
         initializeAlphaSlider()
 
         binding.imageRotationUseCase =
-                ImageRotationUseCase(viewModel, { binding.photo.drawable.toBitmap() })
+                ImageRotationUseCase(viewModel, {
+                    // TODO binding.photo.drawable.toBitmap()
+                    null
+                })
         viewModel.bitmap.observe(this, Observer {
-            binding.photo.setImageBitmap(it)
+            adapter.setImageBitmap()
         })
 
         contentResolver = binding.root.context.contentResolver
-        loadImageAsync(activityContext, path)
 
-        binding.photo.maximumScale = 100f
+        val images: List<Image> = arguments?.getSerializable(KEY_IMAGE) as? List<Image>
+                ?: return super.onCreateDialog(savedInstanceState)
+        adapter.setImages(images)
+        adapter.notifyDataSetChanged()
+        val position = arguments?.getInt(KEY_POSITION) ?: 0
+        binding.photo.scrollToPosition(position)
 
         return AlertDialog.Builder(activityContext)
                 .setView(binding.root)
@@ -162,7 +171,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         Glide.with(activityContext)
                 .load(Uri.parse(File(path).toURI().toString()))
-                .into(binding.photo)
+                //.into(binding.photo)
     }
 
     fun edit() {
@@ -194,10 +203,15 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         private const val KEY_IMAGE = "image"
 
-        fun withImage(image: Image) =
+        private const val KEY_POSITION = "position"
+
+        fun withImage(image: Collection<Image>, position: Int) =
                 ImagePreviewDialogFragment()
                         .also {
-                            it.arguments = bundleOf(KEY_IMAGE to image.path)
+                            it.arguments = bundleOf(
+                                    KEY_IMAGE to image,
+                                    KEY_POSITION to position
+                            )
                         }
     }
 
