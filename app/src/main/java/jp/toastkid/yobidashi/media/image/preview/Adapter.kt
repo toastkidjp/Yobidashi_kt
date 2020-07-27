@@ -25,7 +25,7 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = PhotoView(parent.context)
         view.layoutParams = layoutParams
-        view.maximumScale = 50f
+        view.maximumScale = 15f
         return ViewHolder(view)
     }
 
