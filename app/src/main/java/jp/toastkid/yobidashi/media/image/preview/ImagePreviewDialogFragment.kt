@@ -15,9 +15,11 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -85,11 +87,15 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         binding.imageRotationUseCase =
                 ImageRotationUseCase(viewModel, {
-                    // TODO binding.photo.drawable.toBitmap()
-                    null
+                    (binding.photo.layoutManager as? LinearLayoutManager)?.let {
+                        (it.findViewByPosition(it.findFirstVisibleItemPosition()) as? ImageView)?.drawable?.toBitmap()
+                    }
                 })
-        viewModel.bitmap.observe(this, Observer {
-            adapter.setImageBitmap()
+        viewModel.bitmap.observe(this, Observer { bitmap ->
+            (binding.photo.layoutManager as? LinearLayoutManager)?.let {
+                val view = it.findViewByPosition(it.findFirstVisibleItemPosition()) as? ImageView ?: return@Observer
+                view.setImageBitmap(bitmap)
+            }
         })
 
         contentResolver = binding.root.context.contentResolver
