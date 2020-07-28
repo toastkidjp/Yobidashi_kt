@@ -90,8 +90,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     findCurrentImageView()?.drawable?.toBitmap()
                 })
         viewModel.bitmap.observe(this, Observer { bitmap ->
-            val view = findCurrentImageView() ?: return@Observer
-            view.setImageBitmap(bitmap)
+            findCurrentImageView()?.setImageBitmap(bitmap)
         })
 
         contentResolver = binding.root.context.contentResolver
