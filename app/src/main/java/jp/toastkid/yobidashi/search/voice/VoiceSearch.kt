@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
+import jp.toastkid.search.SearchCategory
 import kotlinx.coroutines.Job
 
 /**
@@ -53,7 +53,8 @@ object VoiceSearch {
         if (result.isNullOrEmpty()) {
             return Job()
         }
-        return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(), result[0])
+        return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine()
+                ?: SearchCategory.getDefaultCategoryName(), result[0])
                 .invoke()
     }
 

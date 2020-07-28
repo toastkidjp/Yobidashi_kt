@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -56,12 +57,12 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
@@ -69,6 +70,7 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
+import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -76,7 +78,7 @@ import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListService
-import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
+import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -342,6 +344,17 @@ class MainActivity : AppCompatActivity(),
         contentViewModel?.refresh?.observe(this, Observer {
             refresh()
         })
+        contentViewModel?.newArticle?.observe(this, Observer {
+            val titleAndOnBackground = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openNewArticleTab(titleAndOnBackground.first, titleAndOnBackground.second)
+            if (titleAndOnBackground.second) {
+                contentViewModel?.snackShort(
+                        getString(R.string.message_tab_open_background, titleAndOnBackground.first)
+                )
+            } else {
+                replaceToCurrentTab()
+            }
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {
@@ -376,7 +389,7 @@ class MainActivity : AppCompatActivity(),
                 calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
                     val query = it.toString()
                     if (Urls.isInvalidUrl(query)) {
-                        search(preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(), query)
+                        search(preferenceApplier.getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), query)
                         return
                     }
                     openNewWebTab(query.toUri())
@@ -387,7 +400,7 @@ class MainActivity : AppCompatActivity(),
                 val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
                     calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
                 } else {
-                    preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
+                    preferenceApplier.getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
                 }
                 search(category, calledIntent.getStringExtra(SearchManager.QUERY))
                 return
@@ -520,6 +533,16 @@ class MainActivity : AppCompatActivity(),
                     } catch (e: IllegalStateException) {
                         Timber.e(e)
                         return
+                    }
+                }
+            }
+            is ArticleTab -> {
+                val fragment = obtainFragment(ContentViewerFragment::class.java)
+                replaceFragment(fragment, withAnimation)
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread {
+                        (fragment as? ContentViewerFragment)?.loadContent(currentTab.title())
+                        refreshThumbnail()
                     }
                 }
             }

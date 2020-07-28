@@ -31,13 +31,6 @@ class MainActivityIntentFactory {
                 it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
 
-    fun randomWikipedia(context: Context) = Intent(context, MainActivity::class.java)
-            .also {
-                it.action = Intent.ACTION_VIEW
-                it.putExtra("random_wikipedia", true)
-                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
-
     fun barcodeReader(context: Context) = withAction(context, BARCODE_READER)
 
     fun launcher(context: Context) = withAction(context, APP_LAUNCHER)

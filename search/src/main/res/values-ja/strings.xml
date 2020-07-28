@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_site_search_by_google">サイト内をGoogleで検索</string>
+
+    <string name="search_category_web">DuckDuckGo</string>
+    <string name="search_category_image">画像</string>
+    <string name="search_category_map">地図</string>
+    <string name="search_category_apps">アプリ</string>
+    <string name="search_category_twitter">Twitter</string>
+    <string name="search_category_facebook">Facebook</string>
+    <string name="search_category_instagram">Instagram</string>
+    <string name="search_category_youtube">動画</string>
+    <string name="search_category_wikipedia">Wikipedia</string>
+    <string name="search_category_internet_archive">Internet Archive</string>
+    <string name="search_category_shopping">ショッピング</string>
+    <string name="search_category_stack_overflow">Stack Overflow</string>
+    <string name="search_category_technology">TechCrunch</string>
+    <string name="search_category_github">GitHub</string>
+    <string name="search_category_mvnrepository">MvnRepository</string>
+    <string name="search_category_grep_code">GrepCode</string>
+    <string name="search_category_yandex">Yandex</string>
+    <string name="search_category_yahoo">Yahoo!</string>
+    <string name="search_category_yahoo_japan">Yahoo! JAPAN</string>
+    <string name="google">Google</string>
+    <string name="bing">Bing</string>
+    <string name="yelp">Yelp</string>
+    <string name="gutenberg">Gutenberg</string>
+    <string name="medium">Medium</string>
+    <string name="ted">TED</string>
+    <string name="buzzfeed">BuzzFeed</string>
+    <string name="slideshare">SlideShare</string>
+    <string name="speakerdeck">Speaker Deck</string>
+    <string name="baidu">Baidu</string>
+    <string name="search_category_flickr">Flickr</string>
+    <string name="search_category_wikimedia_commons">Wikimedia Commons</string>
+    <string name="livejournal">LiveJournal</string>
+    <string name="search_category_slashdot">Slashdot</string>
+    <string name="search_category_reddit">reddit</string>
+    <string name="search_category_tiktok">TikTok</string>
+    <string name="search_category_open_weather">Open Weather</string>
+    <string name="tumblr">Tumblr</string>
+    <string name="search_category_open_street_map">OpenStreetMap</string>
+    <string name="search_category_quora">Quora</string>
+    <string name="search_category_ask_com">Ask.com</string>
+    <string name="naver">NAVER</string>
+    <string name="daum">Daum</string>
+    <string name="aol">AOL.</string>
+    <string name="wolfram_alpha">Wolfram Alpha</string>
+    <string name="linked_in">LinkedIn</string>
+    <string name="financial_times">Financial Times</string>
+    <string name="wayback_machine">Wayback Machine</string>
+    <string name="search_category_qwant">Qwant</string>
+    <string name="search_category_startpage">Startpage</string>
+    <string name="imdb">IMDb</string>
+    <string name="espn">ESPN</string>
+
+</resources>

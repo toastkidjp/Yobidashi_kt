@@ -7,6 +7,7 @@
  */
 package jp.toastkid.article_viewer.article.detail
 
+import android.net.Uri
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
@@ -16,6 +17,8 @@ import androidx.core.net.toUri
 import jp.toastkid.article_viewer.R
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.UrlFactory
 
 /**
  * @author toastkidjp
@@ -32,9 +35,11 @@ class ContextMenuInitializer(
 
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val text = extractSelectedText()
+                val menuInflater = MenuInflater(context)
                 if (Urls.isValidUrl(text)) {
-                    MenuInflater(context).inflate(R.menu.context_article_content_url, menu)
+                    menuInflater.inflate(R.menu.context_article_content_url, menu)
                 }
+                menuInflater.inflate(R.menu.context_article_content_search, menu)
                 return true
             }
 
@@ -56,9 +61,25 @@ class ContextMenuInitializer(
                         actionMode?.finish()
                         return true
                     }
+                    R.id.preview_search -> {
+                        browserViewModel.preview(makeSearchUrl(text))
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.web_search -> {
+                        browserViewModel.open(makeSearchUrl(text))
+                        actionMode?.finish()
+                        return true
+                    }
                     else -> Unit
                 }
                 return false
+            }
+
+            private fun makeSearchUrl(text: String): Uri {
+                val category = PreferenceApplier(context).getDefaultSearchEngine() ?: ""
+                val uri = UrlFactory().invoke(category, text, null)
+                return uri
             }
 
             private fun extractSelectedText(): String {

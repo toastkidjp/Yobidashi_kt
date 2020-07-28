@@ -69,6 +69,8 @@ class MediaPlayerPopup(private val context: Context) {
 
     private var adapter: Adapter? = null
 
+    private var layoutManager: LinearLayoutManager? = null
+
     private lateinit var mediaBrowser: MediaBrowserCompat
 
     private val preferenceApplier = PreferenceApplier(context)
@@ -105,6 +107,7 @@ class MediaPlayerPopup(private val context: Context) {
             children.forEach { adapter?.add(it) }
 
             adapter?.notifyDataSetChanged()
+            layoutManager?.scrollToPosition(adapter?.mediumPosition() ?: 0)
         }
     }
 
@@ -129,7 +132,7 @@ class MediaPlayerPopup(private val context: Context) {
         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
             when (state?.state) {
                 PlaybackStateCompat.STATE_PLAYING -> setPauseIcon()
-                PlaybackStateCompat.STATE_PAUSED -> setPlayIcon()
+                PlaybackStateCompat.STATE_PAUSED,
                 PlaybackStateCompat.STATE_STOPPED -> setPlayIcon()
                 else -> Unit
             }
@@ -159,8 +162,9 @@ class MediaPlayerPopup(private val context: Context) {
         observeViewModels()
 
         binding.mediaList.adapter = adapter
-        binding.mediaList.layoutManager =
-                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.mediaList.layoutManager = layoutManager
 
         initializePlaybackSpeedChanger()
 

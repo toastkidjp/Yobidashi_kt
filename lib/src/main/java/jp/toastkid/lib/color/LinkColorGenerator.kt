@@ -5,9 +5,19 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.main
+package jp.toastkid.lib.color
+
+import android.graphics.Color
+import androidx.annotation.ColorInt
 
 /**
  * @author toastkidjp
  */
-interface TabUiFragment
+class LinkColorGenerator {
+
+    @ColorInt
+    operator fun invoke(@ColorInt baseColor: Int): Int {
+        return Color.rgb(Color.green(baseColor), Color.blue(baseColor), Color.red(baseColor))
+    }
+
+}

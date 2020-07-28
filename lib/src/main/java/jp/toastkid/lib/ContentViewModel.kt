@@ -122,4 +122,17 @@ class ContentViewModel : ViewModel() {
     fun refresh() {
         _refresh.postValue(Unit)
     }
+
+    private val _newArticle = MutableLiveData<Event<Pair<String, Boolean>>>()
+
+    val newArticle: LiveData<Event<Pair<String, Boolean>>> = _newArticle
+
+    fun newArticle(title: String) {
+        _newArticle.postValue(Event(title to false))
+    }
+
+    fun newArticleOnBackground(title: String) {
+        _newArticle.postValue(Event(title to true))
+    }
+
 }

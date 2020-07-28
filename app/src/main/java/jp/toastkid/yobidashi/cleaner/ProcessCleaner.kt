@@ -11,15 +11,14 @@ import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
-import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.os.Build
 
 /**
  * @author toastkidjp
  */
 class ProcessCleaner {
+
+    private val notIgnoreProcessFilter = NotIgnoreProcessFilter()
 
     operator fun invoke(
             packageManager: PackageManager,
@@ -33,32 +32,21 @@ class ProcessCleaner {
         val preInformation = getMemoryInformation(activityManager)
         val preAvailableMemories = (preInformation.availMem / 1024 / 1024).toInt()
 
-        val installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
-                .filter { isTarget(it) }
-                .map { it.packageName }
-
-        val homeApp = packageManager
-                .queryIntentActivities(intent, flag)
-                .map { it.activityInfo.packageName }
-
         val runningAppProcesses = getRunningProcesses(usageStatsManager)
         if (runningAppProcesses.isEmpty()) {
             return ""
         }
 
-        val killingTargetProcesses = runningAppProcesses
-                .filter { !homeApp.contains(it) && installedApplications.contains(it) }
+        val targetProcessFilter = TargetProcessFilter(packageManager, notIgnoreProcessFilter)
+        val targetProcesses = runningAppProcesses.filter { targetProcessFilter(it) }
 
-        if (killingTargetProcesses.isEmpty()) {
+        if (targetProcesses.isEmpty()) {
             return "Target processes are not found."
         }
 
-        killingTargetProcesses
-                .forEach {
-                    activityManager.killBackgroundProcesses(it)
-                }
+        targetProcesses.forEach { activityManager.killBackgroundProcesses(it) }
 
-        val targets = killingTargetProcesses.reduce { base, item -> "$base$lineSeparator$item" }
+        val targets = targetProcesses.reduce { base, item -> "$base$lineSeparator$item" }
 
         val postInformation = getMemoryInformation(activityManager)
         val availableMemories = (postInformation.availMem / 1024 / 1024).toInt()
@@ -88,38 +76,7 @@ class ProcessCleaner {
         return memoryInfo
     }
 
-    private fun isTarget(applicationInfo: ApplicationInfo): Boolean {
-        if (applicationInfo.flags and PRIMARY_FLAG == PRIMARY_FLAG) {
-            return false
-        }
-        return !ignoreProcesses.contains(applicationInfo.packageName)
-
-    }
-
     companion object {
-
-        private val intent =
-                Intent(Intent.ACTION_MAIN).also { it.addCategory(Intent.CATEGORY_HOME) }
-
-        private val flag =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PackageManager.MATCH_ALL
-                else 0
-
-        private const val PRIMARY_FLAG = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_PERSISTENT
-
-        private val ignoreProcesses = setOf(
-                "system",
-                "com.android.phone",
-                "android.process.acore",
-                "android.process.media",
-                "com.android.inputmethod",
-                "com.android.bluetooth",
-                "com.android.systemui",
-                "com.android.smspush",
-                "com.android.chrome",
-                "jp.toastkid.yobidashi.d",
-                "jp.toastkid.yobidashi"
-        )
 
         private val lineSeparator = System.getProperty("line.separator")
     }

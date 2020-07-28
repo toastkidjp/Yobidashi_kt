@@ -54,7 +54,8 @@ class SearchHistoryFragment : Fragment(),
         adapter = ModuleAdapter(
                 context,
                 DatabaseFinder().invoke(context).searchHistoryRepository(),
-                { SearchAction(context, it.category ?: "", it.query ?: "").invoke()},
+                { SearchAction(context, it.category
+                        ?: "", it.query ?: "").invoke()},
                 { },
                 { },
                 false

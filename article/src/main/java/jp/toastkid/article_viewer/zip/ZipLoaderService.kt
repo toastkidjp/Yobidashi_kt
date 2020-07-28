@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.zip
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -29,11 +28,10 @@ import java.io.IOException
 @RequiresApi(Build.VERSION_CODES.N)
 class ZipLoaderService : JobIntentService() {
 
-    @SuppressLint("CheckResult")
     override fun onHandleWork(intent: Intent) {
         val dataBase = AppDatabase.find(this)
 
-        val articleRepository = dataBase.diaryRepository()
+        val articleRepository = dataBase.articleRepository()
 
         val file = intent.getParcelableExtra<Uri>("target") ?: return
 
@@ -53,9 +51,7 @@ class ZipLoaderService : JobIntentService() {
             /*progress.visibility = View.GONE
             progress_circular.visibility = View.GONE
             all()*/
-            val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
-            progressIntent.putExtra("progress", 100)
-            sendBroadcast(progressIntent)
+            sendBroadcast(makeBroadcastIntent(100))
             zipLoader.dispose()
         }
     }
@@ -63,6 +59,12 @@ class ZipLoaderService : JobIntentService() {
     companion object {
 
         private const val ACTION_PROGRESS_BROADCAST = "jp.toastkid.articles.importing.progress"
+
+        private fun makeBroadcastIntent(progress: Int): Intent {
+            val progressIntent = Intent(ACTION_PROGRESS_BROADCAST)
+            progressIntent.putExtra("progress", progress)
+            return progressIntent
+        }
 
         fun makeProgressBroadcastIntentFilter() = IntentFilter(ACTION_PROGRESS_BROADCAST)
 

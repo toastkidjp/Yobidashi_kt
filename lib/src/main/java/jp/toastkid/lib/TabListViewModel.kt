@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.tab.tab_list
+package jp.toastkid.lib
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +15,7 @@ import java.io.File
 /**
  * @author toastkidjp
  */
-internal class TabListViewModel : ViewModel() {
+class TabListViewModel : ViewModel() {
 
     private val _saveEditorTab = MutableLiveData<File>()
 

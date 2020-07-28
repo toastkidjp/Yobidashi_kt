@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.search
+package jp.toastkid.search
 
 import android.net.Uri
 import androidx.core.net.toUri

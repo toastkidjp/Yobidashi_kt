@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.rss.api
 
 import jp.toastkid.yobidashi.rss.RssResponseConverter
+import jp.toastkid.yobidashi.rss.model.Parser
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -22,7 +23,7 @@ class RssConverterFactory private constructor(): Converter.Factory() {
             type: Type?,
             annotations: Array<Annotation>?,
             retrofit: Retrofit?
-    ): Converter<ResponseBody, *> = RssResponseConverter()
+    ): Converter<ResponseBody, *> = RssResponseConverter(Parser())
 
     companion object {
 

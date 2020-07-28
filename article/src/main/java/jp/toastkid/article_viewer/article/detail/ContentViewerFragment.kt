@@ -8,45 +8,60 @@
 package jp.toastkid.article_viewer.article.detail
 
 import android.os.Bundle
-import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
+import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.common.SearchFunction
-import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
+import jp.toastkid.article_viewer.databinding.AppBarContentViewerBinding
 import jp.toastkid.article_viewer.databinding.FragmentContentBinding
+import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.color.LinkColorGenerator
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.TextViewHighlighter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import java.util.regex.Pattern
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
-class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
+class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable, TabUiFragment {
 
     private lateinit var binding: FragmentContentBinding
 
-    private lateinit var appBarBinding: AppBarArticleListBinding
+    private lateinit var appBarBinding: AppBarContentViewerBinding
 
     private lateinit var textViewHighlighter: TextViewHighlighter
+
+    private lateinit var repository: ArticleRepository
+
+    private val subheads = mutableListOf<String>()
 
     private val disposables = Job()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false)
-        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
+        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_content_viewer, container, false)
+        appBarBinding.fragment = this
         textViewHighlighter = TextViewHighlighter(binding.content)
+        repository = AppDatabase.find(binding.root.context).articleRepository()
 
         ContextMenuInitializer(
                 binding.content,
@@ -59,14 +74,13 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
             linkBehaviorService.invoke(url)
         }
         binding.content.movementMethod = linkMovementMethod
+
         return binding.root
     }
 
     private fun makeLinkBehaviorService(): LinkBehaviorService {
-        val repository = AppDatabase.find(requireContext()).diaryRepository()
         val viewModelProvider = ViewModelProvider(requireActivity())
         val linkBehaviorService = LinkBehaviorService(
-                repository,
                 viewModelProvider.get(ContentViewModel::class.java),
                 viewModelProvider.get(BrowserViewModel::class.java)
         )
@@ -76,18 +90,58 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        binding.content.text = arguments?.getString("content")
+        binding.content.linksClickable = true
         arguments?.getString("title")?.also {
             appBarBinding.searchResult.text = it
+            loadContent(it)
         }
 
         appBarBinding.input.addTextChangedListener {
             search(it.toString())
         }
 
-        binding.content.linksClickable = true
+        val activity = activity ?: return
+        ViewModelProvider(activity).get(TabListViewModel::class.java)
+                .tabCount
+                .observe(activity, Observer { appBarBinding.tabCount.text = it.toString() })
+    }
 
-        LinkGeneratorService().invoke(binding.content)
+    override fun onResume() {
+        super.onResume()
+        val preferenceApplier = PreferenceApplier(binding.root.context)
+        binding.contentScroll.setBackgroundColor(preferenceApplier.editorBackgroundColor())
+
+        val editorFontColor = preferenceApplier.editorFontColor()
+        binding.content.setTextColor(editorFontColor)
+        binding.content.setLinkTextColor(LinkColorGenerator().invoke(editorFontColor))
+
+        appBarBinding.searchResult.setTextColor(preferenceApplier.fontColor)
+        appBarBinding.input.setTextColor(preferenceApplier.fontColor)
+        appBarBinding.tabIcon.setColorFilter(preferenceApplier.fontColor)
+        appBarBinding.tabCount.setTextColor(preferenceApplier.fontColor)
+        appBarBinding.subhead.setColorFilter(preferenceApplier.fontColor)
+
+        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
+                .replace(appBarBinding.root)
+    }
+
+    fun loadContent(title: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            appBarBinding.searchResult.text = title
+            val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) } ?: return@launch
+            binding.content.text = content
+            LinkGeneratorService().invoke(binding.content)
+
+            withContext(Dispatchers.Default) {
+                content.split(System.lineSeparator())
+                        .filter { it.startsWith("#") }
+                        .forEach { subheads.add(it) }
+            }
+        }
+    }
+
+    fun tabList() {
+        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).switchTabList()
     }
 
     override fun search(keyword: String?) {
@@ -100,6 +154,16 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
         binding.contentScroll.smoothScrollTo(0, 0)
     }
 
+    fun showSubheads() {
+        if (subheads.isEmpty()) {
+            return
+        }
+
+        SubheadDialogFragment
+                .make(subheads)
+                .show(parentFragmentManager, SubheadDialogFragment::class.java.canonicalName)
+    }
+
     override fun toBottom() {
         binding.contentScroll.smoothScrollTo(0, binding.content.measuredHeight)
     }
@@ -109,14 +173,4 @@ class ContentViewerFragment : Fragment(), SearchFunction, ContentScrollable {
         super.onDetach()
     }
 
-    companion object {
-
-        fun make(title: String, content: String): Fragment
-                = ContentViewerFragment().also {
-                    it.arguments = bundleOf(
-                        "content" to content,
-                        "title" to title
-                    )
-                }
-    }
 }

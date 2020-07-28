@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.search
+package jp.toastkid.search
 
 import org.junit.Assert
 import org.junit.Test
@@ -14,7 +14,7 @@ class SiteSearchUrlGeneratorTest {
     /**
      * Testing object.
      */
-    private val siteSearchUrlGenerator = SiteSearchUrlGenerator()
+    private val siteSearchUrlGenerator = jp.toastkid.search.SiteSearchUrlGenerator()
 
     /**
      * Check behavior.

@@ -18,11 +18,12 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
-import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
+import jp.toastkid.lib.TabListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -141,6 +142,15 @@ class TabAdapter(
         tabList.add(pdfTab)
         setCount()
         setIndexByTab(pdfTab)
+    }
+
+    fun openNewArticleTab(title: String, onBackground: Boolean = false) {
+        val articleTab = ArticleTab.make(title)
+        tabList.add(articleTab)
+        setCount()
+        if (!onBackground) {
+            setIndexByTab(articleTab)
+        }
     }
 
     /**

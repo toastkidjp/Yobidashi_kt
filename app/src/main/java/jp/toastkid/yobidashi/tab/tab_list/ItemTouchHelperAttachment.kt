@@ -22,7 +22,7 @@ class ItemTouchHelperAttachment {
      *
      * @param recyclerView [RecyclerView]
      */
-    operator fun invoke(recyclerView: RecyclerView): ItemTouchHelper {
+    operator fun invoke(recyclerView: RecyclerView) {
         val itemTouchHelper = ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(
                         DRAG_DIRECTIONS,
@@ -52,7 +52,6 @@ class ItemTouchHelperAttachment {
                 }
         )
         itemTouchHelper.attachToRecyclerView(recyclerView)
-        return itemTouchHelper
     }
 
     companion object {

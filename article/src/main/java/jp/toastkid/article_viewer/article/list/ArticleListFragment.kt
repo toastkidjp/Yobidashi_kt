@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.article_viewer.calendar.CalendarFragment
 import jp.toastkid.article_viewer.common.ProgressCallback
 import jp.toastkid.article_viewer.common.SearchFunction
@@ -100,6 +99,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
 
     private val tokenizer = NgramTokenizer()
 
+    private val inputChannel = Channel<String>()
+
     /**
      * [CompositeDisposable].
      */
@@ -133,7 +134,7 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
     private fun initializeRepository(activityContext: Context) {
         val dataBase = AppDatabase.find(activityContext)
 
-        articleRepository = dataBase.diaryRepository()
+        articleRepository = dataBase.articleRepository()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -152,26 +153,8 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
 
         adapter = Adapter(
                 LayoutInflater.from(context),
-                { title ->
-                    CoroutineScope(Dispatchers.Main).launch(disposables) {
-                        val content = withContext(Dispatchers.IO) {
-                            articleRepository.findContentByTitle(title)
-                        }
-                        if (content.isNullOrBlank()) {
-                            return@launch
-                        }
-                        contentViewModel
-                                ?.nextFragment(ContentViewerFragment.make(title, content))
-                    }
-                },
-                {
-                    /*if (preferencesWrapper.containsBookmark(it)) {
-                        Snackbar.make(results, "「$it」 is already added.", Snackbar.LENGTH_SHORT).show()
-                        return@Adapter
-                    }
-                    preferencesWrapper.addBookmark(it)
-                    Snackbar.make(results, "It has added $it.", Snackbar.LENGTH_SHORT).show()*/
-                }
+                { contentViewModel?.newArticle(it) },
+                { contentViewModel?.newArticleOnBackground(it) }
         )
 
         binding.results.adapter = adapter
@@ -186,7 +169,6 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
             true
         }
 
-        val inputChannel = Channel<String>()
         appBarBinding.input.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) = Unit
 
@@ -355,10 +337,11 @@ class ArticleListFragment : Fragment(), SearchFunction, ProgressCallback, Conten
         RecyclerViewScroller.toBottom(binding.results, adapter.itemCount)
     }
 
-    override fun onDestroy() {
+    override fun onDetach() {
         disposables.cancel()
+        inputChannel.cancel()
         context?.unregisterReceiver(progressBroadcastReceiver)
-        super.onDestroy()
+        super.onDetach()
     }
 
 }

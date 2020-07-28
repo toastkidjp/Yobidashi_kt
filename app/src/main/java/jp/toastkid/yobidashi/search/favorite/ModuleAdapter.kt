@@ -7,7 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -68,7 +67,7 @@ internal class ModuleAdapter(
 
         holder.setAddIcon(R.drawable.ic_add_circle_search)
 
-        holder.setImageRes(SearchCategory.findByCategory(favorite.category as String).iconId)
+        holder.setImageRes(jp.toastkid.search.SearchCategory.findByCategory(favorite.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
             SearchAction(
                     v.context,

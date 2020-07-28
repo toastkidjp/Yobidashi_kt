@@ -151,9 +151,9 @@ class SearchFragment : Fragment() {
         headerBinding?.fragment = this
         headerBinding?.searchCategories?.let {
             it.adapter = SearchCategoryAdapter(context)
-            val index = SearchCategory.findIndex(
-                    SearchCategory.findByHostOrNull(currentUrl?.toUri()?.host)?.name
-                            ?: PreferenceApplier(context).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
+            val index = jp.toastkid.search.SearchCategory.findIndex(
+                    jp.toastkid.search.SearchCategory.findByHostOrNull(currentUrl?.toUri()?.host)?.name
+                            ?: PreferenceApplier(context).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
             )
             it.setSelection(index)
         }

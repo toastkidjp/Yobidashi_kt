@@ -42,7 +42,7 @@ import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
+import jp.toastkid.search.SearchCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -117,7 +117,8 @@ class BarcodeReaderFragment : Fragment() {
             it.open.observe(viewLifecycleOwner, Observer { text ->
                 SearchAction(
                         requireActivity,
-                        preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName(),
+                        preferenceApplier.getDefaultSearchEngine()
+                                ?: SearchCategory.getDefaultCategoryName(),
                         text
                 ).invoke()
                 activity?.supportFragmentManager?.popBackStack()

@@ -48,9 +48,9 @@ import jp.toastkid.lib.storage.ExternalFileAssignment
 import jp.toastkid.lib.view.TextViewColorApplier
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.yobidashi.main.TabUiFragment
+import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.yobidashi.tab.tab_list.TabListViewModel
+import jp.toastkid.lib.TabListViewModel
 import okio.Okio
 import java.io.File
 import java.text.SimpleDateFormat

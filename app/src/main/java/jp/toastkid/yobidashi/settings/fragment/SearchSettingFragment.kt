@@ -20,7 +20,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchCategory
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 
 /**
@@ -46,14 +46,14 @@ class SearchSettingFragment : Fragment() {
         binding.fragment = this
 
         binding.searchCategories.adapter = SearchCategoryAdapter(activityContext)
-        val index = SearchCategory.findIndex(
-                PreferenceApplier(activityContext).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
+        val index = jp.toastkid.search.SearchCategory.findIndex(
+                PreferenceApplier(activityContext).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
         )
         binding.searchCategories.setSelection(index)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier.setDefaultSearchEngine(
-                        SearchCategory.values()[binding.searchCategories.selectedItemPosition].name)
+                        jp.toastkid.search.SearchCategory.values()[binding.searchCategories.selectedItemPosition].name)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit

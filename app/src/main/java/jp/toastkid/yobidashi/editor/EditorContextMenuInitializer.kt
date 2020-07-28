@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.editor
 
+import android.net.Uri
 import android.os.Build
 import android.view.ActionMode
 import android.view.Menu
@@ -20,6 +21,9 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.SearchCategory
+import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
@@ -91,8 +95,7 @@ class EditorContextMenuInitializer {
         }
 
         val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
-            ViewModelProvider(fragmentActivity)
-                    .get(BrowserViewModel::class.java)
+            ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
         }
 
         editText.customSelectionActionModeCallback = object : ActionMode.Callback {
@@ -144,6 +147,16 @@ class EditorContextMenuInitializer {
                         actionMode?.finish()
                         return true
                     }
+                    R.id.context_edit_preview_search -> {
+                        browserViewModel?.preview(makeSearchResultUrl(text))
+                        actionMode?.finish()
+                        return true
+                    }
+                    R.id.context_edit_web_search -> {
+                        browserViewModel?.open(makeSearchResultUrl(text))
+                        actionMode?.finish()
+                        return true
+                    }
                     R.id.context_edit_speech -> {
                         speechMaker?.invoke(text)
                         actionMode?.finish()
@@ -153,6 +166,12 @@ class EditorContextMenuInitializer {
                 }
                 return false
             }
+
+            private fun makeSearchResultUrl(text: String): Uri = UrlFactory().invoke(
+                    PreferenceApplier(context).getDefaultSearchEngine()
+                            ?: SearchCategory.getDefaultCategoryName(),
+                    text
+            )
 
             private fun extractSelectedText(): String {
                 return editText.text

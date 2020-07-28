@@ -8,19 +8,13 @@
 package jp.toastkid.article_viewer.article.detail
 
 import androidx.core.net.toUri
-import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
 class LinkBehaviorService(
-        private val repository: ArticleRepository,
         private val contentViewModel: ContentViewModel,
         private val browserViewModel: BrowserViewModel
 ) {
@@ -35,17 +29,6 @@ class LinkBehaviorService(
             return
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val title = InternalLinkScheme.extract(url)
-            val content = withContext(Dispatchers.IO) {
-                repository.findContentByTitle(title)
-            }
-
-            if (content.isNullOrBlank()) {
-                return@launch
-            }
-
-            contentViewModel.nextFragment(ContentViewerFragment.make(title, content))
-        }
+        contentViewModel.newArticle(InternalLinkScheme.extract(url))
     }
 }

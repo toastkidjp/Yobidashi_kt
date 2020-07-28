@@ -16,7 +16,7 @@ import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchCategory
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import java.text.MessageFormat
 
@@ -61,8 +61,8 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
     private fun initSpinner() {
         val context = context ?: return
         binding.favoriteSearchAdditionCategories.adapter = SearchCategoryAdapter(context)
-        val index = SearchCategory.findIndex(
-                PreferenceApplier(context).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
+        val index = jp.toastkid.search.SearchCategory.findIndex(
+                PreferenceApplier(context).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
         )
         binding.favoriteSearchAdditionCategories.setSelection(index)
     }

@@ -66,12 +66,12 @@ class ProcessCleanerInvoker {
 
     private fun onSuccess(
             snackbarParent: View,
-            it: String,
+            message: String,
             preferenceApplier: PreferenceApplier
     ) {
         Toaster.snack(
                 snackbarParent,
-                if (it.isBlank()) "Failed." else it,
+                if (message.isBlank()) "Failed." else message,
                 preferenceApplier.colorPair(),
                 Snackbar.LENGTH_LONG
         )

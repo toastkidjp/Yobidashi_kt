@@ -25,4 +25,16 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/context_edit_preview_search"
+        android:title="@string/preview_search"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/context_edit_web_search"
+        android:title="@string/web_search"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
 </menu>

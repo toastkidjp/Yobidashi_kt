@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.MainActivityIntentFactory
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 
 /**
  * Factory of [PendingIntent].
@@ -93,7 +94,7 @@ class PendingIntentFactory {
             PendingIntent.getActivity(
                     context,
                     11,
-                    mainActivityIntentFactory.randomWikipedia(context),
+                    RandomWikipedia.makeIntent(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 

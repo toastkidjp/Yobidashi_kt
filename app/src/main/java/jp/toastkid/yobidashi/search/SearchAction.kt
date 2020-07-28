@@ -4,10 +4,11 @@ import android.content.Context
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.UrlFactory
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.history.SearchHistoryInsertion
 import kotlinx.coroutines.Job
 
@@ -79,7 +80,7 @@ class SearchAction(
             return
         }
 
-        val searchUri = urlFactory(activityContext, category, query, currentUrl)
+        val searchUri = urlFactory(category, query, currentUrl)
 
         if (onBackground) {
             browserViewModel?.openBackground(

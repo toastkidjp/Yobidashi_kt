@@ -22,7 +22,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.yobidashi.search.SearchCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -81,7 +80,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
         adapter = ModuleAdapter(
                 fragmentActivity,
                 repository,
-                { startSearch(SearchCategory.findByCategory(it.category), it.query ?: "") },
+                { startSearch(jp.toastkid.search.SearchCategory.findByCategory(it.category), it.query ?: "") },
                 { },
                 { }
         )
@@ -131,7 +130,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
      * @param category Search category
      * @param query    Search query
      */
-    private fun startSearch(category: SearchCategory, query: String) {
+    private fun startSearch(category: jp.toastkid.search.SearchCategory, query: String) {
         activity?.let {
             SearchAction(it, category.name, query).invoke()
         }
