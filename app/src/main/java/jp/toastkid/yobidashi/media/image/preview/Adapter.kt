@@ -20,8 +20,6 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
 
     private val images = mutableListOf<Image>()
 
-    private var colorFilter: ColorFilter? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = PhotoView(parent.context)
         view.layoutParams = layoutParams
@@ -31,15 +29,9 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setImage(images[position].path)
-        holder.setColorFilter(colorFilter)
     }
 
     override fun getItemCount(): Int = images.size
-
-    fun setColorFilter(it: ColorFilter?) {
-        this.colorFilter = it
-        notifyDataSetChanged()
-    }
 
     fun setImages(images: List<Image>) {
         this.images.addAll(images)
