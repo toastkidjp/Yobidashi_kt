@@ -71,7 +71,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         LinearSnapHelper().attachToRecyclerView(binding.photo)
 
         pathFinder = {
-            (binding.photo.layoutManager as? LinearLayoutManager)?.let {
+            findLayoutManager()?.let {
                 adapter.getPath(it.findFirstVisibleItemPosition())
             }
         }
@@ -87,12 +87,12 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         binding.imageRotationUseCase =
                 ImageRotationUseCase(viewModel, {
-                    (binding.photo.layoutManager as? LinearLayoutManager)?.let {
+                    (findLayoutManager())?.let {
                         (it.findViewByPosition(it.findFirstVisibleItemPosition()) as? ImageView)?.drawable?.toBitmap()
                     }
                 })
         viewModel.bitmap.observe(this, Observer { bitmap ->
-            (binding.photo.layoutManager as? LinearLayoutManager)?.let {
+            findLayoutManager()?.let {
                 val view = it.findViewByPosition(it.findFirstVisibleItemPosition()) as? ImageView ?: return@Observer
                 view.setImageBitmap(bitmap)
             }
@@ -118,6 +118,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     }
                 }
     }
+
+    private fun findLayoutManager() = binding.photo.layoutManager as? LinearLayoutManager
 
     private fun initializeContrastSlider() {
         binding.contrast.progress = 50
