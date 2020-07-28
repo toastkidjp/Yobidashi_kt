@@ -89,8 +89,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 ImageRotationUseCase(viewModel, {
                     findCurrentImageView()?.drawable?.toBitmap()
                 })
-        viewModel.bitmap.observe(this, Observer { bitmap ->
-            findCurrentImageView()?.setImageBitmap(bitmap)
+        viewModel.bitmap.observe(this, Observer {
+            findCurrentImageView()?.setImageBitmap(it)
         })
 
         contentResolver = binding.root.context.contentResolver
