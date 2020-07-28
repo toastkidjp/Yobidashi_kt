@@ -87,15 +87,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         binding.imageRotationUseCase =
                 ImageRotationUseCase(viewModel, {
-                    (findLayoutManager())?.let {
-                        (it.findViewByPosition(it.findFirstVisibleItemPosition()) as? ImageView)?.drawable?.toBitmap()
-                    }
+                    findCurrentImageView()?.drawable?.toBitmap()
                 })
         viewModel.bitmap.observe(this, Observer { bitmap ->
-            findLayoutManager()?.let {
-                val view = it.findViewByPosition(it.findFirstVisibleItemPosition()) as? ImageView ?: return@Observer
-                view.setImageBitmap(bitmap)
-            }
+            val view = findCurrentImageView() ?: return@Observer
+            view.setImageBitmap(bitmap)
         })
 
         contentResolver = binding.root.context.contentResolver
@@ -118,6 +114,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     }
                 }
     }
+
+    private fun findCurrentImageView() =
+            findLayoutManager()?.let {
+                it.findViewByPosition(it.findFirstVisibleItemPosition()) as? ImageView
+            }
 
     private fun findLayoutManager() = binding.photo.layoutManager as? LinearLayoutManager
 
