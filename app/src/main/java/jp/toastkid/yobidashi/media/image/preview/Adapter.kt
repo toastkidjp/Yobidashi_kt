@@ -7,10 +7,10 @@
  */
 package jp.toastkid.yobidashi.media.image.preview
 
-import android.graphics.ColorFilter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.chrisbanes.photoview.PhotoView
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.media.image.Image
 
 /**
@@ -22,7 +22,12 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = PhotoView(parent.context)
-        view.layoutParams = layoutParams
+        view.layoutParams = layoutParams.also {
+            val horizontalMargin =
+                    parent.resources.getDimensionPixelSize(R.dimen.image_viewer_item_horizontal_margin)
+            it.leftMargin = horizontalMargin
+            it.rightMargin = horizontalMargin
+        }
         view.maximumScale = 15f
         return ViewHolder(view)
     }
@@ -42,7 +47,7 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     companion object {
-        private val layoutParams = ViewGroup.LayoutParams(
+        private val layoutParams = ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         )
