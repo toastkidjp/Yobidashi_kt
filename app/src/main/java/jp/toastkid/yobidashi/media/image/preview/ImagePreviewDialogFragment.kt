@@ -79,7 +79,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
-            adapter.setColorFilter(it)
+            findCurrentImageView()?.colorFilter = it
         })
 
         initializeContrastSlider()
