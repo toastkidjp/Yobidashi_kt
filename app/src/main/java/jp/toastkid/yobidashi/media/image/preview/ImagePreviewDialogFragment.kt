@@ -86,9 +86,9 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         initializeAlphaSlider()
 
         binding.imageRotationUseCase =
-                ImageRotationUseCase(viewModel, {
+                ImageRotationUseCase(viewModel) {
                     findCurrentImageView()?.drawable?.toBitmap()
-                })
+                }
         viewModel.bitmap.observe(this, Observer {
             findCurrentImageView()?.setImageBitmap(it)
         })
