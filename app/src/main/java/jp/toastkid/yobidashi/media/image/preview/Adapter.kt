@@ -41,10 +41,6 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun setImageBitmap() {
-        // TODO binding.photo.setImageBitmap(it)
-    }
-
     fun setImages(images: List<Image>) {
         this.images.addAll(images)
     }
