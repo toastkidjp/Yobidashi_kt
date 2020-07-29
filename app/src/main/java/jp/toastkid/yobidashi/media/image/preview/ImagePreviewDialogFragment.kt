@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.media.image.preview
 
 import android.app.Dialog
-import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -32,7 +31,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.media.image.Image
-import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -46,8 +44,6 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private lateinit var contentViewModel: ContentViewModel
 
     private var pathFinder: () -> String? = { null }
-
-    private val imageEditChooserFactory = ImageEditChooserFactory()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
@@ -179,18 +175,11 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     fun edit() {
-        val path = pathFinder()
-        if (path == null) {
-            contentViewModel.snackShort(R.string.message_cannot_launch_app)
-            return
-        }
-
-        try {
-            binding.root.context.startActivity(imageEditChooserFactory(requireContext(), path))
-        } catch (e: ActivityNotFoundException) {
-            Timber.w(e)
-            contentViewModel.snackShort(R.string.message_cannot_launch_app)
-        }
+        EditorChooserInvokingUseCase(
+                pathFinder,
+                { contentViewModel.snackShort(R.string.message_cannot_launch_app) },
+                { binding.root.context.startActivity(it) }
+        ).invoke(requireContext())
     }
 
     companion object {
