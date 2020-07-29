@@ -20,12 +20,10 @@ class ImageViewFactory {
 
     operator fun invoke(context: Context): ImageView {
         val view = PhotoView(context)
-        view.layoutParams = layoutParams.also {
-            val horizontalMargin =
-                    context.resources.getDimensionPixelSize(R.dimen.image_viewer_item_horizontal_margin)
-            it.leftMargin = horizontalMargin
-            it.rightMargin = horizontalMargin
-        }
+        view.layoutParams = layoutParams
+        val horizontalMargin =
+                context.resources.getDimensionPixelSize(R.dimen.image_viewer_item_horizontal_margin)
+        view.setPadding(horizontalMargin, 0, horizontalMargin, 0)
         view.maximumScale = 15f
 
         return view
