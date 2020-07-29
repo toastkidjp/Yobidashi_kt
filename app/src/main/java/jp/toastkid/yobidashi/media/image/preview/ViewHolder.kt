@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.media.image.preview
 
-import android.graphics.ColorFilter
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -24,10 +23,6 @@ class ViewHolder(private val view: ImageView) : RecyclerView.ViewHolder(view) {
                 .load(File(path))
                 .override(max(view.width, view.height))
                 .into(view)
-    }
-
-    fun setColorFilter(colorFilter: ColorFilter?) {
-        view.colorFilter = colorFilter
     }
 
 }
