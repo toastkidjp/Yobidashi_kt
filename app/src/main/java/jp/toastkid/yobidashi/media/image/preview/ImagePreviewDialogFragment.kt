@@ -202,7 +202,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         private const val KEY_POSITION = "position"
 
-        fun withImage(image: Collection<Image>, position: Int) =
+        fun withImages(image: Collection<Image>, position: Int) =
                 ImagePreviewDialogFragment()
                         .also {
                             it.arguments = bundleOf(
