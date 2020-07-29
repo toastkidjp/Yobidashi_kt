@@ -35,7 +35,7 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     fun getPath(position: Int): String? {
-        return images.get(position).path
+        return images[position].path
     }
 
 }
