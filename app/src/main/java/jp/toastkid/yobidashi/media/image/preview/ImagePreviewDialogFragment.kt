@@ -27,10 +27,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.media.image.Image
 import timber.log.Timber
 
@@ -42,6 +42,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private lateinit var binding: DialogImagePreviewBinding
 
     private lateinit var contentResolver: ContentResolver
+
+    private lateinit var contentViewModel: ContentViewModel
 
     private var pathFinder: () -> String? = { null }
 
@@ -75,6 +77,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 adapter.getPath(it.findFirstVisibleItemPosition())
             }
         }
+
+        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
         val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
@@ -177,11 +181,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     fun edit() {
         val path = pathFinder()
         if (path == null) {
-            Toaster.snackShort(
-                    binding.root,
-                    R.string.message_cannot_launch_app,
-                    PreferenceApplier(binding.root.context).colorPair()
-            )
+            contentViewModel.snackShort(R.string.message_cannot_launch_app)
             return
         }
 
@@ -189,11 +189,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
             binding.root.context.startActivity(imageEditChooserFactory(requireContext(), path))
         } catch (e: ActivityNotFoundException) {
             Timber.w(e)
-            Toaster.snackShort(
-                    binding.root,
-                    R.string.message_cannot_launch_app,
-                    PreferenceApplier(binding.root.context).colorPair()
-            )
+            contentViewModel.snackShort(R.string.message_cannot_launch_app)
         }
     }
 
