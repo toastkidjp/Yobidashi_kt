@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.tab.tab_list
 
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -103,6 +104,11 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
         )
 
         return binding.root
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        setStyle(STYLE_NORMAL, R.style.TabListBottomSheetDialog);
+        return super.onCreateDialog(savedInstanceState)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

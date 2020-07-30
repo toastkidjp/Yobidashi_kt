@@ -16,7 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * @author toastkidjp
  */
-class Adapter(private val layoutInflater: LayoutInflater) : RecyclerView.Adapter<ViewHolder>() {
+class Adapter(
+        private val layoutInflater: LayoutInflater,
+        private val viewModel: SubheadDialogFragmentViewModel
+) : RecyclerView.Adapter<ViewHolder>() {
 
     private val subheads = mutableListOf<String>()
 
@@ -30,6 +33,9 @@ class Adapter(private val layoutInflater: LayoutInflater) : RecyclerView.Adapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = subheads[position]
         holder.setText(item)
+        holder.itemView.setOnClickListener {
+            viewModel.subhead(item)
+        }
     }
 
     override fun getItemCount() = subheads.size

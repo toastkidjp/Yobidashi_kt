@@ -119,12 +119,6 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="TabListBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/TabListBottomSheetStyle</item>
-    </style>
-
-    <style name="TabListBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="behavior_peekHeight">280dp</item>
-    </style>
+    <style name="TabListBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog" />
 
 </resources>
