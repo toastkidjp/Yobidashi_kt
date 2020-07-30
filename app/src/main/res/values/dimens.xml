@@ -36,6 +36,6 @@
 
     <dimen name="menu_font_size">12sp</dimen>
 
-    <dimen name="image_viewer_item_horizontal_margin">16dp</dimen>
+    <dimen name="image_viewer_item_horizontal_margin">8dp</dimen>
 
 </resources>
