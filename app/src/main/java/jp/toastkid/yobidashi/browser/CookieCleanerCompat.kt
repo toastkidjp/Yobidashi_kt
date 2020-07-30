@@ -21,7 +21,8 @@ class CookieCleanerCompat {
     /**
      * Invoke action.
      *
-     * @param snackbarParent
+     * @param context Use for under lollipop devices
+     * @param callback Pass action on complete work.
      */
     operator fun invoke(context: Context, callback: () -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
