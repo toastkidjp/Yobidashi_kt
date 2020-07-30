@@ -19,7 +19,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,14 +29,23 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.FileExtractorFromUri
+import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.tab.TabUiFragment
+import jp.toastkid.lib.view.ToolbarColorApplier
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
@@ -49,18 +57,10 @@ import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.permission.RuntimePermissions
-import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.ToolbarColorApplier
-import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.FileExtractorFromUri
-import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -73,16 +73,11 @@ import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListService
-import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -90,7 +85,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Main of this calendar app.
@@ -118,6 +112,8 @@ class MainActivity : AppCompatActivity(),
      * Find-in-page module.
      */
     private lateinit var pageSearchPresenter: PageSearcherModule
+
+    private lateinit var tabReplacingUseCase: TabReplacingUseCase
 
     /**
      * Menu's view model.
@@ -241,6 +237,15 @@ class MainActivity : AppCompatActivity(),
                 )
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
+
+        tabReplacingUseCase = TabReplacingUseCase(
+                tabs,
+                ::obtainFragment,
+                { fragment, animation -> replaceFragment(fragment, animation) },
+                ::refreshThumbnail,
+                { runOnUiThread(it) },
+                disposables
+        )
 
         processShortcut(intent)
 
@@ -517,63 +522,7 @@ class MainActivity : AppCompatActivity(),
      * @param withAnimation for suppress redundant animation.
      */
     private fun replaceToCurrentTab(withAnimation: Boolean = true) {
-        when (val currentTab = tabs.currentTab()) {
-            is WebTab -> {
-                val browserFragment =
-                        (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
-                replaceFragment(browserFragment, false)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
-                                .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
-                    }
-                }
-            }
-            is EditorTab -> {
-                val editorFragment =
-                        obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
-                editorFragment.arguments = bundleOf("path" to currentTab.path)
-                replaceFragment(editorFragment, withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        editorFragment.reload()
-                        refreshThumbnail()
-                    }
-                }
-            }
-            is PdfTab -> {
-                val url: String = currentTab.getUrl()
-                if (url.isNotEmpty()) {
-                    try {
-                        val uri = Uri.parse(url)
-
-                        val pdfViewerFragment =
-                                obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment ?: return
-                        pdfViewerFragment.setInitialArguments(uri, currentTab.getScrolled())
-                        replaceFragment(pdfViewerFragment, withAnimation)
-                        refreshThumbnail()
-                    } catch (e: SecurityException) {
-                        Timber.e(e)
-                        return
-                    } catch (e: IllegalStateException) {
-                        Timber.e(e)
-                        return
-                    }
-                }
-            }
-            is ArticleTab -> {
-                val fragment = obtainFragment(ContentViewerFragment::class.java)
-                replaceFragment(fragment, withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        (fragment as? ContentViewerFragment)?.loadContent(currentTab.title())
-                        refreshThumbnail()
-                    }
-                }
-            }
-        }
-
-        tabs.saveTabList()
+        tabReplacingUseCase.invoke(withAnimation)
     }
 
     private fun refreshThumbnail() {
