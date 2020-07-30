@@ -291,7 +291,13 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      * @param snackbarParent for data binding
      */
     fun clearCookie(snackbarParent: View) {
-        CookieCleanerCompat().invoke(snackbarParent)
+        CookieCleanerCompat().invoke(snackbarParent.context) {
+            Toaster.snackShort(
+                    snackbarParent,
+                    R.string.done_clear,
+                    PreferenceApplier(snackbarParent.context).colorPair()
+            )
+        }
     }
 
     /**
