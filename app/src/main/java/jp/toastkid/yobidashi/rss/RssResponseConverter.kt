@@ -26,6 +26,6 @@ class RssResponseConverter(private val parser: Parser) : Converter<ResponseBody,
             if (body.contains(LINE_SEPARATOR)) LINE_SEPARATOR else "\n"
 
     companion object {
-        private val LINE_SEPARATOR = System.getProperty("line.separator") ?: "\n"
+        private val LINE_SEPARATOR = System.lineSeparator()
     }
 }
