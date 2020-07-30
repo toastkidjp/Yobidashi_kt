@@ -30,6 +30,7 @@ class CookieCleanerCompat {
             return
         }
         invokeUnderLollipop(context)
+        callback()
     }
 
     /**
