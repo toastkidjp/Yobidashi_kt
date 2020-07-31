@@ -36,7 +36,7 @@ class CookieCleanerCompat {
     /**
      * Invoke under lollipop environment.
      *
-     * @param snackbarParent
+     * @param context Use for under lollipop devices
      */
     private fun invokeUnderLollipop(context: Context) {
         val cookieSyncManager = CookieSyncManager.createInstance(context)
