@@ -4,12 +4,8 @@ package jp.toastkid.yobidashi.browser
 
 import android.content.Context
 import android.os.Build
-import android.view.View
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Cookie cleaner for backward compatible.
