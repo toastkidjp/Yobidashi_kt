@@ -56,6 +56,9 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
+import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
+import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -395,7 +398,10 @@ class MainActivity : AppCompatActivity(),
                 { openNewWebTab(it) },
                 { openEditorTab(FileExtractorFromUri(this, it)) },
                 ::search,
-                { preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName() },
+                {
+                    preferenceApplier.getDefaultSearchEngine()
+                            ?: SearchCategory.getDefaultCategoryName()
+                },
                 { replaceFragment(obtainFragment(it)) },
                 ElseCaseUseCase(
                         { tabs.isEmpty() },

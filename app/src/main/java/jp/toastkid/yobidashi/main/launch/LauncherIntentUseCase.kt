@@ -5,18 +5,22 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.main
+package jp.toastkid.yobidashi.main.launch
 
 import android.app.SearchManager
 import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
+import jp.toastkid.yobidashi.main.APP_LAUNCHER
+import jp.toastkid.yobidashi.main.BARCODE_READER
+import jp.toastkid.yobidashi.main.BOOKMARK
+import jp.toastkid.yobidashi.main.SEARCH
+import jp.toastkid.yobidashi.main.SETTING
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.SettingFragment
