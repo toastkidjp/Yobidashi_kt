@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -570,7 +571,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun updateColorFilter() {
         binding.foreground.foreground =
-                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(ContextCompat.getColor(this, R.color.default_color_filter)))
+                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(Color.TRANSPARENT))
                 else null
     }
 
