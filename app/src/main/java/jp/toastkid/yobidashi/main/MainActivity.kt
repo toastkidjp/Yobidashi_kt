@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.main
 
 import android.Manifest
 import android.app.Activity
-import android.app.SearchManager
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
@@ -18,7 +17,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -34,7 +32,6 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.lib.Urls
 import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -44,7 +41,6 @@ import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
-import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -54,7 +50,6 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
-import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -68,7 +63,6 @@ import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
-import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
@@ -78,7 +72,6 @@ import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListService
-import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -393,76 +386,24 @@ class MainActivity : AppCompatActivity(),
      * @param calledIntent
      */
     private fun processShortcut(calledIntent: Intent) {
-        if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
-            RandomWikipedia().fetchWithAction { title, uri ->
-                openNewWebTab(uri)
-                Toaster.snackShort(
-                        binding.content,
-                        getString(R.string.message_open_random_wikipedia, title),
-                        preferenceApplier.colorPair()
+        LauncherIntentUseCase(
+                RandomWikipediaUseCase(
+                        contentViewModel,
+                        this::openNewWebTab,
+                        { id, param -> getString(id, param) }
+                ),
+                { openNewWebTab(it) },
+                { openEditorTab(FileExtractorFromUri(this, it)) },
+                ::search,
+                { preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName() },
+                { replaceFragment(obtainFragment(it)) },
+                ElseCaseUseCase(
+                        { tabs.isEmpty() },
+                        { openNewTab() },
+                        { supportFragmentManager.findFragmentById(R.id.content) },
+                        { replaceToCurrentTab(false) }
                 )
-            }
-            return
-        }
-
-        when (calledIntent.action) {
-            Intent.ACTION_VIEW -> {
-                val uri = calledIntent.data ?: return
-                when (uri.scheme) {
-                    "content" -> openEditorTab(FileExtractorFromUri(this, uri))
-                    else -> openNewWebTab(uri)
-                }
-                return
-            }
-            Intent.ACTION_SEND -> {
-                calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
-                    val query = it.toString()
-                    if (Urls.isInvalidUrl(query)) {
-                        search(preferenceApplier.getDefaultSearchEngine()
-                                ?: SearchCategory.getDefaultCategoryName(), query)
-                        return
-                    }
-                    openNewWebTab(query.toUri())
-                }
-                return
-            }
-            Intent.ACTION_WEB_SEARCH -> {
-                val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
-                    calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
-                } else {
-                    preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
-                }
-                search(category, calledIntent.getStringExtra(SearchManager.QUERY))
-                return
-            }
-            BOOKMARK -> {
-                replaceFragment(obtainFragment(BookmarkFragment::class.java))
-            }
-            APP_LAUNCHER -> {
-                replaceFragment(obtainFragment(LauncherFragment::class.java))
-            }
-            BARCODE_READER -> {
-                replaceFragment(obtainFragment(BarcodeReaderFragment::class.java))
-            }
-            SEARCH -> {
-                replaceFragment(obtainFragment(SearchFragment::class.java))
-            }
-            SETTING -> {
-                replaceFragment(obtainFragment(SettingFragment::class.java))
-            }
-            else -> {
-                if (tabs.isEmpty()) {
-                    openNewTab()
-                    return
-                }
-
-                // Add for re-creating activity.
-                val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
-                if (currentFragment is TabUiFragment || currentFragment == null) {
-                    replaceToCurrentTab(false)
-                }
-            }
-        }
+        ).invoke(calledIntent)
     }
 
     private fun search(category: String?, query: String?) {
