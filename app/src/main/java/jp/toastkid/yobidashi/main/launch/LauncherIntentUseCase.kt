@@ -16,11 +16,6 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
-import jp.toastkid.yobidashi.main.APP_LAUNCHER
-import jp.toastkid.yobidashi.main.BARCODE_READER
-import jp.toastkid.yobidashi.main.BOOKMARK
-import jp.toastkid.yobidashi.main.SEARCH
-import jp.toastkid.yobidashi.main.SETTING
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.SettingFragment
