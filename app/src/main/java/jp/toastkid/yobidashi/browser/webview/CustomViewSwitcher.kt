@@ -83,6 +83,7 @@ class CustomViewSwitcher(
 
         customViewContainer = FrameLayout(activity)
         customViewContainer?.setBackgroundColor(ContextCompat.getColor(activity, R.color.filter_white_aa))
+        view?.keepScreenOn = true
 
         val listener = VideoCompletionListener()
         if (view is FrameLayout) {
@@ -116,6 +117,7 @@ class CustomViewSwitcher(
         val activity = contextSupplier() as? Activity ?: return
 
         activity.window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        customView?.keepScreenOn = false
 
         if (customViewCallback != null) {
             try {
