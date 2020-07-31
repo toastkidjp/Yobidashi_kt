@@ -395,7 +395,7 @@ class MainActivity : AppCompatActivity(),
                         this::openNewWebTab,
                         { id, param -> getString(id, param) }
                 ),
-                { openNewWebTab(it) },
+                this::openNewWebTab,
                 { openEditorTab(FileExtractorFromUri(this, it)) },
                 ::search,
                 {
@@ -404,8 +404,8 @@ class MainActivity : AppCompatActivity(),
                 },
                 { replaceFragment(obtainFragment(it)) },
                 ElseCaseUseCase(
-                        { tabs.isEmpty() },
-                        { openNewTab() },
+                        tabs::isEmpty,
+                        ::openNewTab,
                         { supportFragmentManager.findFragmentById(R.id.content) },
                         { replaceToCurrentTab(false) }
                 )
