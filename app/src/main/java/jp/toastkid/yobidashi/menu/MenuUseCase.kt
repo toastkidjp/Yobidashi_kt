@@ -58,8 +58,6 @@ class MenuUseCase(
 
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
-    private lateinit var randomWikipedia: RandomWikipedia
-
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
 
     init {
@@ -190,10 +188,7 @@ class MenuUseCase(
                     return
                 }
 
-                if (!::randomWikipedia.isInitialized) {
-                    randomWikipedia = RandomWikipedia()
-                }
-                randomWikipedia
+                RandomWikipedia()
                         .fetchWithAction { title, link ->
                             ViewModelProvider(activitySupplier()).get(BrowserViewModel::class.java)
                                     .open(link)
