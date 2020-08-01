@@ -446,5 +446,7 @@
     <string name="title_add_default_background">デフォルトの背景を追加</string>
     <string name="title_article_viewer">記事</string>
     <string name="preview_search">Preview search</string>
+    <string name="translate">翻訳</string>
+    <string name="download_all_images">すべての画像を保存</string>
 
 </resources>

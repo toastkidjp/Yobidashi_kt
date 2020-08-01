@@ -3,15 +3,12 @@ package jp.toastkid.yobidashi.editor
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 /**
  * [Quotation]'s test cases.
  *
  * @author toastkidjp
  */
-@RunWith(RobolectricTestRunner::class)
 class QuotationTest {
 
     /**

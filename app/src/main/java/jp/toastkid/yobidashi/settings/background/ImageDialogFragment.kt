@@ -9,12 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment.Companion.withBitmap
 
 /**

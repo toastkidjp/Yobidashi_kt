@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/translate"
-        android:title="Translate"
+        android:title="@string/translate"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/download_all_images"
+        android:title="@string/download_all_images"
         android:orderInCategory="100"
         app:showAsAction="never"
         />

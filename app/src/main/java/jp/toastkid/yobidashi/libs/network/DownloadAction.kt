@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.libs.network
 
 import android.app.DownloadManager
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
@@ -19,13 +20,16 @@ import kotlinx.coroutines.launch
 /**
  * Method object of downloading.
  *
+ * @param context [Context]
  * @author toastkidjp
  */
-class DownloadAction(
-        val context: Context,
-        val url: String
-) {
-    operator fun invoke() {
+class DownloadAction(val context: Context) {
+
+    operator fun invoke(url: String) {
+        invoke(listOf(url))
+    }
+
+    operator fun invoke(urls: Collection<String>) {
         if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
@@ -42,26 +46,27 @@ class DownloadAction(
                             Toaster.tShort(activity, R.string.message_requires_permission_storage)
                             return@collect
                         }
-                        enqueue()
+                        enqueue(urls)
                     }
         }
     }
 
-    private fun enqueue() {
-        val uri = url.toUri()
-        val request = DownloadManager.Request(uri)
-
-        request.setNotificationVisibility(
-                DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
-
+    private fun enqueue(urls: Collection<String>) {
         val externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         if (externalFilesDir?.exists() == false) {
             externalFilesDir.mkdirs()
         }
 
         val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
-        dm?.enqueue(request)
+        urls.map { makeRequest(it.toUri()) }.forEach { dm?.enqueue(it) }
+    }
+
+    private fun makeRequest(uri: Uri): DownloadManager.Request {
+        val request = DownloadManager.Request(uri)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
+        request.setAllowedOverMetered(false)
+        request.setAllowedOverRoaming(false)
+        return request
     }
 }

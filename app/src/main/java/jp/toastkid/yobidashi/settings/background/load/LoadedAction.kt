@@ -1,33 +1,28 @@
-package jp.toastkid.yobidashi.settings.background
+package jp.toastkid.yobidashi.settings.background.load
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Rect
 import android.net.Uri
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.BitmapScaling
-import jp.toastkid.yobidashi.libs.ImageLoader
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.settings.background.ImageDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
 
 /**
  * Action of loaded new background image.
  *
- * @param data
+ * @param uri Image file URI.
  * @param parent Snackbar's parent.
  * @param colorPair Color pair.
  * @param onLoadedAction On loaded action.
@@ -35,17 +30,12 @@ import java.io.IOException
  * @author toastkidjp
  */
 internal class LoadedAction (
-        data: Intent,
+        private val uri: Uri?,
         private val parent: View,
         private val colorPair: ColorPair,
         private val onLoadedAction: () -> Unit,
         private val fileDir: String
 ) {
-
-    /**
-     * Image file URI.
-     */
-    private val uri: Uri? = data.data
 
     /**
      * For fixing rotated image.
@@ -65,9 +55,14 @@ internal class LoadedAction (
         CoroutineScope(Dispatchers.Main).launch {
             val bitmap = try {
                 withContext(Dispatchers.IO) {
-                    val image = ImageLoader.loadBitmap(context, uri)
+                    val image = Glide.with(context).asBitmap().load(uri).submit().get()
                     val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
-                    fixedImage?.let { storeImageToFile(context, it, uri) }
+                    fixedImage?.let {
+                        ImageStoreService(
+                                FilesDir(context, fileDir),
+                                PreferenceApplier(context)
+                        )(it, uri, (context as? Activity)?.windowManager?.defaultDisplay)
+                    }
                     fixedImage
                 }
             } catch (e: IOException) {
@@ -79,26 +74,6 @@ internal class LoadedAction (
             onLoadedAction()
             bitmap?.let { informDone(it) }
         }
-    }
-
-    /**
-     * Store image file.
-     *
-     * @param context
-     * @param image
-     *
-     * @throws FileNotFoundException
-     */
-    @Throws(FileNotFoundException::class)
-    private fun storeImageToFile(context: Context, image: Bitmap, uri: Uri) {
-        val output = FilesDir(context, fileDir).assignNewFile(uri)
-        PreferenceApplier(context).backgroundImagePath = output.path
-        val size = Rect()
-        (context as? Activity)?.windowManager?.defaultDisplay?.getRectSize(size)
-        val fileOutputStream = FileOutputStream(output)
-        BitmapScaling(image, size.width().toDouble(), size.height().toDouble())
-                .compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-        fileOutputStream.close()
     }
 
     /**

@@ -55,6 +55,8 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
+import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.Job
@@ -77,11 +79,6 @@ class BrowserModule(
     private val readerModeUseCase by lazy { ReaderModeUseCase() }
 
     private val htmlSourceExtractionUseCase by lazy { HtmlSourceExtractionUseCase() }
-
-    /**
-     * Loading flag.
-     */
-    private var isLoadFinished: Boolean = false
 
     private var customViewSwitcher: CustomViewSwitcher? = null
 
@@ -138,7 +135,7 @@ class BrowserModule(
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             browserHeaderViewModel?.updateProgress(0)
-            isLoadFinished = false
+            browserHeaderViewModel?.nextUrl(url)
 
             rssAddingSuggestion(view, url)
             updateBackButtonState(view.canGoBack())
@@ -146,7 +143,6 @@ class BrowserModule(
 
         override fun onPageFinished(view: WebView, url: String?) {
             super.onPageFinished(view, url)
-            isLoadFinished = true
 
             val title = view.title ?: ""
             val urlStr = url ?: ""
@@ -274,19 +270,6 @@ class BrowserModule(
 
             browserHeaderViewModel?.updateProgress(newProgress)
             browserHeaderViewModel?.stopProgress(newProgress < 65)
-
-            if (isLoadFinished) {
-                return
-            }
-
-            try {
-                val progressTitle =
-                        view.context.getString(R.string.prefix_loading) + newProgress + "%"
-                browserHeaderViewModel?.nextTitle(progressTitle)
-                browserHeaderViewModel?.nextUrl(view.url)
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
         }
 
         override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
@@ -457,8 +440,6 @@ class BrowserModule(
         updateForwardButtonState(it.canGoForward())
     }
 
-    fun canCurrentTabGoesBack() = currentView()?.canGoBack() == true
-
     /**
      * Save archive file.
      */
@@ -616,6 +597,10 @@ class BrowserModule(
 
     fun invokeHtmlSourceExtraction(callback: ValueCallback<String>) {
         htmlSourceExtractionUseCase(currentView(), callback)
+    }
+
+    fun downloadAllImages() {
+        AllImageDownloaderService(DownloadAction(context)).invoke(currentView())
     }
 
     companion object {

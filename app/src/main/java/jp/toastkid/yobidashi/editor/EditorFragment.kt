@@ -51,6 +51,7 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.file.ExtensionRemover
 import okio.Okio
 import java.io.File
 import java.text.SimpleDateFormat
@@ -79,6 +80,8 @@ class EditorFragment :
     private lateinit var preferenceApplier: PreferenceApplier
 
     private val externalFileAssignment = ExternalFileAssignment()
+
+    private val extensionRemover = ExtensionRemover()
 
     /**
      * Default date format holder.
@@ -277,7 +280,7 @@ class EditorFragment :
             save()
             return
         }
-        val fileName = removeExtension(File(path).name) + "_backup.txt"
+        val fileName = extensionRemover(File(path).name) + "_backup.txt"
         saveToFile(externalFileAssignment(binding.root.context, fileName).absolutePath)
     }
 
@@ -366,17 +369,6 @@ class EditorFragment :
     }
 
     /**
-     * Remove extension from passed text.
-     *
-     * @param fileName
-     * @return string
-     */
-    private fun removeExtension(fileName: String): String {
-        val endIndex = fileName.lastIndexOf(".")
-        return if (endIndex == -1) fileName else fileName.substring(0, endIndex)
-    }
-
-    /**
      * Save content to file.
      *
      * @param filePath
@@ -389,6 +381,7 @@ class EditorFragment :
 
         if (runtimePermissions.isRevoked(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             snackText(R.string.message_requires_permission_storage)
+            runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             return
         }
 
@@ -521,7 +514,7 @@ class EditorFragment :
         while (newFile.exists()) {
             newFile = externalFileAssignment(
                     context,
-                    "${removeExtension(newFile.name)}_.txt"
+                    "${extensionRemover(newFile.name)}_.txt"
             )
         }
         path = newFile.absolutePath

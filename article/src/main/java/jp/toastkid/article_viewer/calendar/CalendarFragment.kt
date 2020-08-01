@@ -15,15 +15,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.databinding.FragmentCalendarBinding
 import jp.toastkid.lib.ContentViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -32,11 +26,7 @@ class CalendarFragment : Fragment() {
 
     private lateinit var binding: FragmentCalendarBinding
 
-    private lateinit var articleRepository: ArticleRepository
-
-    private var contentViewModel: ContentViewModel? = null
-
-    private val disposables = Job()
+    private lateinit var dateSelectedActionService: DateSelectedActionService
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -53,29 +43,18 @@ class CalendarFragment : Fragment() {
 
         val activityContext = context ?: return
 
-        contentViewModel = activity?.let {
-            ViewModelProvider(it).get(ContentViewModel::class.java)
-        }
+        dateSelectedActionService = DateSelectedActionService(
+                AppDatabase.find(activityContext).articleRepository(),
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        )
 
-        articleRepository = AppDatabase.find(activityContext).articleRepository()
-
-        setSelectedAction()
-    }
-
-    private fun setSelectedAction() {
         binding.calendar.setOnDateChangeListener { _, year, month, date ->
-            CoroutineScope(Dispatchers.Main).launch(disposables) {
-                val article = withContext(Dispatchers.IO) {
-                    // TODO make efficient.
-                    articleRepository.findFirst(TitleFilterGenerator(year, month + 1, date))
-                } ?: return@launch
-                contentViewModel?.newArticle(article.title)
-            }
+            dateSelectedActionService.invoke(year, month, date)
         }
     }
 
     override fun onDetach() {
-        disposables.cancel()
+        dateSelectedActionService.dispose()
         super.onDetach()
     }
 

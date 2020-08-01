@@ -4,14 +4,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
@@ -66,10 +69,14 @@ class ColorSettingFragment : Fragment(),
      */
     private val disposables: Job by lazy { Job() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.fragment_settings_color,
+                LAYOUT_ID,
                 container,
                 false
         )
@@ -131,7 +138,13 @@ class ColorSettingFragment : Fragment(),
 
         repository = DatabaseFinder().invoke(activityContext).savedColorRepository()
 
-        adapter = SavedColorAdapter(repository)
+        adapter = SavedColorAdapter(
+                LayoutInflater.from(activityContext),
+                repository,
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java),
+                this::commitNewColor
+        )
+
         binding?.savedColors?.adapter = adapter
         binding?.savedColors?.layoutManager =
                 GridLayoutManager(activityContext, 3, LinearLayoutManager.VERTICAL, false)
@@ -147,24 +160,6 @@ class ColorSettingFragment : Fragment(),
 
     override fun onClickClearColor() {
         adapter?.clear()
-    }
-
-    /**
-     * Bind value and action to holder's view.
-     *
-     * @param holder Holder
-     * @param color  [SavedColor] object
-     */
-    private fun bindView(holder: SavedColorHolder, color: SavedColor) {
-        color.setTo(holder.textView)
-        holder.textView.setOnClickListener { commitNewColor(color.bgColor, color.fontColor) }
-        holder.remove.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch(disposables) {
-                repository.delete(color)
-                adapter?.deleteAt(color)
-            }
-            snackShort(R.string.settings_color_delete)
-        }
     }
 
     override fun onResume() {
@@ -233,95 +228,32 @@ class ColorSettingFragment : Fragment(),
 
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
         inflater.inflate(R.menu.color_setting_toolbar_menu, menu)
+    }
 
-        menu.let { menuNonNull ->
-            menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_recommend)
-                    ?.setOnMenuItemClickListener {
-                        RecommendColorDialogFragment().show(
-                                parentFragmentManager,
-                                RecommendColorDialogFragment::class.java.simpleName
-                        )
-                        true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.color_settings_toolbar_menu_add_recommend -> {
+                RecommendColorDialogFragment().show(
+                        parentFragmentManager,
+                        RecommendColorDialogFragment::class.java.simpleName
+                )
+                true
             }
-            menuNonNull.findItem(R.id.color_settings_toolbar_menu_add_random)
-                    ?.setOnMenuItemClickListener {
-                        val activityContext = context ?: return@setOnMenuItemClickListener true
-                        RandomColorInsertion()(activityContext) {
-                            adapter?.refresh()
-                        }
-                        snackShort(R.string.done_addition)
-                        true
-                    }
+            R.id.color_settings_toolbar_menu_add_random -> {
+                RandomColorInsertion(repository)() {
+                    adapter?.refresh()
+                }
+                snackShort(R.string.done_addition)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun snackShort(@StringRes messageId: Int) {
         binding?.root?.let {
             Toaster.snackShort(it, messageId, colorPair())
-        }
-    }
-
-    /**
-     * Saved color's adapter.
-     */
-    private inner class SavedColorAdapter(private val repository: SavedColorRepository)
-        : RecyclerView.Adapter<SavedColorHolder>() {
-
-        private val items = mutableListOf<SavedColor>()
-
-        override fun onCreateViewHolder(
-                parent: ViewGroup,
-                viewType: Int
-        ): SavedColorHolder {
-            val inflater = LayoutInflater.from(context)
-            return SavedColorHolder(inflater.inflate(R.layout.item_saved_color, parent, false))
-        }
-
-        override fun onBindViewHolder(holder: SavedColorHolder, position: Int) {
-            bindView(holder, items.get(position))
-        }
-
-        override fun getItemCount(): Int = items.count()
-
-        fun refresh() {
-            items.clear()
-            CoroutineScope(Dispatchers.Main).launch(disposables) {
-                withContext(Dispatchers.IO) { repository.findAll().forEach { items.add(it) } }
-                notifyDataSetChanged()
-            }
-        }
-
-        fun deleteAt(savedColor: SavedColor) {
-            CoroutineScope(Dispatchers.Main).launch(disposables) {
-                withContext(Dispatchers.IO) {
-                    repository.delete(savedColor)
-                    items.remove(savedColor)
-                }
-                notifyDataSetChanged()
-            }
-        }
-
-        fun add(savedColor: SavedColor) {
-            items.add(savedColor)
-        }
-
-        fun clear() {
-            CoroutineScope(Dispatchers.Main).launch(disposables) {
-                withContext(Dispatchers.IO) {
-                    repository.deleteAll()
-                    items.clear()
-                }
-
-                notifyDataSetChanged()
-                val root = binding?.root ?: return@launch
-                Toaster.snackShort(
-                        root,
-                        R.string.settings_color_delete,
-                        colorPair()
-                )
-            }
         }
     }
 
@@ -333,6 +265,9 @@ class ColorSettingFragment : Fragment(),
     }
 
     companion object : TitleIdSupplier {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.fragment_settings_color
 
         override fun titleId(): Int = R.string.title_settings_color
 

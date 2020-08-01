@@ -40,6 +40,12 @@ import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.storage.CacheDir
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okio.Okio
 
 /**
  * Internal browser fragment.
@@ -129,9 +135,13 @@ class BrowserFragment : Fragment(),
                 if (70 < newProgress) {
                     appBarBinding?.progress?.isVisible = false
                     appBarBinding?.reload?.setImageResource(R.drawable.ic_reload)
-                    //TODO refreshThumbnail()
                     return@Observer
                 }
+
+                val progressTitle =
+                        activity.getString(R.string.prefix_loading) + newProgress + "%"
+                appBarBinding?.mainText?.text = progressTitle
+
                 appBarBinding?.progress?.let {
                     it.isVisible = true
                     it.progress = newProgress
@@ -214,6 +224,9 @@ class BrowserFragment : Fragment(),
                 ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
                         .open(uri.toUri())
             }
+            R.id.download_all_images -> {
+                browserModule.downloadAllImages()
+            }
             R.id.add_to_home -> {
                 val uri = browserModule.currentUrl()?.toUri() ?: return true
                 ShortcutUseCase(requireContext())
@@ -290,13 +303,19 @@ class BrowserFragment : Fragment(),
     private fun showReaderFragment(content: String) {
         val lineSeparator = System.getProperty("line.separator") ?: ""
         val replacedContent = content.replace("\\n", lineSeparator)
+        CoroutineScope(Dispatchers.Main).launch {
+            val file = CacheDir(requireContext(), "content").assignNewFile("reader")
+            withContext(Dispatchers.IO) {
+                Okio.buffer(Okio.sink(file)).use { it.writeUtf8(replacedContent) }
+            }
 
-        val readerFragment =
-                activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
-                        ?: ReaderFragment()
-        (readerFragment as? ReaderFragment)?.setContent(browserModule.currentTitle(), replacedContent)
+            val readerFragment =
+                    activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
+                            ?: ReaderFragment()
+            (readerFragment as? ReaderFragment)?.setContent(browserModule.currentTitle(), file)
 
-        contentViewModel?.nextFragment(readerFragment)
+            contentViewModel?.nextFragment(readerFragment)
+        }
     }
 
     fun showUserAgentSetting() {

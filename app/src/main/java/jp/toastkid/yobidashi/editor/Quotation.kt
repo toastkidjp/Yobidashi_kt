@@ -1,7 +1,5 @@
 package jp.toastkid.yobidashi.editor
 
-import android.text.TextUtils
-
 /**
  * Converter of quotation style(Markdown).
  *
@@ -20,12 +18,12 @@ class Quotation {
      * @param str Nullable [CharSequence]
      */
     operator fun invoke(str: CharSequence?): CharSequence? {
-        if (TextUtils.isEmpty(str)) {
+        if (str.isNullOrEmpty()) {
             return str
         }
-        return str?.split(lineSeparator)
-                ?.asSequence()
-                ?.map { "> $it" }
-                ?.reduce { str1, str2 -> str1 + lineSeparator + str2 }
+        return str.split(lineSeparator)
+                .asSequence()
+                .map { "> $it" }
+                .reduce { str1, str2 -> str1 + lineSeparator + str2 }
     }
 }

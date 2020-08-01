@@ -69,11 +69,10 @@ class ColorChooserDialogFragment : DialogFragment() {
 
         private const val KEY_CURRENT_COLOR = "current_color"
 
-        fun withCurrentColor(@ColorInt currentColor: Int): ColorChooserDialogFragment {
-            return ColorChooserDialogFragment().also {
-                it.arguments = bundleOf(KEY_CURRENT_COLOR to currentColor)
-            }
-        }
+        fun withCurrentColor(@ColorInt currentColor: Int) =
+                ColorChooserDialogFragment().also {
+                    it.arguments = bundleOf(KEY_CURRENT_COLOR to currentColor)
+                }
     }
 
 }

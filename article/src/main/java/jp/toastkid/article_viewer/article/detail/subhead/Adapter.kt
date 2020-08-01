@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.article_viewer.R
 
 /**
  * @author toastkidjp
@@ -49,7 +50,7 @@ class Adapter(
     companion object {
 
         @LayoutRes
-        private val ITEM_ID = android.R.layout.simple_list_item_1
+        private val ITEM_ID = R.layout.item_subhead_dialog
 
     }
 }

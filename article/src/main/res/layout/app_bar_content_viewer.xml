@@ -51,6 +51,7 @@
                 android:layout_gravity="center"
                 android:scaleType="center"
                 app:srcCompat="@drawable/ic_tab"
+                android:contentDescription="@string/tab"
                 tools:tint="@android:color/white"
                 />
             <TextView
@@ -76,6 +77,7 @@
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.showSubheads()}"
             app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/subhead"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
