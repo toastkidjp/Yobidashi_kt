@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.tab.model
 
-import java.util.*
+import java.util.UUID
 
 /**
  * PDF tab.
