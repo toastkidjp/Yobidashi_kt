@@ -59,6 +59,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         )
 
         binding.dialog = this
+        binding.moduleEdit.dialog = this
 
         fitPhotoView()
 
@@ -77,7 +78,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
         val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
-        binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
+        binding.moduleEdit.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
             findCurrentImageView()?.colorFilter = it
         })
@@ -85,7 +86,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         initializeContrastSlider()
         initializeAlphaSlider()
 
-        binding.imageRotationUseCase = ImageRotationUseCase(viewModel) {
+        binding.moduleEdit.imageRotationUseCase = ImageRotationUseCase(viewModel) {
             findCurrentImageView()?.drawable?.toBitmap()
         }
 
@@ -122,14 +123,14 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private fun findLayoutManager() = binding.photo.layoutManager as? LinearLayoutManager
 
     private fun initializeContrastSlider() {
-        binding.contrast.progress = 50
-        binding.contrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.moduleEdit.contrast.progress = 50
+        binding.moduleEdit.contrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (!fromUser) {
                     return
                 }
 
-                binding.colorFilterUseCase?.applyContrast(((progress - 50).toFloat() / 70f))
+                binding.moduleEdit.colorFilterUseCase?.applyContrast(((progress - 50).toFloat() / 70f))
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
@@ -140,14 +141,14 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     private fun initializeAlphaSlider() {
-        binding.alpha.progress = 50
-        binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.moduleEdit.alpha.progress = 50
+        binding.moduleEdit.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (!fromUser) {
                     return
                 }
 
-                binding.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
+                binding.moduleEdit.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
@@ -167,10 +168,10 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private fun applyColorToButtons() {
         val fontColor = PreferenceApplier(binding.root.context).fontColor
-        binding.reverse.setColorFilter(fontColor)
-        binding.rotateLeft.setColorFilter(fontColor)
-        binding.rotateRight.setColorFilter(fontColor)
-        binding.edit.setColorFilter(fontColor)
+        binding.moduleEdit.reverse.setColorFilter(fontColor)
+        binding.moduleEdit.rotateLeft.setColorFilter(fontColor)
+        binding.moduleEdit.rotateRight.setColorFilter(fontColor)
+        binding.moduleEdit.edit.setColorFilter(fontColor)
         binding.close.setColorFilter(fontColor)
     }
 

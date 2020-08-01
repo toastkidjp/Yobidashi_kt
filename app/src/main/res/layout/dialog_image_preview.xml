@@ -2,8 +2,6 @@
 <layout>
     <data>
         <variable name="dialog" type="jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment" />
-        <variable name="colorFilterUseCase" type="jp.toastkid.yobidashi.media.image.preview.ColorFilterUseCase" />
-        <variable name="imageRotationUseCase" type="jp.toastkid.yobidashi.media.image.preview.ImageRotationUseCase" />
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,114 +30,13 @@
             android:background="@drawable/ripple_transparent"
             />
 
-        <SeekBar
-            android:id="@+id/contrast"
+        <include
+            android:id="@+id/module_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="90dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:max="100"
+            layout="@layout/module_image_preview_edit"
             />
 
-        <SeekBar
-            android:id="@+id/alpha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="60dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:max="100"
-            />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="20dp"
-            >
-
-            <ImageView
-                android:id="@+id/reverse_filter"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/lime_bg"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> colorFilterUseCase.reverseFilter()}"
-                />
-
-            <ImageView
-                android:id="@+id/sepia"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/deep_orange_500_dd"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> colorFilterUseCase.sepia()}"
-                />
-            <ImageView
-                android:id="@+id/gray_scale"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/pre4_ripple"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> colorFilterUseCase.grayScale()}"
-                />
-
-            <ImageView
-                android:id="@+id/rotate_left"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_rotate_left"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> imageRotationUseCase.rotateLeft()}"
-                />
-            <ImageView
-                android:id="@+id/reverse"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="12dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_flip"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> imageRotationUseCase.reverse()}"
-                />
-            <ImageView
-                android:id="@+id/rotate_right"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="12dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_rotate_right"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> imageRotationUseCase.rotateRight()}"
-                />
-            <ImageView
-                android:id="@+id/edit"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="12dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_brush"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> dialog.edit()}"
-                />
-        </LinearLayout>
     </FrameLayout>
 </layout>
