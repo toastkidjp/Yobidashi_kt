@@ -4,7 +4,6 @@ import android.webkit.CookieManager
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
-import java.util.*
 
 /**
  * For sharing [WebView]'s cookie.
@@ -26,7 +25,7 @@ object WebViewCookieHandler : CookieJar {
     }
 
     override fun loadForRequest(url: HttpUrl?): List<Cookie> {
-        val urlString = url?.toString() ?: return Collections.emptyList()
+        val urlString = url?.toString() ?: return emptyList()
         val cookiesString = cookieManager.getCookie(urlString)
 
         return if (cookiesString != null && cookiesString.isNotEmpty()) {
@@ -34,7 +33,7 @@ object WebViewCookieHandler : CookieJar {
                     .split(DELIMITER)
                     .mapNotNull { Cookie.parse(url, it) }
         } else {
-            Collections.emptyList()
+            emptyList()
         }
     }
 }
