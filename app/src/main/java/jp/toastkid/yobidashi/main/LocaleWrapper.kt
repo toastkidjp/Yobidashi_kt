@@ -2,7 +2,7 @@ package jp.toastkid.yobidashi.main
 
 import android.content.res.Configuration
 import android.os.Build
-import java.util.*
+import java.util.Locale
 
 /**
  * @author toastkidjp
