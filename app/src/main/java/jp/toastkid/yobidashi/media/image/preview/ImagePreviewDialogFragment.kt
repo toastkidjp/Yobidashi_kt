@@ -20,6 +20,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -172,6 +173,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         binding.moduleEdit.rotateLeft.setColorFilter(fontColor)
         binding.moduleEdit.rotateRight.setColorFilter(fontColor)
         binding.moduleEdit.edit.setColorFilter(fontColor)
+        binding.visibilitySwitch.setColorFilter(fontColor)
         binding.close.setColorFilter(fontColor)
     }
 
@@ -181,6 +183,13 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 { contentViewModel.snackShort(R.string.message_cannot_launch_app) },
                 { binding.root.context.startActivity(it) }
         ).invoke(requireContext())
+    }
+
+    fun switchVisibility() {
+        binding.moduleEdit.root.isVisible = !binding.moduleEdit.root.isVisible
+        binding.visibilitySwitch.setImageResource(
+                if (binding.moduleEdit.root.isVisible) R.drawable.ic_down else R.drawable.ic_up
+        )
     }
 
     companion object {

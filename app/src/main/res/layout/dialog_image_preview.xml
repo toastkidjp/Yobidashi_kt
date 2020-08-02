@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="dialog" type="jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment" />
     </data>
@@ -30,13 +30,33 @@
             android:background="@drawable/ripple_transparent"
             />
 
-        <include
-            android:id="@+id/module_edit"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_gravity="bottom"
-            layout="@layout/module_image_preview_edit"
-            />
+            >
+            <ImageView
+                android:id="@+id/visibility_switch"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ripple_transparent"
+                app:srcCompat="@drawable/ic_up"
+                tools:tint="@color/design_default_color_secondary_variant"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:onClick="@{view -> dialog.switchVisibility()}"
+                />
+            <include
+                android:id="@+id/module_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/module_image_preview_edit"
+                android:visibility="gone"
+                />
+        </LinearLayout>
 
     </FrameLayout>
 </layout>
