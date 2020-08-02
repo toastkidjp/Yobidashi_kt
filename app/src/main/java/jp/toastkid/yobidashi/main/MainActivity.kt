@@ -112,6 +112,8 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var tabReplacingUseCase: TabReplacingUseCase
 
+    private lateinit var onBackPressedUseCase: OnBackPressedUseCase
+
     /**
      * Menu's view model.
      */
@@ -245,6 +247,18 @@ class MainActivity : AppCompatActivity(),
         )
 
         processShortcut(intent)
+
+        onBackPressedUseCase = OnBackPressedUseCase(
+                tabListService,
+                { binding.menuStub.root?.isVisible == true },
+                menuViewModel,
+                pageSearchPresenter,
+                floatingPreview,
+                tabs,
+                ::onEmptyTabs,
+                tabReplacingUseCase,
+                supportFragmentManager
+        )
 
         supportFragmentManager.addOnBackStackChangedListener {
             val findFragment = findFragment()
@@ -485,62 +499,10 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        if (tabListService?.onBackPressed() == true) {
-            return
-        }
-
-        if (binding.menuStub.root?.isVisible == true) {
-            menuViewModel?.close()
-            return
-        }
-
-        if (pageSearchPresenter.isVisible()) {
-            pageSearchPresenter.hide()
-            return
-        }
-
-        if (floatingPreview?.isVisible() == true) {
-            floatingPreview?.hide()
-            return
-        }
-
-        val currentFragment = findFragment()
-        if (currentFragment is CommonFragmentAction && currentFragment.pressBack()) {
-            return
-        }
-
-        if (currentFragment is BrowserFragment
-                || currentFragment is PdfViewerFragment
-                || currentFragment is ContentViewerFragment
-        ) {
-            tabs.closeTab(tabs.index())
-
-            if (tabs.isEmpty()) {
-                onEmptyTabs()
-                return
-            }
-            replaceToCurrentTab(true)
-            return
-        }
-
-        val fragment = findFragment()
-        if (fragment !is EditorFragment) {
-            supportFragmentManager.popBackStackImmediate()
-            return
-        }
-
-        confirmExit()
+        onBackPressedUseCase.invoke()
     }
 
     private fun findFragment() = supportFragmentManager.findFragmentById(R.id.content)
-
-    /**
-     * Show confirm exit.
-     */
-    private fun confirmExit() {
-        CloseDialogFragment()
-                .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
-    }
 
     override fun onResume() {
         super.onResume()
