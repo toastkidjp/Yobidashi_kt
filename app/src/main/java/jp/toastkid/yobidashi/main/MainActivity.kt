@@ -17,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -26,7 +25,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -44,13 +42,11 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.LoadingViewModel
-import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
-import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -63,7 +59,6 @@ import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
-import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -113,6 +108,8 @@ class MainActivity : AppCompatActivity(),
     private lateinit var tabReplacingUseCase: TabReplacingUseCase
 
     private lateinit var onBackPressedUseCase: OnBackPressedUseCase
+
+    private lateinit var appBarVisibilityUseCase: AppBarVisibilityUseCase
 
     /**
      * Menu's view model.
@@ -168,6 +165,8 @@ class MainActivity : AppCompatActivity(),
         val colorPair = preferenceApplier.colorPair()
 
         pageSearchPresenter = PageSearcherModule(binding.sip)
+
+        appBarVisibilityUseCase = AppBarVisibilityUseCase(binding.toolbar, preferenceApplier)
 
         initializeHeaderViewModel()
 
@@ -577,44 +576,12 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun hideToolbar() {
-        when (ScreenMode.find(preferenceApplier.browserScreenMode())) {
-            ScreenMode.FIXED -> Unit
-            ScreenMode.FULL_SCREEN -> {
-                binding.toolbar.visibility = View.GONE
-            }
-            ScreenMode.EXPANDABLE -> {
-                binding.toolbar.animate()?.let {
-                    it.cancel()
-                    it.translationY(-resources.getDimension(R.dimen.toolbar_height))
-                            .setDuration(HEADER_HIDING_DURATION)
-                            .withStartAction { binding.content.requestLayout() }
-                            .withEndAction   {
-                                binding.toolbar.visibility = View.GONE
-                            }
-                            .start()
-                }
-            }
-        }
+    private fun showToolbar() {
+        appBarVisibilityUseCase.show()
     }
 
-    private fun showToolbar() {
-        when (ScreenMode.find(preferenceApplier.browserScreenMode())) {
-            ScreenMode.FIXED -> {
-                binding.toolbar.visibility = View.VISIBLE
-            }
-            ScreenMode.FULL_SCREEN -> Unit
-            ScreenMode.EXPANDABLE -> binding.toolbar.animate()?.let {
-                it.cancel()
-                it.translationY(0f)
-                        .setDuration(HEADER_HIDING_DURATION)
-                        .withStartAction {
-                            binding.toolbar.visibility = View.VISIBLE
-                        }
-                        .withEndAction   { binding.content.requestLayout() }
-                        .start()
-            }
-        }
+    private fun hideToolbar() {
+        appBarVisibilityUseCase.hide()
     }
 
     /**
@@ -791,11 +758,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     companion object {
-
-        /**
-         * Header hiding duration.
-         */
-        private const val HEADER_HIDING_DURATION = 75L
 
         /**
          * Layout ID.
