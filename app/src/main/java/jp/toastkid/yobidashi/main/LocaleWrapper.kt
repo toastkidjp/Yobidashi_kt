@@ -15,7 +15,7 @@ object LocaleWrapper {
         return getLocale(configuration) == JAPANESE
     }
 
-    fun getLocale(configuration: Configuration): String {
+    private fun getLocale(configuration: Configuration): String {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             return configuration.locale.language
         }
