@@ -602,6 +602,6 @@ class BrowserModule(
     }
 
     companion object {
-        private val lineSeparator = System.getProperty("line.separator")
+        private val lineSeparator = System.lineSeparator()
     }
 }
