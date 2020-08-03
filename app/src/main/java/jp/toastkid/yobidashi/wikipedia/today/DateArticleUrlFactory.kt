@@ -36,7 +36,7 @@ class DateArticleUrlFactory {
         }
 
         val monthString =
-                if (LocaleWrapper.isJa(context.resources.configuration)) "${month + 1}"
+                if (LocaleWrapper().isJa(context.resources.configuration)) "${month + 1}"
                 else Month().get(month)
 
         return MessageFormat.format(context.getString(FORMAT_ID), monthString, dayOfMonth)

@@ -7,7 +7,7 @@ import java.util.Locale
 /**
  * @author toastkidjp
  */
-object LocaleWrapper {
+class LocaleWrapper {
 
     private val JAPANESE = Locale.JAPAN.language
 
