@@ -301,7 +301,7 @@ class MainActivity : AppCompatActivity(),
         })
 
         headerViewModel.visibility.observe(this, Observer { isVisible ->
-            if (isVisible) showToolbar() else hideToolbar()
+            if (isVisible) appBarVisibilityUseCase.show() else appBarVisibilityUseCase.hide()
         })
     }
 
@@ -574,14 +574,6 @@ class MainActivity : AppCompatActivity(),
                         replaceToCurrentTab()
                     }
         }
-    }
-
-    private fun showToolbar() {
-        appBarVisibilityUseCase.show()
-    }
-
-    private fun hideToolbar() {
-        appBarVisibilityUseCase.hide()
     }
 
     /**
