@@ -458,8 +458,6 @@ class BrowserModule(
 
     /**
      * Reload [WebSettings].
-     *
-     * @return subscription
      */
     private fun reloadWebViewSettings() {
         WebSettingApplier(preferenceApplier).invoke(currentView()?.settings)
