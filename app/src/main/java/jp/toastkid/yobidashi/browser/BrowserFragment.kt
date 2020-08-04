@@ -455,14 +455,6 @@ class BrowserFragment : Fragment(),
                     .nextFragment(fragment)
         }
     }
-
-    /**
-     * TODO delete it.
-     * Hide option menus.
-     */
-    private fun hideOption(): Boolean {
-        return false
-    }
     
     private fun colorPair() = preferenceApplier.colorPair()
 
