@@ -111,6 +111,8 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var appBarVisibilityUseCase: AppBarVisibilityUseCase
 
+    private lateinit var fragmentReplacingUseCase: FragmentReplacingUseCase
+
     /**
      * Menu's view model.
      */
@@ -161,6 +163,8 @@ class MainActivity : AppCompatActivity(),
         setSupportActionBar(binding.toolbar)
 
         runtimePermissions = RuntimePermissions(this)
+
+        fragmentReplacingUseCase = FragmentReplacingUseCase(supportFragmentManager)
 
         val colorPair = preferenceApplier.colorPair()
 
@@ -448,7 +452,7 @@ class MainActivity : AppCompatActivity(),
             withAnimation: Boolean = true,
             withSlideIn: Boolean = false
     ) {
-        FragmentReplacingUseCase(supportFragmentManager).invoke(fragment, withAnimation, withSlideIn)
+        fragmentReplacingUseCase.invoke(fragment, withAnimation, withSlideIn)
     }
 
     /**
