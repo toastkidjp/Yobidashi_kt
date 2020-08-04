@@ -51,7 +51,7 @@ class OnBackPressedUseCase(
         }
 
         if (floatingPreview?.isVisible() == true) {
-            floatingPreview?.hide()
+            floatingPreview.hide()
             return
         }
 
