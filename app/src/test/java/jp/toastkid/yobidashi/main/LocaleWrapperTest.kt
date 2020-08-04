@@ -17,23 +17,26 @@ class LocaleWrapperTest {
     @MockK
     private lateinit var configuration: Configuration
 
+    private lateinit var localeWrapper: LocaleWrapper
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        localeWrapper = LocaleWrapper()
     }
 
     @Test
     fun testIsJapanese() {
         configuration.locale = Locale.JAPANESE
 
-        assertTrue(LocaleWrapper().isJa(configuration))
+        assertTrue(localeWrapper.isJa(configuration))
     }
 
     @Test
     fun testIsElse() {
         configuration.locale = Locale.ENGLISH
 
-        assertFalse(LocaleWrapper().isJa(configuration))
+        assertFalse(localeWrapper.isJa(configuration))
     }
 
 }
