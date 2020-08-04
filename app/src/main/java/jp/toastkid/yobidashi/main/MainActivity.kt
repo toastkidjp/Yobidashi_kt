@@ -448,32 +448,7 @@ class MainActivity : AppCompatActivity(),
             withAnimation: Boolean = true,
             withSlideIn: Boolean = false
     ) {
-        val currentFragment = findFragment()
-        if (currentFragment == fragment) {
-            return
-        }
-
-        val fragments = supportFragmentManager.fragments
-        if (fragments.size != 0 && fragments.contains(fragment)) {
-            fragments.remove(fragment)
-        }
-
-        val transaction = supportFragmentManager.beginTransaction()
-        if (withAnimation) {
-            transaction.setCustomAnimations(
-                    if (withSlideIn) R.anim.slide_in_right else R.anim.slide_up,
-                    0,
-                    0,
-                    if (withSlideIn) android.R.anim.slide_out_right else R.anim.slide_down
-            )
-        }
-
-        transaction.replace(R.id.content, fragment, fragment::class.java.canonicalName)
-
-        if (fragment !is TabUiFragment) {
-            transaction.addToBackStack(fragment::class.java.canonicalName)
-        }
-        transaction.commitAllowingStateLoss()
+        FragmentReplacingUseCase(supportFragmentManager).invoke(fragment, withAnimation, withSlideIn)
     }
 
     /**
