@@ -93,12 +93,37 @@ class MainActivity : AppCompatActivity(),
      */
     private lateinit var binding: ActivityMainBinding
 
-    private val backgroundImageLoaderUseCase by lazy { BackgroundImageLoaderUseCase() }
+    /**
+     * Preferences wrapper.
+     */
+    private lateinit var preferenceApplier: PreferenceApplier
 
     /**
-     * Disposables.
+     * Runtime permission.
      */
-    private val disposables: Job by lazy { Job() }
+    private var runtimePermissions: RuntimePermissions? = null
+
+    private lateinit var tabs: TabAdapter
+
+    private var floatingPreview: FloatingPreview? = null
+
+    /**
+     * Menu's view model.
+     */
+    private var menuViewModel: MenuViewModel? = null
+
+    private var contentViewModel: ContentViewModel? = null
+
+    private var tabListViewModel: TabListViewModel? = null
+
+    private var browserViewModel: BrowserViewModel? = null
+
+    /**
+     * Search-with-clip object.
+     */
+    private lateinit var searchWithClip: SearchWithClip
+
+    private val backgroundImageLoaderUseCase by lazy { BackgroundImageLoaderUseCase() }
 
     /**
      * Find-in-page module.
@@ -113,39 +138,14 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var fragmentReplacingUseCase: FragmentReplacingUseCase
 
-    /**
-     * Menu's view model.
-     */
-    private var menuViewModel: MenuViewModel? = null
-
-    private var contentViewModel: ContentViewModel? = null
-
-    private var tabListViewModel: TabListViewModel? = null
-
-    private var browserViewModel: BrowserViewModel? = null
-
-    private var floatingPreview: FloatingPreview? = null
-
-    private lateinit var tabs: TabAdapter
-
-    /**
-     * Search-with-clip object.
-     */
-    private lateinit var searchWithClip: SearchWithClip
-
-    /**
-     * Runtime permission.
-     */
-    private var runtimePermissions: RuntimePermissions? = null
-
-    /**
-     * Preferences wrapper.
-     */
-    private lateinit var preferenceApplier: PreferenceApplier
-
     private lateinit var menuUseCase: MenuUseCase
 
     private var tabListService: TabListService? = null
+
+    /**
+     * Disposables.
+     */
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
