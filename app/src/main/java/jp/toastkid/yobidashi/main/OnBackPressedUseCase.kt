@@ -18,13 +18,13 @@ import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.tab_list.TabListService
+import jp.toastkid.yobidashi.tab.tab_list.TabListUseCase
 
 /**
  * @author toastkidjp
  */
 class OnBackPressedUseCase(
-        private val tabListService: TabListService?,
+        private val tabListUseCase: TabListUseCase?,
         private val menuVisibility: () -> Boolean,
         private val menuViewModel: MenuViewModel?,
         private val pageSearcherModule: PageSearcherModule,
@@ -36,7 +36,7 @@ class OnBackPressedUseCase(
 ) {
 
     operator fun invoke() {
-        if (tabListService?.onBackPressed() == true) {
+        if (tabListUseCase?.onBackPressed() == true) {
             return
         }
 

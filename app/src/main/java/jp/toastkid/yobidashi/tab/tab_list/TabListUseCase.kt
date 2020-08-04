@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager
 /**
  * @author toastkidjp
  */
-class TabListService(
+class TabListUseCase(
         private val fragmentManager: FragmentManager,
         private val thumbnailRefresher: () -> Unit
 ) {

@@ -70,7 +70,7 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
-import jp.toastkid.yobidashi.tab.tab_list.TabListService
+import jp.toastkid.yobidashi.tab.tab_list.TabListUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var menuUseCase: MenuUseCase
 
-    private var tabListService: TabListService? = null
+    private var tabListUseCase: TabListUseCase? = null
 
     /**
      * Disposables.
@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity(),
         processShortcut(intent)
 
         onBackPressedUseCase = OnBackPressedUseCase(
-                tabListService,
+                tabListUseCase,
                 { binding.menuStub.root?.isVisible == true },
                 menuViewModel,
                 pageSearchPresenter,
@@ -559,17 +559,17 @@ class MainActivity : AppCompatActivity(),
      * Switch tab list visibility.
      */
     private fun switchTabList() {
-        if (tabListService == null) {
-            tabListService = TabListService(supportFragmentManager, this::refreshThumbnail)
+        if (tabListUseCase == null) {
+            tabListUseCase = TabListUseCase(supportFragmentManager, this::refreshThumbnail)
         }
-        tabListService?.switch()
+        tabListUseCase?.switch()
     }
 
     /**
      * Action on empty tabs.
      */
     private fun onEmptyTabs() {
-        tabListService?.dismiss()
+        tabListUseCase?.dismiss()
         openNewTab()
     }
 
@@ -579,7 +579,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onCloseOnly() {
-        tabListService?.dismiss()
+        tabListUseCase?.dismiss()
     }
 
     override fun onCloseTabListDialogFragment(lastTabId: String) {
@@ -690,7 +690,7 @@ class MainActivity : AppCompatActivity(),
 
                 tabs.openNewPdfTab(uri)
                 replaceToCurrentTab(true)
-                tabListService?.dismiss()
+                tabListUseCase?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(this, data)
