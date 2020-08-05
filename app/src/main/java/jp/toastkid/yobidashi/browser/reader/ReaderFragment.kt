@@ -207,7 +207,7 @@ class ReaderFragment : Fragment(), ContentScrollable {
 
         private const val KEY_CONTENT = "content"
 
-        private val lineSeparator = System.getProperty("line.separator")
+        private val lineSeparator = System.lineSeparator()
 
     }
 

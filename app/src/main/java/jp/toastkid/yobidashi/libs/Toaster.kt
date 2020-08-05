@@ -116,7 +116,7 @@ object Toaster {
         return withAction(
                 view,
                 message,
-                actionTextId,
+                view.context.getString(actionTextId),
                 action,
                 pair,
                 Snackbar.LENGTH_LONG
@@ -142,7 +142,7 @@ object Toaster {
         return withAction(
                 view,
                 view.context.getString(messageId),
-                actionTextId,
+                view.context.getString(actionTextId),
                 action,
                 pair,
                 Snackbar.LENGTH_LONG
@@ -166,14 +166,14 @@ object Toaster {
             action: View.OnClickListener,
             pair: ColorPair,
             duration: Int = Snackbar.LENGTH_INDEFINITE
-    ) = withAction(view, view.context.getString(messageId), actionTextId, action, pair, duration)
+    ) = withAction(view, view.context.getString(messageId), view.context.getString(actionTextId), action, pair, duration)
 
     /**
      * Show snackbar on long time.
      *
      * @param view
      * @param message
-     * @param actionTextId
+     * @param actionText
      * @param action
      * @param pair
      * @param duration default = Snackbar.LENGTH_INDEFINITE
@@ -185,9 +185,28 @@ object Toaster {
             action: View.OnClickListener,
             pair: ColorPair,
             duration: Int = Snackbar.LENGTH_INDEFINITE
+    ) = withAction(view, message, view.context.getString(actionTextId), action, pair, duration)
+
+    /**
+     * Show snackbar on long time.
+     *
+     * @param view
+     * @param message
+     * @param actionText
+     * @param action
+     * @param pair
+     * @param duration default = Snackbar.LENGTH_INDEFINITE
+     */
+    fun withAction(
+            view: View,
+            message: String,
+            actionText: String,
+            action: View.OnClickListener,
+            pair: ColorPair,
+            duration: Int = Snackbar.LENGTH_INDEFINITE
     ): Snackbar {
         val snackbar = Snackbar.make(view, message, duration)
-        snackbar.setAction(actionTextId, action)
+        snackbar.setAction(actionText, action)
         val snackbarView = snackbar.view
         snackbarView.setBackgroundColor(pair.bgColor())
         snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
@@ -197,6 +216,5 @@ object Toaster {
         snackbar.show()
         return snackbar
     }
-
 
 }
