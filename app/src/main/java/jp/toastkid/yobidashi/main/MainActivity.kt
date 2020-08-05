@@ -138,8 +138,6 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var fragmentReplacingUseCase: FragmentReplacingUseCase
 
-    private lateinit var menuUseCase: MenuUseCase
-
     private var tabListUseCase: TabListUseCase? = null
 
     /**
@@ -314,8 +312,7 @@ class MainActivity : AppCompatActivity(),
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
-        menuUseCase = MenuUseCase({ this }, menuViewModel)
-        menuUseCase.observe()
+        MenuUseCase({ this }, menuViewModel).observe()
     }
 
     private fun initializeContentViewModel() {
