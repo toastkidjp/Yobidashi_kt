@@ -315,6 +315,7 @@ class MainActivity : AppCompatActivity(),
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
         menuUseCase = MenuUseCase({ this }, menuViewModel)
+        menuUseCase.observe()
     }
 
     private fun initializeContentViewModel() {

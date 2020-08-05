@@ -60,7 +60,7 @@ class MenuUseCase(
 
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
 
-    init {
+    fun observe() {
         val activity = activitySupplier()
         menuViewModel?.click?.observe(activity, Observer { event ->
             event.getContentIfNotHandled()?.let {
