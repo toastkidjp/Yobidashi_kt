@@ -21,7 +21,7 @@ class DateArticleUrlFactory {
     /**
      * Make Wikipedia article's url.
      *
-     * @param context context
+     * @param context Use for extracting current configuration and title template
      * @param month <b>0</b>-11
      * @param dayOfMonth 1-31
      *
