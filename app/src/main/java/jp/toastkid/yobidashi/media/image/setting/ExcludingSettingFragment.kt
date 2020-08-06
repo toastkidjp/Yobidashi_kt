@@ -17,10 +17,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentSettingImageExcludingBinding
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RightSwipeActionAttachment
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.FragmentSettingImageExcludingBinding
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragmentViewModel
 
 /**
@@ -30,7 +30,11 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentSettingImageExcludingBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.fragment_setting_image_excluding,
