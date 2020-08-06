@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.media.image.preview
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.ContentResolver
 import android.graphics.Color
@@ -19,6 +20,7 @@ import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -29,9 +31,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.media.image.Image
+import jp.toastkid.yobidashi.settings.background.load.ImageStoreService
+import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
 
 /**
  * @author toastkidjp
@@ -172,9 +177,21 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         binding.moduleEdit.reverse.setColorFilter(fontColor)
         binding.moduleEdit.rotateLeft.setColorFilter(fontColor)
         binding.moduleEdit.rotateRight.setColorFilter(fontColor)
+        binding.moduleEdit.setTo.setColorFilter(fontColor)
         binding.moduleEdit.edit.setColorFilter(fontColor)
         binding.visibilitySwitch.setColorFilter(fontColor)
         binding.close.setColorFilter(fontColor)
+    }
+
+    fun setTo() {
+        val context = context ?: return
+        val uri = pathFinder()?.toUri() ?: return
+        val image = findCurrentImageView()?.drawable?.toBitmap() ?: return
+        ImageStoreService(
+                FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory()),
+                PreferenceApplier(context)
+        )(image, uri, (context as? Activity)?.windowManager?.defaultDisplay)
+        contentViewModel.snackShort(R.string.done_addition)
     }
 
     fun edit() {
