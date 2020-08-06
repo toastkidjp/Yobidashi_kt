@@ -511,7 +511,7 @@ class SearchFragment : Fragment() {
                 CoroutineScope(Dispatchers.Default).launch(disposables) {
                     delay(200)
                     withContext(Dispatchers.Main) {
-                        val top = binding?.suggestionModule?.top ?: 0
+                        val top = binding?.suggestionModule?.root?.top ?: 0
                         binding?.scroll?.smoothScrollTo(0, top)
                     }
                 }
