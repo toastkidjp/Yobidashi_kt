@@ -29,7 +29,11 @@ class GestureMemoFragment : Fragment() {
 
     private val canvasStoreScenario = CanvasStoreScenario()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         setHasOptionsMenu(true)
         return binding.root
