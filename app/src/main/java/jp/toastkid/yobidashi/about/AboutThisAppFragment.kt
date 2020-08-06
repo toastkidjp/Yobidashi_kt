@@ -11,13 +11,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.ContentScrollable
 
 /**
  * About this app.
@@ -33,7 +33,11 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     private lateinit var preferenceApplier: PreferenceApplier
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
