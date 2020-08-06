@@ -20,7 +20,7 @@ class ImageViewFactory {
 
     operator fun invoke(context: Context): ImageView {
         val view = PhotoView(context)
-        view.layoutParams = layoutParams
+        view.layoutParams = LAYOUT_PARAMS
         val horizontalMargin =
                 context.resources.getDimensionPixelSize(R.dimen.image_viewer_item_horizontal_margin)
         view.setPadding(horizontalMargin, 0, horizontalMargin, 0)
@@ -30,7 +30,7 @@ class ImageViewFactory {
     }
 
     companion object {
-        private val layoutParams = ViewGroup.MarginLayoutParams(
+        private val LAYOUT_PARAMS = ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         )
