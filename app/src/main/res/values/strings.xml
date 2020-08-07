@@ -455,5 +455,7 @@
     <string name="preview_search">Preview search</string>
     <string name="translate">Translate</string>
     <string name="download_all_images">Download all images</string>
+    <string name="this_app">This app</string>
+    <string name="other_app">Other app</string>
 
 </resources>
