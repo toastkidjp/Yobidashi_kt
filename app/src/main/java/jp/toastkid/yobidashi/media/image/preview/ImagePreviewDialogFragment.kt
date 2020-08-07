@@ -83,7 +83,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
-        val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
+        val viewModel =
+                ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
         binding.moduleEdit.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
             findCurrentImageView()?.colorFilter = it
