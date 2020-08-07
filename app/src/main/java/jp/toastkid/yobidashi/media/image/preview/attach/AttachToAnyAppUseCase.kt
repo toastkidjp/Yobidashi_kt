@@ -28,7 +28,6 @@ class AttachToAnyAppUseCase(private val activityStarter: (Intent) -> Unit) {
                 ImageCache().saveBitmap(context.cacheDir, bitmap).absoluteFile
         )
         intent.setDataAndType(uri, "image/*")
-        intent.putExtra("mimeType", "image/*")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         activityStarter(Intent.createChooser(intent, "Set as:"))
