@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.media.image.preview
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.ContentResolver
 import android.graphics.Color
@@ -31,12 +30,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.media.image.Image
-import jp.toastkid.yobidashi.settings.background.load.ImageStoreService
-import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
+import jp.toastkid.yobidashi.media.image.preview.attach.AttachToThisAppBackgroundUseCase
 
 /**
  * @author toastkidjp
@@ -188,11 +185,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val context = context ?: return
         val uri = pathFinder()?.toUri() ?: return
         val image = findCurrentImageView()?.drawable?.toBitmap() ?: return
-        ImageStoreService(
-                FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory()),
-                PreferenceApplier(context)
-        )(image, uri, (context as? Activity)?.windowManager?.defaultDisplay)
-        contentViewModel.snackShort(R.string.done_addition)
+        AttachToThisAppBackgroundUseCase(contentViewModel).invoke(context, uri, image)
     }
 
     fun edit() {
