@@ -33,7 +33,10 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.media.image.Image
+import jp.toastkid.yobidashi.media.image.preview.attach.AttachMenuPopup
 import jp.toastkid.yobidashi.media.image.preview.attach.AttachToAnyAppUseCase
+import jp.toastkid.yobidashi.media.image.preview.attach.AttachToThisAppBackgroundUseCase
+import jp.toastkid.yobidashi.media.image.preview.attach.MenuActionUseCase
 
 /**
  * @author toastkidjp
@@ -45,6 +48,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private lateinit var contentResolver: ContentResolver
 
     private lateinit var contentViewModel: ContentViewModel
+
+    private var attachMenuPopup: AttachMenuPopup? = null
 
     private var pathFinder: () -> String? = { null }
 
@@ -182,12 +187,19 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     fun setTo() {
-        val context = context ?: return
-        val uri = pathFinder()?.toUri() ?: return
-        val image = findCurrentImageView()?.drawable?.toBitmap() ?: return
+        if (attachMenuPopup == null) {
+            attachMenuPopup = AttachMenuPopup(
+                    requireContext(),
+                    MenuActionUseCase(
+                            AttachToThisAppBackgroundUseCase(contentViewModel),
+                            AttachToAnyAppUseCase { startActivity(it) },
+                            { pathFinder()?.toUri() },
+                            { findCurrentImageView()?.drawable?.toBitmap() }
+                    )
+            )
+        }
 
-        AttachToAnyAppUseCase { startActivity(it) }.invoke(context, image)
-        //AttachToThisAppBackgroundUseCase(contentViewModel).invoke(context, uri, image)
+        attachMenuPopup?.show(binding.moduleEdit.setTo)
     }
 
     fun edit() {
