@@ -24,13 +24,20 @@ class AttachToAnyAppUseCase(private val activityStarter: (Intent) -> Unit) {
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         val uri = FileProvider.getUriForFile(
                 context,
-                "${BuildConfig.APPLICATION_ID}.fileprovider",
+                AUTHORITY,
                 ImageCache().saveBitmap(context.cacheDir, bitmap).absoluteFile
         )
-        intent.setDataAndType(uri, "image/*")
+        intent.setDataAndType(uri, MIME_TYPE)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-        activityStarter(Intent.createChooser(intent, "Set as:"))
+        activityStarter(Intent.createChooser(intent, CHOOSER_TITLE))
     }
 
+    companion object {
+        private const val AUTHORITY = "${BuildConfig.APPLICATION_ID}.fileprovider"
+
+        private const val MIME_TYPE = "image/*"
+
+        private const val CHOOSER_TITLE = "Set as:"
+    }
 }
