@@ -33,7 +33,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.media.image.Image
-import jp.toastkid.yobidashi.media.image.preview.attach.AttachToThisAppBackgroundUseCase
+import jp.toastkid.yobidashi.media.image.preview.attach.AttachToAnyAppUseCase
 
 /**
  * @author toastkidjp
@@ -185,7 +185,9 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         val context = context ?: return
         val uri = pathFinder()?.toUri() ?: return
         val image = findCurrentImageView()?.drawable?.toBitmap() ?: return
-        AttachToThisAppBackgroundUseCase(contentViewModel).invoke(context, uri, image)
+
+        AttachToAnyAppUseCase { startActivity(it) }.invoke(context, image)
+        //AttachToThisAppBackgroundUseCase(contentViewModel).invoke(context, uri, image)
     }
 
     fun edit() {
