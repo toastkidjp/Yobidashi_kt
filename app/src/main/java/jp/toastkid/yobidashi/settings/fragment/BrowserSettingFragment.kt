@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
@@ -111,19 +110,10 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
             val lastValue = preferenceApplier.poolSize.toFloat()
             it.poolSizeValue.value = if (lastValue > it.poolSizeValue.valueTo) it.poolSizeValue.valueTo else lastValue
 
-            it.valueBackgroundAlpha.setOnSeekBarChangeListener(
-                    object: SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
-                    val newSize = bar?.progress ?: 0
-                    preferenceApplier.setWebViewBackgroundAlpha(newSize.toFloat() / 100f)
-                    it.textBackgroundAlpha.text = newSize.toString()
-                }
-
-                override fun onStartTrackingTouch(p0: SeekBar?) = Unit
-
-                override fun onStopTrackingTouch(p0: SeekBar?) = Unit
-
-            })
+            it.valueBackgroundAlpha.addOnChangeListener { _, value, fromUser ->
+                preferenceApplier.setWebViewBackgroundAlpha(value / 100.0f)
+                it.textBackgroundAlpha.text = value.toString()
+            }
 
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 it.darkModeCheck.let { checkBox ->
@@ -134,8 +124,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
                 it.darkModeCheck.isVisible = false
             }
 
-            it.valueBackgroundAlpha.progress =
-                    (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
+            it.valueBackgroundAlpha.value =
+                    preferenceApplier.getWebViewBackgroundAlpha() * 100f
         }
 
         binding.browserExpand.screenMode.let {
