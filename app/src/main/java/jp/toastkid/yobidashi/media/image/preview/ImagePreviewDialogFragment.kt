@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.media.image.preview
 
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -167,6 +168,12 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         binding.moduleEdit.rotateRight.setColorFilter(fontColor)
         binding.moduleEdit.setTo.setColorFilter(fontColor)
         binding.moduleEdit.edit.setColorFilter(fontColor)
+
+        binding.moduleEdit.alpha.thumbTintList = ColorStateList.valueOf(fontColor)
+        binding.moduleEdit.alpha.trackActiveTintList = ColorStateList.valueOf(fontColor)
+        binding.moduleEdit.contrast.thumbTintList = ColorStateList.valueOf(fontColor)
+        binding.moduleEdit.contrast.trackActiveTintList = ColorStateList.valueOf(fontColor)
+
         binding.visibilitySwitch.setColorFilter(fontColor)
         binding.close.setColorFilter(fontColor)
     }
