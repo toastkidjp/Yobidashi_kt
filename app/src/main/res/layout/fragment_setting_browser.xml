@@ -263,7 +263,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/title_pool_size"
                         />
-                    <SeekBar
+                    <com.google.android.material.slider.Slider
                         android:id="@+id/pool_size_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -273,7 +273,9 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         style="@style/OneLineTextMenu"
-                        android:max="20"
+                        android:valueFrom="1.0"
+                        android:valueTo="20.0"
+                        android:stepSize="1.0"
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
