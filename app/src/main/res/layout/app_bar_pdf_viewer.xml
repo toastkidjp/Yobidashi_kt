@@ -9,12 +9,14 @@
         android:layout_height="44dp"
         >
 
-        <SeekBar
+        <com.google.android.material.slider.Slider
             android:id="@+id/seek"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="44dp"
             android:layout_marginEnd="44dp"
+            android:valueFrom="0.0"
+            android:stepSize="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/input"
             />
