@@ -42,6 +42,8 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
     private var url: String? = null
 
+    private var cookie: String? = null
+
     private val imageCache = ImageCache()
 
     private val disposables: Job by lazy { Job() }
@@ -51,6 +53,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
         favicon = args?.getParcelable<Bitmap?>("favicon")
         title = args?.getString("title")
         url = args?.getString("url")
+        cookie = args?.getString("cookie")
     }
 
     @SuppressLint("InflateParams", "SetTextI18n")
@@ -65,6 +68,9 @@ internal class PageInformationDialogFragment: DialogFragment() {
                 .inflate(R.layout.content_dialog_share_barcode, null)
 
         contentView.findViewById<TextView>(R.id.url).text = "URL: $url"
+
+        contentView.findViewById<TextView>(R.id.cookie).text =
+                "Cookie:$lineSeparator${cookie?.replace(";", ";$lineSeparator")}"
 
         setUpBarcode(contentView)
 

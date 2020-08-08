@@ -20,6 +20,7 @@
             android:textSize="16sp"
             android:textColor="@color/black"
             />
+
         <ImageView
             android:id="@+id/barcode"
             android:layout_width="200dp"
@@ -28,6 +29,7 @@
             android:contentDescription="@string/title_instant_barcode"
             android:visibility="gone"
             />
+
         <Button
             android:id="@+id/share"
             android:layout_width="match_parent"
@@ -42,6 +44,17 @@
             android:background="@color/colorPrimary"
             style="?android:attr/buttonBarStyle"
             />
+
+        <TextView
+            android:id="@+id/cookie"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            />
+
     </LinearLayout>
 
 </ScrollView>
