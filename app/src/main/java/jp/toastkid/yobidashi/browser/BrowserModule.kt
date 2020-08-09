@@ -559,9 +559,7 @@ class BrowserModule(
         currentView()?.saveState(outState)
     }
 
-    fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->
-        return PageInformationExtractor().invoke(currentView())
-    }
+    fun makeCurrentPageInformation(): Bundle = PageInformationExtractor().invoke(currentView())
 
     /**
      * Resize [GlobalWebViewPool].
