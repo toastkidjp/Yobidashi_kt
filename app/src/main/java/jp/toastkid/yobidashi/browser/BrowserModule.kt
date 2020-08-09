@@ -14,7 +14,6 @@ import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.webkit.CookieManager
 import android.webkit.SslErrorHandler
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -26,7 +25,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -562,18 +560,7 @@ class BrowserModule(
     }
 
     fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->
-        return currentView()?.let {
-            val url = it.url
-            if (url.isNullOrBlank()) {
-                return@let bundleOf()
-            }
-
-            bundle.putString("url", url)
-            bundle.putParcelable("favicon", it.favicon)
-            bundle.putString("title", it.title)
-            bundle.putString("cookie", CookieManager.getInstance().getCookie(url))
-            bundle
-        } ?: bundleOf()
+        return PageInformationExtractor().invoke(currentView())
     }
 
     /**
