@@ -1,11 +1,12 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.tls
 
 import android.content.Context
 import android.net.http.SslCertificate
 import android.net.http.SslError
 import jp.toastkid.yobidashi.R
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * @author toastkidjp

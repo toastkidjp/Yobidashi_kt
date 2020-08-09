@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.tls
 
 import org.junit.Assert.assertTrue
 import org.junit.Test
