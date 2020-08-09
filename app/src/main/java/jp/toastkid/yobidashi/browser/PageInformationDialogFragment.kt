@@ -2,32 +2,19 @@ package jp.toastkid.yobidashi.browser
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
-import com.google.zxing.BarcodeFormat
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.ImageCache
+import jp.toastkid.yobidashi.browser.page_information.BarcodePreparationUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 /**
  * Method object of displaying page information dialog.
@@ -43,8 +30,6 @@ internal class PageInformationDialogFragment: DialogFragment() {
     private var url: String? = null
 
     private var cookie: String? = null
-
-    private val imageCache = ImageCache()
 
     private val disposables: Job by lazy { Job() }
 
@@ -72,7 +57,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
         contentView.findViewById<TextView>(R.id.cookie).text =
                 "Cookie:$lineSeparator${cookie?.replace(";", ";$lineSeparator")}"
 
-        setUpBarcode(contentView)
+        BarcodePreparationUseCase().invoke(contentView, url)
 
         val builder = AlertDialog.Builder(activityContext)
                 .setTitle(title)
@@ -83,36 +68,6 @@ internal class PageInformationDialogFragment: DialogFragment() {
             builder.setIcon(BitmapDrawable(activityContext.resources, favicon))
         }
         return builder.create()
-    }
-
-    private fun setUpBarcode(contentView: View) {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val imageView = contentView.findViewById<ImageView>(R.id.barcode)
-            val bitmap = withContext(Dispatchers.IO) {
-                BarcodeEncoder()
-                        .encodeBitmap(url, BarcodeFormat.QR_CODE, BARCODE_SIZE, BARCODE_SIZE)
-            }
-            imageView.setImageBitmap(bitmap)
-            imageView.visibility = View.VISIBLE
-            setShareAction(bitmap, contentView.findViewById(R.id.share))
-        }
-    }
-
-    private fun setShareAction(bitmap: Bitmap, shareView: View?) {
-        val context = shareView?.context ?: return
-
-        shareView.setOnClickListener {
-            val uri = FileProvider.getUriForFile(
-                    context,
-                     "${BuildConfig.APPLICATION_ID}.fileprovider",
-                    imageCache.saveBitmap(context.cacheDir, bitmap).absoluteFile
-            )
-            try {
-                context.startActivity(IntentFactory.shareImage(uri))
-            } catch (e: ActivityNotFoundException) {
-                Timber.e(e)
-            }
-        }
     }
 
     /**
@@ -147,11 +102,6 @@ internal class PageInformationDialogFragment: DialogFragment() {
          * Line separator.
          */
         private val lineSeparator = System.getProperty("line.separator")
-
-        /**
-         * Barcode size.
-         */
-        private const val BARCODE_SIZE = 400
 
     }
 }
