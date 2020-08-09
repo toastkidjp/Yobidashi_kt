@@ -21,7 +21,7 @@ class PageInformationExtractor {
         return webView?.let {
             val url = it.url
             if (url.isNullOrBlank()) {
-                return@let bundleOf()
+                return@let Bundle.EMPTY
             }
 
             return@let bundleOf(
@@ -30,6 +30,6 @@ class PageInformationExtractor {
                     "title" to it.title,
                     "cookie" to CookieManager.getInstance().getCookie(url)
             )
-        } ?: bundleOf()
+        } ?: Bundle.EMPTY
     }
 }
