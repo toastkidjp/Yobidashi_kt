@@ -1,4 +1,4 @@
-package jp.toastkid.yobidashi.browser
+package jp.toastkid.yobidashi.browser.page_information
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.page_information.BarcodePreparationUseCase
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import kotlinx.coroutines.Job

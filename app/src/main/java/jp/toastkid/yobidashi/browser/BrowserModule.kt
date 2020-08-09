@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
+import jp.toastkid.yobidashi.browser.page_information.PageInformationExtractor
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
