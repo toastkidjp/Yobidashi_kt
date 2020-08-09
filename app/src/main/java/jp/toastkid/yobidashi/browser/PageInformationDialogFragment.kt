@@ -94,7 +94,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
             }
             imageView.setImageBitmap(bitmap)
             imageView.visibility = View.VISIBLE
-            setShareAction(bitmap, contentView.findViewById<View>(R.id.share)) // TODO remove class
+            setShareAction(bitmap, contentView.findViewById(R.id.share))
         }
     }
 
