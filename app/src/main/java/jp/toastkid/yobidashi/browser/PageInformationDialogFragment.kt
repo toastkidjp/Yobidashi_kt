@@ -50,7 +50,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
 
     override fun setArguments(args: Bundle?) {
         super.setArguments(args)
-        favicon = args?.getParcelable<Bitmap?>("favicon")
+        favicon = args?.getParcelable("favicon")
         title = args?.getString("title")
         url = args?.getString("url")
         cookie = args?.getString("cookie")
