@@ -13,6 +13,7 @@ import androidx.annotation.LayoutRes
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingDataAdapter
+import androidx.paging.PagingSource
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
@@ -71,34 +72,23 @@ class Adapter(
     }
 
     fun all() {
-        CoroutineScope(Dispatchers.IO).launch {
-            Pager(PagingConfig(pageSize = 50, enablePlaceholders = true)) {
-                repository.getAll()
-            }
-                    .flow
-                    .collectLatest {
-                        submitData(it)
-                    }
-        }
+        load { repository.getAll() }
     }
 
     fun search(biGram: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            Pager(PagingConfig(pageSize = 50, enablePlaceholders = true)) {
-                repository.search(biGram)
-            }
-                    .flow
-                    .collectLatest {
-                        submitData(it)
-                    }
-        }
+        load { repository.search(biGram) }
     }
 
     fun filter(query: String) {
+        load { repository.filter(query) }
+    }
+
+    private fun load(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {
         CoroutineScope(Dispatchers.IO).launch {
-            Pager(PagingConfig(pageSize = 50, enablePlaceholders = true)) {
-                repository.filter(query)
-            }
+            Pager(
+                    PagingConfig(pageSize = 50, enablePlaceholders = true),
+                    pagingSourceFactory = pagingSourceFactory
+            )
                     .flow
                     .collectLatest {
                         submitData(it)
