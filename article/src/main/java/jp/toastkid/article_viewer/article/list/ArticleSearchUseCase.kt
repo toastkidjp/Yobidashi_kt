@@ -7,7 +7,6 @@
  */
 package jp.toastkid.article_viewer.article.list
 
-import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.Job
@@ -16,8 +15,6 @@ import kotlinx.coroutines.Job
  * @author toastkidjp
  */
 class ArticleSearchUseCase(
-        private val articleRepository: ArticleRepository,
-        private val viewModel: ArticleListFragmentViewModel?,
         private val adapter: Adapter,
         private val preferencesWrapper: PreferenceApplier
 ) {
