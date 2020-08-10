@@ -12,9 +12,7 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -56,21 +54,6 @@ class ArticleSearchUseCase(
 
     fun all() {
         adapter.all()
-    }
-
-    private suspend fun applyArticle(results: List<SearchResult>) {
-        adapter.clear()
-        setSearchStart()
-
-        val start = System.currentTimeMillis()
-
-        withContext(Dispatchers.Default) {
-            results.forEach(adapter::add)
-        }
-
-        adapter.notifyDataSetChanged()
-        viewModel?.hideProgress()
-        setSearchEnded(results.size, System.currentTimeMillis() - start)
     }
 
     private fun setSearchStart() {
