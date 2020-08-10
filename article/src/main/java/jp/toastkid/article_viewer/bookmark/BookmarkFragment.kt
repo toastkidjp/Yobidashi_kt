@@ -97,7 +97,6 @@ class BookmarkFragment : Fragment(), ContentScrollable {
 
         adapter = Adapter(
             LayoutInflater.from(activityContext),
-            articleRepository,
             { title ->
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
                     ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)

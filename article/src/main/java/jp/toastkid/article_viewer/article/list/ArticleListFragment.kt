@@ -144,7 +144,6 @@ class ArticleListFragment : Fragment(), ContentScrollable {
 
         adapter = Adapter(
                 LayoutInflater.from(context),
-                articleRepository,
                 { contentViewModel?.newArticle(it) },
                 { contentViewModel?.newArticleOnBackground(it) }
         )
@@ -207,7 +206,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
             }
         })
 
-        searchUseCase = ArticleSearchUseCase(articleRepository, viewModel, adapter, preferencesWrapper)
+        searchUseCase = ArticleSearchUseCase(adapter, articleRepository, preferencesWrapper)
 
         searchUseCase?.all()
     }

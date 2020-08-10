@@ -10,18 +10,10 @@ package jp.toastkid.article_viewer.article.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingDataAdapter
-import androidx.paging.PagingSource
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
 import jp.toastkid.article_viewer.article.list.sort.Sort
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.util.Collections
 
 /**
@@ -35,7 +27,6 @@ import java.util.Collections
  */
 class Adapter(
     private val layoutInflater: LayoutInflater,
-    private val repository: ArticleRepository,
     private val onClick: (String) -> Unit,
     private val onLongClick: (String) -> Unit
 ) : PagingDataAdapter<SearchResult, ViewHolder>(SimpleComparator()) {
@@ -69,31 +60,6 @@ class Adapter(
      */
     fun add(result: SearchResult) {
         items.add(result)
-    }
-
-    fun all() {
-        load { repository.getAll() }
-    }
-
-    fun search(biGram: String) {
-        load { repository.search(biGram) }
-    }
-
-    fun filter(query: String) {
-        load { repository.filter(query) }
-    }
-
-    private fun load(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {
-        CoroutineScope(Dispatchers.IO).launch {
-            Pager(
-                    PagingConfig(pageSize = 50, enablePlaceholders = true),
-                    pagingSourceFactory = pagingSourceFactory
-            )
-                    .flow
-                    .collectLatest {
-                        submitData(it)
-                    }
-        }
     }
 
     fun sort(sort: Sort) {
