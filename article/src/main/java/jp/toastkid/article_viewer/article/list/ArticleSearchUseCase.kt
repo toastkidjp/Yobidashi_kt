@@ -33,7 +33,7 @@ class ArticleSearchUseCase(
     /**
      * [CompositeDisposable].
      */
-    private val disposables = Job()
+    private var lastJob: Job? = null
 
     fun all() {
         load { repository.getAll() }
@@ -61,7 +61,8 @@ class ArticleSearchUseCase(
     }
 
     private fun load(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {
-        CoroutineScope(Dispatchers.IO).launch {
+        lastJob?.cancel()
+        lastJob = CoroutineScope(Dispatchers.IO).launch {
             Pager(
                     PagingConfig(pageSize = 50, enablePlaceholders = true),
                     pagingSourceFactory = pagingSourceFactory
@@ -74,7 +75,7 @@ class ArticleSearchUseCase(
     }
 
     fun dispose() {
-        disposables.cancel()
+        lastJob?.cancel()
     }
 
 }
