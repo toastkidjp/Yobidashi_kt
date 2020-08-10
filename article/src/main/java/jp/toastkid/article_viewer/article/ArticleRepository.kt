@@ -50,6 +50,6 @@ interface ArticleRepository {
     fun deleteAll()
 
     @Query("SELECT article.id, article.title, article.lastModified, article.length FROM article WHERE article.id IN (:articleIds)")
-    fun findByIds(articleIds: List<Int>): List<SearchResult>
+    fun findByIds(articleIds: List<Int>): PagingSource<Int, SearchResult>
 
 }
