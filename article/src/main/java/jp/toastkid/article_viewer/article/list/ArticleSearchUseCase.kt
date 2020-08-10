@@ -38,12 +38,6 @@ class ArticleSearchUseCase(
             return
         }
 
-        /*CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val results = withContext(Dispatchers.IO) {
-                articleRepository.search("${tokenizer(keyword, 2)}")
-            }
-            applyArticle(results)
-        }*/
         adapter.search("${tokenizer(keyword, 2)}")
     }
 
