@@ -115,6 +115,10 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
 
+        showAllBookmark(activityContext)
+    }
+
+    private fun showAllBookmark(activityContext: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             val database = AppDatabase.find(activityContext)
             val articleIds = database.bookmarkRepository().allArticleIds()
