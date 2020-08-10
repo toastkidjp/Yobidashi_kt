@@ -12,10 +12,8 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
@@ -40,12 +38,13 @@ class ArticleSearchUseCase(
             return
         }
 
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
+        /*CoroutineScope(Dispatchers.Main).launch(disposables) {
             val results = withContext(Dispatchers.IO) {
                 articleRepository.search("${tokenizer(keyword, 2)}")
             }
             applyArticle(results)
-        }
+        }*/
+        adapter.search("${tokenizer(keyword, 2)}")
     }
 
     fun filter(keyword: String?) {
@@ -58,21 +57,11 @@ class ArticleSearchUseCase(
             return
         }
 
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val results = withContext(Dispatchers.IO) {
-                articleRepository.search("${tokenizer(keyword, 2)}")
-            }
-            applyArticle(results)
-        }
+        adapter.filter(keyword)
     }
 
     fun all() {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val results = withContext(Dispatchers.IO) {
-                articleRepository.getAll()
-            }
-            applyArticle(results)
-        }
+        adapter.all()
     }
 
     private suspend fun applyArticle(results: List<SearchResult>) {

@@ -7,10 +7,11 @@
  */
 package jp.toastkid.article_viewer.article
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Query
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import androidx.room.Transaction
 import jp.toastkid.article_viewer.article.list.SearchResult
 
@@ -23,11 +24,11 @@ interface ArticleRepository {
     @Query("SELECT * FROM article ORDER BY lastModified DESC")
     fun getAllWithContent(): List<Article>
 
-    @Query("SELECT id, title, lastModified, length FROM article ORDER BY lastModified DESC LIMIT 500")
-    fun getAll(): List<SearchResult>
+    @Query("SELECT id, title, lastModified, length FROM article ORDER BY lastModified DESC")
+    fun getAll(): PagingSource<Int, SearchResult>
 
     @Query("SELECT id, title, lastModified, length FROM article WHERE title LIKE :title ORDER BY lastModified DESC")
-    fun filter(title: String): List<SearchResult>
+    fun filter(title: String): PagingSource<Int, SearchResult>
 
     @Query("SELECT contentText FROM article WHERE title = :title LIMIT 1")
     fun findContentByTitle(title: String): String?
@@ -36,7 +37,7 @@ interface ArticleRepository {
     fun findFirst(title: String): Article?
 
     @Query("SELECT article.id, article.title, article.lastModified, article.length FROM article JOIN articleFts ON (article.id = articleFts.docid) WHERE articleFts MATCH :query")
-    fun search(query: String): List<SearchResult>
+    fun search(query: String): PagingSource<Int, SearchResult>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entity: Article)

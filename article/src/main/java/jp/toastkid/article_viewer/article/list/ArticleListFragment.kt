@@ -144,6 +144,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
 
         adapter = Adapter(
                 LayoutInflater.from(context),
+                articleRepository,
                 { contentViewModel?.newArticle(it) },
                 { contentViewModel?.newArticleOnBackground(it) }
         )

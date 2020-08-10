@@ -10,9 +10,17 @@ package jp.toastkid.article_viewer.article.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingDataAdapter
 import jp.toastkid.article_viewer.R
+import jp.toastkid.article_viewer.article.ArticleRepository
+import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
 import jp.toastkid.article_viewer.article.list.sort.Sort
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.Collections
 
 /**
@@ -26,9 +34,10 @@ import java.util.Collections
  */
 class Adapter(
     private val layoutInflater: LayoutInflater,
+    private val repository: ArticleRepository,
     private val onClick: (String) -> Unit,
     private val onLongClick: (String) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
+) : PagingDataAdapter<SearchResult, ViewHolder>(SimpleComparator()) {
 
     private val items: MutableList<SearchResult> = mutableListOf()
 
@@ -40,10 +49,9 @@ class Adapter(
         )
     }
 
-    override fun getItemCount() = items.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+        val result = getItem(position) ?: return
+        holder.bind(result)
     }
 
     /**
@@ -60,6 +68,42 @@ class Adapter(
      */
     fun add(result: SearchResult) {
         items.add(result)
+    }
+
+    fun all() {
+        CoroutineScope(Dispatchers.IO).launch {
+            Pager(PagingConfig(pageSize = 50, enablePlaceholders = true)) {
+                repository.getAll()
+            }
+                    .flow
+                    .collectLatest {
+                        submitData(it)
+                    }
+        }
+    }
+
+    fun search(biGram: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Pager(PagingConfig(pageSize = 50, enablePlaceholders = true)) {
+                repository.search(biGram)
+            }
+                    .flow
+                    .collectLatest {
+                        submitData(it)
+                    }
+        }
+    }
+
+    fun filter(query: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Pager(PagingConfig(pageSize = 50, enablePlaceholders = true)) {
+                repository.filter(query)
+            }
+                    .flow
+                    .collectLatest {
+                        submitData(it)
+                    }
+        }
     }
 
     fun sort(sort: Sort) {
