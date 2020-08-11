@@ -7,19 +7,14 @@
  */
 package jp.toastkid.article_viewer.article.list.sort
 
-import jp.toastkid.article_viewer.article.list.SearchResult
-import jp.toastkid.article_viewer.article.list.sort.comparator.LastModifiedComparator
-import jp.toastkid.article_viewer.article.list.sort.comparator.LengthComparator
-import jp.toastkid.article_viewer.article.list.sort.comparator.NameComparator
-
 /**
  * @author toastkidjp
  */
-enum class Sort(val comparator: Comparator<SearchResult>) {
+enum class Sort {
 
-    LAST_MODIFIED(LastModifiedComparator()),
-    NAME(NameComparator()),
-    LENGTH(LengthComparator());
+    LAST_MODIFIED,
+    NAME,
+    LENGTH;
 
     companion object {
 
