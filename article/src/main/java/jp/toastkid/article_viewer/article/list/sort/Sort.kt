@@ -20,9 +20,7 @@ enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, Searc
     NAME({ it.orderByLength() }),
     LENGTH({ it.orderByName() });
 
-    operator fun invoke(repository: ArticleRepository): PagingSource<Int, SearchResult> {
-        return sort(repository)
-    }
+    operator fun invoke(repository: ArticleRepository) = sort(repository)
 
     companion object {
 
