@@ -25,7 +25,7 @@ interface ArticleRepository {
     fun getAllWithContent(): List<Article>
 
     @Query("SELECT id, title, lastModified, length FROM article ORDER BY lastModified DESC")
-    fun getAll(): PagingSource<Int, SearchResult>
+    fun orderByLastModified(): PagingSource<Int, SearchResult>
 
     @Query("SELECT id, title, lastModified, length FROM article ORDER BY title DESC")
     fun orderByName(): PagingSource<Int, SearchResult>

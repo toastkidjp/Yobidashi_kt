@@ -24,7 +24,7 @@ class SortTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { repository.getAll() }.answers { mockk() }
+        every { repository.orderByLastModified() }.answers { mockk() }
         every { repository.orderByLength() }.answers { mockk() }
         every { repository.orderByName() }.answers { mockk() }
     }
@@ -33,7 +33,7 @@ class SortTest {
     fun testSortLastModified() {
         Sort.LAST_MODIFIED.invoke(repository)
 
-        verify(exactly = 1) { repository.getAll() }
+        verify(exactly = 1) { repository.orderByLastModified() }
         verify(exactly = 0) { repository.orderByLength() }
         verify(exactly = 0) { repository.orderByName() }
     }
@@ -42,7 +42,7 @@ class SortTest {
     fun testSortLength() {
         Sort.LENGTH.invoke(repository)
 
-        verify(exactly = 0) { repository.getAll() }
+        verify(exactly = 0) { repository.orderByLastModified() }
         verify(exactly = 1) { repository.orderByLength() }
         verify(exactly = 0) { repository.orderByName() }
     }
@@ -51,7 +51,7 @@ class SortTest {
     fun testSortName() {
         Sort.NAME.invoke(repository)
 
-        verify(exactly = 0) { repository.getAll() }
+        verify(exactly = 0) { repository.orderByLastModified() }
         verify(exactly = 0) { repository.orderByLength() }
         verify(exactly = 1) { repository.orderByName() }
     }
