@@ -13,8 +13,6 @@ import androidx.annotation.LayoutRes
 import androidx.paging.PagingDataAdapter
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
-import jp.toastkid.article_viewer.article.list.sort.Sort
-import java.util.Collections
 
 /**
  * [SearchResult] list's adapter.
@@ -44,11 +42,6 @@ class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val result = getItem(position) ?: return
         holder.bind(result)
-    }
-
-    fun sort(sort: Sort) {
-        Collections.sort(items, sort.comparator)
-        notifyDataSetChanged()
     }
 
     companion object {
