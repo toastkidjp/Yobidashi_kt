@@ -46,22 +46,6 @@ class Adapter(
         holder.bind(result)
     }
 
-    /**
-     * Remove all item from current list.
-     */
-    fun clear() {
-        items.clear()
-    }
-
-    /**
-     * Add new item.
-     *
-     * @param result new item
-     */
-    fun add(result: SearchResult) {
-        items.add(result)
-    }
-
     fun sort(sort: Sort) {
         Collections.sort(items, sort.comparator)
         notifyDataSetChanged()
