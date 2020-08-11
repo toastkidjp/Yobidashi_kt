@@ -27,6 +27,12 @@ interface ArticleRepository {
     @Query("SELECT id, title, lastModified, length FROM article ORDER BY lastModified DESC")
     fun getAll(): PagingSource<Int, SearchResult>
 
+    @Query("SELECT id, title, lastModified, length FROM article ORDER BY title DESC")
+    fun orderByName(): PagingSource<Int, SearchResult>
+
+    @Query("SELECT id, title, lastModified, length FROM article ORDER BY length, lastModified ASC")
+    fun orderByLength(): PagingSource<Int, SearchResult>
+
     @Query("SELECT id, title, lastModified, length FROM article WHERE title LIKE :title ORDER BY lastModified DESC")
     fun filter(title: String): PagingSource<Int, SearchResult>
 

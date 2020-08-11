@@ -202,7 +202,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
         })
         viewModel?.sort?.observe(viewLifecycleOwner, Observer {
             it?.getContentIfNotHandled()?.let { sort ->
-                adapter.sort(sort)
+                searchUseCase?.all()
             }
         })
 

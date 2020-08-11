@@ -11,6 +11,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import jp.toastkid.article_viewer.article.ArticleRepository
+import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +37,13 @@ class ArticleSearchUseCase(
     private var lastJob: Job? = null
 
     fun all() {
-        load { repository.getAll() }
+        load {
+            when (Sort.findByName(preferencesWrapper.articleSort())) {
+                Sort.LAST_MODIFIED -> repository.getAll()
+                Sort.LENGTH -> repository.orderByLength()
+                Sort.NAME -> repository.orderByName()
+            }
+        }
     }
 
     fun search(keyword: String?) {

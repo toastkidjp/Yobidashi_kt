@@ -36,5 +36,9 @@ enum class Sort(val comparator: Comparator<SearchResult>) {
             return 0
         }
 
+        fun findByName(name: String?): Sort {
+            return values().firstOrNull { it.name.equals(name, true) } ?: LAST_MODIFIED
+        }
+
     }
 }
