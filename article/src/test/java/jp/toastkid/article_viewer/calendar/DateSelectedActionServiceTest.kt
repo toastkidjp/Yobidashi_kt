@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkObject
+import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
@@ -11,6 +12,7 @@ import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -43,10 +45,16 @@ class DateSelectedActionServiceTest {
 
         val dateSelectedActionService = DateSelectedActionService(repository, viewModel)
         dateSelectedActionService.invoke(2020, 0, 22)
+        Thread.sleep(1000L)
 
         verify(exactly = 1) { repository.findFirst(any()) }
         verify(exactly = 1) { viewModel.newArticle(any()) }
         verify(exactly = 1) { TitleFilterGenerator.invoke(any(), any(), any()) }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
 }

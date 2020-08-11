@@ -611,7 +611,10 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        if (currentFragment is BrowserFragment || currentFragment is PdfViewerFragment) {
+        if (currentFragment is BrowserFragment
+                || currentFragment is PdfViewerFragment
+                || currentFragment is ContentViewerFragment
+        ) {
             tabs.closeTab(tabs.index())
 
             if (tabs.isEmpty()) {

@@ -2,7 +2,7 @@
     <string name="app_name">Articles</string>
     <string name="action_all_article">All article</string>
     <string name="action_settings">Settings</string>
-    <string name="action_set_target">Set target</string>
+    <string name="action_set_target">Import article zip</string>
     <string name="action_find">Find in page</string>
     <string name="action_close">Close</string>
     <string name="action_to_top">↑</string>

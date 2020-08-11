@@ -12,6 +12,12 @@ package jp.toastkid.lib.file
  */
 class ExtensionRemover {
 
+    /**
+     * Remove extension from passed text.
+     *
+     * @param fileName
+     * @return string
+     */
     operator fun invoke(fileName: String): String {
         val endIndex = fileName.lastIndexOf(".")
         return if (endIndex == -1) fileName else fileName.substring(0, endIndex)

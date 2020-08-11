@@ -1,8 +1,7 @@
 package jp.toastkid.yobidashi.tab.model
 
-import android.text.TextUtils
 import jp.toastkid.yobidashi.tab.History
-import java.util.*
+import java.util.UUID
 
 /**
  * Model of web-browser tab.
@@ -26,7 +25,7 @@ internal class WebTab: Tab {
     }
 
     fun addHistory(history: History?) {
-        if (history == null || TextUtils.equals(history.url(), "about:blank")) {
+        if (history == null || "about:blank".equals(history.url())) {
             return
         }
 
