@@ -17,8 +17,8 @@ import jp.toastkid.article_viewer.article.list.SearchResult
 enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, SearchResult>) {
 
     LAST_MODIFIED({ it.getAll() }),
-    NAME({ it.orderByLength() }),
-    LENGTH({ it.orderByName() });
+    NAME({ it.orderByName() }),
+    LENGTH({ it.orderByLength() });
 
     operator fun invoke(repository: ArticleRepository) = sort(repository)
 
