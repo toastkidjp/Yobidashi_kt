@@ -7,14 +7,22 @@
  */
 package jp.toastkid.article_viewer.article.list.sort
 
+import androidx.paging.PagingSource
+import jp.toastkid.article_viewer.article.ArticleRepository
+import jp.toastkid.article_viewer.article.list.SearchResult
+
 /**
  * @author toastkidjp
  */
-enum class Sort {
+enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, SearchResult>) {
 
-    LAST_MODIFIED,
-    NAME,
-    LENGTH;
+    LAST_MODIFIED({ it.getAll() }),
+    NAME({ it.orderByLength() }),
+    LENGTH({ it.orderByName() });
+
+    operator fun invoke(repository: ArticleRepository): PagingSource<Int, SearchResult> {
+        return sort(repository)
+    }
 
     companion object {
 

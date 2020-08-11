@@ -37,13 +37,7 @@ class ArticleSearchUseCase(
     private var lastJob: Job? = null
 
     fun all() {
-        load {
-            when (Sort.findByName(preferencesWrapper.articleSort())) {
-                Sort.LAST_MODIFIED -> repository.getAll()
-                Sort.LENGTH -> repository.orderByLength()
-                Sort.NAME -> repository.orderByName()
-            }
-        }
+        load { Sort.findByName(preferencesWrapper.articleSort()).invoke(repository) }
     }
 
     fun search(keyword: String?) {
