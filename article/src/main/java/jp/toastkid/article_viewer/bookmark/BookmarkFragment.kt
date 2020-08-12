@@ -157,8 +157,8 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         RecyclerViewScroller.toBottom(binding.results, binding.results.adapter?.itemCount ?: 0)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         disposables.cancel()
+        super.onDetach()
     }
 }
