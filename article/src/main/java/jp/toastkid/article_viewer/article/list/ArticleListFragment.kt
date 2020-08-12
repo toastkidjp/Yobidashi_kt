@@ -206,7 +206,11 @@ class ArticleListFragment : Fragment(), ContentScrollable {
             }
         })
 
-        searchUseCase = ArticleSearchUseCase(ListLoaderUseCase(adapter), articleRepository, preferencesWrapper)
+        searchUseCase = ArticleSearchUseCase(
+                ListLoaderUseCase(adapter),
+                articleRepository,
+                preferencesWrapper
+        )
 
         searchUseCase?.all()
     }
@@ -214,7 +218,8 @@ class ArticleListFragment : Fragment(), ContentScrollable {
     override fun onResume() {
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
-        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java).replace(appBarBinding.root)
+        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
+                .replace(appBarBinding.root)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
