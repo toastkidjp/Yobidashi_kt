@@ -32,7 +32,7 @@ class TlsErrorDialogFragment : DialogFragment() {
 
         private const val KEY_MESSAGE = "message"
 
-        fun make(message: String): TlsErrorDialogFragment =
+        fun make(message: String) =
                 TlsErrorDialogFragment()
                         .also { it.arguments = bundleOf(Pair(KEY_MESSAGE, message)) }
     }
