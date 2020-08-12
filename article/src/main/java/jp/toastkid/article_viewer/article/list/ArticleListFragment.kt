@@ -128,10 +128,16 @@ class ArticleListFragment : Fragment(), ContentScrollable {
         articleRepository = dataBase.articleRepository()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_list, container, false)
-        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
+        binding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_article_list, container, false)
+        appBarBinding = DataBindingUtil.inflate(
+                inflater, R.layout.app_bar_article_list, container, false)
         return binding.root
     }
 
