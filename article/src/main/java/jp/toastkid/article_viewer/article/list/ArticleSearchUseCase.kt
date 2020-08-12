@@ -31,9 +31,6 @@ class ArticleSearchUseCase(
 
     private val tokenizer = NgramTokenizer()
 
-    /**
-     * [CompositeDisposable].
-     */
     private var lastJob: Job? = null
 
     fun all() {
