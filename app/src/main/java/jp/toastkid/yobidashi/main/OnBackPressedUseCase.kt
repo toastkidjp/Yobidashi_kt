@@ -27,7 +27,7 @@ class OnBackPressedUseCase(
         private val menuVisibility: () -> Boolean,
         private val menuViewModel: MenuViewModel?,
         private val pageSearcherModule: PageSearcherModule,
-        private val floatingPreview: FloatingPreview?,
+        private val floatingPreviewSupplier: () -> FloatingPreview?,
         private val tabs: TabAdapter,
         private val onEmptyTabs: () -> Unit,
         private val replaceToCurrentTab: TabReplacingUseCase,
@@ -49,8 +49,8 @@ class OnBackPressedUseCase(
             return
         }
 
-        if (floatingPreview?.isVisible() == true) {
-            floatingPreview.hide()
+        val floatingPreview = floatingPreviewSupplier()
+        if (floatingPreview?.onBackPressed() == true) {
             return
         }
 

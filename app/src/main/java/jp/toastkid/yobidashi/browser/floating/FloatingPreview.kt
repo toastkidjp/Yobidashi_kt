@@ -31,13 +31,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.SlidingTapListener
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.SlidingTapListener
 
 /**
  * Floating preview.
@@ -225,6 +225,18 @@ class FloatingPreview(context: Context) {
 
     fun dispose() {
         webView.destroy()
+    }
+
+    fun onBackPressed(): Boolean {
+        if (webView.canGoBack()) {
+            webView.goBack()
+            return true
+        }
+        if (isVisible()) {
+            hide()
+            return true
+        }
+        return false
     }
 
     companion object {
