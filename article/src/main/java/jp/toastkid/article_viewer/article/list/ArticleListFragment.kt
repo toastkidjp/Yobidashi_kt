@@ -206,7 +206,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
             }
         })
 
-        searchUseCase = ArticleSearchUseCase(adapter, articleRepository, preferencesWrapper)
+        searchUseCase = ArticleSearchUseCase(ListLoaderUseCase(adapter), articleRepository, preferencesWrapper)
 
         searchUseCase?.all()
     }

@@ -7,34 +7,24 @@
  */
 package jp.toastkid.article_viewer.article.list
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingSource
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
  */
 class ArticleSearchUseCase(
-        private val adapter: Adapter,
+        private val listLoaderUseCase: ListLoaderUseCase,
         private val repository: ArticleRepository,
         private val preferencesWrapper: PreferenceApplier
 ) {
 
     private val tokenizer = NgramTokenizer()
 
-    private var lastJob: Job? = null
-
     fun all() {
-        load { Sort.findByName(preferencesWrapper.articleSort()).invoke(repository) }
+        listLoaderUseCase { Sort.findByName(preferencesWrapper.articleSort()).invoke(repository) }
     }
 
     fun search(keyword: String?) {
@@ -42,7 +32,7 @@ class ArticleSearchUseCase(
             return
         }
 
-        load { repository.search("${tokenizer(keyword, 2)}") }
+        listLoaderUseCase { repository.search("${tokenizer(keyword, 2)}") }
     }
 
     fun filter(keyword: String?) {
@@ -55,25 +45,11 @@ class ArticleSearchUseCase(
             return
         }
 
-        load { repository.filter(keyword) }
-    }
-
-    private fun load(pagingSourceFactory: () -> PagingSource<Int, SearchResult>) {
-        lastJob?.cancel()
-        lastJob = CoroutineScope(Dispatchers.IO).launch {
-            Pager(
-                    PagingConfig(pageSize = 50, enablePlaceholders = true),
-                    pagingSourceFactory = pagingSourceFactory
-            )
-                    .flow
-                    .collectLatest {
-                        adapter.submitData(it)
-                    }
-        }
+        listLoaderUseCase { repository.filter(keyword) }
     }
 
     fun dispose() {
-        lastJob?.cancel()
+        listLoaderUseCase.dispose()
     }
 
 }
