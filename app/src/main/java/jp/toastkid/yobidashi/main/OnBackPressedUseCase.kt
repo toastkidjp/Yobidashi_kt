@@ -73,8 +73,7 @@ class OnBackPressedUseCase(
             return
         }
 
-        val fragment = findFragment()
-        if (fragment !is EditorFragment) {
+        if (currentFragment !is EditorFragment) {
             supportFragmentManager.popBackStackImmediate()
             return
         }
