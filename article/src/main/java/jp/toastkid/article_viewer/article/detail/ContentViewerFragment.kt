@@ -172,8 +172,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, TabUiFragment {
         textViewHighlighter(keyword)
     }
 
-    private fun filter(keyword: String?) = Unit
-
     override fun toTop() {
         binding.contentScroll.smoothScrollTo(0, 0)
     }
