@@ -10,8 +10,6 @@ package jp.toastkid.lib.view
 import android.view.MotionEvent
 import android.view.View
 import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 /**
  * @author toastkidjp
@@ -44,15 +42,6 @@ class SlidingTapListener(private val targetView: View) : View.OnTouchListener {
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-                val viewHeight = view.height
-
-                val viewParent = view.parent as? View
-                val parentHeight = viewParent?.height?.toFloat() ?: 0f
-
-                var newY = motionEvent.rawY + dY
-                newY = max(0f, newY)
-                newY = min(parentHeight - viewHeight, newY)
-
                 onNewPosition?.onNewPosition(targetView.x, motionEvent.rawY)
                 return true
             }
