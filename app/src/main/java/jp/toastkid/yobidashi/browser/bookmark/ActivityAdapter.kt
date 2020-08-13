@@ -8,8 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.Stack
 
 /**
  * Bookmark activity's adapter.
@@ -78,7 +78,7 @@ internal class ActivityAdapter(
             ViewModelProvider(it).get(BrowserViewModel::class.java)
         }
 
-        holder.itemView.setOnLongClickListener { v ->
+        holder.itemView.setOnLongClickListener {
             browserViewModel?.openBackground(bookmark.title, Uri.parse(bookmark.url))
             true
         }
