@@ -221,7 +221,7 @@ class FloatingPreview(context: Context) {
         }
     }
 
-    fun isVisible() = popupWindow.isShowing
+    private fun isVisible() = popupWindow.isShowing
 
     fun dispose() {
         webView.destroy()
