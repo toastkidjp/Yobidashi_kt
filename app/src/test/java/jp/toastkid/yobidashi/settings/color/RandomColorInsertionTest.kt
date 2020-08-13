@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.settings.color
 
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -20,7 +21,7 @@ class RandomColorInsertionTest {
 
         RandomColorInsertion(repository).invoke(afterInserted)
 
-        verify(exactly = 1) { repository.add(any()) }
-        verify(exactly = 1) { afterInserted.invoke() }
+        coVerify(exactly = 1) { repository.add(any()) }
+        coVerify(exactly = 1) { afterInserted.invoke() }
     }
 }

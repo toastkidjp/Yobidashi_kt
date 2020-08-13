@@ -3,15 +3,12 @@ package jp.toastkid.yobidashi.libs
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 /**
  * [MultiByteCharacterInspector]' test cases.
  *
  * @author toastkidjp
  */
-@RunWith(RobolectricTestRunner::class)
 class MultiByteCharacterInspectorTest {
 
     private val multiByteCharacterInspector = MultiByteCharacterInspector()

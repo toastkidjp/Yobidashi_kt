@@ -1,7 +1,8 @@
 package jp.toastkid.search
 
-import jp.toastkid.search.SearchQueryExtractor
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -14,9 +15,20 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class SearchQueryExtractorTest {
 
+    private lateinit var searchQueryExtractor: SearchQueryExtractor
+
+    @Before
+    fun setUp() {
+        searchQueryExtractor = SearchQueryExtractor()
+    }
+
+    @Test
+    fun testNull() {
+        assertNull(searchQueryExtractor("/search?q=orange"))
+    }
+
     @Test
     fun testInvoke() {
-        val searchQueryExtractor = SearchQueryExtractor()
         assertEquals(
                 "かもめ",
                 searchQueryExtractor("https://www.google.com/search?q=%E3%81%8B%E3%82%82%E3%82%81")
@@ -101,5 +113,42 @@ class SearchQueryExtractorTest {
                 "ラーメン",
                 searchQueryExtractor("https://duckduckgo.com/?q=%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3&ia=web")
         )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://search.yahoo.com/search?p=orange")
+        )
+        assertEquals(
+                "Hamburger",
+                searchQueryExtractor("https://www.yelp.com/search?find_desc=Hamburger&find_loc=Shinjuku%2C+%E6%9D%B1%E4%BA%AC%E9%83%BD%2C+Japan&ns=1")
+        )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://www.flickr.com/search/?text=orange")
+        )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://www.youtube.com/results?search_query=orange")
+        )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://yandex.com/search/?text=orange&lr=10636")
+        )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://www.baidu.com/s?wd=orange")
+        )
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://ja.wikipedia.org/wiki/orange")
+        )
     }
+
+    @Test
+    fun testElseCase() {
+        assertEquals(
+                "orange",
+                searchQueryExtractor("https://www.sample-search.com/search?q=orange")
+        )
+    }
+
 }

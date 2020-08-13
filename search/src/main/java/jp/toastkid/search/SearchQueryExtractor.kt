@@ -45,7 +45,7 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("field-keywords")
             host.endsWith(".linkedin.com") ->
                 uri.getQueryParameter("keywords")
-            host.startsWith("www.yandex.") ->
+            host.contains("yandex.") ->
                 uri.getQueryParameter("text")
             host.startsWith("www.youtube.") ->
                 uri.getQueryParameter("search_query")

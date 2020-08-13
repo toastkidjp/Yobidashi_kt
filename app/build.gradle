@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'io.fabric'
+apply plugin: "jacoco"
 
 apply from: 'signing/config.gradle', to: android
 
@@ -56,6 +57,11 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
     }
 }
 
@@ -123,6 +129,24 @@ kapt {
     javacOptions {
         option("-Xmaxerrs", 5000)
     }
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+task jacocoTestReport(
+        type: JacocoReport,
+        dependsOn: "testDebugUnitTest",
+        group: "verification"
+) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    getSourceDirectories().from = "${projectDir}/src/main/java"
+    getClassDirectories().from = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug")
+    getExecutionData().from = "${buildDir}/jacoco/testDebugUnitTest.exec"
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 29
@@ -28,6 +29,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
 }
 
 dependencies {
@@ -41,4 +50,22 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:4.2.1"
     testImplementation "io.mockk:mockk:1.9.3"
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+task jacocoTestReport(
+        type: JacocoReport,
+        dependsOn: "testDebugUnitTest",
+        group: "verification"
+) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    getSourceDirectories().from = "${projectDir}/src/main/java"
+    getClassDirectories().from = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug")
+    getExecutionData().from = "${buildDir}/jacoco/testDebugUnitTest.exec"
 }

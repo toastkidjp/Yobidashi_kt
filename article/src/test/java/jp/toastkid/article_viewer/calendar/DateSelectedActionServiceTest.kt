@@ -1,6 +1,7 @@
 package jp.toastkid.article_viewer.calendar
 
 import io.mockk.MockKAnnotations
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkObject
@@ -45,11 +46,10 @@ class DateSelectedActionServiceTest {
 
         val dateSelectedActionService = DateSelectedActionService(repository, viewModel)
         dateSelectedActionService.invoke(2020, 0, 22)
-        Thread.sleep(1000L)
 
-        verify(exactly = 1) { repository.findFirst(any()) }
-        verify(exactly = 1) { viewModel.newArticle(any()) }
-        verify(exactly = 1) { TitleFilterGenerator.invoke(any(), any(), any()) }
+        coVerify(exactly = 1) { repository.findFirst(any()) }
+        coVerify(exactly = 1) { viewModel.newArticle(any()) }
+        coVerify(exactly = 1) { TitleFilterGenerator.invoke(any(), any(), any()) }
     }
 
     @After

@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.article.list.ArticleListFragment
+import jp.toastkid.article_viewer.calendar.CalendarFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.lib.BrowserViewModel
@@ -138,6 +139,9 @@ class MenuUseCase(
             }
             Menu.PDF-> {
                 contentViewModel.openPdf()
+            }
+            Menu.CALENDAR -> {
+                contentViewModel.nextFragment(CalendarFragment::class.java)
             }
             Menu.ARTICLE_VIEWER -> {
                 contentViewModel.nextFragment(ArticleListFragment::class.java)

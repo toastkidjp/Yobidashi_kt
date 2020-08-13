@@ -8,6 +8,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.mockk
+import io.mockk.mockkClass
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.spyk
@@ -17,7 +18,9 @@ import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import org.junit.Before
 import org.junit.Test
+import java.io.Closeable
 import java.io.File
+import java.io.FileDescriptor
 import java.io.FileOutputStream
 
 /**
@@ -42,9 +45,6 @@ class ImageStoreServiceTest {
     @MockK
     private lateinit var scaledBitmap: Bitmap
 
-    @MockK
-    private lateinit var fileOutputStream: FileOutputStream
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -52,14 +52,13 @@ class ImageStoreServiceTest {
 
     @Test
     fun test() {
-        val file = spyk(File("test"))
-        every { file.getPath() }.answers { "test" }
+        val file = spyk(File.createTempFile("test", "webp"))
         every { filesDir.assignNewFile(any<Uri>()) }.answers { file }
         every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
         every { display.getRectSize(any()) }.answers { Unit }
 
         mockkConstructor(FileOutputStream::class)
-        every { fileOutputStream.close() }.answers { Unit }
+        every { anyConstructed<FileOutputStream>().close() }.answers { Unit }
 
         every { scaledBitmap.compress(any(), any(), any()) }.answers { true }
 
@@ -73,6 +72,8 @@ class ImageStoreServiceTest {
         verify(exactly = 1) { display.getRectSize(any()) }
         verify(exactly = 1) { anyConstructed<FileOutputStream>().close() }
         verify(exactly = 1) { BitmapScaling.invoke(any(), any(), any()) }
+
+        file.delete()
     }
 
 }
