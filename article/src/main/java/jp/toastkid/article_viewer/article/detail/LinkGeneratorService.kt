@@ -20,7 +20,7 @@ class LinkGeneratorService {
         embedLinks(
                 textView,
                 internalLinkPattern,
-                Linkify.TransformFilter { matcher, s ->
+                Linkify.TransformFilter { matcher, _ ->
                     InternalLinkScheme.makeLink(matcher.group(1))
                 }
         )
@@ -28,7 +28,7 @@ class LinkGeneratorService {
         embedLinks(
                 textView,
                 httpPattern,
-                Linkify.TransformFilter { matcher, s -> matcher.group(0) }
+                Linkify.TransformFilter { matcher, _ -> matcher.group(0) }
         )
     }
 
