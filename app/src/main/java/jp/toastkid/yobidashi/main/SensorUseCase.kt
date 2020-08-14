@@ -31,7 +31,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += System.lineSeparator() +
+                        sensorText += LINE_SEPARATOR +
                                 "RELATIVE_HUMIDITY ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
                     }
                 }
@@ -48,7 +48,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += System.lineSeparator() + "LIGHT ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
+                        sensorText += LINE_SEPARATOR + "LIGHT ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
                     }
                 }
                 sensorManager.registerListener(
@@ -64,7 +64,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += System.lineSeparator() + "AMBIENT_TEMPERATURE ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
+                        sensorText += LINE_SEPARATOR + "AMBIENT_TEMPERATURE ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
                     }
                 }
                 sensorManager.registerListener(
@@ -85,4 +85,9 @@ class SensorUseCase(private val sensorManager: SensorManager) {
     fun getText(): String {
         return sensorText
     }
+
+    companion object {
+        private val LINE_SEPARATOR = System.lineSeparator()
+    }
+
 }
