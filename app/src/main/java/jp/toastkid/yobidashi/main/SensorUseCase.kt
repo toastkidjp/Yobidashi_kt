@@ -11,6 +11,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import timber.log.Timber
 import java.util.Calendar
 
 /**
@@ -32,7 +33,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
 
                     override fun onSensorChanged(event: SensorEvent?) {
                         sensorText += LINE_SEPARATOR +
-                                "RELATIVE_HUMIDITY ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
+                                "RELATIVE_HUMIDITY ${toTimeString(event?.timestamp)} ${event?.values?.get(0)}"
                     }
                 }
                 sensorManager.registerListener(
@@ -48,7 +49,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += LINE_SEPARATOR + "LIGHT ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
+                        sensorText += LINE_SEPARATOR + "LIGHT ${toTimeString(event?.timestamp)} ${event?.values?.get(0)}"
                     }
                 }
                 sensorManager.registerListener(
@@ -64,7 +65,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += LINE_SEPARATOR + "AMBIENT_TEMPERATURE ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
+                        sensorText += LINE_SEPARATOR + "AMBIENT_TEMPERATURE ${toTimeString(event?.timestamp)} ${event?.values?.get(0)}"
                     }
                 }
                 sensorManager.registerListener(
@@ -75,6 +76,12 @@ class SensorUseCase(private val sensorManager: SensorManager) {
             }
         }
     }
+
+    private fun toTimeString(timestamp: Long?) =
+            Calendar.getInstance().also { cal ->
+                Timber.i("timestamp $timestamp")
+                cal.timeInMillis = ((timestamp ?: 0) / 1000).takeIf { it != 0L } ?: cal.timeInMillis
+            }.time
 
     fun onPause() {
         sensorManager.unregisterListener(humidityListener)
