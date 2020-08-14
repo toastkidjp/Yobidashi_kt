@@ -89,9 +89,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
         sensorManager.unregisterListener(listener)
     }
 
-    fun getText(): String {
-        return sensorText
-    }
+    fun getText() = sensorText
 
     companion object {
         private val LINE_SEPARATOR = System.lineSeparator()
