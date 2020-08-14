@@ -28,9 +28,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
         sensorManager.getSensorList(Sensor.TYPE_RELATIVE_HUMIDITY)?.let {
             if (it.isNotEmpty()) {
                 humidityListener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-                    }
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
                         sensorText += System.lineSeparator() +
@@ -47,9 +45,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
         sensorManager.getSensorList(Sensor.TYPE_LIGHT)?.let {
             if (it.isNotEmpty()) {
                 listener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-                    }
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
                         sensorText += System.lineSeparator() + "LIGHT ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
@@ -65,9 +61,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
         sensorManager.getSensorList(Sensor.TYPE_AMBIENT_TEMPERATURE)?.let {
             if (it.isNotEmpty()) {
                 tempListener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-                    }
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
                     override fun onSensorChanged(event: SensorEvent?) {
                         sensorText += System.lineSeparator() + "AMBIENT_TEMPERATURE ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }.time}${event?.values?.get(0)}"
