@@ -9,7 +9,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +16,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -41,6 +39,7 @@ import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
@@ -97,8 +96,6 @@ class MainActivity : AppCompatActivity(),
      * Preferences wrapper.
      */
     private lateinit var preferenceApplier: PreferenceApplier
-
-    private lateinit var sensorUseCase: SensorUseCase
 
     /**
      * Runtime permission.
@@ -270,8 +267,6 @@ class MainActivity : AppCompatActivity(),
                 finish()
             }
         }
-
-        sensorUseCase = SensorUseCase(getSystemService(Context.SENSOR_SERVICE) as SensorManager)
     }
 
     private fun invokeSearchWithClip(colorPair: ColorPair) {
@@ -491,7 +486,6 @@ class MainActivity : AppCompatActivity(),
         floatingPreview?.onResume()
 
         tabs.setCount()
-        sensorUseCase.onResume()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -655,12 +649,7 @@ class MainActivity : AppCompatActivity(),
             true
         }
         R.id.about_this_app -> {
-            AlertDialog.Builder(this)
-                    .setTitle("sensor")
-                    .setMessage(sensorUseCase.getText())
-                    .setPositiveButton(R.string.ok, { d, i -> d.dismiss() })
-                    .show()
-            //replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
+            replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
             true
         }
         R.id.menu_exit -> {
@@ -719,7 +708,6 @@ class MainActivity : AppCompatActivity(),
     override fun onPause() {
         super.onPause()
         floatingPreview?.onPause()
-        sensorUseCase.onPause()
     }
 
     override fun onStop() {
