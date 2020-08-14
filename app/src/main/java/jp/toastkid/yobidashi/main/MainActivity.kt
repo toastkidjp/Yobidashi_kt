@@ -9,9 +9,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Build
@@ -80,7 +77,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 /**
  * Main of this calendar app.
@@ -102,13 +98,7 @@ class MainActivity : AppCompatActivity(),
      */
     private lateinit var preferenceApplier: PreferenceApplier
 
-    private lateinit var sensorManager: SensorManager
-
-    private var humidityListener: SensorEventListener? = null
-    private var tempListener: SensorEventListener? = null
-    private var listener: SensorEventListener? = null
-
-    private var sensorText = ""
+    private lateinit var sensorUseCase: SensorUseCase
 
     /**
      * Runtime permission.
@@ -281,7 +271,7 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorUseCase = SensorUseCase(getSystemService(Context.SENSOR_SERVICE) as SensorManager)
     }
 
     private fun invokeSearchWithClip(colorPair: ColorPair) {
@@ -501,62 +491,7 @@ class MainActivity : AppCompatActivity(),
         floatingPreview?.onResume()
 
         tabs.setCount()
-
-        sensorManager.getSensorList(Sensor.TYPE_RELATIVE_HUMIDITY)?.let {
-            if (it.isNotEmpty()) {
-                humidityListener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-                    }
-
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += "RELATIVE_HUMIDITY ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }}${event?.values?.get(0)}"
-                    }
-                }
-                sensorManager.registerListener(
-                        humidityListener,
-                        it.get(0),
-                        SensorManager.SENSOR_DELAY_NORMAL
-                )
-            }
-        }
-        sensorManager.getSensorList(Sensor.TYPE_LIGHT)?.let {
-            if (it.isNotEmpty()) {
-                listener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-                    }
-
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += "LIGHT ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }}${event?.values?.get(0)}"
-                    }
-                }
-                sensorManager.registerListener(
-                        listener,
-                        it.get(0),
-                        SensorManager.SENSOR_DELAY_NORMAL
-                )
-            }
-        }
-        sensorManager.getSensorList(Sensor.TYPE_AMBIENT_TEMPERATURE)?.let {
-            if (it.isNotEmpty()) {
-                tempListener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-                    }
-
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += "TYPE_AMBIENT_TEMPERATURE ${Calendar.getInstance().also { it.timeInMillis = event?.timestamp ?: it.timeInMillis }}${event?.values?.get(0)}"
-                    }
-                }
-                sensorManager.registerListener(
-                        tempListener,
-                        it.get(0),
-                        SensorManager.SENSOR_DELAY_NORMAL
-                )
-            }
-        }
-
+        sensorUseCase.onResume()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -722,7 +657,7 @@ class MainActivity : AppCompatActivity(),
         R.id.about_this_app -> {
             AlertDialog.Builder(this)
                     .setTitle("sensor")
-                    .setMessage(sensorText)
+                    .setMessage(sensorUseCase.getText())
                     .setPositiveButton(R.string.ok, { d, i -> d.dismiss() })
                     .show()
             //replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
@@ -784,9 +719,7 @@ class MainActivity : AppCompatActivity(),
     override fun onPause() {
         super.onPause()
         floatingPreview?.onPause()
-        sensorManager.unregisterListener(humidityListener)
-        sensorManager.unregisterListener(tempListener)
-        sensorManager.unregisterListener(listener)
+        sensorUseCase.onPause()
     }
 
     override fun onStop() {
