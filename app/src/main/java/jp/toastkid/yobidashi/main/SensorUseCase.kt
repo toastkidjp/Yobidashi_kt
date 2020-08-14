@@ -18,57 +18,33 @@ import java.util.Calendar
  */
 class SensorUseCase(private val sensorManager: SensorManager) {
 
-    private var humidityListener: SensorEventListener? = null
-    private var tempListener: SensorEventListener? = null
-    private var listener: SensorEventListener? = null
-
     private var sensorText = ""
 
+    private val listeners = mapOf(
+            Sensor.TYPE_LIGHT to makeListener("LIGHT"),
+            Sensor.TYPE_RELATIVE_HUMIDITY to makeListener("HUMIDITY"),
+            Sensor.TYPE_AMBIENT_TEMPERATURE to makeListener("AMBIENT_TEMPERATURE")
+    )
+
     fun onResume() {
-        sensorManager.getSensorList(Sensor.TYPE_RELATIVE_HUMIDITY)?.let {
-            if (it.isNotEmpty()) {
-                humidityListener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
+        listeners.forEach { registerListener(it.key, it.value) }
+    }
 
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += LINE_SEPARATOR +
-                                "RELATIVE_HUMIDITY ${toTimeString(event?.timestamp)} ${event?.values?.get(0)}"
-                    }
+    private fun makeListener(listenerName: String) =
+            object : SensorEventListener {
+                override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
+
+                override fun onSensorChanged(event: SensorEvent?) {
+                    sensorText += LINE_SEPARATOR +
+                            "$listenerName ${toTimeString(event?.timestamp)} ${event?.values?.get(0)}"
                 }
-                sensorManager.registerListener(
-                        humidityListener,
-                        it.get(0),
-                        SensorManager.SENSOR_DELAY_NORMAL
-                )
             }
-        }
-        sensorManager.getSensorList(Sensor.TYPE_LIGHT)?.let {
-            if (it.isNotEmpty()) {
-                listener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += LINE_SEPARATOR + "LIGHT ${toTimeString(event?.timestamp)} ${event?.values?.get(0)}"
-                    }
-                }
-                sensorManager.registerListener(
-                        listener,
-                        it.get(0),
-                        SensorManager.SENSOR_DELAY_NORMAL
-                )
-            }
-        }
-        sensorManager.getSensorList(Sensor.TYPE_AMBIENT_TEMPERATURE)?.let {
+    private fun registerListener(listenerType: Int, eventListener: SensorEventListener) {
+        sensorManager.getSensorList(listenerType)?.let {
             if (it.isNotEmpty()) {
-                tempListener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
-
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        sensorText += LINE_SEPARATOR + "AMBIENT_TEMPERATURE ${toTimeString(event?.timestamp)} ${event?.values?.get(0)}"
-                    }
-                }
                 sensorManager.registerListener(
-                        tempListener,
+                        eventListener,
                         it.get(0),
                         SensorManager.SENSOR_DELAY_NORMAL
                 )
@@ -82,9 +58,7 @@ class SensorUseCase(private val sensorManager: SensorManager) {
             }.time
 
     fun onPause() {
-        sensorManager.unregisterListener(humidityListener)
-        sensorManager.unregisterListener(tempListener)
-        sensorManager.unregisterListener(listener)
+        listeners.forEach { sensorManager.unregisterListener(it.value) }
     }
 
     fun getText() = sensorText
