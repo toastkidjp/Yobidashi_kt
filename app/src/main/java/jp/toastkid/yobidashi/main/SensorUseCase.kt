@@ -11,7 +11,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import timber.log.Timber
 import java.util.Calendar
 
 /**
@@ -79,7 +78,6 @@ class SensorUseCase(private val sensorManager: SensorManager) {
 
     private fun toTimeString(timestamp: Long?) =
             Calendar.getInstance().also { cal ->
-                Timber.i("timestamp $timestamp")
                 cal.timeInMillis = ((timestamp ?: 0) / 1000).takeIf { it != 0L } ?: cal.timeInMillis
             }.time
 
