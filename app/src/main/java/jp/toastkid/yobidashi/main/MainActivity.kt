@@ -41,6 +41,7 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
@@ -241,6 +242,7 @@ class MainActivity : AppCompatActivity(),
                 tabs,
                 ::obtainFragment,
                 { fragment, animation -> replaceFragment(fragment, animation) },
+                activityViewModelProvider.get(BrowserFragmentViewModel::class.java),
                 ::refreshThumbnail,
                 { runOnUiThread(it) },
                 disposables
