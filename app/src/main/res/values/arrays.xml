@@ -4,6 +4,7 @@
         <item name="open_article">Open new tab</item>
         <item name="add_schedule">Open background tab</item>
         <item name="image_search">Image search</item>
+        <item name="preview">Preview</item>
         <item name="download">Download this image file</item>
         <item name="copy">Copy URL</item>
     </array>
