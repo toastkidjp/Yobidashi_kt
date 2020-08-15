@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -225,6 +226,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
     override fun onResume() {
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
+        appBarBinding.input.setHintTextColor(ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196))
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
     }
