@@ -21,6 +21,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -135,7 +136,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_article_list, container, false)
+                inflater, LAYOUT_ID, container, false)
         appBarBinding = DataBindingUtil.inflate(
                 inflater, R.layout.app_bar_article_list, container, false)
         return binding.root
@@ -304,4 +305,10 @@ class ArticleListFragment : Fragment(), ContentScrollable {
         super.onDetach()
     }
 
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_article_list
+
+    }
 }
