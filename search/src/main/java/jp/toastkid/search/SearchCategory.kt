@@ -1,6 +1,5 @@
 package jp.toastkid.search
 
-import android.content.Context
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -78,11 +77,6 @@ enum class SearchCategory(
             R.drawable.ic_yandex,
             "https://www.yandex.com/search/?text="
     ),
-    BAIDU(
-            R.string.baidu,
-            R.drawable.ic_baidu,
-            "https://www.baidu.com/s?wd="
-    ),
     NAVER(
             R.string.naver,
             R.drawable.ic_naver,
@@ -102,11 +96,6 @@ enum class SearchCategory(
             R.string.search_category_youtube,
             R.drawable.ic_video,
             "https://www.youtube.com/results?search_query="
-    ),
-    TIKTOK(
-            R.string.search_category_tiktok,
-            R.drawable.ic_tiktok,
-            "https://www.tiktok.com/tag/"
     ),
     WIKIPEDIA(
             R.string.search_category_wikipedia,

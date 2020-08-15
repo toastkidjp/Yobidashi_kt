@@ -34,13 +34,11 @@
     <string name="buzzfeed">BuzzFeed</string>
     <string name="slideshare">SlideShare</string>
     <string name="speakerdeck">Speaker Deck</string>
-    <string name="baidu">Baidu</string>
     <string name="search_category_flickr">Flickr</string>
     <string name="search_category_wikimedia_commons">Wikimedia Commons</string>
     <string name="livejournal">LiveJournal</string>
     <string name="search_category_slashdot">Slashdot</string>
     <string name="search_category_reddit">reddit</string>
-    <string name="search_category_tiktok">TikTok</string>
     <string name="search_category_open_weather">Open Weather</string>
     <string name="search_category_startpage">Startpage</string>
     <string name="tumblr">Tumblr</string>
