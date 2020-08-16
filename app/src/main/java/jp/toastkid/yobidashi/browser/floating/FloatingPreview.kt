@@ -228,6 +228,9 @@ class FloatingPreview(context: Context) {
     }
 
     fun onBackPressed(): Boolean {
+        if (popupWindow.isShowing.not()) {
+            return false
+        }
         if (webView.canGoBack()) {
             webView.goBack()
             return true
@@ -242,7 +245,7 @@ class FloatingPreview(context: Context) {
     companion object {
 
         @LayoutRes
-        private val LAYOUT_ID = R.layout.popup_floating_preview
+        private const val LAYOUT_ID = R.layout.popup_floating_preview
 
     }
 }
