@@ -25,11 +25,13 @@ class RecentAppColoringUseCase(
 ) {
 
     operator fun invoke(@ColorInt color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val opaqueColor = ColorUtils.setAlphaComponent(color, 255)
-            val taskDescription = makeTaskDescription(opaqueColor)
-            setTaskDescription(taskDescription)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return
         }
+
+        val opaqueColor = ColorUtils.setAlphaComponent(color, 255)
+        val taskDescription = makeTaskDescription(opaqueColor)
+        setTaskDescription(taskDescription)
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
