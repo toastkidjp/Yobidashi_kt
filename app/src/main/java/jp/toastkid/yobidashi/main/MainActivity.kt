@@ -506,9 +506,9 @@ class MainActivity : AppCompatActivity(),
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             RecentAppColoringUseCase(
-                    { getString(it) },
+                    ::getString,
                     { BitmapFactory.decodeResource(resources, it) },
-                    { setTaskDescription(it) }
+                    ::setTaskDescription
             ).invoke(preferenceApplier.color)
         }
 
