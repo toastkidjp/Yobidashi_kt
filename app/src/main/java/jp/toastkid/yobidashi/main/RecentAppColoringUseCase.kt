@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.main
 
+import android.annotation.TargetApi
 import android.app.ActivityManager
 import android.graphics.Bitmap
 import android.os.Build
@@ -26,20 +27,26 @@ class RecentAppColoringUseCase(
     operator fun invoke(@ColorInt color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val opaqueColor = ColorUtils.setAlphaComponent(color, 255)
-            val taskDescription = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                ActivityManager.TaskDescription(
-                        getString(R.string.app_name),
-                        R.mipmap.ic_launcher,
-                        opaqueColor
-                )
-            } else {
-                ActivityManager.TaskDescription(
-                        getString(R.string.app_name),
-                        bitmapDecoder(R.mipmap.ic_launcher),
-                        opaqueColor
-                )
-            }
+            val taskDescription = makeTaskDescription(opaqueColor)
             setTaskDescription(taskDescription)
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun makeTaskDescription(opaqueColor: Int): ActivityManager.TaskDescription {
+        val taskDescription = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ActivityManager.TaskDescription(
+                    getString(R.string.app_name),
+                    R.mipmap.ic_launcher,
+                    opaqueColor
+            )
+        } else {
+            ActivityManager.TaskDescription(
+                    getString(R.string.app_name),
+                    bitmapDecoder(R.mipmap.ic_launcher),
+                    opaqueColor
+            )
+        }
+        return taskDescription
     }
 }
