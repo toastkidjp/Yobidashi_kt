@@ -2,11 +2,13 @@ package jp.toastkid.yobidashi.main
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -17,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -502,6 +505,23 @@ class MainActivity : AppCompatActivity(),
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
         binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val opaqueColor = ColorUtils.setAlphaComponent(preferenceApplier.color, 255)
+            val taskDescription = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ActivityManager.TaskDescription(
+                        getString(R.string.app_name),
+                        R.mipmap.ic_launcher,
+                        opaqueColor
+                )
+            } else {
+                ActivityManager.TaskDescription(
+                        getString(R.string.app_name),
+                        BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher),
+                        opaqueColor
+                )
+            }
+            setTaskDescription(taskDescription)
+        }
 
         backgroundImageLoaderUseCase.invoke(binding.background, preferenceApplier.backgroundImagePath)
 
