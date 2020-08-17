@@ -467,7 +467,16 @@ class BrowserFragment : Fragment(),
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        browserModule.onSaveInstanceState(outState)
+        /*
+         * jp.toastkid.yobidashi.d E/AndroidRuntime: FATAL EXCEPTION: main
+         *     kotlin.UninitializedPropertyAccessException: lateinit property browserModule has not been initialize
+         *         at jp.toastkid.yobidashi.browser.BrowserFragment.onSaveInstanceState(BrowserFragment.kt:470)
+         *         at androidx.fragment.app.Fragment.performSaveInstanceState(Fragment.java:2863)
+         *         at androidx.fragment.app.FragmentStateManager.saveBasicState(FragmentStateManager.java:434)
+         */
+        if (::browserModule.isInitialized) {
+            browserModule.onSaveInstanceState(outState)
+        }
         super.onSaveInstanceState(outState)
     }
 
