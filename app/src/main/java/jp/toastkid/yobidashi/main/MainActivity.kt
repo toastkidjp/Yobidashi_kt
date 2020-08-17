@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -507,7 +506,7 @@ class MainActivity : AppCompatActivity(),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             RecentAppColoringUseCase(
                     ::getString,
-                    { BitmapFactory.decodeResource(resources, it) },
+                    { resources },
                     ::setTaskDescription
             ).invoke(preferenceApplier.color)
         }

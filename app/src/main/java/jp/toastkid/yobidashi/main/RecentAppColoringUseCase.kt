@@ -9,7 +9,8 @@ package jp.toastkid.yobidashi.main
 
 import android.annotation.TargetApi
 import android.app.ActivityManager
-import android.graphics.Bitmap
+import android.content.res.Resources
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
@@ -20,7 +21,7 @@ import jp.toastkid.yobidashi.R
  */
 class RecentAppColoringUseCase(
         private val getString: (Int) -> String,
-        private val bitmapDecoder: (Int) -> Bitmap,
+        private val resourcesSupplier: () -> Resources?,
         private val setTaskDescription: (ActivityManager.TaskDescription) -> Unit
 ) {
 
@@ -30,12 +31,12 @@ class RecentAppColoringUseCase(
         }
 
         val opaqueColor = ColorUtils.setAlphaComponent(color, 255)
-        val taskDescription = makeTaskDescription(opaqueColor)
+        val taskDescription = makeTaskDescription(opaqueColor) ?: return
         setTaskDescription(taskDescription)
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun makeTaskDescription(opaqueColor: Int): ActivityManager.TaskDescription {
+    private fun makeTaskDescription(opaqueColor: Int): ActivityManager.TaskDescription? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ActivityManager.TaskDescription(
                     getString(R.string.app_name),
@@ -43,9 +44,10 @@ class RecentAppColoringUseCase(
                     opaqueColor
             )
         } else {
+            val resources = resourcesSupplier() ?: return null
             ActivityManager.TaskDescription(
                     getString(R.string.app_name),
-                    bitmapDecoder(R.mipmap.ic_launcher),
+                    BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher),
                     opaqueColor
             )
         }
