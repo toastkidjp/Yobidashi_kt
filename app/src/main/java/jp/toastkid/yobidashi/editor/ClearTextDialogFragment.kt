@@ -60,9 +60,8 @@ class ClearTextDialogFragment : DialogFragment() {
         fun show(target: Fragment) {
             val dialogFragment = ClearTextDialogFragment()
             dialogFragment.setTargetFragment(target, 1)
-            val fragmentManager = target.parentFragmentManager
             dialogFragment.show(
-                    fragmentManager,
+                    target.parentFragmentManager,
                     dialogFragment::class.java.canonicalName
             )
         }
