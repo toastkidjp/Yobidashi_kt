@@ -498,8 +498,7 @@ class MainActivity : AppCompatActivity(),
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        val colorPair = preferenceApplier.colorPair()
-        ToolbarColorApplier()(window, binding.toolbar, colorPair)
+        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             RecentAppColoringUseCase(
