@@ -36,7 +36,7 @@ class RecentAppColoringUseCase(
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun makeTaskDescription(opaqueColor: Int): ActivityManager.TaskDescription? {
+    private fun makeTaskDescription(@ColorInt opaqueColor: Int): ActivityManager.TaskDescription? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ActivityManager.TaskDescription(
                     getString(R.string.app_name),
