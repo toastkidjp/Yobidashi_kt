@@ -495,14 +495,6 @@ class BrowserModule(
     }
 
     /**
-     * Dispose [GlobalWebViewPool].
-     */
-    fun dispose() {
-        GlobalWebViewPool.dispose()
-        disposables.cancel()
-    }
-
-    /**
      * Disable [WebView].
      */
     fun disableWebView() {
