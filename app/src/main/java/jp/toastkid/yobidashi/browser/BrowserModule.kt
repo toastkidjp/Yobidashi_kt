@@ -61,7 +61,6 @@ import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
-import kotlinx.coroutines.Job
 import timber.log.Timber
 
 /**
