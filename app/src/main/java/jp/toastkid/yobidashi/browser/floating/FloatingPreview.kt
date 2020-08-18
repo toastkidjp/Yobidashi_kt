@@ -42,6 +42,7 @@ import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 /**
  * Floating preview.
  *
+ * @param context Use for obtaining [PopupWindow], [WebView], and so on...
  * @author toastkidjp
  */
 class FloatingPreview(context: Context) {
