@@ -115,8 +115,6 @@ class BrowserModule(
 
     private val webViewStateUseCase = WebViewStateUseCase.make(context)
 
-    private val disposables: Job by lazy { Job() }
-
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
 
