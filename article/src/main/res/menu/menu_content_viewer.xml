@@ -1,15 +1,13 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".article.detail.ContentViewerFragment">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
-    <item android:id="@+id/action_find"
-          android:title="@string/action_find"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_add_to_bookmark"
+        android:title="@string/action_add_to_bookmark"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        />
 
-    <item android:id="@+id/action_close"
-          android:title="@string/action_close"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
 </menu>

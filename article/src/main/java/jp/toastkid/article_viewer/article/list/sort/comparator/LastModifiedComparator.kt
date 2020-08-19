@@ -5,29 +5,18 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.article_viewer.article
+package jp.toastkid.article_viewer.article.list.sort.comparator
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import jp.toastkid.article_viewer.article.list.SearchResult
 
 /**
+ * DESC order.
  * @author toastkidjp
  */
-@Entity
-class Article(
-    @PrimaryKey
-    var id: Int
-) {
+class LastModifiedComparator : Comparator<SearchResult> {
 
-    var title: String = ""
-
-    var contentText: String = ""
-
-    var lastModified: Long = 0L
-
-    var length: Int = 0
-
-    var bigram: String = ""
+    override fun compare(o1: SearchResult?, o2: SearchResult?): Int {
+        return ((o2?.lastModified ?: 0L) - (o1?.lastModified ?: 0L)).toInt()
+    }
 
 }

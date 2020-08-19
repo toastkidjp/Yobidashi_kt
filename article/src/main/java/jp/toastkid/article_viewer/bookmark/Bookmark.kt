@@ -5,14 +5,13 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.article_viewer.article.list
+package jp.toastkid.article_viewer.bookmark
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * @author toastkidjp
  */
-data class SearchResult(
-    val id: Int,
-    val title: String,
-    val lastModified: Long,
-    val length: Int
-)
+@Entity
+data class Bookmark(@PrimaryKey(autoGenerate = false) var id: Int)

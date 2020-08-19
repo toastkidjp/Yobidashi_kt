@@ -28,7 +28,7 @@
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_music"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/divider"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 />
             <TextView

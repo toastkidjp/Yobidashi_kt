@@ -37,7 +37,7 @@ class WebSettingApplier(private val preferenceApplier: PreferenceApplier) {
         webSettings.setSupportMultipleWindows(true)
         webSettings.domStorageEnabled = true
 
-        val ua =  UserAgent.valueOf(preferenceApplier.userAgent()).text()
+        val ua =  UserAgent.findByName(preferenceApplier.userAgent()).text()
 
         if (webSettings.userAgentString != ua) {
             webSettings.userAgentString = ua

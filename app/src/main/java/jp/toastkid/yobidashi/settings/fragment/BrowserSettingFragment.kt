@@ -94,7 +94,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
             it.saveFormCheck.isChecked = preferenceApplier.doesSaveForm()
             it.saveFormCheck.jumpDrawablesToCurrentState()
 
-            it.userAgentValue.text = UserAgent.valueOf(preferenceApplier.userAgent()).title()
+            it.userAgentValue.text = UserAgent.findByName(preferenceApplier.userAgent()).title()
 
             it.saveViewHistoryCheck.isChecked = preferenceApplier.saveViewHistory
             it.saveViewHistoryCheck.jumpDrawablesToCurrentState()

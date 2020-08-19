@@ -40,6 +40,9 @@ import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.lib.TabListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Internal browser fragment.
@@ -295,15 +298,21 @@ class BrowserFragment : Fragment(),
     }
 
     private fun showReaderFragment(content: String) {
-        val lineSeparator = System.getProperty("line.separator") ?: ""
-        val replacedContent = content.replace("\\n", lineSeparator)
-
         val readerFragment =
                 activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
                         ?: ReaderFragment()
-        (readerFragment as? ReaderFragment)?.setContent(browserModule.currentTitle(), replacedContent)
 
         contentViewModel?.nextFragment(readerFragment)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val lineSeparator = System.getProperty("line.separator") ?: ""
+            val replacedContent = content.replace("\\n", lineSeparator)
+
+            activity?.runOnUiThread {
+                (readerFragment as? ReaderFragment)
+                        ?.setContent(browserModule.currentTitle(), replacedContent)
+            }
+        }
     }
 
     fun showUserAgentSetting() {

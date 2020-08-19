@@ -5,14 +5,17 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.article_viewer.article.list
+package jp.toastkid.article_viewer.article.list.sort.comparator
+
+import jp.toastkid.article_viewer.article.list.SearchResult
 
 /**
  * @author toastkidjp
  */
-data class SearchResult(
-    val id: Int,
-    val title: String,
-    val lastModified: Long,
-    val length: Int
-)
+class NameComparator : Comparator<SearchResult> {
+
+    override fun compare(o1: SearchResult?, o2: SearchResult?): Int {
+        return o2?.title?.compareTo(o1?.title ?: "") ?: 0
+    }
+
+}

@@ -5,16 +5,17 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.article_viewer.common
+package jp.toastkid.article_viewer.article.list.sort.comparator
+
+import jp.toastkid.article_viewer.article.list.SearchResult
 
 /**
  * @author toastkidjp
  */
-interface ProgressCallback {
+class LengthComparator : Comparator<SearchResult> {
 
-    fun showProgress()
+    override fun compare(o1: SearchResult?, o2: SearchResult?): Int {
+        return o2?.length?.compareTo(o1?.length ?: 0) ?: 0
+    }
 
-    fun hideProgress()
-
-    fun setProgressMessage(message: String)
 }

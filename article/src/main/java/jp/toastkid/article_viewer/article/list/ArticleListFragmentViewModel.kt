@@ -10,6 +10,7 @@ package jp.toastkid.article_viewer.article.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.article_viewer.article.list.sort.Sort
 import jp.toastkid.lib.lifecycle.Event
 
 /**
@@ -40,6 +41,13 @@ class ArticleListFragmentViewModel : ViewModel() {
 
     fun setProgressMessageId(messageId: Int) {
         _messageId.postValue(Event(messageId))
+    }
+
+    private val _sort = MutableLiveData<Event<Sort>>()
+    val sort: LiveData<Event<Sort>> = _sort
+
+    fun sort(sort: Sort) {
+        _sort.postValue(Event(sort))
     }
 
 }

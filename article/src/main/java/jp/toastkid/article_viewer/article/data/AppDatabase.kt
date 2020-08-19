@@ -14,13 +14,18 @@ import androidx.room.RoomDatabase
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleFts
 import jp.toastkid.article_viewer.article.ArticleRepository
+import jp.toastkid.article_viewer.bookmark.Bookmark
+import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 
 /**
  * @author toastkidjp
  */
-@Database(entities = [Article::class, ArticleFts::class], version = 1)
+@Database(entities = [Article::class, ArticleFts::class, Bookmark::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
+
     abstract fun articleRepository(): ArticleRepository
+
+    abstract fun bookmarkRepository(): BookmarkRepository
 
     companion object {
         fun find(activityContext: Context): AppDatabase {
@@ -28,7 +33,9 @@ abstract class AppDatabase : RoomDatabase() {
                     activityContext.applicationContext,
                     AppDatabase::class.java,
                     "article_db"
-            ).build()
+            )
+                    .fallbackToDestructiveMigration()
+                    .build()
         }
     }
 }

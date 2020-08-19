@@ -33,5 +33,8 @@ enum class UserAgent constructor(private val title: String, private val text: St
             }
             return 0
         }
+
+        fun findByName(userAgentName: String) =
+                values().find { it.name == userAgentName } ?: DEFAULT
     }
 }

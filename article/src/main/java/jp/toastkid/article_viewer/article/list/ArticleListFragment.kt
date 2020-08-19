@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
+import jp.toastkid.article_viewer.bookmark.BookmarkFragment
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.article_viewer.zip.ZipFileChooserIntentFactory
@@ -198,6 +200,11 @@ class ArticleListFragment : Fragment(), ContentScrollable {
                 appBarBinding.searchResult.setText(messageId)
             }
         })
+        viewModel?.sort?.observe(viewLifecycleOwner, Observer {
+            it?.getContentIfNotHandled()?.let { sort ->
+                adapter.sort(sort)
+            }
+        })
 
         searchUseCase = ArticleSearchUseCase(articleRepository, viewModel, adapter, preferencesWrapper)
 
@@ -222,8 +229,18 @@ class ArticleListFragment : Fragment(), ContentScrollable {
                 searchUseCase?.all()
                 true
             }
+            R.id.action_bookmark -> {
+                contentViewModel?.nextFragment(BookmarkFragment::class.java)
+                true
+            }
             R.id.action_set_target -> {
                 startActivityForResult(ZipFileChooserIntentFactory()(), 1)
+                true
+            }
+            R.id.action_sort -> {
+                val dialogFragment = SortSettingDialogFragment()
+                dialogFragment.setTargetFragment(this, 1)
+                dialogFragment.show(parentFragmentManager, "")
                 true
             }
             R.id.action_switch_title_filter -> {

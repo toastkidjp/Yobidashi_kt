@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
+import jp.toastkid.article_viewer.article.list.sort.Sort
+import java.util.Collections
 
 /**
  * [SearchResult] list's adapter.
@@ -58,6 +60,11 @@ class Adapter(
      */
     fun add(result: SearchResult) {
         items.add(result)
+    }
+
+    fun sort(sort: Sort) {
+        Collections.sort(items, sort.comparator)
+        notifyDataSetChanged()
     }
 
     companion object {
