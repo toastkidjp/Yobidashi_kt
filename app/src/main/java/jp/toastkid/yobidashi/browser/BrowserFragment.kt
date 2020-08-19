@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -408,6 +410,11 @@ class BrowserFragment : Fragment(),
             it.pageInformation.setColorFilter(fontColor)
             it.userAgent.setColorFilter(fontColor)
             it.htmlSource.setColorFilter(fontColor)
+            it.progress.progressDrawable.colorFilter =
+                    PorterDuffColorFilter(
+                            preferenceApplier.fontColor,
+                            PorterDuff.Mode.SRC_IN
+                    )
         }
 
         browserModule.resizePool(preferenceApplier.poolSize)
