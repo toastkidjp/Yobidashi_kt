@@ -99,6 +99,7 @@ internal class Adapter(private val context: Context, private val parent: View)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 packageInfo.longVersionCode
             } else {
+                @Suppress("DEPRECATION")
                 packageInfo.versionCode.toLong()
             }
 
