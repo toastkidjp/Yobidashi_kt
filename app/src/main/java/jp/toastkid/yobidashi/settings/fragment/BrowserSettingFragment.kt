@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -168,7 +167,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      */
     fun commitHomeInput() {
         val input = binding.homeInputLayout.editText?.text?.toString()
-        if (TextUtils.isEmpty(input)) {
+        if (input.isNullOrEmpty()) {
             Toaster.snackShort(
                     binding.root,
                     R.string.favorite_search_addition_dialog_empty_message,
