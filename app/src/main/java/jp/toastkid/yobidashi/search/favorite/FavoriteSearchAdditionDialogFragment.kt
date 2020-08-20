@@ -106,7 +106,7 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
      * Ok action.
      */
     fun ok() {
-        val query = binding.favoriteSearchAdditionQueryInput.text.toString()
+        val query = binding.favoriteSearchAdditionQueryInput.text?.toString()
 
         if (TextUtils.isEmpty(query)) {
             Toaster.snackShort(
