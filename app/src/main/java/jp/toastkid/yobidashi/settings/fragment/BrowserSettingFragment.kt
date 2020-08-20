@@ -167,7 +167,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      * Commit input.
      */
     fun commitHomeInput() {
-        val input = binding.homeInputLayout.editText?.text.toString()
+        val input = binding.homeInputLayout.editText?.text?.toString()
         if (TextUtils.isEmpty(input)) {
             Toaster.snackShort(
                     binding.root,
