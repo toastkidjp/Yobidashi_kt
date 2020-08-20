@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -143,7 +142,7 @@ internal class Adapter(private val context: Context, private val parent: View)
      */
     fun filter(str: String, limit: Int = -1, onResult: () -> Unit = {}) {
         installedApps.clear()
-        if (TextUtils.isEmpty(str)) {
+        if (str.isEmpty()) {
             installedApps.addAll(master)
             notifyDataSetChanged()
             return
