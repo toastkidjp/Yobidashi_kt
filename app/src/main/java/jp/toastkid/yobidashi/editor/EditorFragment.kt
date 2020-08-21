@@ -15,7 +15,6 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -423,7 +422,7 @@ class EditorFragment :
         val context = context ?: return
 
         FileExtractorFromUri(context, data)?.let {
-            if (TextUtils.equals(it, path)) {
+            if (it == path) {
                 return
             }
 
