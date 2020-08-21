@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
-import android.text.TextUtils
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 
 /**
@@ -16,7 +15,7 @@ class Exporter(private val bookmarks: Iterable<Bookmark?>) {
                 .append("<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">\n")
                 .append("<TITLE>Bookmarks</TITLE>\n")
                 .append("<H1>ブックマークメニュー</H1><DL><p>\n")
-        bookmarks.filter { TextUtils.equals("root", it?.parent) }
+        bookmarks.filter { "root" == it?.parent }
                 .forEach {
                     if (it?.folder ?: false) { convertDirectory(builder, it) }
                     else { convertBookmarkItem(builder, it) }
@@ -48,5 +47,5 @@ class Exporter(private val bookmarks: Iterable<Bookmark?>) {
     }
 
     private fun getDirBookmarks(parent: String): List<Bookmark?> =
-            bookmarks.filter { TextUtils.equals(parent, it?.parent) }
+            bookmarks.filter { parent == it?.parent }
 }
