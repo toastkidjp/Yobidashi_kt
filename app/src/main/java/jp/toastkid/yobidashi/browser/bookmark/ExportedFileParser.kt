@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
-import android.text.TextUtils
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import okio.Okio
 import org.jsoup.Jsoup
@@ -54,7 +53,7 @@ class ExportedFileParser {
      */
     private fun parseChild(child: Element, folderName: String): Bookmark? =
             child.select("h3, a").first()?.let {
-                if (TextUtils.equals("a", it.tagName())) {
+                if ("a" == it.tagName()) {
                     val bookmark = Bookmark()
                     bookmark.title  = it.text()
                     bookmark.url    = it.attr("href")
