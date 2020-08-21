@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.search.apps
 
-import android.text.TextUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
@@ -50,7 +49,7 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
      * @param key search keyword.
      */
     fun request(key: String) {
-        if (TextUtils.isEmpty(key)) {
+        if (key.isEmpty()) {
             hide()
             return
         }
