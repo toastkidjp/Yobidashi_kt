@@ -8,7 +8,9 @@
 package jp.toastkid.yobidashi.search.apps
 
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.launcher.Adapter
 import kotlinx.coroutines.CoroutineScope
@@ -22,12 +24,15 @@ import kotlinx.coroutines.launch
  * @param binding [ModuleSearchAppsBinding]
  * @author toastkidjp
  */
-class AppModule(private val binding: ModuleSearchAppsBinding) {
+class AppModule(
+        private val binding: ModuleSearchAppsBinding,
+        contentViewModel: ContentViewModel?
+) {
 
     /**
      * Suggest ModuleAdapter.
      */
-    private val adapter: Adapter = Adapter(binding.root.context, binding.root)
+    private val adapter: Adapter = Adapter(binding.root.context, contentViewModel)
 
     /**
      * Disposable of last query.

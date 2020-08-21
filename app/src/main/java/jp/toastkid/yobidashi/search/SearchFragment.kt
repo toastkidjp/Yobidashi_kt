@@ -160,6 +160,12 @@ class SearchFragment : Fragment() {
 
         preferenceApplier = PreferenceApplier(context)
 
+        activity?.also {
+            val activityViewModelProvider = ViewModelProvider(it)
+            appBarViewModel = activityViewModelProvider.get(AppBarViewModel::class.java)
+            contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
+        }
+
         initFavoriteModule()
 
         initHistoryModule()
@@ -185,7 +191,7 @@ class SearchFragment : Fragment() {
                 { search(extractCurrentSearchCategory(), it, true) }
         )
 
-        appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding)
+        appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding, contentViewModel)
 
         setListenerForKeyboardHiding()
 
@@ -196,12 +202,6 @@ class SearchFragment : Fragment() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             headerBinding?.searchBar?.transitionName = "share"
-        }
-
-        activity?.also {
-            val activityViewModelProvider = ViewModelProvider(it)
-            appBarViewModel = activityViewModelProvider.get(AppBarViewModel::class.java)
-            contentViewModel = activityViewModelProvider.get(ContentViewModel::class.java)
         }
 
         contentViewModel?.snackShort(R.string.message_search_on_background)

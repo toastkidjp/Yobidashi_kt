@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.R
@@ -55,7 +56,10 @@ class LauncherFragment : Fragment(), ContentScrollable {
         binding.appItemsView.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        adapter = Adapter(context, binding.root)
+        adapter = Adapter(
+                context,
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        )
         binding.appItemsView.adapter = adapter
         binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
             override fun onFling(velocityX: Int, velocityY: Int): Boolean {

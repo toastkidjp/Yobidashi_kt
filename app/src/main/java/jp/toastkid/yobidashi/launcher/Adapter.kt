@@ -7,14 +7,13 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemAppLauncherBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,7 +30,10 @@ import java.util.ArrayList
  *
  * @author toastkidjp
  */
-internal class Adapter(private val context: Context, private val parent: View)
+internal class Adapter(
+        private val context: Context,
+        private val contentViewModel: ContentViewModel?
+)
     : RecyclerView.Adapter<ViewHolder>() {
 
     /**
@@ -128,11 +130,7 @@ internal class Adapter(private val context: Context, private val parent: View)
      * Show cannot launch message with snackbar.
      */
     private fun snackCannotLaunch() {
-        Toaster.snackShort(
-                parent,
-                R.string.message_failed_launching,
-                preferenceApplier.colorPair()
-        )
+        contentViewModel?.snackShort(R.string.message_failed_launching)
     }
 
     /**
