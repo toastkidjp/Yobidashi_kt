@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.launcher
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentLauncherBinding
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.ContentScrollable
 
 /**
  * App Launcher.
@@ -69,7 +68,7 @@ class LauncherFragment : Fragment(), ContentScrollable {
             val viewModel =
                     ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
             viewModel.find.observe(activity, Observer {
-                if (TextUtils.equals(prev, it)) {
+                if (prev == it) {
                     return@Observer
                 }
                 prev = it.toString()
