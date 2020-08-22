@@ -34,10 +34,6 @@ class ArticleListTab : Tab {
 
     override fun title() = titleStr
 
-    fun setTitle(title: String) {
-        titleStr = title
-    }
-
     companion object {
         fun withTitle(title: String): Tab {
             return ArticleListTab().also { it.titleStr = title }
