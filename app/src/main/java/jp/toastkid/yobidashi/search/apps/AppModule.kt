@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.search.apps
 
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
@@ -22,6 +21,7 @@ import kotlinx.coroutines.launch
  * App search module in [SearchActivity].
  *
  * @param binding [ModuleSearchAppsBinding]
+ * @param contentViewModel Use for showing snackbar
  * @author toastkidjp
  */
 class AppModule(
