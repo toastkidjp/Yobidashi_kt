@@ -253,7 +253,7 @@ class BookmarkFragment: Fragment(),
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             BookmarkInsertion(
                     binding.root.context,
-                    title ?: "", // This value is always non-null, because it has checked at above statement.
+                    title,
                     parent = adapter.currentFolderName(),
                     folder = true
             ).insert()
