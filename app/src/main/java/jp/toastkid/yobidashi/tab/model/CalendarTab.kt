@@ -37,4 +37,12 @@ class CalendarTab : Tab {
     fun setTitle(title: String) {
         titleStr = title
     }
+
+    companion object {
+
+        fun withTitle(title: String): Tab {
+            return CalendarTab().also { it.titleStr = title }
+        }
+
+    }
 }

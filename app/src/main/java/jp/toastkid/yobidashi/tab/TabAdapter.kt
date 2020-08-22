@@ -163,8 +163,7 @@ class TabAdapter(
     }
 
     fun openCalendar() {
-        val newTab = CalendarTab()
-        newTab.setTitle(contextSupplier().getString(R.string.title_calendar))
+        val newTab = CalendarTab.withTitle(contextSupplier().getString(R.string.title_calendar))
         tabList.add(newTab)
         setCount()
         setIndexByTab(newTab)
