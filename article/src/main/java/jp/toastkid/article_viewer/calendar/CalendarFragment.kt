@@ -18,11 +18,12 @@ import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.databinding.FragmentCalendarBinding
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.tab.TabUiFragment
 
 /**
  * @author toastkidjp
  */
-class CalendarFragment : Fragment() {
+class CalendarFragment : Fragment(), TabUiFragment {
 
     private lateinit var binding: FragmentCalendarBinding
 

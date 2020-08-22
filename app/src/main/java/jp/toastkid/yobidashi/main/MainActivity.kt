@@ -395,6 +395,10 @@ class MainActivity : AppCompatActivity(),
             tabs.openArticleList()
             replaceToCurrentTab()
         })
+        contentViewModel?.openCalendar?.observe(this, Observer {
+            tabs.openCalendar()
+            replaceToCurrentTab()
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {

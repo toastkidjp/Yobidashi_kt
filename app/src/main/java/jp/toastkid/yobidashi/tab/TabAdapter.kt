@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
+import jp.toastkid.yobidashi.tab.model.CalendarTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
@@ -156,6 +157,14 @@ class TabAdapter(
 
     fun openArticleList() {
         val newTab = ArticleListTab.withTitle(contextSupplier().getString(R.string.title_article_viewer))
+        tabList.add(newTab)
+        setCount()
+        setIndexByTab(newTab)
+    }
+
+    fun openCalendar() {
+        val newTab = CalendarTab()
+        newTab.setTitle(contextSupplier().getString(R.string.title_calendar))
         tabList.add(newTab)
         setCount()
         setIndexByTab(newTab)
