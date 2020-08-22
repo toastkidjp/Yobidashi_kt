@@ -155,8 +155,7 @@ class TabAdapter(
     }
 
     fun openArticleList() {
-        val newTab = ArticleListTab()
-        newTab.setTitle(contextSupplier().getString(R.string.title_article_viewer))
+        val newTab = ArticleListTab.withTitle(contextSupplier().getString(R.string.title_article_viewer))
         tabList.add(newTab)
         setCount()
         setIndexByTab(newTab)
