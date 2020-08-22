@@ -391,6 +391,10 @@ class MainActivity : AppCompatActivity(),
                 replaceToCurrentTab()
             }
         })
+        contentViewModel?.openArticleList?.observe(this, Observer {
+            tabs.openArticleList()
+            replaceToCurrentTab()
+        })
     }
 
     override fun onNewIntent(passedIntent: Intent) {

@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.main
 
 import androidx.fragment.app.FragmentManager
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
+import jp.toastkid.article_viewer.article.list.ArticleListFragment
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
@@ -62,6 +63,7 @@ class OnBackPressedUseCase(
         if (currentFragment is BrowserFragment
                 || currentFragment is PdfViewerFragment
                 || currentFragment is ContentViewerFragment
+                || currentFragment is ArticleListFragment
         ) {
             tabs.closeTab(tabs.index())
 

@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
+import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
@@ -87,6 +88,7 @@ class TabList private constructor() {
                     is EditorTab -> editorTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     is PdfTab -> pdfTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     is ArticleTab -> articleTabJsonAdapter.toJson(tab)?.toByteArray(charset)
+                    is ArticleListTab -> articleListTabJsonAdapter.toJson(tab)?.toByteArray(charset)
                     else -> ByteArray(0)
                 }
                 source?.let {
@@ -174,6 +176,10 @@ class TabList private constructor() {
             Moshi.Builder().build().adapter(ArticleTab::class.java)
         }
 
+        private val articleListTabJsonAdapter: JsonAdapter<ArticleListTab> by lazy {
+            Moshi.Builder().build().adapter(ArticleListTab::class.java)
+        }
+
         private var itemsDir: File? = null
 
         internal fun loadOrInit(context: Context): TabList {
@@ -217,6 +223,7 @@ class TabList private constructor() {
                             json.contains("editorTab") -> editorTabJsonAdapter.fromJson(json)
                             json.contains("pdfTab") -> pdfTabJsonAdapter.fromJson(json)
                             json.contains("articleTab") -> articleTabJsonAdapter.fromJson(json)
+                            json.contains("articleListTab") -> articleListTabJsonAdapter.fromJson(json)
                             else -> webTabJsonAdapter.fromJson(json)
                         }
                     }
