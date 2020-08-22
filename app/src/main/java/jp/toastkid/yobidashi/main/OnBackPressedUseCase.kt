@@ -8,17 +8,13 @@
 package jp.toastkid.yobidashi.main
 
 import androidx.fragment.app.FragmentManager
-import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
-import jp.toastkid.article_viewer.article.list.ArticleListFragment
-import jp.toastkid.article_viewer.calendar.CalendarFragment
+import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.menu.MenuViewModel
-import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.tab.TabAdapter
 
 /**
@@ -61,12 +57,7 @@ class OnBackPressedUseCase(
             return
         }
 
-        if (currentFragment is BrowserFragment
-                || currentFragment is PdfViewerFragment
-                || currentFragment is ContentViewerFragment
-                || currentFragment is ArticleListFragment
-                || currentFragment is CalendarFragment
-        ) {
+        if (currentFragment is OnBackCloseableTabUiFragment) {
             tabs.closeTab(tabs.index())
 
             if (tabs.isEmpty()) {

@@ -43,7 +43,7 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.tab.TabUiFragment
+import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +60,7 @@ import kotlinx.coroutines.withContext
  *
  * @author toastkidjp
  */
-class ArticleListFragment : Fragment(), ContentScrollable, TabUiFragment {
+class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiFragment {
 
     /**
      * List item adapter.

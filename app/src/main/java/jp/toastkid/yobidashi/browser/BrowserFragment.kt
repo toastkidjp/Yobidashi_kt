@@ -25,6 +25,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -50,7 +51,7 @@ import jp.toastkid.yobidashi.search.SearchFragment
  * @author toastkidjp
  */
 class BrowserFragment : Fragment(),
-        TabUiFragment,
+        OnBackCloseableTabUiFragment,
         CommonFragmentAction,
         UserAgentDialogFragment.Callback,
         ContentScrollable
