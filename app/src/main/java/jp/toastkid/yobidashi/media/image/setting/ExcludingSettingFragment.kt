@@ -49,7 +49,7 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
 
         val preferenceApplier = PreferenceApplier(view.context)
         val excludedItems = preferenceApplier.excludedItems()
-        if (excludedItems.isEmpty() == true) {
+        if (excludedItems.isEmpty()) {
             dismiss()
             return
         }
