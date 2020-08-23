@@ -164,7 +164,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     }
 
     fun tabList() {
-        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).switchTabList()
+        activity?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java).switchTabList()
+        }
     }
 
     private fun search(keyword: String?) {
