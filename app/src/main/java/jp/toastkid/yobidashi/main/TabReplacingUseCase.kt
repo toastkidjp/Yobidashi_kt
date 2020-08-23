@@ -106,12 +106,10 @@ class TabReplacingUseCase(
                 }
             }
             is ArticleListTab -> {
-                val fragment = obtainFragment(ArticleListFragment::class.java)
-                replaceFragment(fragment, withAnimation)
+                replaceFragment(obtainFragment(ArticleListFragment::class.java), withAnimation)
             }
             is CalendarTab -> {
-                val fragment = obtainFragment(CalendarFragment::class.java)
-                replaceFragment(fragment, withAnimation)
+                replaceFragment(obtainFragment(CalendarFragment::class.java), withAnimation)
             }
         }
 
