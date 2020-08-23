@@ -15,15 +15,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentViewHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 
 /**
@@ -122,7 +122,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
                 val clearDialogFragment = ClearDialogFragment()
                 clearDialogFragment.setTargetFragment(this, clearDialogFragment.id)
                 clearDialogFragment.show(
-                        requireFragmentManager(),
+                        parentFragmentManager,
                         ClearDialogFragment::class.java.simpleName
                 )
                 true
