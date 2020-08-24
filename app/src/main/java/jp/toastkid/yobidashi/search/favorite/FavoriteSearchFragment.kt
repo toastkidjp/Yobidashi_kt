@@ -15,12 +15,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentFavoriteSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -149,7 +149,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     override fun onOptionsItemSelected(item: MenuItem) =
             when (item.itemId) {
                 R.id.favorite_toolbar_menu_clear -> {
-                    fragmentManager?.let {
+                    parentFragmentManager?.let {
                         ClearFavoriteSearchDialogFragment.show(it, this)
                     }
                     true
@@ -193,7 +193,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     private fun invokeAddition() {
         FavoriteSearchAdditionDialogFragment()
                 .also { it.setTargetFragment(this, 0) }
-                .show(requireFragmentManager(), "addition")
+                .show(parentFragmentManager, "addition")
     }
 
     private fun colorPair() = preferenceApplier.colorPair()
