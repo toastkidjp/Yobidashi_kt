@@ -28,7 +28,7 @@ class ViewHolder(
     }
 
     fun setText(item: String) {
-        binding.text.setText(item)
+        binding.text.text = item
     }
 
 }
