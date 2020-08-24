@@ -118,8 +118,6 @@
         - インターネットでの検索アイコン 1: https://icon-rainbow.com/インターネットでの検索アイコン 1/\n
         - サイト内検索のアイコン素材: https://icon-rainbow.com/サイト内検索のアイコン素材/\n
     </string>
-    <string name="message_done_load_ad">広告のロードが完了しました。</string>
-    <string name="message_failed_ad_loading">広告のロードに失敗しました。</string>
     <string name="title_add_recommended_colors">おすすめの色を追加</string>
     <string name="done_addition">追加しました。</string>
     <string name="message_add_recommended_colors">おすすめの色を追加します。</string>
@@ -128,7 +126,6 @@
     <string name="section_title_about_this_app">このアプリの情報</string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="link_privacy_policy">https://tmblr.co/ZDG7Be2NVdctY</string>
-    <string name="message_please_view_ad">インタースティシャル広告をご覧ください。</string>
     <string name="app_widget_name_search">Web 検索ウィジェット</string>
     <string name="app_widget_search">検索</string>
     <string name="title_daily_notification">毎朝8時に通知</string>
