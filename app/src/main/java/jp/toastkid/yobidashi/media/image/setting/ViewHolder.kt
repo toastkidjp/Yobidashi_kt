@@ -24,7 +24,7 @@ class ViewHolder(
     }
 
     private fun removeItem() {
-        val path = binding.text.text.toString() ?: return
+        val path = binding.text.text.toString()
         refresh(path)
     }
 
