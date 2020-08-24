@@ -149,7 +149,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
     override fun onOptionsItemSelected(item: MenuItem) =
             when (item.itemId) {
                 R.id.favorite_toolbar_menu_clear -> {
-                    parentFragmentManager?.let {
+                    parentFragmentManager.let {
                         ClearFavoriteSearchDialogFragment.show(it, this)
                     }
                     true
