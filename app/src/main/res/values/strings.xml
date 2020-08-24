@@ -117,8 +117,6 @@
         - インターネットでの検索アイコン 1: https://icon-rainbow.com/インターネットでの検索アイコン 1/\n
         - サイト内検索のアイコン素材: https://icon-rainbow.com/サイト内検索のアイコン素材/\n
     </string>
-    <string name="message_done_load_ad">It has done loading AD!</string>
-    <string name="message_failed_ad_loading">It failed to load AD...</string>
     <string name="title_add_recommended_colors">Add recommended colors</string>
     <string name="done_addition">It has done addition!</string>
     <string name="message_add_recommended_colors">Would you like to add recommended colors?</string>
@@ -127,7 +125,6 @@
     <string name="section_title_about_this_app">This app\'s information</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="link_privacy_policy">https://tmblr.co/ZDG7Be2NVdctY</string>
-    <string name="message_please_view_ad">Please could you bear to see interstitial ad...</string>
     <string name="app_widget_name_search">Web Search App-Widget</string>
     <string name="app_widget_search">Search</string>
     <string name="title_daily_notification">Daily notification at 8:00 a.m.</string>
