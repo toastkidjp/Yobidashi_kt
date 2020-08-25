@@ -100,7 +100,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
             it.adRemoveCheck.isChecked = preferenceApplier.adRemove
             it.adRemoveCheck.jumpDrawablesToCurrentState()
 
-            it.poolSizeValue.addOnChangeListener { _, value, fromUser ->
+            it.poolSizeValue.addOnChangeListener { _, value, _ ->
                 val newSize = value.toInt()
                 preferenceApplier.poolSize = newSize
                 it.poolSizeText.text = "$newSize"
@@ -109,7 +109,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
             val lastValue = preferenceApplier.poolSize.toFloat()
             it.poolSizeValue.value = if (lastValue > it.poolSizeValue.valueTo) it.poolSizeValue.valueTo else lastValue
 
-            it.valueBackgroundAlpha.addOnChangeListener { _, value, fromUser ->
+            it.valueBackgroundAlpha.addOnChangeListener { _, value, _ ->
                 preferenceApplier.setWebViewBackgroundAlpha(value / 100.0f)
                 it.textBackgroundAlpha.text = value.toString()
             }
