@@ -20,23 +20,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.TextViewHighlighter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentReaderModeBinding
-import jp.toastkid.lib.Urls
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.storage.CacheDir
-import jp.toastkid.lib.view.TextViewHighlighter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okio.Okio
-import timber.log.Timber
-import java.io.File
-import java.io.IOException
 
 /**
  * @author toastkidjp
@@ -102,17 +93,20 @@ class ReaderFragment : Fragment(), ContentScrollable {
         activity?.also { activity ->
             val finder = TextViewHighlighter(binding.textContent)
 
-            ViewModelProvider(activity)
-                    .get(PageSearcherViewModel::class.java)
-                    .find.observe(activity, Observer { finder(it ?: "") })
+            val viewModelProvider = ViewModelProvider(activity)
+            viewModelProvider.get(PageSearcherViewModel::class.java)
+                    .find
+                    .observe(activity, Observer { finder(it ?: "") })
+
+            viewModelProvider.get(ReaderFragmentViewModel::class.java)
+                    .content
+                    .observe(activity, Observer {
+                        binding.title.text = it.first
+                        binding.textContent.text = it.second
+                    })
         }
 
         setHasOptionsMenu(true)
-    }
-
-    fun setContent(title: String, content: String) {
-        binding.title.text = title
-        binding.textContent.text = content
     }
 
     fun close() {
@@ -164,28 +158,10 @@ class ReaderFragment : Fragment(), ContentScrollable {
         super.onDetach()
     }
 
-    override fun onDestroy() {
-        try {
-            val tempFile = assignCacheFile()
-            if (tempFile.exists()) {
-                tempFile.delete()
-            }
-        } catch (e: IOException) {
-            Timber.e(e)
-        }
-        super.onDestroy()
-    }
-
-    private fun assignCacheFile() = CacheDir(requireContext(), "content").assignNewFile("reader")
-
     companion object {
 
         @LayoutRes
         private val LAYOUT_ID = R.layout.fragment_reader_mode
-
-        private const val KEY_TITLE = "title"
-
-        private const val KEY_CONTENT = "content"
 
         private val lineSeparator = System.lineSeparator()
 
