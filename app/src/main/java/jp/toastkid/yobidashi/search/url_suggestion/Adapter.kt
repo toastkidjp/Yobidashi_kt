@@ -42,7 +42,7 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = suggestions.get(position)
+        val item = suggestions[position]
         item.bind(holder)
         holder.setOnClick(View.OnClickListener { browseCallback(item.urlString()) })
         holder.setOnLongClick(View.OnLongClickListener {
