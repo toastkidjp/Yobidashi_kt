@@ -82,7 +82,7 @@ class Adapter(
      *
      * @return item
      */
-    fun get(index: Int): UrlItem = suggestions.get(index)
+    fun get(index: Int): UrlItem = suggestions[index]
 
     /**
      * Remove at index.
