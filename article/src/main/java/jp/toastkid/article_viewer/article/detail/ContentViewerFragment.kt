@@ -9,7 +9,6 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
 import android.text.Selection
 import android.view.LayoutInflater
 import android.view.Menu
@@ -17,12 +16,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import io.noties.markwon.Markwon
+import io.noties.markwon.ext.tables.TablePlugin
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
@@ -151,8 +151,13 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         CoroutineScope(Dispatchers.Main).launch {
             appBarBinding.searchResult.text = title
             val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) } ?: return@launch
-            val editable = Editable.Factory.getInstance().newEditable(content)
-            binding.content.setText(editable, TextView.BufferType.EDITABLE)
+            //val editable = Editable.Factory.getInstance().newEditable(content)
+            //binding.content.setText(editable, TextView.BufferType.EDITABLE)
+            val context = binding.root.context
+            Markwon.builder(context)
+                    .usePlugin(TablePlugin.create(context))
+                    .build()
+                    .setMarkdown(binding.content, content)
             LinkGeneratorService().invoke(binding.content)
 
             withContext(Dispatchers.Default) {
