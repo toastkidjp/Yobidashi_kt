@@ -151,8 +151,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         CoroutineScope(Dispatchers.Main).launch {
             appBarBinding.searchResult.text = title
             val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) } ?: return@launch
-            //val editable = Editable.Factory.getInstance().newEditable(content)
-            //binding.content.setText(editable, TextView.BufferType.EDITABLE)
+
             val context = binding.root.context
             Markwon.builder(context)
                     .usePlugin(TablePlugin.create(context))
