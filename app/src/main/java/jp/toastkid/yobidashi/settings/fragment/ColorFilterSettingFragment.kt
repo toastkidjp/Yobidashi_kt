@@ -60,7 +60,7 @@ class ColorFilterSettingFragment : Fragment() {
             )
         }
 
-        binding.alpha.addOnChangeListener { slider, value, fromUser ->
+        binding.alpha.addOnChangeListener { _, value, _ ->
             binding.useCase?.setAlpha(value.toInt())
         }
 
