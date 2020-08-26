@@ -44,7 +44,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -148,23 +147,16 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
     }
 
     fun loadContent(title: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            appBarBinding.searchResult.text = title
-            val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) } ?: return@launch
+        appBarBinding.searchResult.text = title
 
-            val context = binding.root.context
-            Markwon.builder(context)
-                    .usePlugin(TablePlugin.create(context))
-                    .build()
-                    .setMarkdown(binding.content, content)
-            LinkGeneratorService().invoke(binding.content)
+        val context = binding.root.context
 
-            withContext(Dispatchers.Default) {
-                content.split(System.lineSeparator())
-                        .filter { it.startsWith("#") }
-                        .forEach { subheads.add(it) }
-            }
-        }
+        ContentLoaderUseCase(
+                repository,
+                Markwon.builder(context).usePlugin(TablePlugin.create(context)).build(),
+                binding.content,
+                subheads
+        ).invoke(title)
     }
 
     fun tabList() {
