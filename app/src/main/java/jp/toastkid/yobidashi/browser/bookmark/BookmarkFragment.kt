@@ -151,7 +151,7 @@ class BookmarkFragment: Fragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val fragmentManager = parentFragmentManager ?: return true
+        val fragmentManager = parentFragmentManager
         return when (item.itemId) {
             R.id.clear -> {
                 BookmarkClearDialogFragment()
