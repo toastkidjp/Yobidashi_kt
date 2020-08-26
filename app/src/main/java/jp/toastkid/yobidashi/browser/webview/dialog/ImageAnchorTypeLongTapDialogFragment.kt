@@ -23,7 +23,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 /**
- * TODO Modify displaying url.
  * @author toastkidjp
  */
 class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
@@ -44,7 +43,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
         val uri = anchor.toUri()
 
         return AlertDialog.Builder(activityContext)
-                .setTitle("URL: $imageUrl")
+                .setTitle("URL: $anchor")
                 .setItems(R.array.image_anchor_menu) { _, which ->
                     when (which) {
                         0 -> viewModel.open(uri)
