@@ -7,7 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
-import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -91,7 +90,7 @@ class Adapter(
      * @param index
      * @return disposable
      */
-    fun removeAt(viewHistoryRepository: ViewHistoryRepository, index: Int): Job {
+    fun removeAt(index: Int): Job {
         return remove(get(index), index)
     }
 
