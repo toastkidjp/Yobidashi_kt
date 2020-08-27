@@ -106,10 +106,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         super.onActivityCreated(savedInstanceState)
 
         binding.content.linksClickable = true
-        arguments?.getString("title")?.also {
-            appBarBinding.searchResult.text = it
-            loadContent(it)
-        }
 
         appBarBinding.input.addTextChangedListener {
             search(it.toString())
