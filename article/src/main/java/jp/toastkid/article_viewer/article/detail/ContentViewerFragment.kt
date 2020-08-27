@@ -9,7 +9,6 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Selection
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -100,11 +99,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         ViewModelProvider(this)
                 .get(SubheadDialogFragmentViewModel::class.java)
                 .subhead
-                .observe(viewLifecycleOwner, Observer {
-                    val subhead = it?.getContentIfNotHandled() ?: return@Observer
-                    val indexOf = binding.content.editableText.indexOf(subhead)
-                    Selection.setSelection(binding.content.editableText, indexOf)
-                })
+                .observe(viewLifecycleOwner, Observer { })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
