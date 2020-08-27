@@ -2,13 +2,10 @@
 
 package jp.toastkid.yobidashi.browser
 
+import android.content.Context
 import android.os.Build
-import android.view.View
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Cookie cleaner for backward compatible.
@@ -20,23 +17,25 @@ class CookieCleanerCompat {
     /**
      * Invoke action.
      *
-     * @param snackbarParent
+     * @param context Use for under lollipop devices
+     * @param callback Pass action on complete work.
      */
-    operator fun invoke(snackbarParent: View) {
+    operator fun invoke(context: Context, callback: () -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().removeAllCookies { snackMessage(snackbarParent) }
+            CookieManager.getInstance().removeAllCookies { callback() }
             return
         }
-        invokeUnderLollipop(snackbarParent)
+        invokeUnderLollipop(context)
+        callback()
     }
 
     /**
      * Invoke under lollipop environment.
      *
-     * @param snackbarParent
+     * @param context Use for under lollipop devices
      */
-    private fun invokeUnderLollipop(snackbarParent: View) {
-        val cookieSyncManager = CookieSyncManager.createInstance(snackbarParent.context)
+    private fun invokeUnderLollipop(context: Context) {
+        val cookieSyncManager = CookieSyncManager.createInstance(context)
         cookieSyncManager.startSync()
         CookieManager.getInstance().run {
             removeAllCookie()
@@ -44,19 +43,6 @@ class CookieCleanerCompat {
         }
         cookieSyncManager.stopSync()
         cookieSyncManager.sync()
-        snackMessage(snackbarParent)
     }
 
-    /**
-     * Show message with snackbar.
-     *
-     * @param snackbarParent
-     */
-    private fun snackMessage(snackbarParent: View) {
-        Toaster.snackShort(
-                snackbarParent,
-                R.string.done_clear,
-                PreferenceApplier(snackbarParent.context).colorPair()
-        )
-    }
 }

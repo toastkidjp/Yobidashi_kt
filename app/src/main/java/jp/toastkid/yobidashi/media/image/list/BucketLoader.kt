@@ -42,7 +42,7 @@ class BucketLoader(private val contentResolver: ContentResolver) {
             val path = cursor.getString(pathIndex)
             val parentPath = parentExtractor(path) ?: continue
             names.add(parentPath)
-            buckets.add(Image.makeBucket(cursor.getString(columnIndex), path, 0))
+            buckets.add(Image.makeBucket(cursor.getString(columnIndex), path))
         }
 
         val grouped = buckets

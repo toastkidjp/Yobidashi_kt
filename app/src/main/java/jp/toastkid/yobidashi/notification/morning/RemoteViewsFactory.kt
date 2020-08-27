@@ -14,7 +14,7 @@ import android.widget.RemoteViews
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.main.MainActivityIntentFactory
+import jp.toastkid.yobidashi.main.launch.MainActivityIntentFactory
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
 import java.util.*

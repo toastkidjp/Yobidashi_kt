@@ -5,11 +5,12 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.yobidashi.main
+package jp.toastkid.yobidashi.main.launch
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import jp.toastkid.yobidashi.main.MainActivity
 
 /**
  * @author toastkidjp

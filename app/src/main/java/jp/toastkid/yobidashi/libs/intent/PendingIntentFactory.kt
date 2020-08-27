@@ -4,7 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import androidx.core.net.toUri
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.main.MainActivityIntentFactory
+import jp.toastkid.yobidashi.main.launch.MainActivityIntentFactory
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 
 /**

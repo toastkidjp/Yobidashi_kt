@@ -2,12 +2,12 @@ package jp.toastkid.yobidashi.main
 
 import android.Manifest
 import android.app.Activity
-import android.app.SearchManager
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -18,8 +18,6 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,14 +28,21 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.FileExtractorFromUri
+import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.tab.TabUiFragment
+import jp.toastkid.lib.view.ToolbarColorApplier
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
-import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
-import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
@@ -46,21 +51,15 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.editor.EditorFragment
-import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.clip.ClippingUrlOpener
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.permission.RuntimePermissions
-import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.ToolbarColorApplier
-import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.FileExtractorFromUri
-import jp.toastkid.lib.tab.TabUiFragment
+import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
+import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
+import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
@@ -68,29 +67,21 @@ import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
-import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
-import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
-import jp.toastkid.yobidashi.tab.model.WebTab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListService
-import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.search.SearchCategory
-import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Main of this calendar app.
@@ -118,6 +109,8 @@ class MainActivity : AppCompatActivity(),
      * Find-in-page module.
      */
     private lateinit var pageSearchPresenter: PageSearcherModule
+
+    private lateinit var tabReplacingUseCase: TabReplacingUseCase
 
     /**
      * Menu's view model.
@@ -241,6 +234,15 @@ class MainActivity : AppCompatActivity(),
                 )
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
+
+        tabReplacingUseCase = TabReplacingUseCase(
+                tabs,
+                ::obtainFragment,
+                { fragment, animation -> replaceFragment(fragment, animation) },
+                ::refreshThumbnail,
+                { runOnUiThread(it) },
+                disposables
+        )
 
         processShortcut(intent)
 
@@ -388,76 +390,26 @@ class MainActivity : AppCompatActivity(),
      * @param calledIntent
      */
     private fun processShortcut(calledIntent: Intent) {
-        if (calledIntent.getBooleanExtra("random_wikipedia", false)) {
-            RandomWikipedia().fetchWithAction { title, uri ->
-                openNewWebTab(uri)
-                Toaster.snackShort(
-                        binding.content,
-                        getString(R.string.message_open_random_wikipedia, title),
-                        preferenceApplier.colorPair()
+        LauncherIntentUseCase(
+                RandomWikipediaUseCase(
+                        contentViewModel,
+                        this::openNewWebTab
+                ) { id, param -> getString(id, param) },
+                this::openNewWebTab,
+                { openEditorTab(FileExtractorFromUri(this, it)) },
+                ::search,
+                {
+                    preferenceApplier.getDefaultSearchEngine()
+                            ?: SearchCategory.getDefaultCategoryName()
+                },
+                { replaceFragment(obtainFragment(it)) },
+                ElseCaseUseCase(
+                        tabs::isEmpty,
+                        ::openNewTab,
+                        { supportFragmentManager.findFragmentById(R.id.content) },
+                        { replaceToCurrentTab(false) }
                 )
-            }
-            return
-        }
-
-        when (calledIntent.action) {
-            Intent.ACTION_VIEW -> {
-                val uri = calledIntent.data ?: return
-                when (uri.scheme) {
-                    "content" -> openEditorTab(FileExtractorFromUri(this, uri))
-                    else -> openNewWebTab(uri)
-                }
-                return
-            }
-            Intent.ACTION_SEND -> {
-                calledIntent.extras?.getCharSequence(Intent.EXTRA_TEXT)?.also {
-                    val query = it.toString()
-                    if (Urls.isInvalidUrl(query)) {
-                        search(preferenceApplier.getDefaultSearchEngine()
-                                ?: SearchCategory.getDefaultCategoryName(), query)
-                        return
-                    }
-                    openNewWebTab(query.toUri())
-                }
-                return
-            }
-            Intent.ACTION_WEB_SEARCH -> {
-                val category = if (calledIntent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
-                    calledIntent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
-                } else {
-                    preferenceApplier.getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
-                }
-                search(category, calledIntent.getStringExtra(SearchManager.QUERY))
-                return
-            }
-            BOOKMARK -> {
-                replaceFragment(obtainFragment(BookmarkFragment::class.java))
-            }
-            APP_LAUNCHER -> {
-                replaceFragment(obtainFragment(LauncherFragment::class.java))
-            }
-            BARCODE_READER -> {
-                replaceFragment(obtainFragment(BarcodeReaderFragment::class.java))
-            }
-            SEARCH -> {
-                replaceFragment(obtainFragment(SearchFragment::class.java))
-            }
-            SETTING -> {
-                replaceFragment(obtainFragment(SettingFragment::class.java))
-            }
-            else -> {
-                if (tabs.isEmpty()) {
-                    openNewTab()
-                    return
-                }
-
-                // Add for re-creating activity.
-                val currentFragment = supportFragmentManager.findFragmentById(R.id.content)
-                if (currentFragment is TabUiFragment || currentFragment == null) {
-                    replaceToCurrentTab(false)
-                }
-            }
-        }
+        ).invoke(calledIntent)
     }
 
     private fun search(category: String?, query: String?) {
@@ -517,63 +469,7 @@ class MainActivity : AppCompatActivity(),
      * @param withAnimation for suppress redundant animation.
      */
     private fun replaceToCurrentTab(withAnimation: Boolean = true) {
-        when (val currentTab = tabs.currentTab()) {
-            is WebTab -> {
-                val browserFragment =
-                        (obtainFragment(BrowserFragment::class.java) as? BrowserFragment) ?: return
-                replaceFragment(browserFragment, false)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
-                                .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
-                    }
-                }
-            }
-            is EditorTab -> {
-                val editorFragment =
-                        obtainFragment(EditorFragment::class.java) as? EditorFragment ?: return
-                editorFragment.arguments = bundleOf("path" to currentTab.path)
-                replaceFragment(editorFragment, withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        editorFragment.reload()
-                        refreshThumbnail()
-                    }
-                }
-            }
-            is PdfTab -> {
-                val url: String = currentTab.getUrl()
-                if (url.isNotEmpty()) {
-                    try {
-                        val uri = Uri.parse(url)
-
-                        val pdfViewerFragment =
-                                obtainFragment(PdfViewerFragment::class.java) as? PdfViewerFragment ?: return
-                        pdfViewerFragment.setInitialArguments(uri, currentTab.getScrolled())
-                        replaceFragment(pdfViewerFragment, withAnimation)
-                        refreshThumbnail()
-                    } catch (e: SecurityException) {
-                        Timber.e(e)
-                        return
-                    } catch (e: IllegalStateException) {
-                        Timber.e(e)
-                        return
-                    }
-                }
-            }
-            is ArticleTab -> {
-                val fragment = obtainFragment(ContentViewerFragment::class.java)
-                replaceFragment(fragment, withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread {
-                        (fragment as? ContentViewerFragment)?.loadContent(currentTab.title())
-                        refreshThumbnail()
-                    }
-                }
-            }
-        }
-
-        tabs.saveTabList()
+        tabReplacingUseCase.invoke(withAnimation)
     }
 
     private fun refreshThumbnail() {
@@ -675,7 +571,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun updateColorFilter() {
         binding.foreground.foreground =
-                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(ContextCompat.getColor(this, R.color.default_color_filter)))
+                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(Color.TRANSPARENT))
                 else null
     }
 

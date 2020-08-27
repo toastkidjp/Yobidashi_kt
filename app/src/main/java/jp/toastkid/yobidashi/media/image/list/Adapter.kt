@@ -53,7 +53,7 @@ internal class Adapter(
                 imageViewerFragmentViewModel?.click(it.name)
             } else {
                 val fragmentManager = fragmentManager ?: return@applyContent
-                ImagePreviewDialogFragment.withImage(it)
+                ImagePreviewDialogFragment.withImages(images, position)
                         .show(fragmentManager, ImagePreviewDialogFragment::class.java.simpleName)
             }
         }
@@ -81,5 +81,5 @@ internal class Adapter(
         images.clear()
     }
 
-    fun isBucketMode() = images.isNotEmpty() && images.get(0).isBucket
+    fun isBucketMode() = images.isNotEmpty() && images[0].isBucket
 }

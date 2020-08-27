@@ -18,7 +18,7 @@ import java.io.File
  */
 class ImageEditChooserFactory {
 
-    operator fun invoke(context: Context, path: String?): Intent {
+    operator fun invoke(context: Context, path: String): Intent {
         val intent = Intent(Intent.ACTION_EDIT)
 
         val uriForFile = FileProvider.getUriForFile(
