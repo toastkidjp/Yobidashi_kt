@@ -15,6 +15,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.UiThread
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -137,6 +138,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
                 .replace(appBarBinding.root)
     }
 
+    @UiThread
     fun loadContent(title: String) {
         appBarBinding.searchResult.text = title
 
