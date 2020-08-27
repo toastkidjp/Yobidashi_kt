@@ -35,10 +35,15 @@ class ContentLoaderUseCase(
             LinkGeneratorService().invoke(contentView)
 
             withContext(Dispatchers.Default) {
-                content.split(System.lineSeparator())
-                        .filter { it.startsWith("#") }
-                        .forEach { subheads.add(it) }
+                appendSubheads(content)
             }
         }
     }
+
+    private fun appendSubheads(content: String) {
+        content.split(System.lineSeparator())
+                .filter { it.startsWith("#") }
+                .forEach { subheads.add(it) }
+    }
+
 }
