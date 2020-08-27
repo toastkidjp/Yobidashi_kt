@@ -42,8 +42,13 @@ class ContentLoaderUseCase(
 
     private fun appendSubheads(content: String) {
         content.split(System.lineSeparator())
-                .filter { it.startsWith("#") }
+                .filter { it.startsWith(PREFIX) }
                 .forEach { subheads.add(it) }
     }
 
+    companion object {
+
+        private const val PREFIX = "#"
+
+    }
 }
