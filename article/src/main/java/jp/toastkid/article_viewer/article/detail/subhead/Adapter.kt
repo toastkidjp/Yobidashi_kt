@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 
 /**
+ *
+ * @param layoutInflater Use for inflating item view
+ * @param viewModel Use for sending click event
+ *
  * @author toastkidjp
  */
 class Adapter(
