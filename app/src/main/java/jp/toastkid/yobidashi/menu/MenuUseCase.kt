@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.article_viewer.note.NotePopup
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
@@ -57,6 +58,8 @@ class MenuUseCase(
     private val preferenceApplier = PreferenceApplier(activitySupplier())
 
     private val mediaPlayerPopup by lazy { MediaPlayerPopup(activitySupplier()) }
+
+    private val notePopup by lazy { NotePopup(activitySupplier()) }
 
     fun observe() {
         val activity = activitySupplier()
@@ -163,6 +166,10 @@ class MenuUseCase(
                         )
                     }
                 }
+            }
+            Menu.QUICK_NOTE -> {
+                val parent = extractContentView() ?: return
+                notePopup.show(parent)
             }
             Menu.WHAT_HAPPENED_TODAY -> {
                 val calendar = Calendar.getInstance()

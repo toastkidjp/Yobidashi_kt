@@ -447,5 +447,6 @@
     <string name="download_all_images">すべての画像を保存</string>
     <string name="this_app">このアプリの背景に設定</string>
     <string name="other_app">別のアプリで設定</string>
+    <string name="title_quick_note">Quick note</string>
 
 </resources>
