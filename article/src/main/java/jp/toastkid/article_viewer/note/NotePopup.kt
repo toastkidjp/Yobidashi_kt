@@ -31,6 +31,7 @@ import jp.toastkid.lib.view.SlidingTapListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 /**
  * Floating preview.
@@ -77,6 +78,8 @@ class NotePopup(context: Context) {
         binding.close.setColorFilter(preferenceApplier.color)
         binding.inputContent.setBackgroundColor(preferenceApplier.editorBackgroundColor())
         binding.inputContent.setTextColor(preferenceApplier.editorFontColor())
+
+        binding.inputTitle.setText("Note: ${Calendar.getInstance().time}")
 
         setSlidingListener()
     }
