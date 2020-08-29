@@ -20,7 +20,7 @@ import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 /**
  * @author toastkidjp
  */
-@Database(entities = [Article::class, ArticleFts::class, Bookmark::class], version = 2)
+@Database(entities = [Article::class, ArticleFts::class, Bookmark::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun articleRepository(): ArticleRepository
