@@ -14,7 +14,6 @@ import timber.log.Timber
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -24,8 +23,6 @@ import java.util.zip.ZipInputStream
 class ZipLoader(private val articleRepository: ArticleRepository) {
 
     private val tokenizer = NgramTokenizer()
-
-    private val id = AtomicInteger()
 
     private val items = mutableListOf<Article>()
 
@@ -65,8 +62,9 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
         Okio.buffer(Okio.source(zipInputStream)).let {
             val start = System.currentTimeMillis()
             val content = it.readUtf8()
-            val article = Article(id.incrementAndGet()).also { a ->
-                a.title = extractFileName(nextEntry.name)
+            val title = extractFileName(nextEntry.name)
+            val article = (articleRepository.findFirst(title) ?: Article(0)).also { a ->
+                a.title = title
                 a.contentText = content
                 a.length = a.contentText.length
             }
