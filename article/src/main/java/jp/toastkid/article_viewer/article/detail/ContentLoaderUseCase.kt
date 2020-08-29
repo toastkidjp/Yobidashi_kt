@@ -22,7 +22,8 @@ class ContentLoaderUseCase(
         private val repository: ArticleRepository,
         private val markwon: Markwon,
         private val contentView: TextView,
-        private val subheads: MutableList<String>
+        private val subheads: MutableList<String>,
+        private val linkGeneratorService: LinkGeneratorService = LinkGeneratorService()
 ) {
 
     operator fun invoke(title: String) {
@@ -32,7 +33,7 @@ class ContentLoaderUseCase(
 
             markwon.setMarkdown(contentView, content)
 
-            LinkGeneratorService().invoke(contentView)
+            linkGeneratorService.invoke(contentView)
 
             withContext(Dispatchers.Default) {
                 appendSubheads(content)
