@@ -18,14 +18,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.Adapter
+import jp.toastkid.article_viewer.article.list.ListLoaderUseCase
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -34,7 +33,6 @@ import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -119,17 +117,10 @@ class BookmarkFragment : Fragment(), ContentScrollable {
     }
 
     private fun showAllBookmark(activityContext: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
+        ListLoaderUseCase(adapter).invoke {
             val database = AppDatabase.find(activityContext)
             val articleIds = database.bookmarkRepository().allArticleIds()
-            Pager(
-                    PagingConfig(pageSize = 50, enablePlaceholders = true),
-                    pagingSourceFactory = { articleRepository.findByIds(articleIds) }
-            )
-                    .flow
-                    .collectLatest {
-                        adapter.submitData(it)
-                    }
+            return@invoke articleRepository.findByIds(articleIds)
         }
     }
 
