@@ -31,9 +31,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
-import jp.toastkid.article_viewer.article.Article
-import jp.toastkid.article_viewer.article.data.AppDatabase
-import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
+import jp.toastkid.article_viewer.article.data.ArticleInsertion
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -54,9 +52,6 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okio.Okio
 import java.io.File
 import java.text.SimpleDateFormat
@@ -346,16 +341,10 @@ class EditorFragment :
     }
 
     fun exportToArticleViewer() {
-        val article = Article(0)
-        val content = content()
-        article.title = if (path.isEmpty()) Calendar.getInstance().time.toString() else path.split("/").last()
-        article.contentText = content
-        article.bigram = NgramTokenizer().invoke(content, 2) ?: return
-        article.length = content.length
-        article.lastModified = System.currentTimeMillis()
-        CoroutineScope(Dispatchers.IO).launch {
-            AppDatabase.find(requireContext()).articleRepository().insert(article)
-        }
+        ArticleInsertion(requireContext()).invoke(
+                if (path.isEmpty()) Calendar.getInstance().time.toString() else path.split("/").last(),
+                content()
+        )
         contentViewModel?.snackShort(R.string.done_save)
     }
 
