@@ -11,7 +11,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,15 +21,10 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.Article
-import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.data.ArticleInsertion
 import jp.toastkid.article_viewer.databinding.PopupNoteBinding
-import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.SlidingTapListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.Calendar
 
 /**
@@ -52,7 +46,7 @@ class NotePopup(context: Context) {
 
     private val swipeLimit = heightPixels - (headerHeight / 2)
 
-    private val repository = AppDatabase.find(context).articleRepository()
+    private val insertion = ArticleInsertion(context)
 
     private val binding: PopupNoteBinding
 
@@ -85,21 +79,13 @@ class NotePopup(context: Context) {
     }
 
     fun store() {
-        val article = Article(0)
-        article.title = binding.inputTitle.text?.toString() ?: return
-        if (article.title.isEmpty()) {
+        val title = binding.inputTitle.text?.toString() ?: return
+        if (title.isEmpty()) {
             return
         }
-        article.contentText = binding.inputContent.text?.toString() ?: return
-        article.length = article.contentText.length
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            article.lastModified = System.currentTimeMillis()
-        }
-        article.bigram = NgramTokenizer()(article.contentText, 2) ?: ""
+        val contentText = binding.inputContent.text?.toString() ?: return
 
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.insert(article)
-        }
+        insertion(title, contentText)
 
         Snackbar.make(binding.root, "Saved.", Snackbar.LENGTH_SHORT).show()
     }
