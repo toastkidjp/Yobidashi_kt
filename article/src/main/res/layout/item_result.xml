@@ -51,6 +51,7 @@
             app:srcCompat="@drawable/ic_more"
             app:layout_constraintEnd_toEndOf="parent"
             android:tint="@color/design_default_color_primary_variant"
+            android:contentDescription="Menu"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
