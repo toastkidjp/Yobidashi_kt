@@ -79,13 +79,10 @@ class NotePopup(context: Context) {
     }
 
     fun store() {
-        val title = binding.inputTitle.text?.toString() ?: return
-        if (title.isEmpty()) {
-            return
-        }
-        val contentText = binding.inputContent.text?.toString() ?: return
-
-        insertion(title, contentText)
+        insertion(
+                binding.inputTitle.text?.toString(),
+                binding.inputContent.text?.toString()
+        )
 
         Snackbar.make(binding.root, "Saved.", Snackbar.LENGTH_SHORT).show()
     }
