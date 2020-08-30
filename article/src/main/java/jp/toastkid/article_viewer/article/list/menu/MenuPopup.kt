@@ -16,17 +16,12 @@ import androidx.databinding.DataBindingUtil
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.SearchResult
-import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.databinding.PopupArticleListMenuBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
-class MenuPopup(context: Context, private val deleted: () -> Unit) {
+class MenuPopup(context: Context, private val action: MenuPopupActionUseCase) {
 
     private val popupWindow = PopupWindow(context)
 
@@ -61,21 +56,14 @@ class MenuPopup(context: Context, private val deleted: () -> Unit) {
 
     fun addToBookmark() {
         targetId?.let {
-            CoroutineScope(Dispatchers.IO).launch {
-                bookmarkRepository.add(Bookmark(it))
-            }
+            action.addToBookmark(it)
         }
         popupWindow.dismiss()
     }
 
     fun delete() {
         targetId?.let {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    articleRepository.delete(it)
-                }
-                deleted()
-            }
+            action.delete(it)
         }
         popupWindow.dismiss()
     }
