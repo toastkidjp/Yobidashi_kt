@@ -31,8 +31,6 @@ class Adapter(
     private val onMenuClick: (View, SearchResult) -> Unit
 ) : PagingDataAdapter<SearchResult, ViewHolder>(SimpleComparator()) {
 
-    private val items: MutableList<SearchResult> = mutableListOf()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             layoutInflater.inflate(ITEM_LAYOUT_ID, parent, false),
