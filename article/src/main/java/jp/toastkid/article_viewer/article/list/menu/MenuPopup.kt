@@ -48,7 +48,7 @@ class MenuPopup(context: Context, private val deleted: () -> Unit) {
     init {
         popupWindow.contentView = binding.root
         popupWindow.isOutsideTouchable = true
-        popupWindow.width = WindowManager.LayoutParams.WRAP_CONTENT
+        popupWindow.width = context.resources.getDimensionPixelSize(R.dimen.menu_popup_width)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
 
         binding.popup = this
