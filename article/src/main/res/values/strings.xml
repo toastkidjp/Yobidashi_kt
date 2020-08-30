@@ -25,4 +25,5 @@
     <string name="hint_input_content">Please would you input any text...</string>
     <string name="title">Title</string>
     <string name="menu">Menu</string>
+    <string name="delete">Delete</string>
 </resources>
