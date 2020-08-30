@@ -23,13 +23,18 @@ class ArticleInsertion(context: Context) {
 
     private val tokenizer = NgramTokenizer()
 
-    operator fun invoke(title: String, content: String) {
+    operator fun invoke(title: String?, content: String?) {
+        if (title.isNullOrBlank() || content.isNullOrBlank()) {
+            return
+        }
+
         val article = Article(0)
         article.title = title
         article.contentText = content
         article.bigram = tokenizer.invoke(content, 2) ?: return
         article.length = content.length
         article.lastModified = System.currentTimeMillis()
+
         CoroutineScope(Dispatchers.IO).launch {
             repository.insert(article)
         }
