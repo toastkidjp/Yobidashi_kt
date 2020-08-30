@@ -56,7 +56,7 @@ class MenuPopup(context: Context, private val deleted: () -> Unit) {
 
     fun show(view: View, searchResult: SearchResult) {
         targetId = searchResult.id
-        popupWindow.showAsDropDown(view, 10, -300)
+        popupWindow.showAsDropDown(view)
     }
 
     fun addToBookmark() {

@@ -44,7 +44,7 @@ class ViewHolder(
         view.findViewById<ImageView>(R.id.menu).also {
             it.setColorFilter(PreferenceApplier(view.context).color)
             it.setOnClickListener {
-                onMenuClick(view, result)
+                onMenuClick(it, result)
             }
         }
     }
