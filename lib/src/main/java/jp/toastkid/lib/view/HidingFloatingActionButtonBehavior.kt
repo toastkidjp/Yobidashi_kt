@@ -15,6 +15,7 @@ import androidx.annotation.Keep
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
@@ -34,15 +35,24 @@ class HidingFloatingActionButtonBehavior<V : View>(context: Context, attrs: Attr
         if (motionEvent.action == MotionEvent.ACTION_DOWN) {
             lastY = motionEvent.rawY
         }
-        if (child is FloatingActionButton
-                && child.isGone
-                && motionEvent.action == MotionEvent.ACTION_UP
-        ) {
-            if ((lastY - motionEvent.rawY) > 10) {
-                return super.onInterceptTouchEvent(parent, child, motionEvent)
+
+        if (child !is FloatingActionButton || child.isVisible) {
+            return super.onInterceptTouchEvent(parent, child, motionEvent)
+        }
+
+        when (motionEvent.action) {
+            MotionEvent.ACTION_UP -> {
+                if ((lastY - motionEvent.rawY) > 10) {
+                    return super.onInterceptTouchEvent(parent, child, motionEvent)
+                }
+                child.show()
+                lastY = 0f
             }
-            child.show()
-            lastY = 0f
+            MotionEvent.ACTION_MOVE -> {
+                if ((motionEvent.rawY - lastY) > 20) {
+                    child.show()
+                }
+            }
         }
         return super.onInterceptTouchEvent(parent, child, motionEvent)
     }

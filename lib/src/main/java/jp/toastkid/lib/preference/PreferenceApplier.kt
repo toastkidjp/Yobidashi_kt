@@ -7,7 +7,8 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import jp.toastkid.lib.Urls
 import java.io.File
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import kotlin.math.max
 
 /**
