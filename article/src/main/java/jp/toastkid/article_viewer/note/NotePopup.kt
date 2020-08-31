@@ -79,12 +79,13 @@ class NotePopup(context: Context) {
     }
 
     fun store() {
+        val title = binding.inputTitle.text?.toString() ?: return
         insertion(
-                binding.inputTitle.text?.toString(),
+                title,
                 binding.inputContent.text?.toString()
         )
 
-        Snackbar.make(binding.root, "Saved.", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, "Saved. $title", Snackbar.LENGTH_SHORT).show()
     }
 
     /**
