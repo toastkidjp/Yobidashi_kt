@@ -15,7 +15,7 @@
         >
 
         <TextView
-            android:id="@+id/this_app"
+            android:id="@+id/add_to_bookmark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -31,21 +31,21 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            app:layout_constraintTop_toBottomOf="@id/this_app"
+            app:layout_constraintTop_toBottomOf="@id/add_to_bookmark"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:background="#88000000"
             />
 
         <TextView
-            android:id="@+id/other_app"
+            android:id="@+id/delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:padding="16dp"
             android:text="@string/delete"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/this_app"
+            app:layout_constraintTop_toBottomOf="@id/add_to_bookmark"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{v -> popup.delete()}"
             />

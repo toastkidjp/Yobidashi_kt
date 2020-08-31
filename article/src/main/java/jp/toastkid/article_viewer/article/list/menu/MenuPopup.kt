@@ -40,7 +40,7 @@ class MenuPopup(context: Context, private val action: MenuPopupActionUseCase, us
         popupWindow.width = context.resources.getDimensionPixelSize(R.dimen.menu_popup_width)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
 
-        binding.thisApp.isVisible = useAddToBookmark
+        binding.addToBookmark.isVisible = useAddToBookmark
         binding.divider.isVisible = useAddToBookmark
 
         binding.popup = this

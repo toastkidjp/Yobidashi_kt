@@ -16,7 +16,8 @@ import jp.toastkid.lib.ContentViewModel
  */
 class LinkBehaviorService(
         private val contentViewModel: ContentViewModel,
-        private val browserViewModel: BrowserViewModel
+        private val browserViewModel: BrowserViewModel,
+        private val exists: (String) -> Boolean
 ) {
 
     operator fun invoke(url: String?) {
@@ -29,6 +30,9 @@ class LinkBehaviorService(
             return
         }
 
-        contentViewModel.newArticle(InternalLinkScheme.extract(url))
+        val title = InternalLinkScheme.extract(url)
+        if (exists(title)) {
+            contentViewModel.newArticle(title)
+        }
     }
 }
