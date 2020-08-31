@@ -14,7 +14,6 @@ import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.SearchResult
 import jp.toastkid.article_viewer.databinding.PopupArticleListMenuBinding
 
@@ -24,12 +23,6 @@ import jp.toastkid.article_viewer.databinding.PopupArticleListMenuBinding
 class MenuPopup(context: Context, private val action: MenuPopupActionUseCase) {
 
     private val popupWindow = PopupWindow(context)
-
-    private val database = AppDatabase.find(context)
-
-    private val articleRepository = database.articleRepository()
-
-    private val bookmarkRepository = database.bookmarkRepository()
 
     private val binding: PopupArticleListMenuBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
