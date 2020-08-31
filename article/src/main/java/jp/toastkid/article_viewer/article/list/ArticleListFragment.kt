@@ -157,9 +157,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 activityContext,
                 ArticleListMenuPopupActionUseCase(
                         articleRepository,
-                        AppDatabase.find(activityContext).bookmarkRepository(),
-                        { adapter.refresh() }
-                )
+                        AppDatabase.find(activityContext).bookmarkRepository()
+                ) { adapter.refresh() }
         )
 
         adapter = Adapter(
