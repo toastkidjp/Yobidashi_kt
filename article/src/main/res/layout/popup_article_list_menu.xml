@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:padding="16dp"
-            android:text="Delete"
+            android:text="@string/delete"
             android:textSize="16sp"
             app:layout_constraintTop_toBottomOf="@id/this_app"
             android:background="@drawable/ripple_transparent"
