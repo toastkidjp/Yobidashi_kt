@@ -25,4 +25,7 @@ interface BookmarkRepository {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(articleId: Bookmark)
 
+    @Query("DELETE FROM bookmark WHERE id = :articleId")
+    fun delete(articleId: Int)
+
 }

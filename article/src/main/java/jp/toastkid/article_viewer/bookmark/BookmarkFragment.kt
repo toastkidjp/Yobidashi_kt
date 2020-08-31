@@ -25,6 +25,8 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.Adapter
 import jp.toastkid.article_viewer.article.list.ListLoaderUseCase
+import jp.toastkid.article_viewer.article.list.menu.BookmarkListMenuPopupActionUseCase
+import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -99,6 +101,14 @@ class BookmarkFragment : Fragment(), ContentScrollable {
 
         val activityContext = context ?: return
 
+        val menuPopup = MenuPopup(
+                activityContext,
+                BookmarkListMenuPopupActionUseCase(
+                        AppDatabase.find(activityContext).bookmarkRepository(),
+                        { adapter.refresh() }
+                )
+        )
+
         adapter = Adapter(
             LayoutInflater.from(activityContext),
             { title ->
@@ -113,7 +123,7 @@ class BookmarkFragment : Fragment(), ContentScrollable {
                             .newArticleOnBackground(title)
                 }
             },
-            { itemView, searchResult -> /* TODO Implement. */ }
+            { itemView, searchResult -> menuPopup.show(itemView, searchResult) }
         )
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
