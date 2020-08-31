@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.list.SearchResult
@@ -20,7 +21,7 @@ import jp.toastkid.article_viewer.databinding.PopupArticleListMenuBinding
 /**
  * @author toastkidjp
  */
-class MenuPopup(context: Context, private val action: MenuPopupActionUseCase) {
+class MenuPopup(context: Context, private val action: MenuPopupActionUseCase, useAddToBookmark: Boolean = true) {
 
     private val popupWindow = PopupWindow(context)
 
@@ -38,6 +39,9 @@ class MenuPopup(context: Context, private val action: MenuPopupActionUseCase) {
         popupWindow.isOutsideTouchable = true
         popupWindow.width = context.resources.getDimensionPixelSize(R.dimen.menu_popup_width)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        binding.thisApp.isVisible = useAddToBookmark
+        binding.divider.isVisible = useAddToBookmark
 
         binding.popup = this
     }

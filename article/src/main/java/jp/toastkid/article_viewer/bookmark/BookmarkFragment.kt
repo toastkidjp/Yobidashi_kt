@@ -106,7 +106,8 @@ class BookmarkFragment : Fragment(), ContentScrollable {
                 BookmarkListMenuPopupActionUseCase(
                         AppDatabase.find(activityContext).bookmarkRepository(),
                         { adapter.refresh() }
-                )
+                ),
+                false
         )
 
         adapter = Adapter(
