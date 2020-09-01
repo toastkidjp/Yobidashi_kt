@@ -158,7 +158,14 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 ArticleListMenuPopupActionUseCase(
                         articleRepository,
                         AppDatabase.find(activityContext).bookmarkRepository()
-                ) { adapter.refresh() }
+                ) {
+                    adapter.refresh()
+                    contentViewModel?.snackWithAction(
+                            "Deleted: \"${it.title}\".",
+                            "UNDO",
+                            { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
+                    )
+                }
         )
 
         adapter = Adapter(

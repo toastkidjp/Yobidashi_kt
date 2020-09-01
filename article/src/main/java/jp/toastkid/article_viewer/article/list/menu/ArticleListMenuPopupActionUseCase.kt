@@ -7,6 +7,7 @@
  */
 package jp.toastkid.article_viewer.article.list.menu
 
+import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
@@ -21,7 +22,7 @@ import kotlinx.coroutines.withContext
 class ArticleListMenuPopupActionUseCase(
         private val articleRepository: ArticleRepository,
         private val bookmarkRepository: BookmarkRepository,
-        private val deleted: () -> Unit
+        private val deleted: (Article) -> Unit
 ) : MenuPopupActionUseCase {
 
     override fun addToBookmark(id: Int) {
@@ -32,10 +33,12 @@ class ArticleListMenuPopupActionUseCase(
 
     override fun delete(id: Int) {
         CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
+            val article = withContext(Dispatchers.IO) {
+                val article = articleRepository.findArticleById(id)
                 articleRepository.delete(id)
+                return@withContext article
             }
-            deleted()
+            deleted(article)
         }
     }
 }
