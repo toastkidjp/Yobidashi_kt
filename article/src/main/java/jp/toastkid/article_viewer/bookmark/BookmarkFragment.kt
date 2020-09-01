@@ -36,6 +36,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -101,10 +102,22 @@ class BookmarkFragment : Fragment(), ContentScrollable {
 
         val activityContext = context ?: return
 
+        val bookmarkRepository = AppDatabase.find(activityContext).bookmarkRepository()
+        CoroutineScope(Dispatchers.Main).launch {
+            val count = withContext(Dispatchers.IO) {
+                bookmarkRepository.count()
+            }
+            if (count == 0) {
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+                        .snackShort("Bookmark list is empty.")
+                activity?.supportFragmentManager?.popBackStack()
+            }
+        }
+
         val menuPopup = MenuPopup(
                 activityContext,
                 BookmarkListMenuPopupActionUseCase(
-                        AppDatabase.find(activityContext).bookmarkRepository()
+                        bookmarkRepository
                 ) { adapter.refresh() },
                 false
         )
