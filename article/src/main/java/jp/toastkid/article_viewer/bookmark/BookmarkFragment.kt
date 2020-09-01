@@ -104,9 +104,8 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         val menuPopup = MenuPopup(
                 activityContext,
                 BookmarkListMenuPopupActionUseCase(
-                        AppDatabase.find(activityContext).bookmarkRepository(),
-                        { adapter.refresh() }
-                ),
+                        AppDatabase.find(activityContext).bookmarkRepository()
+                ) { adapter.refresh() },
                 false
         )
 
