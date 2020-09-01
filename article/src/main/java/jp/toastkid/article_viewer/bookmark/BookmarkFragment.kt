@@ -104,13 +104,14 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         val activityContext = context ?: return
 
         val bookmarkRepository = AppDatabase.find(activityContext).bookmarkRepository()
-        closeOnEmpty(bookmarkRepository)
+        val contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        closeOnEmpty(bookmarkRepository, contentViewModel)
 
         val menuPopup = MenuPopup(
                 activityContext,
                 BookmarkListMenuPopupActionUseCase(bookmarkRepository) {
                     adapter.refresh()
-                    closeOnEmpty(bookmarkRepository)
+                    closeOnEmpty(bookmarkRepository, contentViewModel)
                 },
                 false
         )
@@ -119,14 +120,12 @@ class BookmarkFragment : Fragment(), ContentScrollable {
             LayoutInflater.from(activityContext),
             { title ->
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                            .newArticle(title)
+                    contentViewModel.newArticle(title)
                 }
             },
             { title ->
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                            .newArticleOnBackground(title)
+                    contentViewModel.newArticleOnBackground(title)
                 }
             },
             { itemView, searchResult -> menuPopup.show(itemView, searchResult) }
@@ -137,14 +136,13 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         showAllBookmark(activityContext)
     }
 
-    private fun closeOnEmpty(bookmarkRepository: BookmarkRepository) {
+    private fun closeOnEmpty(bookmarkRepository: BookmarkRepository, contentViewModel: ContentViewModel) {
         CoroutineScope(Dispatchers.Main).launch {
             val count = withContext(Dispatchers.IO) {
                 bookmarkRepository.count()
             }
             if (count == 0) {
-                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                        .snackShort("Bookmark list is empty.")
+                contentViewModel.snackShort("Bookmark list is empty.")
                 activity?.supportFragmentManager?.popBackStack()
             }
         }
