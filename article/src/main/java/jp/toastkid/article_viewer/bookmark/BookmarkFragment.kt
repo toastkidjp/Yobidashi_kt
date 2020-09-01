@@ -27,6 +27,7 @@ import jp.toastkid.article_viewer.article.list.Adapter
 import jp.toastkid.article_viewer.article.list.ListLoaderUseCase
 import jp.toastkid.article_viewer.article.list.menu.BookmarkListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
+import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -103,22 +104,14 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         val activityContext = context ?: return
 
         val bookmarkRepository = AppDatabase.find(activityContext).bookmarkRepository()
-        CoroutineScope(Dispatchers.Main).launch {
-            val count = withContext(Dispatchers.IO) {
-                bookmarkRepository.count()
-            }
-            if (count == 0) {
-                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                        .snackShort("Bookmark list is empty.")
-                activity?.supportFragmentManager?.popBackStack()
-            }
-        }
+        closeOnEmpty(bookmarkRepository)
 
         val menuPopup = MenuPopup(
                 activityContext,
-                BookmarkListMenuPopupActionUseCase(
-                        bookmarkRepository
-                ) { adapter.refresh() },
+                BookmarkListMenuPopupActionUseCase(bookmarkRepository) {
+                    adapter.refresh()
+                    closeOnEmpty(bookmarkRepository)
+                },
                 false
         )
 
@@ -142,6 +135,19 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
 
         showAllBookmark(activityContext)
+    }
+
+    private fun closeOnEmpty(bookmarkRepository: BookmarkRepository) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val count = withContext(Dispatchers.IO) {
+                bookmarkRepository.count()
+            }
+            if (count == 0) {
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+                        .snackShort("Bookmark list is empty.")
+                activity?.supportFragmentManager?.popBackStack()
+            }
+        }
     }
 
     private fun showAllBookmark(activityContext: Context) {
