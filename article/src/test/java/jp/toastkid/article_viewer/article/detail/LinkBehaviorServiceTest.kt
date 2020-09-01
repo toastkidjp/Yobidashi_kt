@@ -78,7 +78,7 @@ class LinkBehaviorServiceTest {
     }
 
     @Test
-    fun testArticleUrl() {
+    fun testArticleUrlDoesNotExists() {
         every { browserViewModel.open(any()) }.answers { Unit }
         coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
         coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
@@ -90,6 +90,21 @@ class LinkBehaviorServiceTest {
         verify(exactly = 0) { browserViewModel.open(any()) }
         coVerify(exactly = 0) { contentViewModel.newArticle(any()) }
         coVerify(exactly = 1) { contentViewModel.snackShort(any<String>())}
+    }
+
+    @Test
+    fun testArticleUrl() {
+        every { browserViewModel.open(any()) }.answers { Unit }
+        coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
+        coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
+        coEvery { exists(any()) }.answers { true }
+        val linkBehaviorService = LinkBehaviorService(contentViewModel, browserViewModel, exists)
+
+        linkBehaviorService.invoke("internal-article://yahoo")
+
+        verify(exactly = 0) { browserViewModel.open(any()) }
+        coVerify(exactly = 1) { contentViewModel.newArticle(any()) }
+        coVerify(exactly = 0) { contentViewModel.snackShort(any<String>())}
     }
 
     @After
