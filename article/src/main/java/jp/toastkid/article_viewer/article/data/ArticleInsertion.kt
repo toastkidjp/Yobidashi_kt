@@ -28,16 +28,21 @@ class ArticleInsertion(context: Context) {
             return
         }
 
-        val article = Article(0)
-        article.title = title
-        article.contentText = content
-        article.bigram = tokenizer.invoke(content, 2) ?: return
-        article.length = content.length
-        article.lastModified = System.currentTimeMillis()
+        val article = makeArticle(title, content) ?: return
 
         CoroutineScope(Dispatchers.IO).launch {
             repository.insert(article)
         }
+    }
+
+    private fun makeArticle(title: String, content: String): Article? {
+        val article = Article(0)
+        article.title = title
+        article.contentText = content
+        article.bigram = tokenizer.invoke(content, 2) ?: return null
+        article.length = content.length
+        article.lastModified = System.currentTimeMillis()
+        return article
     }
 
 }
