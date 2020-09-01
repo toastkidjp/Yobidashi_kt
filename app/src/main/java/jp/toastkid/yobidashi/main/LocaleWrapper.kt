@@ -2,12 +2,12 @@ package jp.toastkid.yobidashi.main
 
 import android.content.res.Configuration
 import android.os.Build
-import java.util.*
+import java.util.Locale
 
 /**
  * @author toastkidjp
  */
-object LocaleWrapper {
+class LocaleWrapper {
 
     private val JAPANESE = Locale.JAPAN.language
 
@@ -15,7 +15,7 @@ object LocaleWrapper {
         return getLocale(configuration) == JAPANESE
     }
 
-    fun getLocale(configuration: Configuration): String {
+    private fun getLocale(configuration: Configuration): String {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             return configuration.locale.language
         }

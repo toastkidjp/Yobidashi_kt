@@ -14,6 +14,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
 /**
+ * Implement for re-showing notification widget on reboot.
+ *
  * @author toastkidjp
  */
 class BootReceiver : BroadcastReceiver() {

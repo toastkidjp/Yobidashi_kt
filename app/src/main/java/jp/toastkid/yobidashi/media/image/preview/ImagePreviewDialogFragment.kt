@@ -19,7 +19,9 @@ import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -31,6 +33,10 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogImagePreviewBinding
 import jp.toastkid.yobidashi.media.image.Image
+import jp.toastkid.yobidashi.media.image.preview.attach.AttachMenuPopup
+import jp.toastkid.yobidashi.media.image.preview.attach.AttachToAnyAppUseCase
+import jp.toastkid.yobidashi.media.image.preview.attach.AttachToThisAppBackgroundUseCase
+import jp.toastkid.yobidashi.media.image.preview.attach.MenuActionUseCase
 
 /**
  * @author toastkidjp
@@ -42,6 +48,8 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private lateinit var contentResolver: ContentResolver
 
     private lateinit var contentViewModel: ContentViewModel
+
+    private var attachMenuPopup: AttachMenuPopup? = null
 
     private var pathFinder: () -> String? = { null }
 
@@ -59,6 +67,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         )
 
         binding.dialog = this
+        binding.moduleEdit.dialog = this
 
         fitPhotoView()
 
@@ -76,8 +85,9 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
         contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
-        val viewModel = ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
-        binding.colorFilterUseCase = ColorFilterUseCase(viewModel)
+        val viewModel =
+                ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
+        binding.moduleEdit.colorFilterUseCase = ColorFilterUseCase(viewModel)
         viewModel.colorFilter.observe(this, Observer {
             findCurrentImageView()?.colorFilter = it
         })
@@ -85,7 +95,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         initializeContrastSlider()
         initializeAlphaSlider()
 
-        binding.imageRotationUseCase = ImageRotationUseCase(viewModel) {
+        binding.moduleEdit.imageRotationUseCase = ImageRotationUseCase(viewModel) {
             findCurrentImageView()?.drawable?.toBitmap()
         }
 
@@ -122,14 +132,14 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private fun findLayoutManager() = binding.photo.layoutManager as? LinearLayoutManager
 
     private fun initializeContrastSlider() {
-        binding.contrast.progress = 50
-        binding.contrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.moduleEdit.contrast.progress = 50
+        binding.moduleEdit.contrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (!fromUser) {
                     return
                 }
 
-                binding.colorFilterUseCase?.applyContrast(((progress - 50).toFloat() / 70f))
+                binding.moduleEdit.colorFilterUseCase?.applyContrast(((progress - 50).toFloat() / 70f))
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
@@ -140,14 +150,14 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     }
 
     private fun initializeAlphaSlider() {
-        binding.alpha.progress = 50
-        binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.moduleEdit.alpha.progress = 50
+        binding.moduleEdit.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (!fromUser) {
                     return
                 }
 
-                binding.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
+                binding.moduleEdit.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
@@ -167,11 +177,29 @@ class ImagePreviewDialogFragment  : DialogFragment() {
 
     private fun applyColorToButtons() {
         val fontColor = PreferenceApplier(binding.root.context).fontColor
-        binding.reverse.setColorFilter(fontColor)
-        binding.rotateLeft.setColorFilter(fontColor)
-        binding.rotateRight.setColorFilter(fontColor)
-        binding.edit.setColorFilter(fontColor)
+        binding.moduleEdit.reverse.setColorFilter(fontColor)
+        binding.moduleEdit.rotateLeft.setColorFilter(fontColor)
+        binding.moduleEdit.rotateRight.setColorFilter(fontColor)
+        binding.moduleEdit.setTo.setColorFilter(fontColor)
+        binding.moduleEdit.edit.setColorFilter(fontColor)
+        binding.visibilitySwitch.setColorFilter(fontColor)
         binding.close.setColorFilter(fontColor)
+    }
+
+    fun setTo() {
+        if (attachMenuPopup == null) {
+            attachMenuPopup = AttachMenuPopup(
+                    requireContext(),
+                    MenuActionUseCase(
+                            AttachToThisAppBackgroundUseCase(contentViewModel),
+                            AttachToAnyAppUseCase { startActivity(it) },
+                            { pathFinder()?.toUri() },
+                            { findCurrentImageView()?.drawable?.toBitmap() }
+                    )
+            )
+        }
+
+        attachMenuPopup?.show(binding.moduleEdit.setTo)
     }
 
     fun edit() {
@@ -180,6 +208,13 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 { contentViewModel.snackShort(R.string.message_cannot_launch_app) },
                 { binding.root.context.startActivity(it) }
         ).invoke(requireContext())
+    }
+
+    fun switchVisibility() {
+        binding.moduleEdit.root.isVisible = !binding.moduleEdit.root.isVisible
+        binding.visibilitySwitch.setImageResource(
+                if (binding.moduleEdit.root.isVisible) R.drawable.ic_down else R.drawable.ic_up
+        )
     }
 
     companion object {

@@ -1,7 +1,7 @@
 package jp.toastkid.yobidashi.tab.model
 
 import java.io.File
-import java.util.*
+import java.util.UUID
 
 /**
  * Model of editor tab.

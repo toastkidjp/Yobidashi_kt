@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="dialog" type="jp.toastkid.yobidashi.media.image.preview.ImagePreviewDialogFragment" />
-        <variable name="colorFilterUseCase" type="jp.toastkid.yobidashi.media.image.preview.ColorFilterUseCase" />
-        <variable name="imageRotationUseCase" type="jp.toastkid.yobidashi.media.image.preview.ImageRotationUseCase" />
     </data>
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,114 +30,33 @@
             android:background="@drawable/ripple_transparent"
             />
 
-        <SeekBar
-            android:id="@+id/contrast"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="90dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:max="100"
-            />
-
-        <SeekBar
-            android:id="@+id/alpha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="60dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:max="100"
-            />
-
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
             >
-
             <ImageView
-                android:id="@+id/reverse_filter"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/lime_bg"
+                android:id="@+id/visibility_switch"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> colorFilterUseCase.reverseFilter()}"
+                app:srcCompat="@drawable/ic_up"
+                tools:tint="@color/design_default_color_secondary_variant"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:onClick="@{view -> dialog.switchVisibility()}"
                 />
-
-            <ImageView
-                android:id="@+id/sepia"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/deep_orange_500_dd"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> colorFilterUseCase.sepia()}"
-                />
-            <ImageView
-                android:id="@+id/gray_scale"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/pre4_ripple"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> colorFilterUseCase.grayScale()}"
-                />
-
-            <ImageView
-                android:id="@+id/rotate_left"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_rotate_left"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> imageRotationUseCase.rotateLeft()}"
-                />
-            <ImageView
-                android:id="@+id/reverse"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="12dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_flip"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> imageRotationUseCase.reverse()}"
-                />
-            <ImageView
-                android:id="@+id/rotate_right"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="12dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_rotate_right"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> imageRotationUseCase.rotateRight()}"
-                />
-            <ImageView
-                android:id="@+id/edit"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="12dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/ic_brush"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> dialog.edit()}"
+            <include
+                android:id="@+id/module_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/module_image_preview_edit"
+                android:visibility="gone"
                 />
         </LinearLayout>
+
     </FrameLayout>
 </layout>

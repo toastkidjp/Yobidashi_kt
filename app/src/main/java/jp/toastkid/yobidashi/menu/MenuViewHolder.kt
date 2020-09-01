@@ -15,6 +15,7 @@ import jp.toastkid.yobidashi.databinding.ItemHomeMenuBinding
 import jp.toastkid.lib.preference.ColorPair
 
 /**
+ * @param binding [ItemHomeMenuBinding]
  * @author toastkidjp
  */
 class MenuViewHolder(private val binding: ItemHomeMenuBinding)

@@ -391,7 +391,7 @@ class BrowserFragment : Fragment(),
 
         switchToolbarVisibility()
 
-        val colorPair = colorPair()
+        val colorPair = preferenceApplier.colorPair()
 
         val fontColor = colorPair.fontColor()
 
@@ -455,16 +455,6 @@ class BrowserFragment : Fragment(),
                     .nextFragment(fragment)
         }
     }
-
-    /**
-     * TODO delete it.
-     * Hide option menus.
-     */
-    private fun hideOption(): Boolean {
-        return false
-    }
-    
-    private fun colorPair() = preferenceApplier.colorPair()
 
     override fun onClickUserAgent(userAgent: UserAgent) {
         browserModule.resetUserAgent(userAgent.text())

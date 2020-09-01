@@ -17,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -26,7 +25,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
-import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
@@ -44,13 +42,11 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.LoadingViewModel
-import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
-import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
@@ -63,7 +59,6 @@ import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
-import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
@@ -75,7 +70,7 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.tab_list.TabListClearDialogFragment
 import jp.toastkid.yobidashi.tab.tab_list.TabListDialogFragment
-import jp.toastkid.yobidashi.tab.tab_list.TabListService
+import jp.toastkid.yobidashi.tab.tab_list.TabListUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -98,19 +93,19 @@ class MainActivity : AppCompatActivity(),
      */
     private lateinit var binding: ActivityMainBinding
 
-    private val backgroundImageLoaderUseCase by lazy { BackgroundImageLoaderUseCase() }
+    /**
+     * Preferences wrapper.
+     */
+    private lateinit var preferenceApplier: PreferenceApplier
 
     /**
-     * Disposables.
+     * Runtime permission.
      */
-    private val disposables: Job by lazy { Job() }
+    private var runtimePermissions: RuntimePermissions? = null
 
-    /**
-     * Find-in-page module.
-     */
-    private lateinit var pageSearchPresenter: PageSearcherModule
+    private lateinit var tabs: TabAdapter
 
-    private lateinit var tabReplacingUseCase: TabReplacingUseCase
+    private var floatingPreview: FloatingPreview? = null
 
     /**
      * Menu's view model.
@@ -123,28 +118,32 @@ class MainActivity : AppCompatActivity(),
 
     private var browserViewModel: BrowserViewModel? = null
 
-    private var floatingPreview: FloatingPreview? = null
-
-    private lateinit var tabs: TabAdapter
-
     /**
      * Search-with-clip object.
      */
     private lateinit var searchWithClip: SearchWithClip
 
-    /**
-     * Runtime permission.
-     */
-    private var runtimePermissions: RuntimePermissions? = null
+    private val backgroundImageLoaderUseCase by lazy { BackgroundImageLoaderUseCase() }
 
     /**
-     * Preferences wrapper.
+     * Find-in-page module.
      */
-    private lateinit var preferenceApplier: PreferenceApplier
+    private lateinit var pageSearchPresenter: PageSearcherModule
 
-    private lateinit var menuUseCase: MenuUseCase
+    private lateinit var tabReplacingUseCase: TabReplacingUseCase
 
-    private var tabListService: TabListService? = null
+    private lateinit var onBackPressedUseCase: OnBackPressedUseCase
+
+    private lateinit var appBarVisibilityUseCase: AppBarVisibilityUseCase
+
+    private lateinit var fragmentReplacingUseCase: FragmentReplacingUseCase
+
+    private var tabListUseCase: TabListUseCase? = null
+
+    /**
+     * Disposables.
+     */
+    private val disposables: Job by lazy { Job() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,9 +162,13 @@ class MainActivity : AppCompatActivity(),
 
         runtimePermissions = RuntimePermissions(this)
 
+        fragmentReplacingUseCase = FragmentReplacingUseCase(supportFragmentManager)
+
         val colorPair = preferenceApplier.colorPair()
 
         pageSearchPresenter = PageSearcherModule(binding.sip)
+
+        appBarVisibilityUseCase = AppBarVisibilityUseCase(binding.toolbar, preferenceApplier)
 
         initializeHeaderViewModel()
 
@@ -246,6 +249,18 @@ class MainActivity : AppCompatActivity(),
 
         processShortcut(intent)
 
+        onBackPressedUseCase = OnBackPressedUseCase(
+                tabListUseCase,
+                { binding.menuStub.root?.isVisible == true },
+                menuViewModel,
+                pageSearchPresenter,
+                floatingPreview,
+                tabs,
+                ::onEmptyTabs,
+                tabReplacingUseCase,
+                supportFragmentManager
+        )
+
         supportFragmentManager.addOnBackStackChangedListener {
             val findFragment = findFragment()
 
@@ -288,7 +303,7 @@ class MainActivity : AppCompatActivity(),
         })
 
         headerViewModel.visibility.observe(this, Observer { isVisible ->
-            if (isVisible) showToolbar() else hideToolbar()
+            if (isVisible) appBarVisibilityUseCase.show() else appBarVisibilityUseCase.hide()
         })
     }
 
@@ -297,7 +312,7 @@ class MainActivity : AppCompatActivity(),
 
         MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
-        menuUseCase = MenuUseCase({ this }, menuViewModel)
+        MenuUseCase({ this }, menuViewModel).observe()
     }
 
     private fun initializeContentViewModel() {
@@ -435,32 +450,7 @@ class MainActivity : AppCompatActivity(),
             withAnimation: Boolean = true,
             withSlideIn: Boolean = false
     ) {
-        val currentFragment = findFragment()
-        if (currentFragment == fragment) {
-            return
-        }
-
-        val fragments = supportFragmentManager.fragments
-        if (fragments.size != 0 && fragments.contains(fragment)) {
-            fragments.remove(fragment)
-        }
-
-        val transaction = supportFragmentManager.beginTransaction()
-        if (withAnimation) {
-            transaction.setCustomAnimations(
-                    if (withSlideIn) R.anim.slide_in_right else R.anim.slide_up,
-                    0,
-                    0,
-                    if (withSlideIn) android.R.anim.slide_out_right else R.anim.slide_down
-            )
-        }
-
-        transaction.replace(R.id.content, fragment, fragment::class.java.canonicalName)
-
-        if (fragment !is TabUiFragment) {
-            transaction.addToBackStack(fragment::class.java.canonicalName)
-        }
-        transaction.commitAllowingStateLoss()
+        fragmentReplacingUseCase.invoke(fragment, withAnimation, withSlideIn)
     }
 
     /**
@@ -485,62 +475,10 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        if (tabListService?.onBackPressed() == true) {
-            return
-        }
-
-        if (binding.menuStub.root?.isVisible == true) {
-            menuViewModel?.close()
-            return
-        }
-
-        if (pageSearchPresenter.isVisible()) {
-            pageSearchPresenter.hide()
-            return
-        }
-
-        if (floatingPreview?.isVisible() == true) {
-            floatingPreview?.hide()
-            return
-        }
-
-        val currentFragment = findFragment()
-        if (currentFragment is CommonFragmentAction && currentFragment.pressBack()) {
-            return
-        }
-
-        if (currentFragment is BrowserFragment
-                || currentFragment is PdfViewerFragment
-                || currentFragment is ContentViewerFragment
-        ) {
-            tabs.closeTab(tabs.index())
-
-            if (tabs.isEmpty()) {
-                onEmptyTabs()
-                return
-            }
-            replaceToCurrentTab(true)
-            return
-        }
-
-        val fragment = findFragment()
-        if (fragment !is EditorFragment) {
-            supportFragmentManager.popBackStackImmediate()
-            return
-        }
-
-        confirmExit()
+        onBackPressedUseCase.invoke()
     }
 
     private fun findFragment() = supportFragmentManager.findFragmentById(R.id.content)
-
-    /**
-     * Show confirm exit.
-     */
-    private fun confirmExit() {
-        CloseDialogFragment()
-                .show(supportFragmentManager, CloseDialogFragment::class.java.simpleName)
-    }
 
     override fun onResume() {
         super.onResume()
@@ -615,61 +553,21 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun hideToolbar() {
-        when (ScreenMode.find(preferenceApplier.browserScreenMode())) {
-            ScreenMode.FIXED -> Unit
-            ScreenMode.FULL_SCREEN -> {
-                binding.toolbar.visibility = View.GONE
-            }
-            ScreenMode.EXPANDABLE -> {
-                binding.toolbar.animate()?.let {
-                    it.cancel()
-                    it.translationY(-resources.getDimension(R.dimen.toolbar_height))
-                            .setDuration(HEADER_HIDING_DURATION)
-                            .withStartAction { binding.content.requestLayout() }
-                            .withEndAction   {
-                                binding.toolbar.visibility = View.GONE
-                            }
-                            .start()
-                }
-            }
-        }
-    }
-
-    private fun showToolbar() {
-        when (ScreenMode.find(preferenceApplier.browserScreenMode())) {
-            ScreenMode.FIXED -> {
-                binding.toolbar.visibility = View.VISIBLE
-            }
-            ScreenMode.FULL_SCREEN -> Unit
-            ScreenMode.EXPANDABLE -> binding.toolbar.animate()?.let {
-                it.cancel()
-                it.translationY(0f)
-                        .setDuration(HEADER_HIDING_DURATION)
-                        .withStartAction {
-                            binding.toolbar.visibility = View.VISIBLE
-                        }
-                        .withEndAction   { binding.content.requestLayout() }
-                        .start()
-            }
-        }
-    }
-
     /**
      * Switch tab list visibility.
      */
     private fun switchTabList() {
-        if (tabListService == null) {
-            tabListService = TabListService(supportFragmentManager, this::refreshThumbnail)
+        if (tabListUseCase == null) {
+            tabListUseCase = TabListUseCase(supportFragmentManager, this::refreshThumbnail)
         }
-        tabListService?.switch()
+        tabListUseCase?.switch()
     }
 
     /**
      * Action on empty tabs.
      */
     private fun onEmptyTabs() {
-        tabListService?.dismiss()
+        tabListUseCase?.dismiss()
         openNewTab()
     }
 
@@ -679,7 +577,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onCloseOnly() {
-        tabListService?.dismiss()
+        tabListUseCase?.dismiss()
     }
 
     override fun onCloseTabListDialogFragment(lastTabId: String) {
@@ -790,7 +688,7 @@ class MainActivity : AppCompatActivity(),
 
                 tabs.openNewPdfTab(uri)
                 replaceToCurrentTab(true)
-                tabListService?.dismiss()
+                tabListUseCase?.dismiss()
             }
             VoiceSearch.REQUEST_CODE -> {
                 VoiceSearch.processResult(this, data)
@@ -829,11 +727,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     companion object {
-
-        /**
-         * Header hiding duration.
-         */
-        private const val HEADER_HIDING_DURATION = 75L
 
         /**
          * Layout ID.

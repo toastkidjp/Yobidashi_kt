@@ -26,6 +26,13 @@ class UserAgentTest {
     }
 
     @Test
+    fun testFindByName() {
+        assertEquals(UserAgent.DEFAULT, UserAgent.findByName("test"))
+        assertEquals(UserAgent.DEFAULT, UserAgent.findByName("iphone"))
+        assertEquals(UserAgent.IPHONE, UserAgent.findByName("IPHONE"))
+    }
+
+    @Test
     fun test() {
         assertEquals("Android", UserAgent.ANDROID.title())
         assertTrue(UserAgent.ANDROID.text().isNotEmpty())

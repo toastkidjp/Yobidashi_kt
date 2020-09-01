@@ -21,7 +21,7 @@ class DateArticleUrlFactory {
     /**
      * Make Wikipedia article's url.
      *
-     * @param context context
+     * @param context Use for extracting current configuration and title template
      * @param month <b>0</b>-11
      * @param dayOfMonth 1-31
      *
@@ -36,13 +36,15 @@ class DateArticleUrlFactory {
         }
 
         val monthString =
-                if (LocaleWrapper.isJa(context.resources.configuration)) "${month + 1}"
+                if (LOCALE_WRAPPER.isJa(context.resources.configuration)) "${month + 1}"
                 else Month().get(month)
 
         return MessageFormat.format(context.getString(FORMAT_ID), monthString, dayOfMonth)
     }
 
     companion object {
+
+        private val LOCALE_WRAPPER = LocaleWrapper()
 
         /**
          * Format resource ID.
