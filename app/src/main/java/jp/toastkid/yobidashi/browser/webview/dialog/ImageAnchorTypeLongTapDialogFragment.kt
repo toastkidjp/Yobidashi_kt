@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.ImageSearchUrlGenerator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
 import jp.toastkid.yobidashi.libs.Toaster
@@ -48,7 +49,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
                     when (which) {
                         0 -> viewModel.open(uri)
                         1 -> viewModel.openBackground(title, uri)
-                        2 -> viewModel.open("https://www.google.co.jp/searchbyimage?image_url=$imageUrl".toUri())
+                        2 -> viewModel.open(ImageSearchUrlGenerator()(imageUrl))
                         3 -> ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).preview(uri)
                         4 -> downloadImage(imageUrl)
                         5 -> Clipboard.clip(activityContext, anchor)
