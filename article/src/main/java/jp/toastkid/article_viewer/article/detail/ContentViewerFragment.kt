@@ -23,6 +23,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tasklist.TaskListPlugin
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
@@ -146,7 +147,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         ContentLoaderUseCase(
                 repository,
-                Markwon.builder(context).usePlugin(TablePlugin.create(context)).build(),
+                Markwon.builder(context).usePlugins(listOf(TablePlugin.create(context), TaskListPlugin.create(context))).build(),
                 binding.content,
                 subheads
         ).invoke(title)
