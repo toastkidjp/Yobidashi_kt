@@ -118,14 +118,14 @@ class BookmarkFragment : Fragment(), ContentScrollable {
 
         adapter = Adapter(
             LayoutInflater.from(activityContext),
-            { title ->
+            {
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    contentViewModel.newArticle(title)
+                    contentViewModel.newArticle(it)
                 }
             },
-            { title ->
+            {
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    contentViewModel.newArticleOnBackground(title)
+                    contentViewModel.newArticleOnBackground(it)
                 }
             },
             { itemView, searchResult -> menuPopup.show(itemView, searchResult) }
