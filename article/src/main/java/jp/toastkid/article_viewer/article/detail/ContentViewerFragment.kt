@@ -145,9 +145,11 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         val context = binding.root.context
 
+        val plugins = listOf(TablePlugin.create(context), TaskListPlugin.create(context))
+
         ContentLoaderUseCase(
                 repository,
-                Markwon.builder(context).usePlugins(listOf(TablePlugin.create(context), TaskListPlugin.create(context))).build(),
+                Markwon.builder(context).usePlugins(plugins).build(),
                 binding.content,
                 subheads
         ).invoke(title)
