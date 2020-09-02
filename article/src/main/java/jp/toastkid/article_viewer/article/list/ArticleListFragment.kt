@@ -294,7 +294,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            //PreferencesWrapper(this).setTarget(data?.data?.toString())
             val uri = data?.data ?: return
             updateIfNeed(uri)
         }
