@@ -162,9 +162,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                     adapter.refresh()
                     contentViewModel?.snackWithAction(
                             "Deleted: \"${it.title}\".",
-                            "UNDO",
-                            { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
-                    )
+                            "UNDO"
+                    ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
                 }
         )
 
