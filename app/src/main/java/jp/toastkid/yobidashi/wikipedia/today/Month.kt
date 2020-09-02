@@ -7,7 +7,7 @@
  */
 package jp.toastkid.yobidashi.wikipedia.today
 
-import java.util.*
+import java.util.Calendar
 
 /**
  * @author toastkidjp
