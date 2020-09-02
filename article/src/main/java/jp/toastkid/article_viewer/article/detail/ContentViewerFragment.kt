@@ -77,8 +77,8 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         val linkBehaviorService = makeLinkBehaviorService()
 
-        val linkMovementMethod = ContentLinkMovementMethod { url ->
-            linkBehaviorService.invoke(url)
+        val linkMovementMethod = ContentLinkMovementMethod {
+            linkBehaviorService.invoke(it)
         }
         binding.content.movementMethod = linkMovementMethod
 
