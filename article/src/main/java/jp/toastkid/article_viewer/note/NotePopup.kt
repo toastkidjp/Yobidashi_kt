@@ -15,7 +15,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.webkit.WebView
 import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -28,9 +27,9 @@ import jp.toastkid.lib.view.SlidingTapListener
 import java.util.Calendar
 
 /**
- * Floating preview.
+ * Note popup.
  *
- * @param context Use for obtaining [PopupWindow], [WebView], and so on...
+ * @param context Use for obtaining [PopupWindow]
  * @author toastkidjp
  */
 class NotePopup(context: Context) {
