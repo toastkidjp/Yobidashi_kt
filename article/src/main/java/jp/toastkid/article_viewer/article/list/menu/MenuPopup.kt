@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.article_viewer.R
@@ -27,7 +28,7 @@ class MenuPopup(context: Context, private val action: MenuPopupActionUseCase, us
 
     private val binding: PopupArticleListMenuBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.popup_article_list_menu,
+            LAYOUT_ID,
             null,
             false
     )
@@ -65,4 +66,10 @@ class MenuPopup(context: Context, private val action: MenuPopupActionUseCase, us
         popupWindow.dismiss()
     }
 
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.popup_article_list_menu
+
+    }
 }
