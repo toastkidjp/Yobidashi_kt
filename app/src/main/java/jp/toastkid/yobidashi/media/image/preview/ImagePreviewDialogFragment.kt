@@ -9,13 +9,13 @@ package jp.toastkid.yobidashi.media.image.preview
 
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.toBitmap
@@ -132,39 +132,25 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     private fun findLayoutManager() = binding.photo.layoutManager as? LinearLayoutManager
 
     private fun initializeContrastSlider() {
-        binding.moduleEdit.contrast.progress = 50
-        binding.moduleEdit.contrast.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (!fromUser) {
-                    return
-                }
-
-                binding.moduleEdit.colorFilterUseCase?.applyContrast(((progress - 50).toFloat() / 70f))
+        binding.moduleEdit.contrast.value = 0f
+        binding.moduleEdit.contrast.addOnChangeListener { _, value, fromUser ->
+            if (!fromUser) {
+                return@addOnChangeListener
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-
-        })
+            binding.moduleEdit.colorFilterUseCase?.applyContrast(value)
+        }
     }
 
     private fun initializeAlphaSlider() {
-        binding.moduleEdit.alpha.progress = 50
-        binding.moduleEdit.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (!fromUser) {
-                    return
-                }
-
-                binding.moduleEdit.colorFilterUseCase?.applyAlpha(((progress - 50).toFloat() / 100f))
+        binding.moduleEdit.alpha.value = 0f
+        binding.moduleEdit.alpha.addOnChangeListener { _, value, fromUser ->
+            if (!fromUser) {
+                return@addOnChangeListener
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-
-        })
+            binding.moduleEdit.colorFilterUseCase?.applyAlpha(value)
+        }
     }
 
     private fun fitPhotoView() {
@@ -182,6 +168,12 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         binding.moduleEdit.rotateRight.setColorFilter(fontColor)
         binding.moduleEdit.setTo.setColorFilter(fontColor)
         binding.moduleEdit.edit.setColorFilter(fontColor)
+
+        binding.moduleEdit.alpha.thumbTintList = ColorStateList.valueOf(fontColor)
+        binding.moduleEdit.alpha.trackActiveTintList = ColorStateList.valueOf(fontColor)
+        binding.moduleEdit.contrast.thumbTintList = ColorStateList.valueOf(fontColor)
+        binding.moduleEdit.contrast.trackActiveTintList = ColorStateList.valueOf(fontColor)
+
         binding.visibilitySwitch.setColorFilter(fontColor)
         binding.close.setColorFilter(fontColor)
     }

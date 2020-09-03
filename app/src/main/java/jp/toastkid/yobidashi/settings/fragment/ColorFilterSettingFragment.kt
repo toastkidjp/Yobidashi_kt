@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
@@ -20,9 +19,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -61,25 +60,13 @@ class ColorFilterSettingFragment : Fragment() {
             )
         }
 
-        binding.alpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                // NOP
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-                // NOP
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                binding.useCase?.setAlpha(seekBar?.progress ?: 0)
-            }
-
-        })
+        binding.alpha.addOnChangeListener { slider, value, fromUser ->
+            binding.useCase?.setAlpha(value.toInt())
+        }
 
         binding.defaultColor.setOnClickListener{
             binding.useCase?.setDefault()
-            binding.alpha.progress = OverlayColorFilterUseCase.getDefaultAlpha()
+            binding.alpha.value = OverlayColorFilterUseCase.getDefaultAlpha().toFloat()
         }
     }
 
@@ -87,7 +74,7 @@ class ColorFilterSettingFragment : Fragment() {
         super.onResume()
         val filterColor = preferenceApplier.filterColor(ContextCompat.getColor(binding.root.context, R.color.default_color_filter))
         binding.sample.setBackgroundColor(filterColor)
-        binding.alpha.progress = Color.alpha(filterColor)
+        binding.alpha.value = Color.alpha(filterColor).toFloat()
         binding.useColorFilterCheck.let {
             it.isChecked = preferenceApplier.useColorFilter()
             it.jumpDrawablesToCurrentState()

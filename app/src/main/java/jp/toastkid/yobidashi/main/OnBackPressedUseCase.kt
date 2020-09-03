@@ -18,7 +18,6 @@ import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.pdf.PdfViewerFragment
 import jp.toastkid.yobidashi.tab.TabAdapter
-import jp.toastkid.yobidashi.tab.tab_list.TabListUseCase
 
 /**
  * @author toastkidjp

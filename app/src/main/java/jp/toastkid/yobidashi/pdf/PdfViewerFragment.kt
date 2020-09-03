@@ -7,8 +7,7 @@
  */
 package jp.toastkid.yobidashi.pdf
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -17,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
-import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -26,17 +24,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.CommonFragmentAction
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
-import jp.toastkid.yobidashi.databinding.AppBarPdfViewerBinding
-import jp.toastkid.lib.view.EditTextColorSetter
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.tab.TabUiFragment
+import jp.toastkid.lib.view.EditTextColorSetter
+import jp.toastkid.lib.view.RecyclerViewScroller
+import jp.toastkid.yobidashi.CommonFragmentAction
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.AppBarPdfViewerBinding
+import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
 
 /**
  * @author toastkidjp
@@ -89,17 +87,9 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
         binding.pdfImages.layoutManager = layoutManager
         PagerSnapHelper().attachToRecyclerView(binding.pdfImages)
 
-        appBarBinding.seek.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                val progress = p0?.progress ?: 0
-                appBarBinding.input.setText((progress + 1).toString())
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) = Unit
-
-            override fun onStopTrackingTouch(p0: SeekBar?) = Unit
-
-        })
+        appBarBinding.seek.addOnChangeListener { _, value, _ ->
+            appBarBinding.input.setText((value.toInt() + 1).toString())
+        }
         appBarBinding.input.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(p0: Editable?) = Unit
 
@@ -141,7 +131,7 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
     private fun load(uri: Uri) {
         adapter.load(uri)
         binding.pdfImages.scheduleLayoutAnimation()
-        appBarBinding.seek.max = adapter.itemCount - 1
+        appBarBinding.seek.valueTo = (adapter.itemCount - 1).toFloat()
     }
 
     /**
@@ -191,8 +181,8 @@ class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, Conte
      */
     private fun applyColor(colorPair: ColorPair) {
         appBarBinding.appBar.setBackgroundColor(colorPair.bgColor())
-        appBarBinding.seek.progressDrawable.colorFilter =
-                PorterDuffColorFilter(colorPair.fontColor(), PorterDuff.Mode.SRC_IN)
+        appBarBinding.seek.thumbTintList = ColorStateList.valueOf(colorPair.fontColor())
+        appBarBinding.seek.trackActiveTintList = ColorStateList.valueOf(colorPair.fontColor())
         EditTextColorSetter().invoke(appBarBinding.input, colorPair.fontColor())
     }
 

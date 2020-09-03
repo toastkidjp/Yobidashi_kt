@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <SeekBar
+        <com.google.android.material.slider.Slider
             android:id="@+id/contrast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,13 +19,14 @@
             android:layout_marginBottom="90dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:max="100"
+            android:valueFrom="0.0"
+            android:valueTo="1.5"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-        <SeekBar
+        <com.google.android.material.slider.Slider
             android:id="@+id/alpha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +34,8 @@
             android:layout_marginBottom="60dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:max="100"
+            android:valueFrom="-0.75"
+            android:valueTo="0.75"
             app:layout_constraintTop_toBottomOf="@id/contrast"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

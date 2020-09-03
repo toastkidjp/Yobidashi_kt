@@ -13,13 +13,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import android.widget.SeekBar
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.webkit.WebViewFeature
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -28,8 +29,6 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.Urls
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Setting fragment of WEB browser.
@@ -102,33 +101,19 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
             it.adRemoveCheck.isChecked = preferenceApplier.adRemove
             it.adRemoveCheck.jumpDrawablesToCurrentState()
 
-            it.poolSizeValue.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
-                    val newSize = bar?.progress ?: 0
-                    preferenceApplier.poolSize = newSize + 1
-                    it.poolSizeText.text = "${newSize + 1}"
-                }
+            it.poolSizeValue.addOnChangeListener { _, value, fromUser ->
+                val newSize = value.toInt()
+                preferenceApplier.poolSize = newSize
+                it.poolSizeText.text = "$newSize"
+            }
 
-                override fun onStartTrackingTouch(p0: SeekBar?) = Unit
+            val lastValue = preferenceApplier.poolSize.toFloat()
+            it.poolSizeValue.value = if (lastValue > it.poolSizeValue.valueTo) it.poolSizeValue.valueTo else lastValue
 
-                override fun onStopTrackingTouch(p0: SeekBar?) = Unit
-
-            })
-            it.poolSizeValue.progress = preferenceApplier.poolSize - 1
-
-            it.valueBackgroundAlpha.setOnSeekBarChangeListener(
-                    object: SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(bar: SeekBar?, p1: Int, p2: Boolean) {
-                    val newSize = bar?.progress ?: 0
-                    preferenceApplier.setWebViewBackgroundAlpha(newSize.toFloat() / 100f)
-                    it.textBackgroundAlpha.text = newSize.toString()
-                }
-
-                override fun onStartTrackingTouch(p0: SeekBar?) = Unit
-
-                override fun onStopTrackingTouch(p0: SeekBar?) = Unit
-
-            })
+            it.valueBackgroundAlpha.addOnChangeListener { _, value, fromUser ->
+                preferenceApplier.setWebViewBackgroundAlpha(value / 100.0f)
+                it.textBackgroundAlpha.text = value.toString()
+            }
 
             if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                 it.darkModeCheck.let { checkBox ->
@@ -139,8 +124,8 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
                 it.darkModeCheck.isVisible = false
             }
 
-            it.valueBackgroundAlpha.progress =
-                    (preferenceApplier.getWebViewBackgroundAlpha() * 100f).toInt()
+            it.valueBackgroundAlpha.value =
+                    preferenceApplier.getWebViewBackgroundAlpha() * 100f
         }
 
         binding.browserExpand.screenMode.let {
