@@ -21,12 +21,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.noties.markwon.Markwon
-import io.noties.markwon.ext.tables.TablePlugin
-import io.noties.markwon.ext.tasklist.TaskListPlugin
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.detail.markdown.MarkdownConverterProviderUseCase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
 import jp.toastkid.article_viewer.bookmark.Bookmark
@@ -145,11 +143,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         val context = binding.root.context
 
-        val plugins = listOf(TablePlugin.create(context), TaskListPlugin.create(context))
-
         ContentLoaderUseCase(
                 repository,
-                Markwon.builder(context).usePlugins(plugins).build(),
+                MarkdownConverterProviderUseCase()(context),
                 binding.content,
                 subheads
         ).invoke(title)
