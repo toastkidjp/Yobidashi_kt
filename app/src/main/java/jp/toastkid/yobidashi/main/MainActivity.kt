@@ -34,6 +34,7 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.ToolbarColorApplier
+import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -500,7 +501,8 @@ class MainActivity : AppCompatActivity(),
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
+        ToolbarColorApplier()(binding.toolbar, preferenceApplier.colorPair())
+        WindowOptionColorApplier()(window, preferenceApplier.colorPair())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             RecentAppColoringUseCase(
