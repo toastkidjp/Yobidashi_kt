@@ -127,20 +127,6 @@ class NotePopup(context: Context) {
         binding.header.setOnTouchListener(slidingTouchListener)
     }
 
-    private fun isVisible() = popupWindow.isShowing
-
-    // TODO call it.
-    fun onBackPressed(): Boolean {
-        if (popupWindow.isShowing.not()) {
-            return false
-        }
-        if (isVisible()) {
-            hide()
-            return true
-        }
-        return false
-    }
-
     companion object {
 
         @LayoutRes
