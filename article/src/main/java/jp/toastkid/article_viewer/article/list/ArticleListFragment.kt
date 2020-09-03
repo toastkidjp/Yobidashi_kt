@@ -11,6 +11,7 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabaseLockedException
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -56,6 +57,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 /**
  * Article list fragment.
@@ -89,10 +91,21 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     private val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             viewModel?.hideProgress()
+            showFeedback()
+        }
+
+        private fun showFeedback() {
             contentViewModel?.snackWithAction(
                     getString(R.string.message_done_import),
                     getString(R.string.reload)
-            ) { searchUseCase?.all() }
+            ) {
+                try {
+                    searchUseCase?.all()
+                } catch (e: SQLiteDatabaseLockedException) {
+                    Timber.e(e)
+                    showFeedback()
+                }
+            }
         }
     }
 
