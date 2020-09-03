@@ -502,7 +502,9 @@ class MainActivity : AppCompatActivity(),
      */
     private fun refresh() {
         ToolbarColorApplier()(binding.toolbar, preferenceApplier.colorPair())
-        WindowOptionColorApplier()(window, preferenceApplier.colorPair())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            WindowOptionColorApplier()(window, preferenceApplier.colorPair())
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             RecentAppColoringUseCase(
