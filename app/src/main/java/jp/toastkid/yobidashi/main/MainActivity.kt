@@ -57,6 +57,7 @@ import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
+import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.search.SearchAction
@@ -139,6 +140,8 @@ class MainActivity : AppCompatActivity(),
 
     private var tabListUseCase: TabListUseCase? = null
 
+    private lateinit var menuSwitchColorApplier: MenuSwitchColorApplier
+
     /**
      * Disposables.
      */
@@ -169,6 +172,8 @@ class MainActivity : AppCompatActivity(),
         initializeMenuViewModel()
 
         initializeContentViewModel()
+
+        menuSwitchColorApplier = MenuSwitchColorApplier(binding.menuSwitch)
 
         val activityViewModelProvider = ViewModelProvider(this)
         browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
@@ -497,8 +502,6 @@ class MainActivity : AppCompatActivity(),
         ClippingUrlOpener(binding.content) { browserViewModel?.open(it) }
     }
 
-    private var previousIconColor: Int = Color.TRANSPARENT
-
     /**
      * Refresh toolbar and background.
      */
@@ -517,11 +520,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         val colorPair = preferenceApplier.colorPair()
-        val newColor = colorPair.bgColor()
-        if (previousIconColor != newColor) {
-            previousIconColor = newColor
-            colorPair.applyReverseTo(binding.menuSwitch)
-        }
+        menuSwitchColorApplier(colorPair)
 
         backgroundImageLoaderUseCase.invoke(binding.background, preferenceApplier.backgroundImagePath)
 
