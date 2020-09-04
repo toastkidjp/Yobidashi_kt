@@ -334,6 +334,7 @@
                         android:layout_margin="@dimen/settings_item_left_margin"
                         android:gravity="center_vertical"
                         android:text="@string/title_dark_mode"
+                        android:drawableStart="@drawable/ic_dark_mode_black"
                         />
                     <CheckBox
                         android:id="@+id/dark_mode_check"
