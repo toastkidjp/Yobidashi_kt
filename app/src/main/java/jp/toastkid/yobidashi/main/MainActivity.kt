@@ -506,9 +506,10 @@ class MainActivity : AppCompatActivity(),
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        ToolbarColorApplier()(binding.toolbar, preferenceApplier.colorPair())
+        val colorPair = preferenceApplier.colorPair()
+        ToolbarColorApplier()(binding.toolbar, colorPair)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            WindowOptionColorApplier()(window, preferenceApplier.colorPair())
+            WindowOptionColorApplier()(window, colorPair)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -519,7 +520,6 @@ class MainActivity : AppCompatActivity(),
             ).invoke(preferenceApplier.color)
         }
 
-        val colorPair = preferenceApplier.colorPair()
         menuSwitchColorApplier(colorPair)
 
         backgroundImageLoaderUseCase.invoke(binding.background, preferenceApplier.backgroundImagePath)
