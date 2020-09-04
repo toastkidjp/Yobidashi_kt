@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.menu
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
@@ -19,9 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.DraggableTouchListener
+import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import kotlin.math.min
 
 /**
@@ -37,8 +36,6 @@ class MenuBinder(
 
     private var menuAdapter: MenuAdapter? = null
 
-    private var previousIconColor: Int = Color.TRANSPARENT
-
     private var recyclerView: RecyclerView? = null
 
     init {
@@ -50,13 +47,6 @@ class MenuBinder(
 
         menuViewModel?.onResume?.observe(fragmentActivity, Observer {
             recyclerView?.requestLayout()
-
-            val colorPair = preferenceApplier.colorPair()
-            val newColor = colorPair.bgColor()
-            if (previousIconColor != newColor) {
-                previousIconColor = newColor
-                colorPair.applyReverseTo(menuSwitch)
-            }
         })
 
         menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {

@@ -497,6 +497,8 @@ class MainActivity : AppCompatActivity(),
         ClippingUrlOpener(binding.content) { browserViewModel?.open(it) }
     }
 
+    private var previousIconColor: Int = Color.TRANSPARENT
+
     /**
      * Refresh toolbar and background.
      */
@@ -512,6 +514,13 @@ class MainActivity : AppCompatActivity(),
                     { resources },
                     ::setTaskDescription
             ).invoke(preferenceApplier.color)
+        }
+
+        val colorPair = preferenceApplier.colorPair()
+        val newColor = colorPair.bgColor()
+        if (previousIconColor != newColor) {
+            previousIconColor = newColor
+            colorPair.applyReverseTo(binding.menuSwitch)
         }
 
         backgroundImageLoaderUseCase.invoke(binding.background, preferenceApplier.backgroundImagePath)
