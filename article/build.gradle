@@ -74,6 +74,7 @@ dependencies {
     implementation ("io.noties.markwon:syntax-highlight:$markwonVersion") {
         exclude group: 'org.jetbrains', module: 'annotations-java5'
     }
+    kapt "io.noties:prism4j-bundler:2.0.0"
 
     final def roomVersion = '2.3.0-alpha01'
     implementation "androidx.room:room-runtime:$roomVersion"
