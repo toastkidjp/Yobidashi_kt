@@ -28,7 +28,12 @@ buildscript {
     ext.libVersions = [
             coroutines: '1.3.5',
             ktx: '1.1.0',
+            appcompat: '1.2.0',
+            cardview: '1.0.0',
+            constraintlayout: '1.1.3',
+            lifecycle: '2.2.0',
             room: '2.3.0-alpha02',
+            paging: '3.0.0-alpha03',
             material: '1.2.0',
             fragment: '1.2.4',
             timber: '4.6.0',
