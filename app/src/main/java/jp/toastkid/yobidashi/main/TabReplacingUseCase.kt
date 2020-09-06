@@ -107,9 +107,15 @@ class TabReplacingUseCase(
             }
             is ArticleListTab -> {
                 replaceFragment(obtainFragment(ArticleListFragment::class.java), withAnimation)
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread { refreshThumbnail() }
+                }
             }
             is CalendarTab -> {
                 replaceFragment(obtainFragment(CalendarFragment::class.java), withAnimation)
+                CoroutineScope(Dispatchers.Default).launch(disposables) {
+                    runOnUiThread { refreshThumbnail() }
+                }
             }
         }
 
