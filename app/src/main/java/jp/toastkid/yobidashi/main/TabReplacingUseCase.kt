@@ -107,19 +107,21 @@ class TabReplacingUseCase(
             }
             is ArticleListTab -> {
                 replaceFragment(obtainFragment(ArticleListFragment::class.java), withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread { refreshThumbnail() }
-                }
+                takeThumbnail()
             }
             is CalendarTab -> {
                 replaceFragment(obtainFragment(CalendarFragment::class.java), withAnimation)
-                CoroutineScope(Dispatchers.Default).launch(disposables) {
-                    runOnUiThread { refreshThumbnail() }
-                }
+                takeThumbnail()
             }
         }
 
         tabs.saveTabList()
+    }
+
+    private fun takeThumbnail() {
+        CoroutineScope(Dispatchers.Default).launch(disposables) {
+            runOnUiThread { refreshThumbnail() }
+        }
     }
 
 }
