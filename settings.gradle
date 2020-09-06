@@ -1,3 +1,4 @@
+include ':todo'
 include ':search'
 include ':lib'
 include ':app'
