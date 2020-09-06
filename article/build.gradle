@@ -62,8 +62,8 @@ dependencies {
     implementation "androidx.paging:paging-runtime:3.0.0-alpha03"
 
     implementation 'com.squareup.okio:okio:1.17.5'
-    implementation 'com.jakewharton.timber:timber:4.6.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
+    implementation "com.jakewharton.timber:timber:$libVersions.timber"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
     final def markwonVersion = '4.5.1'
 
@@ -76,9 +76,8 @@ dependencies {
     }
     kapt "io.noties:prism4j-bundler:2.0.0"
 
-    final def roomVersion = '2.3.0-alpha02'
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-runtime:$libVersions.room"
+    kapt "androidx.room:room-compiler:$libVersions.room"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.mockk:mockk:1.9.3"
