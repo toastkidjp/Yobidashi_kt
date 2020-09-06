@@ -19,9 +19,7 @@ import io.noties.prism4j.annotations.PrismBundle
 /**
  * @author toastkidjp
  */
-@PrismBundle(
-        include = ["kotlin", "java"]
-)
+@PrismBundle(include = ["kotlin", "java"])
 class MarkdownConverterProviderUseCase {
 
     operator fun invoke(context: Context): Markwon {
