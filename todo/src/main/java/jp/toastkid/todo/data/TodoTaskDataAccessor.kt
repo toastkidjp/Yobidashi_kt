@@ -7,6 +7,7 @@
  */
 package jp.toastkid.todo.data
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -21,7 +22,7 @@ import jp.toastkid.todo.model.TodoTask
 interface TodoTaskDataAccessor {
 
     @Query("SELECT * FROM todotask")
-    fun allTasks(): List<TodoTask>
+    fun allTasks(): PagingSource<Int, TodoTask>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(task: TodoTask)
