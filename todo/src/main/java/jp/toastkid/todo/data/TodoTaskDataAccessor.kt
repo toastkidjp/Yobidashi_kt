@@ -30,4 +30,7 @@ interface TodoTaskDataAccessor {
     @Delete
     fun delete(task: TodoTask)
 
+    @Query("SELECT COUNT(id) FROM todotask")
+    fun count(): Int
+
 }

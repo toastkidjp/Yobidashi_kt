@@ -24,6 +24,7 @@ import jp.toastkid.todo.databinding.AppBarTaskListBinding
 import jp.toastkid.todo.databinding.FragmentTaskListBinding
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragment
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
+import jp.toastkid.todo.view.initial.InitialTaskPreparation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -53,6 +54,9 @@ class TaskListFragment : Fragment() {
         val adapter = Adapter()
         binding.results.adapter = adapter
         CoroutineScope(Dispatchers.IO).launch {
+            if (repository.count() == 0) {
+                InitialTaskPreparation(repository).invoke()
+            }
             Pager(
                     PagingConfig(pageSize = 10, enablePlaceholders = true),
                     pagingSourceFactory = { repository.allTasks() }
