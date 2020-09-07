@@ -21,6 +21,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.todo.view.TaskListFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
@@ -166,6 +167,9 @@ class MenuUseCase(
                         )
                     }
                 }
+            }
+            Menu.TODO_TASKS -> {
+                nextFragment(TaskListFragment::class.java)
             }
             Menu.QUICK_NOTE -> {
                 val parent = extractContentView() ?: return

@@ -75,6 +75,7 @@ dependencies {
     implementation project(":lib")
     implementation project(":article")
     implementation project(":search")
+    implementation project(":todo")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.fragment:fragment:$libVersions.fragment"
