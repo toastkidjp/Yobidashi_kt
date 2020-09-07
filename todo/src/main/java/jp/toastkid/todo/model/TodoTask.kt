@@ -22,6 +22,8 @@ class TodoTask(
 ) {
     var description: String = ""
 
+    var bigram: String = ""
+
     var created: Long = 0L
 
     var lastModified: Long = 0L
