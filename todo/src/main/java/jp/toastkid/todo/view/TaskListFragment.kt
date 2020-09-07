@@ -42,22 +42,6 @@ class TaskListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false)
 
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_task_list, container, false)
-
-        val repository = TodoTaskDatabase.find(requireContext()).repository()
-        /*CoroutineScope(Dispatchers.IO).launch {
-            repository.insert(
-                    TodoTask(0).also {
-                        it.color = Color.RED
-                        it.description = "test"
-                    }
-            )
-            repository.insert(
-                    TodoTask(0).also {
-                        it.color = Color.BLUE
-                        it.description = "test"
-                    }
-            )
-        }*/
         return binding.root
     }
 
