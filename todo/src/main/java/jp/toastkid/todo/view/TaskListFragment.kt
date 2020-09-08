@@ -52,12 +52,17 @@ class TaskListFragment : Fragment() {
         val repository = TodoTaskDatabase.find(view.context).repository()
 
         var popup: ItemMenuPopup? = null
+
         val adapter = Adapter { parent, item -> popup?.show(parent, item) }
+
+        val taskAdditionDialogFragmentUseCase =
+                TaskAdditionDialogFragmentUseCase(this, { adapter.refresh() })
+
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
                         TodoTaskDatabase.find(view.context).repository(),
-                        { TaskAdditionDialogFragmentUseCase(this, { adapter.refresh() }).invoke(it) },
+                        { taskAdditionDialogFragmentUseCase.invoke(it) },
                         { adapter.refresh() }
                 )
         )
@@ -78,7 +83,7 @@ class TaskListFragment : Fragment() {
         }
 
         appBarBinding.add.setOnClickListener {
-            TaskAdditionDialogFragmentUseCase(this, { adapter.refresh() }).invoke()
+            taskAdditionDialogFragmentUseCase.invoke()
         }
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
