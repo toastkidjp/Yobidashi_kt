@@ -16,6 +16,13 @@ import jp.toastkid.todo.model.TodoTask
  */
 class InitialTaskPreparation(private val repository: TodoTaskDataAccessor) {
 
+    /**
+     * <pre>
+     * CoroutineScope(Dispatchers.IO).launch {
+     *     InitialTaskPreparation(repository).invoke()
+     * }
+     * </pre>
+     */
     operator fun invoke() {
         repository.insert(
                 TodoTask(0).also {
