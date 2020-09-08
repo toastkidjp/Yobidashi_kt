@@ -25,38 +25,40 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
+import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
+import jp.toastkid.yobidashi.browser.page_information.PageInformationExtractor
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
+import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
+import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
+import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.AppBarViewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
-import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.Job
@@ -560,19 +562,7 @@ class BrowserModule(
         currentView()?.saveState(outState)
     }
 
-    fun makeCurrentPageInformation(): Bundle = Bundle().also { bundle ->
-        return currentView()?.let {
-            val url = it.url
-            if (url.isNullOrBlank()) {
-                return@let bundleOf()
-            }
-
-            bundle.putString("url", url)
-            bundle.putParcelable("favicon", it.favicon)
-            bundle.putString("title", it.title)
-            bundle
-        } ?: bundleOf()
-    }
+    fun makeCurrentPageInformation(): Bundle = PageInformationExtractor().invoke(currentView())
 
     /**
      * Resize [GlobalWebViewPool].

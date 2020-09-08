@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.yobidashi.browser.page_information.PageInformationDialogFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 
 /**
