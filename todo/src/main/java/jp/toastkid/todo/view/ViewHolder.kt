@@ -7,6 +7,7 @@
  */
 package jp.toastkid.todo.view
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.todo.databinding.ItemTaskBinding
 import jp.toastkid.todo.model.TodoTask
@@ -22,4 +23,7 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
         binding.subText.text = task.dueDate.toString()
     }
 
+    fun setOnMenuClick(onAction: (View) -> Unit) {
+        binding.menu.setOnClickListener { onAction(it) }
+    }
 }
