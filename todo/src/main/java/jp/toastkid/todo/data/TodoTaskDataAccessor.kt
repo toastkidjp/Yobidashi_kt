@@ -24,6 +24,9 @@ interface TodoTaskDataAccessor {
     @Query("SELECT * FROM todotask")
     fun allTasks(): PagingSource<Int, TodoTask>
 
+    @Query("SELECT * FROM todotask WHERE id = :id")
+    fun findById(id: Int): TodoTask
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(task: TodoTask)
 
