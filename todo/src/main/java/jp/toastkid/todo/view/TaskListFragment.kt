@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -22,8 +21,7 @@ import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.AppBarTaskListBinding
 import jp.toastkid.todo.databinding.FragmentTaskListBinding
-import jp.toastkid.todo.view.addition.TaskAdditionDialogFragment
-import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
+import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
 import jp.toastkid.todo.view.initial.InitialTaskPreparation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,15 +66,7 @@ class TaskListFragment : Fragment() {
         }
 
         appBarBinding.add.setOnClickListener {
-            val taskAdditionDialogFragment = TaskAdditionDialogFragment()
-            taskAdditionDialogFragment.setTargetFragment(this, 1)
-            ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
-                    .refresh
-                    .observe(viewLifecycleOwner, Observer {
-                        it?.getContentIfNotHandled() ?: return@Observer
-                        adapter.refresh()
-                    })
-            taskAdditionDialogFragment.show(parentFragmentManager, "")
+            TaskAdditionDialogFragmentUseCase(this, { adapter.refresh() }).invoke()
         }
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
