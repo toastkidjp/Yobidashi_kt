@@ -11,6 +11,7 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 /**
  * @author toastkidjp
@@ -19,7 +20,7 @@ import androidx.room.PrimaryKey
 class TodoTask(
         @PrimaryKey(autoGenerate = true)
         var id: Int
-) {
+): Serializable {
     var description: String = ""
 
     var bigram: String = ""
