@@ -13,7 +13,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.todo.R
@@ -34,11 +36,17 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
     private var viewModel: TaskAdditionDialogFragmentViewModel? = null
 
+    private var task: TodoTask? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_task_addition, container, false)
         binding.dialog = this
         viewModel = targetFragment?.let {
             ViewModelProvider(it).get(TaskAdditionDialogFragmentViewModel::class.java)
+        }
+        task = arguments?.getSerializable("task") as? TodoTask
+        task?.let {
+            binding.additionQueryInput.setText(it.description)
         }
         return binding.root
     }
@@ -46,15 +54,32 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
     fun add() {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                val task = TodoTask(0)
+                val task = task ?: TodoTask(0)
                 task.description = binding.additionQueryInput.text.toString()
-                task.created = System.currentTimeMillis()
+                if (this@TaskAdditionDialogFragment.task == null) {
+                    task.created = System.currentTimeMillis()
+                }
                 task.lastModified = System.currentTimeMillis()
                 task.dueDate = binding.datePicker.minDate
                 task.color = (binding.root.findViewById<View>(binding.colors.checkedRadioButtonId)?.background as? ColorDrawable)?.color ?: Color.TRANSPARENT
                 TodoTaskDatabase.find(requireContext()).repository().insert(task)
             }
             viewModel?.refresh()
+
+            if (task != null) {
+                dismiss()
+            }
+        }
+    }
+
+    companion object {
+
+        fun make(task: TodoTask? = null): DialogFragment {
+            return TaskAdditionDialogFragment().also {
+                if (task != null) {
+                    it.arguments = bundleOf("task" to task)
+                }
+            }
         }
     }
 

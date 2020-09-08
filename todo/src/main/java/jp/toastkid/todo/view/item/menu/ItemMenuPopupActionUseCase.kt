@@ -8,6 +8,7 @@
 package jp.toastkid.todo.view.item.menu
 
 import jp.toastkid.todo.data.TodoTaskDataAccessor
+import jp.toastkid.todo.model.TodoTask
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,11 +19,17 @@ import kotlinx.coroutines.withContext
  */
 class ItemMenuPopupActionUseCase(
         private val repository: TodoTaskDataAccessor,
+        private val modify: (TodoTask) -> Unit,
         private val refresh: () -> Unit
 ) {
 
     fun modify(id: Int) {
-        // TODO implement.
+        CoroutineScope(Dispatchers.Main).launch {
+            val task = withContext(Dispatchers.IO) {
+                repository.findById(id)
+            } ?: return@launch
+            modify(task)
+        }
     }
 
     fun delete(id: Int) {

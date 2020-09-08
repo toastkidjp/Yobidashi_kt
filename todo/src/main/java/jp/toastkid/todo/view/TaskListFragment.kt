@@ -23,6 +23,8 @@ import jp.toastkid.todo.databinding.AppBarTaskListBinding
 import jp.toastkid.todo.databinding.FragmentTaskListBinding
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
 import jp.toastkid.todo.view.initial.InitialTaskPreparation
+import jp.toastkid.todo.view.item.menu.ItemMenuPopup
+import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -49,7 +51,17 @@ class TaskListFragment : Fragment() {
 
         val repository = TodoTaskDatabase.find(view.context).repository()
 
-        val adapter = Adapter()
+        var popup: ItemMenuPopup? = null
+        val adapter = Adapter { parent, item -> popup?.show(parent, item) }
+        popup = ItemMenuPopup(
+                view.context,
+                ItemMenuPopupActionUseCase(
+                        TodoTaskDatabase.find(view.context).repository(),
+                        { TaskAdditionDialogFragmentUseCase(this, { adapter.refresh() }).invoke(it) },
+                        { adapter.refresh() }
+                )
+        )
+
         binding.results.adapter = adapter
         CoroutineScope(Dispatchers.IO).launch {
             if (repository.count() == 0) {

@@ -10,6 +10,7 @@ package jp.toastkid.todo.view.addition
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.todo.model.TodoTask
 
 /**
  * @author toastkidjp
@@ -19,8 +20,8 @@ class TaskAdditionDialogFragmentUseCase(
         private val refresh: () -> Unit
 ) {
 
-    operator fun invoke() {
-        val taskAdditionDialogFragment = TaskAdditionDialogFragment()
+    operator fun invoke(task: TodoTask? = null) {
+        val taskAdditionDialogFragment = TaskAdditionDialogFragment.make(task)
         taskAdditionDialogFragment.setTargetFragment(viewLifecycleOwner, 1)
         ViewModelProvider(viewLifecycleOwner).get(TaskAdditionDialogFragmentViewModel::class.java)
                 .refresh
