@@ -19,6 +19,9 @@ import jp.toastkid.todo.databinding.PopupTodoTasksItemMenuBinding
 import jp.toastkid.todo.model.TodoTask
 
 /**
+ *
+ * @param context Use for obtaining [PopupWindow]
+ * @param action [ItemMenuPopupActionUseCase]
  * @author toastkidjp
  */
 class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUseCase) {
