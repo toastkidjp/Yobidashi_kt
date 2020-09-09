@@ -9,6 +9,7 @@ package jp.toastkid.todo.view
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.databinding.ItemTaskBinding
 import jp.toastkid.todo.model.TodoTask
 import java.text.SimpleDateFormat
@@ -24,6 +25,7 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
         binding.color.setBackgroundColor(task.color)
         binding.mainText.text = task.description
         binding.subText.text = dateFormatHolder.get()?.format(Calendar.getInstance().also { it.timeInMillis = task.dueDate }.time)
+        binding.menu.setColorFilter(PreferenceApplier(binding.menu.context).color)
     }
 
     fun setOnMenuClick(onAction: (View) -> Unit) {
