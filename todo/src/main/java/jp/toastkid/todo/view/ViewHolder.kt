@@ -11,6 +11,9 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.todo.databinding.ItemTaskBinding
 import jp.toastkid.todo.model.TodoTask
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * @author toastkidjp
@@ -20,10 +23,19 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
     fun bind(task: TodoTask) {
         binding.color.setBackgroundColor(task.color)
         binding.mainText.text = task.description
-        binding.subText.text = task.dueDate.toString()
+        binding.subText.text = dateFormatHolder.get()?.format(Calendar.getInstance().also { it.timeInMillis = task.dueDate }.time)
     }
 
     fun setOnMenuClick(onAction: (View) -> Unit) {
         binding.menu.setOnClickListener { onAction(it) }
+    }
+
+    companion object {
+        private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
+            object: ThreadLocal<SimpleDateFormat>() {
+                override fun initialValue() =
+                        SimpleDateFormat("yyyy/MM/dd(E)", Locale.getDefault())
+            }
+        }
     }
 }
