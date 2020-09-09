@@ -55,15 +55,17 @@ class TaskListFragment : Fragment() {
 
         val adapter = Adapter { parent, item -> popup?.show(parent, item) }
 
+        val refresh = { adapter.refresh() }
+
         val taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(this, { adapter.refresh() })
+                TaskAdditionDialogFragmentUseCase(this, refresh)
 
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
                         TodoTaskDatabase.find(view.context).repository(),
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
-                        { adapter.refresh() }
+                        refresh
                 )
         )
 
