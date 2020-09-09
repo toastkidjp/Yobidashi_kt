@@ -13,7 +13,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
@@ -60,6 +62,9 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         task = arguments?.getSerializable("task") as? TodoTask
         task?.let {
             binding.additionQueryInput.setText(it.description)
+            (binding.colors.children
+                    .firstOrNull { checkbox -> extractBackgroundColor(checkbox) == it.color }
+                    as? RadioButton)?.isChecked = true
         }
         return binding.root
     }
