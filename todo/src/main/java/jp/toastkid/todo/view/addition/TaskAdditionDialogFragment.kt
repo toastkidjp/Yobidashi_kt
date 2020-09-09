@@ -26,6 +26,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 /**
  * @author toastkidjp
@@ -38,12 +40,23 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
     private var task: TodoTask? = null
 
+    private var date: Triple<Int, Int, Int>? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_task_addition, container, false)
         binding.dialog = this
+
+        val today = Calendar.getInstance()
+        binding.datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                { view, year, monthOfYear, dayOfMonth ->
+                    date = Triple(year, monthOfYear, dayOfMonth)
+                }
+        )
+
         viewModel = targetFragment?.let {
             ViewModelProvider(it).get(TaskAdditionDialogFragmentViewModel::class.java)
         }
+
         task = arguments?.getSerializable("task") as? TodoTask
         task?.let {
             binding.additionQueryInput.setText(it.description)
@@ -60,7 +73,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
                     task.created = System.currentTimeMillis()
                 }
                 task.lastModified = System.currentTimeMillis()
-                task.dueDate = binding.datePicker.minDate
+                task.dueDate = if (date == null) { System.currentTimeMillis() } else { GregorianCalendar(date?.first ?: 0, date?.second ?: 0, date?.third ?: 0).timeInMillis }
                 task.color = (binding.root.findViewById<View>(binding.colors.checkedRadioButtonId)?.background as? ColorDrawable)?.color ?: Color.TRANSPARENT
                 TodoTaskDatabase.find(requireContext()).repository().insert(task)
             }
