@@ -28,7 +28,7 @@ class Adapter(private val showPopup: (View, TodoTask) -> Unit) : PagingDataAdapt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val result = getItem(position) ?: return
         holder.bind(result)
-        holder.setOnMenuClick { view -> showPopup(view, result) }
+        holder.setOnMenuClick { showPopup(it, result) }
     }
 
 }
