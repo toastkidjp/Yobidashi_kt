@@ -81,7 +81,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
                     task.created = System.currentTimeMillis()
                 }
                 task.lastModified = System.currentTimeMillis()
-                task.dueDate = if (date == null) { System.currentTimeMillis() } else { GregorianCalendar(date?.first ?: 0, date?.second ?: 0, date?.third ?: 0).timeInMillis }
+                task.dueDate = makeDateMs()
                 task.color = extractBackgroundColor(binding.root.findViewById(binding.colors.checkedRadioButtonId))
                 TodoTaskDatabase.find(requireContext()).repository().insert(task)
             }
@@ -92,6 +92,13 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             }
         }
     }
+
+    private fun makeDateMs() =
+            if (date == null) {
+                System.currentTimeMillis()
+            } else {
+                GregorianCalendar(date?.first ?: 0, date?.second ?: 0, date?.third ?: 0).timeInMillis
+            }
 
     private fun extractBackgroundColor(view: View?) =
             (view?.background as? ColorDrawable)?.color
