@@ -8,6 +8,7 @@
 package jp.toastkid.todo.view.initial
 
 import android.graphics.Color
+import androidx.annotation.WorkerThread
 import jp.toastkid.todo.data.TodoTaskDataAccessor
 import jp.toastkid.todo.model.TodoTask
 
@@ -23,6 +24,7 @@ class InitialTaskPreparation(private val repository: TodoTaskDataAccessor) {
      * }
      * </pre>
      */
+    @WorkerThread
     operator fun invoke() {
         repository.insert(
                 TodoTask(0).also {
