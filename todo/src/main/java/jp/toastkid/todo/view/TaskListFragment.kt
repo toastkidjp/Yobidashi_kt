@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -40,9 +41,9 @@ class TaskListFragment : Fragment() {
     private lateinit var appBarBinding: AppBarTaskListBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_task_list, container, false)
+        appBarBinding = DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
         return binding.root
     }
 
@@ -92,4 +93,13 @@ class TaskListFragment : Fragment() {
                 .replace(appBarBinding.root)
     }
 
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_task_list
+
+        @LayoutRes
+        private val APP_BAR_LAYOUT_ID = R.layout.app_bar_task_list
+
+    }
 }
