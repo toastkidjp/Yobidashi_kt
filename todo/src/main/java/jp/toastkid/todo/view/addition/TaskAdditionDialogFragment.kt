@@ -97,7 +97,11 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             if (date == null) {
                 System.currentTimeMillis()
             } else {
-                GregorianCalendar(date?.first ?: 0, date?.second ?: 0, date?.third ?: 0).timeInMillis
+                GregorianCalendar(
+                        date?.first ?: 0,
+                        date?.second ?: 0,
+                        date?.third ?: 0
+                ).timeInMillis
             }
 
     private fun extractBackgroundColor(view: View?) =
