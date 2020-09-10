@@ -48,7 +48,11 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_task_addition, container, false)
         binding.dialog = this
 
+        task = arguments?.getSerializable("task") as? TodoTask
         val today = Calendar.getInstance()
+        task?.let {
+            today.timeInMillis = it.dueDate
+        }
         binding.datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
                 { view, year, monthOfYear, dayOfMonth ->
                     date = Triple(year, monthOfYear, dayOfMonth)
@@ -59,7 +63,6 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             ViewModelProvider(it).get(TaskAdditionDialogFragmentViewModel::class.java)
         }
 
-        task = arguments?.getSerializable("task") as? TodoTask
         task?.let {
             binding.additionQueryInput.setText(it.description)
             (binding.colors.children
