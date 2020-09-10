@@ -24,7 +24,7 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
     fun bind(task: TodoTask) {
         binding.color.setBackgroundColor(task.color)
         binding.mainText.text = task.description
-        binding.subText.text = dateFormatHolder.get()?.format(Calendar.getInstance().also { it.timeInMillis = task.dueDate }.time)
+        binding.subText.text = format(task.dueDate)
         binding.menu.setColorFilter(PreferenceApplier(binding.menu.context).color)
     }
 
@@ -33,6 +33,11 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
     }
 
     companion object {
+
+        fun format(ms: Long): String? {
+            return dateFormatHolder.get()?.format(Calendar.getInstance().also { it.timeInMillis = ms }.time)
+        }
+
         private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
             object: ThreadLocal<SimpleDateFormat>() {
                 override fun initialValue() =
