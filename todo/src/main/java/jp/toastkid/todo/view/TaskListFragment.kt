@@ -74,7 +74,7 @@ class TaskListFragment : Fragment() {
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        TodoTaskDatabase.find(view.context).repository(),
+                        repository,
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
                         refresh
                 )
