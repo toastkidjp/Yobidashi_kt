@@ -8,7 +8,6 @@
 package jp.toastkid.todo.view
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
@@ -19,7 +18,7 @@ import jp.toastkid.todo.model.TodoTask
 /**
  * @author toastkidjp
  */
-class Adapter(private val showPopup: (View, TodoTask) -> Unit) : PagingDataAdapter<TodoTask, ViewHolder>(SimpleComparator()) {
+class Adapter(private val viewModel: TaskListFragmentViewModel) : PagingDataAdapter<TodoTask, ViewHolder>(SimpleComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_task, parent, false))
@@ -28,7 +27,7 @@ class Adapter(private val showPopup: (View, TodoTask) -> Unit) : PagingDataAdapt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val result = getItem(position) ?: return
         holder.bind(result)
-        holder.setOnMenuClick { showPopup(it, result) }
+        holder.setOnMenuClick { viewModel.showMenu(it, result) }
     }
 
 }

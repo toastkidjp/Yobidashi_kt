@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -54,7 +55,16 @@ class TaskListFragment : Fragment() {
 
         var popup: ItemMenuPopup? = null
 
-        val adapter = Adapter { parent, item -> popup?.show(parent, item) }
+        val viewModel = ViewModelProvider(this).get(TaskListFragmentViewModel::class.java)
+        viewModel
+                .showMenu
+                .observe(viewLifecycleOwner, Observer { event ->
+                    event.getContentIfNotHandled()?.let {
+                        popup?.show(it.first, it.second)
+                    }
+                })
+
+        val adapter = Adapter(viewModel)
 
         val refresh = { adapter.refresh() }
 
