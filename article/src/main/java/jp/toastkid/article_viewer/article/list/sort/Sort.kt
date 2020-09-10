@@ -7,19 +7,20 @@
  */
 package jp.toastkid.article_viewer.article.list.sort
 
+import androidx.paging.PagingSource
+import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.list.SearchResult
-import jp.toastkid.article_viewer.article.list.sort.comparator.LastModifiedComparator
-import jp.toastkid.article_viewer.article.list.sort.comparator.LengthComparator
-import jp.toastkid.article_viewer.article.list.sort.comparator.NameComparator
 
 /**
  * @author toastkidjp
  */
-enum class Sort(val comparator: Comparator<SearchResult>) {
+enum class Sort(private val sort: (ArticleRepository) -> PagingSource<Int, SearchResult>) {
 
-    LAST_MODIFIED(LastModifiedComparator()),
-    NAME(NameComparator()),
-    LENGTH(LengthComparator());
+    LAST_MODIFIED({ it.orderByLastModified() }),
+    NAME({ it.orderByName() }),
+    LENGTH({ it.orderByLength() });
+
+    operator fun invoke(repository: ArticleRepository) = sort(repository)
 
     companion object {
 
@@ -34,6 +35,10 @@ enum class Sort(val comparator: Comparator<SearchResult>) {
                 }
             }
             return 0
+        }
+
+        fun findByName(name: String?): Sort {
+            return values().firstOrNull { it.name.equals(name, true) } ?: LAST_MODIFIED
         }
 
     }

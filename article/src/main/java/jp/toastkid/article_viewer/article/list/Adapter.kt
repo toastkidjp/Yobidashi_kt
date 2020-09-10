@@ -10,10 +10,9 @@ package jp.toastkid.article_viewer.article.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagingDataAdapter
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.list.sort.Sort
-import java.util.Collections
+import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
 
 /**
  * [SearchResult] list's adapter.
@@ -28,7 +27,7 @@ class Adapter(
     private val layoutInflater: LayoutInflater,
     private val onClick: (String) -> Unit,
     private val onLongClick: (String) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
+) : PagingDataAdapter<SearchResult, ViewHolder>(SimpleComparator()) {
 
     private val items: MutableList<SearchResult> = mutableListOf()
 
@@ -40,31 +39,9 @@ class Adapter(
         )
     }
 
-    override fun getItemCount() = items.size
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
-
-    /**
-     * Remove all item from current list.
-     */
-    fun clear() {
-        items.clear()
-    }
-
-    /**
-     * Add new item.
-     *
-     * @param result new item
-     */
-    fun add(result: SearchResult) {
-        items.add(result)
-    }
-
-    fun sort(sort: Sort) {
-        Collections.sort(items, sort.comparator)
-        notifyDataSetChanged()
+        val result = getItem(position) ?: return
+        holder.bind(result)
     }
 
     companion object {

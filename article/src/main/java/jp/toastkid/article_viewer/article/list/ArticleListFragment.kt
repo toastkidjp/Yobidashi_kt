@@ -128,10 +128,16 @@ class ArticleListFragment : Fragment(), ContentScrollable {
         articleRepository = dataBase.articleRepository()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_list, container, false)
-        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_article_list, container, false)
+        binding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_article_list, container, false)
+        appBarBinding = DataBindingUtil.inflate(
+                inflater, R.layout.app_bar_article_list, container, false)
         return binding.root
     }
 
@@ -202,11 +208,15 @@ class ArticleListFragment : Fragment(), ContentScrollable {
         })
         viewModel?.sort?.observe(viewLifecycleOwner, Observer {
             it?.getContentIfNotHandled()?.let { sort ->
-                adapter.sort(sort)
+                searchUseCase?.all()
             }
         })
 
-        searchUseCase = ArticleSearchUseCase(articleRepository, viewModel, adapter, preferencesWrapper)
+        searchUseCase = ArticleSearchUseCase(
+                ListLoaderUseCase(adapter),
+                articleRepository,
+                preferencesWrapper
+        )
 
         searchUseCase?.all()
     }
@@ -214,7 +224,8 @@ class ArticleListFragment : Fragment(), ContentScrollable {
     override fun onResume() {
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
-        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java).replace(appBarBinding.root)
+        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
+                .replace(appBarBinding.root)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {

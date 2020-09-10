@@ -18,6 +18,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
@@ -32,8 +34,8 @@ import jp.toastkid.lib.view.RecyclerViewScroller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -112,13 +114,22 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         )
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                val database = AppDatabase.find(activityContext)
-                val articleIds = database.bookmarkRepository().allArticleIds()
-                articleRepository.findByIds(articleIds).forEach { adapter.add(it) }
-            }
-            adapter.notifyDataSetChanged()
+
+        showAllBookmark(activityContext)
+    }
+
+    private fun showAllBookmark(activityContext: Context) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val database = AppDatabase.find(activityContext)
+            val articleIds = database.bookmarkRepository().allArticleIds()
+            Pager(
+                    PagingConfig(pageSize = 50, enablePlaceholders = true),
+                    pagingSourceFactory = { articleRepository.findByIds(articleIds) }
+            )
+                    .flow
+                    .collectLatest {
+                        adapter.submitData(it)
+                    }
         }
     }
 
@@ -146,8 +157,8 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         RecyclerViewScroller.toBottom(binding.results, binding.results.adapter?.itemCount ?: 0)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
         disposables.cancel()
+        super.onDetach()
     }
 }
