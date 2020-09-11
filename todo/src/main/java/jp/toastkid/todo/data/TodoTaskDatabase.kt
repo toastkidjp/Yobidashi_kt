@@ -30,7 +30,7 @@ abstract class TodoTaskDatabase : RoomDatabase() {
             return Room.databaseBuilder(
                     activityContext.applicationContext,
                     TodoTaskDatabase::class.java,
-                    "task_db"
+                    "todo_task_db"
             )
                     .fallbackToDestructiveMigration()
                     .build()
