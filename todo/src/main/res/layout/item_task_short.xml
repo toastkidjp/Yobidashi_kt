@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        app:cardBackgroundColor="#EEFFFFFF"
+        app:cardElevation="2dp"
+        android:foreground="@drawable/ripple_transparent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            >
+
+            <CheckBox
+                android:id="@+id/done"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/main_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:maxLines="5"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@id/done"
+                app:layout_constraintEnd_toStartOf="@id/color"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="main_text"
+                />
+
+            <View
+                android:id="@+id/color"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toStartOf="@id/menu"
+                tools:background="@android:color/holo_blue_bright"
+                />
+
+            <ImageView
+                android:id="@+id/menu"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_more"
+                tools:tint="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>
