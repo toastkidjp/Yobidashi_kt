@@ -31,6 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -69,7 +70,14 @@ class TaskListFragment : Fragment() {
         val refresh = { adapter.refresh() }
 
         val taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(this, repository, refresh)
+                TaskAdditionDialogFragmentUseCase(this, {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            repository.insert(it)
+                        }
+                        refresh()
+                    }
+                })
 
         popup = ItemMenuPopup(
                 view.context,
