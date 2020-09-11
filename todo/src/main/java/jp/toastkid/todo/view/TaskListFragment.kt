@@ -69,7 +69,7 @@ class TaskListFragment : Fragment() {
         val refresh = { adapter.refresh() }
 
         val taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(this, refresh)
+                TaskAdditionDialogFragmentUseCase(this, repository, refresh)
 
         popup = ItemMenuPopup(
                 view.context,

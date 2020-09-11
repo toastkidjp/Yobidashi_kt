@@ -11,18 +11,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.lib.lifecycle.Event
+import jp.toastkid.todo.model.TodoTask
 
 /**
  * @author toastkidjp
  */
 class TaskAdditionDialogFragmentViewModel : ViewModel() {
 
-    private val _refresh = MutableLiveData<Event<Unit>>()
+    private val _refresh = MutableLiveData<Event<TodoTask>>()
 
-    val refresh: LiveData<Event<Unit>> = _refresh
+    val refresh: LiveData<Event<TodoTask>> = _refresh
 
-    fun refresh() {
-        _refresh.postValue(Event(Unit))
+    fun refresh(task: TodoTask) {
+        _refresh.postValue(Event(task))
     }
 
 }

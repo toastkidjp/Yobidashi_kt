@@ -21,13 +21,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.todo.R
-import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.DialogTaskAdditionBinding
 import jp.toastkid.todo.model.TodoTask
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -73,23 +68,18 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun add() {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                val task = task ?: TodoTask(0)
-                task.description = binding.additionQueryInput.text.toString()
-                if (this@TaskAdditionDialogFragment.task == null) {
-                    task.created = System.currentTimeMillis()
-                }
-                task.lastModified = System.currentTimeMillis()
-                task.dueDate = makeDateMs()
-                task.color = extractBackgroundColor(binding.root.findViewById(binding.colors.checkedRadioButtonId))
-                TodoTaskDatabase.find(requireContext()).repository().insert(task)
-            }
-            viewModel?.refresh()
+        val task = this.task ?: TodoTask(0)
+        task.description = binding.additionQueryInput.text.toString()
+        if (this@TaskAdditionDialogFragment.task == null) {
+            task.created = System.currentTimeMillis()
+        }
+        task.lastModified = System.currentTimeMillis()
+        task.dueDate = makeDateMs()
+        task.color = extractBackgroundColor(binding.root.findViewById(binding.colors.checkedRadioButtonId))
+        viewModel?.refresh(task)
 
-            if (task != null) {
-                dismiss()
-            }
+        if (this.task != null) {
+            dismiss()
         }
     }
 

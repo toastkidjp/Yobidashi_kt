@@ -10,13 +10,19 @@ package jp.toastkid.todo.view.addition
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.todo.data.TodoTaskDataAccessor
 import jp.toastkid.todo.model.TodoTask
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
 class TaskAdditionDialogFragmentUseCase(
         private val viewLifecycleOwner: Fragment,
+        private val repository: TodoTaskDataAccessor,
         private val refresh: () -> Unit
 ) {
 
@@ -26,8 +32,13 @@ class TaskAdditionDialogFragmentUseCase(
         ViewModelProvider(viewLifecycleOwner).get(TaskAdditionDialogFragmentViewModel::class.java)
                 .refresh
                 .observe(viewLifecycleOwner, Observer {
-                    it?.getContentIfNotHandled() ?: return@Observer
-                    refresh()
+                    val task = it?.getContentIfNotHandled() ?: return@Observer
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO) {
+                            repository.insert(task)
+                        }
+                        refresh()
+                    }
                 })
         taskAdditionDialogFragment.show(viewLifecycleOwner.parentFragmentManager, "")
     }
