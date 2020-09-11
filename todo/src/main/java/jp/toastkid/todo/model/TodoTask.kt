@@ -35,9 +35,9 @@ class TodoTask(
 
     var boardId: Int = 0
 
-    var x: Int = 0
+    var x: Float = 0f
 
-    var y: Int = 0
+    var y: Float = 0f
 
     @ColorInt
     var color: Int = Color.CYAN
