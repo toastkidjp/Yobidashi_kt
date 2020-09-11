@@ -54,7 +54,7 @@ class DraggableTouchListener : View.OnTouchListener {
                 downRawY = motionEvent.rawY
                 dX = view.x - downRawX
                 dY = view.y - downRawY
-                false
+                true
             }
             MotionEvent.ACTION_MOVE -> {
                 val viewWidth = view.width
@@ -77,7 +77,7 @@ class DraggableTouchListener : View.OnTouchListener {
                         .y(newY)
                         .setDuration(0)
                         .start()
-                false
+                true
             }
             MotionEvent.ACTION_UP -> {
                 val upRawX = motionEvent.rawX
@@ -88,10 +88,10 @@ class DraggableTouchListener : View.OnTouchListener {
 
                 if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) {
                     onClick?.onClick()
-                    return false
+                    return true
                 }
                 onNewPosition?.onNewPosition(view.x, view.y)
-                false
+                true
             }
             else -> false
         }
