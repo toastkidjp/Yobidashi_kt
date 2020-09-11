@@ -20,8 +20,8 @@ class TaskAdditionDialogFragmentUseCase(
         private val refresh: () -> Unit
 ) {
 
-    operator fun invoke(task: TodoTask? = null) {
-        val taskAdditionDialogFragment = TaskAdditionDialogFragment.make(task)
+    operator fun invoke(currentTask: TodoTask? = null) {
+        val taskAdditionDialogFragment = TaskAdditionDialogFragment.make(currentTask)
         taskAdditionDialogFragment.setTargetFragment(viewLifecycleOwner, 1)
         ViewModelProvider(viewLifecycleOwner).get(TaskAdditionDialogFragmentViewModel::class.java)
                 .refresh
