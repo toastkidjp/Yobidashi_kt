@@ -20,12 +20,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.map
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.AppBarBoardBinding
 import jp.toastkid.todo.databinding.FragmentTaskBoardBinding
-import jp.toastkid.todo.databinding.ItemTaskShortBinding
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.TaskListFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
@@ -78,23 +76,11 @@ class BoardFragment : Fragment() {
                 TaskAdditionDialogFragmentUseCase(this, {
                     it.id = tasks.size + 1
                     tasks.add(it)
-                    val itemBinding = DataBindingUtil.inflate<ItemTaskShortBinding>(layoutInflater, R.layout.item_task_short, binding.board, false)
-                    itemBinding.color.setBackgroundColor(it.color)
-                    itemBinding.mainText.text = it.description
-                    itemBinding.menu.setColorFilter(PreferenceApplier(view.context).color)
-                    val draggableTouchListener = DraggableTouchListener()
-                    draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
 
-                        override fun onNewPosition(x: Float, y: Float) {
-                            it.x = x
-                            it.y = y
-                        }
+                    val itemView = BoardItemViewFactory(layoutInflater)
+                            .invoke(binding.board, it, PreferenceApplier(view.context).color)
 
-                    })
-
-                    itemBinding.root.setOnTouchListener(draggableTouchListener)
-
-                    binding.board.addView(itemBinding.root)
+                    binding.board.addView(itemView)
                 })
 
         popup = ItemMenuPopup(
