@@ -29,6 +29,6 @@ class TaskAdditionDialogFragmentUseCase(
                     val task = it?.getContentIfNotHandled() ?: return@Observer
                     taskConsumer(task)
                 })
-        taskAdditionDialogFragment.show(viewLifecycleOwner.parentFragmentManager, "")
+        taskAdditionDialogFragment.show(viewLifecycleOwner.parentFragmentManager, javaClass.canonicalName)
     }
 }
