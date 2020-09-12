@@ -29,7 +29,6 @@ import jp.toastkid.todo.databinding.AppBarBoardBinding
 import jp.toastkid.todo.databinding.FragmentTaskBoardBinding
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.TaskListFragmentViewModel
-import jp.toastkid.todo.view.ViewHolder
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
 import jp.toastkid.todo.view.initial.InitialTaskPreparation
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
@@ -83,7 +82,6 @@ class BoardFragment : Fragment() {
                     val itemView = layoutInflater.inflate(R.layout.item_task_short, binding.board, false)
                     itemView.findViewById<View>(R.id.color).setBackgroundColor(it.color)
                     itemView.findViewById<TextView>(R.id.main_text).text = it.description
-                    itemView.findViewById<TextView>(R.id.sub_text).text = ViewHolder.format(it.dueDate)
                     itemView.findViewById<ImageView>(R.id.menu).setColorFilter(PreferenceApplier(view.context).color)
                     val draggableTouchListener = DraggableTouchListener()
                     draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
