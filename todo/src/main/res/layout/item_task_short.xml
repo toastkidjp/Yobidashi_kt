@@ -4,8 +4,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="4dp"
@@ -20,41 +20,59 @@
             android:padding="4dp"
             >
 
-            <CheckBox
-                android:id="@+id/done"
-                android:layout_width="32dp"
-                android:layout_height="match_parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-
             <TextView
                 android:id="@+id/main_text"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:textSize="20sp"
+                android:gravity="top"
                 android:maxLines="5"
                 android:layout_marginStart="4dp"
-                app:layout_constraintStart_toEndOf="@id/done"
-                app:layout_constraintEnd_toStartOf="@id/color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/menu"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/color"
                 tools:text="main_text"
                 />
 
             <View
                 android:id="@+id/color"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/menu"
                 tools:background="@android:color/holo_blue_bright"
+                />
+
+            <CheckBox
+                android:id="@+id/done"
+                android:layout_width="32dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/divider"
+                />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="24dp"
+                android:layout_height="1dp"
+                android:background="#88000000"
+                app:layout_constraintStart_toStartOf="@id/done"
+                app:layout_constraintEnd_toEndOf="@id/done"
+                app:layout_constraintTop_toBottomOf="@id/done"
+                app:layout_constraintBottom_toTopOf="@id/menu"
                 />
 
             <ImageView
                 android:id="@+id/menu"
                 android:layout_width="32dp"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 app:srcCompat="@drawable/ic_more"
                 tools:tint="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
