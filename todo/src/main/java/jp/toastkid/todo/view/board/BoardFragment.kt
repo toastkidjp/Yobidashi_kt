@@ -11,8 +11,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,6 +25,7 @@ import jp.toastkid.todo.R
 import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.AppBarBoardBinding
 import jp.toastkid.todo.databinding.FragmentTaskBoardBinding
+import jp.toastkid.todo.databinding.ItemTaskShortBinding
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.TaskListFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
@@ -79,10 +78,10 @@ class BoardFragment : Fragment() {
                 TaskAdditionDialogFragmentUseCase(this, {
                     it.id = tasks.size + 1
                     tasks.add(it)
-                    val itemView = layoutInflater.inflate(R.layout.item_task_short, binding.board, false)
-                    itemView.findViewById<View>(R.id.color).setBackgroundColor(it.color)
-                    itemView.findViewById<TextView>(R.id.main_text).text = it.description
-                    itemView.findViewById<ImageView>(R.id.menu).setColorFilter(PreferenceApplier(view.context).color)
+                    val itemBinding = DataBindingUtil.inflate<ItemTaskShortBinding>(layoutInflater, R.layout.item_task_short, binding.board, false)
+                    itemBinding.color.setBackgroundColor(it.color)
+                    itemBinding.mainText.text = it.description
+                    itemBinding.menu.setColorFilter(PreferenceApplier(view.context).color)
                     val draggableTouchListener = DraggableTouchListener()
                     draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
 
@@ -92,9 +91,10 @@ class BoardFragment : Fragment() {
                         }
 
                     })
-                    itemView.setOnTouchListener(draggableTouchListener)
 
-                    binding.board.addView(itemView)
+                    itemBinding.root.setOnTouchListener(draggableTouchListener)
+
+                    binding.board.addView(itemBinding.root)
                 })
 
         popup = ItemMenuPopup(
