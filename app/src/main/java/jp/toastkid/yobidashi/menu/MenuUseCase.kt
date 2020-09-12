@@ -22,6 +22,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.view.TaskListFragment
+import jp.toastkid.todo.view.board.BoardFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
@@ -167,6 +168,9 @@ class MenuUseCase(
                         )
                     }
                 }
+            }
+            Menu.TODO_TASKS_BOARD -> {
+                nextFragment(BoardFragment::class.java)
             }
             Menu.TODO_TASKS -> {
                 nextFragment(TaskListFragment::class.java)
