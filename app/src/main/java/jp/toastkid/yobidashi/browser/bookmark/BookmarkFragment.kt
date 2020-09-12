@@ -19,18 +19,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.permission.RuntimePermissions
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -101,8 +101,8 @@ class BookmarkFragment: Fragment(),
                             viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder
                     ): Boolean {
-                        val fromPos = viewHolder.adapterPosition
-                        val toPos = target.adapterPosition
+                        val fromPos = viewHolder.absoluteAdapterPosition
+                        val toPos = target.absoluteAdapterPosition
                         adapter.notifyItemMoved(fromPos, toPos)
                         return true
                     }
@@ -114,7 +114,7 @@ class BookmarkFragment: Fragment(),
                         if (direction != ItemTouchHelper.RIGHT) {
                             return
                         }
-                        adapter.removeAt(viewHolder.adapterPosition)
+                        adapter.removeAt(viewHolder.absoluteAdapterPosition)
                     }
                 }).attachToRecyclerView(binding.historiesView)
 
