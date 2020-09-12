@@ -70,7 +70,6 @@
                     android:id="@+id/color1"
                     android:layout_width="44dp"
                     android:layout_height="44dp"
-                    android:layout_marginTop="8dp"
                     android:background="#e53935"
                     />
 
