@@ -19,23 +19,20 @@ import kotlinx.coroutines.withContext
  */
 class ItemMenuPopupActionUseCase(
         private val repository: TodoTaskDataAccessor,
-        private val modify: (TodoTask) -> Unit,
+        private val modifyAction: (TodoTask) -> Unit,
         private val refresh: () -> Unit
 ) {
 
-    fun modify(id: Int) {
+    fun modify(task: TodoTask) {
         CoroutineScope(Dispatchers.Main).launch {
-            val task = withContext(Dispatchers.IO) {
-                repository.findById(id)
-            } ?: return@launch
-            modify(task)
+            modifyAction(task)
         }
     }
 
-    fun delete(id: Int) {
+    fun delete(task: TodoTask) {
         CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                repository.delete(id)
+                repository.delete(task)
             }
             refresh()
         }

@@ -36,7 +36,7 @@ class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUse
             false
     )
 
-    private var targetId: Int? = null
+    private var lastTask: TodoTask? = null
 
     init {
         popupWindow.contentView = binding.root
@@ -48,19 +48,19 @@ class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUse
     }
 
     fun show(view: View, item: TodoTask) {
-        targetId = item.id
+        lastTask = item
         popupWindow.showAsDropDown(view)
     }
 
     fun modify() {
-        targetId?.let {
+        lastTask?.let {
             action.modify(it)
         }
         popupWindow.dismiss()
     }
 
     fun delete() {
-        targetId?.let {
+        lastTask?.let {
             action.delete(it)
         }
         popupWindow.dismiss()
