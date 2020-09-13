@@ -75,12 +75,7 @@ class BoardFragment : Fragment() {
         val taskAdditionDialogFragmentUseCase =
                 TaskAdditionDialogFragmentUseCase(this, {
                     it.id = tasks.size + 1
-                    tasks.add(it)
-
-                    val itemView = BoardItemViewFactory(layoutInflater)
-                            .invoke(binding.board, it, PreferenceApplier(view.context).color)
-
-                    binding.board.addView(itemView)
+                    addTask(it)
                 })
 
         popup = ItemMenuPopup(
@@ -116,6 +111,15 @@ class BoardFragment : Fragment() {
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
+    }
+
+    private fun addTask(it: TodoTask) {
+        tasks.add(it)
+
+        val itemView = BoardItemViewFactory(layoutInflater)
+                .invoke(binding.board, it, PreferenceApplier(requireContext()).color)
+
+        binding.board.addView(itemView)
     }
 
 }
