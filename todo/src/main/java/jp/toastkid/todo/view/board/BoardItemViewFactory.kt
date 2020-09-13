@@ -22,10 +22,17 @@ import jp.toastkid.todo.model.TodoTask
 class BoardItemViewFactory(private val layoutInflater: LayoutInflater) {
 
     operator fun invoke(parent: ViewGroup?, it: TodoTask, menuColor: Int): View {
-        val itemBinding = DataBindingUtil.inflate<ItemTaskShortBinding>(layoutInflater, R.layout.item_task_short, parent, false)
+        val itemBinding = DataBindingUtil.inflate<ItemTaskShortBinding>(
+                layoutInflater,
+                R.layout.item_task_short,
+                parent,
+                false
+        )
+
         itemBinding.color.setBackgroundColor(it.color)
         itemBinding.mainText.text = it.description
         itemBinding.menu.setColorFilter(menuColor)
+
         val draggableTouchListener = DraggableTouchListener()
         draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
 
