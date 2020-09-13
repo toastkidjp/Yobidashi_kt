@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.todo.R
@@ -40,7 +41,7 @@ class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUse
     init {
         popupWindow.contentView = binding.root
         popupWindow.isOutsideTouchable = true
-        popupWindow.width = context.resources.getDimensionPixelSize(R.dimen.item_menu_popup_width)
+        popupWindow.width = context.resources.getDimensionPixelSize(WIDTH)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
 
         binding.popup = this
@@ -69,6 +70,9 @@ class ItemMenuPopup(context: Context, private val action: ItemMenuPopupActionUse
 
         @LayoutRes
         private val LAYOUT_ID = R.layout.popup_todo_tasks_item_menu
+
+        @DimenRes
+        private val WIDTH = R.dimen.item_menu_popup_width
 
     }
 }
