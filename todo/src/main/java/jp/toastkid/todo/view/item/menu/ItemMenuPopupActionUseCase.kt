@@ -7,34 +7,22 @@
  */
 package jp.toastkid.todo.view.item.menu
 
-import jp.toastkid.todo.data.TodoTaskDataAccessor
 import jp.toastkid.todo.model.TodoTask
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
 class ItemMenuPopupActionUseCase(
-        private val repository: TodoTaskDataAccessor,
         private val modifyAction: (TodoTask) -> Unit,
+        private val deleteAction: (TodoTask) -> Unit,
         private val refresh: () -> Unit
 ) {
 
     fun modify(task: TodoTask) {
-        CoroutineScope(Dispatchers.Main).launch {
-            modifyAction(task)
-        }
+        modifyAction(task)
     }
 
     fun delete(task: TodoTask) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                repository.delete(task)
-            }
-            refresh()
-        }
+        deleteAction(task)
     }
 }

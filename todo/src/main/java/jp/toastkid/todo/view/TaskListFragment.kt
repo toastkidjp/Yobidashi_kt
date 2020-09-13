@@ -82,8 +82,15 @@ class TaskListFragment : Fragment() {
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        repository,
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
+                        {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                withContext(Dispatchers.IO) {
+                                    repository.delete(it)
+                                }
+                                refresh()
+                            }
+                        },
                         refresh
                 )
         )
