@@ -256,7 +256,7 @@ class EditorFragment :
         binding.editorInput.setTextColor(preferenceApplier.editorFontColor())
         binding.editorInput.setTextSize(Dimension.SP, preferenceApplier.editorFontSize().toFloat())
 
-        CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor(ContextCompat.getColor(binding.root.context, R.color.colorAccent)))
+        CursorColorSetter().invoke(binding.editorInput, preferenceApplier.editorCursorColor(ContextCompat.getColor(binding.root.context, R.color.editor_cursor)))
         binding.editorInput.highlightColor = preferenceApplier.editorHighlightColor(ContextCompat.getColor(binding.root.context, R.color.light_blue_200_dd))
     }
 

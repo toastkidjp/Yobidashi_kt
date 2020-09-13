@@ -49,4 +49,6 @@
     <color name="pink">#DDf16971</color>
     <color name="dark_brown">#DD4b1f12</color>
     <color name="red_yellow">#FF9100</color>
+
+    <color name="editor_cursor">#FFE0E0E0</color>
 </resources>
