@@ -90,8 +90,7 @@ class TaskListFragment : Fragment() {
                                 }
                                 refresh()
                             }
-                        },
-                        refresh
+                        }
                 )
         )
 

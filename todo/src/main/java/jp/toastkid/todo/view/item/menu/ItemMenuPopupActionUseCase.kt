@@ -14,8 +14,7 @@ import jp.toastkid.todo.model.TodoTask
  */
 class ItemMenuPopupActionUseCase(
         private val modifyAction: (TodoTask) -> Unit,
-        private val deleteAction: (TodoTask) -> Unit,
-        private val refresh: () -> Unit
+        private val deleteAction: (TodoTask) -> Unit
 ) {
 
     fun modify(task: TodoTask) {
