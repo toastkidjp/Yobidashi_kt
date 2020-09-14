@@ -16,9 +16,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.map
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
@@ -28,13 +25,8 @@ import jp.toastkid.todo.databinding.FragmentTaskBoardBinding
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.TaskListFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
-import jp.toastkid.todo.view.initial.InitialTaskPreparation
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 /**
  * @author toastkidjp
@@ -99,24 +91,6 @@ class BoardFragment : Fragment() {
                         }
                 )
         )
-
-        CoroutineScope(Dispatchers.IO).launch {
-            if (repository.count() == 0) {
-                InitialTaskPreparation(repository).invoke()
-            }
-            Pager(
-                    PagingConfig(pageSize = 10, enablePlaceholders = true),
-                    pagingSourceFactory = { repository.allTasks() }
-            )
-                    .flow
-                    .collectLatest {
-                        //adapter.submitData(it)
-                        it.map { item ->
-
-                            item
-                        }
-                    }
-        }
 
         appBarBinding.add.setOnClickListener {
             taskAdditionDialogFragmentUseCase.invoke()
