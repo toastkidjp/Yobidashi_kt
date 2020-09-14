@@ -130,9 +130,8 @@ class BoardFragment : Fragment() {
         tasks.add(it)
 
         val itemView = BoardItemViewFactory(
-                layoutInflater,
-                { parent, showTask -> popup?.show(parent, showTask) }
-        )
+                layoutInflater
+        ) { parent, showTask -> popup?.show(parent, showTask) }
                 .invoke(binding.board, it, PreferenceApplier(requireContext()).color)
 
         itemView.tag = it.id
