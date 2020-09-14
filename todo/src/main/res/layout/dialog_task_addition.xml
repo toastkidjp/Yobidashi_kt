@@ -20,7 +20,7 @@
             >
             <TextView
                 android:id="@+id/title_input"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/description"
                 android:textSize="16sp"
@@ -135,12 +135,12 @@
             <Button
                 android:id="@+id/add"
                 android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:text="@string/add"
                 android:onClick="@{view -> dialog.add()}"
-                app:layout_constraintTop_toBottomOf="@id/title_input"
+                app:layout_constraintTop_toTopOf="@id/title_input"
+                app:layout_constraintBottom_toBottomOf="@id/addition_query"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
 
