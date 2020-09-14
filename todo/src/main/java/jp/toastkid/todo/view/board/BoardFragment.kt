@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -68,22 +69,34 @@ class BoardFragment : Fragment() {
                     }
                 })
 
-        val refresh = {
-
-        }
-
         val taskAdditionDialogFragmentUseCase =
                 TaskAdditionDialogFragmentUseCase(this, {
+                    val iterator = tasks.iterator()
+                    for (task in iterator) {
+                        if (task.lastModified == it.lastModified) {
+                            iterator.remove()
+                            tasks.remove(it)
+                            binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
+                                binding.board.removeView(v)
+                            }
+                            addTask(it, popup)
+                            return@TaskAdditionDialogFragmentUseCase
+                        }
+                    }
                     it.id = tasks.size + 1
-                    addTask(it)
+                    addTask(it, popup)
                 })
 
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        repository,
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
-                        refresh
+                        {
+                            tasks.remove(it)
+                            binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
+                                binding.board.removeView(v)
+                            }
+                        }
                 )
         )
 
@@ -113,12 +126,16 @@ class BoardFragment : Fragment() {
                 .replace(appBarBinding.root)
     }
 
-    private fun addTask(it: TodoTask) {
+    private fun addTask(it: TodoTask, popup: ItemMenuPopup?) {
         tasks.add(it)
 
-        val itemView = BoardItemViewFactory(layoutInflater)
+        val itemView = BoardItemViewFactory(
+                layoutInflater,
+                { parent, showTask -> popup?.show(parent, showTask) }
+        )
                 .invoke(binding.board, it, PreferenceApplier(requireContext()).color)
 
+        itemView.tag = it.id
         binding.board.addView(itemView)
     }
 
