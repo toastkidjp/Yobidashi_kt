@@ -139,7 +139,7 @@
                 android:layout_height="0dp"
                 android:text="@string/add"
                 android:onClick="@{view -> dialog.add()}"
-                app:layout_constraintTop_toTopOf="@id/title_input"
+                app:layout_constraintTop_toBottomOf="@id/title_input"
                 app:layout_constraintBottom_toBottomOf="@id/addition_query"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
