@@ -64,10 +64,7 @@ class BoardFragment : Fragment() {
                     for (task in iterator) {
                         if (task.lastModified == it.lastModified) {
                             iterator.remove()
-                            tasks.remove(it)
-                            binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
-                                binding.board.removeView(v)
-                            }
+                            removeTask(it)
                             addTask(it, popup)
                             return@TaskAdditionDialogFragmentUseCase
                         }
@@ -81,10 +78,7 @@ class BoardFragment : Fragment() {
                 ItemMenuPopupActionUseCase(
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
                         {
-                            tasks.remove(it)
-                            binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
-                                binding.board.removeView(v)
-                            }
+                            removeTask(it)
                         }
                 )
         )
@@ -95,6 +89,13 @@ class BoardFragment : Fragment() {
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
+    }
+
+    private fun removeTask(it: TodoTask) {
+        tasks.remove(it)
+        binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
+            binding.board.removeView(v)
+        }
     }
 
     private fun addTask(it: TodoTask, popup: ItemMenuPopup?) {
