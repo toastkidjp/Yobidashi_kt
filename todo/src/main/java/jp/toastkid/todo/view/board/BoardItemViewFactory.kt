@@ -39,6 +39,18 @@ class BoardItemViewFactory(
             showPopup(itemBinding.menu, task)
         }
 
+        val draggableTouchListener = makeListener(task)
+
+        itemBinding.root.also {
+            it.x = task.x
+            it.y = task.y
+        }
+        itemBinding.root.setOnTouchListener(draggableTouchListener)
+
+        return itemBinding.root
+    }
+
+    private fun makeListener(task: TodoTask): DraggableTouchListener {
         val draggableTouchListener = DraggableTouchListener()
         draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
 
@@ -48,13 +60,6 @@ class BoardItemViewFactory(
             }
 
         })
-
-        itemBinding.root.also {
-            it.x = task.x
-            it.y = task.y
-        }
-        itemBinding.root.setOnTouchListener(draggableTouchListener)
-
-        return itemBinding.root
+        return draggableTouchListener
     }
 }
