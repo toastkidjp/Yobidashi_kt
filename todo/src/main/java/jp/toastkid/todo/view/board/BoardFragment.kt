@@ -60,17 +60,16 @@ class BoardFragment : Fragment() {
 
         val taskAdditionDialogFragmentUseCase =
                 TaskAdditionDialogFragmentUseCase(this) {
-                    val iterator = tasks.iterator()
-                    for (task in iterator) {
-                        if (task.lastModified == it.lastModified) {
-                            iterator.remove()
-                            removeTask(it)
-                            addTask(it, popup)
-                            return@TaskAdditionDialogFragmentUseCase
-                        }
+                    val firstOrNull = tasks.firstOrNull { task -> task.lastModified == it.lastModified }
+                    if (firstOrNull == null) {
+                        it.id = tasks.size + 1
+                        addTask(it, popup)
+                        return@TaskAdditionDialogFragmentUseCase
                     }
-                    it.id = tasks.size + 1
-                    addTask(it, popup)
+
+                    tasks.remove(firstOrNull)
+                    removeTask(firstOrNull)
+                    addTask(firstOrNull, popup)
                 }
 
         popup = ItemMenuPopup(
