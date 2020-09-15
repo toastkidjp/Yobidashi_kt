@@ -124,7 +124,7 @@ internal class WebViewFactory {
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
 
-        webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+        webView.setDownloadListener { url, _, _, _, _ ->
             val i = Intent(Intent.ACTION_QUICK_VIEW)
             i.data = Uri.parse(url)
             webView.context.startActivity(i)
