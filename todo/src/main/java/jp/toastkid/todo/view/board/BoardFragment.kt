@@ -87,8 +87,7 @@ class BoardFragment : Fragment() {
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 
-        val sampleTask = makeSampleTask()
-        addTask(sampleTask, popup)
+        addTask(makeSampleTask(), popup)
     }
 
     private fun makeSampleTask(): TodoTask {
