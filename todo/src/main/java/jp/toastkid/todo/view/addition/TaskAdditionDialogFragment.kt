@@ -75,7 +75,12 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         }
         task.lastModified = System.currentTimeMillis()
         task.dueDate = makeDateMs()
-        task.color = extractBackgroundColor(binding.root.findViewById(binding.colors.checkedRadioButtonId))
+
+        val checkedRadioButtonId = binding.colors.checkedRadioButtonId
+        if (checkedRadioButtonId != -1) {
+            task.color = extractBackgroundColor(binding.root.findViewById(checkedRadioButtonId))
+        }
+
         viewModel?.refresh(task)
 
         if (this.task != null) {
