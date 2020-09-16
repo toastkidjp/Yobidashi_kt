@@ -21,7 +21,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.todo.view.TaskListFragment
+import jp.toastkid.todo.view.list.TaskListFragment
 import jp.toastkid.todo.view.board.BoardFragment
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment

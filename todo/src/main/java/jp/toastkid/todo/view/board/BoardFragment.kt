@@ -22,10 +22,10 @@ import jp.toastkid.todo.R
 import jp.toastkid.todo.databinding.AppBarBoardBinding
 import jp.toastkid.todo.databinding.FragmentTaskBoardBinding
 import jp.toastkid.todo.model.TodoTask
-import jp.toastkid.todo.view.TaskListFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
+import jp.toastkid.todo.view.list.TaskListFragmentViewModel
 
 /**
  * @author toastkidjp
