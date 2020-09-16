@@ -15,7 +15,7 @@
     <string name="action_switch_title_filter">Use title filter</string>
     <string name="action_calendar">Calendar</string>
     <string name="action_bookmark">Bookmark</string>
-    <string name="hint_search_articles">Search articles</string>
+    <string name="hint_search_articles">Please would you input some word for search articles?</string>
     <string name="subhead">Subhead</string>
     <string name="tab">Tab</string>
     <string name="message_done_import">Completed import.</string>

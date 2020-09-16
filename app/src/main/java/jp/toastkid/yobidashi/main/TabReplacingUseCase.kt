@@ -11,7 +11,6 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.article.detail.ContentViewerFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
@@ -35,6 +34,7 @@ class TabReplacingUseCase(
         private val tabs: TabAdapter,
         private val obtainFragment: (Class<out Fragment>) -> Fragment,
         private val replaceFragment: (Fragment, Boolean) -> Unit,
+        private val browserFragmentViewModel: BrowserFragmentViewModel,
         private val refreshThumbnail: () -> Unit,
         private val runOnUiThread: (() -> Unit) -> Unit,
         private val disposables: Job
@@ -53,7 +53,7 @@ class TabReplacingUseCase(
                 replaceFragment(browserFragment, false)
                 CoroutineScope(Dispatchers.Default).launch(disposables) {
                     runOnUiThread {
-                        ViewModelProvider(browserFragment).get(BrowserFragmentViewModel::class.java)
+                        browserFragmentViewModel
                                 .loadWithNewTab(currentTab.getUrl().toUri() to currentTab.id())
                     }
                 }

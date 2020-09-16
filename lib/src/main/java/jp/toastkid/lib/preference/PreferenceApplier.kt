@@ -430,7 +430,7 @@ class PreferenceApplier(private val context: Context) {
     }
 
     fun useTitleFilter(): Boolean {
-        return preferences.getBoolean(Key.USE_TITLE_FILTER.name, true)
+        return preferences.getBoolean(Key.USE_TITLE_FILTER.name, false)
     }
 
     fun setArticleSort(name: String) {

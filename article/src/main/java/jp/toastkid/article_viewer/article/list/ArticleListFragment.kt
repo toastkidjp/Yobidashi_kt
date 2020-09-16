@@ -21,6 +21,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -135,7 +137,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_article_list, container, false)
+                inflater, LAYOUT_ID, container, false)
         appBarBinding = DataBindingUtil.inflate(
                 inflater, R.layout.app_bar_article_list, container, false)
         return binding.root
@@ -224,6 +226,7 @@ class ArticleListFragment : Fragment(), ContentScrollable {
     override fun onResume() {
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
+        appBarBinding.input.setHintTextColor(ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196))
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
     }
@@ -304,4 +307,10 @@ class ArticleListFragment : Fragment(), ContentScrollable {
         super.onDetach()
     }
 
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.fragment_article_list
+
+    }
 }

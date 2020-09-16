@@ -27,7 +27,7 @@ class ListLoaderUseCase(private val adapter: Adapter) {
         lastJob?.cancel()
         lastJob = CoroutineScope(Dispatchers.IO).launch {
             Pager(
-                    PagingConfig(pageSize = 50, enablePlaceholders = true),
+                    PagingConfig(pageSize = 20, enablePlaceholders = true),
                     pagingSourceFactory = pagingSourceFactory
             )
                     .flow

@@ -17,31 +17,31 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.tab.TabUiFragment
+import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.page_information.PageInformationDialogFragment
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
+import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
-import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.ContentScrollable
-import jp.toastkid.lib.AppBarViewModel
-import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.tab.TabUiFragment
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
-import jp.toastkid.search.SearchQueryExtractor
-import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.yobidashi.browser.page_information.PageInformationDialogFragment
-import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 
 /**
  * Internal browser fragment.
@@ -181,7 +181,7 @@ class BrowserFragment : Fragment(),
                         Observer { browserModule.saveArchiveForAutoArchive() }
                 )
 
-        ViewModelProvider(this).get(BrowserFragmentViewModel::class.java)
+        viewModelProvider.get(BrowserFragmentViewModel::class.java)
                 .loadWithNewTab
                 .observe(activity, Observer {
                     browserModule.loadWithNewTab(it.first, it.second)
