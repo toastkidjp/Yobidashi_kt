@@ -48,11 +48,10 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         task?.let {
             today.timeInMillis = it.dueDate
         }
-        binding.datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
-                { view, year, monthOfYear, dayOfMonth ->
-                    date = Triple(year, monthOfYear, dayOfMonth)
-                }
-        )
+        binding.datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH)
+        ) { view, year, monthOfYear, dayOfMonth ->
+            date = Triple(year, monthOfYear, dayOfMonth)
+        }
 
         viewModel = targetFragment?.let {
             ViewModelProvider(it).get(TaskAdditionDialogFragmentViewModel::class.java)
