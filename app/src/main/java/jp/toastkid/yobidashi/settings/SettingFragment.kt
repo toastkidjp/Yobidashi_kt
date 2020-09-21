@@ -21,8 +21,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
-import jp.toastkid.yobidashi.editor.EditorFragment
-import jp.toastkid.yobidashi.search.SearchFragment
+import jp.toastkid.yobidashi.settings.initial.InitialIndexSettingUseCase
 
 /**
  * @author toastkidjp
@@ -35,6 +34,8 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private val initialIndexSettingUseCase = InitialIndexSettingUseCase()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -65,7 +66,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.container.setCurrentItem(arguments?.getInt(KEY_EXTRA_INITIAL_INDEX) ?: 0, false)
+        binding.container.setCurrentItem(initialIndexSettingUseCase.extract(arguments), false)
     }
 
     override fun onResume() {
@@ -92,14 +93,7 @@ class SettingFragment : Fragment() {
             arguments = Bundle()
         }
 
-        arguments?.putInt(
-                KEY_EXTRA_INITIAL_INDEX,
-                when (javaClass) {
-                    SearchFragment::class.java -> 2
-                    EditorFragment::class.java -> 4
-                    else -> 0
-                }
-        )
+        initialIndexSettingUseCase.put(arguments, javaClass)
     }
 
     companion object {
@@ -109,8 +103,6 @@ class SettingFragment : Fragment() {
          */
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_settings
-
-        private const val KEY_EXTRA_INITIAL_INDEX = "initialIndex"
 
     }
 }
