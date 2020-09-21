@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
  * Initialize with binding object.
  *
  * @param binding Data binding object
- * @param searchInput Input field
+ * @param queryPutter Use for query inserting
  * @param searchCallback Callback on search
  * @param searchBackgroundCallback Callback for background search
  * @param onClick Callback on click
