@@ -21,6 +21,8 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
+import jp.toastkid.yobidashi.editor.EditorFragment
+import jp.toastkid.yobidashi.search.SearchFragment
 
 /**
  * @author toastkidjp
@@ -63,7 +65,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.container.currentItem = 0
+        binding.container.setCurrentItem(arguments?.getInt("initialIndex") ?: 0, false)
     }
 
     override fun onResume() {
@@ -83,6 +85,21 @@ class SettingFragment : Fragment() {
     override fun onDetach() {
         ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).refresh()
         super.onDetach()
+    }
+
+    fun setFrom(javaClass: Class<Fragment>?) {
+        if (arguments == null) {
+            arguments = Bundle()
+        }
+
+        arguments?.putInt(
+                "initialIndex",
+                when (javaClass) {
+                    SearchFragment::class.java -> 2
+                    EditorFragment::class.java -> 4
+                    else -> 0
+                }
+        )
     }
 
     companion object {
