@@ -65,7 +65,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.container.setCurrentItem(arguments?.getInt("initialIndex") ?: 0, false)
+        binding.container.setCurrentItem(arguments?.getInt(KEY_EXTRA_INITIAL_INDEX) ?: 0, false)
     }
 
     override fun onResume() {
@@ -93,7 +93,7 @@ class SettingFragment : Fragment() {
         }
 
         arguments?.putInt(
-                "initialIndex",
+                KEY_EXTRA_INITIAL_INDEX,
                 when (javaClass) {
                     SearchFragment::class.java -> 2
                     EditorFragment::class.java -> 4
@@ -109,6 +109,8 @@ class SettingFragment : Fragment() {
          */
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_settings
+
+        private const val KEY_EXTRA_INITIAL_INDEX = "initialIndex"
 
     }
 }
