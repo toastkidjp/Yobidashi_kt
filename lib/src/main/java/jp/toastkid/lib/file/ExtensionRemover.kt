@@ -19,8 +19,11 @@ class ExtensionRemover {
      * @return string
      */
     operator fun invoke(fileName: String): String {
-        val endIndex = fileName.lastIndexOf(".")
+        val endIndex = fileName.lastIndexOf(DOT)
         return if (endIndex == -1) fileName else fileName.substring(0, endIndex)
     }
 
+    companion object {
+        private const val DOT = "."
+    }
 }
