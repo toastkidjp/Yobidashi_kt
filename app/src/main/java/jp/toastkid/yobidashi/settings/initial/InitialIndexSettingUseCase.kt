@@ -28,9 +28,7 @@ class InitialIndexSettingUseCase {
         )
     }
 
-    fun extract(arguments: Bundle?): Int {
-        return arguments?.getInt(KEY_EXTRA_INITIAL_INDEX) ?: 0
-    }
+    fun extract(arguments: Bundle?): Int = arguments?.getInt(KEY_EXTRA_INITIAL_INDEX) ?: 0
 
     companion object {
 
