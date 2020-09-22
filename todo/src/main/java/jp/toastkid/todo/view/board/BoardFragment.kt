@@ -101,9 +101,9 @@ class BoardFragment : Fragment() {
         return sampleTask
     }
 
-    private fun removeTask(it: TodoTask) {
-        tasks.remove(it)
-        binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
+    private fun removeTask(task: TodoTask) {
+        tasks.remove(task)
+        binding.board.children.firstOrNull { v -> v.tag == task.id }?.also { v ->
             binding.board.removeView(v)
         }
     }
