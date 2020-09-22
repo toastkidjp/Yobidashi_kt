@@ -24,13 +24,12 @@ class InitialIndexSettingUseCase {
         )
     }
 
-    private fun findIndex(javaClass: Class<Fragment>?): Int {
-        return when (javaClass) {
-            SearchFragment::class.java -> 2
-            EditorFragment::class.java -> 4
-            else -> 0
-        }
-    }
+    private fun findIndex(javaClass: Class<Fragment>?): Int =
+            when (javaClass) {
+                SearchFragment::class.java -> 2
+                EditorFragment::class.java -> 4
+                else -> 0
+            }
 
     fun extract(arguments: Bundle?): Int = arguments?.getInt(KEY_EXTRA_INITIAL_INDEX) ?: 0
 
