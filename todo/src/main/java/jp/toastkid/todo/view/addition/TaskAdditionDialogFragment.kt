@@ -43,7 +43,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_task_addition, container, false)
         binding.dialog = this
 
-        task = arguments?.getSerializable("task") as? TodoTask
+        task = arguments?.getSerializable(KEY_EXTRA) as? TodoTask
         val today = Calendar.getInstance()
         task?.let {
             today.timeInMillis = it.dueDate
@@ -106,10 +106,12 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
 
+        private const val KEY_EXTRA = "task"
+
         fun make(task: TodoTask? = null): DialogFragment {
             return TaskAdditionDialogFragment().also {
                 if (task != null) {
-                    it.arguments = bundleOf("task" to task)
+                    it.arguments = bundleOf(KEY_EXTRA to task)
                 }
             }
         }
