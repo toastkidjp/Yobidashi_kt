@@ -10,40 +10,41 @@ package jp.toastkid.yobidashi.barcode
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * @author toastkidjp
  */
 class BarcodeReaderResultPopupViewModel : ViewModel() {
 
-    private val _clip = MutableLiveData<String>()
-    val clip: LiveData<String> = _clip
+    private val _clip = MutableLiveData<Event<String>>()
+    val clip: LiveData<Event<String>> = _clip
 
     fun clipText(text: String?) {
         if (text.isNullOrEmpty()) {
             return
         }
-        _clip.postValue(text)
+        _clip.postValue(Event(text))
     }
 
-    private val _share = MutableLiveData<String>()
-    val share: LiveData<String> = _share
+    private val _share = MutableLiveData<Event<String>>()
+    val share: LiveData<Event<String>> = _share
 
     fun shareText(text: String?) {
         if (text.isNullOrEmpty()) {
             return
         }
-        _share.postValue(text)
+        _share.postValue(Event(text))
     }
 
-    private val _open = MutableLiveData<String>()
-    val open: LiveData<String> = _open
+    private val _open = MutableLiveData<Event<String>>()
+    val open: LiveData<Event<String>> = _open
 
     fun openText(text: String?) {
         if (text.isNullOrEmpty()) {
             return
         }
-        _open.postValue(text)
+        _open.postValue(Event(text))
     }
 
 }
