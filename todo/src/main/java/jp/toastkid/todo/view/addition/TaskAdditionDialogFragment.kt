@@ -39,7 +39,11 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
     private var date: Triple<Int, Int, Int>? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_task_addition, container, false)
         binding.dialog = this
 
