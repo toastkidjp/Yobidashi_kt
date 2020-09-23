@@ -13,7 +13,7 @@ import timber.log.Timber
  * Suggest list adapter.
  *
  * @param layoutInflater Layout inflater
- * @param searchInput EditText
+ * @param queryPutter putting function of query
  * @param suggestionsCallback Using selected suggest action
  *
  * @author toastkidjp
