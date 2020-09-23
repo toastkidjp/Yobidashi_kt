@@ -17,6 +17,12 @@ import jp.toastkid.yobidashi.search.SearchFragment
  */
 class InitialIndexSettingUseCase {
 
+    /**
+     * Put from class to passed bundle.
+     *
+     * @param arguments bundle
+     * @param javaClass from Fragment class
+     */
     fun put(arguments: Bundle?, javaClass: Class<Fragment>?) {
         arguments?.putInt(
                 KEY_EXTRA_INITIAL_INDEX,
