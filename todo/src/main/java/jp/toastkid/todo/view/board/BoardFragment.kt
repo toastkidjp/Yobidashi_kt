@@ -90,16 +90,7 @@ class BoardFragment : Fragment() {
         addTask(makeSampleTask(), popup)
     }
 
-    private fun makeSampleTask(): TodoTask {
-        val sampleTask = TodoTask(0)
-        sampleTask.dueDate = System.currentTimeMillis()
-        sampleTask.lastModified = System.currentTimeMillis()
-        sampleTask.created = System.currentTimeMillis()
-        sampleTask.description = "Sample task"
-        sampleTask.x = 200f
-        sampleTask.y = 200f
-        return sampleTask
-    }
+    private fun makeSampleTask() = SampleTaskMaker().invoke()
 
     private fun removeTask(task: TodoTask) {
         tasks.remove(task)
