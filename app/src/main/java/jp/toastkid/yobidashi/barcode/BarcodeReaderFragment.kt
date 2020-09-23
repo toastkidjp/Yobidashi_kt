@@ -38,7 +38,6 @@ import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.search.SearchAction
@@ -218,7 +217,6 @@ class BarcodeReaderFragment : Fragment() {
     private fun clip(text: String) {
         binding?.root?.let { snackbarParent ->
             Clipboard.clip(snackbarParent.context, text)
-            Toaster.snackShort(snackbarParent, text, preferenceApplier.colorPair())
         }
     }
 
