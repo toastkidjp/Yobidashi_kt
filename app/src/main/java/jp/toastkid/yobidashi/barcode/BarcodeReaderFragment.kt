@@ -114,7 +114,6 @@ class BarcodeReaderFragment : Fragment() {
             it.share.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
                 startActivity(IntentFactory.makeShare(text))
-                activity?.supportFragmentManager?.popBackStack()
             })
             it.open.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
