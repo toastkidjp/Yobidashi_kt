@@ -136,8 +136,7 @@ class BarcodeReaderResultPopup(context: Context) {
             popupWindow.dismiss()
         }
 
-        @Suppress("UsePropertyAccessSyntax")
-        binding.result.setText(text)
+        binding.result.text = text
         binding.root.startAnimation(slideUpBottom)
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
     }
