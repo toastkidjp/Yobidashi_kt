@@ -112,11 +112,9 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
         private const val KEY_EXTRA = "task"
 
-        fun make(task: TodoTask? = null): DialogFragment {
-            return TaskAdditionDialogFragment().also {
-                if (task != null) {
-                    it.arguments = bundleOf(KEY_EXTRA to task)
-                }
+        fun make(task: TodoTask? = null): DialogFragment = TaskAdditionDialogFragment().also {
+            if (task != null) {
+                it.arguments = bundleOf(KEY_EXTRA to task)
             }
         }
     }
