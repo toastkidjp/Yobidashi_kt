@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -44,7 +45,7 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_task_addition, container, false)
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.dialog = this
 
         task = arguments?.getSerializable(KEY_EXTRA) as? TodoTask
@@ -109,6 +110,9 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
                     ?: Color.TRANSPARENT
 
     companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.dialog_task_addition
 
         private const val KEY_EXTRA = "task"
 
