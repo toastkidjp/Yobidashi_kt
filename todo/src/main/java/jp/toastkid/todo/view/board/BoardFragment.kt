@@ -76,7 +76,7 @@ class BoardFragment : Fragment() {
                 view.context,
                 ItemMenuPopupActionUseCase(
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
-                        { removeTask(it) }
+                        ::removeTask
                 )
         )
 
