@@ -15,10 +15,12 @@ import jp.toastkid.todo.model.TodoTask
 class SampleTaskMaker {
 
     operator fun invoke(): TodoTask {
+        val currentTimeMillis = System.currentTimeMillis()
+
         val sampleTask = TodoTask(0)
-        sampleTask.dueDate = System.currentTimeMillis()
-        sampleTask.lastModified = System.currentTimeMillis()
-        sampleTask.created = System.currentTimeMillis()
+        sampleTask.dueDate = currentTimeMillis
+        sampleTask.lastModified = currentTimeMillis
+        sampleTask.created = currentTimeMillis
         sampleTask.description = "Sample task"
         sampleTask.x = 200f
         sampleTask.y = 200f
