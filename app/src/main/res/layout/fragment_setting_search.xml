@@ -46,7 +46,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider"/>
 
                 <FrameLayout
                     android:id="@+id/enable_search_query_extract"
@@ -75,7 +75,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider"/>
 
                 <FrameLayout
                     android:id="@+id/enable_search_with_clip"
@@ -104,7 +104,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider"/>
 
                 <FrameLayout
                     android:id="@+id/use_suggestion"
@@ -133,6 +133,8 @@
                         />
                 </FrameLayout>
 
+                <include layout="@layout/view_setting_divider"/>
+
                 <FrameLayout
                     android:id="@+id/use_history"
                     android:layout_width="match_parent"
@@ -159,6 +161,8 @@
                         style="@style/Border"
                         />
                 </FrameLayout>
+
+                <include layout="@layout/view_setting_divider"/>
 
                 <FrameLayout
                     android:id="@+id/use_favorite"
@@ -187,6 +191,8 @@
                         />
                 </FrameLayout>
 
+                <include layout="@layout/view_setting_divider"/>
+
                 <FrameLayout
                     android:id="@+id/use_view_history"
                     android:layout_width="match_parent"
@@ -214,6 +220,8 @@
                         />
                 </FrameLayout>
 
+                <include layout="@layout/view_setting_divider"/>
+
                 <FrameLayout
                     android:id="@+id/use_url_module"
                     android:layout_width="match_parent"
@@ -240,6 +248,8 @@
                         style="@style/Border"
                         />
                 </FrameLayout>
+
+                <include layout="@layout/view_setting_divider"/>
 
                 <FrameLayout
                     android:id="@+id/use_app_search"
