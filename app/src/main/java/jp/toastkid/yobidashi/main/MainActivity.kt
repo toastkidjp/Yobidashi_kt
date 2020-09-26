@@ -324,10 +324,12 @@ class MainActivity : AppCompatActivity(),
     private fun initializeContentViewModel() {
         contentViewModel = ViewModelProvider(this).get(ContentViewModel::class.java)
         contentViewModel?.fragmentClass?.observe(this, Observer {
-            replaceFragment(obtainFragment(it), withAnimation = true, withSlideIn = true)
+            val fragmentClass = it?.getContentIfNotHandled() ?: return@Observer
+            replaceFragment(obtainFragment(fragmentClass), withAnimation = true, withSlideIn = true)
         })
         contentViewModel?.fragment?.observe(this, Observer {
-            replaceFragment(it, withAnimation = true, withSlideIn = false)
+            val fragment = it?.getContentIfNotHandled() ?: return@Observer
+            replaceFragment(fragment, withAnimation = true, withSlideIn = false)
         })
         contentViewModel?.snackbar?.observe(this, Observer {
             val snackbarEvent = it.getContentIfNotHandled() ?: return@Observer

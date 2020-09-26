@@ -19,20 +19,20 @@ import jp.toastkid.lib.lifecycle.Event
  */
 class ContentViewModel : ViewModel() {
 
-    private val _fragmentClass = MutableLiveData<Class<out Fragment>>()
+    private val _fragmentClass = MutableLiveData<Event<Class<out Fragment>>>()
 
-    val fragmentClass: LiveData<Class<out Fragment>> = _fragmentClass
+    val fragmentClass: LiveData<Event<Class<out Fragment>>> = _fragmentClass
 
     fun nextFragment(fragmentClass: Class<out Fragment>) {
-        _fragmentClass.postValue(fragmentClass)
+        _fragmentClass.postValue(Event(fragmentClass))
     }
 
-    private val _fragment = MutableLiveData<Fragment>()
+    private val _fragment = MutableLiveData<Event<Fragment>>()
 
-    val fragment: LiveData<Fragment> = _fragment
+    val fragment: LiveData<Event<Fragment>> = _fragment
 
     fun nextFragment(fragment: Fragment) {
-        _fragment.postValue(fragment)
+        _fragment.postValue(Event(fragment))
     }
 
     private val _snackbar = MutableLiveData<Event<SnackbarEvent>>()
