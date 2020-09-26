@@ -178,27 +178,33 @@ class MainActivity : AppCompatActivity(),
         val activityViewModelProvider = ViewModelProvider(this)
         browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
+            val uri = it?.getContentIfNotHandled() ?: return@Observer
             Inputs.hideKeyboard(binding.content)
 
             if (floatingPreview == null) {
                 floatingPreview = FloatingPreview(this)
             }
-            floatingPreview?.show(binding.root, it.toString())
+            floatingPreview?.show(binding.root, uri.toString())
         })
-        browserViewModel?.open?.observe(this, Observer(::openNewWebTab))
+        browserViewModel?.open?.observe(this, Observer {
+            val uri = it?.getContentIfNotHandled() ?: return@Observer
+            openNewWebTab(uri)
+        })
         browserViewModel?.openBackground?.observe(this, Observer {
-            tabs.openBackgroundTab(it.toString(), it.toString())
+            val uri = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openBackgroundTab(uri.toString(), uri.toString())
             Toaster.snackShort(
                     binding.content,
-                    getString(R.string.message_tab_open_background, it.toString()),
+                    getString(R.string.message_tab_open_background, uri.toString()),
                     preferenceApplier.colorPair()
             )
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
-            tabs.openBackgroundTab(it.first, it.second.toString())
+            val pair = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openBackgroundTab(pair.first, pair.second.toString())
             Toaster.snackShort(
                     binding.content,
-                    getString(R.string.message_tab_open_background, it.first),
+                    getString(R.string.message_tab_open_background, pair.first),
                     preferenceApplier.colorPair()
             )
         })
