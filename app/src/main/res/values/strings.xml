@@ -456,5 +456,6 @@
     <string name="other_app">Other app</string>
     <string name="title_todo_tasks">TODO tasks</string>
     <string name="title_todo_tasks_board">Task board</string>
+    <string name="title_search_with_map_app">Search with map app</string>
 
 </resources>

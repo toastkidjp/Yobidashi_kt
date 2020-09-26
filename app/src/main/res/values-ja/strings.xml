@@ -449,5 +449,6 @@
     <string name="other_app">別のアプリで設定</string>
     <string name="title_todo_tasks">TODO tasks</string>
     <string name="title_todo_tasks_board">Task board</string>
+    <string name="title_search_with_map_app">地図アプリで検索</string>
 
 </resources>

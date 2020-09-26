@@ -1,6 +1,8 @@
 package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
@@ -14,11 +16,12 @@ import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import jp.toastkid.search.UrlFactory
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.speech.SpeechMaker
+
 
 /**
  * Extend for disabling pull-to-refresh on Google map.
@@ -165,6 +168,14 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                                 R.id.preview_search -> {
                                     searchWithPreview()
                                     mode?.finish()
+                                    return true
+                                }
+                                R.id.search_with_map_app -> {
+                                    selectedTextExtractor.withAction(this@CustomWebView) { word ->
+                                        val gmmIntentUri = Uri.parse("geo:0,0?q=$word")
+                                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                                        context.startActivity(mapIntent)
+                                    }
                                     return true
                                 }
                                 R.id.web_search -> {
