@@ -111,12 +111,12 @@ class ContentViewModel : ViewModel() {
         _switchPageSearcher.postValue(Unit)
     }
 
-    private val _switchTabList = MutableLiveData<Unit>()
+    private val _switchTabList = MutableLiveData<Event<Unit>>()
 
-    val switchTabList: LiveData<Unit> = _switchTabList
+    val switchTabList: LiveData<Event<Unit>> = _switchTabList
 
     fun switchTabList() {
-        _switchTabList.postValue(Unit)
+        _switchTabList.postValue(Event(Unit))
     }
 
     private val _refresh = MutableLiveData<Unit>()

@@ -382,6 +382,7 @@ class MainActivity : AppCompatActivity(),
             pageSearchPresenter.switch()
         })
         contentViewModel?.switchTabList?.observe(this, Observer {
+            it?.getContentIfNotHandled() ?: return@Observer
             switchTabList()
         })
         contentViewModel?.refresh?.observe(this, Observer {
