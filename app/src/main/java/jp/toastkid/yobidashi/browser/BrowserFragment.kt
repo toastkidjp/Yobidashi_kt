@@ -26,7 +26,6 @@ import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
-import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.search.SearchQueryExtractor
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -495,7 +494,6 @@ class BrowserFragment : Fragment(),
 
     override fun onDetach() {
         appBarViewModel?.show()
-        browserModule.onPause()
         super.onDetach()
     }
 
