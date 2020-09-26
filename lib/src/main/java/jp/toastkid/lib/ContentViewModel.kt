@@ -43,12 +43,12 @@ class ContentViewModel : ViewModel() {
         _snackbar.postValue(Event(SnackbarEvent(message)))
     }
 
-    private val _snackbarRes = MutableLiveData<Int>()
+    private val _snackbarRes = MutableLiveData<Event<Int>>()
 
-    val snackbarRes: LiveData<Int> = _snackbarRes
+    val snackbarRes: LiveData<Event<Int>> = _snackbarRes
 
     fun snackShort(@StringRes messageId: Int) {
-        _snackbarRes.postValue(messageId)
+        _snackbarRes.postValue(Event(messageId))
     }
 
     fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {

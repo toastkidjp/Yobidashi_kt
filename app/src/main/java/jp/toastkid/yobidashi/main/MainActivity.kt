@@ -351,7 +351,8 @@ class MainActivity : AppCompatActivity(),
             )
         })
         contentViewModel?.snackbarRes?.observe(this, Observer {
-            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+            val messageId = it?.getContentIfNotHandled() ?: return@Observer
+            Toaster.snackShort(binding.content, messageId, preferenceApplier.colorPair())
         })
         contentViewModel?.toTop?.observe(this, Observer {
             (findFragment() as? ContentScrollable)?.toTop()
