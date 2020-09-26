@@ -14,15 +14,17 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
+ * TODO Rename url to imageURL.
+ * TODO Add image search
  * @author toastkidjp
  */
 class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
@@ -49,8 +51,9 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
                         0 -> viewModel.open(uri)
                         1 -> viewModel.openBackground(title, uri)
                         2 -> viewModel.open("https://www.google.co.jp/searchbyimage?image_url=$url".toUri())
-                        3 -> downloadImage(url)
-                        4 -> Clipboard.clip(activityContext, anchor)
+                        3 -> ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).preview(uri)
+                        4 -> downloadImage(url)
+                        5 -> Clipboard.clip(activityContext, anchor)
                     }
                 }
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
