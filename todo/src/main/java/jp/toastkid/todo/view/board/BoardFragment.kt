@@ -38,7 +38,11 @@ class BoardFragment : Fragment() {
 
     private val tasks = mutableListOf<TodoTask>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_board, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_board, container, false)
         return binding.root
