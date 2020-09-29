@@ -171,8 +171,9 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                                 }
                                 R.id.search_with_map_app -> {
                                     selectedTextExtractor.withAction(this@CustomWebView) { word ->
-                                        val mapIntent = Intent(Intent.ACTION_VIEW, "geo:0,0?q=$word".toUri())
-                                        context.startActivity(mapIntent)
+                                        context.startActivity(
+                                                Intent(Intent.ACTION_VIEW, "geo:0,0?q=$word".toUri())
+                                        )
                                     }
                                     return true
                                 }
