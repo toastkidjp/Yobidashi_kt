@@ -104,14 +104,14 @@ class BoardFragment : Fragment() {
     }
 
     private fun addTask(it: TodoTask, popup: ItemMenuPopup?) {
-        tasks.add(it)
-
-        val itemView = BoardItemViewFactory(layoutInflater) { parent, showTask ->
-            popup?.show(parent, showTask)
-        }.invoke(binding.board, it, PreferenceApplier(requireContext()).color)
-
-        itemView.tag = it.id
-        binding.board.addView(itemView)
+        TaskAddingUseCase(
+                PreferenceApplier(requireContext()).color,
+                tasks,
+                binding.board,
+                BoardItemViewFactory(layoutInflater) { parent, showTask ->
+                    popup?.show(parent, showTask)
+                }
+        ).invoke(it)
     }
 
 }
