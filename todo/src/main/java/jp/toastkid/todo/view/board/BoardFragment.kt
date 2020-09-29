@@ -52,6 +52,7 @@ class BoardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var popup: ItemMenuPopup? = null
+        var taskAddingUseCase: TaskAddingUseCase? = null
 
         val viewModel = ViewModelProvider(this).get(TaskListFragmentViewModel::class.java)
         viewModel
@@ -67,13 +68,13 @@ class BoardFragment : Fragment() {
                     val firstOrNull = tasks.firstOrNull { task -> task.lastModified == it.lastModified }
                     if (firstOrNull == null) {
                         it.id = tasks.size + 1
-                        addTask(it, popup)
+                        taskAddingUseCase?.invoke(it)
                         return@TaskAdditionDialogFragmentUseCase
                     }
 
                     tasks.remove(firstOrNull)
                     removeTask(firstOrNull)
-                    addTask(firstOrNull, popup)
+                    taskAddingUseCase?.invoke(firstOrNull)
                 }
 
         popup = ItemMenuPopup(
@@ -84,6 +85,15 @@ class BoardFragment : Fragment() {
                 )
         )
 
+        taskAddingUseCase = TaskAddingUseCase(
+                PreferenceApplier(requireContext()).color,
+                tasks,
+                binding.board,
+                BoardItemViewFactory(layoutInflater) { parent, showTask ->
+                    popup?.show(parent, showTask)
+                }
+        )
+
         appBarBinding.add.setOnClickListener {
             taskAdditionDialogFragmentUseCase.invoke()
         }
@@ -91,7 +101,7 @@ class BoardFragment : Fragment() {
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 
-        addTask(makeSampleTask(), popup)
+        taskAddingUseCase.invoke(makeSampleTask())
     }
 
     private fun makeSampleTask() = SampleTaskMaker().invoke()
@@ -101,17 +111,6 @@ class BoardFragment : Fragment() {
         binding.board.children
                 .firstOrNull { it.tag == task.id }
                 ?.also { binding.board.removeView(it) }
-    }
-
-    private fun addTask(it: TodoTask, popup: ItemMenuPopup?) {
-        TaskAddingUseCase(
-                PreferenceApplier(requireContext()).color,
-                tasks,
-                binding.board,
-                BoardItemViewFactory(layoutInflater) { parent, showTask ->
-                    popup?.show(parent, showTask)
-                }
-        ).invoke(it)
     }
 
 }
