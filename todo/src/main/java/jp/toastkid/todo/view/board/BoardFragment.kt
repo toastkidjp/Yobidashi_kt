@@ -80,7 +80,7 @@ class BoardFragment : Fragment() {
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        { taskAdditionDialogFragmentUseCase.invoke(it) },
+                        taskAdditionDialogFragmentUseCase::invoke,
                         ::removeTask
                 )
         )
