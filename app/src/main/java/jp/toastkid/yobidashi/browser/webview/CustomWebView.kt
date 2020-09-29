@@ -175,6 +175,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                                                 Intent(Intent.ACTION_VIEW, "geo:0,0?q=$it".toUri())
                                         )
                                     }
+                                    mode?.finish()
                                     return true
                                 }
                                 R.id.web_search -> {
