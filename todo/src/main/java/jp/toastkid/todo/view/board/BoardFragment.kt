@@ -98,6 +98,11 @@ class BoardFragment : Fragment() {
             taskAdditionDialogFragmentUseCase.invoke()
         }
 
+        appBarBinding.clear.setOnClickListener {
+            tasks.clear()
+            binding.board.removeAllViews()
+        }
+
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 

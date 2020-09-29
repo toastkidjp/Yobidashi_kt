@@ -15,5 +15,14 @@
             android:text="@string/add"
             />
 
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/add"
+            android:text="@string/clear"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
