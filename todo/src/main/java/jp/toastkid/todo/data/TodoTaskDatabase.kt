@@ -19,7 +19,10 @@ import jp.toastkid.todo.model.TodoTaskFts
 /**
  * @author toastkidjp
  */
-@Database(entities = [TodoTask::class, TodoTaskFts::class, Board::class, Category::class], version = 1)
+@Database(
+        entities = [TodoTask::class, TodoTaskFts::class, Board::class, Category::class],
+        version = 1
+)
 abstract class TodoTaskDatabase : RoomDatabase() {
 
     abstract fun repository(): TodoTaskDataAccessor
