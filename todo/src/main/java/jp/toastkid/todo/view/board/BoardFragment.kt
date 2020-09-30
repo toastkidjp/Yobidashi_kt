@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
 import jp.toastkid.todo.databinding.AppBarBoardBinding
@@ -99,8 +100,15 @@ class BoardFragment : Fragment() {
         }
 
         appBarBinding.clear.setOnClickListener {
+            val keep = mutableListOf<TodoTask>().also {
+                it.addAll(tasks)
+            }
             tasks.clear()
             binding.board.removeAllViews()
+            ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+                    .snackWithAction("Clear all tasks.", "Undo", {
+                        keep.forEach { taskAddingUseCase.invoke(it) }
+                    })
         }
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
