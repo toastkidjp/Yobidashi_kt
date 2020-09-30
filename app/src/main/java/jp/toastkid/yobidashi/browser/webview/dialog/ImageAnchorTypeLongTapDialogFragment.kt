@@ -23,8 +23,7 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 /**
- * TODO Rename url to imageURL.
- * TODO Add image search
+ * TODO Modify displaying url.
  * @author toastkidjp
  */
 class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
@@ -34,7 +33,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
 
         val title = arguments?.getString(KEY_TITLE) ?: ""
 
-        val url = arguments?.getString(KEY_EXTRA)
+        val imageUrl = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
         val anchor = arguments?.getString(KEY_ANCHOR)
@@ -45,14 +44,14 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
         val uri = anchor.toUri()
 
         return AlertDialog.Builder(activityContext)
-                .setTitle("URL: $url")
+                .setTitle("URL: $imageUrl")
                 .setItems(R.array.image_anchor_menu) { _, which ->
                     when (which) {
                         0 -> viewModel.open(uri)
                         1 -> viewModel.openBackground(title, uri)
-                        2 -> viewModel.open("https://www.google.co.jp/searchbyimage?image_url=$url".toUri())
+                        2 -> viewModel.open("https://www.google.co.jp/searchbyimage?image_url=$imageUrl".toUri())
                         3 -> ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).preview(uri)
-                        4 -> downloadImage(url)
+                        4 -> downloadImage(imageUrl)
                         5 -> Clipboard.clip(activityContext, anchor)
                     }
                 }

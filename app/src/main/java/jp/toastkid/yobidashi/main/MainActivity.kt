@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -502,6 +503,14 @@ class MainActivity : AppCompatActivity(),
         val colorPair = preferenceApplier.colorPair()
         ToolbarColorApplier()(window, binding.toolbar, colorPair)
         binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            RecentAppColoringUseCase(
+                    ::getString,
+                    { BitmapFactory.decodeResource(resources, it) },
+                    ::setTaskDescription
+            ).invoke(preferenceApplier.color)
+        }
 
         backgroundImageLoaderUseCase.invoke(binding.background, preferenceApplier.backgroundImagePath)
 
