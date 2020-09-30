@@ -14,7 +14,7 @@ import jp.toastkid.todo.model.TodoTask
  * @author toastkidjp
  */
 class TaskAddingUseCase(
-        private val color: Int,
+        private val menuIconColor: Int,
         private val tasks: MutableList<TodoTask>,
         private val board: ViewGroup,
         private val boardItemViewFactory: BoardItemViewFactory
@@ -23,7 +23,7 @@ class TaskAddingUseCase(
     operator fun invoke(task: TodoTask) {
         tasks.add(task)
 
-        val itemView = boardItemViewFactory.invoke(board, task, color)
+        val itemView = boardItemViewFactory.invoke(board, task, menuIconColor)
 
         itemView.tag = task.id
         board.addView(itemView)
