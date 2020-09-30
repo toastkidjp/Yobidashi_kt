@@ -8,13 +8,14 @@
 package jp.toastkid.todo.view.board
 
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import jp.toastkid.todo.model.TodoTask
 
 /**
  * @author toastkidjp
  */
 class TaskAddingUseCase(
-        private val menuIconColor: Int,
+        @ColorInt private val menuIconColor: Int,
         private val tasks: MutableList<TodoTask>,
         private val board: ViewGroup,
         private val boardItemViewFactory: BoardItemViewFactory
