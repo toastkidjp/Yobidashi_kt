@@ -26,11 +26,13 @@ abstract class TodoTaskDatabase : RoomDatabase() {
 
     companion object {
 
+        private const val DB_NAME = "todo_task_db"
+
         fun find(activityContext: Context): TodoTaskDatabase {
             return Room.databaseBuilder(
                     activityContext.applicationContext,
                     TodoTaskDatabase::class.java,
-                    "todo_task_db"
+                    DB_NAME
             )
                     .fallbackToDestructiveMigration()
                     .build()
