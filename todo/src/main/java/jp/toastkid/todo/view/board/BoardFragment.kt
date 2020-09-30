@@ -100,15 +100,7 @@ class BoardFragment : Fragment() {
         }
 
         appBarBinding.clear.setOnClickListener {
-            val keep = mutableListOf<TodoTask>().also {
-                it.addAll(tasks)
-            }
-            tasks.clear()
-            binding.board.removeAllViews()
-            ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                    .snackWithAction("Clear all tasks.", "Undo", {
-                        keep.forEach { taskAddingUseCase.invoke(it) }
-                    })
+            clearTasks(taskAddingUseCase)
         }
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
@@ -124,6 +116,18 @@ class BoardFragment : Fragment() {
         binding.board.children
                 .firstOrNull { it.tag == task.id }
                 ?.also { binding.board.removeView(it) }
+    }
+
+    private fun clearTasks(taskAddingUseCase: TaskAddingUseCase) {
+        val keep = mutableListOf<TodoTask>().also {
+            it.addAll(tasks)
+        }
+        tasks.clear()
+        binding.board.removeAllViews()
+        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+                .snackWithAction("Clear all tasks.", "Undo", {
+                    keep.forEach { taskAddingUseCase.invoke(it) }
+                })
     }
 
 }
