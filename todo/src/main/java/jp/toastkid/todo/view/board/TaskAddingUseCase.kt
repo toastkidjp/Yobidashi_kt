@@ -20,12 +20,12 @@ class TaskAddingUseCase(
         private val boardItemViewFactory: BoardItemViewFactory
 ) {
 
-    operator fun invoke(it: TodoTask) {
-        tasks.add(it)
+    operator fun invoke(task: TodoTask) {
+        tasks.add(task)
 
-        val itemView = boardItemViewFactory.invoke(board, it, color)
+        val itemView = boardItemViewFactory.invoke(board, task, color)
 
-        itemView.tag = it.id
+        itemView.tag = task.id
         board.addView(itemView)
     }
 
