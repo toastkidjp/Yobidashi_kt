@@ -114,6 +114,10 @@ class BoardFragment : Fragment() {
                 ?.also { binding.board.removeView(it) }
     }
 
+    fun addTask() {
+        taskAdditionDialogFragmentUseCase?.invoke()
+    }
+
     fun clearTasks() {
         val keep = mutableListOf<TodoTask>().also {
             it.addAll(tasks)
@@ -124,10 +128,6 @@ class BoardFragment : Fragment() {
                 .snackWithAction("Clear all tasks.", "Undo", {
                     keep.forEach { taskAddingUseCase?.invoke(it) }
                 })
-    }
-
-    fun addTask() {
-        taskAdditionDialogFragmentUseCase?.invoke()
     }
 
 }
