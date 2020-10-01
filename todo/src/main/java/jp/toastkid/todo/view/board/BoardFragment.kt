@@ -39,6 +39,8 @@ class BoardFragment : Fragment() {
 
     private var taskAdditionDialogFragmentUseCase: TaskAdditionDialogFragmentUseCase? = null
 
+    private var taskAddingUseCase: TaskAddingUseCase? = null
+
     private val tasks = mutableListOf<TodoTask>()
 
     override fun onCreateView(
@@ -56,7 +58,6 @@ class BoardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var popup: ItemMenuPopup? = null
-        var taskAddingUseCase: TaskAddingUseCase? = null
 
         val viewModel = ViewModelProvider(this).get(TaskListFragmentViewModel::class.java)
         viewModel
@@ -99,13 +100,13 @@ class BoardFragment : Fragment() {
         )
 
         appBarBinding.clear.setOnClickListener {
-            clearTasks(taskAddingUseCase)
+            clearTasks()
         }
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 
-        taskAddingUseCase.invoke(makeSampleTask())
+        taskAddingUseCase?.invoke(makeSampleTask())
     }
 
     private fun makeSampleTask() = SampleTaskMaker().invoke()
@@ -117,7 +118,7 @@ class BoardFragment : Fragment() {
                 ?.also { binding.board.removeView(it) }
     }
 
-    private fun clearTasks(taskAddingUseCase: TaskAddingUseCase) {
+    private fun clearTasks() {
         val keep = mutableListOf<TodoTask>().also {
             it.addAll(tasks)
         }
@@ -125,7 +126,7 @@ class BoardFragment : Fragment() {
         binding.board.removeAllViews()
         ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
                 .snackWithAction("Clear all tasks.", "Undo", {
-                    keep.forEach { taskAddingUseCase.invoke(it) }
+                    keep.forEach { taskAddingUseCase?.invoke(it) }
                 })
     }
 
