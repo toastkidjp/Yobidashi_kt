@@ -37,6 +37,8 @@ class BoardFragment : Fragment() {
 
     private lateinit var appBarBinding: AppBarBoardBinding
 
+    private var taskAdditionDialogFragmentUseCase: TaskAdditionDialogFragmentUseCase? = null
+
     private val tasks = mutableListOf<TodoTask>()
 
     override fun onCreateView(
@@ -46,6 +48,7 @@ class BoardFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_board, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_board, container, false)
+        appBarBinding.fragment = this
         return binding.root
     }
 
@@ -64,7 +67,7 @@ class BoardFragment : Fragment() {
                     }
                 })
 
-        val taskAdditionDialogFragmentUseCase =
+        taskAdditionDialogFragmentUseCase =
                 TaskAdditionDialogFragmentUseCase(this) {
                     val firstOrNull = tasks.firstOrNull { task -> task.lastModified == it.lastModified }
                     if (firstOrNull == null) {
@@ -81,7 +84,7 @@ class BoardFragment : Fragment() {
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        taskAdditionDialogFragmentUseCase::invoke,
+                        { taskAdditionDialogFragmentUseCase?.invoke(it) },
                         ::removeTask
                 )
         )
@@ -94,10 +97,6 @@ class BoardFragment : Fragment() {
                     popup?.show(parent, showTask)
                 }
         )
-
-        appBarBinding.add.setOnClickListener {
-            taskAdditionDialogFragmentUseCase.invoke()
-        }
 
         appBarBinding.clear.setOnClickListener {
             clearTasks(taskAddingUseCase)
@@ -128,6 +127,10 @@ class BoardFragment : Fragment() {
                 .snackWithAction("Clear all tasks.", "Undo", {
                     keep.forEach { taskAddingUseCase.invoke(it) }
                 })
+    }
+
+    fun addTask() {
+        taskAdditionDialogFragmentUseCase?.invoke()
     }
 
 }
