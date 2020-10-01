@@ -99,10 +99,6 @@ class BoardFragment : Fragment() {
                 }
         )
 
-        appBarBinding.clear.setOnClickListener {
-            clearTasks()
-        }
-
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 
@@ -118,7 +114,7 @@ class BoardFragment : Fragment() {
                 ?.also { binding.board.removeView(it) }
     }
 
-    private fun clearTasks() {
+    fun clearTasks() {
         val keep = mutableListOf<TodoTask>().also {
             it.addAll(tasks)
         }

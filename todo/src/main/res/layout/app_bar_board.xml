@@ -29,6 +29,7 @@
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@id/add"
             android:text="@string/clear"
+            android:onClick="@{v -> fragment.clearTasks()}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
