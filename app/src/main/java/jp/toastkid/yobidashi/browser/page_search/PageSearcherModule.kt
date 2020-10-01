@@ -9,10 +9,10 @@ import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -143,10 +143,14 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
 
         (context as? FragmentActivity)?.let { activity ->
             viewModel?.clear?.observe(activity, Observer {
+                it?.getContentIfNotHandled() ?: return@Observer
                 clearInput()
             })
 
-            viewModel?.close?.observe(activity, Observer { hide() })
+            viewModel?.close?.observe(activity, Observer {
+                it?.getContentIfNotHandled() ?: return@Observer
+                hide()
+            })
         }
 
         if (height == 0f) {

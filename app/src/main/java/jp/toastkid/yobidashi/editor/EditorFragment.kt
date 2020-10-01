@@ -177,15 +177,18 @@ class EditorFragment :
             (viewModelProvider.get(PageSearcherViewModel::class.java)).let { viewModel ->
                 var currentWord = ""
                 viewModel.find.observe(activity, Observer {
-                    currentWord = it ?: ""
+                    val text = it?.getContentIfNotHandled() ?: return@Observer
+                    currentWord = text
                     finder.findDown(currentWord)
                 })
 
                 viewModel.upward.observe(activity, Observer {
+                    it?.getContentIfNotHandled() ?: return@Observer
                     finder.findUp(currentWord)
                 })
 
                 viewModel.downward.observe(activity, Observer {
+                    it?.getContentIfNotHandled() ?: return@Observer
                     finder.findDown(currentWord)
                 })
             }

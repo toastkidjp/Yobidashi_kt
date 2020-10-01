@@ -72,10 +72,11 @@ class LauncherFragment : Fragment(), ContentScrollable {
             val viewModel =
                     ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
             viewModel.find.observe(activity, Observer {
-                if (prev == it) {
+                val text = it?.getContentIfNotHandled() ?: return@Observer
+                if (prev == text) {
                     return@Observer
                 }
-                prev = it.toString()
+                prev = text
                 adapter.filter(prev)
                 binding.appItemsView.scheduleLayoutAnimation()
             })
