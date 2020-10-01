@@ -107,9 +107,8 @@ class BoardFragment : Fragment() {
         taskClearUseCase = TaskClearUseCase(
                 tasks,
                 ViewModelProvider(requireActivity()).get(ContentViewModel::class.java),
-                taskAddingUseCase,
-                { binding.board.removeAllViews() }
-        )
+                taskAddingUseCase
+        ) { binding.board.removeAllViews() }
 
         taskAddingUseCase?.invoke(makeSampleTask())
     }
