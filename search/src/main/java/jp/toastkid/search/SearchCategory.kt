@@ -67,6 +67,11 @@ enum class SearchCategory(
             R.drawable.ic_qwant,
             "https://www.qwant.com/?q="
     ),
+    GMX(
+            R.string.search_category_gmx,
+            R.drawable.ic_gmx,
+            "https://search.gmx.com/web?q="
+    ),
     STARTPAGE(
             R.string.search_category_startpage,
             R.drawable.ic_startpage,
