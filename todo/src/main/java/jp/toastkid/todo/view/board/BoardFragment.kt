@@ -41,6 +41,8 @@ class BoardFragment : Fragment() {
 
     private var taskAddingUseCase: TaskAddingUseCase? = null
 
+    private var taskClearUseCase: TaskClearUseCase? = null
+
     private val tasks = mutableListOf<TodoTask>()
 
     override fun onCreateView(
@@ -102,6 +104,13 @@ class BoardFragment : Fragment() {
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 
+        taskClearUseCase = TaskClearUseCase(
+                tasks,
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java),
+                taskAddingUseCase,
+                { binding.board.removeAllViews() }
+        )
+
         taskAddingUseCase?.invoke(makeSampleTask())
     }
 
@@ -119,15 +128,7 @@ class BoardFragment : Fragment() {
     }
 
     fun clearTasks() {
-        val keep = mutableListOf<TodoTask>().also {
-            it.addAll(tasks)
-        }
-        tasks.clear()
-        binding.board.removeAllViews()
-        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                .snackWithAction("Clear all tasks.", "Undo") {
-                    keep.forEach { taskAddingUseCase?.invoke(it) }
-                }
+        taskClearUseCase?.invoke()
     }
 
 }
