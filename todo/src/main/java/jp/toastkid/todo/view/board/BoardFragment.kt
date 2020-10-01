@@ -125,9 +125,9 @@ class BoardFragment : Fragment() {
         tasks.clear()
         binding.board.removeAllViews()
         ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                .snackWithAction("Clear all tasks.", "Undo", {
+                .snackWithAction("Clear all tasks.", "Undo") {
                     keep.forEach { taskAddingUseCase?.invoke(it) }
-                })
+                }
     }
 
 }
