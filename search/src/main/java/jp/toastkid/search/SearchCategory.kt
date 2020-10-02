@@ -77,6 +77,11 @@ enum class SearchCategory(
             R.drawable.ic_startpage,
             "https://www.startpage.com/sp/search?q="
     ),
+    INFO_COM(
+            R.string.search_category_info_com,
+            R.drawable.ic_info_com,
+            "https://www.info.com/serp?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,

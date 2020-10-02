@@ -42,6 +42,7 @@
     <string name="search_category_reddit">reddit</string>
     <string name="search_category_open_weather">Open Weather</string>
     <string name="search_category_startpage">Startpage</string>
+    <string name="search_category_info_com">info.com</string>
     <string name="tumblr">Tumblr</string>
     <string name="search_category_open_street_map">OpenStreetMap</string>
     <string name="search_category_quora">Quora</string>
