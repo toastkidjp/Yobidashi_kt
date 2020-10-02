@@ -149,6 +149,10 @@ class SearchQueryExtractorTest {
                 "test",
                 searchQueryExtractor("https://www.info.com/serp?q=test&sc=ZkYgeSO4txSIw")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://curlie.org/search?q=test&lang=en&stime=92452189")
+        )
     }
 
     @Test
