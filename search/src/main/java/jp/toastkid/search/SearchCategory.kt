@@ -82,6 +82,12 @@ enum class SearchCategory(
             R.drawable.ic_info_com,
             "https://www.info.com/serp?q="
     ),
+    CURLIE(
+            R.string.search_category_curlie,
+            R.drawable.ic_curlie,
+            "https://curlie.org/search?lang=&q=",
+            { l, h, q -> "https://curlie.org/search?lang=$l&q=$q" }
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
