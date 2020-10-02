@@ -1,5 +1,7 @@
 package jp.toastkid.yobidashi.browser
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -408,6 +410,11 @@ class BrowserFragment : Fragment(),
             it.pageInformation.setColorFilter(fontColor)
             it.userAgent.setColorFilter(fontColor)
             it.htmlSource.setColorFilter(fontColor)
+            it.progress.progressDrawable.colorFilter =
+                    PorterDuffColorFilter(
+                            preferenceApplier.fontColor,
+                            PorterDuff.Mode.SRC_IN
+                    )
         }
 
         browserModule.resizePool(preferenceApplier.poolSize)
@@ -467,7 +474,16 @@ class BrowserFragment : Fragment(),
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        browserModule.onSaveInstanceState(outState)
+        /*
+         * jp.toastkid.yobidashi.d E/AndroidRuntime: FATAL EXCEPTION: main
+         *     kotlin.UninitializedPropertyAccessException: lateinit property browserModule has not been initialize
+         *         at jp.toastkid.yobidashi.browser.BrowserFragment.onSaveInstanceState(BrowserFragment.kt:470)
+         *         at androidx.fragment.app.Fragment.performSaveInstanceState(Fragment.java:2863)
+         *         at androidx.fragment.app.FragmentStateManager.saveBasicState(FragmentStateManager.java:434)
+         */
+        if (::browserModule.isInitialized) {
+            browserModule.onSaveInstanceState(outState)
+        }
         super.onSaveInstanceState(outState)
     }
 

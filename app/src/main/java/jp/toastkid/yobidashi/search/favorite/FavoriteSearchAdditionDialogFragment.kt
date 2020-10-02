@@ -10,13 +10,13 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogFavoriteSearchAdditionBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import java.text.MessageFormat
 
@@ -61,8 +61,8 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
     private fun initSpinner() {
         val context = context ?: return
         binding.favoriteSearchAdditionCategories.adapter = SearchCategoryAdapter(context)
-        val index = jp.toastkid.search.SearchCategory.findIndex(
-                PreferenceApplier(context).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
+        val index = SearchCategory.findIndex(
+                PreferenceApplier(context).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
         )
         binding.favoriteSearchAdditionCategories.setSelection(index)
     }

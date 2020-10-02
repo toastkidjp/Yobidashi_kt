@@ -33,7 +33,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
 
         val title = arguments?.getString(KEY_TITLE) ?: ""
 
-        val imageUrl = arguments?.getString(KEY_EXTRA)
+        val imageUrl = arguments?.getString(KEY_IMAGE_URL)
                 ?: return super.onCreateDialog(savedInstanceState)
 
         val anchor = arguments?.getString(KEY_ANCHOR)
@@ -79,14 +79,14 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
 
         private const val KEY_ANCHOR = "anchor"
 
-        private const val KEY_EXTRA = "extra"
+        private const val KEY_IMAGE_URL = "extra"
 
         fun make(title: String, extra: String, anchor: String) =
                 ImageAnchorTypeLongTapDialogFragment()
                         .also {
                             it.arguments = bundleOf(
                                     KEY_TITLE to title,
-                                    KEY_EXTRA to extra,
+                                    KEY_IMAGE_URL to extra,
                                     KEY_ANCHOR to anchor
                             )
                         }

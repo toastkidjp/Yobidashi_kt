@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.editor
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -56,14 +55,13 @@ class ClearTextDialogFragment : DialogFragment() {
         /**
          * Show this dialog.
          *
-         * @param context [Context]
+         * @param target [androidx.fragment.app.Fragment]
          */
         fun show(target: Fragment) {
             val dialogFragment = ClearTextDialogFragment()
             dialogFragment.setTargetFragment(target, 1)
-            val fragmentManager = target.parentFragmentManager ?: return
             dialogFragment.show(
-                    fragmentManager,
+                    target.parentFragmentManager,
                     dialogFragment::class.java.canonicalName
             )
         }

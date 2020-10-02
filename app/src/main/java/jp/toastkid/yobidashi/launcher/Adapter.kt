@@ -3,17 +3,19 @@ package jp.toastkid.yobidashi.launcher
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemAppLauncherBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,7 +25,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
+import java.util.ArrayList
 
 /**
  * RecyclerView's adapter.
@@ -84,7 +86,7 @@ internal class Adapter(private val context: Context, private val parent: View)
         holder.setPackageName(info.packageName)
         try {
             val packageInfo = packageManager.getPackageInfo(info.packageName, PackageManager.GET_META_DATA)
-            holder.setVersionInformation("${packageInfo.versionName} (${packageInfo.versionCode})")
+            holder.setVersionInformation("${packageInfo.versionName} (${extractVersionCode(packageInfo)})")
             holder.setInstalledMs(packageInfo.firstInstallTime)
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.e(e)
@@ -92,6 +94,14 @@ internal class Adapter(private val context: Context, private val parent: View)
 
         setOnClick(holder, info)
     }
+
+    private fun extractVersionCode(packageInfo: PackageInfo) =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.longVersionCode
+            } else {
+                @Suppress("DEPRECATION")
+                packageInfo.versionCode.toLong()
+            }
 
     /**
      * Set on click actions.

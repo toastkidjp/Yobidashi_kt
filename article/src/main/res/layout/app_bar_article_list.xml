@@ -16,7 +16,8 @@
             android:hint="@string/hint_search_articles"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/search_result"
-            tools:ignore="Autofill,LabelFor"/>
+            tools:ignore="Autofill,LabelFor"
+            />
         <TextView
             android:id="@+id/search_result"
             android:layout_width="match_parent"

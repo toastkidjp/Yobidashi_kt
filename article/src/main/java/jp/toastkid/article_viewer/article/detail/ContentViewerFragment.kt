@@ -89,11 +89,10 @@ class ContentViewerFragment : Fragment(), ContentScrollable, TabUiFragment {
 
     private fun makeLinkBehaviorService(): LinkBehaviorService {
         val viewModelProvider = ViewModelProvider(requireActivity())
-        val linkBehaviorService = LinkBehaviorService(
+        return LinkBehaviorService(
                 viewModelProvider.get(ContentViewModel::class.java),
                 viewModelProvider.get(BrowserViewModel::class.java)
         )
-        return linkBehaviorService
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -61,7 +61,6 @@ import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
-import kotlinx.coroutines.Job
 import timber.log.Timber
 
 /**
@@ -114,8 +113,6 @@ class BrowserModule(
     private val alphaConverter = AlphaConverter()
 
     private val webViewStateUseCase = WebViewStateUseCase.make(context)
-
-    private val disposables: Job by lazy { Job() }
 
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
@@ -492,14 +489,6 @@ class BrowserModule(
     fun onPause() {
         GlobalWebViewPool.storeStates(context)
         GlobalWebViewPool.onPause()
-    }
-
-    /**
-     * Dispose [GlobalWebViewPool].
-     */
-    fun dispose() {
-        GlobalWebViewPool.dispose()
-        disposables.cancel()
     }
 
     /**

@@ -90,9 +90,9 @@ class OnBackPressedUseCase(
     }
 
     /**
-     * Find current [Fragment].
+     * Find current [androidx.fragment.app.Fragment].
      *
-     * @return [Fragment]
+     * @return [androidx.fragment.app.Fragment]
      */
     private fun findFragment() = supportFragmentManager.findFragmentById(R.id.content)
 

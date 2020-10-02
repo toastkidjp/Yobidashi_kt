@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -148,7 +146,6 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.AppTheme_NoActionBar)
         setContentView(LAYOUT_ID)
 
         CoroutineScope(Dispatchers.IO).launch(disposables) {
@@ -500,14 +497,12 @@ class MainActivity : AppCompatActivity(),
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        val colorPair = preferenceApplier.colorPair()
-        ToolbarColorApplier()(window, binding.toolbar, colorPair)
-        binding.toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
+        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             RecentAppColoringUseCase(
                     ::getString,
-                    { BitmapFactory.decodeResource(resources, it) },
+                    { resources },
                     ::setTaskDescription
             ).invoke(preferenceApplier.color)
         }
