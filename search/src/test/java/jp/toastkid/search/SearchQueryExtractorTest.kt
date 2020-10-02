@@ -141,6 +141,10 @@ class SearchQueryExtractorTest {
                 "orange",
                 searchQueryExtractor("https://ja.wikipedia.org/wiki/orange")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://search.gmx.com/web?q=test&origin=HP_sf_atf")
+        )
     }
 
     @Test
