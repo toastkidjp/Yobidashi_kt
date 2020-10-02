@@ -147,6 +147,10 @@ class SearchQueryExtractorTest {
         )
         assertEquals(
                 "test",
+                searchQueryExtractor("https://www.teoma.com/web?q=test&tpr=1&ts=1601594078977")
+        )
+        assertEquals(
+                "test",
                 searchQueryExtractor("https://www.info.com/serp?q=test&sc=ZkYgeSO4txSIw")
         )
         assertEquals(

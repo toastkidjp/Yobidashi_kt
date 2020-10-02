@@ -40,6 +40,7 @@ class SearchQueryExtractor {
                     or host.endsWith(".quora.com")
                     or host.endsWith(".livejournal.com")
                     or host.endsWith("search.daum.net")
+                    or host.endsWith(".teoma.com")
                     or host.endsWith("www.info.com")
                     or host.endsWith("curlie.org")
                     or host.endsWith("search.gmx.com") ->
