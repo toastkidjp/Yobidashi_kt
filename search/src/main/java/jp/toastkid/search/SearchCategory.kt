@@ -87,6 +87,11 @@ enum class SearchCategory(
             R.drawable.ic_info_com,
             "https://www.info.com/serp?q="
     ),
+    LOOKSMART(
+            R.string.search_category_looksmart,
+            R.drawable.ic_looksmart,
+            "https://results.looksmart.com/serp?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
