@@ -6,6 +6,16 @@ jacoco {
 }
 
 buildscript {
+    byte verMajor  = 1
+    byte verMiddle = 4
+    byte verMinor  = 35
+
+    if (verMiddle >= 100 || verMinor >= 10_000) {
+        throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
+    }
+
+    ext.versionCodeValue = ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
+    ext.versionNameValue = "${verMajor}.${verMiddle}.${verMinor}"
 
     ext.kotlin_version = '1.4.10'
 
@@ -42,17 +52,6 @@ buildscript {
             mockk: '1.9.3',
             coroutines_test: '1.3.5'
     ]
-
-    byte verMajor  = 1
-    byte verMiddle = 4
-    byte verMinor  = 35
-
-    if (verMiddle >= 100 || verMinor >= 10_000) {
-        throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
-    }
-
-    ext.versionCodeValue = ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
-    ext.versionNameValue = "${verMajor}.${verMiddle}.${verMinor}"
 }
 
 allprojects {
