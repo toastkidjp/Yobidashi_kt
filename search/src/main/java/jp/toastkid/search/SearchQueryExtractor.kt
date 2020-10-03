@@ -43,6 +43,7 @@ class SearchQueryExtractor {
                     or host.endsWith(".teoma.com")
                     or host.endsWith("www.info.com")
                     or host.endsWith("curlie.org")
+                    or host.endsWith("results.looksmart.com")
                     or host.endsWith("search.gmx.com") ->
                 uri.getQueryParameter("q")
             host.startsWith("www.amazon.") ->
