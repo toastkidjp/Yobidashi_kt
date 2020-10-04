@@ -25,7 +25,7 @@
             android:text="Apply dark mode"
             />
 
-        <include layout="@layout/primary_dark_divider" />
+        <include layout="@layout/view_setting_divider" />
 
         <TextView
             android:id="@+id/clear_background_settings"
@@ -37,7 +37,7 @@
             android:text="@string/title_bg_reset"
             />
 
-        <include layout="@layout/primary_dark_divider" />
+        <include layout="@layout/view_setting_divider" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/fab_parent"
