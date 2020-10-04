@@ -22,12 +22,12 @@
                 android:layout_height="wrap_content"
                 >
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <include android:id="@+id/browser_expand"
                     layout="@layout/fragment_setting_section_browser_expand_mode"/>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/retain_tabs"
@@ -57,7 +57,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:orientation="horizontal"
@@ -103,7 +103,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/browser_js"
@@ -131,7 +131,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/use_image"
@@ -159,7 +159,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/save_form"
@@ -187,7 +187,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/save_view_history"
@@ -217,7 +217,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/user_agent"
@@ -241,7 +241,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
@@ -282,7 +282,7 @@
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
@@ -322,7 +322,7 @@
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/dark_mode"
@@ -352,7 +352,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/ad_remove"
@@ -382,7 +382,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -392,7 +392,7 @@
                     android:onClick="@{fragment::clearCache}"
                     />
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -402,7 +402,7 @@
                     android:onClick="@{fragment::clearFormData}"
                     />
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
