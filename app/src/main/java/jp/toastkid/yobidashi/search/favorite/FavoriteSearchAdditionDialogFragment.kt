@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -106,9 +105,9 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
      * Ok action.
      */
     fun ok() {
-        val query = binding.favoriteSearchAdditionQueryInput.text.toString()
+        val query = binding.favoriteSearchAdditionQueryInput.text?.toString()
 
-        if (TextUtils.isEmpty(query)) {
+        if (query.isNullOrEmpty()) {
             Toaster.snackShort(
                     binding.root,
                     getString(R.string.favorite_search_addition_dialog_empty_message),

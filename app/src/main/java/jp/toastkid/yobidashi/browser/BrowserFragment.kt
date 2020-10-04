@@ -4,7 +4,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -362,7 +361,7 @@ class BrowserFragment : Fragment(),
         val currentTitle = browserModule.currentTitle()
         val currentUrl = browserModule.currentUrl()
         val query = searchQueryExtractor.invoke(currentUrl)
-        val makeIntent = if (TextUtils.isEmpty(query) || Urls.isValidUrl(query)) {
+        val makeIntent = if (query.isNullOrEmpty() || Urls.isValidUrl(query)) {
             SearchFragment.makeWith(currentTitle, currentUrl)
         } else {
             SearchFragment.makeWithQuery(query ?: "", currentTitle, currentUrl)

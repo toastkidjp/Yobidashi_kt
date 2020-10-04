@@ -14,7 +14,6 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -31,18 +30,18 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.SourceData
 import com.journeyapps.barcodescanner.camera.PreviewCallback
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.storage.ExternalFileAssignment
+import jp.toastkid.lib.view.DraggableTouchListener
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.permission.RuntimePermissions
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.storage.ExternalFileAssignment
-import jp.toastkid.lib.view.DraggableTouchListener
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.search.SearchCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -201,7 +200,7 @@ class BarcodeReaderFragment : Fragment() {
 
             override fun barcodeResult(barcodeResult: BarcodeResult) {
                 val text = barcodeResult.text
-                if (TextUtils.equals(text, resultPopup.currentText())) {
+                if (text == resultPopup.currentText()) {
                     return
                 }
                 showResult(text)

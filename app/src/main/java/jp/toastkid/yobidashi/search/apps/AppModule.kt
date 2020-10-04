@@ -7,9 +7,9 @@
  */
 package jp.toastkid.yobidashi.search.apps
 
-import android.text.TextUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.launcher.Adapter
 import kotlinx.coroutines.CoroutineScope
@@ -21,14 +21,18 @@ import kotlinx.coroutines.launch
  * App search module in [SearchActivity].
  *
  * @param binding [ModuleSearchAppsBinding]
+ * @param contentViewModel Use for showing snackbar
  * @author toastkidjp
  */
-class AppModule(private val binding: ModuleSearchAppsBinding) {
+class AppModule(
+        private val binding: ModuleSearchAppsBinding,
+        contentViewModel: ContentViewModel?
+) {
 
     /**
      * Suggest ModuleAdapter.
      */
-    private val adapter: Adapter = Adapter(binding.root.context, binding.root)
+    private val adapter: Adapter = Adapter(binding.root.context, contentViewModel)
 
     /**
      * Disposable of last query.
@@ -50,7 +54,7 @@ class AppModule(private val binding: ModuleSearchAppsBinding) {
      * @param key search keyword.
      */
     fun request(key: String) {
-        if (TextUtils.isEmpty(key)) {
+        if (key.isEmpty()) {
             hide()
             return
         }

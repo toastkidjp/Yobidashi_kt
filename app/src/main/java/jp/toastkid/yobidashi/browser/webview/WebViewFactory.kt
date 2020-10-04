@@ -3,19 +3,17 @@ package jp.toastkid.yobidashi.browser.webview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
-import android.text.TextUtils
 import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.SearchCategory
 
 /**
  * [WebView] factory.
@@ -62,7 +60,7 @@ internal class WebViewFactory {
                     val url = hitResult.extra ?: return@setOnLongClickListener false
                     webView.requestFocusNodeHref(handler.obtainMessage())
                     if (context is FragmentActivity) {
-                        if (TextUtils.isEmpty(longTapItemHolder.anchor)) {
+                        if (longTapItemHolder.anchor.isEmpty()) {
                             handler.postDelayed({
                                 showImageAnchorDialog(url, context)
                                 longTapItemHolder.reset()

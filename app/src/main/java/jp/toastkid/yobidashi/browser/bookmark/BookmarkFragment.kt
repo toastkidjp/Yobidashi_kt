@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -247,14 +246,14 @@ class BookmarkFragment: Fragment(),
     }
 
     override fun onClickAddFolder(title: String?) {
-        if (TextUtils.isEmpty(title)) {
+        if (title.isNullOrEmpty()) {
             return
         }
 
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             BookmarkInsertion(
                     binding.root.context,
-                    title ?: "", // This value is always non-null, because it has checked at above statement.
+                    title,
                     parent = adapter.currentFolderName(),
                     folder = true
             ).insert()

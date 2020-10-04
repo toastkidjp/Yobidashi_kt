@@ -2,15 +2,14 @@ package jp.toastkid.yobidashi.libs.clip
 
 import android.content.Context
 import android.net.Uri
-import android.text.TextUtils
 import android.view.View
 import androidx.core.net.toUri
 import com.google.android.material.snackbar.Snackbar
+import jp.toastkid.lib.Urls
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Clipping URL opener, this class invoked containing URL in clipboard.
@@ -48,7 +47,7 @@ object ClippingUrlOpener {
     }
 
     private fun shouldNotFeedback(clipboardContent: String) =
-            Urls.isInvalidUrl(clipboardContent) || TextUtils.equals(previous, clipboardContent)
+            Urls.isInvalidUrl(clipboardContent) || clipboardContent.equals(previous)
 
     private fun feedbackToUser(view: View, clipboardContent: String, onClick: (Uri) -> Unit, activityContext: Context) {
         Toaster.withAction(

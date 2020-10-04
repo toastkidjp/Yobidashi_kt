@@ -10,7 +10,6 @@ import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.os.Message
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -326,7 +325,7 @@ class BrowserModule(
 
         val currentView = currentView() ?: return
 
-        if (TextUtils.isEmpty(currentView.url)
+        if (currentView.url.isNullOrEmpty()
                 && Urls.isValidUrl(url)
                 && NetworkChecker.isNotAvailable(context)
         ) {
