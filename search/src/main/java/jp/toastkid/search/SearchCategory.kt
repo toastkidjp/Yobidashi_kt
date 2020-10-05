@@ -92,6 +92,11 @@ enum class SearchCategory(
             R.drawable.ic_looksmart,
             "https://results.looksmart.com/serp?q="
     ),
+    PRIVACY_WALL(
+            R.string.search_category_privacy_wall,
+            R.drawable.ic_privacywall,
+            "https://www.privacywall.org/search/secure/?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
