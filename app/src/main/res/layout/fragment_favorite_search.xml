@@ -27,11 +27,6 @@
                     android:layout_height="wrap_content"
                     />
 
-                <include layout="@layout/primary_dark_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    />
-
                 <FrameLayout
                     android:id="@+id/favorite_search_addition"
                     android:orientation="vertical"
