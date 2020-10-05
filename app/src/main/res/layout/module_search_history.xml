@@ -32,6 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_search_history"
+                tools:itemCount="3"
                 />
 
             <include layout="@layout/view_setting_divider"/>
