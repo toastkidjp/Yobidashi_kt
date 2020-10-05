@@ -157,6 +157,10 @@ class SearchQueryExtractorTest {
                 "test",
                 searchQueryExtractor("https://results.looksmart.com/serp?q=test")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.privacywall.org/search/secure/?q=test")
+        )
     }
 
     @Test
