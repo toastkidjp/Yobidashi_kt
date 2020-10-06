@@ -161,6 +161,10 @@ class SearchQueryExtractorTest {
                 "test",
                 searchQueryExtractor("https://www.privacywall.org/search/secure/?q=test")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.ecosia.org/search?q=test")
+        )
     }
 
     @Test
