@@ -165,6 +165,10 @@ class SearchQueryExtractorTest {
                 "test",
                 searchQueryExtractor("https://www.ecosia.org/search?q=test")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://nova.rambler.ru/search?query=test&utm_source=head&utm_campaign=self_promo&utm_medium=form&utm_content=search&_openstat=Umcl9N")
+        )
     }
 
     @Test
