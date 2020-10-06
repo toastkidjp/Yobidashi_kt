@@ -5,6 +5,10 @@ import android.net.Uri
 import android.view.View
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.TabListViewModel
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
@@ -14,16 +18,14 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
-import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
+import jp.toastkid.yobidashi.tab.model.CalendarTab
 import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
-import jp.toastkid.lib.TabListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -151,6 +153,20 @@ class TabAdapter(
         if (!onBackground) {
             setIndexByTab(articleTab)
         }
+    }
+
+    fun openArticleList() {
+        val newTab = ArticleListTab.withTitle(contextSupplier().getString(R.string.title_article_viewer))
+        tabList.add(newTab)
+        setCount()
+        setIndexByTab(newTab)
+    }
+
+    fun openCalendar() {
+        val newTab = CalendarTab.withTitle(contextSupplier().getString(R.string.title_calendar))
+        tabList.add(newTab)
+        setCount()
+        setIndexByTab(newTab)
     }
 
     /**

@@ -28,6 +28,7 @@ import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.lib.view.RecyclerViewScroller
@@ -39,7 +40,7 @@ import jp.toastkid.yobidashi.databinding.FragmentPdfViewerBinding
 /**
  * @author toastkidjp
  */
-class PdfViewerFragment : Fragment(), TabUiFragment, CommonFragmentAction, ContentScrollable {
+class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragmentAction, ContentScrollable {
 
     /**
      * Data binding object.

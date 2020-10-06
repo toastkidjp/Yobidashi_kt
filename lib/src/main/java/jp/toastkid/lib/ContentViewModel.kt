@@ -139,4 +139,20 @@ class ContentViewModel : ViewModel() {
         _newArticle.postValue(Event(title to true))
     }
 
+    private val _openArticleList = MutableLiveData<Event<Unit>>()
+
+    val openArticleList: LiveData<Event<Unit>> = _openArticleList
+
+    fun openArticleList() {
+        _openArticleList.postValue(Event(Unit))
+    }
+
+    private val _openCalendar = MutableLiveData<Event<Unit>>()
+
+    val openCalendar: LiveData<Event<Unit>> = _openCalendar
+
+    fun openCalendar() {
+        _openCalendar.postValue(Event(Unit))
+    }
+
 }

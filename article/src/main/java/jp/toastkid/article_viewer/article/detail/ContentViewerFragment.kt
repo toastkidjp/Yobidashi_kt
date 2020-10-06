@@ -38,7 +38,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.color.LinkColorGenerator
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.tab.TabUiFragment
+import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.view.TextViewHighlighter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +49,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class ContentViewerFragment : Fragment(), ContentScrollable, TabUiFragment {
+class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiFragment {
 
     private lateinit var binding: FragmentContentBinding
 
@@ -164,7 +164,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, TabUiFragment {
     }
 
     fun tabList() {
-        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).switchTabList()
+        activity?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java).switchTabList()
+        }
     }
 
     private fun search(keyword: String?) {
