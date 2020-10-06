@@ -4,14 +4,9 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: "jacoco"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion compileSdk
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
