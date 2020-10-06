@@ -17,6 +17,10 @@ buildscript {
     ext.versionCodeValue = ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
     ext.versionNameValue = "${verMajor}.${verMiddle}.${verMinor}"
 
+    ext.compileSdk = 30
+    ext.targetSdk = 30
+    ext.buildTools = "30.0.0"
+
     ext.kotlin_version = '1.4.10'
 
     repositories {

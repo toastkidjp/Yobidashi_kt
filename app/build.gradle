@@ -9,13 +9,13 @@ apply plugin: "jacoco"
 apply from: 'signing/config.gradle', to: android
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    compileSdkVersion compileSdk
+    buildToolsVersion buildTools
 
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion targetSdk
 
         versionCode versionCodeValue
         versionName versionNameValue
