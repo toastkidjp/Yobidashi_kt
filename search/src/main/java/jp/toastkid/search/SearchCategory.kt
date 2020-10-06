@@ -72,6 +72,11 @@ enum class SearchCategory(
             R.drawable.ic_gmx,
             "https://search.gmx.com/web?q="
     ),
+    ECOSIA(
+            R.string.search_category_gmx,
+            R.drawable.ic_ecosia,
+            "https://www.ecosia.org/search?q="
+    ),
     STARTPAGE(
             R.string.search_category_startpage,
             R.drawable.ic_startpage,
