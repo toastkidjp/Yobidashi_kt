@@ -64,7 +64,7 @@ class LauncherIntentUseCase(
                     intent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
                 } else {
                     searchCategoryFinder()
-                }
+                } ?: return
                 search(category, intent.getStringExtra(SearchManager.QUERY) ?: "")
                 return
             }

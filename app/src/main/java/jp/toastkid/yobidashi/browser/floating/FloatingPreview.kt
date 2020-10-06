@@ -162,7 +162,8 @@ class FloatingPreview(context: Context) {
 
     fun openCurrentWithNewTab() {
         extractWebView()?.also {
-            openNewTabWithUrl(it.url)
+            val url = it.url ?: return
+            openNewTabWithUrl(url)
         }
     }
 
