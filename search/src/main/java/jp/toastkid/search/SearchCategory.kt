@@ -107,6 +107,11 @@ enum class SearchCategory(
             R.drawable.ic_yandex,
             "https://www.yandex.com/search/?text="
     ),
+    RAMBLER(
+            R.string.search_category_rambler,
+            R.drawable.ic_rambler,
+            "https://nova.rambler.ru/search?query="
+    ),
     NAVER(
             R.string.naver,
             R.drawable.ic_naver,
