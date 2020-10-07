@@ -316,7 +316,7 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProvider(this).get(MenuViewModel::class.java)
 
-        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
+        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch, ::openSetting)
 
         MenuUseCase({ this }, menuViewModel).observe()
     }

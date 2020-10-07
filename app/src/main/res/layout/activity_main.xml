@@ -41,7 +41,7 @@
             <ViewStub
                 android:id="@+id/menu_stub"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="112dp"
                 android:layout_marginBottom="80dp"
                 android:layout_gravity="right|bottom"
                 android:layout="@layout/module_main_menu"

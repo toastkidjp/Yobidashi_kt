@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.menu
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
@@ -22,6 +23,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import kotlin.math.min
+import kotlin.reflect.KFunction0
 
 /**
  * @author toastkidjp
@@ -30,11 +32,14 @@ class MenuBinder(
         fragmentActivity: FragmentActivity,
         private val menuViewModel: MenuViewModel?,
         private val menuStub: ViewStubProxy,
-        private val menuSwitch: FloatingActionButton?
+        private val menuSwitch: FloatingActionButton?,
+        private val openSetting: KFunction0<Unit>
 ) {
     private val preferenceApplier = PreferenceApplier(fragmentActivity)
 
     private var menuAdapter: MenuAdapter? = null
+
+    private var previousIconColor: Int = Color.TRANSPARENT
 
     private var recyclerView: RecyclerView? = null
 
@@ -47,6 +52,13 @@ class MenuBinder(
 
         menuViewModel?.onResume?.observe(fragmentActivity, Observer {
             recyclerView?.requestLayout()
+
+            val colorPair = preferenceApplier.colorPair()
+            val newColor = colorPair.bgColor()
+            if (previousIconColor != newColor) {
+                previousIconColor = newColor
+                colorPair.applyReverseTo(menuSwitch)
+            }
         })
 
         menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {
@@ -75,7 +87,13 @@ class MenuBinder(
             override fun onClick() {
                 if (!menuStub.isInflated) {
                     menuStub.viewStub?.inflate()
-                    recyclerView = (menuStub.binding as? ModuleMainMenuBinding)?.menusView
+                    (menuStub.binding as? ModuleMainMenuBinding)?.also {
+                        recyclerView = it.menusView
+                        it.setting.setOnClickListener {
+                            openSetting()
+                        }
+                    }
+
                     initializeWithContext()
 
                     menuViewModel?.switchVisibility(true)
@@ -136,22 +154,31 @@ class MenuBinder(
     }
 
     private fun open() {
-        recyclerView?.scheduleLayoutAnimation()
-        menuStub.root?.visibility = View.VISIBLE
-
-        recyclerView?.post {
+        menuStub.root?.post {
             menuSwitch?.y?.let {
-                recyclerView?.y = when {
+                menuStub.root?.y = when {
                     it > menuSwitch.rootView.height -> menuSwitch.rootView.height.toFloat()
                     it < 0 -> 0f
                     else -> it
                 }
             }
+
+            recyclerView?.scheduleLayoutAnimation()
+            menuStub.root?.animate()?.let {
+                it.cancel()
+                it.alpha(1f)
+                        .setDuration(350L)
+                        .withStartAction {
+                            menuStub.root?.alpha = 0f
+                            menuStub.root?.visibility = View.VISIBLE
+                        }
+                        .start()
+            }
         }
     }
 
     private fun close() {
-        recyclerView?.animate()?.let {
+        menuStub.root?.animate()?.let {
             it.cancel()
             it.alpha(0f)
                     .setDuration(350L)
