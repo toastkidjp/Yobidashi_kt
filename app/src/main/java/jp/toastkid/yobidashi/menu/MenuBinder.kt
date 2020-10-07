@@ -38,6 +38,8 @@ class MenuBinder(
 ) {
     private val preferenceApplier = PreferenceApplier(fragmentActivity)
 
+    private val textColorApplier = TextViewColorApplier()
+
     private var menuAdapter: MenuAdapter? = null
 
     private var previousIconColor: Int = Color.TRANSPARENT
@@ -61,7 +63,7 @@ class MenuBinder(
                 colorPair.applyReverseTo(menuSwitch)
             }
 
-            TextViewColorApplier()(colorPair.fontColor(), (menuStub.binding as? ModuleMainMenuBinding)?.setting)
+            textColorApplier(colorPair.fontColor(), (menuStub.binding as? ModuleMainMenuBinding)?.setting)
         })
 
         menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {
@@ -135,7 +137,7 @@ class MenuBinder(
             recyclerView?.adapter = menuAdapter
         }
 
-        TextViewColorApplier()(preferenceApplier.fontColor, (menuStub.binding as? ModuleMainMenuBinding)?.setting)
+        textColorApplier(preferenceApplier.fontColor, (menuStub.binding as? ModuleMainMenuBinding)?.setting)
     }
 
     private fun setFabPosition() {
