@@ -159,6 +159,10 @@ class SearchQueryExtractorTest {
         )
         assertEquals(
                 "test",
+                searchQueryExtractor("https://www.mojeek.com/search?q=test")
+        )
+        assertEquals(
+                "test",
                 searchQueryExtractor("https://www.privacywall.org/search/secure/?q=test")
         )
         assertEquals(

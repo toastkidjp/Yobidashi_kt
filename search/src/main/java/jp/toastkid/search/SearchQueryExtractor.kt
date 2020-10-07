@@ -44,6 +44,7 @@ class SearchQueryExtractor {
                     or host.endsWith("www.info.com")
                     or host.endsWith("results.looksmart.com")
                     or host.equals("www.privacywall.org")
+                    or host.equals("www.mojeek.com")
                     or host.equals("www.ecosia.org")
                     or host.endsWith("search.gmx.com") ->
                 uri.getQueryParameter("q")
