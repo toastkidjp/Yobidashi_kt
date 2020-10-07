@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.DraggableTouchListener
+import jp.toastkid.lib.view.TextViewColorApplier
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import kotlin.math.min
 import kotlin.reflect.KFunction0
@@ -59,6 +60,8 @@ class MenuBinder(
                 previousIconColor = newColor
                 colorPair.applyReverseTo(menuSwitch)
             }
+
+            TextViewColorApplier()(colorPair.fontColor(), (menuStub.binding as? ModuleMainMenuBinding)?.setting)
         })
 
         menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {
@@ -131,6 +134,8 @@ class MenuBinder(
             menuAdapter = MenuAdapter(LayoutInflater.from(it), preferenceApplier, menuViewModel)
             recyclerView?.adapter = menuAdapter
         }
+
+        TextViewColorApplier()(preferenceApplier.fontColor, (menuStub.binding as? ModuleMainMenuBinding)?.setting)
     }
 
     private fun setFabPosition() {
