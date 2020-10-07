@@ -73,7 +73,7 @@ enum class SearchCategory(
             "https://search.gmx.com/web?q="
     ),
     ECOSIA(
-            R.string.search_category_gmx,
+            R.string.search_category_ecosia,
             R.drawable.ic_ecosia,
             "https://www.ecosia.org/search?q="
     ),
