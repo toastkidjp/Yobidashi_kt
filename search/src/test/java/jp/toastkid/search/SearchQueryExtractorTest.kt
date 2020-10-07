@@ -131,6 +131,10 @@ class SearchQueryExtractorTest {
         )
         assertEquals(
                 "orange",
+                searchQueryExtractor("https://m.youtube.com/results?search_query=orange")
+        )
+        assertEquals(
+                "orange",
                 searchQueryExtractor("https://yandex.com/search/?text=orange&lr=10636")
         )
         assertEquals(
