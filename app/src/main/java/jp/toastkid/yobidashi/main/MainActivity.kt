@@ -672,11 +672,7 @@ class MainActivity : AppCompatActivity(),
             true
         }
         R.id.setting -> {
-            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
-                val currentFragment = findFragment()
-                it.setFrom(currentFragment?.javaClass)
-                replaceFragment(it)
-            }
+            openSetting()
             true
         }
         R.id.reset_menu_position -> {
@@ -692,6 +688,14 @@ class MainActivity : AppCompatActivity(),
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun openSetting() {
+        (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
+            val currentFragment = findFragment()
+            it.setFrom(currentFragment?.javaClass)
+            replaceFragment(it)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
