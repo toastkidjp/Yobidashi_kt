@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.DraggableTouchListener
-import jp.toastkid.lib.view.TextViewColorApplier
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import kotlin.math.min
 import kotlin.reflect.KFunction0
@@ -40,8 +39,6 @@ class MenuBinder(
         private val openSetting: KFunction0<Unit>
 ) {
     private val preferenceApplier = PreferenceApplier(fragmentActivity)
-
-    private val textColorApplier = TextViewColorApplier()
 
     private var menuAdapter: MenuAdapter? = null
 
