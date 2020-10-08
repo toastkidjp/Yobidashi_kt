@@ -38,7 +38,6 @@ import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
@@ -673,10 +672,6 @@ class MainActivity : AppCompatActivity(),
         }
         R.id.reset_menu_position -> {
             menuViewModel?.resetPosition()
-            true
-        }
-        R.id.about_this_app -> {
-            replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
             true
         }
         R.id.menu_exit -> {

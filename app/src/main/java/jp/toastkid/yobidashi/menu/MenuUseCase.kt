@@ -23,6 +23,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.view.board.BoardFragment
 import jp.toastkid.todo.view.list.TaskListFragment
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
@@ -165,6 +166,9 @@ class MenuUseCase(
                         )
                     }
                 }
+            }
+            Menu.ABOUT_THIS_APP -> {
+                nextFragment(AboutThisAppFragment::class.java)
             }
             Menu.TODO_TASKS_BOARD -> {
                 nextFragment(BoardFragment::class.java)
