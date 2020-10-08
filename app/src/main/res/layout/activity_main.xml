@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="112dp"
                 android:layout_marginBottom="80dp"
-                android:layout_gravity="right|bottom"
+                android:layout_gravity="end|bottom"
                 android:layout="@layout/module_main_menu"
                 />
 
@@ -70,7 +70,7 @@
                 android:id="@+id/menu_switch"
                 android:layout_width="@dimen/menu_button_size"
                 android:layout_height="@dimen/menu_button_size"
-                android:layout_gravity="right|bottom"
+                android:layout_gravity="end|bottom"
                 android:layout_marginBottom="80dp"
                 app:srcCompat="@drawable/ic_menu_cycle"
                 app:backgroundTint="@color/soft_background"
