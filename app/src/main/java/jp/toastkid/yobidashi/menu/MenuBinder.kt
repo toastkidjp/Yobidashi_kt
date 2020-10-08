@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
@@ -63,7 +64,7 @@ class MenuBinder(
                 colorPair.applyReverseTo(menuSwitch)
             }
 
-            textColorApplier(colorPair.fontColor(), (menuStub.binding as? ModuleMainMenuBinding)?.setting)
+            applyTextColor(colorPair.fontColor(), (menuStub.binding as? ModuleMainMenuBinding)?.setting)
         })
 
         menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {
@@ -137,7 +138,7 @@ class MenuBinder(
             recyclerView?.adapter = menuAdapter
         }
 
-        textColorApplier(preferenceApplier.fontColor, (menuStub.binding as? ModuleMainMenuBinding)?.setting)
+        applyTextColor(preferenceApplier.fontColor, (menuStub.binding as? ModuleMainMenuBinding)?.setting)
     }
 
     private fun setFabPosition() {
@@ -196,4 +197,9 @@ class MenuBinder(
                     .start()
         }
     }
+
+    private fun applyTextColor(fontColor: Int, textView: TextView?) {
+        textColorApplier(fontColor, textView)
+    }
+
 }
