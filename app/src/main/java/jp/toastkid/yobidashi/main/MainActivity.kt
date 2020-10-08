@@ -315,7 +315,13 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProvider(this).get(MenuViewModel::class.java)
 
-        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch, ::openSetting)
+        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch, {
+            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
+                val currentFragment = findFragment()
+                it.setFrom(currentFragment?.javaClass)
+                replaceFragment(it)
+            }
+        })
 
         MenuUseCase({ this }, menuViewModel).observe()
     }
@@ -679,14 +685,6 @@ class MainActivity : AppCompatActivity(),
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    private fun openSetting() {
-        (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
-            val currentFragment = findFragment()
-            it.setFrom(currentFragment?.javaClass)
-            replaceFragment(it)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -26,7 +26,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.yobidashi.databinding.ModuleMainMenuBinding
 import kotlin.math.min
-import kotlin.reflect.KFunction0
 
 /**
  * @author toastkidjp
@@ -36,7 +35,7 @@ class MenuBinder(
         private val menuViewModel: MenuViewModel?,
         private val menuStub: ViewStubProxy,
         private val menuSwitch: FloatingActionButton?,
-        private val openSetting: KFunction0<Unit>
+        private val openSetting: () -> Unit
 ) {
     private val preferenceApplier = PreferenceApplier(fragmentActivity)
 
