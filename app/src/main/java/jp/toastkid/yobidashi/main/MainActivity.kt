@@ -671,10 +671,6 @@ class MainActivity : AppCompatActivity(),
             switchTabList()
             true
         }
-        R.id.setting -> {
-            openSetting()
-            true
-        }
         R.id.reset_menu_position -> {
             menuViewModel?.resetPosition()
             true

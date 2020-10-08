@@ -9,12 +9,6 @@
         app:showAsAction="never"
         />
     <item
-        android:id="@+id/setting"
-        android:orderInCategory="200"
-        android:title="@string/title_settings"
-        app:showAsAction="never"
-        />
-    <item
         android:id="@+id/open_tabs"
         android:title="@string/title_tab_list"
         android:checkable="false"
