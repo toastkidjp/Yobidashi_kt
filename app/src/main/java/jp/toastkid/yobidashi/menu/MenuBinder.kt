@@ -8,11 +8,13 @@
 package jp.toastkid.yobidashi.menu
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -199,7 +201,10 @@ class MenuBinder(
     }
 
     private fun applyTextColor(fontColor: Int, textView: TextView?) {
-        textColorApplier(fontColor, textView)
+        textView?.also {
+            it.setTextColor(fontColor)
+            TextViewCompat.setCompoundDrawableTintList(it, ColorStateList.valueOf(fontColor))
+        }
     }
 
 }
