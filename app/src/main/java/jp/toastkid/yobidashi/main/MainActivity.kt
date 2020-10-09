@@ -315,13 +315,13 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProvider(this).get(MenuViewModel::class.java)
 
-        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch, {
+        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch) {
             (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
                 val currentFragment = findFragment()
                 it.setFrom(currentFragment?.javaClass)
                 replaceFragment(it)
             }
-        })
+        }
 
         MenuUseCase({ this }, menuViewModel).observe()
     }
