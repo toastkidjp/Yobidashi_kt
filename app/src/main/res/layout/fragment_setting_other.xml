@@ -36,8 +36,6 @@
                     android:id="@+id/wifi_only_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_marginEnd="@dimen/common_horizontal_margin"
                     android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
