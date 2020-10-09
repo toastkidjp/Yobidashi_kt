@@ -91,7 +91,7 @@ class MenuUseCase(
                 nextFragment(BarcodeReaderFragment::class.java)
             }
             Menu.OVERLAY_COLOR_FILTER-> {
-                preferenceApplier.setUseColorFilter(!preferenceApplier.useColorFilter())
+                preferenceApplier.setUseColorFilter(preferenceApplier.useColorFilter().not())
                 (activitySupplier() as? MainActivity)?.let {
                     ViewModelProvider(it).get(OverlayColorFilterViewModel::class.java)
                             .newColor(preferenceApplier.filterColor(ContextCompat.getColor(activitySupplier(), R.color.default_color_filter)))
