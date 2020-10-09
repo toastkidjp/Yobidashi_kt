@@ -153,6 +153,7 @@
                     android:layout_height="@dimen/search_category_spinner_width"
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_cursor_black"
+                    android:drawablePadding="4dp"
                     android:text="@string/title_cursor_color"
                     />
                 <Button
@@ -182,6 +183,7 @@
                     android:layout_height="@dimen/search_category_spinner_width"
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_highlight_black"
+                    android:drawablePadding="4dp"
                     android:text="@string/title_highlight_color"
                     />
                 <Button
@@ -210,6 +212,7 @@
                     android:layout_height="@dimen/search_category_spinner_width"
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_search_black"
+                    android:drawablePadding="4dp"
                     android:text="@string/title_font_size"
                     />
                 <Spinner
