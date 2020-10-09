@@ -58,6 +58,7 @@
                 style="@style/OneLineTextMenu"
                 android:drawableLeft="@drawable/ic_settings_cell_black"
                 android:drawableStart="@drawable/ic_settings_cell_black"
+                android:drawablePadding="4dp"
                 android:text="@string/title_settings_device"
                 android:onClick="@{view -> fragment.deviceSetting()}"
                 />
@@ -72,6 +73,7 @@
                 android:text="@string/title_settings_wifi"
                 android:drawableLeft="@drawable/ic_wifi_black"
                 android:drawableStart="@drawable/ic_wifi_black"
+                android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.wifi()}"
                 />
 
@@ -85,6 +87,7 @@
                 android:text="@string/title_settings_wireless"
                 android:drawableLeft="@drawable/ic_network_black"
                 android:drawableStart="@drawable/ic_network_black"
+                android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.wireless()}"
                 />
 
@@ -98,6 +101,7 @@
                 android:text="@string/title_settings_date_and_time"
                 android:drawableLeft="@drawable/ic_time"
                 android:drawableStart="@drawable/ic_time"
+                android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.dateAndTime()}"
                 />
 
@@ -111,6 +115,7 @@
                 android:text="@string/title_settings_display"
                 android:drawableLeft="@drawable/ic_phone_android_black"
                 android:drawableStart="@drawable/ic_phone_android_black"
+                android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.display()}"
                 />
 
@@ -124,6 +129,7 @@
                 android:text="@string/title_settings_all_apps"
                 android:drawableLeft="@drawable/ic_android_app"
                 android:drawableStart="@drawable/ic_android_app"
+                android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.allApps()}"
                 />
 
@@ -142,6 +148,7 @@
                     android:text="@string/title_clear_settings"
                     android:drawableLeft="@drawable/ic_close_black"
                     android:drawableStart="@drawable/ic_close_black"
+                    android:drawablePadding="4dp"
                     android:onClick="@{view -> fragment.clearSettings()}"
                     />
             </androidx.cardview.widget.CardView>
