@@ -7,6 +7,7 @@
     <!--Use NestedScroll-->
     <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/others"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
-                android:drawableStart="@drawable/ic_settings_cell_black"
+                app:drawableStartCompat="@drawable/ic_settings_cell_black"
                 android:drawablePadding="4dp"
                 android:text="@string/title_settings_device"
                 android:onClick="@{view -> fragment.deviceSetting()}"
@@ -70,7 +71,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_settings_wifi"
-                android:drawableStart="@drawable/ic_wifi_black"
+                app:drawableStartCompat="@drawable/ic_wifi_black"
                 android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.wifi()}"
                 />
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_settings_wireless"
-                android:drawableStart="@drawable/ic_network_black"
+                app:drawableStartCompat="@drawable/ic_network_black"
                 android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.wireless()}"
                 />
@@ -96,7 +97,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_settings_date_and_time"
-                android:drawableStart="@drawable/ic_time"
+                app:drawableStartCompat="@drawable/ic_time"
                 android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.dateAndTime()}"
                 />
@@ -109,7 +110,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_settings_display"
-                android:drawableStart="@drawable/ic_phone_android_black"
+                app:drawableStartCompat="@drawable/ic_phone_android_black"
                 android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.display()}"
                 />
@@ -122,7 +123,7 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_settings_all_apps"
-                android:drawableStart="@drawable/ic_android_app"
+                app:drawableStartCompat="@drawable/ic_android_app"
                 android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.allApps()}"
                 />
@@ -140,7 +141,7 @@
                     android:layout_height="wrap_content"
                     style="@style/OneLineTextMenu"
                     android:text="@string/title_clear_settings"
-                    android:drawableStart="@drawable/ic_close_black"
+                    app:drawableStartCompat="@drawable/ic_close_black"
                     android:drawablePadding="4dp"
                     android:onClick="@{view -> fragment.clearSettings()}"
                     />
