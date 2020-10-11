@@ -77,6 +77,11 @@ enum class SearchCategory(
             R.drawable.ic_ecosia,
             "https://www.ecosia.org/search?q="
     ),
+    FINDX(
+            R.string.search_category_findx,
+            R.drawable.ic_findx,
+            "https://www.findx.com/search?q="
+    ),
     STARTPAGE(
             R.string.search_category_startpage,
             R.drawable.ic_startpage,
