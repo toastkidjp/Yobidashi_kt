@@ -367,7 +367,7 @@ enum class SearchCategory(
 
         fun findByHostOrNull(host: String?): SearchCategory? =
                 if (host.isNullOrBlank()) null
-                else hostAndCategories.get(host)
+                else hostAndCategories[host]
 
         /**
          * Find [SearchCategory] by search category.
