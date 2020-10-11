@@ -52,8 +52,8 @@
                 android:layout_marginStart="8dp"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:text="@string/minus"
-                android:textColor="@color/gray_500_dd"
+                android:text="A"
+                android:textColor="@color/black"
                 />
             <TextView
                 android:layout_width="match_parent"
