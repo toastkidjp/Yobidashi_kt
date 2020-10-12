@@ -15,13 +15,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -99,11 +99,11 @@ class ColorSettingFragment : Fragment(),
         initSavedColors()
 
         initialBgColor = colorPair.bgColor()
-        binding?.settingsColorPrev?.setBackgroundColor(initialBgColor)
+        binding?.prev?.setBackgroundColor(initialBgColor)
         binding?.backgroundPalette?.color = initialBgColor
 
         initialFontColor = colorPair.fontColor()
-        binding?.settingsColorPrev?.setTextColor(initialFontColor)
+        binding?.prev?.setTextColor(initialFontColor)
         binding?.fontPalette?.color = initialFontColor
     }
 
@@ -115,7 +115,7 @@ class ColorSettingFragment : Fragment(),
             it.addSVBar(binding?.backgroundSvbar)
             it.addOpacityBar(binding?.backgroundOpacitybar)
             it.setOnColorChangedListener { color ->
-                binding?.settingsColorOk?.setBackgroundColor(color)
+                binding?.ok?.setBackgroundColor(color)
             }
         }
 
@@ -123,7 +123,7 @@ class ColorSettingFragment : Fragment(),
             it.addSVBar(binding?.fontSvbar)
             it.addOpacityBar(binding?.fontOpacitybar)
             it.setOnColorChangedListener { color ->
-                binding?.settingsColorOk?.setTextColor(color)
+                binding?.ok?.setTextColor(color)
             }
         }
 
@@ -171,7 +171,7 @@ class ColorSettingFragment : Fragment(),
      * Refresh with current color.
      */
     private fun refresh() {
-        binding?.settingsColorOk?.also { colorPair().setTo(it) }
+        binding?.ok?.also { colorPair().setTo(it) }
         adapter?.refresh()
     }
 
