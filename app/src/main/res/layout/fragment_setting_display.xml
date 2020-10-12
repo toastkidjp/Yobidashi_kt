@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_dark_mode_black"
             android:drawableStart="@drawable/ic_dark_mode_black"
+            android:drawablePadding="4dp"
             android:onClick="@{view -> fragment.applyDarkMode()}"
             android:text="Apply dark mode"
             />
@@ -33,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_close_black"
+            android:drawablePadding="4dp"
             android:onClick="@{view -> fragment.removeBackgroundSettings()}"
             android:text="@string/title_bg_reset"
             />
