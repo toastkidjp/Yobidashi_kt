@@ -23,13 +23,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.rss.api.RssReaderApi
 import jp.toastkid.yobidashi.rss.list.Adapter
 import jp.toastkid.yobidashi.rss.setting.RssSettingFragment
@@ -103,7 +103,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
             }
 
             activity?.supportFragmentManager?.popBackStack()
-            ViewModelProvider(requireActivity())
+            ViewModelProvider(fragmentActivity)
                     .get(BrowserViewModel::class.java)
                     .open(it.toUri())
         })

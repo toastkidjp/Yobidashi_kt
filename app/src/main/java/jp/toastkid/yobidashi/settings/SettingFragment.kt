@@ -17,13 +17,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
-import jp.toastkid.yobidashi.libs.ad.AdService
-import jp.toastkid.yobidashi.libs.ad.AdViewFactory
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.AppBarViewModel
-import jp.toastkid.lib.ContentViewModel
 
 /**
  * @author toastkidjp
@@ -36,8 +33,6 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
-
-    private var adService: AdService? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -60,9 +55,6 @@ class SettingFragment : Fragment() {
         }
         mediator.attach()
 
-        adService = AdService(AdViewFactory(), context)
-        adService?.sendWith(ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java))
-
         setHasOptionsMenu(true)
 
         return binding.root
@@ -72,8 +64,6 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.container.currentItem = 0
-
-        adService?.load()
     }
 
     override fun onResume() {
@@ -93,11 +83,6 @@ class SettingFragment : Fragment() {
     override fun onDetach() {
         ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).refresh()
         super.onDetach()
-    }
-
-    override fun onDestroyView() {
-        adService?.destroy()
-        super.onDestroyView()
     }
 
     companion object {

@@ -21,7 +21,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.ads.MobileAds
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.lib.AppBarViewModel
@@ -147,10 +146,6 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
-
-        CoroutineScope(Dispatchers.IO).launch(disposables) {
-            MobileAds.initialize(this@MainActivity) {}
-        }
 
         preferenceApplier = PreferenceApplier(this)
 
