@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/OneLineTextMenu"
-            android:drawableLeft="@drawable/ic_tab_black"
+            android:drawableStart="@drawable/ic_tab_black"
             android:drawablePadding="8dp"
             android:text="@string/title_setting_new_tab"
             />
