@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+<layout xmlns:tools="http://schemas.android.com/tools">
+    <merge
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:parentTag="LinearLayout"
+        tools:orientation="vertical"
         >
         <TextView
             android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="8dp"
             >
 
             <RadioGroup
@@ -56,5 +57,5 @@
                     />
             </RadioGroup>
         </HorizontalScrollView>
-    </FrameLayout>
+    </merge>
 </layout>
