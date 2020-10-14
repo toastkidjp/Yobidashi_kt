@@ -4,100 +4,93 @@
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.NotificationSettingFragment" />
     </data>
-    <FrameLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/notifications_module"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/SettingCardStyle"
         >
-        <LinearLayout
-            android:orientation="vertical"
+
+        <FrameLayout
+            android:id="@+id/use_notification_widget"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
+            android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.switchNotificationWidget()}"
             >
-
-            <FrameLayout
-                android:id="@+id/use_notification_widget"
+            <TextView
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> fragment.switchNotificationWidget()}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginLeft="@dimen/common_horizontal_margin"
-                    android:layout_marginStart="@dimen/common_horizontal_margin"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@string/title_show_notification_widget"
-                    />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="@dimen/common_horizontal_margin"
-                    android:layout_marginStart="@dimen/common_horizontal_margin"
-                    app:srcCompat="@mipmap/thumbnail"
-                    android:contentDescription="@string/thumbnail"
-                    />
-                <CheckBox
-                    android:id="@+id/use_notification_widget_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginLeft="@dimen/common_horizontal_margin"
+                android:layout_marginStart="@dimen/common_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/title_show_notification_widget"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="@dimen/common_horizontal_margin"
+                android:layout_marginStart="@dimen/common_horizontal_margin"
+                app:srcCompat="@mipmap/thumbnail"
+                android:contentDescription="@string/thumbnail"
+                />
+            <CheckBox
+                android:id="@+id/use_notification_widget_check"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:clickable="false"
+                style="@style/Border"
+                />
+        </FrameLayout>
 
-            <include layout="@layout/view_setting_divider"/>
+        <include layout="@layout/view_setting_divider"/>
 
-            <FrameLayout
-                android:id="@+id/use_daily_notification"
+        <FrameLayout
+            android:id="@+id/use_daily_notification"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:background="@drawable/ripple_transparent"
+            android:onClick="@{view -> fragment.switchDailyNotification()}"
+            >
+            <TextView
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> fragment.switchDailyNotification()}"
-                >
-                <TextView
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginLeft="@dimen/common_horizontal_margin"
-                    android:layout_marginStart="@dimen/common_horizontal_margin"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="@string/title_show_morning_notification"
-                    />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="@dimen/common_horizontal_margin"
-                    android:layout_marginStart="@dimen/common_horizontal_margin"
-                    tools:src="@mipmap/thumbnail"
-                    android:contentDescription="@string/thumbnail"
-                    />
-                <CheckBox
-                    android:id="@+id/use_daily_notification_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                     android:layout_gravity="end"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-        </LinearLayout>
-
-    </FrameLayout>
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginLeft="@dimen/common_horizontal_margin"
+                android:layout_marginStart="@dimen/common_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/title_show_morning_notification"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="@dimen/common_horizontal_margin"
+                android:layout_marginStart="@dimen/common_horizontal_margin"
+                tools:src="@mipmap/thumbnail"
+                android:contentDescription="@string/thumbnail"
+                />
+            <CheckBox
+                android:id="@+id/use_daily_notification_check"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:clickable="false"
+                style="@style/Border"
+                />
+        </FrameLayout>
+    </LinearLayout>
 
 </layout>
