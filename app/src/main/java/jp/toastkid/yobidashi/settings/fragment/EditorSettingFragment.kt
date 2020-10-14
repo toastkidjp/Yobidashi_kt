@@ -21,12 +21,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragment
 import jp.toastkid.yobidashi.settings.color.ColorChooserDialogFragmentViewModel
 
@@ -77,24 +77,27 @@ class EditorSettingFragment : Fragment() {
             initialBgColor = backgroundColor
             initialFontColor = fontColor
 
-            editorModule.backgroundPalette.also { picker ->
-                picker.addSVBar(editorModule.backgroundSvbar)
-                picker.addOpacityBar(editorModule.backgroundOpacitybar)
-                picker.setOnColorChangedListener { editorModule.ok.setBackgroundColor(it) }
+            editorModule.palettes.backgroundPalette.also { picker ->
+                picker.addSVBar(editorModule.palettes.backgroundSvbar)
+                picker.addOpacityBar(editorModule.palettes.backgroundOpacitybar)
+                picker.setOnColorChangedListener { editorModule.palettes.ok.setBackgroundColor(it) }
                 picker.color = preferenceApplier.editorBackgroundColor()
             }
 
-            editorModule.fontPalette.also { picker ->
-                picker.addSVBar(editorModule.fontSvbar)
-                picker.addOpacityBar(editorModule.fontOpacitybar)
-                picker.setOnColorChangedListener { editorModule.ok.setTextColor(it) }
+            editorModule.palettes.fontPalette.also { picker ->
+                picker.addSVBar(editorModule.palettes.fontSvbar)
+                picker.addOpacityBar(editorModule.palettes.fontOpacitybar)
+                picker.setOnColorChangedListener { editorModule.palettes.ok.setTextColor(it) }
                 picker.color = preferenceApplier.editorFontColor()
             }
             editorModule.fragment = this
 
-            ColorPair(backgroundColor, fontColor).setTo(binding.ok)
+            editorModule.palettes.ok.setOnClickListener { ok() }
+            editorModule.palettes.prev.setOnClickListener { reset() }
 
-            ColorPair(initialBgColor, initialFontColor).setTo(binding.prev)
+            ColorPair(backgroundColor, fontColor).setTo(binding.palettes.ok)
+
+            ColorPair(initialBgColor, initialFontColor).setTo(binding.palettes.prev)
 
             editorModule.fontSize.adapter = object : BaseAdapter() {
                 override fun getCount(): Int = EditorFontSize.values().size
@@ -146,32 +149,32 @@ class EditorSettingFragment : Fragment() {
     /**
      * OK button's action.
      */
-    fun ok() {
-        val backgroundColor = binding.backgroundPalette.color
-        val fontColor = binding.fontPalette.color
+    private fun ok() {
+        val backgroundColor = binding.palettes.backgroundPalette.color
+        val fontColor = binding.palettes.fontPalette.color
 
         preferenceApplier.setEditorBackgroundColor(backgroundColor)
         preferenceApplier.setEditorFontColor(fontColor)
 
-        binding.backgroundPalette.color = backgroundColor
-        binding.fontPalette.color = fontColor
+        binding.palettes.backgroundPalette.color = backgroundColor
+        binding.palettes.fontPalette.color = fontColor
 
         val colorPair = ColorPair(backgroundColor, fontColor)
-        colorPair.setTo(binding.ok)
+        colorPair.setTo(binding.palettes.ok)
         Toaster.snackShort(binding.root, R.string.settings_color_done_commit, colorPair)
     }
 
     /**
      * Reset button's action.
      */
-    fun reset() {
+    private fun reset() {
         preferenceApplier.setEditorBackgroundColor(initialBgColor)
         preferenceApplier.setEditorFontColor(initialFontColor)
 
-        binding.backgroundPalette.color = initialBgColor
-        binding.fontPalette.color = initialFontColor
+        binding.palettes.backgroundPalette.color = initialBgColor
+        binding.palettes.fontPalette.color = initialFontColor
 
-        ColorPair(initialBgColor, initialFontColor).setTo(binding.ok)
+        ColorPair(initialBgColor, initialFontColor).setTo(binding.palettes.ok)
 
         Toaster.snackShort(binding.root, R.string.settings_color_done_reset, preferenceApplier.colorPair())
     }
