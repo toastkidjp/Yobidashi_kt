@@ -26,6 +26,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:drawableStart="@drawable/ic_color_filter_black"
+                android:drawablePadding="4dp"
                 android:text="@string/title_color_filter"
                 />
             <CheckBox
