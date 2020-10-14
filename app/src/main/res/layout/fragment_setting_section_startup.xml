@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <merge
         xmlns:android="http://schemas.android.com/apk/res/android"
         tools:parentTag="LinearLayout"
@@ -9,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/OneLineTextMenu"
-            android:drawableStart="@drawable/ic_tab_black"
+            app:drawableStartCompat="@drawable/ic_tab_black"
             android:drawablePadding="8dp"
             android:text="@string/title_setting_new_tab"
             />
