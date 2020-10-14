@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="4dp"
                     style="@style/OneLineTextMenu"
-                    android:drawableLeft="@drawable/ic_search_black"
+                    android:drawableStart="@drawable/ic_search_black"
                     android:text="@string/title_default_search_engine"
                     />
                 <Spinner
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
-                    android:drawableLeft="@drawable/ic_extract"
+                    android:drawableStart="@drawable/ic_extract"
                     android:gravity="center_vertical"
                     android:text="@string/title_use_search_query_extractor"
                     />
@@ -86,7 +86,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_clipboard_black"
+                    android:drawableStart="@drawable/ic_clipboard_black"
                     android:text="@string/title_enable_search_with_clip"
                     />
                 <CheckBox
@@ -115,7 +115,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_open_in_browser_black"
+                    android:drawableStart="@drawable/ic_open_in_browser_black"
                     android:text="@string/title_enable_suggestion"
                     />
                 <CheckBox
@@ -144,7 +144,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_history_black"
+                    android:drawableStart="@drawable/ic_history_black"
                     android:text="@string/title_use_search_history"
                     />
                 <CheckBox
@@ -173,7 +173,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_favorite"
+                    android:drawableStart="@drawable/ic_favorite"
                     android:text="@string/title_use_favorite_search"
                     />
                 <CheckBox
@@ -202,7 +202,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_web_black"
+                    android:drawableStart="@drawable/ic_web_black"
                     android:text="@string/use_view_history"
                     />
                 <CheckBox
@@ -231,7 +231,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_web_black"
+                    android:drawableStart="@drawable/ic_web_black"
                     android:text="@string/title_url_module"
                     />
                 <CheckBox
@@ -260,7 +260,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_android_app"
+                    android:drawableStart="@drawable/ic_android_app"
                     android:text="@string/use_app_search"
                     />
                 <CheckBox
