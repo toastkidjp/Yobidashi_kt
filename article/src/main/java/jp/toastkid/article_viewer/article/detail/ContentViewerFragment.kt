@@ -9,20 +9,20 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.Selection
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.annotation.UiThread
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import io.noties.markwon.Markwon
+import io.noties.markwon.ext.tables.TablePlugin
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
@@ -44,7 +44,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -101,21 +100,13 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         ViewModelProvider(this)
                 .get(SubheadDialogFragmentViewModel::class.java)
                 .subhead
-                .observe(viewLifecycleOwner, Observer {
-                    val subhead = it?.getContentIfNotHandled() ?: return@Observer
-                    val indexOf = binding.content.editableText.indexOf(subhead)
-                    Selection.setSelection(binding.content.editableText, indexOf)
-                })
+                .observe(viewLifecycleOwner, Observer { })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         binding.content.linksClickable = true
-        arguments?.getString("title")?.also {
-            appBarBinding.searchResult.text = it
-            loadContent(it)
-        }
 
         appBarBinding.input.addTextChangedListener {
             search(it.toString())
@@ -147,20 +138,18 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
                 .replace(appBarBinding.root)
     }
 
+    @UiThread
     fun loadContent(title: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            appBarBinding.searchResult.text = title
-            val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) } ?: return@launch
-            val editable = Editable.Factory.getInstance().newEditable(content)
-            binding.content.setText(editable, TextView.BufferType.EDITABLE)
-            LinkGeneratorService().invoke(binding.content)
+        appBarBinding.searchResult.text = title
 
-            withContext(Dispatchers.Default) {
-                content.split(System.lineSeparator())
-                        .filter { it.startsWith("#") }
-                        .forEach { subheads.add(it) }
-            }
-        }
+        val context = binding.root.context
+
+        ContentLoaderUseCase(
+                repository,
+                Markwon.builder(context).usePlugin(TablePlugin.create(context)).build(),
+                binding.content,
+                subheads
+        ).invoke(title)
     }
 
     fun tabList() {

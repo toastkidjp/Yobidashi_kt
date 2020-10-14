@@ -61,7 +61,7 @@ class UrlSuggestionModule(
      * @param index
      */
     private fun removeAt(index: Int) {
-        adapter.removeAt(viewHistoryRepository, index)
+        adapter.removeAt(index)
     }
 
     private fun remove(item: UrlItem) {

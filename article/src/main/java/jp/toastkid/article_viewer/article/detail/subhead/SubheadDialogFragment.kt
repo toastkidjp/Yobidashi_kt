@@ -44,10 +44,8 @@ class SubheadDialogFragment : BottomSheetDialogFragment() {
 
         private const val KEY_EXTRA_ITEM = "items"
 
-        fun make(items: List<String>): SubheadDialogFragment {
-            return SubheadDialogFragment().also {
-                it.arguments = bundleOf(KEY_EXTRA_ITEM to items)
-            }
+        fun make(items: List<String>) = SubheadDialogFragment().also {
+            it.arguments = bundleOf(KEY_EXTRA_ITEM to items)
         }
 
     }

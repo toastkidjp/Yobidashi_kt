@@ -7,7 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
-import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,11 +37,11 @@ class Adapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(
                 layoutInflater, R.layout.item_view_history, parent, false
-        ));
+        ))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = suggestions.get(position)
+        val item = suggestions[position]
         item.bind(holder)
         holder.setOnClick(View.OnClickListener { browseCallback(item.urlString()) })
         holder.setOnLongClick(View.OnLongClickListener {
@@ -82,7 +81,7 @@ class Adapter(
      *
      * @return item
      */
-    fun get(index: Int): UrlItem = suggestions.get(index)
+    fun get(index: Int): UrlItem = suggestions[index]
 
     /**
      * Remove at index.
@@ -91,7 +90,7 @@ class Adapter(
      * @param index
      * @return disposable
      */
-    fun removeAt(viewHistoryRepository: ViewHistoryRepository, index: Int): Job {
+    fun removeAt(index: Int): Job {
         return remove(get(index), index)
     }
 

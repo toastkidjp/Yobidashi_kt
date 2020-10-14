@@ -12,11 +12,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.SearchAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,16 +85,16 @@ class SearchHistoryFragment : Fragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.clear -> {
-                val fragmentManager = parentFragmentManager ?: return true
+                val fragmentManager = parentFragmentManager
                 SearchHistoryClearDialogFragment.show(
                         fragmentManager,
                         this
                 )
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
