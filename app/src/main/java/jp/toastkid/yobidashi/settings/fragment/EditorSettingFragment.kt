@@ -181,7 +181,10 @@ class EditorSettingFragment : Fragment() {
 
     fun showCursorColorSetting() {
         val activity = requireActivity()
-        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorCursorColor(ContextCompat.getColor(activity, R.color.editor_cursor)))
+        val currentColor = preferenceApplier.editorCursorColor(
+                ContextCompat.getColor(activity, R.color.editor_cursor)
+        )
+        ColorChooserDialogFragment.withCurrentColor(currentColor)
                 .show(
                         activity.supportFragmentManager,
                         ColorChooserDialogFragment::class.java.canonicalName
