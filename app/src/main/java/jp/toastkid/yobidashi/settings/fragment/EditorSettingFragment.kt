@@ -200,7 +200,10 @@ class EditorSettingFragment : Fragment() {
 
     fun showHighlightColorSetting() {
         val activity = requireActivity()
-        ColorChooserDialogFragment.withCurrentColor(preferenceApplier.editorHighlightColor(ContextCompat.getColor(activity, R.color.light_blue_200_dd)))
+        val currentColor = preferenceApplier.editorHighlightColor(
+                ContextCompat.getColor(activity, R.color.light_blue_200_dd)
+        )
+        ColorChooserDialogFragment.withCurrentColor(currentColor)
                 .show(
                         activity.supportFragmentManager,
                         ColorChooserDialogFragment::class.java.canonicalName
