@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <LinearLayout
+    <merge
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        tools:parentTag="LinearLayout"
+        tools:orientation="vertical"
         >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:drawableStart="@drawable/ic_fullscreen_black"
             android:drawablePadding="4dp"
             android:gravity="center_vertical"
@@ -20,6 +23,7 @@
             android:id="@+id/screen_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             >
             <RadioButton
                 android:id="@+id/full_screen"
@@ -43,5 +47,5 @@
                 android:text="@string/title_screen_mode_fixed"
                 />
         </RadioGroup>
-    </LinearLayout>
+    </merge>
 </layout>
