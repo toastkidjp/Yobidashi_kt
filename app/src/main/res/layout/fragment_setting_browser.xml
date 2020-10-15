@@ -22,8 +22,6 @@
                 android:layout_height="wrap_content"
                 >
 
-                <include layout="@layout/view_setting_divider" />
-
                 <include android:id="@+id/browser_expand"
                     layout="@layout/fragment_setting_section_browser_expand_mode"/>
 
