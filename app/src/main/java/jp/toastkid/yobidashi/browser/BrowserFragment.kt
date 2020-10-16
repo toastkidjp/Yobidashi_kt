@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.page_information.PageInformationDialogFragment
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
@@ -356,6 +357,11 @@ class BrowserFragment : Fragment(),
      * Do browser forward action.
      */
     fun forward() = browserModule.forward()
+
+    fun showHistory(): Boolean {
+        contentViewModel?.nextFragment(ViewHistoryFragment::class.java)
+        return true
+    }
 
     /**
      * TODO implement ViewModel.

@@ -110,6 +110,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.back()}"
+            android:onLongClick="@{view -> fragment.showHistory()}"
             />
         <ImageView
             android:id="@+id/forward"
@@ -125,6 +126,7 @@
             app:layout_constraintStart_toEndOf="@id/back"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.forward()}"
+            android:onLongClick="@{view -> fragment.showHistory()}"
             />
         <FrameLayout
             android:id="@+id/tab_list"
