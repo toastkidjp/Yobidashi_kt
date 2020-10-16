@@ -67,6 +67,7 @@
                 android:layout_marginRight="@dimen/common_horizontal_margin"
                 android:adjustViewBounds="true"
                 android:layout_gravity="right"
+                tools:tint="@color/black"
                 app:srcCompat="@drawable/ic_remove_circle_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
