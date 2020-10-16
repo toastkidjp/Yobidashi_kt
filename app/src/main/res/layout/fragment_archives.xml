@@ -2,9 +2,11 @@
 <layout>
     <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/archives_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layoutAnimation="@anim/layout_slide_in_right"
+        app:layoutAnimation="@anim/layout_slide_in_right"
         />
 </layout>
