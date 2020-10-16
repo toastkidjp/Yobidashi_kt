@@ -70,16 +70,6 @@
                 app:srcCompat="@drawable/ic_remove_circle_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="60dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/text"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/colorPrimaryDark"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
