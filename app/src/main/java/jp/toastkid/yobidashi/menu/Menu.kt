@@ -64,6 +64,8 @@ enum class Menu(
     MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
+
+    QUICK_NOTE(R.string.title_quick_note, R.drawable.ic_quick_note),
     ;
 
 }

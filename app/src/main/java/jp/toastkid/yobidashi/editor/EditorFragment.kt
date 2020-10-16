@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
+import jp.toastkid.article_viewer.article.data.ArticleInsertion
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -238,6 +239,7 @@ class EditorFragment :
                 menuBinding.saveAs,
                 menuBinding.load,
                 menuBinding.loadAs,
+                menuBinding.exportArticleViewer,
                 menuBinding.restore,
                 menuBinding.lastSaved,
                 menuBinding.counter,
@@ -336,6 +338,14 @@ class EditorFragment :
      */
     fun loadAs() {
         startActivityForResult(IntentFactory.makeGetContent("text/plain"), REQUEST_CODE_LOAD_AS)
+    }
+
+    fun exportToArticleViewer() {
+        ArticleInsertion(requireContext()).invoke(
+                if (path.isEmpty()) Calendar.getInstance().time.toString() else path.split("/").last(),
+                content()
+        )
+        contentViewModel?.snackShort(R.string.done_save)
     }
 
     fun restore() {

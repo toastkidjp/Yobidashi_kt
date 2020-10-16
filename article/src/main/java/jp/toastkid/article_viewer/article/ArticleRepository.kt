@@ -52,6 +52,9 @@ interface ArticleRepository {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(entities: Collection<Article>)
 
+    @Query("DELETE FROM article WHERE article.id = :id")
+    fun delete(id: Int)
+
     @Query("DELETE FROM article")
     fun deleteAll()
 

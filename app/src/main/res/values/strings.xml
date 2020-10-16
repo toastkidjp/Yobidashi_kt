@@ -454,5 +454,6 @@
     <string name="download_all_images">Download all images</string>
     <string name="this_app">This app</string>
     <string name="other_app">Other app</string>
+    <string name="title_quick_note">Quick note</string>
 
 </resources>

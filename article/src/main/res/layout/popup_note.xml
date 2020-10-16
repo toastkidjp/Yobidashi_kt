@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="popup" type="jp.toastkid.article_viewer.note.NotePopup" />
+    </data>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_panel"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        tools:ignore="UselessParent"
+        >
+        <androidx.cardview.widget.CardView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/note_popup_header_height"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="2dp"
+            >
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="100dp"
+                >
+                <EditText
+                    android:id="@+id/input_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:hint="@string/title"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/store"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="52dp"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/ic_save"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:onClick="@{view -> popup.store()}"
+                android:background="@drawable/ripple_transparent"
+                />
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/ic_close"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:onClick="@{view -> popup.hide()}"
+                android:background="@drawable/ripple_transparent"
+                />
+        </androidx.cardview.widget.CardView>
+        <EditText
+            android:id="@+id/input_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:inputType="textMultiLine"
+            android:hint="@string/hint_input_content"
+            />
+    </LinearLayout>
+</layout>

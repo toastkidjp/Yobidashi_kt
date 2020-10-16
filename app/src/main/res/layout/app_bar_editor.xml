@@ -131,6 +131,20 @@
                 android:onClick="@{view -> fragment.loadAs()}"
                 android:onLongClick="@{fragment::showName}"
                 />
+
+            <TextView
+                android:id="@+id/export_article_viewer"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="Export to Article viewer"
+                android:textSize="@dimen/menu_font_size"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_article"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.exportToArticleViewer()}"
+                android:onLongClick="@{fragment::showName}"
+                />
+
             <TextView
                 android:id="@+id/counter"
                 android:layout_width="wrap_content"
