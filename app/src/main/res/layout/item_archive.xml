@@ -21,6 +21,7 @@
                 android:layout_marginLeft="@dimen/search_horizontal_margin"
                 android:adjustViewBounds="true"
                 android:layout_gravity="left"
+                tools:tint="@color/black"
                 app:srcCompat="@drawable/ic_archive"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
