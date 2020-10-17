@@ -302,12 +302,18 @@ class BrowserFragment : Fragment(),
     }
 
     private fun showReaderFragment(content: String) {
+        val cleaned = content.replace("^\"|\"$".toRegex(), "")
+        if (cleaned.isBlank()) {
+            contentViewModel?.snackShort("This page can't show reader mode.")
+            return
+        }
+
         val readerFragment =
                 activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
                         ?: ReaderFragment()
 
         val lineSeparator = System.getProperty("line.separator") ?: ""
-        val replacedContent = content.replace("\\n", lineSeparator)
+        val replacedContent = cleaned.replace("\\n", lineSeparator)
 
         activity?.let {
             ViewModelProvider(it).get(ReaderFragmentViewModel::class.java)
