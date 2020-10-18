@@ -122,6 +122,11 @@ enum class SearchCategory(
             R.drawable.ic_rambler,
             "https://nova.rambler.ru/search?query="
     ),
+    GOO(
+            R.string.goo,
+            R.drawable.ic_goo,
+            "https://search.goo.ne.jp/web.jsp?IE=UTF-8&OE=UTF-8&MT="
+    ),
     NAVER(
             R.string.naver,
             R.drawable.ic_naver,
