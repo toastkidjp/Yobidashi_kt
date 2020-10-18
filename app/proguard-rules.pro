@@ -47,19 +47,6 @@
 -dontwarn java.lang.invoke.*
 -dontwarn **$$Lambda$*
 
-## For use AdMob
--keep public class com.google.android.gms.ads.** {
-    public *;
-}
-
--keep public class com.google.ads.** {
-    public *;
-}
-
--keep public class com.google.android.gms.internal.** {
-    *;
-}
-
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 # EnclosingMethod is required to use InnerClasses.
 -keepattributes Signature, InnerClasses, EnclosingMethod
