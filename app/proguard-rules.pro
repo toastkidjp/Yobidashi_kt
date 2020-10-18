@@ -11,6 +11,11 @@
 -keep class jp.toastkid.yobidashi.tab.model.** { *; }
 -keepclassmembers enum jp.toastkid.yobidashi.** { *; }
 
+# For Jsoup
+-keep public class org.jsoup.** {
+    public *;
+}
+
 # For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
 -keepclassmembers enum * {
     public static **[] values();
