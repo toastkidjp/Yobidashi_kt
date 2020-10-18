@@ -13,6 +13,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,12 @@ class HourlyTrendModule(
 
     private var lastJob: Job = Job()
 
+    private var enable: Boolean
+
     init {
+        val context = hourlyTrendModule?.root?.context
+        enable = if (context == null) false else PreferenceApplier(context).isEnableTrendModule()
+
         adapter = Adapter(browseCallback, browseBackgroundCallback)
         hourlyTrendModule?.trendItems?.adapter = adapter
         val layoutManager = FlexboxLayoutManager(hourlyTrendModule?.root?.context)
@@ -48,6 +54,10 @@ class HourlyTrendModule(
 
     fun request() {
         lastJob.cancel()
+        if (!enable) {
+            return
+        }
+
         lastJob = CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 adapter?.replace(trendApi())
@@ -55,6 +65,12 @@ class HourlyTrendModule(
             hourlyTrendModule?.root?.isVisible = adapter?.isNotEmpty() ?: false
             adapter?.notifyDataSetChanged()
         }
+    }
+
+    fun setEnable(newState: Boolean) {
+        this.enable = newState
+
+        hourlyTrendModule?.root?.isVisible = newState
     }
 
     fun dispose() {

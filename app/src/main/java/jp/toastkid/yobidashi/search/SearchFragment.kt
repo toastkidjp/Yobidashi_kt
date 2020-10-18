@@ -324,6 +324,7 @@ class SearchFragment : Fragment() {
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
+        hourlyTrendModule?.setEnable(preferenceApplier.isEnableTrendModule())
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
         val headerView = headerBinding?.root ?: return

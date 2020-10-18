@@ -247,6 +247,34 @@
             <include layout="@layout/view_setting_divider"/>
 
             <FrameLayout
+                android:id="@+id/use_trend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchUseTrendModule() }"
+                >
+                <TextView
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:text="Use hot trend"
+                    />
+                <CheckBox
+                    android:id="@+id/use_trend_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
+
+            <include layout="@layout/view_setting_divider"/>
+
+            <FrameLayout
                 android:id="@+id/use_app_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
