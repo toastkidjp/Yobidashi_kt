@@ -9,9 +9,11 @@ package jp.toastkid.article_viewer.article.list
 
 import android.annotation.SuppressLint
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
+import jp.toastkid.lib.preference.PreferenceApplier
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -23,7 +25,8 @@ import java.util.Locale
 class ViewHolder(
     private val view: View,
     private val onClick: (String) -> Unit,
-    private val onLongClick: (String) -> Unit
+    private val onLongClick: (String) -> Unit,
+    private val onMenuClick: (View, SearchResult) -> Unit
 ) : RecyclerView.ViewHolder(view) {
 
     @SuppressLint("SetTextI18n")
@@ -37,6 +40,13 @@ class ViewHolder(
         view.findViewById<TextView>(R.id.sub_text).text =
             "Last updated: ${DATE_FORMAT.get()?.format(Date().also { it.time = result.lastModified })}" +
                     " / ${result.length} chars"
+
+        view.findViewById<ImageView>(R.id.menu).also {
+            it.setColorFilter(PreferenceApplier(view.context).color)
+            it.setOnClickListener {
+                onMenuClick(view, result)
+            }
+        }
     }
 
     companion object {

@@ -8,6 +8,7 @@
 package jp.toastkid.article_viewer.article.list
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.paging.PagingDataAdapter
@@ -26,7 +27,8 @@ import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
 class Adapter(
     private val layoutInflater: LayoutInflater,
     private val onClick: (String) -> Unit,
-    private val onLongClick: (String) -> Unit
+    private val onLongClick: (String) -> Unit,
+    private val onMenuClick: (View, SearchResult) -> Unit
 ) : PagingDataAdapter<SearchResult, ViewHolder>(SimpleComparator()) {
 
     private val items: MutableList<SearchResult> = mutableListOf()
@@ -35,7 +37,8 @@ class Adapter(
         return ViewHolder(
             layoutInflater.inflate(ITEM_LAYOUT_ID, parent, false),
             onClick,
-            onLongClick
+            onLongClick,
+            onMenuClick
         )
     }
 

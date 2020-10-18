@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
 import jp.toastkid.article_viewer.databinding.AppBarArticleListBinding
@@ -151,10 +152,13 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
+        val menuPopup = MenuPopup(activityContext) { adapter.refresh() }
+
         adapter = Adapter(
                 LayoutInflater.from(context),
                 { contentViewModel?.newArticle(it) },
-                { contentViewModel?.newArticleOnBackground(it) }
+                { contentViewModel?.newArticleOnBackground(it) },
+                { itemView, searchResult -> menuPopup.show(itemView, searchResult) }
         )
 
         binding.results.adapter = adapter

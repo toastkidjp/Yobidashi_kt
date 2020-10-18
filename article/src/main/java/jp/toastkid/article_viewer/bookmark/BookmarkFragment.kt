@@ -108,7 +108,8 @@ class BookmarkFragment : Fragment(), ContentScrollable {
                     ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
                             .newArticleOnBackground(title)
                 }
-            }
+            },
+            { itemView, searchResult -> /* TODO Implement. */ }
         )
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
