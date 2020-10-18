@@ -31,6 +31,9 @@
             <include android:id="@+id/suggestion_module"
                 layout="@layout/module_search_suggestion" />
 
+            <include android:id="@+id/hourly_trend_module"
+                layout="@layout/module_search_hourly_trend" />
+
             <include android:id="@+id/app_module"
                 layout="@layout/module_search_apps" />
 
