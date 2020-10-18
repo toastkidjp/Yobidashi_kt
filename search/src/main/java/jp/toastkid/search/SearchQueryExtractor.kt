@@ -82,6 +82,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("wd")
             host == "www.wolframalpha.com" ->
                 uri.getQueryParameter("i")
+            host == "search.goo.ne.jp" ->
+                uri.getQueryParameter("MT")
             host.endsWith("facebook.com")
                     or host.equals("www.instagram.com")
                     or host.equals("www.espn.com") ->
