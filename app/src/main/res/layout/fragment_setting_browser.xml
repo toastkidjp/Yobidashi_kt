@@ -223,6 +223,8 @@
                         android:layout_height="wrap_content"
                         style="@style/OneLineTextMenu"
                         android:layout_gravity="left"
+                        android:drawableStart="@drawable/ic_user_agent_black"
+                        android:drawablePadding="4dp"
                         android:text="@string/title_user_agent"
                         />
                     <TextView
