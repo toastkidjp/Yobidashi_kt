@@ -12,33 +12,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.annotation.LayoutRes
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import jp.toastkid.article_viewer.R
-import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.SearchResult
-import jp.toastkid.article_viewer.bookmark.Bookmark
 import jp.toastkid.article_viewer.databinding.PopupArticleListMenuBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
-class MenuPopup(context: Context, private val deleted: () -> Unit) {
+class MenuPopup(context: Context, private val action: MenuPopupActionUseCase, useAddToBookmark: Boolean = true) {
 
     private val popupWindow = PopupWindow(context)
 
-    private val database = AppDatabase.find(context)
-
-    private val articleRepository = database.articleRepository()
-
-    private val bookmarkRepository = database.bookmarkRepository()
-
     private val binding: PopupArticleListMenuBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.popup_article_list_menu,
+            LAYOUT_ID,
             null,
             false
     )
@@ -48,36 +38,38 @@ class MenuPopup(context: Context, private val deleted: () -> Unit) {
     init {
         popupWindow.contentView = binding.root
         popupWindow.isOutsideTouchable = true
-        popupWindow.width = WindowManager.LayoutParams.WRAP_CONTENT
+        popupWindow.width = context.resources.getDimensionPixelSize(R.dimen.menu_popup_width)
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        binding.addToBookmark.isVisible = useAddToBookmark
+        binding.divider.isVisible = useAddToBookmark
 
         binding.popup = this
     }
 
     fun show(view: View, searchResult: SearchResult) {
         targetId = searchResult.id
-        popupWindow.showAsDropDown(view, 10, -300)
+        popupWindow.showAsDropDown(view)
     }
 
     fun addToBookmark() {
         targetId?.let {
-            CoroutineScope(Dispatchers.IO).launch {
-                bookmarkRepository.add(Bookmark(it))
-            }
+            action.addToBookmark(it)
         }
         popupWindow.dismiss()
     }
 
     fun delete() {
         targetId?.let {
-            CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    articleRepository.delete(it)
-                }
-                deleted()
-            }
+            action.delete(it)
         }
         popupWindow.dismiss()
     }
 
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.popup_article_list_menu
+
+    }
 }

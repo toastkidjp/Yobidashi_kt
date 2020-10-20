@@ -15,7 +15,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.webkit.WebView
 import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -28,9 +27,9 @@ import jp.toastkid.lib.view.SlidingTapListener
 import java.util.Calendar
 
 /**
- * Floating preview.
+ * Note popup.
  *
- * @param context Use for obtaining [PopupWindow], [WebView], and so on...
+ * @param context Use for obtaining [PopupWindow]
  * @author toastkidjp
  */
 class NotePopup(context: Context) {
@@ -80,14 +79,12 @@ class NotePopup(context: Context) {
 
     fun store() {
         val title = binding.inputTitle.text?.toString() ?: return
-        if (title.isEmpty()) {
-            return
-        }
-        val contentText = binding.inputContent.text?.toString() ?: return
+        insertion(
+                title,
+                binding.inputContent.text?.toString()
+        )
 
-        insertion(title, contentText)
-
-        Snackbar.make(binding.root, "Saved.", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, "Saved. $title", Snackbar.LENGTH_SHORT).show()
     }
 
     /**
@@ -127,20 +124,6 @@ class NotePopup(context: Context) {
             }
         })
         binding.header.setOnTouchListener(slidingTouchListener)
-    }
-
-    private fun isVisible() = popupWindow.isShowing
-
-    // TODO call it.
-    fun onBackPressed(): Boolean {
-        if (popupWindow.isShowing.not()) {
-            return false
-        }
-        if (isVisible()) {
-            hide()
-            return true
-        }
-        return false
     }
 
     companion object {

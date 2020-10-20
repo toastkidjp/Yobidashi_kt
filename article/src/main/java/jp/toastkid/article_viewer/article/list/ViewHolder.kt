@@ -39,12 +39,12 @@ class ViewHolder(
         }
         view.findViewById<TextView>(R.id.sub_text).text =
             "Last updated: ${DATE_FORMAT.get()?.format(Date().also { it.time = result.lastModified })}" +
-                    " / ${result.length} chars"
+                    " / ${result.length}"
 
         view.findViewById<ImageView>(R.id.menu).also {
             it.setColorFilter(PreferenceApplier(view.context).color)
             it.setOnClickListener {
-                onMenuClick(view, result)
+                onMenuClick(it, result)
             }
         }
     }

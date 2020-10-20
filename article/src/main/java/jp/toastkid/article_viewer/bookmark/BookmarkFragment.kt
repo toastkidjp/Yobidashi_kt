@@ -25,6 +25,9 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.Adapter
 import jp.toastkid.article_viewer.article.list.ListLoaderUseCase
+import jp.toastkid.article_viewer.article.list.menu.BookmarkListMenuPopupActionUseCase
+import jp.toastkid.article_viewer.article.list.menu.MenuPopup
+import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import jp.toastkid.article_viewer.databinding.FragmentArticleListBinding
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
@@ -34,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -81,7 +85,11 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         articleRepository = dataBase.articleRepository()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         context?.let { preferencesWrapper = PreferenceApplier(it) }
@@ -95,26 +103,49 @@ class BookmarkFragment : Fragment(), ContentScrollable {
 
         val activityContext = context ?: return
 
+        val bookmarkRepository = AppDatabase.find(activityContext).bookmarkRepository()
+        val contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        closeOnEmpty(bookmarkRepository, contentViewModel)
+
+        val menuPopup = MenuPopup(
+                activityContext,
+                BookmarkListMenuPopupActionUseCase(bookmarkRepository) {
+                    adapter.refresh()
+                    closeOnEmpty(bookmarkRepository, contentViewModel)
+                },
+                false
+        )
+
         adapter = Adapter(
             LayoutInflater.from(activityContext),
-            { title ->
+            {
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                            .newArticle(title)
+                    contentViewModel.newArticle(it)
                 }
             },
-            { title ->
+            {
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-                            .newArticleOnBackground(title)
+                    contentViewModel.newArticleOnBackground(it)
                 }
             },
-            { itemView, searchResult -> /* TODO Implement. */ }
+            { itemView, searchResult -> menuPopup.show(itemView, searchResult) }
         )
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
 
         showAllBookmark(activityContext)
+    }
+
+    private fun closeOnEmpty(bookmarkRepository: BookmarkRepository, contentViewModel: ContentViewModel) {
+        CoroutineScope(Dispatchers.Main).launch(disposables) {
+            val count = withContext(Dispatchers.IO) {
+                bookmarkRepository.count()
+            }
+            if (count == 0) {
+                contentViewModel.snackShort("Bookmark list is empty.")
+                activity?.supportFragmentManager?.popBackStack()
+            }
+        }
     }
 
     private fun showAllBookmark(activityContext: Context) {

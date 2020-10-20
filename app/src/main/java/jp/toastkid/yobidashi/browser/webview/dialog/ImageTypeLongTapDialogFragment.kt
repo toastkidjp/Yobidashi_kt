@@ -14,12 +14,13 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.ImageSearchUrlGenerator
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
+import jp.toastkid.yobidashi.libs.Toaster
 
 /**
  * @author toastkidjp
@@ -38,7 +39,7 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
                 .setTitle("Image: $url")
                 .setItems(R.array.image_menu, { _, which ->
                     when (which) {
-                        0 -> viewModel.open("https://www.google.co.jp/searchbyimage?image_url=$url".toUri())
+                        0 -> viewModel.open(ImageSearchUrlGenerator()(url))
                         1 -> ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).preview(url.toUri())
                         2 -> downloadImage(url)
                     }

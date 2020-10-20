@@ -21,11 +21,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import io.noties.markwon.Markwon
-import io.noties.markwon.ext.tables.TablePlugin
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.detail.markdown.MarkdownConverterProviderUseCase
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragment
 import jp.toastkid.article_viewer.article.detail.subhead.SubheadDialogFragmentViewModel
 import jp.toastkid.article_viewer.bookmark.Bookmark
@@ -77,8 +76,8 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         val linkBehaviorService = makeLinkBehaviorService()
 
-        val linkMovementMethod = ContentLinkMovementMethod { url ->
-            linkBehaviorService.invoke(url)
+        val linkMovementMethod = ContentLinkMovementMethod {
+            linkBehaviorService.invoke(it)
         }
         binding.content.movementMethod = linkMovementMethod
 
@@ -91,7 +90,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         return LinkBehaviorService(
                 viewModelProvider.get(ContentViewModel::class.java),
                 viewModelProvider.get(BrowserViewModel::class.java)
-        )
+        ) { repository.exists(it) > 0 }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -146,7 +145,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
         ContentLoaderUseCase(
                 repository,
-                Markwon.builder(context).usePlugin(TablePlugin.create(context)).build(),
+                MarkdownConverterProviderUseCase()(context),
                 binding.content,
                 subheads
         ).invoke(title)

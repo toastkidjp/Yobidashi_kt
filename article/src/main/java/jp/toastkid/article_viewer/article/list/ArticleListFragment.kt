@@ -11,6 +11,7 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabaseLockedException
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -33,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
 import jp.toastkid.article_viewer.bookmark.BookmarkFragment
@@ -55,6 +57,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 /**
  * Article list fragment.
@@ -88,10 +91,21 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     private val progressBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             viewModel?.hideProgress()
+            showFeedback()
+        }
+
+        private fun showFeedback() {
             contentViewModel?.snackWithAction(
                     getString(R.string.message_done_import),
                     getString(R.string.reload)
-            ) { searchUseCase?.all() }
+            ) {
+                try {
+                    searchUseCase?.all()
+                } catch (e: SQLiteDatabaseLockedException) {
+                    Timber.e(e)
+                    showFeedback()
+                }
+            }
         }
     }
 
@@ -152,7 +166,19 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
 
-        val menuPopup = MenuPopup(activityContext) { adapter.refresh() }
+        val menuPopup = MenuPopup(
+                activityContext,
+                ArticleListMenuPopupActionUseCase(
+                        articleRepository,
+                        AppDatabase.find(activityContext).bookmarkRepository()
+                ) {
+                    adapter.refresh()
+                    contentViewModel?.snackWithAction(
+                            "Deleted: \"${it.title}\".",
+                            "UNDO"
+                    ) { CoroutineScope(Dispatchers.IO).launch { articleRepository.insert(it) } }
+                }
+        )
 
         adapter = Adapter(
                 LayoutInflater.from(context),
@@ -281,7 +307,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            //PreferencesWrapper(this).setTarget(data?.data?.toString())
             val uri = data?.data ?: return
             updateIfNeed(uri)
         }

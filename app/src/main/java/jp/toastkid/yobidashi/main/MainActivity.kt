@@ -34,6 +34,7 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.ToolbarColorApplier
+import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -56,6 +57,7 @@ import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
+import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
 import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.search.SearchAction
@@ -138,6 +140,8 @@ class MainActivity : AppCompatActivity(),
 
     private var tabListUseCase: TabListUseCase? = null
 
+    private lateinit var menuSwitchColorApplier: MenuSwitchColorApplier
+
     /**
      * Disposables.
      */
@@ -168,6 +172,8 @@ class MainActivity : AppCompatActivity(),
         initializeMenuViewModel()
 
         initializeContentViewModel()
+
+        menuSwitchColorApplier = MenuSwitchColorApplier(binding.menuSwitch)
 
         val activityViewModelProvider = ViewModelProvider(this)
         browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
@@ -500,7 +506,11 @@ class MainActivity : AppCompatActivity(),
      * Refresh toolbar and background.
      */
     private fun refresh() {
-        ToolbarColorApplier()(window, binding.toolbar, preferenceApplier.colorPair())
+        val colorPair = preferenceApplier.colorPair()
+        ToolbarColorApplier()(binding.toolbar, colorPair)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            WindowOptionColorApplier()(window, colorPair)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             RecentAppColoringUseCase(
@@ -509,6 +519,8 @@ class MainActivity : AppCompatActivity(),
                     ::setTaskDescription
             ).invoke(preferenceApplier.color)
         }
+
+        menuSwitchColorApplier(colorPair)
 
         backgroundImageLoaderUseCase.invoke(binding.background, preferenceApplier.backgroundImagePath)
 

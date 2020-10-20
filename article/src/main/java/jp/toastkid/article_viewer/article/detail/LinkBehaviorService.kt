@@ -10,13 +10,18 @@ package jp.toastkid.article_viewer.article.detail
 import androidx.core.net.toUri
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
  */
 class LinkBehaviorService(
         private val contentViewModel: ContentViewModel,
-        private val browserViewModel: BrowserViewModel
+        private val browserViewModel: BrowserViewModel,
+        private val exists: (String) -> Boolean
 ) {
 
     operator fun invoke(url: String?) {
@@ -29,6 +34,14 @@ class LinkBehaviorService(
             return
         }
 
-        contentViewModel.newArticle(InternalLinkScheme.extract(url))
+        val title = InternalLinkScheme.extract(url)
+        CoroutineScope(Dispatchers.Main).launch {
+            val exists = withContext(Dispatchers.IO) { exists(title) }
+            if (exists) {
+                contentViewModel.newArticle(title)
+            } else {
+                contentViewModel.snackShort("\"$title\" does not exist.")
+            }
+        }
     }
 }

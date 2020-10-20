@@ -58,7 +58,13 @@ interface ArticleRepository {
     @Query("DELETE FROM article")
     fun deleteAll()
 
+    @Query("SELECT * FROM article WHERE article.id = :articleId")
+    fun findArticleById(articleId: Int): Article
+
     @Query("SELECT article.id, article.title, article.lastModified, article.length FROM article WHERE article.id IN (:articleIds)")
     fun findByIds(articleIds: List<Int>): PagingSource<Int, SearchResult>
+
+    @Query("SELECT COUNT(article.title) FROM article WHERE article.title = :title")
+    fun exists(title: String): Int
 
 }

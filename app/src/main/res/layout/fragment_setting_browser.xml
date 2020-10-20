@@ -43,6 +43,7 @@
                         android:layout_margin="16dp"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_tab_black"
+                        android:drawablePadding="4dp"
                         android:text="@string/title_retain_tabs"
                         />
                     <CheckBox
@@ -66,6 +67,7 @@
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:gravity="center_vertical"
                     android:drawableLeft="@drawable/ic_home_black"
+                    android:drawablePadding="4dp"
                     android:text="@string/title_home"
                     />
                 <FrameLayout
@@ -201,6 +203,7 @@
                         android:layout_margin="16dp"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_open_in_browser_black"
+                        android:drawablePadding="4dp"
                         android:text="@string/title_save_view_history"
                         />
                     <CheckBox
@@ -334,6 +337,8 @@
                         android:layout_margin="@dimen/settings_item_left_margin"
                         android:gravity="center_vertical"
                         android:text="@string/title_dark_mode"
+                        android:drawableStart="@drawable/ic_dark_mode_black"
+                        android:drawablePadding="4dp"
                         />
                     <CheckBox
                         android:id="@+id/dark_mode_check"
@@ -363,6 +368,7 @@
                         android:layout_margin="16dp"
                         android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_block_black"
+                        android:drawablePadding="4dp"
                         android:text="@string/title_remove_ad"
                         />
                     <CheckBox

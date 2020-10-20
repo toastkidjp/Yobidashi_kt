@@ -23,16 +23,33 @@ class ArticleInsertion(context: Context) {
 
     private val tokenizer = NgramTokenizer()
 
-    operator fun invoke(title: String, content: String) {
-        val article = Article(0)
-        article.title = title
-        article.contentText = content
-        article.bigram = tokenizer.invoke(content, 2) ?: return
-        article.length = content.length
-        article.lastModified = System.currentTimeMillis()
+    operator fun invoke(title: String?, content: String?) {
+        if (title.isNullOrBlank() || content.isNullOrBlank()) {
+            return
+        }
+
+        val article = makeArticle(title, content) ?: return
+
         CoroutineScope(Dispatchers.IO).launch {
             repository.insert(article)
         }
     }
 
+    private fun makeArticle(title: String, content: String): Article? {
+        val article = Article(DEFAULT_ID)
+        article.title = title
+        article.contentText = content
+        article.bigram = tokenizer.invoke(content, BI_GRAM) ?: return null
+        article.length = content.length
+        article.lastModified = System.currentTimeMillis()
+        return article
+    }
+
+    companion object {
+
+        private const val DEFAULT_ID = 0
+
+        private const val BI_GRAM = 2
+
+    }
 }

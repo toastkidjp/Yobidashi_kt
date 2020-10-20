@@ -8,10 +8,7 @@
 package jp.toastkid.lib.view
 
 import android.content.res.ColorStateList
-import android.os.Build
-import android.view.Window
 import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.bottomappbar.BottomAppBar
 import jp.toastkid.lib.preference.ColorPair
@@ -21,7 +18,7 @@ import jp.toastkid.lib.preference.ColorPair
  */
 class ToolbarColorApplier {
 
-    operator fun invoke(window: Window, toolbar: Toolbar, colorPair: ColorPair) {
+    operator fun invoke(toolbar: Toolbar, colorPair: ColorPair) {
         toolbar.let {
             it.setBackgroundColor(colorPair.bgColor())
 
@@ -35,12 +32,6 @@ class ToolbarColorApplier {
 
         if (toolbar is BottomAppBar) {
             toolbar.backgroundTint = ColorStateList.valueOf(colorPair.bgColor())
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val color = ColorUtils.setAlphaComponent(colorPair.bgColor(), 255)
-            window.statusBarColor     = color
-            window.navigationBarColor = color
         }
     }
 }
