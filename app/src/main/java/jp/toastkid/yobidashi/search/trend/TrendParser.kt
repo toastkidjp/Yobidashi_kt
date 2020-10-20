@@ -14,8 +14,13 @@ import org.jsoup.Jsoup
  */
 class TrendParser {
 
-    operator fun invoke(content: String): List<String> =
+    operator fun invoke(content: String): List<Trend> =
             Jsoup.parse(content)
-                    .select("channel > item > title")
-                    .map { it.text() }
+                    .select("channel > item")
+                    .map {
+                        Trend(
+                                it.getElementsByTag("title").text(),
+                                it.getElementsByTag("ht:picture").text()
+                        )
+                    }
 }
