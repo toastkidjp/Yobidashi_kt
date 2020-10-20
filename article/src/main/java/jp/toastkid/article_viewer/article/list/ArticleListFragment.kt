@@ -294,12 +294,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 item.isChecked = newState
                 true
             }
-            /* TODO Implement reload menu
-            it.registerReceiver(
-                progressBroadcastReceiver,
-                ZipLoaderService.makeProgressBroadcastIntentFilter()
-            )
-             */
             else -> super.onOptionsItemSelected(item)
         }
     }
