@@ -21,11 +21,11 @@ class Adapter(
         private val browseBackgroundCallback: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
 
-    private val items = mutableListOf<String>()
+    private val items = mutableListOf<Trend>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_search_suggestion, parent, false)
+                DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_trend_simple, parent, false)
         )
     }
 
@@ -39,7 +39,7 @@ class Adapter(
         return items.size
     }
 
-    fun replace(trends: List<String>?) {
+    fun replace(trends: List<Trend>?) {
         trends ?: return
 
         items.clear()

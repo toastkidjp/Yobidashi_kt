@@ -16,6 +16,6 @@ import retrofit2.http.GET
 interface TrendService {
 
     @GET("trends/hottrends/atom/hourly?geo=JP")
-    fun call(): Call<List<String>?>
+    fun call(): Call<List<Trend>?>
 
 }
