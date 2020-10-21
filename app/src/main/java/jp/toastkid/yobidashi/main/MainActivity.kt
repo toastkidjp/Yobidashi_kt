@@ -44,7 +44,6 @@ import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -674,6 +673,14 @@ class MainActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.open_tabs -> {
             switchTabList()
+            true
+        }
+        R.id.setting -> {
+            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
+                val currentFragment = findFragment()
+                it.setFrom(currentFragment?.javaClass)
+                replaceFragment(it)
+            }
             true
         }
         R.id.reset_menu_position -> {
