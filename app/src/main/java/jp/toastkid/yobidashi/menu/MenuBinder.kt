@@ -34,8 +34,7 @@ class MenuBinder(
         fragmentActivity: FragmentActivity,
         private val menuViewModel: MenuViewModel?,
         private val menuStub: ViewStubProxy,
-        private val menuSwitch: FloatingActionButton?,
-        private val openSetting: () -> Unit
+        private val menuSwitch: FloatingActionButton?
 ) {
     private val preferenceApplier = PreferenceApplier(fragmentActivity)
 
@@ -93,9 +92,6 @@ class MenuBinder(
                     menuStub.viewStub?.inflate()
                     (menuStub.binding as? ModuleMainMenuBinding)?.also {
                         recyclerView = it.menusView
-                        it.setting.setOnClickListener {
-                            openSetting()
-                        }
                     }
 
                     initializeWithContext()
