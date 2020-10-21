@@ -19,6 +19,7 @@
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/image"
             />
         <TextView
             android:id="@+id/search_suggest_text"
