@@ -60,8 +60,6 @@ class MenuBinder(
                 previousIconColor = newColor
                 colorPair.applyReverseTo(menuSwitch)
             }
-
-            applyTextColor(colorPair.fontColor(), (menuStub.binding as? ModuleMainMenuBinding)?.setting)
         })
 
         menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {
@@ -131,8 +129,6 @@ class MenuBinder(
             menuAdapter = MenuAdapter(LayoutInflater.from(it), preferenceApplier, menuViewModel)
             recyclerView?.adapter = menuAdapter
         }
-
-        applyTextColor(preferenceApplier.fontColor, (menuStub.binding as? ModuleMainMenuBinding)?.setting)
     }
 
     private fun setFabPosition() {
