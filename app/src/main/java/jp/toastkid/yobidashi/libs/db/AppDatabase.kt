@@ -23,7 +23,8 @@ import jp.toastkid.yobidashi.settings.color.SavedColorRepository
             ViewHistory::class,
             Bookmark::class
         ],
-        version = 1
+        version = 1,
+        exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
