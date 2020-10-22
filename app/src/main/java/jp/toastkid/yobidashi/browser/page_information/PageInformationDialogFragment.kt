@@ -62,7 +62,7 @@ internal class PageInformationDialogFragment: DialogFragment() {
                 .setTitle(title)
                 .setView(contentView)
                 .setNegativeButton(R.string.button_clip_url) { d, _ -> clipText(url, d) }
-                .setNeutralButton("Clip cookie") { d, _ -> clipText(cookie, d) }
+                .setNeutralButton(R.string.button_clip_cookie) { d, _ -> clipText(cookie, d) }
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
         if (favicon != null) {
             builder.setIcon(BitmapDrawable(activityContext.resources, favicon))
