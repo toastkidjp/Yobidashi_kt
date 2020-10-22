@@ -673,7 +673,7 @@ class MainActivity : AppCompatActivity(),
             (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
                 val currentFragment = findFragment()
                 it.setFrom(currentFragment?.javaClass)
-                replaceFragment(it)
+                replaceFragment(it, true, true)
             }
             true
         }
