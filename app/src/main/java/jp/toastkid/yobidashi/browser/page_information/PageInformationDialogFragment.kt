@@ -72,7 +72,8 @@ internal class PageInformationDialogFragment: DialogFragment() {
     /**
      * Copy URL to Clipboard.
      *
-     * @param d
+     * @param copyText text for clipping (Nullable)
+     * @param d [DialogInterface]
      */
     private fun clipText(copyText: String?, d: DialogInterface) {
         val appContext = context ?: return
