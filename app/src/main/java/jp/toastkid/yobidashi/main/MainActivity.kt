@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -723,16 +722,6 @@ class MainActivity : AppCompatActivity(),
             }
         }
     }
-
-    /**
-     * Workaround appcompat-1.1.0 bug.
-     * @link https://issuetracker.google.com/issues/141132133
-     */
-    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) =
-            when (Build.VERSION.SDK_INT) {
-                in 21..22 -> Unit
-                else -> super.applyOverrideConfiguration(overrideConfiguration)
-            }
 
     override fun onPause() {
         super.onPause()
