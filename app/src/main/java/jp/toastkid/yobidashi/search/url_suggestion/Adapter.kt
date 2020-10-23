@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,8 +26,7 @@ import kotlinx.coroutines.withContext
 class Adapter(
         private val layoutInflater: LayoutInflater,
         private val removeAt: (UrlItem) -> Unit,
-        private val browseCallback: (String) -> Unit,
-        private val browseBackgroundCallback: (String) -> Unit
+        private val viewModel: SearchFragmentViewModel
 ): RecyclerView.Adapter<ViewHolder>() {
 
     /**
@@ -43,9 +43,9 @@ class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = suggestions[position]
         item.bind(holder)
-        holder.setOnClick(View.OnClickListener { browseCallback(item.urlString()) })
+        holder.setOnClick(View.OnClickListener { viewModel.search(item.urlString()) })
         holder.setOnLongClick(View.OnLongClickListener {
-            browseBackgroundCallback(item.urlString())
+            viewModel.searchOnBackground(item.urlString())
             true
         })
         holder.setDelete(View.OnClickListener { removeAt(item) })

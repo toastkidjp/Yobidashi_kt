@@ -30,6 +30,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -187,12 +188,6 @@ class SearchFragment : Fragment() {
                 this::hideKeyboard
         )
 
-        urlSuggestionModule = UrlSuggestionModule(
-                binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                { search(extractCurrentSearchCategory(), it) },
-                { search(extractCurrentSearchCategory(), it, true) }
-        )
-
         hourlyTrendModule = HourlyTrendModule(
                 binding?.hourlyTrendModule,
                 { search(extractCurrentSearchCategory(), it) },
@@ -218,6 +213,23 @@ class SearchFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val activity = activity ?: return
+        val viewModel = ViewModelProvider(activity).get(SearchFragmentViewModel::class.java)
+        viewModel.search
+                .observe(activity, Observer { event ->
+                    val pair = event?.getContentIfNotHandled() ?: return@Observer
+                    search(extractCurrentSearchCategory(), pair.first, pair.second)
+                })
+
+        urlSuggestionModule = UrlSuggestionModule(
+                binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
+                viewModel
+        )
     }
 
     private fun setQuery(query: String?) {
