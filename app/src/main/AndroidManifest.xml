@@ -38,6 +38,7 @@
             android:name=".main.MainActivity"
             android:label="${app_name}"
             android:theme="@style/AppTheme.Translucent"
+            android:screenOrientation="sensor"
             android:configChanges="orientation|screenSize|locale"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize"
