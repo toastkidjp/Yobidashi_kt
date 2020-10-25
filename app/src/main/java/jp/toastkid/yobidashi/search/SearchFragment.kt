@@ -188,13 +188,6 @@ class SearchFragment : Fragment() {
                 this::hideKeyboard
         )
 
-        hourlyTrendModule = HourlyTrendModule(
-                binding?.hourlyTrendModule,
-                { search(extractCurrentSearchCategory(), it) },
-                { search(extractCurrentSearchCategory(), it, true) }
-        )
-        hourlyTrendModule?.request()
-
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding, contentViewModel)
 
         setListenerForKeyboardHiding()
@@ -230,6 +223,12 @@ class SearchFragment : Fragment() {
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
                 viewModel
         )
+
+        hourlyTrendModule = HourlyTrendModule(
+                binding?.hourlyTrendModule,
+                viewModel
+        )
+        hourlyTrendModule?.request()
     }
 
     private fun setQuery(query: String?) {

@@ -12,14 +12,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 
 /**
  * @author toastkidjp
  */
-class Adapter(
-        private val browseCallback: (String) -> Unit,
-        private val browseBackgroundCallback: (String) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
+class Adapter(private val viewModel: SearchFragmentViewModel) : RecyclerView.Adapter<ViewHolder>() {
 
     private val items = mutableListOf<Trend>()
 
@@ -31,8 +29,13 @@ class Adapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items.get(position))
-        holder.setOnClick(browseCallback)
-        holder.setOnLongClick(browseBackgroundCallback)
+        holder.itemView.setOnClickListener {
+            viewModel.search(items.get(position).title)
+        }
+        holder.itemView.setOnLongClickListener {
+            viewModel.searchOnBackground(items.get(position).title)
+            true
+        }
     }
 
     override fun getItemCount(): Int {

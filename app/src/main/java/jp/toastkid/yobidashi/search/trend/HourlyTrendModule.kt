@@ -15,6 +15,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,8 +27,7 @@ import kotlinx.coroutines.withContext
  */
 class HourlyTrendModule(
         private val hourlyTrendModule: ModuleSearchHourlyTrendBinding?,
-        browseCallback: (String) -> Unit,
-        browseBackgroundCallback: (String) -> Unit
+        viewModel: SearchFragmentViewModel
 ) {
 
     private val trendApi = TrendApi()
@@ -42,7 +42,7 @@ class HourlyTrendModule(
         val context = hourlyTrendModule?.root?.context
         enable = if (context == null) false else PreferenceApplier(context).isEnableTrendModule()
 
-        adapter = Adapter(browseCallback, browseBackgroundCallback)
+        adapter = Adapter(viewModel)
         hourlyTrendModule?.trendItems?.adapter = adapter
         val layoutManager = FlexboxLayoutManager(hourlyTrendModule?.root?.context)
         layoutManager.flexDirection = FlexDirection.ROW
