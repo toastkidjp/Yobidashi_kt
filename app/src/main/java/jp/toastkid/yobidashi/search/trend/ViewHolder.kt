@@ -23,17 +23,4 @@ class ViewHolder(private val binding: ItemTrendSimpleBinding) : RecyclerView.Vie
         //binding.searchSuggestAdd.isVisible = false
     }
 
-    fun setOnClick(browseCallback: (String) -> Unit) {
-        binding.root.setOnClickListener {
-            browseCallback(binding.searchSuggestText.text.toString())
-        }
-    }
-
-    fun setOnLongClick(browseBackgroundCallback: (String) -> Unit) {
-        binding.root.setOnLongClickListener {
-            browseBackgroundCallback(binding.searchSuggestText.text.toString())
-            true
-        }
-    }
-
 }
