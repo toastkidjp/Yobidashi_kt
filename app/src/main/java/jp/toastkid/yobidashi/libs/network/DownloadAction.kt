@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
  * @param context [Context]
  * @author toastkidjp
  */
-class DownloadAction(val context: Context) {
+class DownloadAction(private val context: Context) {
 
     operator fun invoke(url: String) {
         invoke(listOf(url))
