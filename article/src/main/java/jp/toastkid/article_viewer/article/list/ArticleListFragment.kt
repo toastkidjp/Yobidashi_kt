@@ -190,12 +190,20 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
 
+        val activityViewModel = ViewModelProvider(requireActivity()).get(ArticleListFragmentViewModel::class.java)
+        activityViewModel.search.observe(requireActivity(), Observer {
+            searchUseCase?.search(it)
+            if (appBarBinding.input.text.isNullOrEmpty()) {
+                appBarBinding.input.setText(it)
+            }
+        })
+
         appBarBinding.input.setOnEditorActionListener { textView, _, _ ->
             val keyword = textView.text.toString()
             if (keyword.isBlank()) {
                 return@setOnEditorActionListener true
             }
-            searchUseCase?.search(keyword)
+            activityViewModel.search(keyword)
             true
         }
 
@@ -251,7 +259,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 preferencesWrapper
         )
 
-        searchUseCase?.all()
+        searchUseCase?.search(appBarBinding.input.text?.toString())
     }
 
     override fun onResume() {
