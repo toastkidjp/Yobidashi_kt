@@ -729,10 +729,6 @@ class MainActivity : AppCompatActivity(),
     override fun onPause() {
         super.onPause()
         floatingPreview?.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
         tabs.saveTabList()
     }
 

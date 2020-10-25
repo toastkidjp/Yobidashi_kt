@@ -40,7 +40,7 @@ android {
             }
         }
     }
-    buildToolsVersion '29.0.0'
+    buildToolsVersion '29.0.2'
 }
 
 jacoco {
@@ -53,17 +53,16 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    final def supportLibVersion = '1.0.0'
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "androidx.cardview:cardview:${supportLibVersion}"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "com.google.android.material:material:1.0.0"
-    implementation 'androidx.core:core-ktx:1.1.0-alpha05'
-    implementation "androidx.paging:paging-runtime:3.0.0-alpha03"
+    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
+    implementation "androidx.cardview:cardview:$libVersions.cardview"
+    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
+    implementation "com.google.android.material:material:$libVersions.material"
+    implementation "androidx.core:core-ktx:$libVersions.ktx"
+    implementation "androidx.paging:paging-runtime:$libVersions.paging"
 
     implementation 'com.squareup.okio:okio:1.17.5'
-    implementation 'com.jakewharton.timber:timber:4.6.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
+    implementation "com.jakewharton.timber:timber:$libVersions.timber"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
     final def markwonVersion = '4.5.1'
 
@@ -74,14 +73,14 @@ dependencies {
     implementation ("io.noties.markwon:syntax-highlight:$markwonVersion") {
         exclude group: 'org.jetbrains', module: 'annotations-java5'
     }
+    kapt "io.noties:prism4j-bundler:2.0.0"
 
-    final def roomVersion = '2.3.0-alpha01'
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-runtime:$libVersions.room"
+    kapt "androidx.room:room-compiler:$libVersions.room"
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.9.3"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5'
+    testImplementation "junit:junit:$libVersions.junit"
+    testImplementation "io.mockk:mockk:$libVersions.mockk"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$libVersions.coroutines_test"
 }
 
 task jacocoTestReport(

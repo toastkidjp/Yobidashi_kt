@@ -12,6 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_fullscreen_black"
+            android:drawablePadding="4dp"
             android:gravity="center_vertical"
             android:text="@string/title_header_and_footer"
             />
