@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
-import timber.log.Timber
 
 /**
  * Suggest list adapter.
@@ -59,7 +58,10 @@ internal class Adapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = suggestions[position]
         holder.setText(item)
-        holder.itemView.setOnClickListener { onItemClicked(item) }
+        holder.itemView.setOnClickListener {
+            queryPutter(item)
+            viewModel.search(item)
+        }
         holder.itemView.setOnLongClickListener {
             viewModel.searchOnBackground(item)
             true
@@ -75,20 +77,6 @@ internal class Adapter (
     @SuppressLint("SetTextI18n")
     private fun onAddClicked(suggestion: String) {
         queryPutter("$suggestion ")
-    }
-
-    /**
-     * Item clicked action.
-     *
-     * @param suggest
-     */
-    private fun onItemClicked(suggest: String) {
-        queryPutter(suggest)
-        try {
-            viewModel.search(suggest)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
     }
 
     companion object {
