@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi.search.SearchFragmentViewModel
  */
 internal class Adapter (
         private val layoutInflater: LayoutInflater,
-        private val queryPutter: (String) -> Unit,
         private val viewModel: SearchFragmentViewModel
 ) : RecyclerView.Adapter<ViewHolder>() {
 
@@ -59,7 +58,7 @@ internal class Adapter (
         val item = suggestions[position]
         holder.setText(item)
         holder.itemView.setOnClickListener {
-            queryPutter(item)
+            viewModel.putQuery(item)
             viewModel.search(item)
         }
         holder.itemView.setOnLongClickListener {
@@ -76,7 +75,7 @@ internal class Adapter (
      */
     @SuppressLint("SetTextI18n")
     private fun onAddClicked(suggestion: String) {
-        queryPutter("$suggestion ")
+        viewModel.putQuery("$suggestion ")
     }
 
     companion object {

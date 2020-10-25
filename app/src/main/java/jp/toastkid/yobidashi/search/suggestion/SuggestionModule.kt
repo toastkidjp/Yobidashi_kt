@@ -35,7 +35,6 @@ import kotlinx.coroutines.withContext
  */
 class SuggestionModule(
         private val binding: ModuleSearchSuggestionBinding,
-        queryPutter: (String) -> Unit,
         viewModel: SearchFragmentViewModel,
         onClick: () -> Unit
 ) {
@@ -45,7 +44,6 @@ class SuggestionModule(
      */
     private val adapter: Adapter = Adapter(
             LayoutInflater.from(binding.root.context),
-            queryPutter,
             viewModel
     )
 

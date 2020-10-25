@@ -210,10 +210,14 @@ class SearchFragment : Fragment() {
                     val pair = event?.getContentIfNotHandled() ?: return@Observer
                     search(extractCurrentSearchCategory(), pair.first, pair.second)
                 })
+        viewModel.putQuery
+                .observe(activity, Observer { event ->
+                    val query = event?.getContentIfNotHandled() ?: return@Observer
+                    setQuery(query)
+                })
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                { setQuery(it) },
                 viewModel,
                 this::hideKeyboard
         )

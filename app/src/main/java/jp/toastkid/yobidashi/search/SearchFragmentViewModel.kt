@@ -27,4 +27,11 @@ class SearchFragmentViewModel : ViewModel() {
         _search.postValue(Event(query to true))
     }
 
+    private val _putQuery = MutableLiveData<Event<String>>()
+
+    val putQuery: LiveData<Event<String>> = _putQuery
+
+    fun putQuery(query: String) {
+        _putQuery.postValue(Event(query))
+    }
 }
