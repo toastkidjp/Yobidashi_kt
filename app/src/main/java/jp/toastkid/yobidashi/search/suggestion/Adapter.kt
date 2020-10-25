@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,17 +64,7 @@ internal class Adapter (
             viewModel.searchOnBackground(item)
             true
         }
-        holder.setOnClickAdd(View.OnClickListener{ onAddClicked(item) })
-    }
-
-    /**
-     * Add(+) clicked action.
-     *
-     * @param suggestion
-     */
-    @SuppressLint("SetTextI18n")
-    private fun onAddClicked(suggestion: String) {
-        viewModel.putQuery("$suggestion ")
+        holder.setOnClickAdd(View.OnClickListener{ viewModel.putQuery("$item ") })
     }
 
     companion object {
