@@ -35,8 +35,7 @@ import kotlinx.coroutines.withContext
  */
 class SuggestionModule(
         private val binding: ModuleSearchSuggestionBinding,
-        viewModel: SearchFragmentViewModel,
-        onClick: () -> Unit
+        viewModel: SearchFragmentViewModel
 ) {
 
     /**
@@ -71,18 +70,14 @@ class SuggestionModule(
         layoutManager.justifyContent = JustifyContent.FLEX_START
         layoutManager.alignItems = AlignItems.STRETCH
 
-        initializeSearchSuggestionList(layoutManager, onClick)
+        initializeSearchSuggestionList(layoutManager)
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun initializeSearchSuggestionList(
-            layoutManager: FlexboxLayoutManager,
-            onClick: () -> Unit
-    ) {
+    private fun initializeSearchSuggestionList(layoutManager: FlexboxLayoutManager) {
         binding.searchSuggestions.layoutManager = layoutManager
         binding.searchSuggestions.adapter = adapter
         binding.searchSuggestions.setOnTouchListener { _, _ ->
-            onClick()
             false
         }
     }

@@ -218,8 +218,7 @@ class SearchFragment : Fragment() {
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                viewModel,
-                this::hideKeyboard
+                viewModel
         )
 
         urlSuggestionModule = UrlSuggestionModule(
@@ -549,6 +548,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onDetach() {
+        hideKeyboard()
         disposables.cancel()
         channel.cancel()
         favoriteModule?.dispose()
