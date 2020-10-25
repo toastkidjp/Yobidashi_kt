@@ -76,7 +76,13 @@ class SearchAction(
         }
 
         if (validatedUrl) {
-            browserViewModel?.open(Uri.parse(query))
+            if (onBackground)
+                browserViewModel?.openBackground(
+                    activityContext.getString(R.string.title_tab_background_search, query),
+                    Uri.parse(query)
+                )
+            else
+                browserViewModel?.open(Uri.parse(query))
             return
         }
 
