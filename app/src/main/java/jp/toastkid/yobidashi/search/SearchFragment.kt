@@ -180,14 +180,6 @@ class SearchFragment : Fragment() {
                 this::setTextAndMoveCursorToEnd
         )
 
-        suggestionModule = SuggestionModule(
-                binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                { setQuery(it) },
-                { search(extractCurrentSearchCategory(), it) },
-                { search(extractCurrentSearchCategory(), it, true) },
-                this::hideKeyboard
-        )
-
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding, contentViewModel)
 
         setListenerForKeyboardHiding()
@@ -218,6 +210,13 @@ class SearchFragment : Fragment() {
                     val pair = event?.getContentIfNotHandled() ?: return@Observer
                     search(extractCurrentSearchCategory(), pair.first, pair.second)
                 })
+
+        suggestionModule = SuggestionModule(
+                binding?.suggestionModule as ModuleSearchSuggestionBinding,
+                { setQuery(it) },
+                viewModel,
+                this::hideKeyboard
+        )
 
         urlSuggestionModule = UrlSuggestionModule(
                 binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,

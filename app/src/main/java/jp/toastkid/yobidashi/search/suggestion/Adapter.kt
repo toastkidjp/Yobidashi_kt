@@ -8,6 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import timber.log.Timber
 
 /**
@@ -22,8 +23,7 @@ import timber.log.Timber
 internal class Adapter (
         private val layoutInflater: LayoutInflater,
         private val queryPutter: (String) -> Unit,
-        private val suggestionsCallback: (String) -> Unit,
-        private val onLongClicked: (String) -> Unit
+        private val viewModel: SearchFragmentViewModel
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /**
@@ -61,7 +61,7 @@ internal class Adapter (
         holder.setText(item)
         holder.itemView.setOnClickListener { onItemClicked(item) }
         holder.itemView.setOnLongClickListener {
-            onLongClicked(item)
+            viewModel.searchOnBackground(item)
             true
         }
         holder.setOnClickAdd(View.OnClickListener{ onAddClicked(item) })
@@ -85,7 +85,7 @@ internal class Adapter (
     private fun onItemClicked(suggest: String) {
         queryPutter(suggest)
         try {
-            suggestionsCallback(suggest)
+            viewModel.search(suggest)
         } catch (e: Exception) {
             Timber.e(e)
         }

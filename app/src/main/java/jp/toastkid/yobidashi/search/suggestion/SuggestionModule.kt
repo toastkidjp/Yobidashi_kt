@@ -14,6 +14,7 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,8 +36,7 @@ import kotlinx.coroutines.withContext
 class SuggestionModule(
         private val binding: ModuleSearchSuggestionBinding,
         queryPutter: (String) -> Unit,
-        searchCallback: (String) -> Unit,
-        searchBackgroundCallback: (String) -> Unit,
+        viewModel: SearchFragmentViewModel,
         onClick: () -> Unit
 ) {
 
@@ -46,8 +46,7 @@ class SuggestionModule(
     private val adapter: Adapter = Adapter(
             LayoutInflater.from(binding.root.context),
             queryPutter,
-            searchCallback,
-            searchBackgroundCallback
+            viewModel
     )
 
     /**
