@@ -23,4 +23,10 @@ class ViewHolder(private val binding: ItemTrendSimpleBinding) : RecyclerView.Vie
         //binding.searchSuggestAdd.isVisible = false
     }
 
+    fun setOnAdd(function: (String) -> Unit) {
+        binding.searchSuggestAdd.setOnClickListener {
+            function(binding.searchSuggestText.text.toString())
+        }
+    }
+
 }

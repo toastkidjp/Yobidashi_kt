@@ -36,6 +36,7 @@ class Adapter(private val viewModel: SearchFragmentViewModel) : RecyclerView.Ada
             viewModel.searchOnBackground(items.get(position).title)
             true
         }
+        holder.setOnAdd(viewModel::putQuery)
     }
 
     override fun getItemCount(): Int {
