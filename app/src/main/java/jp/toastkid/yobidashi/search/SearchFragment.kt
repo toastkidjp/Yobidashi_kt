@@ -184,9 +184,6 @@ class SearchFragment : Fragment() {
 
         setListenerForKeyboardHiding()
 
-        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
-        setQuery(query)
-
         initSearchInput()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -231,6 +228,9 @@ class SearchFragment : Fragment() {
                 viewModel
         )
         hourlyTrendModule?.request()
+
+        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
+        setQuery(query)
     }
 
     private fun setQuery(query: String?) {
