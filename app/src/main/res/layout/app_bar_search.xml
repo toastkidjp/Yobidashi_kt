@@ -70,5 +70,19 @@
             android:onLongClick="@{view -> fragment.invokeBackgroundSearch()}"
             android:contentDescription="@string/title_search_action" />
 
+        <ImageView
+            android:id="@+id/search_clear"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginEnd="60dp"
+            android:gravity="center"
+            app:srcCompat="@drawable/ic_close"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ripple_appwidget"
+            android:onClick="@{view -> fragment.clearInput()}"
+            android:contentDescription="@string/clear_form_data"
+            />
+
     </FrameLayout>
 </layout>

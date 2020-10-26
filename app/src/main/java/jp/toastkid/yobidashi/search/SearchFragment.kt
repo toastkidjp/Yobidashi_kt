@@ -451,6 +451,7 @@ class SearchFragment : Fragment() {
 
         headerBinding?.also {
             it.searchAction.setColorFilter(fontColor)
+            it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
     }
@@ -500,6 +501,10 @@ class SearchFragment : Fragment() {
         }
 
         SearchAction(context, category, query, currentUrl, onBackground).invoke()
+    }
+
+    fun clearInput() {
+        headerBinding?.searchInput?.setText("")
     }
 
     /**
