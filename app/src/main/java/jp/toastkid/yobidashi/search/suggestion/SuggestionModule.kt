@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import com.google.android.flexbox.AlignItems
@@ -73,13 +72,9 @@ class SuggestionModule(
         initializeSearchSuggestionList(layoutManager)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun initializeSearchSuggestionList(layoutManager: FlexboxLayoutManager) {
         binding.searchSuggestions.layoutManager = layoutManager
         binding.searchSuggestions.adapter = adapter
-        binding.searchSuggestions.setOnTouchListener { _, _ ->
-            false
-        }
     }
 
     /**
