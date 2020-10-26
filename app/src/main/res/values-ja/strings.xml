@@ -448,5 +448,7 @@
     <string name="this_app">このアプリの背景に設定</string>
     <string name="other_app">別のアプリで設定</string>
     <string name="title_quick_note">Quick note</string>
+    <string name="title_todo_tasks">TODO tasks</string>
+    <string name="title_todo_tasks_board">Task board</string>
 
 </resources>

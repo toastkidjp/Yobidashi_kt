@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(":lib")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
+    implementation "androidx.cardview:cardview:$libVersions.cardview"
+    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
+    implementation "com.google.android.material:material:$libVersions.material"
+    implementation "androidx.core:core-ktx:$libVersions.ktx"
+    implementation "androidx.paging:paging-runtime:$libVersions.paging"
+
+    implementation 'com.squareup.okio:okio:1.17.5'
+    implementation "com.jakewharton.timber:timber:$libVersions.timber"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
+
+    implementation "androidx.room:room-runtime:$libVersions.room"
+    kapt "androidx.room:room-compiler:$libVersions.room"
+
+    testImplementation "junit:junit:$libVersions.junit"
+    testImplementation "io.mockk:mockk:$libVersions.mockk"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$libVersions.coroutines_test"
+}

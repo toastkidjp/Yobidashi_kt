@@ -455,5 +455,7 @@
     <string name="this_app">This app</string>
     <string name="other_app">Other app</string>
     <string name="title_quick_note">Quick note</string>
+    <string name="title_todo_tasks">TODO tasks</string>
+    <string name="title_todo_tasks_board">Task board</string>
 
 </resources>
