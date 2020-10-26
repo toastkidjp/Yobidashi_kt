@@ -200,15 +200,14 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = activity ?: return
-        val viewModel = ViewModelProvider(activity).get(SearchFragmentViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
         viewModel.search
-                .observe(activity, Observer { event ->
+                .observe(viewLifecycleOwner, Observer { event ->
                     val pair = event?.getContentIfNotHandled() ?: return@Observer
                     search(extractCurrentSearchCategory(), pair.first, pair.second)
                 })
         viewModel.putQuery
-                .observe(activity, Observer { event ->
+                .observe(viewLifecycleOwner, Observer { event ->
                     val query = event?.getContentIfNotHandled() ?: return@Observer
                     setQuery(query)
                 })
