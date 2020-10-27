@@ -229,10 +229,10 @@ class SearchFragment : Fragment() {
         hourlyTrendModule?.request()
 
         val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
-        setQuery(query)
+        setInitialQuery(query)
     }
 
-    private fun setQuery(query: String?) {
+    private fun setInitialQuery(query: String?) {
         headerBinding?.searchInput?.let { input ->
             input.setText(query)
             input.selectAll()
