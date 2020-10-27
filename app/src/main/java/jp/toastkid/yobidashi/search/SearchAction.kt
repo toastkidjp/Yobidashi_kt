@@ -92,7 +92,6 @@ class SearchAction(
             )
         else
             browserViewModel?.open(uri)
-        return
     }
 
 }
