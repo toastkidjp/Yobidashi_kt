@@ -293,7 +293,7 @@ class SearchFragment : Fragment() {
             favoriteModule = withContext(Dispatchers.Default) {
                 FavoriteSearchModule(
                         binding?.favoriteModule as ModuleSearchFavoriteBinding,
-                        { fav -> search(fav.category as String, fav.query as String) }, // TODO use elvis
+                        { fav -> search(fav.category ?: "", fav.query ?: "") },
                         this@SearchFragment::hideKeyboard,
                         { setTextAndMoveCursorToEnd("${it.query} ") }
                 )
