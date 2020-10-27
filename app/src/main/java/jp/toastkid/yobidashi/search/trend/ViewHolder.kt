@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi.search.trend
 
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import jp.toastkid.yobidashi.databinding.ItemTrendSimpleBinding
 
 /**
@@ -19,7 +19,7 @@ class ViewHolder(private val binding: ItemTrendSimpleBinding) : RecyclerView.Vie
 
     fun bind(trend: Trend) {
         binding.searchSuggestText.text = trend.title
-        Glide.with(binding.image).asDrawable().load(trend.image.toUri()).into(binding.image)
+        binding.image.load(trend.image.toUri())
         //binding.searchSuggestAdd.isVisible = false
     }
 

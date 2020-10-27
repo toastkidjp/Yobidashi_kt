@@ -3,13 +3,12 @@ package jp.toastkid.yobidashi.tab.tab_list
 import android.graphics.Color
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import coil.load
+import coil.request.CachePolicy
+import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemTabListBinding
-import jp.toastkid.lib.preference.ColorPair
 import java.io.File
 
 /**
@@ -41,12 +40,11 @@ internal class ViewHolder(private val binding: ItemTabListBinding)
             return
         }
 
-        Glide.with(binding.image)
-                .load(File(thumbnailPath).toURI().toString().toUri())
-                .override(binding.image.measuredWidth, binding.image.measuredHeight)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(binding.image)
+        binding.image.load(File(thumbnailPath)) {
+            size(binding.image.measuredWidth, binding.image.measuredHeight)
+            diskCachePolicy(CachePolicy.DISABLED)
+            memoryCachePolicy(CachePolicy.DISABLED)
+        }
     }
 
     /**

@@ -9,7 +9,7 @@ package jp.toastkid.yobidashi.media.image.preview
 
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import java.io.File
 import kotlin.math.max
 
@@ -19,10 +19,7 @@ import kotlin.math.max
 class ViewHolder(private val view: ImageView) : RecyclerView.ViewHolder(view) {
 
     fun setImage(path: String) {
-        Glide.with(view)
-                .load(File(path))
-                .override(max(view.width, view.height))
-                .into(view)
+        view.load(File(path)) { size(max(view.width, view.height)) }
     }
 
 }

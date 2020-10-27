@@ -4,11 +4,11 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSavedImageBinding
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.ContentViewModel
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -38,7 +38,7 @@ internal class ViewHolder(
             return
         }
 
-        Glide.with(binding.image).load(f.path).into(binding.image)
+        binding.image.load(f.path)
 
         binding.text.text = f.name
         binding.remove.setOnClickListener { removeSetImage(f) }

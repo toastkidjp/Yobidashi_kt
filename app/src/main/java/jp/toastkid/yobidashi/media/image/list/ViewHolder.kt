@@ -8,9 +8,8 @@
 package jp.toastkid.yobidashi.media.image.list
 
 import android.graphics.drawable.Drawable
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import jp.toastkid.yobidashi.databinding.ItemImageThumbnailsBinding
 import jp.toastkid.yobidashi.media.image.Image
 import java.io.File
@@ -33,11 +32,10 @@ internal class ViewHolder(
      * @param image image
      */
     fun applyContent(image: Image, onClick: (Image) -> Unit) {
-        Glide.with(itemView.context)
-                .load(File(image.path).toURI().toString().toUri())
-                .placeholder(placeholder)
-                .override(300)
-                .into(binding.image)
+        binding.image.load(File(image.path)) {
+            placeholder(placeholder)
+            size(300)
+        }
 
         this.binding.text.text = image.makeDisplayName()
         this.binding.root.setOnClickListener {

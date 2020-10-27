@@ -6,11 +6,11 @@ import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
+import jp.toastkid.lib.view.SwipeViewHolder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
 import jp.toastkid.yobidashi.libs.DateFormatHolder
-import jp.toastkid.lib.view.SwipeViewHolder
 import java.util.Calendar
 
 /**
@@ -47,10 +47,7 @@ class ViewHolder(private val binding: ItemViewHistoryBinding):
     }
 
     fun setIconFromPath(path: String) {
-        Glide.with(itemView.context)
-                .load(path)
-                .override(64)
-                .into(binding.icon)
+        binding.icon.load(path) { size(64) }
     }
 
     /**

@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser.history
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.bumptech.glide.Glide
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.url_suggestion.ViewHolder
