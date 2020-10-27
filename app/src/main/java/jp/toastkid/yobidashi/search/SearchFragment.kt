@@ -209,7 +209,7 @@ class SearchFragment : Fragment() {
         viewModel.putQuery
                 .observe(viewLifecycleOwner, Observer { event ->
                     val query = event?.getContentIfNotHandled() ?: return@Observer
-                    setQuery(query)
+                    setTextAndMoveCursorToEnd(query)
                 })
 
         suggestionModule = SuggestionModule(
