@@ -287,7 +287,6 @@ class SearchFragment : Fragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun initFavoriteModule() {
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             favoriteModule = withContext(Dispatchers.Default) {
