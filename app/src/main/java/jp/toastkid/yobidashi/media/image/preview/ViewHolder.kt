@@ -11,7 +11,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import java.io.File
-import kotlin.math.max
 
 /**
  * @author toastkidjp
@@ -19,7 +18,7 @@ import kotlin.math.max
 class ViewHolder(private val view: ImageView) : RecyclerView.ViewHolder(view) {
 
     fun setImage(path: String) {
-        view.load(File(path)) { size(max(view.width, view.height)) }
+        view.load(File(path))
     }
 
 }
