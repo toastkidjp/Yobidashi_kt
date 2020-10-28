@@ -38,7 +38,7 @@ internal class ViewHolder(
             return
         }
 
-        binding.image.load(f.path)
+        binding.image.load(f)
 
         binding.text.text = f.name
         binding.remove.setOnClickListener { removeSetImage(f) }
