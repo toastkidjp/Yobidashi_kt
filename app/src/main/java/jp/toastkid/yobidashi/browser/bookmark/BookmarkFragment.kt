@@ -37,7 +37,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okio.Okio
+import okio.buffer
+import okio.sink
 
 /**
  * Bookmark list activity.
@@ -309,11 +310,13 @@ class BookmarkFragment: Fragment(),
      * @param uri
      */
     private fun exportBookmark(uri: Uri) {
-        CoroutineScope(Dispatchers.Main).launch(disposables) {
-            val items = withContext(Dispatchers.IO) { bookmarkRepository.all() }
+        CoroutineScope(Dispatchers.IO).launch(disposables) {
+            val items = bookmarkRepository.all()
             val outputStream = context?.contentResolver?.openOutputStream(uri) ?: return@launch
-            Okio.buffer(Okio.sink(outputStream)).use {
-                it.writeUtf8(Exporter(items).invoke())
+            outputStream.sink().use { sink ->
+                sink.buffer().use {
+                    it.writeUtf8(Exporter(items).invoke())
+                }
             }
         }
     }

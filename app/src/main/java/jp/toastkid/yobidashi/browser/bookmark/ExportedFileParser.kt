@@ -1,7 +1,8 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import okio.Okio
+import okio.buffer
+import okio.source
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -32,8 +33,16 @@ class ExportedFileParser {
      *
      * @param inputStream [InputStream]
      */
-    operator fun invoke(inputStream: InputStream): List<Bookmark> =
-            read(Jsoup.parse(Okio.buffer(Okio.source(inputStream)).use { it.readUtf8() }, ENCODE))
+    operator fun invoke(inputStream: InputStream): List<Bookmark> = read(
+            Jsoup.parse(
+                    inputStream.source().use { source ->
+                        source.buffer().use { bufferedSource ->
+                            bufferedSource.readUtf8()
+                        }
+                    },
+                    ENCODE
+            )
+    )
 
     private fun read(doc: Document): List<Bookmark> {
         doc.select("dl")
