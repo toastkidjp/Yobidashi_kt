@@ -23,13 +23,15 @@
             <TextView
                 android:id="@+id/main_text"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:textSize="20sp"
+                android:gravity="top"
                 android:maxLines="5"
                 android:layout_marginStart="4dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/color"
+                app:layout_constraintEnd_toStartOf="@id/menu"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/color"
                 tools:text="main_text"
                 />
 
