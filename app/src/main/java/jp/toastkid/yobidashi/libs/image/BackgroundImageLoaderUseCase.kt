@@ -26,6 +26,9 @@ class BackgroundImageLoaderUseCase {
         lastPath = backgroundImagePath
 
         target.load(File(backgroundImagePath)) {
+            if (target.measuredWidth == 0 || target.measuredHeight == 0) {
+                return@load
+            }
             size(target.measuredWidth, target.measuredHeight)
         }
     }
