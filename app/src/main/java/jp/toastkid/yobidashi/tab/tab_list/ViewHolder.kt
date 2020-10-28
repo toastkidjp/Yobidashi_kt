@@ -41,9 +41,7 @@ internal class ViewHolder(private val binding: ItemTabListBinding)
         }
 
         binding.image.load(File(thumbnailPath)) {
-            size(binding.image.measuredWidth, binding.image.measuredHeight)
             diskCachePolicy(CachePolicy.DISABLED)
-            memoryCachePolicy(CachePolicy.DISABLED)
         }
     }
 
