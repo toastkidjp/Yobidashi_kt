@@ -11,6 +11,7 @@ import jp.toastkid.lib.view.SwipeViewHolder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
 import jp.toastkid.yobidashi.libs.DateFormatHolder
+import java.io.File
 import java.util.Calendar
 
 /**
@@ -47,7 +48,7 @@ class ViewHolder(private val binding: ItemViewHistoryBinding):
     }
 
     fun setIconFromPath(path: String) {
-        binding.icon.load(path) { size(64) }
+        binding.icon.load(File(path)) { size(64) }
     }
 
     /**
