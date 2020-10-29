@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            />
+            android:contentDescription="@string/content_description_background" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
