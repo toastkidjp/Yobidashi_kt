@@ -22,17 +22,18 @@
     public static ** valueOf(java.lang.String);
 }
 
-## For OkHttp
+# For OkHttp
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
+## Ignore JSR 305 annotations for embedding nullability information.
 -dontwarn javax.annotation.**
 -keep class javax.annotation.** { *; }
 
 ### A resource is loaded with a relative path so the package of this class must be preserved.
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
-## For Moshi
+# For Moshi
 -dontwarn okio.**
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
@@ -57,9 +58,6 @@
 
 # Ignore annotation used for build tooling.
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
-
-# Ignore JSR 305 annotations for embedding nullability information.
--dontwarn javax.annotation.**
 
 # Guarded by a NoClassDefFoundError try/catch and only used when on the classpath.
 -dontwarn kotlin.Unit
