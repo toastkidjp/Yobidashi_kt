@@ -9,7 +9,8 @@ import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
 import java.io.IOException
-import java.util.*
+import java.util.Locale
+import kotlin.jvm.Throws
 
 /**
  * Suggest Web API response fetcher.
@@ -45,7 +46,7 @@ class SuggestionApi {
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                val body = response.body()?.string() ?: return
+                val body = response.body?.string() ?: return
                 listCallback(suggestionParser(body))
             }
         })

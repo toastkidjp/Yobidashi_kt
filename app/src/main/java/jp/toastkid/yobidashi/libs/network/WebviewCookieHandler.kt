@@ -19,12 +19,12 @@ object WebViewCookieHandler : CookieJar {
      */
     private val cookieManager = CookieManager.getInstance()
 
-    override fun saveFromResponse(url: HttpUrl?, cookies: MutableList<Cookie>?) {
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         val urlString = url?.toString() ?: return
         cookies?.forEach { cookieManager.setCookie(urlString, it.toString()) }
     }
 
-    override fun loadForRequest(url: HttpUrl?): List<Cookie> {
+    override fun loadForRequest(url: HttpUrl): List<Cookie> {
         val urlString = url?.toString() ?: return emptyList()
         val cookiesString = cookieManager.getCookie(urlString)
 
