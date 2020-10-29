@@ -96,7 +96,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation 'com.larswerkman:HoloColorPicker:1.5'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.squareup.moshi:moshi:1.8.0'
