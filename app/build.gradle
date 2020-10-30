@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
-apply plugin: 'io.fabric'
 apply plugin: "jacoco"
 
 apply from: 'signing/config.gradle', to: android
