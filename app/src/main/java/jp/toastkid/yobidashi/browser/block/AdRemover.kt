@@ -25,8 +25,8 @@ class AdRemover(inputStream: InputStream) {
      * Blacklist of AD hosts.
      */
     private var blackList: Set<String> =
-            inputStream.source().buffer().use {
-                it.readUtf8()
+            inputStream.source().buffer().use { bufferedSource ->
+                bufferedSource.readUtf8()
                         .split("\n")
                         .filter { it.isNotBlank() }
                         .map { it.trim() }
