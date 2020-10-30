@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.search.trend
 
-import okio.Okio
+import okio.buffer
+import okio.source
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,9 +12,11 @@ class TrendParserTest {
 
     @Test
     fun test() {
-        val resourceAsStream =
-                javaClass.classLoader?.getResourceAsStream("hot_trend/hourly.xml")
-        val xmlSource = Okio.buffer(Okio.source(resourceAsStream)).readUtf8()
+        val resourceAsStream = javaClass.classLoader?.getResourceAsStream("hot_trend/hourly.xml")
+
+        val xmlSource = resourceAsStream?.source()?.buffer()?.use { it.readUtf8() }
+                ?: throw RuntimeException()
+
         val items = TrendParser().invoke(xmlSource)
         assertEquals(20, items.size)
     }

@@ -1,8 +1,12 @@
 package jp.toastkid.yobidashi.rss
 
 import jp.toastkid.yobidashi.rss.model.Parser
-import okio.Okio
-import org.junit.Assert.*
+import okio.buffer
+import okio.source
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.io.InputStream
@@ -21,7 +25,11 @@ class ParserTest {
 
     @Test
     fun test() {
-        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.xml"))).readUtf8()
+        val rssText = readStream("rss/sample.xml").source().use { source ->
+            source.buffer().use {
+                it.readUtf8()
+            }
+        }
 
         val rss = parser.parse(rssText.split("\n"))
 
@@ -45,7 +53,9 @@ class ParserTest {
 
     @Test
     fun testAtom() {
-        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.atom"))).readUtf8()
+        val rssText = readStream("rss/sample.atom").source().use { source ->
+            source.buffer().use { it.readUtf8() }
+        }
 
         val rss = parser.parse(rssText.split("\n"))
 
@@ -59,7 +69,9 @@ class ParserTest {
 
     @Test
     fun testRdf() {
-        val rssText = Okio.buffer(Okio.source(readStream("rss/sample.rdf"))).readUtf8()
+        val rssText = readStream("rss/sample.rdf").source().use { source ->
+            source.buffer().use { it.readUtf8() }
+        }
 
         val rss = parser.parse(rssText.split("\n"))
 

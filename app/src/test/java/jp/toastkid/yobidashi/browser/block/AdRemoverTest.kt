@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.browser.block
 
-import okio.Okio
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
@@ -36,8 +35,8 @@ class AdRemoverTest {
         )
 
         @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-        Okio.buffer(Okio.source(response?.data)).use {
-            assertTrue(it.readUtf8().isEmpty())
+        response?.data?.bufferedReader()?.use {
+            assertTrue(it.readLine().isEmpty())
         }
     }
 }
