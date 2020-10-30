@@ -9,6 +9,8 @@ package jp.toastkid.yobidashi.browser.block
 
 import android.content.res.AssetManager
 import android.webkit.WebResourceResponse
+import okio.buffer
+import okio.source
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
@@ -23,8 +25,9 @@ class AdRemover(inputStream: InputStream) {
      * Blacklist of AD hosts.
      */
     private var blackList: Set<String> =
-            inputStream.bufferedReader().use { bufferedSource ->
-                bufferedSource.readLine().split("\n")
+            inputStream.source().buffer().use {
+                it.readUtf8()
+                        .split("\n")
                         .filter { it.isNotBlank() }
                         .map { it.trim() }
                         .toHashSet()
