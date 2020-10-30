@@ -2,19 +2,18 @@ package jp.toastkid.yobidashi.search.suggestion
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.widget.EditText
 import androidx.core.view.isVisible
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
-import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +25,7 @@ import kotlinx.coroutines.withContext
  * Initialize with binding object.
  *
  * @param binding Data binding object
- * @param searchInput Input field
+ * @param queryPutter Use for query inserting
  * @param searchCallback Callback on search
  * @param searchBackgroundCallback Callback for background search
  * @param onClick Callback on click
@@ -35,7 +34,7 @@ import kotlinx.coroutines.withContext
  */
 class SuggestionModule(
         private val binding: ModuleSearchSuggestionBinding,
-        searchInput: EditText,
+        queryPutter: (String) -> Unit,
         searchCallback: (String) -> Unit,
         searchBackgroundCallback: (String) -> Unit,
         onClick: () -> Unit
@@ -46,7 +45,7 @@ class SuggestionModule(
      */
     private val adapter: Adapter = Adapter(
             LayoutInflater.from(binding.root.context),
-            searchInput,
+            queryPutter,
             searchCallback,
             searchBackgroundCallback
     )

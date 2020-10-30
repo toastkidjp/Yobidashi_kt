@@ -18,21 +18,14 @@
             android:layout_height="match_parent"
             android:layout_margin="8dp"
             >
-            <TextView
-                android:id="@+id/title_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/description"
-                android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/addition_query"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/title_input"
+                android:hint="@string/description"
+                app:hintTextColor="#88000000"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/add"
                 >
@@ -135,12 +128,12 @@
             <Button
                 android:id="@+id/add"
                 android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:text="@string/add"
                 android:onClick="@{view -> dialog.add()}"
-                app:layout_constraintTop_toBottomOf="@id/title_input"
+                app:layout_constraintTop_toTopOf="@id/addition_query"
+                app:layout_constraintBottom_toBottomOf="@id/addition_query"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
 

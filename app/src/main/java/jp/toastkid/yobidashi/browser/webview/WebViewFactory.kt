@@ -2,6 +2,8 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -121,6 +123,12 @@ internal class WebViewFactory {
 
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
+
+        webView.setDownloadListener { url, _, _, _, _ ->
+            val intent = Intent(Intent.ACTION_QUICK_VIEW)
+            intent.data = Uri.parse(url)
+            webView.context.startActivity(intent)
+        }
 
         return webView
     }

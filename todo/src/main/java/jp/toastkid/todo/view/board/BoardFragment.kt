@@ -11,31 +11,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.map
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.todo.R
-import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.AppBarBoardBinding
 import jp.toastkid.todo.databinding.FragmentTaskBoardBinding
-import jp.toastkid.todo.databinding.ItemTaskShortBinding
 import jp.toastkid.todo.model.TodoTask
-import jp.toastkid.todo.view.TaskListFragmentViewModel
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
-import jp.toastkid.todo.view.initial.InitialTaskPreparation
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import jp.toastkid.todo.view.list.TaskListFragmentViewModel
 
 /**
  * @author toastkidjp
@@ -57,8 +47,6 @@ class BoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val repository = TodoTaskDatabase.find(view.context).repository()
-
         var popup: ItemMenuPopup? = null
 
         val viewModel = ViewModelProvider(this).get(TaskListFragmentViewModel::class.java)
@@ -70,59 +58,27 @@ class BoardFragment : Fragment() {
                     }
                 })
 
-        val refresh = {
-
-        }
-
         val taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(this, {
-                    it.id = tasks.size + 1
-                    tasks.add(it)
-                    val itemBinding = DataBindingUtil.inflate<ItemTaskShortBinding>(layoutInflater, R.layout.item_task_short, binding.board, false)
-                    itemBinding.color.setBackgroundColor(it.color)
-                    itemBinding.mainText.text = it.description
-                    itemBinding.menu.setColorFilter(PreferenceApplier(view.context).color)
-                    val draggableTouchListener = DraggableTouchListener()
-                    draggableTouchListener.setCallback(object : DraggableTouchListener.OnNewPosition {
+                TaskAdditionDialogFragmentUseCase(this) {
+                    val firstOrNull = tasks.firstOrNull { task -> task.lastModified == it.lastModified }
+                    if (firstOrNull == null) {
+                        it.id = tasks.size + 1
+                        addTask(it, popup)
+                        return@TaskAdditionDialogFragmentUseCase
+                    }
 
-                        override fun onNewPosition(x: Float, y: Float) {
-                            it.x = x
-                            it.y = y
-                        }
-
-                    })
-
-                    itemBinding.root.setOnTouchListener(draggableTouchListener)
-
-                    binding.board.addView(itemBinding.root)
-                })
+                    tasks.remove(firstOrNull)
+                    removeTask(firstOrNull)
+                    addTask(firstOrNull, popup)
+                }
 
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        repository,
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
-                        refresh
+                        { removeTask(it) }
                 )
         )
-
-        CoroutineScope(Dispatchers.IO).launch {
-            if (repository.count() == 0) {
-                InitialTaskPreparation(repository).invoke()
-            }
-            Pager(
-                    PagingConfig(pageSize = 10, enablePlaceholders = true),
-                    pagingSourceFactory = { repository.allTasks() }
-            )
-                    .flow
-                    .collectLatest {
-                        //adapter.submitData(it)
-                        it.map { item ->
-
-                            item
-                        }
-                    }
-        }
 
         appBarBinding.add.setOnClickListener {
             taskAdditionDialogFragmentUseCase.invoke()
@@ -130,6 +86,37 @@ class BoardFragment : Fragment() {
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
+
+        addTask(makeSampleTask(), popup)
+    }
+
+    private fun makeSampleTask(): TodoTask {
+        val sampleTask = TodoTask(0)
+        sampleTask.dueDate = System.currentTimeMillis()
+        sampleTask.lastModified = System.currentTimeMillis()
+        sampleTask.created = System.currentTimeMillis()
+        sampleTask.description = "Sample task"
+        sampleTask.x = 200f
+        sampleTask.y = 200f
+        return sampleTask
+    }
+
+    private fun removeTask(it: TodoTask) {
+        tasks.remove(it)
+        binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
+            binding.board.removeView(v)
+        }
+    }
+
+    private fun addTask(it: TodoTask, popup: ItemMenuPopup?) {
+        tasks.add(it)
+
+        val itemView = BoardItemViewFactory(layoutInflater) { parent, showTask ->
+            popup?.show(parent, showTask)
+        }.invoke(binding.board, it, PreferenceApplier(requireContext()).color)
+
+        itemView.tag = it.id
+        binding.board.addView(itemView)
     }
 
 }

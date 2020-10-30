@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FF002277</color>
     <color name="colorPrimaryDark">#FF000044</color>
-    <color name="colorAccent">#FFE0E0E0</color>
+    <color name="colorAccent">#FF002277</color>
     <color name="textPrimary">#FFE0E0E0</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000B00</color>
@@ -49,4 +49,6 @@
     <color name="pink">#DDf16971</color>
     <color name="dark_brown">#DD4b1f12</color>
     <color name="red_yellow">#FF9100</color>
+
+    <color name="editor_cursor">#FFE0E0E0</color>
 </resources>

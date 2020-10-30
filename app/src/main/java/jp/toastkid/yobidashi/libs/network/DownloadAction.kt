@@ -6,10 +6,10 @@ import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -58,12 +58,15 @@ class DownloadAction(val context: Context) {
         }
 
         val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
-        urls.map { makeRequest(it.toUri()) }.forEach { dm?.enqueue(it) }
+        urls.map { makeRequest(it.toUri(), urls.size != 1) }.forEach { dm?.enqueue(it) }
     }
 
-    private fun makeRequest(uri: Uri): DownloadManager.Request {
+    private fun makeRequest(uri: Uri, showComplete: Boolean): DownloadManager.Request {
         val request = DownloadManager.Request(uri)
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+        request.setNotificationVisibility(
+                if (showComplete) DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
+                else DownloadManager.Request.VISIBILITY_VISIBLE
+        )
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.lastPathSegment)
         request.setAllowedOverMetered(false)
         request.setAllowedOverRoaming(false)

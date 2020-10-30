@@ -26,7 +26,7 @@ class DarkModeApplier {
         val context = parent.context
         val currentTheme = Theme.extract(
                 preferenceApplier,
-                ContextCompat.getColor(context, R.color.colorAccent),
+                ContextCompat.getColor(context, R.color.editor_cursor),
                 ContextCompat.getColor(context, R.color.light_blue_200_dd)
         )
         darkTheme.apply(preferenceApplier)

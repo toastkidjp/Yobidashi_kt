@@ -65,8 +65,6 @@ enum class Menu(
 
     VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
 
-    QUICK_NOTE(R.string.title_quick_note, R.drawable.ic_quick_note),
-
     TODO_TASKS_BOARD(R.string.title_todo_tasks_board, R.drawable.ic_board),
 
     TODO_TASKS(R.string.title_todo_tasks, R.drawable.ic_todo_task),

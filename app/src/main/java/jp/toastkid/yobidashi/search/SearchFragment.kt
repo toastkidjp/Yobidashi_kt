@@ -25,7 +25,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
@@ -179,7 +178,7 @@ class SearchFragment : Fragment() {
 
         suggestionModule = SuggestionModule(
                 binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                headerBinding?.searchInput as EditText,
+                { setQuery(it) },
                 { search(extractCurrentSearchCategory(), it) },
                 { search(extractCurrentSearchCategory(), it, true) },
                 this::hideKeyboard

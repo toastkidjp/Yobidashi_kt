@@ -21,6 +21,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingsBinding
+import jp.toastkid.yobidashi.settings.initial.InitialIndexSettingUseCase
 
 /**
  * @author toastkidjp
@@ -33,6 +34,8 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
 
     private lateinit var preferenceApplier: PreferenceApplier
+
+    private val initialIndexSettingUseCase = InitialIndexSettingUseCase()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -63,7 +66,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.container.currentItem = 0
+        binding.container.setCurrentItem(initialIndexSettingUseCase.extract(arguments), false)
     }
 
     override fun onResume() {
@@ -83,6 +86,14 @@ class SettingFragment : Fragment() {
     override fun onDetach() {
         ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).refresh()
         super.onDetach()
+    }
+
+    fun setFrom(javaClass: Class<Fragment>?) {
+        if (arguments == null) {
+            arguments = Bundle()
+        }
+
+        initialIndexSettingUseCase.put(arguments, javaClass)
     }
 
     companion object {

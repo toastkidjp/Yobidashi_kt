@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -21,7 +20,7 @@ import timber.log.Timber
  */
 internal class Adapter (
         private val layoutInflater: LayoutInflater,
-        private val searchInput: EditText,
+        private val queryPutter: (String) -> Unit,
         private val suggestionsCallback: (String) -> Unit,
         private val onLongClicked: (String) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
@@ -74,8 +73,7 @@ internal class Adapter (
      */
     @SuppressLint("SetTextI18n")
     private fun onAddClicked(suggestion: String) {
-        searchInput.setText("$suggestion ")
-        searchInput.setSelection(searchInput.text.toString().length)
+        queryPutter("$suggestion ")
     }
 
     /**
@@ -84,8 +82,7 @@ internal class Adapter (
      * @param suggest
      */
     private fun onItemClicked(suggest: String) {
-        searchInput.setText(suggest)
-        searchInput.setSelection(suggest.length)
+        queryPutter(suggest)
         try {
             suggestionsCallback(suggest)
         } catch (e: Exception) {

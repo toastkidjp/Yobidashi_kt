@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.todo.view.initial
+package jp.toastkid.todo.view.list.initial
 
 import android.graphics.Color
 import androidx.annotation.WorkerThread

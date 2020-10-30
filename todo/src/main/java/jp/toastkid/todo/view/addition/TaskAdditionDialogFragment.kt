@@ -48,11 +48,13 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         task?.let {
             today.timeInMillis = it.dueDate
         }
-        binding.datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
-                { view, year, monthOfYear, dayOfMonth ->
-                    date = Triple(year, monthOfYear, dayOfMonth)
-                }
-        )
+        binding.datePicker.init(
+                today.get(Calendar.YEAR),
+                today.get(Calendar.MONTH),
+                today.get(Calendar.DAY_OF_MONTH)
+        ) { _, year, monthOfYear, dayOfMonth ->
+            date = Triple(year, monthOfYear, dayOfMonth)
+        }
 
         viewModel = targetFragment?.let {
             ViewModelProvider(it).get(TaskAdditionDialogFragmentViewModel::class.java)
@@ -75,7 +77,12 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         }
         task.lastModified = System.currentTimeMillis()
         task.dueDate = makeDateMs()
-        task.color = extractBackgroundColor(binding.root.findViewById(binding.colors.checkedRadioButtonId))
+
+        val checkedRadioButtonId = binding.colors.checkedRadioButtonId
+        if (checkedRadioButtonId != -1) {
+            task.color = extractBackgroundColor(binding.root.findViewById(checkedRadioButtonId))
+        }
+
         viewModel?.refresh(task)
 
         if (this.task != null) {

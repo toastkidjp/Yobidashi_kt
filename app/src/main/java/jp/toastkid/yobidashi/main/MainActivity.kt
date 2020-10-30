@@ -662,7 +662,11 @@ class MainActivity : AppCompatActivity(),
             true
         }
         R.id.setting -> {
-            replaceFragment(obtainFragment(SettingFragment::class.java))
+            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
+                val currentFragment = findFragment()
+                it.setFrom(currentFragment?.javaClass)
+                replaceFragment(it)
+            }
             true
         }
         R.id.reset_menu_position -> {

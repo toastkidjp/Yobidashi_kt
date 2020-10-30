@@ -5,7 +5,7 @@
  * which accompany this distribution.
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package jp.toastkid.todo.view
+package jp.toastkid.todo.view.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,7 +24,7 @@ import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.AppBarTaskListBinding
 import jp.toastkid.todo.databinding.FragmentTaskListBinding
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
-import jp.toastkid.todo.view.initial.InitialTaskPreparation
+import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -82,9 +82,15 @@ class TaskListFragment : Fragment() {
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        repository,
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
-                        refresh
+                        {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                withContext(Dispatchers.IO) {
+                                    repository.delete(it)
+                                }
+                                refresh()
+                            }
+                        }
                 )
         )
 
