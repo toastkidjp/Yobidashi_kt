@@ -17,6 +17,8 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import androidx.core.content.ContextCompat
+import jp.toastkid.yobidashi.R
 
 class DrawingCanvas
     @JvmOverloads constructor(
@@ -33,9 +35,12 @@ class DrawingCanvas
 
     private val finishedPointerPaths = mutableListOf<Path>()
 
+    private val color = ContextCompat.getColor(context, R.color.black)
+
     private val paint = Paint().also {
         it.strokeWidth = 3.toFloat()
         it.style = Paint.Style.STROKE
+        it.color = color
     }
 
     private val gestureDetector = GestureDetector(
