@@ -1,8 +1,14 @@
 package jp.toastkid.yobidashi.tab
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.view.View
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
@@ -14,7 +20,9 @@ import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
+import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
@@ -62,6 +70,8 @@ class TabAdapter(
     private val bitmapCompressor = BitmapCompressor()
 
     private var tabListViewModel: TabListViewModel? = null
+
+    private val webViewFactory = WebViewFactory()
 
     init {
         val viewContext = contextSupplier()
@@ -120,8 +130,34 @@ class TabAdapter(
                 if (title.isNotBlank()) title
                 else contextSupplier().getString(R.string.new_tab)
 
-        tabList.add(WebTab.makeBackground(tabTitle, url))
+        val newTab = WebTab.makeBackground(tabTitle, url)
+        tabList.add(newTab)
         tabList.save()
+        val webView = webViewFactory.make(contextSupplier())
+        webView.webViewClient = object : WebViewClient() {
+
+            private val adRemover: AdRemover = AdRemover.make(webView.context.assets)
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
+                    if (preferenceApplier.adRemove) {
+                        adRemover(request.url.toString())
+                    } else {
+                        super.shouldInterceptRequest(view, request)
+                    }
+
+            @Suppress("OverridingDeprecatedMember")
+            @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+            override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
+                    if (preferenceApplier.adRemove) {
+                        adRemover(url)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        super.shouldInterceptRequest(view, url)
+                    }
+        }
+        webView.loadUrl(url)
+        GlobalWebViewPool.put(newTab.id(), webView)
         setCount()
     }
 
