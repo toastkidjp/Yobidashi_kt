@@ -50,7 +50,7 @@ sealed class StorageWrapperImplementation(context: Context, dirName: String) : S
         return listFiles()[index].delete()
     }
 
-    override fun findByName(name: String): File? = listFiles().firstOrNull { it.name.equals(name) }
+    override fun findByName(name: String): File? = listFiles().firstOrNull { it.name == name }
 
     override fun delete(name: String) {
         assignNewFile(name).delete()
