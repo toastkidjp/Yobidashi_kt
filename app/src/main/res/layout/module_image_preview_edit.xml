@@ -58,7 +58,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/lime_bg"
+                app:tint="@color/lime_bg"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> colorFilterUseCase.reverseFilter()}"
                 />
@@ -70,7 +70,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/deep_orange_500_dd"
+                app:tint="@color/deep_orange_500_dd"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> colorFilterUseCase.sepia()}"
                 />
@@ -81,7 +81,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_monochrome"
-                android:tint="@color/pre4_ripple"
+                app:tint="@color/pre4_ripple"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> colorFilterUseCase.grayScale()}"
                 />
