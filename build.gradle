@@ -45,7 +45,7 @@ buildscript {
             constraintlayout: '2.0.2',
             lifecycle: '2.2.0',
             room: '2.3.0-alpha02',
-            paging: '3.0.0-alpha03',
+            paging: '3.0.0-alpha07',
             material: '1.2.0',
             fragment: '1.2.4',
             timber: '4.6.0',
