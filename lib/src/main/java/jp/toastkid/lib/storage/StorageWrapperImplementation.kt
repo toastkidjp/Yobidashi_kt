@@ -59,7 +59,7 @@ sealed class StorageWrapperImplementation(context: Context, dirName: String) : S
     /**
      * Delete all files.
      */
-    override fun clean() = dir.listFiles().forEach { it.delete() }
+    override fun clean() = dir.listFiles()?.forEach { it.delete() } ?: Unit
 
     /**
      * Assign new file.
