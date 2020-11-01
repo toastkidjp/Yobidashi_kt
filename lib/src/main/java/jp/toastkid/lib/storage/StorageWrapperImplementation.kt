@@ -87,7 +87,7 @@ sealed class StorageWrapperImplementation(context: Context, dirName: String) : S
      * Internal method.
      * @return
      */
-    override fun listFiles(): Array<File> = dir.listFiles()
+    override fun listFiles(): Array<File> = dir.listFiles() ?: emptyArray()
 
     /**
      * Get file count.
