@@ -184,7 +184,7 @@
     <string name="title_camera">カメラ</string>
     <string name="title_code_reader">コードリーダ</string>
     <string name="title_share_by_code">コードでシェア</string>
-    <string name="title_user_agent">ユーザエージェント</string>
+    <string name="title_user_agent">ユーザーエージェント</string>
     <string name="format_result_user_agent">%s に設定しました。</string>
     <string name="title_screenshot">スクリーンショット</string>
     <string name="title_screenshots">スクリーンショット一覧</string>
