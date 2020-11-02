@@ -371,9 +371,7 @@ class BrowserModule(
             browserHeaderViewModel?.nextTitle(it.title)
             browserHeaderViewModel?.nextUrl(it.url)
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-                it.startAnimation(slideUpFromBottom)
-            }
+            webViewContainer?.startAnimation(slideUpFromBottom)
 
             val activity = webViewContainer?.context
             if (activity is FragmentActivity
