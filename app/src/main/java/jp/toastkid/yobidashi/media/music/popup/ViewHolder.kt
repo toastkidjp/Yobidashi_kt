@@ -44,6 +44,7 @@ class ViewHolder(
     fun loadIcon(uri: Uri?, iconWidth: Int) {
         binding.icon.load(uri) {
             placeholder(placeholder)
+            error(placeholder)
             size(iconWidth)
         }
     }
