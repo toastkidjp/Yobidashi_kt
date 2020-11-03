@@ -20,7 +20,6 @@ class ViewHolder(private val binding: ItemTrendSimpleBinding) : RecyclerView.Vie
     fun bind(trend: Trend) {
         binding.searchSuggestText.text = trend.title
         binding.image.load(trend.image.toUri())
-        //binding.searchSuggestAdd.isVisible = false
     }
 
     fun setOnAdd(function: (String) -> Unit) {
