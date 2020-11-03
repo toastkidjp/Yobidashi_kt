@@ -215,7 +215,6 @@
             android:id="@+id/default_search_engine"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/filter_white_bb"
             app:layout_constraintTop_toBottomOf="@id/divider3"
             >
             <TextView
