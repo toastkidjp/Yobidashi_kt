@@ -7,240 +7,234 @@
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.EditorSettingFragment" />
     </data>
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="3dp"
+        android:layout_height="match_parent"
         >
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <TextView
+            android:id="@+id/background_color_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/settings_item_left_margin"
+            android:text="@string/settings_color_background_title"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <com.larswerkman.holocolorpicker.ColorPicker
+            android:id="@+id/background_palette"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/background_color_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/font_palette"
+            />
+
+        <com.larswerkman.holocolorpicker.SVBar
+            android:id="@+id/background_svbar"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/background_palette"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/font_svbar"
+            />
+
+        <com.larswerkman.holocolorpicker.OpacityBar
+            android:id="@+id/background_opacitybar"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/background_svbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/font_opacitybar"
+            />
+
+        <Button
+            android:id="@+id/ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/settings_item_left_margin"
+            android:layout_marginRight="@dimen/settings_item_left_margin"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/settings_color_commit"
+            android:textSize="14sp"
+            style="?android:attr/buttonBarStyle"
+            app:layout_constraintTop_toBottomOf="@id/background_opacitybar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/prev"
+            />
+
+        <TextView
+            android:id="@+id/font_palette_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/settings_item_left_margin"
+            android:text="@string/settings_color_font_title"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/font_opacitybar"
+            />
+        <com.larswerkman.holocolorpicker.ColorPicker
+            android:id="@+id/font_palette"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/font_palette_title"
+            app:layout_constraintStart_toEndOf="@id/background_palette"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <com.larswerkman.holocolorpicker.SVBar
+            android:id="@+id/font_svbar"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/font_palette"
+            app:layout_constraintStart_toEndOf="@id/background_svbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <com.larswerkman.holocolorpicker.OpacityBar
+            android:id="@+id/font_opacitybar"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/font_svbar"
+            app:layout_constraintStart_toEndOf="@id/background_opacitybar"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <Button
+            android:id="@+id/prev"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/settings_item_left_margin"
+            android:layout_marginRight="@dimen/settings_item_left_margin"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/settings_color_reset"
+            android:textSize="14sp"
+            style="?android:attr/buttonBarStyle"
+            app:layout_constraintTop_toBottomOf="@id/font_opacitybar"
+            app:layout_constraintStart_toEndOf="@id/ok"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <View
+            android:id="@+id/divider1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_500_dd"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/ok"
+            app:layout_constraintBottom_toTopOf="@id/cursor"
+            />
+
+        <FrameLayout
+            android:id="@+id/cursor"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/ripple_transparent"
+            android:onClick="@{v -> fragment.showCursorColorSetting()}"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
             >
-
             <TextView
-                android:id="@+id/background_color_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                android:text="@string/settings_color_background_title"
-                android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/OneLineTextMenu"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/ic_cursor_black"
+                android:drawablePadding="4dp"
+                android:text="@string/title_cursor_color"
                 />
-
-            <com.larswerkman.holocolorpicker.ColorPicker
-                android:id="@+id/background_palette"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/background_color_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/font_palette"
-                />
-
-            <com.larswerkman.holocolorpicker.SVBar
-                android:id="@+id/background_svbar"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                app:layout_constraintTop_toBottomOf="@id/background_palette"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/font_svbar"
-                />
-
-            <com.larswerkman.holocolorpicker.OpacityBar
-                android:id="@+id/background_opacitybar"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                app:layout_constraintTop_toBottomOf="@id/background_svbar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/font_opacitybar"
-                />
-
             <Button
-                android:id="@+id/ok"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                android:layout_marginRight="@dimen/settings_item_left_margin"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/settings_color_commit"
-                android:textSize="14sp"
+                android:id="@+id/cursor_preview"
+                android:layout_width="@dimen/search_category_spinner_width"
+                android:layout_height="@dimen/search_category_spinner_width"
+                android:layout_marginStart="@dimen/settings_item_left_margin"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="right|center_vertical"
                 style="?android:attr/buttonBarStyle"
-                app:layout_constraintTop_toBottomOf="@id/background_opacitybar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/prev"
+                android:clickable="false"
                 />
+        </FrameLayout>
 
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_500_dd"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/cursor"
+            app:layout_constraintBottom_toTopOf="@id/highlight"
+            />
+
+        <FrameLayout
+            android:id="@+id/highlight"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/ripple_transparent"
+            android:onClick="@{v -> fragment.showHighlightColorSetting()}"
+            app:layout_constraintTop_toBottomOf="@id/divider2"
+            >
             <TextView
-                android:id="@+id/font_palette_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                android:text="@string/settings_color_font_title"
-                android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="@id/font_opacitybar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/OneLineTextMenu"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/ic_highlight_black"
+                android:drawablePadding="4dp"
+                android:text="@string/title_highlight_color"
                 />
-            <com.larswerkman.holocolorpicker.ColorPicker
-                android:id="@+id/font_palette"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/font_palette_title"
-                app:layout_constraintStart_toEndOf="@id/background_palette"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
-            <com.larswerkman.holocolorpicker.SVBar
-                android:id="@+id/font_svbar"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                app:layout_constraintTop_toBottomOf="@id/font_palette"
-                app:layout_constraintStart_toEndOf="@id/background_svbar"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
-            <com.larswerkman.holocolorpicker.OpacityBar
-                android:id="@+id/font_opacitybar"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                app:layout_constraintTop_toBottomOf="@id/font_svbar"
-                app:layout_constraintStart_toEndOf="@id/background_opacitybar"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-
             <Button
-                android:id="@+id/prev"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/settings_item_left_margin"
-                android:layout_marginRight="@dimen/settings_item_left_margin"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/settings_color_reset"
-                android:textSize="14sp"
+                android:id="@+id/highlight_preview"
+                android:layout_width="@dimen/search_category_spinner_width"
+                android:layout_height="@dimen/search_category_spinner_width"
+                android:layout_marginStart="@dimen/settings_item_left_margin"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="right|center_vertical"
                 style="?android:attr/buttonBarStyle"
-                app:layout_constraintTop_toBottomOf="@id/font_opacitybar"
-                app:layout_constraintStart_toEndOf="@id/ok"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:clickable="false"
                 />
+        </FrameLayout>
 
-            <View
-                android:id="@+id/divider1"
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_500_dd"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toBottomOf="@id/highlight"
+            app:layout_constraintBottom_toTopOf="@id/default_search_engine"
+            />
+
+        <FrameLayout
+            android:id="@+id/default_search_engine"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/filter_white_bb"
+            app:layout_constraintTop_toBottomOf="@id/divider3"
+            >
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_500_dd"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/ok"
-                app:layout_constraintBottom_toTopOf="@id/cursor"
+                android:layout_height="match_parent"
+                style="@style/OneLineTextMenu"
+                android:gravity="center_vertical"
+                android:drawableLeft="@drawable/ic_search_black"
+                android:drawablePadding="4dp"
+                android:text="@string/title_font_size"
                 />
-
-            <FrameLayout
-                android:id="@+id/cursor"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{v -> fragment.showCursorColorSetting()}"
-                app:layout_constraintTop_toBottomOf="@id/divider1"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/OneLineTextMenu"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_cursor_black"
-                    android:drawablePadding="4dp"
-                    android:text="@string/title_cursor_color"
-                    />
-                <Button
-                    android:id="@+id/cursor_preview"
-                    android:layout_width="@dimen/search_category_spinner_width"
-                    android:layout_height="@dimen/search_category_spinner_width"
-                    android:layout_marginStart="@dimen/settings_item_left_margin"
-                    android:layout_marginEnd="8dp"
-                    android:layout_gravity="right|center_vertical"
-                    style="?android:attr/buttonBarStyle"
-                    android:clickable="false"
-                    />
-            </FrameLayout>
-
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_500_dd"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/cursor"
-                app:layout_constraintBottom_toTopOf="@id/highlight"
+            <Spinner
+                android:id="@+id/font_size"
+                android:layout_width="@dimen/search_category_spinner_width"
+                android:layout_height="@dimen/search_category_spinner_width"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="8dp"
+                android:spinnerMode="dropdown"
+                android:background="@color/spinner_background"
                 />
-
-            <FrameLayout
-                android:id="@+id/highlight"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{v -> fragment.showHighlightColorSetting()}"
-                app:layout_constraintTop_toBottomOf="@id/divider2"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/OneLineTextMenu"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_highlight_black"
-                    android:drawablePadding="4dp"
-                    android:text="@string/title_highlight_color"
-                    />
-                <Button
-                    android:id="@+id/highlight_preview"
-                    android:layout_width="@dimen/search_category_spinner_width"
-                    android:layout_height="@dimen/search_category_spinner_width"
-                    android:layout_marginStart="@dimen/settings_item_left_margin"
-                    android:layout_marginEnd="8dp"
-                    android:layout_gravity="right|center_vertical"
-                    style="?android:attr/buttonBarStyle"
-                    android:clickable="false"
-                    />
-            </FrameLayout>
-
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gray_500_dd"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@id/highlight"
-                app:layout_constraintBottom_toTopOf="@id/default_search_engine"
-                />
-
-            <FrameLayout
-                android:id="@+id/default_search_engine"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@color/filter_white_bb"
-                app:layout_constraintTop_toBottomOf="@id/divider3"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    style="@style/OneLineTextMenu"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@drawable/ic_search_black"
-                    android:drawablePadding="4dp"
-                    android:text="@string/title_font_size"
-                    />
-                <Spinner
-                    android:id="@+id/font_size"
-                    android:layout_width="@dimen/search_category_spinner_width"
-                    android:layout_height="@dimen/search_category_spinner_width"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="8dp"
-                    android:spinnerMode="dropdown"
-                    android:background="@color/spinner_background"
-                    />
-            </FrameLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
