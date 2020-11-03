@@ -11,12 +11,12 @@
         android:id="@+id/others"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/SettingCardStyle"
         >
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/filter_white"
             >
 
             <FrameLayout
