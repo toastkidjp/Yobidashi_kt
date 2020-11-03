@@ -29,6 +29,7 @@ class DefaultColorInsertion {
             R.color.red_200_dd to R.color.black,
             R.color.yellow_200_dd to R.color.black,
             R.color.black to R.color.textPrimary,
+            R.color.black to R.color.deep_yellow,
             R.color.indigo_200_dd to R.color.black,
             R.color.white to R.color.black,
             R.color.pinky to R.color.white,

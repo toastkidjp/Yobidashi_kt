@@ -38,7 +38,6 @@ import jp.toastkid.lib.view.DraggableTouchListener
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentBarcodeReaderBinding
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.search.SearchAction
@@ -108,12 +107,16 @@ class BarcodeReaderFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
         viewModel?.also {
             val viewLifecycleOwner = viewLifecycleOwner
-            it.clip.observe(viewLifecycleOwner, Observer { text -> clip(text) })
-            it.share.observe(viewLifecycleOwner, Observer { text ->
-                startActivity(IntentFactory.makeShare(text))
-                activity?.supportFragmentManager?.popBackStack()
+            it.clip.observe(viewLifecycleOwner, Observer { event ->
+                val text = event?.getContentIfNotHandled() ?: return@Observer
+                clip(text)
             })
-            it.open.observe(viewLifecycleOwner, Observer { text ->
+            it.share.observe(viewLifecycleOwner, Observer { event ->
+                val text = event?.getContentIfNotHandled() ?: return@Observer
+                startActivity(IntentFactory.makeShare(text))
+            })
+            it.open.observe(viewLifecycleOwner, Observer { event ->
+                val text = event?.getContentIfNotHandled() ?: return@Observer
                 SearchAction(
                         requireActivity,
                         preferenceApplier.getDefaultSearchEngine()
@@ -218,7 +221,6 @@ class BarcodeReaderFragment : Fragment() {
     private fun clip(text: String) {
         binding?.root?.let { snackbarParent ->
             Clipboard.clip(snackbarParent.context, text)
-            Toaster.snackShort(snackbarParent, text, preferenceApplier.colorPair())
         }
     }
 

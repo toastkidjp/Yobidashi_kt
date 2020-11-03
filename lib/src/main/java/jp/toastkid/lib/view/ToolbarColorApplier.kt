@@ -26,8 +26,8 @@ class ToolbarColorApplier {
             it.setTitleTextColor(fontColor)
             it.setSubtitleTextColor(fontColor)
 
-            it.navigationIcon?.let { DrawableCompat.setTint(it, fontColor) }
-            it.overflowIcon?.let { DrawableCompat.setTint(it, fontColor) }
+            it.navigationIcon?.let { icon -> DrawableCompat.setTint(icon, fontColor) }
+            it.overflowIcon?.let { icon -> DrawableCompat.setTint(icon, fontColor) }
         }
 
         if (toolbar is BottomAppBar) {

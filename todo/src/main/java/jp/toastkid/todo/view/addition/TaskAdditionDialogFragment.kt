@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -39,11 +40,15 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
     private var date: Triple<Int, Int, Int>? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_task_addition, container, false)
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.dialog = this
 
-        task = arguments?.getSerializable("task") as? TodoTask
+        task = arguments?.getSerializable(KEY_EXTRA) as? TodoTask
         val today = Calendar.getInstance()
         task?.let {
             today.timeInMillis = it.dueDate
@@ -106,11 +111,14 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
 
-        fun make(task: TodoTask? = null): DialogFragment {
-            return TaskAdditionDialogFragment().also {
-                if (task != null) {
-                    it.arguments = bundleOf("task" to task)
-                }
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.dialog_task_addition
+
+        private const val KEY_EXTRA = "task"
+
+        fun make(task: TodoTask? = null): DialogFragment = TaskAdditionDialogFragment().also {
+            if (task != null) {
+                it.arguments = bundleOf(KEY_EXTRA to task)
             }
         }
     }

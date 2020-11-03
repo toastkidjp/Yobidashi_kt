@@ -24,9 +24,9 @@ import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.AppBarTaskListBinding
 import jp.toastkid.todo.databinding.FragmentTaskListBinding
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
-import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
+import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -70,14 +70,14 @@ class TaskListFragment : Fragment() {
         val refresh = { adapter.refresh() }
 
         val taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(this, {
+                TaskAdditionDialogFragmentUseCase(this) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             repository.insert(it)
                         }
                         refresh()
                     }
-                })
+                }
 
         popup = ItemMenuPopup(
                 view.context,

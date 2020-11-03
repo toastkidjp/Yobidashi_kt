@@ -18,9 +18,11 @@ import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.PopupBarcodeResultBinding
-import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.yobidashi.libs.Toaster
 
 /**
  * Popup for showing barcode reader's result.
@@ -95,6 +97,11 @@ class BarcodeReaderResultPopup(context: Context) {
      */
     fun clip() {
         popupViewModel?.clipText(currentText())
+        Toaster.snackShort(
+                binding.clip,
+                binding.root.context.getString(R.string.message_clip_to, currentText()),
+                PreferenceApplier(binding.root.context).colorPair()
+        )
     }
 
     /**
@@ -129,8 +136,7 @@ class BarcodeReaderResultPopup(context: Context) {
             popupWindow.dismiss()
         }
 
-        @Suppress("UsePropertyAccessSyntax")
-        binding.result.setText(text)
+        binding.result.text = text
         binding.root.startAnimation(slideUpBottom)
         popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, 0)
     }

@@ -17,20 +17,27 @@ import jp.toastkid.yobidashi.search.SearchFragment
  */
 class InitialIndexSettingUseCase {
 
+    /**
+     * Put from class to passed bundle.
+     *
+     * @param arguments bundle
+     * @param javaClass from Fragment class
+     */
     fun put(arguments: Bundle?, javaClass: Class<Fragment>?) {
         arguments?.putInt(
                 KEY_EXTRA_INITIAL_INDEX,
-                when (javaClass) {
-                    SearchFragment::class.java -> 2
-                    EditorFragment::class.java -> 4
-                    else -> 0
-                }
+                findIndex(javaClass)
         )
     }
 
-    fun extract(arguments: Bundle?): Int {
-        return arguments?.getInt(KEY_EXTRA_INITIAL_INDEX) ?: 0
-    }
+    private fun findIndex(javaClass: Class<Fragment>?): Int =
+            when (javaClass) {
+                SearchFragment::class.java -> 2
+                EditorFragment::class.java -> 4
+                else -> 0
+            }
+
+    fun extract(arguments: Bundle?): Int = arguments?.getInt(KEY_EXTRA_INITIAL_INDEX) ?: 0
 
     companion object {
 

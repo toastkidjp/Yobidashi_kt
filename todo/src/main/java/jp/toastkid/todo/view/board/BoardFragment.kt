@@ -76,7 +76,7 @@ class BoardFragment : Fragment() {
                 view.context,
                 ItemMenuPopupActionUseCase(
                         { taskAdditionDialogFragmentUseCase.invoke(it) },
-                        { removeTask(it) }
+                        ::removeTask
                 )
         )
 
@@ -90,22 +90,13 @@ class BoardFragment : Fragment() {
         addTask(makeSampleTask(), popup)
     }
 
-    private fun makeSampleTask(): TodoTask {
-        val sampleTask = TodoTask(0)
-        sampleTask.dueDate = System.currentTimeMillis()
-        sampleTask.lastModified = System.currentTimeMillis()
-        sampleTask.created = System.currentTimeMillis()
-        sampleTask.description = "Sample task"
-        sampleTask.x = 200f
-        sampleTask.y = 200f
-        return sampleTask
-    }
+    private fun makeSampleTask() = SampleTaskMaker().invoke()
 
-    private fun removeTask(it: TodoTask) {
-        tasks.remove(it)
-        binding.board.children.firstOrNull { v -> v.tag == it.id }?.also { v ->
-            binding.board.removeView(v)
-        }
+    private fun removeTask(task: TodoTask) {
+        tasks.remove(task)
+        binding.board.children
+                .firstOrNull { it.tag == task.id }
+                ?.also { binding.board.removeView(it) }
     }
 
     private fun addTask(it: TodoTask, popup: ItemMenuPopup?) {

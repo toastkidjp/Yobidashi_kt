@@ -26,16 +26,15 @@ class InitialTaskPreparation(private val repository: TodoTaskDataAccessor) {
      */
     @WorkerThread
     operator fun invoke() {
+        insertTask("Tasks will be added here.", Color.RED)
+        insertTask("Please would you add by press below 'Add' button.", Color.BLUE)
+    }
+
+    private fun insertTask(description: String, color: Int) {
         repository.insert(
                 TodoTask(0).also {
-                    it.color = Color.RED
-                    it.description = "Tasks will be added here."
-                }
-        )
-        repository.insert(
-                TodoTask(0).also {
-                    it.color = Color.BLUE
-                    it.description = "Please would you add by press below 'Add' button."
+                    it.color = color
+                    it.description = description
                 }
         )
     }

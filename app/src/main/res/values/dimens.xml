@@ -38,4 +38,6 @@
 
     <dimen name="image_viewer_item_horizontal_margin">8dp</dimen>
 
+    <dimen name="barcode_result_popup_clip_font_size">24sp</dimen>
+
 </resources>
