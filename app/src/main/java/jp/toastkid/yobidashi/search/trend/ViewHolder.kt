@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.search.trend
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemTrendSimpleBinding
 
 /**
@@ -19,7 +20,10 @@ class ViewHolder(private val binding: ItemTrendSimpleBinding) : RecyclerView.Vie
 
     fun bind(trend: Trend) {
         binding.searchSuggestText.text = trend.title
-        binding.image.load(trend.image.toUri())
+        binding.image.load(trend.image.toUri()) {
+            placeholder(R.drawable.ic_trend_black)
+            error(R.drawable.ic_trend_black)
+        }
     }
 
     fun setOnAdd(function: (String) -> Unit) {
