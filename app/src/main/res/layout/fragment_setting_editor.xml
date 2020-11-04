@@ -144,7 +144,7 @@
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"
                 android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_cursor_black"
+                android:drawableStart="@drawable/ic_cursor_black"
                 android:drawablePadding="4dp"
                 android:text="@string/title_cursor_color"
                 />
@@ -184,7 +184,7 @@
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"
                 android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_highlight_black"
+                android:drawableStart="@drawable/ic_highlight_black"
                 android:drawablePadding="4dp"
                 android:text="@string/title_highlight_color"
                 />
@@ -222,7 +222,7 @@
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"
                 android:gravity="center_vertical"
-                android:drawableLeft="@drawable/ic_search_black"
+                android:drawableStart="@drawable/ic_search_black"
                 android:drawablePadding="4dp"
                 android:text="@string/title_font_size"
                 />
