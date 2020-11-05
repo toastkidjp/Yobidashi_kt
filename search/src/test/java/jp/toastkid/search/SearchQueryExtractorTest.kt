@@ -185,6 +185,10 @@ class SearchQueryExtractorTest {
                 "test",
                 searchQueryExtractor("https://search.goo.ne.jp/web.jsp?MT=test")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.bbc.co.uk/search?q=test")
+        )
     }
 
     @Test
