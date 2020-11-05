@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
+import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
@@ -156,6 +157,7 @@ class TabAdapter(
                         super.shouldInterceptRequest(view, url)
                     }
         }
+        webView.webChromeClient = WebChromeClientFactory().invoke()
         webView.loadUrl(url)
         GlobalWebViewPool.put(newTab.id(), webView)
         setCount()
