@@ -10,263 +10,269 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <FrameLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/SettingCardStyle"
             >
-            <LinearLayout
-                android:orientation="vertical"
+            <FrameLayout
+                android:id="@+id/default_search_engine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/SettingCardStyle"
+                android:onClick="@{view -> fragment.openSearchCategory()}"
                 >
-                <FrameLayout
-                    android:id="@+id/default_search_engine"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{view -> fragment.openSearchCategory()}"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/OneLineTextMenu"
-                        android:drawableLeft="@drawable/ic_search_black"
-                        android:text="@string/title_default_search_engine"
-                        />
-                    <Spinner
-                        android:id="@+id/search_categories"
-                        android:layout_width="@dimen/search_category_spinner_width"
-                        android:layout_height="@dimen/search_category_spinner_width"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:spinnerMode="dropdown"
-                        android:background="@color/spinner_background"
-                        />
-                </FrameLayout>
+                    android:drawablePadding="4dp"
+                    style="@style/OneLineTextMenu"
+                    android:drawableLeft="@drawable/ic_search_black"
+                    android:text="@string/title_default_search_engine"
+                    />
+                <Spinner
+                    android:id="@+id/search_categories"
+                    android:layout_width="@dimen/search_category_spinner_width"
+                    android:layout_height="@dimen/search_category_spinner_width"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="16dp"
+                    android:spinnerMode="dropdown"
+                    android:background="@color/spinner_background"
+                    />
+            </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider"/>
 
-                <FrameLayout
-                    android:id="@+id/enable_search_query_extract"
+            <FrameLayout
+                android:id="@+id/enable_search_query_extract"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchSearchQueryExtract()}"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> fragment.switchSearchQueryExtract()}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/title_use_search_query_extractor"
-                        />
-                    <CheckBox
-                        android:id="@+id/enable_search_query_extract_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:drawableLeft="@drawable/ic_extract"
+                    android:gravity="center_vertical"
+                    android:text="@string/title_use_search_query_extractor"
+                    />
+                <CheckBox
+                    android:id="@+id/enable_search_query_extract_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider"/>
 
-                <FrameLayout
-                    android:id="@+id/enable_search_with_clip"
+            <FrameLayout
+                android:id="@+id/enable_search_with_clip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{fragment::switchSearchWithClip}"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{fragment::switchSearchWithClip}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_clipboard_black"
-                        android:text="@string/title_enable_search_with_clip"
-                        />
-                    <CheckBox
-                        android:id="@+id/enable_search_with_clip_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_clipboard_black"
+                    android:text="@string/title_enable_search_with_clip"
+                    />
+                <CheckBox
+                    android:id="@+id/enable_search_with_clip_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider"/>
 
-                <FrameLayout
-                    android:id="@+id/use_suggestion"
+            <FrameLayout
+                android:id="@+id/use_suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchUseSuggestion()}"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> fragment.switchUseSuggestion()}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_open_in_browser_black"
-                        android:text="@string/title_enable_suggestion"
-                        />
-                    <CheckBox
-                        android:id="@+id/use_suggestion_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_open_in_browser_black"
+                    android:text="@string/title_enable_suggestion"
+                    />
+                <CheckBox
+                    android:id="@+id/use_suggestion_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-                <FrameLayout
-                    android:id="@+id/use_history"
+            <include layout="@layout/view_setting_divider"/>
+
+            <FrameLayout
+                android:id="@+id/use_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchUseSearchHistory()}"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> fragment.switchUseSearchHistory()}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_history_black"
-                        android:text="@string/title_use_search_history"
-                        />
-                    <CheckBox
-                        android:id="@+id/use_history_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_history_black"
+                    android:text="@string/title_use_search_history"
+                    />
+                <CheckBox
+                    android:id="@+id/use_history_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-                <FrameLayout
-                    android:id="@+id/use_favorite"
+            <include layout="@layout/view_setting_divider"/>
+
+            <FrameLayout
+                android:id="@+id/use_favorite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchUseFavoriteSearch()}"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> fragment.switchUseFavoriteSearch()}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_favorite"
-                        android:text="@string/title_use_favorite_search"
-                        />
-                    <CheckBox
-                        android:id="@+id/use_favorite_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_favorite"
+                    android:text="@string/title_use_favorite_search"
+                    />
+                <CheckBox
+                    android:id="@+id/use_favorite_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-                <FrameLayout
-                    android:id="@+id/use_view_history"
+            <include layout="@layout/view_setting_divider"/>
+
+            <FrameLayout
+                android:id="@+id/use_view_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchUseViewHistory()}"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> fragment.switchUseViewHistory()}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_web_black"
-                        android:text="@string/use_view_history"
-                        />
-                    <CheckBox
-                        android:id="@+id/use_view_history_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_web_black"
+                    android:text="@string/use_view_history"
+                    />
+                <CheckBox
+                    android:id="@+id/use_view_history_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-                <FrameLayout
-                    android:id="@+id/use_url_module"
+            <include layout="@layout/view_setting_divider"/>
+
+            <FrameLayout
+                android:id="@+id/use_url_module"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchUseUrlModule()}"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> fragment.switchUseUrlModule()}"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_web_black"
-                        android:text="@string/title_url_module"
-                        />
-                    <CheckBox
-                        android:id="@+id/use_url_module_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_web_black"
+                    android:text="@string/title_url_module"
+                    />
+                <CheckBox
+                    android:id="@+id/use_url_module_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-                <FrameLayout
-                    android:id="@+id/use_app_search"
+            <include layout="@layout/view_setting_divider"/>
+
+            <FrameLayout
+                android:id="@+id/use_app_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> fragment.switchUseAppSearch() }"
+                >
+                <TextView
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_transparent"
-                    android:onClick="@{view -> fragment.switchUseAppSearch() }"
-                    >
-                    <TextView
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_android_app"
-                        android:text="@string/use_app_search"
-                        />
-                    <CheckBox
-                        android:id="@+id/use_app_search_check"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_gravity="end"
-                        android:clickable="false"
-                        style="@style/Border"
-                        />
-                </FrameLayout>
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableLeft="@drawable/ic_android_app"
+                    android:text="@string/use_app_search"
+                    />
+                <CheckBox
+                    android:id="@+id/use_app_search_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:clickable="false"
+                    style="@style/Border"
+                    />
+            </FrameLayout>
 
-            </LinearLayout>
-        </FrameLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

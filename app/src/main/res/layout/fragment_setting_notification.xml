@@ -10,7 +10,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/notifications_module"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         style="@style/SettingCardStyle"
         >
         <LinearLayout
@@ -51,15 +51,13 @@
                     android:id="@+id/use_notification_widget_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_marginEnd="@dimen/common_horizontal_margin"
                     android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />
             </FrameLayout>
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider"/>
 
             <FrameLayout
                 android:id="@+id/use_daily_notification"
@@ -93,9 +91,7 @@
                     android:id="@+id/use_daily_notification_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/common_horizontal_margin"
-                    android:layout_marginEnd="@dimen/common_horizontal_margin"
-                    android:layout_gravity="end"
+                     android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />
