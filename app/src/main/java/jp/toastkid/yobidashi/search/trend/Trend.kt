@@ -12,5 +12,6 @@ package jp.toastkid.yobidashi.search.trend
  */
 data class Trend(
         val title: String,
+        val link: String,
         val image: String
 )
