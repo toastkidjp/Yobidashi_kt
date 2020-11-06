@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.search.trend
 
 import org.jsoup.Jsoup
+import org.jsoup.parser.Parser
 
 /**
  * @author toastkidjp
@@ -15,11 +16,12 @@ import org.jsoup.Jsoup
 class TrendParser {
 
     operator fun invoke(content: String): List<Trend> =
-            Jsoup.parse(content)
+            Jsoup.parse(content, "", Parser.xmlParser())
                     .select("channel > item")
                     .map {
                         Trend(
                                 it.getElementsByTag("title").text(),
+                                it.getElementsByTag("link").text(),
                                 it.getElementsByTag("ht:picture").text()
                         )
                     }
