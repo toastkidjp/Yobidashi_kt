@@ -44,7 +44,7 @@ class WebViewClientFactory {
             adRemover: AdRemover,
             faviconApplier: FaviconApplier,
             preferenceApplier: PreferenceApplier,
-            onPageStartedCallback: (WebView, String?) -> Unit = { _, _, -> },
+            onPageStartedCallback: (WebView, String) -> Unit = { _, _, -> },
             onPageFinishedCallback: (WebView, String?) -> Unit = { _, _, -> },
             onReceiveErrorCallback: (WebView, WebResourceRequest, WebResourceError) -> Unit = { _, _, _, -> }
     ): WebViewClient = object : WebViewClient() {
