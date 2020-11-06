@@ -1,10 +1,8 @@
 package jp.toastkid.yobidashi.browser
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Message
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -14,12 +12,10 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
-import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -39,8 +35,8 @@ import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
 import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
+import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
-import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
@@ -150,56 +146,12 @@ class BrowserModule(
             }
     )
 
-    private fun makeWebChromeClient(): WebChromeClient = object : WebChromeClient() {
-
-        private val bitmapCompressor = BitmapCompressor()
-
-        override fun onProgressChanged(view: WebView, newProgress: Int) {
-            super.onProgressChanged(view, newProgress)
-
-            browserHeaderViewModel?.updateProgress(newProgress)
-            browserHeaderViewModel?.stopProgress(newProgress < 65)
-        }
-
-        override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
-            super.onReceivedIcon(view, favicon)
-            val urlStr = view?.url
-            if (urlStr != null && favicon != null) {
-                bitmapCompressor(favicon, faviconApplier.assignFile(urlStr))
-            }
-        }
-
-        override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-            super.onShowCustomView(view, callback)
-            customViewSwitcher?.onShowCustomView(view, callback)
-        }
-
-        override fun onHideCustomView() {
-            super.onHideCustomView()
-            customViewSwitcher?.onHideCustomView()
-        }
-
-        override fun onCreateWindow(
-                view: WebView?,
-                isDialog: Boolean,
-                isUserGesture: Boolean,
-                resultMsg: Message?
-        ): Boolean {
-            val href = view?.handler?.obtainMessage()
-            view?.requestFocusNodeHref(href)
-            val url = href?.data?.getString("url")?.toUri()
-                    ?: return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
-            view.stopLoading()
-
-            (context as? FragmentActivity)?.also { fragmentActivity ->
-                ViewModelProvider(fragmentActivity)
-                        .get(BrowserViewModel::class.java)
-                        .open(url)
-            }
-
-            return true
-        }
-    }
+    private fun makeWebChromeClient(): WebChromeClient =
+            WebChromeClientFactory().invoke(
+                    browserHeaderViewModel,
+                    faviconApplier,
+                    customViewSwitcher
+            )
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
         lastId = tabId
