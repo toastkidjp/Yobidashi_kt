@@ -229,6 +229,10 @@ class TabAdapter(
      */
     internal fun getTabByIndex(index: Int): Tab? = tabList.get(index)
 
+    internal fun addTo(tab: Tab, index: Int) {
+        tabList.addTo(tab, index)
+    }
+
     /**
      * Close specified index' tab.
      * @param index
