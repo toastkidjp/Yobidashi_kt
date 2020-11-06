@@ -200,9 +200,6 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         appBarBinding.input.setOnEditorActionListener { textView, _, _ ->
             val keyword = textView.text.toString()
-            if (keyword.isBlank()) {
-                return@setOnEditorActionListener true
-            }
             activityViewModel.search(keyword)
             true
         }
