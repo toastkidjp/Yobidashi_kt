@@ -4,4 +4,5 @@
     <color name="white">#FF000000</color>
     <color name="transparent">#00000000</color>
     <color name="item_background">#AA000000</color>
+    <color name="popup_background">#FF0F0F0F</color>
 </resources>
