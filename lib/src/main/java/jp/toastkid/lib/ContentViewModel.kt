@@ -19,20 +19,20 @@ import jp.toastkid.lib.lifecycle.Event
  */
 class ContentViewModel : ViewModel() {
 
-    private val _fragmentClass = MutableLiveData<Class<out Fragment>>()
+    private val _fragmentClass = MutableLiveData<Event<Class<out Fragment>>>()
 
-    val fragmentClass: LiveData<Class<out Fragment>> = _fragmentClass
+    val fragmentClass: LiveData<Event<Class<out Fragment>>> = _fragmentClass
 
     fun nextFragment(fragmentClass: Class<out Fragment>) {
-        _fragmentClass.postValue(fragmentClass)
+        _fragmentClass.postValue(Event(fragmentClass))
     }
 
-    private val _fragment = MutableLiveData<Fragment>()
+    private val _fragment = MutableLiveData<Event<Fragment>>()
 
-    val fragment: LiveData<Fragment> = _fragment
+    val fragment: LiveData<Event<Fragment>> = _fragment
 
     fun nextFragment(fragment: Fragment) {
-        _fragment.postValue(fragment)
+        _fragment.postValue(Event(fragment))
     }
 
     private val _snackbar = MutableLiveData<Event<SnackbarEvent>>()
@@ -43,12 +43,12 @@ class ContentViewModel : ViewModel() {
         _snackbar.postValue(Event(SnackbarEvent(message)))
     }
 
-    private val _snackbarRes = MutableLiveData<Int>()
+    private val _snackbarRes = MutableLiveData<Event<Int>>()
 
-    val snackbarRes: LiveData<Int> = _snackbarRes
+    val snackbarRes: LiveData<Event<Int>> = _snackbarRes
 
     fun snackShort(@StringRes messageId: Int) {
-        _snackbarRes.postValue(messageId)
+        _snackbarRes.postValue(Event(messageId))
     }
 
     fun snackWithAction(message: String, actionLabel: String, action: () -> Unit) {
@@ -111,12 +111,12 @@ class ContentViewModel : ViewModel() {
         _switchPageSearcher.postValue(Unit)
     }
 
-    private val _switchTabList = MutableLiveData<Unit>()
+    private val _switchTabList = MutableLiveData<Event<Unit>>()
 
-    val switchTabList: LiveData<Unit> = _switchTabList
+    val switchTabList: LiveData<Event<Unit>> = _switchTabList
 
     fun switchTabList() {
-        _switchTabList.postValue(Unit)
+        _switchTabList.postValue(Event(Unit))
     }
 
     private val _refresh = MutableLiveData<Unit>()

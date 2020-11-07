@@ -11,42 +11,43 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * @author toastkidjp
  */
 class BrowserViewModel : ViewModel() {
 
-    private val _preview =  MutableLiveData<Uri>()
+    private val _preview =  MutableLiveData<Event<Uri>>()
 
-    val preview: LiveData<Uri> = _preview
+    val preview: LiveData<Event<Uri>> = _preview
 
     fun preview(uri: Uri) {
-        _preview.postValue(uri)
+        _preview.postValue(Event(uri))
     }
 
-    private val _open = MutableLiveData<Uri>()
+    private val _open = MutableLiveData<Event<Uri>>()
 
-    val open: LiveData<Uri> = _open
+    val open: LiveData<Event<Uri>> = _open
 
     fun open(uri: Uri) {
-        _open.postValue(uri)
+        _open.postValue(Event(uri))
     }
 
-    private val _openBackground = MutableLiveData<Uri>()
+    private val _openBackground = MutableLiveData<Event<Uri>>()
 
-    val openBackground: LiveData<Uri> = _openBackground
+    val openBackground: LiveData<Event<Uri>> = _openBackground
 
     fun openBackground(uri: Uri) {
-        _openBackground.postValue(uri)
+        _openBackground.postValue(Event(uri))
     }
 
     // TODO: Use appropriate data class.
-    private val _openBackgroundWithTitle = MutableLiveData<Pair<String, Uri>>()
+    private val _openBackgroundWithTitle = MutableLiveData<Event<Pair<String, Uri>>>()
 
-    val openBackgroundWithTitle: LiveData<Pair<String, Uri>> = _openBackgroundWithTitle
+    val openBackgroundWithTitle: LiveData<Event<Pair<String, Uri>>> = _openBackgroundWithTitle
 
     fun openBackground(title: String, uri: Uri) {
-        _openBackgroundWithTitle.postValue(title to uri)
+        _openBackgroundWithTitle.postValue(Event(title to uri))
     }
 }

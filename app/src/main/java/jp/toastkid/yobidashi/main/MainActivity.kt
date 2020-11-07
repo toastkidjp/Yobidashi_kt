@@ -178,27 +178,33 @@ class MainActivity : AppCompatActivity(),
         val activityViewModelProvider = ViewModelProvider(this)
         browserViewModel = activityViewModelProvider.get(BrowserViewModel::class.java)
         browserViewModel?.preview?.observe(this, Observer {
+            val uri = it?.getContentIfNotHandled() ?: return@Observer
             Inputs.hideKeyboard(binding.content)
 
             if (floatingPreview == null) {
                 floatingPreview = FloatingPreview(this)
             }
-            floatingPreview?.show(binding.root, it.toString())
+            floatingPreview?.show(binding.root, uri.toString())
         })
-        browserViewModel?.open?.observe(this, Observer(::openNewWebTab))
+        browserViewModel?.open?.observe(this, Observer {
+            val uri = it?.getContentIfNotHandled() ?: return@Observer
+            openNewWebTab(uri)
+        })
         browserViewModel?.openBackground?.observe(this, Observer {
-            tabs.openBackgroundTab(it.toString(), it.toString())
+            val uri = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openBackgroundTab(uri.toString(), uri.toString())
             Toaster.snackShort(
                     binding.content,
-                    getString(R.string.message_tab_open_background, it.toString()),
+                    getString(R.string.message_tab_open_background, uri.toString()),
                     preferenceApplier.colorPair()
             )
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
-            tabs.openBackgroundTab(it.first, it.second.toString())
+            val pair = it?.getContentIfNotHandled() ?: return@Observer
+            tabs.openBackgroundTab(pair.first, pair.second.toString())
             Toaster.snackShort(
                     binding.content,
-                    getString(R.string.message_tab_open_background, it.first),
+                    getString(R.string.message_tab_open_background, pair.first),
                     preferenceApplier.colorPair()
             )
         })
@@ -318,10 +324,12 @@ class MainActivity : AppCompatActivity(),
     private fun initializeContentViewModel() {
         contentViewModel = ViewModelProvider(this).get(ContentViewModel::class.java)
         contentViewModel?.fragmentClass?.observe(this, Observer {
-            replaceFragment(obtainFragment(it), withAnimation = true, withSlideIn = true)
+            val fragmentClass = it?.getContentIfNotHandled() ?: return@Observer
+            replaceFragment(obtainFragment(fragmentClass), withAnimation = true, withSlideIn = true)
         })
         contentViewModel?.fragment?.observe(this, Observer {
-            replaceFragment(it, withAnimation = true, withSlideIn = false)
+            val fragment = it?.getContentIfNotHandled() ?: return@Observer
+            replaceFragment(fragment, withAnimation = true, withSlideIn = false)
         })
         contentViewModel?.snackbar?.observe(this, Observer {
             val snackbarEvent = it.getContentIfNotHandled() ?: return@Observer
@@ -343,7 +351,8 @@ class MainActivity : AppCompatActivity(),
             )
         })
         contentViewModel?.snackbarRes?.observe(this, Observer {
-            Toaster.snackShort(binding.content, it, preferenceApplier.colorPair())
+            val messageId = it?.getContentIfNotHandled() ?: return@Observer
+            Toaster.snackShort(binding.content, messageId, preferenceApplier.colorPair())
         })
         contentViewModel?.toTop?.observe(this, Observer {
             (findFragment() as? ContentScrollable)?.toTop()
@@ -376,6 +385,7 @@ class MainActivity : AppCompatActivity(),
             pageSearchPresenter.switch()
         })
         contentViewModel?.switchTabList?.observe(this, Observer {
+            it?.getContentIfNotHandled() ?: return@Observer
             switchTabList()
         })
         contentViewModel?.refresh?.observe(this, Observer {
