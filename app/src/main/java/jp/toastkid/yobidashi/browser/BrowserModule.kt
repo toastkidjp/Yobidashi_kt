@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
@@ -33,7 +31,7 @@ import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
+import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
@@ -89,7 +87,7 @@ class BrowserModule(
 
     private var contentViewModel: ContentViewModel? = null
 
-    private val webViewFactory: WebViewFactory
+    private val webViewFactory: WebViewFactoryUseCase
 
     private val darkThemeApplier = DarkModeApplier()
 
@@ -97,14 +95,8 @@ class BrowserModule(
 
     private val webViewStateUseCase = WebViewStateUseCase.make(context)
 
-    private val webViewClientFactory: WebViewClientFactory
-
-    private val webChromeClientFactory = WebChromeClientFactory()
-
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
-
-        webViewFactory = WebViewFactory()
 
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
 
@@ -115,49 +107,50 @@ class BrowserModule(
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
 
-        webViewClientFactory = WebViewClientFactory(
-                contentViewModel, adRemover, faviconApplier, preferenceApplier,
-                { webView, url ->
-                    browserHeaderViewModel?.updateProgress(0)
-                    browserHeaderViewModel?.nextUrl(url)
+        webViewFactory = WebViewFactoryUseCase(
+                webViewClientFactory = WebViewClientFactory(
+                        contentViewModel,
+                        adRemover,
+                        faviconApplier,
+                        preferenceApplier,
+                        { webView, url ->
+                            browserHeaderViewModel?.updateProgress(0)
+                            browserHeaderViewModel?.nextUrl(url)
 
-                    rssAddingSuggestion(webView, url)
-                    updateBackButtonState(webView.canGoBack())
-                },
-                { webView, url ->
-                    val title = webView.title ?: ""
-                    val urlStr = url ?: ""
-                    if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
-                        loadingViewModel?.finished(lastId, History.make(title, urlStr))
-                    }
+                            rssAddingSuggestion(webView, url)
+                            updateBackButtonState(webView.canGoBack())
+                        },
+                        { webView, url ->
+                            val title = webView.title ?: ""
+                            val urlStr = url ?: ""
+                            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
+                                loadingViewModel?.finished(lastId, History.make(title, urlStr))
+                            }
 
-                    browserHeaderViewModel?.updateProgress(100)
-                    browserHeaderViewModel?.stopProgress(true)
+                            browserHeaderViewModel?.updateProgress(100)
+                            browserHeaderViewModel?.stopProgress(true)
 
-                    try {
-                        if (webView == currentView()) {
-                            browserHeaderViewModel?.nextTitle(title)
-                            browserHeaderViewModel?.nextUrl(urlStr)
+                            try {
+                                if (webView == currentView()) {
+                                    browserHeaderViewModel?.nextTitle(title)
+                                    browserHeaderViewModel?.nextUrl(urlStr)
+                                }
+                            } catch (e: Exception) {
+                                Timber.e(e)
+                            }
+                        },
+                        { webView, request, error ->
+                            browserHeaderViewModel?.updateProgress(100)
+                            browserHeaderViewModel?.stopProgress(true)
                         }
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                },
-                { webView, request, error ->
-                    browserHeaderViewModel?.updateProgress(100)
-                    browserHeaderViewModel?.stopProgress(true)
-                }
+                ),
+                webChromeClientFactory = WebChromeClientFactory(
+                        browserHeaderViewModel,
+                        faviconApplier,
+                        customViewSwitcher
+                )
         )
     }
-
-    private fun makeWebViewClient(): WebViewClient = webViewClientFactory()
-
-    private fun makeWebChromeClient(): WebChromeClient =
-            webChromeClientFactory(
-                    browserHeaderViewModel,
-                    faviconApplier,
-                    customViewSwitcher
-            )
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
         lastId = tabId
@@ -392,10 +385,7 @@ class BrowserModule(
     }
 
     private fun makeWebView(): WebView {
-        val webView = webViewFactory.make(context)
-        webView.webViewClient = makeWebViewClient()
-        webView.webChromeClient = makeWebChromeClient()
-        return webView
+        return webViewFactory(context)
     }
 
     fun onSaveInstanceState(outState: Bundle) {
