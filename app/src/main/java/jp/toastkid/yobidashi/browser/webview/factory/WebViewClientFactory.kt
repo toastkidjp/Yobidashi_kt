@@ -34,20 +34,20 @@ import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import timber.log.Timber
 
-class WebViewClientFactory {
+class WebViewClientFactory(
+        private val contentViewModel: ContentViewModel?,
+        private val adRemover: AdRemover,
+        private val faviconApplier: FaviconApplier,
+        private val preferenceApplier: PreferenceApplier,
+        private val onPageStartedCallback: (WebView, String) -> Unit = { _, _, -> },
+        private val onPageFinishedCallback: (WebView, String?) -> Unit = { _, _, -> },
+        private val onReceiveErrorCallback: (WebView, WebResourceRequest, WebResourceError) -> Unit = { _, _, _, -> }
+) {
 
     /**
      * Add onPageFinished and onPageStarted.
      */
-    operator fun invoke(
-            contentViewModel: ContentViewModel?,
-            adRemover: AdRemover,
-            faviconApplier: FaviconApplier,
-            preferenceApplier: PreferenceApplier,
-            onPageStartedCallback: (WebView, String) -> Unit = { _, _, -> },
-            onPageFinishedCallback: (WebView, String?) -> Unit = { _, _, -> },
-            onReceiveErrorCallback: (WebView, WebResourceRequest, WebResourceError) -> Unit = { _, _, _, -> }
-    ): WebViewClient = object : WebViewClient() {
+    operator fun invoke(): WebViewClient = object : WebViewClient() {
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)

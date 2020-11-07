@@ -136,12 +136,12 @@ class TabAdapter(
 
         val webView = webViewFactory.make(context)
         (context as? FragmentActivity)?.also {
-            webView.webViewClient = WebViewClientFactory().invoke(
+            webView.webViewClient = WebViewClientFactory(
                     ViewModelProvider(it).get(ContentViewModel::class.java),
                     AdRemover.make(context.assets),
                     FaviconApplier(context),
                     preferenceApplier
-            )
+            ).invoke()
         }
 
         webView.webChromeClient = WebChromeClientFactory().invoke()

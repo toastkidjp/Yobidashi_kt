@@ -97,6 +97,8 @@ class BrowserModule(
 
     private val webViewStateUseCase = WebViewStateUseCase.make(context)
 
+    private val webViewClientFactory: WebViewClientFactory
+
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
 
@@ -110,41 +112,43 @@ class BrowserModule(
             loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
+
+        webViewClientFactory = WebViewClientFactory(
+                contentViewModel, adRemover, faviconApplier, preferenceApplier,
+                { webView, url ->
+                    browserHeaderViewModel?.updateProgress(0)
+                    browserHeaderViewModel?.nextUrl(url)
+
+                    rssAddingSuggestion(webView, url)
+                    updateBackButtonState(webView.canGoBack())
+                },
+                { webView, url ->
+                    val title = webView.title ?: ""
+                    val urlStr = url ?: ""
+                    if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
+                        loadingViewModel?.finished(lastId, History.make(title, urlStr))
+                    }
+
+                    browserHeaderViewModel?.updateProgress(100)
+                    browserHeaderViewModel?.stopProgress(true)
+
+                    try {
+                        if (webView == currentView()) {
+                            browserHeaderViewModel?.nextTitle(title)
+                            browserHeaderViewModel?.nextUrl(urlStr)
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e)
+                    }
+                },
+                { webView, request, error ->
+                    browserHeaderViewModel?.updateProgress(100)
+                    browserHeaderViewModel?.stopProgress(true)
+                }
+        )
     }
 
-    private fun makeWebViewClient(): WebViewClient = WebViewClientFactory().invoke(
-            contentViewModel, adRemover, faviconApplier, preferenceApplier,
-            { webView, url ->
-                browserHeaderViewModel?.updateProgress(0)
-                browserHeaderViewModel?.nextUrl(url)
-
-                rssAddingSuggestion(webView, url)
-                updateBackButtonState(webView.canGoBack())
-            },
-            { webView, url ->
-                val title = webView.title ?: ""
-                val urlStr = url ?: ""
-                if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
-                    loadingViewModel?.finished(lastId, History.make(title, urlStr))
-                }
-
-                browserHeaderViewModel?.updateProgress(100)
-                browserHeaderViewModel?.stopProgress(true)
-
-                try {
-                    if (webView == currentView()) {
-                        browserHeaderViewModel?.nextTitle(title)
-                        browserHeaderViewModel?.nextUrl(urlStr)
-                    }
-                } catch (e: Exception) {
-                    Timber.e(e)
-                }
-            },
-            { webView, request, error ->
-                browserHeaderViewModel?.updateProgress(100)
-                browserHeaderViewModel?.stopProgress(true)
-            }
-    )
+    private fun makeWebViewClient(): WebViewClient = webViewClientFactory()
 
     private fun makeWebChromeClient(): WebChromeClient =
             WebChromeClientFactory().invoke(
