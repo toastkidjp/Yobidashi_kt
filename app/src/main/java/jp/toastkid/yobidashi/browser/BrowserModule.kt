@@ -99,6 +99,8 @@ class BrowserModule(
 
     private val webViewClientFactory: WebViewClientFactory
 
+    private val webChromeClientFactory = WebChromeClientFactory()
+
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
 
@@ -151,7 +153,7 @@ class BrowserModule(
     private fun makeWebViewClient(): WebViewClient = webViewClientFactory()
 
     private fun makeWebChromeClient(): WebChromeClient =
-            WebChromeClientFactory().invoke(
+            webChromeClientFactory.invoke(
                     browserHeaderViewModel,
                     faviconApplier,
                     customViewSwitcher
