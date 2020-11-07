@@ -153,7 +153,7 @@ class BrowserModule(
     private fun makeWebViewClient(): WebViewClient = webViewClientFactory()
 
     private fun makeWebChromeClient(): WebChromeClient =
-            webChromeClientFactory.invoke(
+            webChromeClientFactory(
                     browserHeaderViewModel,
                     faviconApplier,
                     customViewSwitcher
