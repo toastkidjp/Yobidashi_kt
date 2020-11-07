@@ -10,7 +10,7 @@ package jp.toastkid.yobidashi.tab.background
 
 import android.content.Context
 import android.webkit.WebView
-import jp.toastkid.yobidashi.browser.webview.WebViewFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 

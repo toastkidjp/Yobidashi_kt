@@ -33,7 +33,7 @@ import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
-import jp.toastkid.yobidashi.browser.webview.WebViewFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory

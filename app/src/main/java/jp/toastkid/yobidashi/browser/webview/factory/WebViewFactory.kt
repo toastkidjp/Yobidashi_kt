@@ -1,4 +1,12 @@
-package jp.toastkid.yobidashi.browser.webview
+/*
+ * Copyright (c) 2020 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+
+package jp.toastkid.yobidashi.browser.webview.factory
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,6 +21,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.BrowserFragment
+import jp.toastkid.yobidashi.browser.webview.AlphaConverter
+import jp.toastkid.yobidashi.browser.webview.CustomWebView
+import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
 import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment

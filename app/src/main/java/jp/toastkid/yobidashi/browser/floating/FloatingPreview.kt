@@ -36,7 +36,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.SlidingTapListener
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
-import jp.toastkid.yobidashi.browser.webview.WebViewFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.databinding.PopupFloatingPreviewBinding
 
 /**
