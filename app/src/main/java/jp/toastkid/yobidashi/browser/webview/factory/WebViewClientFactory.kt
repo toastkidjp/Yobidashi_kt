@@ -53,13 +53,6 @@ class WebViewClientFactory {
             super.onPageStarted(view, url, favicon)
 
             onPageStartedCallback(view, url)
-            /*
-            browserHeaderViewModel?.updateProgress(0)
-            browserHeaderViewModel?.nextUrl(url)
-
-            //TODO rssAddingSuggestion(view, url)
-            //updateBackButtonState(view.canGoBack())
-             */
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
@@ -69,24 +62,6 @@ class WebViewClientFactory {
             val urlStr = url ?: ""
 
             onPageFinishedCallback(view, url)
-
-            /*
-            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
-                loadingViewModel?.finished(lastId, History.make(title, urlStr))
-            }
-
-            browserHeaderViewModel?.updateProgress(100)
-            browserHeaderViewModel?.stopProgress(true)
-
-            try {
-                if (view == currentView()) {
-                    browserHeaderViewModel?.nextTitle(title)
-                    browserHeaderViewModel?.nextUrl(urlStr)
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
-            */
 
             if (preferenceApplier.saveViewHistory
                     && title.isNotEmpty()
@@ -108,10 +83,6 @@ class WebViewClientFactory {
             super.onReceivedError(view, request, error)
 
             onReceiveErrorCallback(view, request, error)
-            /*
-            browserHeaderViewModel?.updateProgress(100)
-            browserHeaderViewModel?.stopProgress(true)
-             */
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
