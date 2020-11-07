@@ -22,13 +22,13 @@ import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 
-class WebChromeClientFactory {
+class WebChromeClientFactory(
+        private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
+        private val faviconApplier: FaviconApplier? = null,
+        private val customViewSwitcher: CustomViewSwitcher? = null
+) {
 
-    operator fun invoke(
-            browserHeaderViewModel: BrowserHeaderViewModel? = null,
-            faviconApplier: FaviconApplier? = null,
-            customViewSwitcher: CustomViewSwitcher? = null
-    ): WebChromeClient = object : WebChromeClient() {
+    operator fun invoke(): WebChromeClient = object : WebChromeClient() {
 
         private val bitmapCompressor = BitmapCompressor()
 
