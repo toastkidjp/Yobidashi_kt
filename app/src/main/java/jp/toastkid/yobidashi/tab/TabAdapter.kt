@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.view.View
 import androidx.annotation.UiThread
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -19,13 +18,12 @@ import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
-import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.tab.background.BackgroundWebViewFactoryUseCase
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
@@ -70,18 +68,28 @@ class TabAdapter(
 
     private var tabListViewModel: TabListViewModel? = null
 
-    private val webViewFactory = WebViewFactory()
+    private var webViewFactory: BackgroundWebViewFactoryUseCase? = null
 
     init {
         val viewContext = contextSupplier()
         tabThumbnails = TabThumbnails(contextSupplier)
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
+
         if (viewContext is MainActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
+
+            webViewFactory = BackgroundWebViewFactoryUseCase(
+                    webViewClientFactory = WebViewClientFactory(
+                            viewModelProvider.get(ContentViewModel::class.java),
+                            AdRemover.make(viewContext.assets),
+                            FaviconApplier(viewContext),
+                            preferenceApplier
+                    )
+            )
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -134,17 +142,7 @@ class TabAdapter(
         tabList.add(newTab)
         tabList.save()
 
-        val webView = webViewFactory.make(context)
-        (context as? FragmentActivity)?.also {
-            webView.webViewClient = WebViewClientFactory(
-                    ViewModelProvider(it).get(ContentViewModel::class.java),
-                    AdRemover.make(context.assets),
-                    FaviconApplier(context),
-                    preferenceApplier
-            ).invoke()
-        }
-
-        webView.webChromeClient = WebChromeClientFactory().invoke()
+        val webView = webViewFactory?.invoke(context) ?: return
         webView.loadUrl(url)
         GlobalWebViewPool.put(newTab.id(), webView)
         setCount()
