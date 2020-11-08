@@ -10,18 +10,19 @@ package jp.toastkid.yobidashi.rss
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * @author toastkidjp
  */
 class RssReaderFragmentViewModel : ViewModel() {
 
-    private val _itemClick = MutableLiveData<String>()
+    private val _itemClick = MutableLiveData<Event<Pair<String, Boolean>>>()
 
-    val itemClick: LiveData<String> = _itemClick
+    val itemClick: LiveData<Event<Pair<String, Boolean>>> = _itemClick
 
-    fun itemClick(url: String) {
-        _itemClick.postValue(url)
+    fun itemClick(url: String, onBackground: Boolean = false) {
+        _itemClick.postValue(Event(url to onBackground))
     }
 
 }
