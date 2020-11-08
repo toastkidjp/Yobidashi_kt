@@ -60,7 +60,6 @@ class Adapter(
     fun addAll(items: MutableList<Item>?) {
         items?.let {
             this.items.addAll(it)
-            notifyDataSetChanged()
         }
     }
 

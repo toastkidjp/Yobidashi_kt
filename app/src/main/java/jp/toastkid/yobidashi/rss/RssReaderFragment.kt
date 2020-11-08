@@ -92,6 +92,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
                     .collect {
                         withContext(Dispatchers.Main) {
                             adapter.addAll(it?.items)
+                            adapter.notifyDataSetChanged()
                         }
                     }
         }
