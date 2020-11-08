@@ -39,4 +39,9 @@ class ViewHolder(private val binding: ItemRssListBinding) : RecyclerView.ViewHol
         binding.time.text = date
     }
 
+    fun setSource(source: String) {
+        binding.source.isVisible = source.isNotBlank()
+        binding.source.text = source
+    }
+
 }

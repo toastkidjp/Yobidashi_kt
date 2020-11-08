@@ -70,6 +70,19 @@
                 app:layout_constraintEnd_toEndOf="@id/title"
                 />
             <TextView
+                android:id="@+id/source"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                tools:text="@string/wikipedia"
+                app:layout_constraintTop_toBottomOf="@id/content"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintEnd_toEndOf="@id/title"
+                />
+            <TextView
                 android:id="@+id/time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -79,7 +92,7 @@
                 android:textColor="@color/darkgray_scale"
                 android:textSize="12sp"
                 tools:text="@string/sample_date_time"
-                app:layout_constraintTop_toBottomOf="@id/content"
+                app:layout_constraintTop_toBottomOf="@id/source"
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintEnd_toEndOf="@id/title"
                 />

@@ -45,6 +45,7 @@ class Adapter(
         holder.setUrl(item.link)
         holder.setContent(item.content.toString())
         holder.setDate(item.date)
+        holder.setSource(item.source)
         holder.itemView.setOnClickListener {
             viewModel?.itemClick(item.link)
         }
