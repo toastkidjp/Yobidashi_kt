@@ -85,6 +85,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("i")
             host == "search.goo.ne.jp" ->
                 uri.getQueryParameter("MT")
+            host == "bgr.com" ->
+                uri.getQueryParameter("s")?.replace("#$".toRegex(), "")
             host.endsWith("facebook.com")
                     or host.equals("www.instagram.com")
                     or host.equals("www.espn.com") ->

@@ -189,6 +189,10 @@ class SearchQueryExtractorTest {
                 "test",
                 searchQueryExtractor("https://www.bbc.co.uk/search?q=test")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://bgr.com/?s=test#")
+        )
     }
 
     @Test
