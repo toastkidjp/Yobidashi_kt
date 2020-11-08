@@ -51,10 +51,10 @@ class Parser {
             line.contains("<description") -> {
                 extractDescription(line)
             }
-            line.contains("</content") -> {
+            line.contains("</summary") -> {
                 isInContent = false
             }
-            line.contains("<content") -> {
+            line.contains("<summary") -> {
                 isInContent = true
             }
             isInContent -> {
