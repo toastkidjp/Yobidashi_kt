@@ -268,6 +268,12 @@ enum class SearchCategory(
             R.drawable.ic_stackoverflow,
             "https://stackoverflow.com/search?q="
     ),
+    BGR(
+            R.string.search_category_bgr,
+            R.drawable.ic_bgr,
+            "https://bgr.com/?s=%s",
+            { _, h, q -> String.format(h, Uri.encode(q)) }
+    ),
     TECHNOLOGY(
             R.string.search_category_technology,
             R.drawable.ic_techcrunch,

@@ -15,6 +15,7 @@
     <string name="search_category_internet_archive">Internet Archive</string>
     <string name="search_category_shopping">Shopping</string>
     <string name="search_category_stack_overflow">Stack Overflow</string>
+    <string name="search_category_bgr">BGR</string>
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
