@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -97,15 +98,17 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
     }
 
     private fun observeViewModelEvent(fragmentActivity: FragmentActivity) {
-        viewModel?.itemClick?.observe(viewLifecycleOwner, Observer<String> {
-            if (it == null) {
-                return@Observer
-            }
+        viewModel?.itemClick?.observe(viewLifecycleOwner, Observer<Event<Pair<String, Boolean>>> {
+            val event = it?.getContentIfNotHandled() ?: return@Observer
 
-            activity?.supportFragmentManager?.popBackStack()
-            ViewModelProvider(fragmentActivity)
+            val browserViewModel = ViewModelProvider(fragmentActivity)
                     .get(BrowserViewModel::class.java)
-                    .open(it.toUri())
+            if (event.second) {
+                browserViewModel.openBackground(event.first.toUri())
+            } else {
+                browserViewModel.open(event.first.toUri())
+                activity?.supportFragmentManager?.popBackStack()
+            }
         })
     }
 

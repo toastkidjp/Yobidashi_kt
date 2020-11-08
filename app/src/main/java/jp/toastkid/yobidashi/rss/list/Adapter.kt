@@ -12,11 +12,11 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemRssListBinding
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.rss.model.Item
 import jp.toastkid.yobidashi.rss.RssReaderFragmentViewModel
+import jp.toastkid.yobidashi.rss.model.Item
 
 /**
  * @author toastkidjp
@@ -47,6 +47,10 @@ class Adapter(
         holder.setDate(item.date)
         holder.itemView.setOnClickListener {
             viewModel?.itemClick(item.link)
+        }
+        holder.itemView.setOnLongClickListener {
+            viewModel?.itemClick(item.link, true)
+            true
         }
     }
 
