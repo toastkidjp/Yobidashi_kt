@@ -91,7 +91,9 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
                     .map { RssReaderApi().invoke(it) }
                     .collect {
                         withContext(Dispatchers.Main) {
-                            adapter.addAll(it?.items)
+                            val items = it?.items
+                            items?.sortByDescending { item -> item.date }
+                            adapter.addAll(items)
                             adapter.notifyDataSetChanged()
                         }
                     }
