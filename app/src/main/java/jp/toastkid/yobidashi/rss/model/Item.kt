@@ -15,5 +15,6 @@ data class Item(
         var link: String = "",
         var date: String = "",
         var description: String = "",
+        var source: String = "",
         var content: StringBuilder = StringBuilder()
 )

@@ -81,6 +81,7 @@ class ParserTest {
         val item = rss.items[0]
         assertEquals("ヤクルト・塩見、ダーツを破壊ｗｗｗｗ", item.title)
         assertEquals("http://blog.livedoor.jp/livejupiter2/archives/9541826.html", item.link)
+        assertEquals("なんJ（まとめては）いかんのか？", item.source)
         println(item.content)
     }
 

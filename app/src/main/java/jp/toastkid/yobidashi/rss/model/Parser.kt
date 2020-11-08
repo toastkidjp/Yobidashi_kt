@@ -182,6 +182,7 @@ class Parser {
      */
     private fun initializeItem() {
         currentItem = Item()
+        currentItem?.source = rss.title ?: ""
     }
 
     companion object {
