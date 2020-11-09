@@ -26,12 +26,17 @@ import androidx.fragment.app.FragmentActivity
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.FaviconApplier
+import jp.toastkid.yobidashi.browser.LoadingViewModel
+import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
+import jp.toastkid.yobidashi.tab.History
 import timber.log.Timber
 
 class WebViewClientFactory(
@@ -39,9 +44,11 @@ class WebViewClientFactory(
         private val adRemover: AdRemover,
         private val faviconApplier: FaviconApplier,
         private val preferenceApplier: PreferenceApplier,
-        private val onPageStartedCallback: (WebView, String) -> Unit = { _, _, -> },
-        private val onPageFinishedCallback: (WebView, String?) -> Unit = { _, _, -> },
-        private val onReceiveErrorCallback: (WebView, WebResourceRequest, WebResourceError) -> Unit = { _, _, _, -> }
+        private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
+        private val rssAddingSuggestion: RssAddingSuggestion? = null,
+        private val loadingViewModel: LoadingViewModel? = null,
+        private val currentView: () -> WebView? = { null },
+        private val lastId: () -> String = { "" }
 ) {
 
     /**
@@ -52,7 +59,11 @@ class WebViewClientFactory(
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
 
-            onPageStartedCallback(view, url)
+            browserHeaderViewModel?.updateProgress(0)
+            browserHeaderViewModel?.nextUrl(url)
+
+            rssAddingSuggestion?.invoke(view, url)
+            browserHeaderViewModel?.setBackButtonEnability(view.canGoBack())
         }
 
         override fun onPageFinished(view: WebView, url: String?) {
@@ -61,7 +72,21 @@ class WebViewClientFactory(
             val title = view.title ?: ""
             val urlStr = url ?: ""
 
-            onPageFinishedCallback(view, url)
+            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
+                loadingViewModel?.finished(lastId(), History.make(title, urlStr))
+            }
+
+            browserHeaderViewModel?.updateProgress(100)
+            browserHeaderViewModel?.stopProgress(true)
+
+            try {
+                if (view == currentView()) {
+                    browserHeaderViewModel?.nextTitle(title)
+                    browserHeaderViewModel?.nextUrl(urlStr)
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
 
             if (preferenceApplier.saveViewHistory
                     && title.isNotEmpty()
@@ -82,7 +107,8 @@ class WebViewClientFactory(
                 view: WebView, request: WebResourceRequest, error: WebResourceError) {
             super.onReceivedError(view, request, error)
 
-            onReceiveErrorCallback(view, request, error)
+            browserHeaderViewModel?.updateProgress(100)
+            browserHeaderViewModel?.stopProgress(true)
         }
 
         override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
