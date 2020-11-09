@@ -94,7 +94,6 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
                     .collect {
                         withContext(Dispatchers.Main) {
                             val items = it?.items
-                            items?.sortByDescending { item -> item.date }
                             adapter.addAll(items)
                             adapter.notifyDataSetChanged()
                         }
