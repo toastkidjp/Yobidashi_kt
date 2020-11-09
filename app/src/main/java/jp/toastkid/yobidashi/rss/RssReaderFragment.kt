@@ -24,9 +24,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
@@ -46,7 +48,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class RssReaderFragment : Fragment(), CommonFragmentAction {
+class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
     private lateinit var binding: FragmentRssReaderBinding
 
@@ -113,6 +115,14 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
                 activity?.supportFragmentManager?.popBackStack()
             }
         })
+    }
+
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.rssList, binding.rssList.adapter?.itemCount ?: 0)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.rssList, binding.rssList.adapter?.itemCount ?: 0)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
