@@ -52,6 +52,7 @@
     <string name="search_category_looksmart">looksmart</string>
     <string name="search_category_mojeek">Mojeek</string>
     <string name="search_category_privacy_wall">PrivacyWall</string>
+    <string name="search_category_aloha_find">AlohaFind</string>
     <string name="tumblr">Tumblr</string>
     <string name="search_category_open_street_map">OpenStreetMap</string>
     <string name="search_category_quora">Quora</string>
