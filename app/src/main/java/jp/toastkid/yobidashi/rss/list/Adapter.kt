@@ -60,6 +60,7 @@ class Adapter(
     fun addAll(items: MutableList<Item>?) {
         items?.let {
             this.items.addAll(it)
+            this.items.sortByDescending { item -> item.date }
         }
     }
 
