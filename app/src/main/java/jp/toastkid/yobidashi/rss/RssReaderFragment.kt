@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.lifecycle.Event
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -102,7 +101,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
     }
 
     private fun observeViewModelEvent(fragmentActivity: FragmentActivity) {
-        viewModel?.itemClick?.observe(viewLifecycleOwner, Observer<Event<Pair<String, Boolean>>> {
+        viewModel?.itemClick?.observe(viewLifecycleOwner, Observer {
             val event = it?.getContentIfNotHandled() ?: return@Observer
 
             val browserViewModel = ViewModelProvider(fragmentActivity)
