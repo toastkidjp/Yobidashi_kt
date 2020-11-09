@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020 toastkidjp.
+  ~ All rights reserved. This program and the accompanying materials
+  ~ are made available under the terms of the Eclipse Public License v1.0
+  ~ which accompany this distribution.
+  ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+  -->
+
 <resources>
     <style name="AppTheme.Translucent" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="windowActionBar">false</item>
