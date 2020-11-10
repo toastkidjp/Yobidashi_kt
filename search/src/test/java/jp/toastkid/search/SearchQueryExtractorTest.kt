@@ -193,6 +193,10 @@ class SearchQueryExtractorTest {
                 "test",
                 searchQueryExtractor("https://bgr.com/?s=test#")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://alohafind.com/search/?q=test#gsc.tab=0&gsc.q=test&gsc.page=1")
+        )
     }
 
     @Test
