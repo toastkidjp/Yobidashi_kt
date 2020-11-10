@@ -20,7 +20,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
+import java.util.ArrayList
 import kotlin.math.min
 
 /**
@@ -85,7 +85,6 @@ internal class ModuleAdapter(
             ).invoke()
             true
         }
-        holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
     /**

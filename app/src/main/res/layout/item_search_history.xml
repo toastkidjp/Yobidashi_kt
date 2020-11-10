@@ -73,14 +73,6 @@
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
                 />
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="40dp"
-                android:background="@color/search_divider"
-                />
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 </layout>
