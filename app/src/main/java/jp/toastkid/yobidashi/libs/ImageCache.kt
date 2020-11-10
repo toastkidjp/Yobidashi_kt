@@ -19,7 +19,7 @@ class ImageCache {
      * @param parent Parent folder file
      * @param bitmap Bitmap
      *
-     * @return
+     * @return temporary file object
      */
     fun saveBitmap(parent: File?, bitmap: Bitmap): File {
         val cacheDir = File(parent, CHILD_DIRECTORY)
