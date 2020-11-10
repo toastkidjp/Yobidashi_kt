@@ -25,7 +25,7 @@
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_rss_feed"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/divider"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 />
             <TextView
@@ -97,16 +97,6 @@
                 app:layout_constraintEnd_toEndOf="@id/title"
                 />
 
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_gravity="bottom"
-                android:background="@color/search_divider"
-                app:layout_constraintTop_toBottomOf="@id/icon"
-                app:layout_constraintStart_toEndOf="@id/icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
