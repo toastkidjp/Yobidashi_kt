@@ -380,7 +380,7 @@ class BrowserModule(
         GlobalWebViewPool.applyNewAlpha(alphaConverter.readBackground(context))
     }
 
-    fun makeShareMessage() = "${currentTitle()}$lineSeparator${currentUrl()}"
+    fun makeShareMessage() = "${currentTitle()}${System.lineSeparator()}${currentUrl()}"
 
     fun invokeContentExtraction(callback: ValueCallback<String>) {
         readerModeUseCase(currentView(), callback)
@@ -394,7 +394,4 @@ class BrowserModule(
         AllImageDownloaderService(DownloadAction(context)).invoke(currentView())
     }
 
-    companion object {
-        private val lineSeparator = System.lineSeparator()
-    }
 }
