@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
@@ -172,8 +171,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
                                 }
                                 R.id.search_with_map_app -> {
                                     selectedTextExtractor.withAction(this@CustomWebView) { word ->
-                                        val gmmIntentUri = Uri.parse("geo:0,0?q=$word")
-                                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                                        val mapIntent = Intent(Intent.ACTION_VIEW, "geo:0,0?q=$word".toUri())
                                         context.startActivity(mapIntent)
                                     }
                                     return true
