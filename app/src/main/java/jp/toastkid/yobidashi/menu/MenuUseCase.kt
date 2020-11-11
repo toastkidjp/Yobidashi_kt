@@ -151,22 +151,6 @@ class MenuUseCase(
             Menu.GESTURE_MEMO -> {
                 nextFragment(GestureMemoFragment::class.java)
             }
-            Menu.VOICE_SEARCH-> {
-                activitySupplier().also {
-                    try {
-                        it.startActivityForResult(
-                                VoiceSearch.makeIntent(it),
-                                VoiceSearch.REQUEST_CODE
-                        )
-                    } catch (e: ActivityNotFoundException) {
-                        Timber.e(e)
-                        VoiceSearch.suggestInstallGoogleApp(
-                                it.findViewById(R.id.content),
-                                preferenceApplier.colorPair()
-                        )
-                    }
-                }
-            }
             Menu.ABOUT_THIS_APP -> {
                 nextFragment(AboutThisAppFragment::class.java)
             }
