@@ -2,9 +2,9 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
 import androidx.core.net.toUri
+import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.lib.storage.FilesDir
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,9 +33,7 @@ class BookmarkInitializer {
                     "Amazon" to "https://www.amazon.com/",
                     "Project Gutenberg" to "http://www.gutenberg.org/",
                     "Expedia" to "https://www.expedia.com",
-                    "Slashdot" to "https://m.slashdot.org",
-                    "Financial Times" to "https://www.ft.com/",
-                    "THE WALL STREET JOURNAL" to "https://www.wsj.com"
+                    "Slashdot" to "https://m.slashdot.org"
             ),
             "Search" to mapOf(
                     "Google" to "https://www.google.com/",
@@ -44,6 +42,12 @@ class BookmarkInitializer {
 
                     "Yahoo!" to "https://www.yahoo.com/",
                     "Yahoo! JAPAN" to "https://www.yahoo.co.jp/"
+            ),
+            "Finance" to mapOf(
+                    "Google Finance" to "https://www.google.com/finance",
+                    "Yahoo Finance" to "https://finance.yahoo.com/",
+                    "Financial Times" to "https://www.ft.com/",
+                    "THE WALL STREET JOURNAL" to "https://www.wsj.com"
             ),
             "SNS" to mapOf(
                     "Instagram" to "https://www.instagram.com/",
