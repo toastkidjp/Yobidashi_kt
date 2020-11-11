@@ -18,10 +18,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
-import jp.toastkid.lib.preference.PreferenceApplier
-import java.util.*
+import java.util.Random
 
 /**
  * @author toastkidjp
@@ -83,7 +83,7 @@ class Adapter(
         items.clear()
     }
 
-    fun random() = items[Random().nextInt(itemCount)]
+    fun random() = items[Random().nextInt(itemCount) % items.size]
 
     companion object {
 
