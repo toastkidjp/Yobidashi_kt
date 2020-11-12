@@ -378,8 +378,6 @@ enum class SearchCategory(
 
     companion object {
 
-        private val locale = Locale.getDefault()
-
         private val hostAndCategories =
                 values()
                         .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
@@ -397,6 +395,7 @@ enum class SearchCategory(
          * @return [SearchCategory]
          */
         fun findByCategory(category: String?): SearchCategory {
+            val locale = Locale.getDefault()
             val target = category?.toUpperCase(locale) ?: ""
             return values().find { it.name == target } ?: getDefault()
         }
@@ -408,8 +407,11 @@ enum class SearchCategory(
          *
          * @return index
          */
-        fun findIndex(category: String): Int =
-                values().find { it.name == category.toUpperCase(locale) } ?.ordinal ?: getDefault().ordinal
+        fun findIndex(category: String): Int {
+            val locale = Locale.getDefault()
+            return values().find { it.name == category.toUpperCase(locale) } ?.ordinal
+                    ?: getDefault().ordinal
+        }
 
         /**
          * Get default object.
