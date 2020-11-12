@@ -451,8 +451,8 @@
     <string name="title_todo_tasks">TODO tasks</string>
     <string name="title_todo_tasks_board">Task board</string>
     <string name="title_search_with_map_app">地図アプリで検索</string>
-    <string name="title_sort_by_date">Sort by date</string>
-    <string name="title_sort_by_name">Sort by name</string>
-    <string name="title_sort_by_count">Sort by count</string>
+    <string name="title_sort_by_date">日付でソート</string>
+    <string name="title_sort_by_name">名前でソート</string>
+    <string name="title_sort_by_count">数でソート</string>
 
 </resources>
