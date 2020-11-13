@@ -16,6 +16,8 @@ import jp.toastkid.lib.storage.StorageWrapper
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.util.UUID
+import kotlin.jvm.Throws
 
 /**
  * @author toastkidjp
@@ -35,7 +37,7 @@ class ImageStoreService(
      */
     @Throws(FileNotFoundException::class)
     operator fun invoke(image: Bitmap, uri: Uri, display: Display?) {
-        val output = filesDir.assignNewFile(uri)
+        val output = filesDir.assignNewFile(uri.lastPathSegment ?: UUID.randomUUID().toString())
         preferenceApplier.backgroundImagePath = output.path
 
         val size = getDisplayScale(display)
