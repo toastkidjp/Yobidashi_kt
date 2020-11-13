@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -52,7 +53,7 @@ internal class Adapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                DataBindingUtil.inflate(layoutInflater, R.layout.item_search_suggestion, parent, false))
+                DataBindingUtil.inflate(layoutInflater, ITEM_LAYOUT_ID, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -88,5 +89,12 @@ internal class Adapter (
         } catch (e: Exception) {
             Timber.e(e)
         }
+    }
+
+    companion object {
+
+        @LayoutRes
+        private const val ITEM_LAYOUT_ID = R.layout.item_search_suggestion
+
     }
 }

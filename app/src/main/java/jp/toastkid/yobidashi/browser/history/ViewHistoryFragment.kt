@@ -78,7 +78,8 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         ViewModelProvider(fragmentActivity).get(PageSearcherViewModel::class.java)
                 .find
                 .observe(fragmentActivity, Observer {
-                    adapter.filter(it)
+                    val text = it?.getContentIfNotHandled() ?: return@Observer
+                    adapter.filter(text)
                 })
     }
 

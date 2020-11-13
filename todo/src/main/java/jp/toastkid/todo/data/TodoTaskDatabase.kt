@@ -19,18 +19,23 @@ import jp.toastkid.todo.model.TodoTaskFts
 /**
  * @author toastkidjp
  */
-@Database(entities = [TodoTask::class, TodoTaskFts::class, Board::class, Category::class], version = 1)
+@Database(
+        entities = [TodoTask::class, TodoTaskFts::class, Board::class, Category::class],
+        version = 1
+)
 abstract class TodoTaskDatabase : RoomDatabase() {
 
     abstract fun repository(): TodoTaskDataAccessor
 
     companion object {
 
+        private const val DB_NAME = "todo_task_db"
+
         fun find(activityContext: Context): TodoTaskDatabase {
             return Room.databaseBuilder(
                     activityContext.applicationContext,
                     TodoTaskDatabase::class.java,
-                    "todo_task_db"
+                    DB_NAME
             )
                     .fallbackToDestructiveMigration()
                     .build()

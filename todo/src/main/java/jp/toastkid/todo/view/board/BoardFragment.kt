@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.R
 import jp.toastkid.todo.databinding.AppBarBoardBinding
@@ -36,11 +37,22 @@ class BoardFragment : Fragment() {
 
     private lateinit var appBarBinding: AppBarBoardBinding
 
+    private var taskAdditionDialogFragmentUseCase: TaskAdditionDialogFragmentUseCase? = null
+
+    private var taskAddingUseCase: TaskAddingUseCase? = null
+
+    private var taskClearUseCase: TaskClearUseCase? = null
+
     private val tasks = mutableListOf<TodoTask>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_board, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_board, container, false)
+        appBarBinding.fragment = this
         return binding.root
     }
 
@@ -58,36 +70,47 @@ class BoardFragment : Fragment() {
                     }
                 })
 
-        val taskAdditionDialogFragmentUseCase =
+        taskAdditionDialogFragmentUseCase =
                 TaskAdditionDialogFragmentUseCase(this) {
                     val firstOrNull = tasks.firstOrNull { task -> task.lastModified == it.lastModified }
                     if (firstOrNull == null) {
                         it.id = tasks.size + 1
-                        addTask(it, popup)
+                        taskAddingUseCase?.invoke(it)
                         return@TaskAdditionDialogFragmentUseCase
                     }
 
                     tasks.remove(firstOrNull)
                     removeTask(firstOrNull)
-                    addTask(firstOrNull, popup)
+                    taskAddingUseCase?.invoke(firstOrNull)
                 }
 
         popup = ItemMenuPopup(
                 view.context,
                 ItemMenuPopupActionUseCase(
-                        { taskAdditionDialogFragmentUseCase.invoke(it) },
+                        { taskAdditionDialogFragmentUseCase?.invoke(it) },
                         ::removeTask
                 )
         )
 
-        appBarBinding.add.setOnClickListener {
-            taskAdditionDialogFragmentUseCase.invoke()
-        }
+        taskAddingUseCase = TaskAddingUseCase(
+                PreferenceApplier(requireContext()).color,
+                tasks,
+                binding.board,
+                BoardItemViewFactory(layoutInflater) { parent, showTask ->
+                    popup?.show(parent, showTask)
+                }
+        )
 
         ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 
-        addTask(makeSampleTask(), popup)
+        taskClearUseCase = TaskClearUseCase(
+                tasks,
+                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java),
+                taskAddingUseCase
+        ) { binding.board.removeAllViews() }
+
+        taskAddingUseCase?.invoke(makeSampleTask())
     }
 
     private fun makeSampleTask() = SampleTaskMaker().invoke()
@@ -99,15 +122,12 @@ class BoardFragment : Fragment() {
                 ?.also { binding.board.removeView(it) }
     }
 
-    private fun addTask(it: TodoTask, popup: ItemMenuPopup?) {
-        tasks.add(it)
+    fun addTask() {
+        taskAdditionDialogFragmentUseCase?.invoke()
+    }
 
-        val itemView = BoardItemViewFactory(layoutInflater) { parent, showTask ->
-            popup?.show(parent, showTask)
-        }.invoke(binding.board, it, PreferenceApplier(requireContext()).color)
-
-        itemView.tag = it.id
-        binding.board.addView(itemView)
+    fun clearTasks() {
+        taskClearUseCase?.invoke()
     }
 
 }

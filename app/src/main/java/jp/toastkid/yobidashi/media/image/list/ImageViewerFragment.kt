@@ -23,15 +23,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentScrollable
+import jp.toastkid.lib.permission.RuntimePermissions
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.FragmentImageViewerBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.permission.RuntimePermissions
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.view.RecyclerViewScroller
-import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.yobidashi.media.image.setting.ExcludingSettingFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -131,7 +131,8 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
         ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
                 .also { viewModel ->
                     viewModel.find.observe(activity, Observer {
-                        imageFilterUseCase(it)
+                        val text = it?.getContentIfNotHandled() ?: return@Observer
+                        imageFilterUseCase(text)
                     })
                 }
     }

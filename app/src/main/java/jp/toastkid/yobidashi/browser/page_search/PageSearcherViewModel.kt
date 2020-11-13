@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.browser.page_search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.toastkid.lib.lifecycle.Event
 
 /**
  * TODO introduce LiveData.
@@ -16,26 +17,26 @@ import androidx.lifecycle.ViewModel
  */
 class PageSearcherViewModel : ViewModel() {
 
-    val find = MutableLiveData<String?>()
+    val find = MutableLiveData<Event<String>>()
 
-    val upward = MutableLiveData<String?>()
+    val upward = MutableLiveData<Event<String>>()
 
-    val downward = MutableLiveData<String?>()
+    val downward = MutableLiveData<Event<String>>()
 
-    val clear = MutableLiveData<Unit>()
+    val clear = MutableLiveData<Event<Unit>>()
 
-    val close = MutableLiveData<Unit>()
+    val close = MutableLiveData<Event<Unit>>()
 
     fun find(s: String?) {
-        find.postValue(s)
+        find.postValue(Event(s ?: ""))
     }
 
     fun findDown(s: String?) {
-        downward.postValue(s)
+        downward.postValue(Event(s ?: ""))
     }
 
     fun findUp(s: String?) {
-        upward.postValue(s)
+        upward.postValue(Event(s ?: ""))
     }
 
     fun findDown() {
@@ -47,10 +48,10 @@ class PageSearcherViewModel : ViewModel() {
     }
 
     fun hide() {
-        close.postValue(Unit)
+        close.postValue(Event(Unit))
     }
 
     fun clearInput() {
-        clear.postValue(Unit)
+        clear.postValue(Event(Unit))
     }
 }

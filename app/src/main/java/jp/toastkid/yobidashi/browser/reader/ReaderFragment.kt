@@ -96,7 +96,10 @@ class ReaderFragment : Fragment(), ContentScrollable {
             val viewModelProvider = ViewModelProvider(activity)
             viewModelProvider.get(PageSearcherViewModel::class.java)
                     .find
-                    .observe(activity, Observer { finder(it ?: "") })
+                    .observe(activity, Observer {
+                        val text = it?.getContentIfNotHandled() ?: return@Observer
+                        finder(text)
+                    })
 
             viewModelProvider.get(ReaderFragmentViewModel::class.java)
                     .content
