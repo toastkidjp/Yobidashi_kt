@@ -117,6 +117,11 @@ enum class SearchCategory(
             R.drawable.ic_alohafind,
             "https://alohafind.com/search/?q="
     ),
+    GIVERO(
+            R.string.givero,
+            R.drawable.ic_givero,
+            "https://www.givero.com/search?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
