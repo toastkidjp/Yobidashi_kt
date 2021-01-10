@@ -9,7 +9,7 @@
         />
     <item
         android:id="@+id/context_edit_add_minus"
-        android:title="@string/title_context_editor_add_minus"
+        android:title="@string/title_context_editor_unordered_list"
         android:orderInCategory="100"
         app:showAsAction="always"
         />

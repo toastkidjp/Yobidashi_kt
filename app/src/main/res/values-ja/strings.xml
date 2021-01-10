@@ -423,7 +423,7 @@
     <string name="title_dark_mode">ダークモードを使う</string>
     <string name="undo">戻す</string>
     <string name="title_context_editor_add_order">順序リスト</string>
-    <string name="title_context_editor_add_minus">リスト</string>
+    <string name="title_context_editor_unordered_list">リスト</string>
     <string name="title_context_editor_convert_to_table">テーブルに変換</string>
     <string name="title_context_editor_add_quote">引用符</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
