@@ -116,7 +116,7 @@ class EditorContextMenuInitializer {
                 val text = extractSelectedText()
                 when (menuItem?.itemId) {
                     R.id.context_edit_add_order -> {
-                        listHeadAdder(editText, "1.")
+                        OrderedListHeadAdder().invoke(editText)
                         return true
                     }
                     R.id.context_edit_add_minus -> {
