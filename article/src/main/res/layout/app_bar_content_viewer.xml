@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:layout_marginBottom="4dp"
+            android:maxLines="1"
             app:layout_constraintStart_toStartOf="@id/input"
             app:layout_constraintEnd_toEndOf="@id/input"
             app:layout_constraintBottom_toBottomOf="parent"
