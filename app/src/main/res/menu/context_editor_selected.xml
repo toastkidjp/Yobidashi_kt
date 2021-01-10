@@ -14,6 +14,12 @@
         app:showAsAction="always"
         />
     <item
+        android:id="@+id/context_edit_convert_to_table"
+        android:title="@string/title_context_editor_convert_to_table"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/context_edit_add_quote"
         android:title="@string/title_context_editor_add_quote"
         android:orderInCategory="100"

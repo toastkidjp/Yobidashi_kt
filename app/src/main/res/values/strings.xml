@@ -430,6 +430,7 @@
     <string name="undo">undo</string>
     <string name="title_context_editor_add_order">Add order</string>
     <string name="title_context_editor_add_minus">Add minus</string>
+    <string name="title_context_editor_convert_to_table">To table</string>
     <string name="title_context_editor_add_quote">Add quote</string>
     <string name="title_context_editor_double_quote">Double quote</string>
     <string name="title_reset_camera_button_position">Reset camera position</string>

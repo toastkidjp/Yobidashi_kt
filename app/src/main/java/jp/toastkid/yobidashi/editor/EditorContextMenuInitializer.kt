@@ -17,13 +17,13 @@ import android.widget.EditText
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
@@ -121,6 +121,10 @@ class EditorContextMenuInitializer {
                     }
                     R.id.context_edit_add_minus -> {
                         listHeadAdder(editText, "-")
+                        return true
+                    }
+                    R.id.context_edit_convert_to_table -> {
+                        TableConverter().invoke(editText)
                         return true
                     }
                     R.id.context_edit_add_quote -> {
