@@ -123,6 +123,10 @@ class EditorContextMenuInitializer {
                         listHeadAdder(editText, "-")
                         return true
                     }
+                    R.id.context_edit_task_list -> {
+                        listHeadAdder(editText, "- [ ]")
+                        return true
+                    }
                     R.id.context_edit_convert_to_table -> {
                         TableConverter().invoke(editText)
                         return true
