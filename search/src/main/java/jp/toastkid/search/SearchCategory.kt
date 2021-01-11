@@ -77,6 +77,21 @@ enum class SearchCategory(
             R.drawable.ic_startpage,
             "https://www.startpage.com/sp/search?q="
     ),
+    TEOMA(
+            R.string.search_category_teoma,
+            R.drawable.ic_teoma,
+            "https://www.teoma.com/web?q="
+    ),
+    INFO_COM(
+            R.string.search_category_info_com,
+            R.drawable.ic_info_com,
+            "https://www.info.com/serp?q="
+    ),
+    LOOKSMART(
+            R.string.search_category_looksmart,
+            R.drawable.ic_looksmart,
+            "https://results.looksmart.com/serp?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,

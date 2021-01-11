@@ -141,6 +141,22 @@ class SearchQueryExtractorTest {
                 "orange",
                 searchQueryExtractor("https://ja.wikipedia.org/wiki/orange")
         )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://search.gmx.com/web?q=test&origin=HP_sf_atf")
+        )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.teoma.com/web?q=test&tpr=1&ts=1601594078977")
+        )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.info.com/serp?q=test&sc=ZkYgeSO4txSIw")
+        )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://results.looksmart.com/serp?q=test")
+        )
     }
 
     @Test

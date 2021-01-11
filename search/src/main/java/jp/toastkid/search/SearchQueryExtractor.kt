@@ -39,7 +39,11 @@ class SearchQueryExtractor {
                     or host.endsWith("openweathermap.org")
                     or host.endsWith(".quora.com")
                     or host.endsWith(".livejournal.com")
-                    or host.endsWith("search.daum.net") ->
+                    or host.endsWith("search.daum.net")
+                    or host.endsWith(".teoma.com")
+                    or host.endsWith("www.info.com")
+                    or host.endsWith("results.looksmart.com")
+                    or host.endsWith("search.gmx.com") ->
                 uri.getQueryParameter("q")
             host.startsWith("www.amazon.") ->
                 uri.getQueryParameter("field-keywords")
