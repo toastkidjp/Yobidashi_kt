@@ -32,6 +32,11 @@ enum class SearchCategory(
             R.drawable.ic_yahoo,
             "https://search.yahoo.com/search?p="
     ),
+    YAHOO_JAPAN_REALTIME_SEARCH(
+            R.string.search_category_yahoo_japan_realtime_search,
+            R.drawable.ic_yahoo_japan_realtime_search,
+            "https://search.yahoo.co.jp/realtime/search?p="
+    ),
     YAHOO_JAPAN(
             R.string.search_category_yahoo_japan,
             R.drawable.ic_yahoo_japan_logo,
