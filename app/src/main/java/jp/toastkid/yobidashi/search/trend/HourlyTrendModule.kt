@@ -28,7 +28,7 @@ import java.io.IOException
  * @author toastkidjp
  */
 class HourlyTrendModule(
-        private val hourlyTrendModule: ModuleSearchHourlyTrendBinding?,
+        private val binding: ModuleSearchHourlyTrendBinding?,
         viewModel: SearchFragmentViewModel
 ) {
 
@@ -41,17 +41,17 @@ class HourlyTrendModule(
     private var enable: Boolean
 
     init {
-        val context = hourlyTrendModule?.root?.context
+        val context = binding?.root?.context
         enable = if (context == null) false else PreferenceApplier(context).isEnableTrendModule()
 
         adapter = Adapter(viewModel)
-        hourlyTrendModule?.trendItems?.adapter = adapter
-        val layoutManager = FlexboxLayoutManager(hourlyTrendModule?.root?.context)
+        binding?.trendItems?.adapter = adapter
+        val layoutManager = FlexboxLayoutManager(binding?.root?.context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.flexWrap = FlexWrap.WRAP
         layoutManager.justifyContent = JustifyContent.FLEX_START
         layoutManager.alignItems = AlignItems.STRETCH
-        hourlyTrendModule?.trendItems?.layoutManager = layoutManager
+        binding?.trendItems?.layoutManager = layoutManager
     }
 
     fun request() {
@@ -70,7 +70,7 @@ class HourlyTrendModule(
                 }
                 adapter?.replace(trendItems?.take(10))
             }
-            hourlyTrendModule?.root?.isVisible = adapter?.isNotEmpty() ?: false
+            binding?.root?.isVisible = adapter?.isNotEmpty() ?: false
             adapter?.notifyDataSetChanged()
         }
     }
@@ -78,7 +78,7 @@ class HourlyTrendModule(
     fun setEnable(newState: Boolean) {
         this.enable = newState
 
-        hourlyTrendModule?.root?.isVisible = newState
+        binding?.root?.isVisible = newState
     }
 
     fun dispose() {
