@@ -46,12 +46,17 @@ class HourlyTrendModule(
 
         adapter = Adapter(viewModel)
         binding?.trendItems?.adapter = adapter
+        val layoutManager = makeLayoutManager()
+        binding?.trendItems?.layoutManager = layoutManager
+    }
+
+    private fun makeLayoutManager(): FlexboxLayoutManager {
         val layoutManager = FlexboxLayoutManager(binding?.root?.context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.flexWrap = FlexWrap.WRAP
         layoutManager.justifyContent = JustifyContent.FLEX_START
         layoutManager.alignItems = AlignItems.STRETCH
-        binding?.trendItems?.layoutManager = layoutManager
+        return layoutManager
     }
 
     fun request() {
