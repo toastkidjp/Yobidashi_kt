@@ -21,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.io.IOException
 
 /**
  * @author toastkidjp
@@ -60,7 +62,13 @@ class HourlyTrendModule(
 
         lastJob = CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                adapter?.replace(trendApi()?.take(10))
+                val trendItems = try {
+                    trendApi()
+                } catch (e: IOException) {
+                    Timber.e(e)
+                    null
+                }
+                adapter?.replace(trendItems?.take(10))
             }
             hourlyTrendModule?.root?.isVisible = adapter?.isNotEmpty() ?: false
             adapter?.notifyDataSetChanged()
