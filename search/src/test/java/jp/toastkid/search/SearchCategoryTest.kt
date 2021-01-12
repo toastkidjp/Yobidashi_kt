@@ -40,16 +40,16 @@ class SearchCategoryTest {
 
     @Test
     fun testFindByHostOrNull() {
-        assertNull(SearchCategory.findByHostOrNull(null))
-        assertNull(SearchCategory.findByHostOrNull(""))
-        assertNull(SearchCategory.findByHostOrNull(" "))
-        assertNull(SearchCategory.findByHostOrNull("www.yahoo.co.jp"))
-        assertSame(SearchCategory.GOOGLE, SearchCategory.findByHostOrNull("www.google.com"))
-        assertSame(SearchCategory.YAHOO_JAPAN, SearchCategory.findByHostOrNull("search.yahoo.co.jp"))
-        assertSame(SearchCategory.FLICKR, SearchCategory.findByHostOrNull("www.flickr.com"))
-        assertSame(SearchCategory.AOL, SearchCategory.findByHostOrNull("www.aolsearch.com"))
-        assertSame(SearchCategory.WOLFRAM_ALPHA, SearchCategory.findByHostOrNull("www.wolframalpha.com"))
-        assertSame(SearchCategory.LINKED_IN, SearchCategory.findByHostOrNull("www.linkedin.com"))
+        assertNull(SearchCategory.findByUrlOrNull(null))
+        assertNull(SearchCategory.findByUrlOrNull(""))
+        assertNull(SearchCategory.findByUrlOrNull(" "))
+        assertNull(SearchCategory.findByUrlOrNull("https://www.yahoo.co.jp"))
+        assertSame(SearchCategory.GOOGLE, SearchCategory.findByUrlOrNull("https://www.google.com"))
+        assertSame(SearchCategory.YAHOO_JAPAN, SearchCategory.findByUrlOrNull("https://search.yahoo.co.jp"))
+        assertSame(SearchCategory.FLICKR, SearchCategory.findByUrlOrNull("https://www.flickr.com"))
+        assertSame(SearchCategory.AOL, SearchCategory.findByUrlOrNull("https://www.aolsearch.com"))
+        assertSame(SearchCategory.WOLFRAM_ALPHA, SearchCategory.findByUrlOrNull("https://www.wolframalpha.com"))
+        assertSame(SearchCategory.LINKED_IN, SearchCategory.findByUrlOrNull("https://www.linkedin.com/jobs/search"))
     }
 
 }
