@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.search.trend
 
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -50,7 +51,7 @@ class HourlyTrendModule(
         binding?.trendItems?.layoutManager = layoutManager
     }
 
-    private fun makeLayoutManager(): FlexboxLayoutManager {
+    private fun makeLayoutManager(): RecyclerView.LayoutManager {
         val layoutManager = FlexboxLayoutManager(binding?.root?.context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.flexWrap = FlexWrap.WRAP
