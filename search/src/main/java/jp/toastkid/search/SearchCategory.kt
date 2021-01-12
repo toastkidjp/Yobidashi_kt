@@ -1,6 +1,7 @@
 package jp.toastkid.search
 
 import android.net.Uri
+import android.webkit.URLUtil
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
@@ -391,12 +392,24 @@ enum class SearchCategory(
         private val hostAndCategories =
                 values()
                         .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
-                        .map { it.host.toUri().host to it }
+                        .map { makeKey(it.host) to it }
                         .toMap()
 
-        fun findByHostOrNull(host: String?): SearchCategory? =
-                if (host.isNullOrBlank()) null
-                else hostAndCategories[host]
+        fun findByUrlOrNull(url: String?): SearchCategory? {
+            val key = makeKey(url)
+            return if (key.isNullOrEmpty()) null else hostAndCategories[key]
+        }
+
+        private fun makeKey(url: String?): String? {
+            if (url.isNullOrBlank() || URLUtil.isValidUrl(url).not()) {
+                return null
+            }
+
+            val uri = url.toUri()
+            val pathSegments = uri.pathSegments
+            val firstPath = if (pathSegments.size >= 2) pathSegments[0] ?: "" else ""
+            return "${uri.host}/$firstPath"
+        }
 
         /**
          * Find [SearchCategory] by search category.
