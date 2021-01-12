@@ -346,6 +346,11 @@ enum class SearchCategory(
             R.drawable.ic_financial_times,
             "https://www.ft.com/search?q="
     ),
+    MORNINGSTAR(
+            R.string.morningstar,
+            R.drawable.ic_morningstar,
+            "https://www.morningstar.com/search?query="
+    ),
     BUZZFEED(
             R.string.buzzfeed,
             R.drawable.ic_buzzfeed,
