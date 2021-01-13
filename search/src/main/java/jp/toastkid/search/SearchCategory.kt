@@ -397,7 +397,10 @@ enum class SearchCategory(
         private val hostAndCategories =
                 values()
                         .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
-                        .map { makeKey(it.host) to it }
+                        .map {
+                            val key = if (it == YAHOO_JAPAN_REALTIME_SEARCH) "search.yahoo.co.jp/realtime" else it.host.toUri().host
+                            key to it
+                        }
                         .toMap()
 
         fun findByUrlOrNull(url: String?): SearchCategory? {
@@ -411,6 +414,10 @@ enum class SearchCategory(
             }
 
             val uri = url.toUri()
+            if (url.contains("/realtime/").not()) {
+                return uri.host
+            }
+
             val pathSegments = uri.pathSegments
             val firstPath = if (pathSegments.size >= 2) pathSegments[0] ?: "" else ""
             return "${uri.host}/$firstPath"
