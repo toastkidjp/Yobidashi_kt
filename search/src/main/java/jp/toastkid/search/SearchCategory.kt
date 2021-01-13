@@ -351,6 +351,11 @@ enum class SearchCategory(
             R.drawable.ic_morningstar,
             "https://www.morningstar.com/search?query="
     ),
+    YAHOO_JAPAN_FINANCE(
+            R.string.yahoo_japan_finance,
+            R.drawable.ic_yahoo_japan_finance,
+            "https://info.finance.yahoo.co.jp/search/?query="
+    ),
     BUZZFEED(
             R.string.buzzfeed,
             R.drawable.ic_buzzfeed,
