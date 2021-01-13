@@ -60,6 +60,7 @@ class SearchQueryExtractorTest {
             "test" to "https://www.bbc.co.uk/search?q=test",
             "test" to "https://bgr.com/?s=test#",
             "test" to "https://alohafind.com/search/?q=test#gsc.tab=0&gsc.q=test&gsc.page=1",
+            "test" to "https://www.morningstar.com/search?query=test",
             "test" to "https://www.givero.com/search?q=test"
     )
 
