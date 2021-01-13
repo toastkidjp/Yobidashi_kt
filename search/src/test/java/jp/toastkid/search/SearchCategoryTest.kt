@@ -45,6 +45,10 @@ class SearchCategoryTest {
         assertNull(SearchCategory.findByUrlOrNull(" "))
         assertNull(SearchCategory.findByUrlOrNull("https://www.yahoo.co.jp"))
         assertSame(SearchCategory.GOOGLE, SearchCategory.findByUrlOrNull("https://www.google.com"))
+        assertSame(
+                SearchCategory.YAHOO_JAPAN_REALTIME_SEARCH,
+                SearchCategory.findByUrlOrNull("https://search.yahoo.co.jp/realtime/search?p=test")
+        )
         assertSame(SearchCategory.YAHOO_JAPAN, SearchCategory.findByUrlOrNull("https://search.yahoo.co.jp"))
         assertSame(SearchCategory.FLICKR, SearchCategory.findByUrlOrNull("https://www.flickr.com"))
         assertSame(SearchCategory.AOL, SearchCategory.findByUrlOrNull("https://www.aolsearch.com"))
