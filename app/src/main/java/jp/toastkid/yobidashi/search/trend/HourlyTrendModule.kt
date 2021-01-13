@@ -47,8 +47,7 @@ class HourlyTrendModule(
 
         adapter = Adapter(viewModel)
         binding?.trendItems?.adapter = adapter
-        val layoutManager = makeLayoutManager()
-        binding?.trendItems?.layoutManager = layoutManager
+        binding?.trendItems?.layoutManager = makeLayoutManager()
     }
 
     private fun makeLayoutManager(): RecyclerView.LayoutManager {
