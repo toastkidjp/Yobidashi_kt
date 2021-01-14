@@ -119,7 +119,7 @@ class EditorContextMenuInitializer {
                         OrderedListHeadAdder().invoke(editText)
                         return true
                     }
-                    R.id.context_edit_add_minus -> {
+                    R.id.context_edit_unordered_list -> {
                         listHeadAdder(editText, "-")
                         return true
                     }

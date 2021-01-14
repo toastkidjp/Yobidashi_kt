@@ -8,7 +8,7 @@
         app:showAsAction="always"
         />
     <item
-        android:id="@+id/context_edit_add_minus"
+        android:id="@+id/context_edit_unordered_list"
         android:title="@string/title_context_editor_unordered_list"
         android:orderInCategory="100"
         app:showAsAction="always"
