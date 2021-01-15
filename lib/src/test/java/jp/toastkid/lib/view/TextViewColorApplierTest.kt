@@ -12,9 +12,15 @@ import org.junit.Test
  */
 class TextViewColorApplierTest {
 
+    private val textViewColorApplier = TextViewColorApplier()
+
+    @Test
+    fun testInvokeWithNull() {
+        textViewColorApplier(Color.WHITE, null)
+    }
+
     @Test
     fun testInvoke() {
-        val textViewColorApplier = TextViewColorApplier()
         val textView = mockk<TextView>()
         every { textView.setTextColor(any<Int>()) }.answers { Unit }
         every { textView.getCompoundDrawables() }.answers { arrayOf() }

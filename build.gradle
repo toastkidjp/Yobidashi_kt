@@ -6,9 +6,9 @@ jacoco {
 }
 
 buildscript {
-    byte verMajor  = 1
-    byte verMiddle = 4
-    byte verMinor  = 35
+    final byte verMajor  = 1
+    final byte verMiddle = 4
+    final byte verMinor  = 35
 
     if (verMiddle >= 100 || verMinor >= 10_000) {
         throw new IllegalStateException("Middle and Minor version value is allowed under 100.")
@@ -16,6 +16,10 @@ buildscript {
 
     ext.versionCodeValue = ((verMajor * 1_000_000) + (verMiddle * 10_000) + verMinor)
     ext.versionNameValue = "${verMajor}.${verMiddle}.${verMinor}"
+
+    ext.compileSdk = 30
+    ext.targetSdk = 30
+    ext.buildTools = "30.0.0"
 
     ext.kotlin_version = '1.4.10'
 

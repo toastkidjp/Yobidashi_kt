@@ -22,12 +22,12 @@
                 android:layout_height="wrap_content"
                 >
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <include android:id="@+id/browser_expand"
                     layout="@layout/fragment_setting_section_browser_expand_mode"/>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/retain_tabs"
@@ -50,14 +50,13 @@
                         android:id="@+id/retain_tabs_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
                         android:layout_gravity="right"
                         android:clickable="false"
                         style="@style/Border"
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:orientation="horizontal"
@@ -103,7 +102,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/browser_js"
@@ -124,14 +123,13 @@
                         android:id="@+id/browser_js_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
                         android:layout_gravity="right"
                         android:clickable="false"
                         style="@style/Border"
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/use_image"
@@ -152,14 +150,13 @@
                         android:id="@+id/use_image_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
                         android:layout_gravity="right"
                         android:clickable="false"
                         style="@style/Border"
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/save_form"
@@ -180,14 +177,13 @@
                         android:id="@+id/save_form_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
                         android:layout_gravity="right"
                         android:clickable="false"
                         style="@style/Border"
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/save_view_history"
@@ -210,14 +206,13 @@
                         android:id="@+id/save_view_history_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
                         android:layout_gravity="right"
                         android:clickable="false"
                         style="@style/Border"
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/user_agent"
@@ -241,7 +236,7 @@
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
@@ -282,7 +277,7 @@
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:orientation="vertical"
@@ -322,7 +317,7 @@
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/dark_mode"
@@ -344,15 +339,13 @@
                         android:id="@+id/dark_mode_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
-                        android:layout_marginEnd="@dimen/common_horizontal_margin"
                         android:layout_gravity="end"
                         android:clickable="false"
                         style="@style/Border"
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <FrameLayout
                     android:id="@+id/ad_remove"
@@ -375,14 +368,13 @@
                         android:id="@+id/ad_remove_check"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="@dimen/common_horizontal_margin"
                         android:layout_gravity="right"
                         android:clickable="false"
                         style="@style/Border"
                         />
                 </FrameLayout>
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -392,7 +384,7 @@
                     android:onClick="@{fragment::clearCache}"
                     />
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -402,7 +394,7 @@
                     android:onClick="@{fragment::clearFormData}"
                     />
 
-                <include layout="@layout/primary_dark_divider"/>
+                <include layout="@layout/view_setting_divider" />
 
                 <TextView
                     android:layout_width="match_parent"

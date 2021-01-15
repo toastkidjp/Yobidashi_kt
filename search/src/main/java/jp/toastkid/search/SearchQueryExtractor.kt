@@ -43,6 +43,9 @@ class SearchQueryExtractor {
                     or host.endsWith(".teoma.com")
                     or host.endsWith("www.info.com")
                     or host.endsWith("results.looksmart.com")
+                    or host.equals("www.privacywall.org")
+                    or host.equals("www.mojeek.com")
+                    or host.equals("www.ecosia.org")
                     or host.endsWith("search.gmx.com") ->
                 uri.getQueryParameter("q")
             host.startsWith("www.amazon.") ->
@@ -51,7 +54,7 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("keywords")
             host.contains("yandex.") ->
                 uri.getQueryParameter("text")
-            host.startsWith("www.youtube.") ->
+            host.endsWith(".youtube.com") ->
                 uri.getQueryParameter("search_query")
             host.startsWith("www.flickr.") ->
                 uri.getQueryParameter("text")
@@ -60,7 +63,8 @@ class SearchQueryExtractor {
             host.equals("www.tumblr.com")
                     or host.equals("web.archive.org")-> uri.lastPathSegment
             host.endsWith("archive.org")
-                    or host.endsWith("search.naver.com") ->
+                    or host.endsWith("search.naver.com")
+                    or host.endsWith(".rambler.ru") ->
                 uri.getQueryParameter("query")
             host.endsWith(".wikipedia.org")
                 or host.endsWith(".wikimedia.org") ->

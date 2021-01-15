@@ -44,14 +44,14 @@
                     />
             </FrameLayout>
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <include
                 android:id="@+id/start_up_items"
                 layout="@layout/fragment_setting_section_startup"
                 />
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <TextView
                 android:id="@+id/settings_device"
@@ -64,7 +64,7 @@
                 android:onClick="@{view -> fragment.deviceSetting()}"
                 />
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <TextView
                 android:id="@+id/settings_wifi"
@@ -77,7 +77,7 @@
                 android:onClick="@{view -> fragment.wifi()}"
                 />
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <TextView
                 android:id="@+id/settings_wireless"
@@ -90,7 +90,7 @@
                 android:onClick="@{view -> fragment.wireless()}"
                 />
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <TextView
                 android:id="@+id/settings_date_and_time"
@@ -103,7 +103,7 @@
                 android:onClick="@{view -> fragment.dateAndTime()}"
                 />
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <TextView
                 android:id="@+id/settings_display"
@@ -116,7 +116,7 @@
                 android:onClick="@{view -> fragment.display()}"
                 />
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <TextView
                 android:id="@+id/settings_all_apps"
@@ -129,7 +129,7 @@
                 android:onClick="@{view -> fragment.allApps()}"
                 />
 
-            <include layout="@layout/primary_dark_divider"/>
+            <include layout="@layout/view_setting_divider" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

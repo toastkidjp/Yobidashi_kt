@@ -72,6 +72,11 @@ enum class SearchCategory(
             R.drawable.ic_gmx,
             "https://search.gmx.com/web?q="
     ),
+    ECOSIA(
+            R.string.search_category_ecosia,
+            R.drawable.ic_ecosia,
+            "https://www.ecosia.org/search?q="
+    ),
     STARTPAGE(
             R.string.search_category_startpage,
             R.drawable.ic_startpage,
@@ -92,10 +97,25 @@ enum class SearchCategory(
             R.drawable.ic_looksmart,
             "https://results.looksmart.com/serp?q="
     ),
+    MOJEEK(
+            R.string.search_category_mojeek,
+            R.drawable.ic_mojeek,
+            "https://www.mojeek.com/search?q="
+    ),
+    PRIVACY_WALL(
+            R.string.search_category_privacy_wall,
+            R.drawable.ic_privacywall,
+            "https://www.privacywall.org/search/secure/?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
             "https://www.yandex.com/search/?text="
+    ),
+    RAMBLER(
+            R.string.search_category_rambler,
+            R.drawable.ic_rambler,
+            "https://nova.rambler.ru/search?query="
     ),
     NAVER(
             R.string.naver,

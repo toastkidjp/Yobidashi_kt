@@ -19,6 +19,7 @@
     <string name="search_category_mvnrepository">MvnRepository</string>
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
+    <string name="search_category_rambler">Rambler</string>
     <string name="search_category_yahoo">Yahoo!</string>
     <string name="search_category_yahoo_japan">Yahoo! JAPAN</string>
     <string name="search_category_ask_com">Ask.com</string>
@@ -30,6 +31,7 @@
     <string name="wayback_machine">Wayback Machine</string>
     <string name="search_category_qwant">Qwant</string>
     <string name="search_category_gmx">GMX</string>
+    <string name="search_category_ecosia">Ecosia</string>
     <string name="medium">Medium</string>
     <string name="ted">TED</string>
     <string name="buzzfeed">BuzzFeed</string>
@@ -45,6 +47,8 @@
     <string name="search_category_teoma">Teoma</string>
     <string name="search_category_info_com">info.com</string>
     <string name="search_category_looksmart">looksmart</string>
+    <string name="search_category_mojeek">Mojeek</string>
+    <string name="search_category_privacy_wall">PrivacyWall</string>
     <string name="tumblr">Tumblr</string>
     <string name="search_category_open_street_map">OpenStreetMap</string>
     <string name="search_category_quora">Quora</string>

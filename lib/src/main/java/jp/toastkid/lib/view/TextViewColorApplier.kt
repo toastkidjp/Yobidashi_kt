@@ -23,8 +23,8 @@ class TextViewColorApplier {
      * @param fontColor [ColorInt]
      * @param textViews multiple [TextView]
      */
-    operator fun invoke(@ColorInt fontColor: Int, vararg textViews: TextView) {
-        textViews.forEach { textView ->
+    operator fun invoke(@ColorInt fontColor: Int, vararg textViews: TextView?) {
+        textViews.filterNotNull().forEach { textView ->
             textView.setTextColor(fontColor)
             textView.compoundDrawables.forEach {
                 it?.colorFilter = PorterDuffColorFilter(fontColor, PorterDuff.Mode.SRC_IN)

@@ -255,7 +255,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      * @param snackbarParent for data binding
      */
     fun clearCache(snackbarParent: View) {
-        WebView(context).clearCache(true)
+        WebView(snackbarParent.context).clearCache(true)
         Toaster.snackShort(snackbarParent, R.string.done_clear, preferenceApplier.colorPair())
     }
 
@@ -265,7 +265,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      * @param snackbarParent for data binding
      */
     fun clearFormData(snackbarParent: View) {
-        WebView(context).clearFormData()
+        WebView(snackbarParent.context).clearFormData()
         Toaster.snackShort(snackbarParent, R.string.done_clear, preferenceApplier.colorPair())
     }
 

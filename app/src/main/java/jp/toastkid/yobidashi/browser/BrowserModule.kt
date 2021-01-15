@@ -272,8 +272,9 @@ class BrowserModule(
 
         override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
             super.onReceivedIcon(view, favicon)
-            if (view?.url != null && favicon != null) {
-                bitmapCompressor(favicon, faviconApplier.assignFile(view.url))
+            val urlStr = view?.url
+            if (urlStr != null && favicon != null) {
+                bitmapCompressor(favicon, faviconApplier.assignFile(urlStr))
             }
         }
 
@@ -401,6 +402,7 @@ class BrowserModule(
     }
 
     fun find(keyword: String?) {
+        keyword ?: return
         currentView()?.findAllAsync(keyword)
     }
 

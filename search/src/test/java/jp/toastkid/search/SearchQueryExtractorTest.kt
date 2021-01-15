@@ -131,6 +131,10 @@ class SearchQueryExtractorTest {
         )
         assertEquals(
                 "orange",
+                searchQueryExtractor("https://m.youtube.com/results?search_query=orange")
+        )
+        assertEquals(
+                "orange",
                 searchQueryExtractor("https://yandex.com/search/?text=orange&lr=10636")
         )
         assertEquals(
@@ -156,6 +160,22 @@ class SearchQueryExtractorTest {
         assertEquals(
                 "test",
                 searchQueryExtractor("https://results.looksmart.com/serp?q=test")
+        )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.mojeek.com/search?q=test")
+        )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.privacywall.org/search/secure/?q=test")
+        )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://www.ecosia.org/search?q=test")
+        )
+        assertEquals(
+                "test",
+                searchQueryExtractor("https://nova.rambler.ru/search?query=test&utm_source=head&utm_campaign=self_promo&utm_medium=form&utm_content=search&_openstat=Umcl9N")
         )
     }
 

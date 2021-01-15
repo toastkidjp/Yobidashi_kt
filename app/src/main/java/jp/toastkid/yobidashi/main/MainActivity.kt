@@ -38,7 +38,6 @@ import jp.toastkid.lib.view.WindowOptionColorApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.about.AboutThisAppFragment
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserFragmentViewModel
 import jp.toastkid.yobidashi.browser.LoadingViewModel
@@ -316,7 +315,13 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProvider(this).get(MenuViewModel::class.java)
 
-        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
+        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch) {
+            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
+                val currentFragment = findFragment()
+                it.setFrom(currentFragment?.javaClass)
+                replaceFragment(it)
+            }
+        }
 
         MenuUseCase({ this }, menuViewModel).observe()
     }
@@ -671,20 +676,8 @@ class MainActivity : AppCompatActivity(),
             switchTabList()
             true
         }
-        R.id.setting -> {
-            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
-                val currentFragment = findFragment()
-                it.setFrom(currentFragment?.javaClass)
-                replaceFragment(it)
-            }
-            true
-        }
         R.id.reset_menu_position -> {
             menuViewModel?.resetPosition()
-            true
-        }
-        R.id.about_this_app -> {
-            replaceFragment(obtainFragment(AboutThisAppFragment::class.java))
             true
         }
         R.id.menu_exit -> {

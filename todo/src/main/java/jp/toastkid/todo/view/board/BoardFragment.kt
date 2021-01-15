@@ -101,12 +101,14 @@ class BoardFragment : Fragment() {
                 }
         )
 
-        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
+        val viewModelProvider = ViewModelProvider(requireActivity())
+
+        viewModelProvider.get(AppBarViewModel::class.java)
                 .replace(appBarBinding.root)
 
         taskClearUseCase = TaskClearUseCase(
                 tasks,
-                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java),
+                viewModelProvider.get(ContentViewModel::class.java),
                 taskAddingUseCase
         ) { binding.board.removeAllViews() }
 
