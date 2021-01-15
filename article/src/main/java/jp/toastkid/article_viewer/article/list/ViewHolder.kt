@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import java.text.DateFormat
@@ -26,7 +27,7 @@ class ViewHolder(
     private val onClick: (String) -> Unit,
     private val onLongClick: (String) -> Unit,
     private val onMenuClick: (View, SearchResult) -> Unit,
-    private val menuColor: Int
+    @ColorInt private val menuColor: Int
 ) : RecyclerView.ViewHolder(view) {
 
     @SuppressLint("SetTextI18n")
