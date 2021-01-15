@@ -43,10 +43,10 @@ class Adapter(
         }
 
         return ViewHolder(
-            layoutInflater.inflate(ITEM_LAYOUT_ID, parent, false),
-            onClick,
-            onLongClick,
-            onMenuClick,
+                layoutInflater.inflate(ITEM_LAYOUT_ID, parent, false),
+                onClick,
+                onLongClick,
+                onMenuClick,
                 menuColor
         )
     }
