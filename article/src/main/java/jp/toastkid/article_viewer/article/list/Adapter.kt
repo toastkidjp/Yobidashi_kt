@@ -10,6 +10,7 @@ package jp.toastkid.article_viewer.article.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.paging.PagingDataAdapter
 import jp.toastkid.article_viewer.R
@@ -33,6 +34,7 @@ class Adapter(
     private val onMenuClick: (View, SearchResult) -> Unit
 ) : PagingDataAdapter<SearchResult, ViewHolder>(SimpleComparator()) {
 
+    @ColorInt
     private var menuColor = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
