@@ -19,7 +19,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.Urls
+import jp.toastkid.lib.night.DisplayMode
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -70,6 +72,21 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
     override fun onResume() {
         super.onResume()
         setCurrentValues()
+
+        val color =
+                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
+                else preferenceApplier.color
+        CompoundDrawableColorApplier().invoke(
+                color,
+                binding.browserExpand.textScreenMode,
+                binding.textAdRemove,
+                binding.textBackgroundAlpha,
+                binding.textDarkMode,
+                binding.textHome,
+                binding.textRetainTab,
+                binding.textSaveHistory,
+                binding.textUserAgent
+        )
     }
 
     /**
