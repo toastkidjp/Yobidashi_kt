@@ -23,13 +23,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingDisplayBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.storage.FilesDir
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.settings.DarkModeApplier
 import jp.toastkid.yobidashi.settings.background.Adapter
 import jp.toastkid.yobidashi.settings.background.ClearImagesDialogFragment
@@ -112,6 +114,11 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
     override fun onResume() {
         super.onResume()
         preferenceApplier.colorPair().applyReverseTo(binding.fab)
+
+        val color =
+                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
+                else preferenceApplier.color
+        CompoundDrawableColorApplier().invoke(color, binding.applyDarkMode)
     }
 
     fun applyDarkMode() {
