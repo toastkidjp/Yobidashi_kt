@@ -15,13 +15,28 @@
         >
 
         <TextView
+            android:id="@+id/detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/title_activity_date_detail"
+            android:textSize="16sp"
+            android:gravity="start"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="@{useCase::detail}"
+            android:background="@drawable/ripple_transparent"
+            />
+
+        <TextView
             android:id="@+id/this_app"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="@string/this_app"
             android:textSize="16sp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail"
             app:layout_constraintStart_toStartOf="parent"
             android:onClick="@{useCase::thisApp}"
             android:background="@drawable/ripple_transparent"
