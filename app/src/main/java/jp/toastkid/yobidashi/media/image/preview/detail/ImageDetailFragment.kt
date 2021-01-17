@@ -36,7 +36,7 @@ class ImageDetailFragment : BottomSheetDialogFragment() {
         val inputStream = FileInputStream(File(imageUri.toString()))
         val exifInterface = ExifInterface(inputStream)
 
-        textView.setText(ExifInformationExtractorUseCase().invoke(exifInterface))
+        textView.text = ExifInformationExtractorUseCase().invoke(exifInterface)
         inputStream.close()
         return textView
     }
