@@ -31,7 +31,6 @@ class ImageDetailFragment : BottomSheetDialogFragment() {
         val imageUri = arguments?.getParcelable<Uri>(KEY_EXTRA_IMAGE_URI) ?: return null
         val inputStream = FileInputStream(File(imageUri.toString()))
         val exifInterface = ExifInterface(inputStream)
-        val lineSeparator = System.lineSeparator()
 
         textView.setText(ExifInformationExtractorUseCase().invoke(exifInterface))
         inputStream.close()
