@@ -16,7 +16,9 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import jp.toastkid.lib.night.DisplayMode
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
@@ -83,6 +85,22 @@ class SearchSettingFragment : Fragment() {
         binding.useTrendCheck.jumpDrawablesToCurrentState()
         binding.useAppSearchCheck.isChecked = preferenceApplier.isEnableAppSearch()
         binding.useAppSearchCheck.jumpDrawablesToCurrentState()
+
+        val color =
+                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
+                else preferenceApplier.color
+        CompoundDrawableColorApplier().invoke(
+                color,
+                binding.textUseViewHistory,
+                binding.textDefaultSearchEngine,
+                binding.textEnableSearchQueryExtract,
+                binding.textEnableSearchWithClip,
+                binding.textUseFavorite,
+                binding.textUseHistory,
+                binding.textUseSuggestion,
+                binding.textUseTrend,
+                binding.textUseUrlModule
+        )
     }
 
     /**
