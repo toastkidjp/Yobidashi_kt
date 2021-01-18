@@ -76,6 +76,7 @@ class OtherSettingFragment : Fragment() {
         CompoundDrawableColorApplier().invoke(
                 color,
                 binding.settingsDevice,
+                binding.startUpItems.textStartUpTab,
                 binding.settingsAllApps,
                 binding.settingsDateAndTime,
                 binding.settingsDisplay,
