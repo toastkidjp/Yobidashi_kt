@@ -173,7 +173,6 @@
                 >
                 <TextView
                     android:id="@+id/text_use_favorite"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -289,6 +288,7 @@
                 android:onClick="@{view -> fragment.switchUseAppSearch() }"
                 >
                 <TextView
+                    android:id="@+id/text_use_app_search"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -99,7 +99,8 @@ class SearchSettingFragment : Fragment() {
                 binding.textUseHistory,
                 binding.textUseSuggestion,
                 binding.textUseTrend,
-                binding.textUseUrlModule
+                binding.textUseUrlModule,
+                binding.textUseAppSearch
         )
     }
 
