@@ -19,7 +19,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.night.DisplayMode
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingColorFilterBinding
 
@@ -80,6 +82,11 @@ class ColorFilterSettingFragment : Fragment() {
             it.jumpDrawablesToCurrentState()
             overlayColorFilterViewModel?.update()
         }
+
+        val color =
+                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
+                else preferenceApplier.color
+        CompoundDrawableColorApplier().invoke(color, binding.textUseColorFilter)
     }
 
     /**
