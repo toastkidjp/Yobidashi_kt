@@ -140,6 +140,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider1"
             >
             <TextView
+                android:id="@+id/text_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"
@@ -180,6 +181,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider2"
             >
             <TextView
+                android:id="@+id/text_highlight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"
@@ -218,6 +220,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider3"
             >
             <TextView
+                android:id="@+id/text_font_size"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"

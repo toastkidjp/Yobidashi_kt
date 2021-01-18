@@ -21,8 +21,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.night.DisplayMode
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingEditorBinding
 import jp.toastkid.yobidashi.editor.EditorFontSize
@@ -148,6 +150,20 @@ class EditorSettingFragment : Fragment() {
             editorModule.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor(ContextCompat.getColor(context, R.color.editor_cursor)))
             editorModule.highlightPreview.setBackgroundColor(preferenceApplier.editorHighlightColor(ContextCompat.getColor(context, R.color.light_blue_200_dd)))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val color =
+                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
+                else preferenceApplier.color
+        CompoundDrawableColorApplier().invoke(
+                color,
+                binding.textCursor,
+                binding.textHighlight,
+                binding.textFontSize
+        )
     }
 
     /**
