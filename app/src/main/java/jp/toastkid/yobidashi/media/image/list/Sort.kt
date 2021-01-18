@@ -15,7 +15,7 @@ import android.provider.MediaStore
 enum class Sort(val bucketSort: String, val imageSort: String) {
     DATE(
             "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
-            "${MediaStore.Images.Media.DATE_TAKEN} DESC"
+            "${MediaStore.Images.Media.DATE_MODIFIED} DESC"
     ),
     NAME(
             "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} ASC",
@@ -23,7 +23,7 @@ enum class Sort(val bucketSort: String, val imageSort: String) {
     ),
     ITEM_COUNT(
             "${MediaStore.Images.Media.DATE_MODIFIED} DESC",
-            "${MediaStore.Images.Media.DATE_TAKEN} DESC"
+            "${MediaStore.Images.Media.DATE_MODIFIED} DESC"
     );
 
     companion object {
