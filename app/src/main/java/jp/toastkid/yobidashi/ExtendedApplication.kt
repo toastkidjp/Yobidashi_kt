@@ -3,8 +3,9 @@ package jp.toastkid.yobidashi
 import android.app.Application
 import android.webkit.WebView
 import androidx.core.content.ContextCompat
-import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
@@ -56,6 +57,11 @@ class ExtendedApplication : Application() {
         DefaultBackgroundImagePreparation()(this) {
             preferenceApplier.backgroundImagePath = it.absolutePath
         }
+    }
+
+    override fun onTerminate() {
+        GlobalWebViewPool.dispose()
+        super.onTerminate()
     }
 
 }

@@ -1,46 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <FrameLayout
+    <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_item_height"
-        android:background="@color/filter_white_bb"
+        android:layout_height="wrap_content"
         android:foreground="@drawable/ripple_transparent"
+        android:layout_margin="2dp"
+        app:cardElevation="2dp"
         >
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/search_horizontal_margin"
-            android:adjustViewBounds="true"
-            android:layout_gravity="left"
-            app:srcCompat="@drawable/ic_archive"
-            />
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="60dp"
             >
-
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                android:layout_marginLeft="@dimen/search_horizontal_margin"
+                android:adjustViewBounds="true"
+                android:layout_gravity="left"
+                tools:tint="@color/black"
+                app:srcCompat="@drawable/ic_archive"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
             <TextView
                 android:id="@+id/text"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="6"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:maxLines="1"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
                 android:textSize="16sp"
                 tools:text="@string/sample_long_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/subtext"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintEnd_toStartOf="@id/delete"
                 />
             <TextView
                 android:id="@+id/subtext"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="4"
                 android:maxLines="1"
@@ -48,23 +55,23 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="10sp"
                 tools:text="@string/sample_long_text"
+                app:layout_constraintTop_toBottomOf="@id/text"
+                app:layout_constraintStart_toStartOf="@id/text"
+                app:layout_constraintEnd_toEndOf="@id/text"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
-        </LinearLayout>
-        <ImageView
-            android:id="@+id/delete"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/common_horizontal_margin"
-            android:adjustViewBounds="true"
-            android:layout_gravity="right"
-            app:srcCompat="@drawable/ic_remove_circle_white"
-            />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="60dp"
-            android:background="@color/colorPrimaryDark"
-            />
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                android:layout_marginRight="@dimen/common_horizontal_margin"
+                android:adjustViewBounds="true"
+                android:layout_gravity="right"
+                tools:tint="@color/black"
+                app:srcCompat="@drawable/ic_remove_circle_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

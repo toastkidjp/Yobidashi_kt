@@ -16,11 +16,11 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 
 /**
@@ -79,6 +79,8 @@ class SearchSettingFragment : Fragment() {
         binding.useViewHistoryCheck.jumpDrawablesToCurrentState()
         binding.useUrlModuleCheck.isChecked = preferenceApplier.isEnableUrlModule()
         binding.useUrlModuleCheck.jumpDrawablesToCurrentState()
+        binding.useTrendCheck.isChecked = preferenceApplier.isEnableTrendModule()
+        binding.useTrendCheck.jumpDrawablesToCurrentState()
         binding.useAppSearchCheck.isChecked = preferenceApplier.isEnableAppSearch()
         binding.useAppSearchCheck.jumpDrawablesToCurrentState()
     }
@@ -157,6 +159,15 @@ class SearchSettingFragment : Fragment() {
         val newState = !preferenceApplier.isEnableUrlModule()
         preferenceApplier.switchEnableUrlModule()
         binding.useUrlModuleCheck.isChecked = newState
+    }
+
+    /**
+     * Switch state of using trend suggestion.
+     */
+    fun switchUseTrendModule() {
+        val newState = !preferenceApplier.isEnableTrendModule()
+        preferenceApplier.switchEnableTrendModule()
+        binding.useTrendCheck.isChecked = newState
     }
 
     /**

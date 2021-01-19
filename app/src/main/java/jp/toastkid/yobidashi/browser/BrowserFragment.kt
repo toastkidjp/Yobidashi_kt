@@ -31,6 +31,7 @@ import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInsertion
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.browser.page_information.PageInformationDialogFragment
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
@@ -301,12 +302,18 @@ class BrowserFragment : Fragment(),
     }
 
     private fun showReaderFragment(content: String) {
+        val cleaned = content.replace("^\"|\"$".toRegex(), "")
+        if (cleaned.isBlank()) {
+            contentViewModel?.snackShort("This page can't show reader mode.")
+            return
+        }
+
         val readerFragment =
                 activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
                         ?: ReaderFragment()
 
         val lineSeparator = System.getProperty("line.separator") ?: ""
-        val replacedContent = content.replace("\\n", lineSeparator)
+        val replacedContent = cleaned.replace("\\n", lineSeparator)
 
         activity?.let {
             ViewModelProvider(it).get(ReaderFragmentViewModel::class.java)
@@ -356,6 +363,11 @@ class BrowserFragment : Fragment(),
      * Do browser forward action.
      */
     fun forward() = browserModule.forward()
+
+    fun showHistory(): Boolean {
+        contentViewModel?.nextFragment(ViewHistoryFragment::class.java)
+        return true
+    }
 
     /**
      * TODO implement ViewModel.

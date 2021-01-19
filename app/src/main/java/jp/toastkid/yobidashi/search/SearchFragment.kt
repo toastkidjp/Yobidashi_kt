@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
 import jp.toastkid.yobidashi.search.history.HistoryModule
 import jp.toastkid.yobidashi.search.history.SearchHistoryFragment
 import jp.toastkid.yobidashi.search.suggestion.SuggestionModule
+import jp.toastkid.yobidashi.search.trend.HourlyTrendModule
 import jp.toastkid.yobidashi.search.url.UrlModule
 import jp.toastkid.yobidashi.search.url_suggestion.UrlSuggestionModule
 import jp.toastkid.yobidashi.search.voice.VoiceSearch
@@ -104,6 +105,8 @@ class SearchFragment : Fragment() {
      * Suggestion module.
      */
     private var urlSuggestionModule: UrlSuggestionModule? = null
+
+    private var hourlyTrendModule: HourlyTrendModule? = null
 
     /**
      * App module.
@@ -189,6 +192,13 @@ class SearchFragment : Fragment() {
                 { search(extractCurrentSearchCategory(), it) },
                 { search(extractCurrentSearchCategory(), it, true) }
         )
+
+        hourlyTrendModule = HourlyTrendModule(
+                binding?.hourlyTrendModule,
+                { search(extractCurrentSearchCategory(), it) },
+                { search(extractCurrentSearchCategory(), it, true) }
+        )
+        hourlyTrendModule?.request()
 
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding, contentViewModel)
 
@@ -314,6 +324,7 @@ class SearchFragment : Fragment() {
         favoriteModule?.enable = preferenceApplier.isEnableFavoriteSearch
         urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
+        hourlyTrendModule?.setEnable(preferenceApplier.isEnableTrendModule())
         appModule?.enable = preferenceApplier.isEnableAppSearch()
 
         val headerView = headerBinding?.root ?: return
@@ -529,6 +540,7 @@ class SearchFragment : Fragment() {
         favoriteModule?.dispose()
         historyModule?.dispose()
         suggestionModule?.dispose()
+        hourlyTrendModule?.dispose()
         appModule?.dispose()
         super.onDetach()
     }

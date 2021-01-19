@@ -745,7 +745,6 @@ class MainActivity : AppCompatActivity(),
         searchWithClip.dispose()
         pageSearchPresenter.dispose()
         floatingPreview?.dispose()
-        GlobalWebViewPool.dispose()
         super.onDestroy()
     }
 

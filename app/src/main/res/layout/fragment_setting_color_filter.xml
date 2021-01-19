@@ -26,6 +26,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:drawableStart="@drawable/ic_color_filter_black"
+                android:drawablePadding="4dp"
                 android:text="@string/title_color_filter"
                 />
             <CheckBox
@@ -49,11 +51,11 @@
                 android:id="@+id/sample"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:text="@string/minus"
-                android:textColor="@color/gray_500_dd"
+                android:text="A"
+                android:textColor="@color/black"
                 />
             <TextView
                 android:layout_width="match_parent"

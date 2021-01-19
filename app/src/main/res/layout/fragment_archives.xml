@@ -5,5 +5,6 @@
         android:id="@+id/archives_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layoutAnimation="@anim/layout_slide_in_right"
         />
 </layout>

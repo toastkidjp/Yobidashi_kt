@@ -15,13 +15,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.databinding.FragmentSettingsColorBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -99,31 +99,34 @@ class ColorSettingFragment : Fragment(),
         initSavedColors()
 
         initialBgColor = colorPair.bgColor()
-        binding?.settingsColorPrev?.setBackgroundColor(initialBgColor)
-        binding?.backgroundPalette?.color = initialBgColor
+        binding?.palettes?.prev?.setBackgroundColor(initialBgColor)
+        binding?.palettes?.backgroundPalette?.color = initialBgColor
 
         initialFontColor = colorPair.fontColor()
-        binding?.settingsColorPrev?.setTextColor(initialFontColor)
-        binding?.fontPalette?.color = initialFontColor
+        binding?.palettes?.prev?.setTextColor(initialFontColor)
+        binding?.palettes?.fontPalette?.color = initialFontColor
+
+        binding?.palettes?.ok?.setOnClickListener { ok() }
+        binding?.palettes?.prev?.setOnClickListener { reset() }
     }
 
     /**
      * Initialize background and font palettes.
      */
     private fun initPalettes() {
-        binding?.backgroundPalette?.also {
-            it.addSVBar(binding?.backgroundSvbar)
-            it.addOpacityBar(binding?.backgroundOpacitybar)
+        binding?.palettes?.backgroundPalette?.also {
+            it.addSVBar(binding?.palettes?.backgroundSvbar)
+            it.addOpacityBar(binding?.palettes?.backgroundOpacitybar)
             it.setOnColorChangedListener { color ->
-                binding?.settingsColorOk?.setBackgroundColor(color)
+                binding?.palettes?.ok?.setBackgroundColor(color)
             }
         }
 
-        binding?.fontPalette?.also {
-            it.addSVBar(binding?.fontSvbar)
-            it.addOpacityBar(binding?.fontOpacitybar)
+        binding?.palettes?.fontPalette?.also {
+            it.addSVBar(binding?.palettes?.fontSvbar)
+            it.addOpacityBar(binding?.palettes?.fontOpacitybar)
             it.setOnColorChangedListener { color ->
-                binding?.settingsColorOk?.setTextColor(color)
+                binding?.palettes?.ok?.setTextColor(color)
             }
         }
 
@@ -171,16 +174,16 @@ class ColorSettingFragment : Fragment(),
      * Refresh with current color.
      */
     private fun refresh() {
-        binding?.settingsColorOk?.also { colorPair().setTo(it) }
+        binding?.palettes?.ok?.also { colorPair().setTo(it) }
         adapter?.refresh()
     }
 
     /**
      * OK button's action.
      */
-    fun ok() {
-        val bgColor = binding?.backgroundPalette?.color ?: Color.BLACK
-        val fontColor = binding?.fontPalette?.color ?: Color.WHITE
+    private fun ok() {
+        val bgColor = binding?.palettes?.backgroundPalette?.color ?: Color.BLACK
+        val fontColor = binding?.palettes?.fontPalette?.color ?: Color.WHITE
 
         commitNewColor(bgColor, fontColor)
 
@@ -207,8 +210,8 @@ class ColorSettingFragment : Fragment(),
 
         refresh()
 
-        binding?.backgroundPalette?.color = bgColor
-        binding?.fontPalette?.color = fontColor
+        binding?.palettes?.backgroundPalette?.color = bgColor
+        binding?.palettes?.fontPalette?.color = fontColor
         activity?.let { Updater.update(it) }
 
         snackShort(R.string.settings_color_done_commit)
@@ -217,7 +220,7 @@ class ColorSettingFragment : Fragment(),
     /**
      * Reset button's action.
      */
-    fun reset() {
+    private fun reset() {
         preferenceApplier.color = initialBgColor
         preferenceApplier.fontColor = initialFontColor
 
