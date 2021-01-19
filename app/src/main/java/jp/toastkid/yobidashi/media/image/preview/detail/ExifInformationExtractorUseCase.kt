@@ -22,7 +22,7 @@ class ExifInformationExtractorUseCase(
         return content
     }
 
-    private fun extractAttribute(exifInterface: androidx.exifinterface.media.ExifInterface, tag: String) {
+    private fun extractAttribute(exifInterface: ExifInterface, tag: String) {
         exifInterface.getAttribute(tag)?.let {
             stringBuilder.append("$tag: $it${System.lineSeparator()}")
         }
