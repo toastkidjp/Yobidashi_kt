@@ -147,8 +147,16 @@ class EditorSettingFragment : Fragment() {
             }
 
             val context = binding.root.context
-            editorModule.cursorPreview.setBackgroundColor(preferenceApplier.editorCursorColor(ContextCompat.getColor(context, R.color.editor_cursor)))
-            editorModule.highlightPreview.setBackgroundColor(preferenceApplier.editorHighlightColor(ContextCompat.getColor(context, R.color.light_blue_200_dd)))
+
+            val defaultCursorColor = ContextCompat.getColor(context, R.color.editor_cursor)
+            editorModule.cursorPreview.setBackgroundColor(
+                    preferenceApplier.editorCursorColor(defaultCursorColor)
+            )
+
+            val defaultHighlightColor = ContextCompat.getColor(context, R.color.light_blue_200_dd)
+            editorModule.highlightPreview.setBackgroundColor(
+                    preferenceApplier.editorHighlightColor(defaultHighlightColor)
+            )
         }
     }
 
