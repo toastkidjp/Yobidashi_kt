@@ -17,7 +17,7 @@
             android:background="@color/setting_background"
             >
             <FrameLayout
-                android:id="@+id/default_search_engine"
+                android:id="@+id/font_size_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{view -> fragment.openSearchCategory()}"
