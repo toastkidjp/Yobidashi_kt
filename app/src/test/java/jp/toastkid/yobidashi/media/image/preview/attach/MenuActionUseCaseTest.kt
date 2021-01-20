@@ -43,6 +43,9 @@ class MenuActionUseCaseTest {
     @MockK
     private lateinit var showDialog: (DialogFragment) -> Unit
 
+    @MockK
+    private lateinit var view: View
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -52,6 +55,7 @@ class MenuActionUseCaseTest {
         every { uriSupplier.invoke() }.returns(mockk())
         every { bitmapSupplier.invoke() }.returns(mockk())
         every { showDialog.invoke(any()) }.answers { Unit }
+        every { view.getContext() }.returns(mockk())
     }
 
     @After
@@ -61,9 +65,6 @@ class MenuActionUseCaseTest {
 
     @Test
     fun thisApp() {
-        val view = mockk<View>()
-        every { view.getContext() }.returns(mockk())
-
         menuActionUseCase.thisApp(view)
 
         verify (exactly = 1) { view.getContext() }
@@ -76,9 +77,6 @@ class MenuActionUseCaseTest {
 
     @Test
     fun otherApp() {
-        val view = mockk<View>()
-        every { view.getContext() }.returns(mockk())
-
         menuActionUseCase.otherApp(view)
 
         verify (exactly = 1) { view.getContext() }
@@ -91,9 +89,6 @@ class MenuActionUseCaseTest {
 
     @Test
     fun detail() {
-        val view = mockk<View>()
-        every { view.getContext() }.returns(mockk())
-
         menuActionUseCase.detail(view)
 
         verify (exactly = 0) { view.getContext() }
