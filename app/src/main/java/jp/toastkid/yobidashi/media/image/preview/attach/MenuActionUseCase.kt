@@ -14,7 +14,6 @@ import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.media.image.preview.detail.ImageDetailFragment
 
 /**
- * TODO write unit test.
  * @author toastkidjp
  */
 class MenuActionUseCase(
