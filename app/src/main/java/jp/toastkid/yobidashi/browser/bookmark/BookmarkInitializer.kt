@@ -67,7 +67,6 @@ class BookmarkInitializer {
         val favicons = FilesDir(context, "favicons")
         val bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
 
-        // TODO Extract to function.
         return CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
                 addBookmarks(bookmarkRepository, favicons)
