@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
+import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
@@ -76,6 +77,7 @@ class BookmarkInitializer {
         }
     }
 
+    @WorkerThread
     private fun addBookmarks(bookmarkRepository: BookmarkRepository, favicons: FilesDir) {
         defaultBookmarks.forEach {
             val parent = it.key
