@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add">追加</string>
+    <string name="modify">修正</string>
+    <string name="delete">削除</string>
+    <string name="clear">全削除</string>
+    <string name="color">色</string>
+    <string name="description">本文</string>
+    <string name="menu">メニュー</string>
+</resources>
