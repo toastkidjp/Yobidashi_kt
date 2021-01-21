@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.night.DisplayMode
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.SlidingTapListener
 import jp.toastkid.yobidashi.R
@@ -126,6 +127,11 @@ class FloatingPreview(context: Context) {
                         PreferenceApplier(context).fontColor,
                         PorterDuff.Mode.SRC_IN
                 )
+        val color =
+                if (DisplayMode(context.resources.configuration).isNightMode()) preferenceApplier.fontColor
+                else Color.TRANSPARENT
+        binding.close.setColorFilter(color)
+
         webView.onResume()
     }
 
