@@ -449,12 +449,12 @@
     <string name="download_all_images">すべての画像を保存</string>
     <string name="this_app">このアプリの背景に設定</string>
     <string name="other_app">別のアプリで設定</string>
-    <string name="title_todo_tasks">TODO tasks</string>
-    <string name="title_todo_tasks_board">Task board</string>
+    <string name="title_todo_tasks">タスクリスト</string>
+    <string name="title_todo_tasks_board">タスクボード</string>
     <string name="title_search_with_map_app">地図アプリで検索</string>
     <string name="title_sort_by_date">日付でソート</string>
     <string name="title_sort_by_name">名前でソート</string>
     <string name="title_sort_by_count">数でソート</string>
-    <string name="title_context_editor_task_list">Task list</string>
+    <string name="title_context_editor_task_list">タスクリスト</string>
 
 </resources>
