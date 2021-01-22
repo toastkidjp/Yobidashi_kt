@@ -136,7 +136,7 @@
                 android:id="@+id/export_article_viewer"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:text="Export to Article viewer"
+                android:text="@string/export_to_article_viewer"
                 android:textSize="@dimen/menu_font_size"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_article"
