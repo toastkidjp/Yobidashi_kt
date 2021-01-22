@@ -127,6 +127,7 @@ class FloatingPreview(context: Context) {
                         PreferenceApplier(context).fontColor,
                         PorterDuff.Mode.SRC_IN
                 )
+
         val color =
                 if (DisplayMode(context.resources.configuration).isNightMode()) preferenceApplier.fontColor
                 else Color.TRANSPARENT
