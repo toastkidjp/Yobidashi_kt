@@ -10,17 +10,19 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.databinding.DialogFragmentTabListBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.image.BackgroundImageLoaderUseCase
-import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.tab.model.Tab
 
 /**
@@ -144,6 +146,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
         initRecyclerView(binding.recyclerView)
 
+        colorPair.applyTo(binding.addArticleTab)
         colorPair.applyTo(binding.addPdfTab)
         colorPair.applyTo(binding.addEditorTab)
         colorPair.applyTo(binding.addTab)
@@ -164,6 +167,11 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
     fun openPdf() {
         callback?.onOpenPdf()
+    }
+
+    fun openArticleList() {
+        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).openArticleList()
+        callback?.onCloseOnly()
     }
 
     fun openEditor(view: View) {
