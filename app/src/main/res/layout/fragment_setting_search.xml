@@ -309,6 +309,18 @@
                     />
             </FrameLayout>
 
+            <TextView
+                android:id="@+id/text_search_category"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_search"
+                android:text="Search category setting"
+                />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/setting_search_categories"
                 android:orientation="vertical"
