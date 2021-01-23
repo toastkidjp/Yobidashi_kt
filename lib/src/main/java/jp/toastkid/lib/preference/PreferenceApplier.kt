@@ -27,7 +27,7 @@ class PreferenceApplier(private val context: Context) {
     private enum class Key {
         BG_COLOR, FONT_COLOR,
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
-        ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH,
+        ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH, DISABLE_SEARCH_CATEGORIES,
         BG_IMAGE, LAST_AD_DATE,
         USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
@@ -112,6 +112,22 @@ class PreferenceApplier(private val context: Context) {
 
     fun switchEnableAppSearch() {
         preferences.edit().putBoolean(Key.ENABLE_APP_SEARCH.name, !isEnableAppSearch()).apply()
+    }
+
+    fun addDisableSearchCategory(name: String) {
+        val set = readDisableSearchCategory()
+        set?.add(name)
+        preferences.edit().putStringSet(Key.DISABLE_SEARCH_CATEGORIES.name, set).apply()
+    }
+
+    fun removeDisableSearchCategory(name: String) {
+        val set = readDisableSearchCategory()
+        set?.remove(name)
+        preferences.edit().putStringSet(Key.DISABLE_SEARCH_CATEGORIES.name, set).apply()
+    }
+
+    fun readDisableSearchCategory(): MutableSet<String>? {
+        return preferences.getStringSet(Key.DISABLE_SEARCH_CATEGORIES.name, mutableSetOf())
     }
 
     var backgroundImagePath: String
