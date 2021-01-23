@@ -318,7 +318,7 @@
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:drawableStart="@drawable/ic_search"
-                android:text="Search category setting"
+                android:text="@string/subhead_search_category_setting"
                 />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -464,5 +464,6 @@
     <string name="title_sort_by_name">Sort by name</string>
     <string name="title_sort_by_count">Sort by count</string>
     <string name="title_context_editor_task_list">Task list</string>
+    <string name="subhead_search_category_setting">Search category setting</string>
 
 </resources>
