@@ -24,6 +24,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingSearchBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
+import jp.toastkid.yobidashi.settings.fragment.search.category.Adapter
 
 /**
  * @author toastkidjp
@@ -60,6 +61,8 @@ class SearchSettingFragment : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
+
+        binding.settingSearchCategories.adapter = Adapter(preferenceApplier)
 
         return binding.root
     }
