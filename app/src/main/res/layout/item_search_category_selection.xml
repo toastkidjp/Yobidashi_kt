@@ -41,6 +41,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
+
         <TextView
             android:id="@+id/text"
             android:layout_width="0dp"
