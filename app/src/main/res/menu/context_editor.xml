@@ -20,7 +20,7 @@
 
     <item
         android:id="@+id/context_edit_duplicate_current_line"
-        android:title="Duplicate current line"
+        android:title="@string/duplicate_current_line"
         android:orderInCategory="100"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
