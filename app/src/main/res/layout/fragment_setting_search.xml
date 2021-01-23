@@ -6,6 +6,7 @@
     </data>
     <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/search_module"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -308,6 +309,13 @@
                     />
             </FrameLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/setting_search_categories"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
