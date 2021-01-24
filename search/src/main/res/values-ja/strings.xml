@@ -68,5 +68,6 @@
     <string name="search_category_yahoo_japan_realtime_search">リアルタイム検索</string>
     <string name="morningstar">Morningstar</string>
     <string name="yahoo_japan_finance">Yahoo!ファイナンス</string>
+    <string name="search_category_webster">Webster</string>
 
 </resources>
