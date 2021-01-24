@@ -52,4 +52,9 @@ class Adapter(private val preferenceApplier: PreferenceApplier) : RecyclerView.A
         return items.size
     }
 
+    fun invokeCheckAll() {
+        items.forEach { it.checked = true }
+        notifyDataSetChanged()
+    }
+
 }

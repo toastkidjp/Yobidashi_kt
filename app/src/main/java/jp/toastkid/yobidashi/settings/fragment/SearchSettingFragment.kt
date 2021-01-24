@@ -62,7 +62,12 @@ class SearchSettingFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
 
-        binding.settingSearchCategories.adapter = Adapter(preferenceApplier)
+        val adapter = Adapter(preferenceApplier)
+        binding.settingSearchCategories.adapter = adapter
+        binding.checkSearchCategory.setOnClickListener {
+            adapter.invokeCheckAll()
+        }
+        adapter.notifyDataSetChanged()
 
         return binding.root
     }
