@@ -284,12 +284,12 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 true
             }
             R.id.action_set_target -> {
-                startActivityForResult(ZipFileChooserIntentFactory()(), 1)
+                startActivityForResult(ZipFileChooserIntentFactory()(), REQUEST_CODE)
                 true
             }
             R.id.action_sort -> {
                 val dialogFragment = SortSettingDialogFragment()
-                dialogFragment.setTargetFragment(this, 1)
+                dialogFragment.setTargetFragment(this, REQUEST_CODE)
                 dialogFragment.show(parentFragmentManager, "")
                 true
             }
@@ -305,7 +305,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val uri = data?.data ?: return
             updateIfNeed(uri)
         }
@@ -340,6 +340,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         @LayoutRes
         private val LAYOUT_ID = R.layout.fragment_article_list
+
+        private const val REQUEST_CODE = 1
 
     }
 }
