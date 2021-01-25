@@ -21,4 +21,5 @@ class TestApplication : Application(), TestLifecycleApplication {
     override fun prepareTest(test: Any?) = Unit
 
     override fun afterTest(method: Method?) = Unit
+
 }
