@@ -70,4 +70,21 @@ class CurrentLineDuplicatorUseCaseTest {
         verify (atLeast = 1) { text.substring(any(), any()) }
     }
 
+    @Test
+    fun testEarlyReturnCase() {
+        every { layout.getLineStart(any()) }.returns(-1)
+        every { layout.getLineEnd(any()) }.returns(133)
+
+        currentLineDuplicatorUseCase.invoke(editText)
+
+        verify (atLeast = 1) { editText.getSelectionStart() }
+        verify (atLeast = 1) { editText.layout }
+        verify (exactly = 0) { editText.text }
+        verify (atLeast = 1) { layout.getLineForOffset(any()) }
+        verify (atLeast = 1) { layout.getLineStart(any()) }
+        verify (atLeast = 1) { layout.getLineEnd(any()) }
+        verify (exactly = 0) { text.insert(any(), any()) }
+        verify (exactly = 0) { text.substring(any(), any()) }
+    }
+
 }
