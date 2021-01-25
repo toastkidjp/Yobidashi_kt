@@ -40,6 +40,7 @@
     <string name="search_category_open_street_map">OpenStreetMap</string>
     <string name="search_category_quora">Quora</string>
     <string name="search_category_ask_com">Ask.com</string>
+    <string name="goo">goo 検索</string>
     <string name="naver">NAVER</string>
     <string name="daum">Daum</string>
     <string name="aol">AOL.</string>
