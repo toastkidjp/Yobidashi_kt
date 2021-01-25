@@ -77,17 +77,7 @@ class EditorContextMenuInitializer {
                             actionMode?.finish()
                         }
                         R.id.context_edit_duplicate_current_line -> {
-                            val lineNumber = editText.layout.getLineForOffset(editText.selectionStart)
-                            val start = editText.layout.getLineStart(lineNumber)
-                            val end = editText.layout.getLineEnd(lineNumber)
-                            if (start < 0 || end < 0) {
-                                actionMode?.finish()
-                                return true
-                            }
-                            editText.text.insert(
-                                    end,
-                                    editText.text.substring(start, end)
-                            )
+                            CurrentLineDuplicatorUseCase().invoke(editText)
                             actionMode?.finish()
                             return true
                         }
