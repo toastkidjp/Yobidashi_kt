@@ -57,7 +57,7 @@ class CurrentLineDuplicatorUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         currentLineDuplicatorUseCase.invoke(editText)
 
         verify (atLeast = 1) { editText.getSelectionStart() }
