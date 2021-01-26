@@ -10,7 +10,6 @@ package jp.toastkid.yobidashi.main.launch
 import android.net.Uri
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 
 /**
@@ -19,11 +18,12 @@ import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 class RandomWikipediaUseCase(
         private val contentViewModel: ContentViewModel?,
         private val openNewWebTab: (Uri) -> Unit,
-        private val stringFinder: (Int, String) -> String
+        private val stringFinder: (Int, String) -> String,
+        private val randomWikipedia: RandomWikipedia = RandomWikipedia()
 ) {
 
     operator fun invoke() {
-        RandomWikipedia().fetchWithAction { title, uri ->
+        randomWikipedia.fetchWithAction { title, uri ->
             openNewWebTab(uri)
             contentViewModel?.snackShort(stringFinder(R.string.message_open_random_wikipedia, title))
         }
