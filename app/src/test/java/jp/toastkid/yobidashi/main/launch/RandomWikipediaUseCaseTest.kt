@@ -4,6 +4,7 @@ import android.net.Uri
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -26,6 +27,7 @@ import java.util.Locale
  */
 class RandomWikipediaUseCaseTest {
 
+    @InjectMockKs
     private lateinit var randomWikipediaUseCase: RandomWikipediaUseCase
 
     @MockK
@@ -57,8 +59,6 @@ class RandomWikipediaUseCaseTest {
         every { openNewWebTab.invoke(any()) }.answers { Unit }
         every { contentViewModel.snackShort(any<String>()) }.answers { Unit }
         every { stringFinder(any(), any()) }.answers { "test" }
-
-        randomWikipediaUseCase = RandomWikipediaUseCase(contentViewModel, openNewWebTab, stringFinder)
     }
 
     @Test
