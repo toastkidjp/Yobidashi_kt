@@ -36,7 +36,7 @@ class AdRemoverTest {
 
         @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
         response?.data?.bufferedReader()?.use {
-            assertTrue(it.readLine().isEmpty())
+            assertTrue(it.readLine().isNullOrBlank())
         }
     }
 }
