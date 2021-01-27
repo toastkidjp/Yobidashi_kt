@@ -61,7 +61,7 @@ class RandomWikipediaTest {
     }
 
     @Test
-    fun fetchWithAction() {
+    fun testFetchWithAction() {
         randomWikipedia.fetchWithAction { s, uri ->  }
 
         coVerify (atLeast = 1) { wikipediaApi.invoke() }
