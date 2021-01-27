@@ -188,7 +188,6 @@
                 >
                 <TextView
                     android:id="@+id/text_save_history"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
