@@ -28,4 +28,5 @@ class RandomWikipediaUseCase(
             contentViewModel?.snackShort(stringFinder(R.string.message_open_random_wikipedia, title))
         }
     }
+
 }
