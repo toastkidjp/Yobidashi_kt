@@ -21,11 +21,10 @@ import kotlin.random.Random
 /**
  * @author toastkidjp
  */
-class RandomWikipedia {
-
-    private val wikipediaApi = WikipediaApi()
-
-    private val urlDecider = UrlDecider()
+class RandomWikipedia(
+        private val wikipediaApi: WikipediaApi = WikipediaApi(),
+        private val urlDecider: UrlDecider = UrlDecider()
+) {
 
     fun fetchWithAction(titleAndLinkConsumer: (String, Uri) -> Unit) {
         CoroutineScope(Dispatchers.Main).launch {
