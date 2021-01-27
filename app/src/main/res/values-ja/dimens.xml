@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="menu_font_size">10sp</dimen>
+    <dimen name="menu_font_size">9sp</dimen>
     <dimen name="barcode_result_popup_clip_font_size">16sp</dimen>
 
 </resources>

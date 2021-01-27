@@ -11,10 +11,10 @@ class TrendParserTest {
 
     @Test
     fun test() {
-        assertEquals(
-                20,
-                TrendParser().invoke(Okio.buffer(Okio.source(javaClass.classLoader.getResourceAsStream("hot_trend/hourly.xml"))).readUtf8()).size
-        )
+        val resourceAsStream = javaClass.classLoader.getResourceAsStream("hot_trend/hourly.xml")
+        val xmlSource = Okio.buffer(Okio.source(resourceAsStream)).readUtf8()
+        val items = TrendParser().invoke(xmlSource)
+        assertEquals(20, items.size)
     }
 
 }

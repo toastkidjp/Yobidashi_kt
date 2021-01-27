@@ -444,6 +444,7 @@
     <string name="title_gesture_memo">Gesture memo</string>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">Clip URL</string>
+    <string name="button_clip_cookie">Clip Cookie</string>
     <string name="add_to_home_screen">Add to Home screen</string>
 
     <string name="horizontal_rule">Horizontal rule</string>

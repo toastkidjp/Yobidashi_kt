@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -44,7 +43,6 @@ import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -315,13 +313,7 @@ class MainActivity : AppCompatActivity(),
     private fun initializeMenuViewModel() {
         menuViewModel = ViewModelProvider(this).get(MenuViewModel::class.java)
 
-        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch) {
-            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
-                val currentFragment = findFragment()
-                it.setFrom(currentFragment?.javaClass)
-                replaceFragment(it)
-            }
-        }
+        MenuBinder(this, menuViewModel, binding.menuStub, binding.menuSwitch)
 
         MenuUseCase({ this }, menuViewModel).observe()
     }
@@ -676,6 +668,14 @@ class MainActivity : AppCompatActivity(),
             switchTabList()
             true
         }
+        R.id.setting -> {
+            (obtainFragment(SettingFragment::class.java) as? SettingFragment)?.let {
+                val currentFragment = findFragment()
+                it.setFrom(currentFragment?.javaClass)
+                replaceFragment(it, true, true)
+            }
+            true
+        }
         R.id.reset_menu_position -> {
             menuViewModel?.resetPosition()
             true
@@ -722,16 +722,6 @@ class MainActivity : AppCompatActivity(),
             }
         }
     }
-
-    /**
-     * Workaround appcompat-1.1.0 bug.
-     * @link https://issuetracker.google.com/issues/141132133
-     */
-    override fun applyOverrideConfiguration(overrideConfiguration: Configuration) =
-            when (Build.VERSION.SDK_INT) {
-                in 21..22 -> Unit
-                else -> super.applyOverrideConfiguration(overrideConfiguration)
-            }
 
     override fun onPause() {
         super.onPause()

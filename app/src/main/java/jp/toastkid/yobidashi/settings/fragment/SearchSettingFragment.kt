@@ -46,14 +46,14 @@ class SearchSettingFragment : Fragment() {
         binding.fragment = this
 
         binding.searchCategories.adapter = SearchCategoryAdapter(activityContext)
-        val index = jp.toastkid.search.SearchCategory.findIndex(
-                PreferenceApplier(activityContext).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
+        val index = SearchCategory.findIndex(
+                PreferenceApplier(activityContext).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
         )
         binding.searchCategories.setSelection(index)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 preferenceApplier.setDefaultSearchEngine(
-                        jp.toastkid.search.SearchCategory.values()[binding.searchCategories.selectedItemPosition].name)
+                        SearchCategory.values()[binding.searchCategories.selectedItemPosition].name)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit

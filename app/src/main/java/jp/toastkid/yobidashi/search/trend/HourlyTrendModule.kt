@@ -60,7 +60,7 @@ class HourlyTrendModule(
 
         lastJob = CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                adapter?.replace(trendApi())
+                adapter?.replace(trendApi()?.take(10))
             }
             hourlyTrendModule?.root?.isVisible = adapter?.isNotEmpty() ?: false
             adapter?.notifyDataSetChanged()

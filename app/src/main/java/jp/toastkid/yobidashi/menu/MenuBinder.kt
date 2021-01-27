@@ -8,13 +8,10 @@
 package jp.toastkid.yobidashi.menu
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.core.widget.TextViewCompat
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -34,8 +31,7 @@ class MenuBinder(
         fragmentActivity: FragmentActivity,
         private val menuViewModel: MenuViewModel?,
         private val menuStub: ViewStubProxy,
-        private val menuSwitch: FloatingActionButton?,
-        private val openSetting: () -> Unit
+        private val menuSwitch: FloatingActionButton?
 ) {
     private val preferenceApplier = PreferenceApplier(fragmentActivity)
 
@@ -61,8 +57,6 @@ class MenuBinder(
                 previousIconColor = newColor
                 colorPair.applyReverseTo(menuSwitch)
             }
-
-            applyTextColor(colorPair.fontColor(), (menuStub.binding as? ModuleMainMenuBinding)?.setting)
         })
 
         menuViewModel?.resetPosition?.observe(fragmentActivity, Observer {
@@ -93,9 +87,6 @@ class MenuBinder(
                     menuStub.viewStub?.inflate()
                     (menuStub.binding as? ModuleMainMenuBinding)?.also {
                         recyclerView = it.menusView
-                        it.setting.setOnClickListener {
-                            openSetting()
-                        }
                     }
 
                     initializeWithContext()
@@ -135,8 +126,6 @@ class MenuBinder(
             menuAdapter = MenuAdapter(LayoutInflater.from(it), preferenceApplier, menuViewModel)
             recyclerView?.adapter = menuAdapter
         }
-
-        applyTextColor(preferenceApplier.fontColor, (menuStub.binding as? ModuleMainMenuBinding)?.setting)
     }
 
     private fun setFabPosition() {
@@ -193,13 +182,6 @@ class MenuBinder(
                         menuStub.root?.alpha = 1f
                     }
                     .start()
-        }
-    }
-
-    private fun applyTextColor(fontColor: Int, textView: TextView?) {
-        textView?.also {
-            it.setTextColor(fontColor)
-            TextViewCompat.setCompoundDrawableTintList(it, ColorStateList.valueOf(fontColor))
         }
     }
 

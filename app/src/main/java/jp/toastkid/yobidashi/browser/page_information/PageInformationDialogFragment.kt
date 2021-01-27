@@ -61,7 +61,8 @@ internal class PageInformationDialogFragment: DialogFragment() {
         val builder = AlertDialog.Builder(activityContext)
                 .setTitle(title)
                 .setView(contentView)
-                .setNeutralButton(R.string.button_clip_url) { d, _ -> clipUrl(d) }
+                .setNeutralButton(R.string.button_clip_url) { d, _ -> clipText(url, d) }
+                .setNegativeButton(R.string.button_clip_cookie) { d, _ -> clipText(cookie, d) }
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
         if (favicon != null) {
             builder.setIcon(BitmapDrawable(activityContext.resources, favicon))
@@ -72,15 +73,16 @@ internal class PageInformationDialogFragment: DialogFragment() {
     /**
      * Copy URL to Clipboard.
      *
-     * @param d
+     * @param copyText text for clipping (Nullable)
+     * @param d [DialogInterface]
      */
-    private fun clipUrl(d: DialogInterface) {
+    private fun clipText(copyText: String?, d: DialogInterface) {
         val appContext = context ?: return
-        url?.also { Clipboard.clip(appContext, it) }
+        copyText?.also { Clipboard.clip(appContext, it) }
 
         Toaster.tShort(
                 appContext,
-                "It has copied URL to clipboard.$lineSeparator$url"
+                "It has copied URL to clipboard.$lineSeparator$copyText"
         )
         d.dismiss()
     }

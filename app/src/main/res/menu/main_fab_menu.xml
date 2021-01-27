@@ -16,6 +16,13 @@
         app:showAsAction="never"
         />
     <item
+        android:id="@+id/setting"
+        android:title="@string/title_settings"
+        android:checkable="false"
+        android:orderInCategory="200"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/menu_exit"
         android:title="@string/exit"
         android:orderInCategory="200"

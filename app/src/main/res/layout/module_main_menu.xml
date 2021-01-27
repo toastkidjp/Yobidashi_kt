@@ -14,26 +14,6 @@
             android:layoutAnimation="@anim/layout_slide_up"
             app:layout_constraintTop_toTopOf="parent"
             />
-        <TextView
-            android:id="@+id/setting"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center_vertical"
-            android:layout_gravity="end|bottom"
-            app:drawableStartCompat="@drawable/ic_settings"
-            android:drawablePadding="4dp"
-            android:text="@string/action_settings"
-            android:textColor="@color/white"
-            android:shadowColor="@color/black"
-            android:shadowDx="1.2"
-            android:shadowDy="1.2"
-            android:shadowRadius="1.2"
-            android:maxLines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menus_view"
-            android:background="@drawable/ripple_transparent"
-            />
     </FrameLayout>
 
 </layout>

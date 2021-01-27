@@ -18,7 +18,7 @@ class TrendApi {
     private val converter = TrendResponseConverterFactory.create()
 
     @WorkerThread
-    operator fun invoke(): List<String>? {
+    operator fun invoke(): List<Trend>? {
         val retrofit = Retrofit.Builder()
                 .baseUrl("https://trends.google.co.jp/")
                 .addConverterFactory(converter)

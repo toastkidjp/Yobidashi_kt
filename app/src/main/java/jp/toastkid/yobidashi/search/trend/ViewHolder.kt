@@ -7,18 +7,20 @@
  */
 package jp.toastkid.yobidashi.search.trend
 
-import androidx.core.view.isVisible
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.databinding.ItemSearchSuggestionBinding
+import com.bumptech.glide.Glide
+import jp.toastkid.yobidashi.databinding.ItemTrendSimpleBinding
 
 /**
  * @author toastkidjp
  */
-class ViewHolder(private val binding: ItemSearchSuggestionBinding) : RecyclerView.ViewHolder(binding.root) {
+class ViewHolder(private val binding: ItemTrendSimpleBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(text: String) {
-        binding.searchSuggestText.text = text
-        binding.searchSuggestAdd.isVisible = false
+    fun bind(trend: Trend) {
+        binding.searchSuggestText.text = trend.title
+        Glide.with(binding.image).asDrawable().load(trend.image.toUri()).into(binding.image)
+        //binding.searchSuggestAdd.isVisible = false
     }
 
     fun setOnClick(browseCallback: (String) -> Unit) {

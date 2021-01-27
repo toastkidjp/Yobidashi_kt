@@ -7,15 +7,10 @@
  */
 package jp.toastkid.yobidashi.search.trend
 
-import retrofit2.Call
-import retrofit2.http.GET
-
 /**
  * @author toastkidjp
  */
-interface TrendService {
-
-    @GET("trends/hottrends/atom/hourly?geo=JP")
-    fun call(): Call<List<Trend>?>
-
-}
+data class Trend(
+        val title: String,
+        val image: String
+)

@@ -99,34 +99,34 @@ class ColorSettingFragment : Fragment(),
         initSavedColors()
 
         initialBgColor = colorPair.bgColor()
-        binding?.palettes?.prev?.setBackgroundColor(initialBgColor)
-        binding?.palettes?.backgroundPalette?.color = initialBgColor
+        binding?.prev?.setBackgroundColor(initialBgColor)
+        binding?.backgroundPalette?.color = initialBgColor
 
         initialFontColor = colorPair.fontColor()
-        binding?.palettes?.prev?.setTextColor(initialFontColor)
-        binding?.palettes?.fontPalette?.color = initialFontColor
+        binding?.prev?.setTextColor(initialFontColor)
+        binding?.fontPalette?.color = initialFontColor
 
-        binding?.palettes?.ok?.setOnClickListener { ok() }
-        binding?.palettes?.prev?.setOnClickListener { reset() }
+        binding?.ok?.setOnClickListener { ok() }
+        binding?.prev?.setOnClickListener { reset() }
     }
 
     /**
      * Initialize background and font palettes.
      */
     private fun initPalettes() {
-        binding?.palettes?.backgroundPalette?.also {
-            it.addSVBar(binding?.palettes?.backgroundSvbar)
-            it.addOpacityBar(binding?.palettes?.backgroundOpacitybar)
+        binding?.backgroundPalette?.also {
+            it.addSVBar(binding?.backgroundSvbar)
+            it.addOpacityBar(binding?.backgroundOpacitybar)
             it.setOnColorChangedListener { color ->
-                binding?.palettes?.ok?.setBackgroundColor(color)
+                binding?.ok?.setBackgroundColor(color)
             }
         }
 
-        binding?.palettes?.fontPalette?.also {
-            it.addSVBar(binding?.palettes?.fontSvbar)
-            it.addOpacityBar(binding?.palettes?.fontOpacitybar)
+        binding?.fontPalette?.also {
+            it.addSVBar(binding?.fontSvbar)
+            it.addOpacityBar(binding?.fontOpacitybar)
             it.setOnColorChangedListener { color ->
-                binding?.palettes?.ok?.setTextColor(color)
+                binding?.ok?.setTextColor(color)
             }
         }
 
@@ -174,7 +174,7 @@ class ColorSettingFragment : Fragment(),
      * Refresh with current color.
      */
     private fun refresh() {
-        binding?.palettes?.ok?.also { colorPair().setTo(it) }
+        binding?.ok?.also { colorPair().setTo(it) }
         adapter?.refresh()
     }
 
@@ -182,8 +182,8 @@ class ColorSettingFragment : Fragment(),
      * OK button's action.
      */
     private fun ok() {
-        val bgColor = binding?.palettes?.backgroundPalette?.color ?: Color.BLACK
-        val fontColor = binding?.palettes?.fontPalette?.color ?: Color.WHITE
+        val bgColor = binding?.backgroundPalette?.color ?: Color.BLACK
+        val fontColor = binding?.fontPalette?.color ?: Color.WHITE
 
         commitNewColor(bgColor, fontColor)
 
@@ -210,8 +210,8 @@ class ColorSettingFragment : Fragment(),
 
         refresh()
 
-        binding?.palettes?.backgroundPalette?.color = bgColor
-        binding?.palettes?.fontPalette?.color = fontColor
+        binding?.backgroundPalette?.color = bgColor
+        binding?.fontPalette?.color = fontColor
         activity?.let { Updater.update(it) }
 
         snackShort(R.string.settings_color_done_commit)
