@@ -422,8 +422,9 @@ class MainActivity : AppCompatActivity(),
         LauncherIntentUseCase(
                 RandomWikipediaUseCase(
                         contentViewModel,
-                        this::openNewWebTab
-                ) { id, param -> getString(id, param) },
+                        this::openNewWebTab,
+                        { id, param -> getString(id, param) }
+                ),
                 this::openNewWebTab,
                 { openEditorTab(FileExtractorFromUri(this, it)) },
                 ::search,
