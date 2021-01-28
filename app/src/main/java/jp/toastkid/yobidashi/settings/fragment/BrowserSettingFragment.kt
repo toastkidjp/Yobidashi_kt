@@ -83,6 +83,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
                 binding.textBackgroundAlpha,
                 binding.textDarkMode,
                 binding.textHome,
+                binding.textUseImage,
                 binding.textRetainTab,
                 binding.textSaveHistory,
                 binding.textUserAgent
