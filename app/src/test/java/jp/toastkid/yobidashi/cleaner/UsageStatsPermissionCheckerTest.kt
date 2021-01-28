@@ -5,7 +5,9 @@ import android.os.Process
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
 import org.junit.Test
 
 /**
@@ -26,6 +28,11 @@ class UsageStatsPermissionCheckerTest {
 
         verify(exactly = 1) { Process.myUid() }
         verify(exactly = 1) { appOps.checkOpNoThrow(any(), any(), any()) }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
 }
