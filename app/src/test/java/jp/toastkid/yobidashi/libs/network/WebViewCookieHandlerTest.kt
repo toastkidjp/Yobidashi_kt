@@ -35,7 +35,7 @@ class WebViewCookieHandlerTest {
 
         WebViewCookieHandler.saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
 
-        verify(exactly = 0) { CookieManager.getInstance() }
+        verify(exactly = 1) { CookieManager.getInstance() }
         verify(exactly = 0) { cookieManager.setCookie(any(), any()) }
     }
 
