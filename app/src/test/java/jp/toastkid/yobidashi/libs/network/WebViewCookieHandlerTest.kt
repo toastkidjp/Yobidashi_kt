@@ -24,15 +24,15 @@ class WebViewCookieHandlerTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-    }
 
-    @Test
-    fun testSaveFromResponseNoneCookie() {
         every { cookieManager.setCookie(any(), any()) }.answers { Unit }
 
         mockkStatic(CookieManager::class)
         every { CookieManager.getInstance() }.answers { cookieManager }
+    }
 
+    @Test
+    fun testSaveFromResponseNoneCookie() {
         WebViewCookieHandler.saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
 
         verify(exactly = 1) { CookieManager.getInstance() }
@@ -41,11 +41,6 @@ class WebViewCookieHandlerTest {
 
     @Test
     fun testSaveFromResponse() {
-        every { cookieManager.setCookie(any(), any()) }.answers { Unit }
-
-        mockkStatic(CookieManager::class)
-        every { CookieManager.getInstance() }.answers { cookieManager }
-
         WebViewCookieHandler.saveFromResponse(
                 "https://www.yahoo.co.jp".toHttpUrl(),
                 mutableListOf(Cookie.Builder().domain("www.yahoo.co.jp").name("test").value("test").build())
