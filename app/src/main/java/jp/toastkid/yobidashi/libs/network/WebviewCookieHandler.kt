@@ -15,13 +15,13 @@ object WebViewCookieHandler : CookieJar {
     private const val DELIMITER = ";"
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
-        val urlString = url.toString() ?: return
+        val urlString = url.toString()
         val cookieManager = CookieManager.getInstance()
         cookies.forEach { cookieManager.setCookie(urlString, it.toString()) }
     }
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        val urlString = url.toString() ?: return emptyList()
+        val urlString = url.toString()
         val cookieManager = CookieManager.getInstance()
         val cookiesString = cookieManager.getCookie(urlString)
 
