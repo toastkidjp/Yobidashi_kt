@@ -9,7 +9,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -42,6 +44,11 @@ class ImageEditChooserFactoryTest {
         verify(exactly = 1) { anyConstructed<Intent>().setFlags(any()) }
         verify(exactly = 1) { Intent.createChooser(any(), any()) }
         verify(exactly = 1) { FileProvider.getUriForFile(any(), any(), any()) }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
 }
