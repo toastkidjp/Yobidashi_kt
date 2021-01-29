@@ -4,6 +4,8 @@ import android.webkit.CookieManager
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -52,7 +54,15 @@ class WebViewCookieHandlerTest {
 
     @Test
     fun testLoadForRequest() {
-        // TODO implement
+        every { cookieManager.getCookie(any()) }.returns("test")
+        mockkObject(Cookie)
+        every { Cookie.parse(any(), any()) }.returns(mockk())
+
+        WebViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl())
+
+        verify(exactly = 1) { CookieManager.getInstance() }
+        verify(exactly = 1) { cookieManager.getCookie(any()) }
+        verify(exactly = 1) { Cookie.parse(any(), any()) }
     }
 
     @After
