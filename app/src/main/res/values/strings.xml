@@ -14,6 +14,7 @@
     <string name="ok">OK</string>
     <string name="share">Share</string>
     <string name="select">Select</string>
+    <string name="check_all">Check all</string>
 
     <string name="title_search_action">Search</string>
     <string name="action_settings">Settings</string>
