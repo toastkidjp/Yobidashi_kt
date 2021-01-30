@@ -76,7 +76,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun search() {
+    fun testSearch() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
 
