@@ -59,4 +59,15 @@ class IconColorFinderTest {
         verify (exactly = 0) { preferenceApplier.color }
     }
 
+    @Test
+    fun testFalseCase() {
+        every { anyConstructed<DisplayMode>().isNightMode() }.returns(false)
+
+        iconColorFinder.invoke()
+
+        verify (exactly = 1) { anyConstructed<DisplayMode>().isNightMode() }
+        verify (exactly = 0) { preferenceApplier.fontColor }
+        verify (exactly = 1) { preferenceApplier.color }
+    }
+
 }
