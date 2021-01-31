@@ -9,6 +9,7 @@
 package jp.toastkid.lib.color
 
 import android.content.res.Configuration
+import android.view.View
 import jp.toastkid.lib.night.DisplayMode
 import jp.toastkid.lib.preference.PreferenceApplier
 
@@ -20,6 +21,15 @@ class IconColorFinder(
     operator fun invoke(): Int {
         val nightMode = DisplayMode(configuration).isNightMode()
         return if (nightMode) preferenceApplier.fontColor else preferenceApplier.color
+    }
+
+    companion object {
+
+        fun from(view: View) =
+                IconColorFinder(
+                        view.resources.configuration,
+                        PreferenceApplier(view.context)
+                )
     }
 
 }
