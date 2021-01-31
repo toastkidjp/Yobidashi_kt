@@ -9,7 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
@@ -95,10 +95,10 @@ internal class ModuleAdapter(
         holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
 
         if (iconColor == Color.TRANSPARENT) {
-            val preferenceApplier = PreferenceApplier(holder.itemView.context)
-            iconColor = if (DisplayMode(holder.itemView.resources.configuration).isNightMode()) {
-                preferenceApplier.fontColor
-            } else preferenceApplier.color
+            iconColor = IconColorFinder(
+                    holder.itemView.resources.configuration,
+                    PreferenceApplier(holder.itemView.context)
+            ).invoke()
         }
 
         holder.setIconColor(iconColor)
