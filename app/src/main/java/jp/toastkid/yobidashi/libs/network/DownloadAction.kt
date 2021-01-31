@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
  * @param context [Context]
  * @author toastkidjp
  */
-class DownloadAction(val context: Context) {
+class DownloadAction(private val context: Context) {
 
     operator fun invoke(url: String) {
         invoke(listOf(url))
@@ -58,7 +58,7 @@ class DownloadAction(val context: Context) {
         }
 
         val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as? DownloadManager
-        urls.map { makeRequest(it.toUri(), urls.size != 1) }.forEach { dm?.enqueue(it) }
+        urls.map { makeRequest(it.toUri(), urls.size == 1) }.forEach { dm?.enqueue(it) }
     }
 
     private fun makeRequest(uri: Uri, showComplete: Boolean): DownloadManager.Request {

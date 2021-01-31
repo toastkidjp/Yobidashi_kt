@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import com.google.android.flexbox.AlignItems
@@ -14,6 +13,7 @@ import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,10 +34,7 @@ import kotlinx.coroutines.withContext
  */
 class SuggestionModule(
         private val binding: ModuleSearchSuggestionBinding,
-        queryPutter: (String) -> Unit,
-        searchCallback: (String) -> Unit,
-        searchBackgroundCallback: (String) -> Unit,
-        onClick: () -> Unit
+        viewModel: SearchFragmentViewModel
 ) {
 
     /**
@@ -45,9 +42,7 @@ class SuggestionModule(
      */
     private val adapter: Adapter = Adapter(
             LayoutInflater.from(binding.root.context),
-            queryPutter,
-            searchCallback,
-            searchBackgroundCallback
+            viewModel
     )
 
     /**
@@ -74,20 +69,12 @@ class SuggestionModule(
         layoutManager.justifyContent = JustifyContent.FLEX_START
         layoutManager.alignItems = AlignItems.STRETCH
 
-        initializeSearchSuggestionList(layoutManager, onClick)
+        initializeSearchSuggestionList(layoutManager)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun initializeSearchSuggestionList(
-            layoutManager: FlexboxLayoutManager,
-            onClick: () -> Unit
-    ) {
+    private fun initializeSearchSuggestionList(layoutManager: FlexboxLayoutManager) {
         binding.searchSuggestions.layoutManager = layoutManager
         binding.searchSuggestions.adapter = adapter
-        binding.searchSuggestions.setOnTouchListener { _, _ ->
-            onClick()
-            false
-        }
     }
 
     /**

@@ -42,7 +42,7 @@ interface ArticleRepository {
     @Query("SELECT * FROM article WHERE title LIKE :title LIMIT 1")
     fun findFirst(title: String): Article?
 
-    @Query("SELECT article.id, article.title, article.lastModified, article.length FROM article JOIN articleFts ON (article.id = articleFts.docid) WHERE articleFts MATCH :query")
+    @Query("SELECT article.id, article.title, article.lastModified, article.length FROM article JOIN articleFts ON (article.id = articleFts.docid) WHERE articleFts MATCH :query ORDER BY lastModified DESC")
     fun search(query: String): PagingSource<Int, SearchResult>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

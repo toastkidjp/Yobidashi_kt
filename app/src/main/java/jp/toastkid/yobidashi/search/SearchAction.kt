@@ -76,20 +76,22 @@ class SearchAction(
         }
 
         if (validatedUrl) {
-            browserViewModel?.open(Uri.parse(query))
+            openUri(browserViewModel, Uri.parse(query))
             return
         }
 
         val searchUri = urlFactory(category, query, currentUrl)
+        openUri(browserViewModel, searchUri)
+    }
 
-        if (onBackground) {
+    private fun openUri(browserViewModel: BrowserViewModel?, uri: Uri) {
+        if (onBackground)
             browserViewModel?.openBackground(
                     activityContext.getString(R.string.title_tab_background_search, query),
-                    searchUri
+                    uri
             )
-            return
-        }
-        browserViewModel?.open(searchUri)
+        else
+            browserViewModel?.open(uri)
     }
 
 }

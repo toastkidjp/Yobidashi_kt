@@ -9,6 +9,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +21,7 @@ import kotlinx.coroutines.withContext
  */
 class UrlSuggestionModule(
         private val binding: ModuleUrlSuggestionBinding,
-        browseCallback: (String) -> Unit,
-        browseBackgroundCallback: (String) -> Unit
+        viewModel: SearchFragmentViewModel
 ) {
 
     /**
@@ -30,8 +30,7 @@ class UrlSuggestionModule(
     private val adapter = Adapter(
             LayoutInflater.from(binding.root.context),
             this::remove,
-            browseCallback,
-            browseBackgroundCallback
+            viewModel
             )
 
     var enable = true

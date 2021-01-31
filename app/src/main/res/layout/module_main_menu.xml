@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/menu_container"
+        android:id="@+id/menus_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/menus_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutAnimation="@anim/layout_slide_up"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    </FrameLayout>
-
+        android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/layout_slide_up"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 </layout>

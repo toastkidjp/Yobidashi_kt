@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
-import timber.log.Timber
+import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 
 /**
  * Suggest list adapter.
@@ -21,9 +20,7 @@ import timber.log.Timber
  */
 internal class Adapter (
         private val layoutInflater: LayoutInflater,
-        private val queryPutter: (String) -> Unit,
-        private val suggestionsCallback: (String) -> Unit,
-        private val onLongClicked: (String) -> Unit
+        private val viewModel: SearchFragmentViewModel
 ) : RecyclerView.Adapter<ViewHolder>() {
 
     /**
@@ -59,36 +56,15 @@ internal class Adapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = suggestions[position]
         holder.setText(item)
-        holder.itemView.setOnClickListener { onItemClicked(item) }
+        holder.itemView.setOnClickListener {
+            viewModel.putQuery(item)
+            viewModel.search(item)
+        }
         holder.itemView.setOnLongClickListener {
-            onLongClicked(item)
+            viewModel.searchOnBackground(item)
             true
         }
-        holder.setOnClickAdd(View.OnClickListener{ onAddClicked(item) })
-    }
-
-    /**
-     * Add(+) clicked action.
-     *
-     * @param suggestion
-     */
-    @SuppressLint("SetTextI18n")
-    private fun onAddClicked(suggestion: String) {
-        queryPutter("$suggestion ")
-    }
-
-    /**
-     * Item clicked action.
-     *
-     * @param suggest
-     */
-    private fun onItemClicked(suggest: String) {
-        queryPutter(suggest)
-        try {
-            suggestionsCallback(suggest)
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
+        holder.setOnClickAdd(View.OnClickListener{ viewModel.putQuery("$item ") })
     }
 
     companion object {

@@ -30,6 +30,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -179,33 +180,9 @@ class SearchFragment : Fragment() {
                 this::setTextAndMoveCursorToEnd
         )
 
-        suggestionModule = SuggestionModule(
-                binding?.suggestionModule as ModuleSearchSuggestionBinding,
-                { setQuery(it) },
-                { search(extractCurrentSearchCategory(), it) },
-                { search(extractCurrentSearchCategory(), it, true) },
-                this::hideKeyboard
-        )
-
-        urlSuggestionModule = UrlSuggestionModule(
-                binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
-                { search(extractCurrentSearchCategory(), it) },
-                { search(extractCurrentSearchCategory(), it, true) }
-        )
-
-        hourlyTrendModule = HourlyTrendModule(
-                binding?.hourlyTrendModule,
-                { search(extractCurrentSearchCategory(), it) },
-                { search(extractCurrentSearchCategory(), it, true) }
-        )
-        hourlyTrendModule?.request()
-
         appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding, contentViewModel)
 
         setListenerForKeyboardHiding()
-
-        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
-        setQuery(query)
 
         initSearchInput()
 
@@ -220,7 +197,42 @@ class SearchFragment : Fragment() {
         return binding?.root
     }
 
-    private fun setQuery(query: String?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val viewModel = ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
+        viewModel.search
+                .observe(viewLifecycleOwner, Observer { event ->
+                    val pair = event?.getContentIfNotHandled() ?: return@Observer
+                    search(extractCurrentSearchCategory(), pair.first, pair.second)
+                })
+        viewModel.putQuery
+                .observe(viewLifecycleOwner, Observer { event ->
+                    val query = event?.getContentIfNotHandled() ?: return@Observer
+                    setTextAndMoveCursorToEnd(query)
+                })
+
+        suggestionModule = SuggestionModule(
+                binding?.suggestionModule as ModuleSearchSuggestionBinding,
+                viewModel
+        )
+
+        urlSuggestionModule = UrlSuggestionModule(
+                binding?.urlSuggestionModule as ModuleUrlSuggestionBinding,
+                viewModel
+        )
+
+        hourlyTrendModule = HourlyTrendModule(
+                binding?.hourlyTrendModule,
+                viewModel
+        )
+        hourlyTrendModule?.request()
+
+        val query = arguments?.getString(EXTRA_KEY_QUERY) ?: ""
+        setInitialQuery(query)
+    }
+
+    private fun setInitialQuery(query: String?) {
         headerBinding?.searchInput?.let { input ->
             input.setText(query)
             input.selectAll()
@@ -275,13 +287,12 @@ class SearchFragment : Fragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun initFavoriteModule() {
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             favoriteModule = withContext(Dispatchers.Default) {
                 FavoriteSearchModule(
                         binding?.favoriteModule as ModuleSearchFavoriteBinding,
-                        { fav -> search(fav.category as String, fav.query as String) }, // TODO use elvis
+                        { fav -> search(fav.category ?: "", fav.query ?: "") },
                         this@SearchFragment::hideKeyboard,
                         { setTextAndMoveCursorToEnd("${it.query} ") }
                 )
@@ -439,6 +450,7 @@ class SearchFragment : Fragment() {
 
         headerBinding?.also {
             it.searchAction.setColorFilter(fontColor)
+            it.searchClear.setColorFilter(fontColor)
             it.searchInputBorder.setBackgroundColor(fontColor)
         }
     }
@@ -490,6 +502,10 @@ class SearchFragment : Fragment() {
         SearchAction(context, category, query, currentUrl, onBackground).invoke()
     }
 
+    fun clearInput() {
+        headerBinding?.searchInput?.setText("")
+    }
+
     /**
      * Hide software keyboard.
      * TODO should deactivate
@@ -535,6 +551,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onDetach() {
+        hideKeyboard()
         disposables.cancel()
         channel.cancel()
         favoriteModule?.dispose()

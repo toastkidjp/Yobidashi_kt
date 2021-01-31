@@ -29,6 +29,7 @@ class ArticleSearchUseCase(
 
     fun search(keyword: String?) {
         if (keyword.isNullOrBlank()) {
+            all()
             return
         }
 

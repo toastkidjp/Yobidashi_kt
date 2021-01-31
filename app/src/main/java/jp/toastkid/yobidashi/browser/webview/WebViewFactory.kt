@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -16,6 +17,7 @@ import jp.toastkid.yobidashi.browser.webview.dialog.AnchorTypeLongTapDialogFragm
 import jp.toastkid.yobidashi.browser.webview.dialog.ElseCaseLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageAnchorTypeLongTapDialogFragment
 import jp.toastkid.yobidashi.browser.webview.dialog.ImageTypeLongTapDialogFragment
+import jp.toastkid.yobidashi.libs.network.DownloadAction
 
 /**
  * [WebView] factory.
@@ -124,10 +126,17 @@ internal class WebViewFactory {
         webView.isNestedScrollingEnabled = true
         webView.setBackgroundColor(alphaConverter.readBackground(context))
 
-        webView.setDownloadListener { url, _, _, _, _ ->
-            val intent = Intent(Intent.ACTION_QUICK_VIEW)
-            intent.data = Uri.parse(url)
-            webView.context.startActivity(intent)
+        webView.setDownloadListener { url, _, _, mimeType, _ ->
+            when {
+                mimeType == "application/pdf" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
+                    val intent = Intent(Intent.ACTION_QUICK_VIEW)
+                    intent.data = Uri.parse(url)
+                    webView.context.startActivity(intent)
+                }
+                else -> {
+                    DownloadAction(context).invoke(url)
+                }
+            }
         }
 
         return webView

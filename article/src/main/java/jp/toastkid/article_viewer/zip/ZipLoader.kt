@@ -73,7 +73,7 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
             }
             Timber.i("${System.currentTimeMillis() - start}[ms] ${article.title}")
 
-            article.bigram = tokenizer(article.contentText, 2) ?: ""
+            article.bigram = tokenizer(SPACE_REGEX.replace(content, ""), 2) ?: ""
             items.add(article)
             if (items.size > 1000) {
                 flush()
@@ -98,5 +98,7 @@ class ZipLoader(private val articleRepository: ArticleRepository) {
 
     companion object {
         private val CHARSET = Charset.forName("UTF-8")
+
+        private val SPACE_REGEX = Regex("\\s")
     }
 }
