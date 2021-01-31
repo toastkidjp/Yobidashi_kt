@@ -1,12 +1,16 @@
 package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
 import jp.toastkid.yobidashi.search.SearchAction
@@ -50,6 +54,9 @@ internal class ModuleAdapter(
      */
     private val selected: MutableList<SearchHistory> = ArrayList(5)
 
+    @ColorInt
+    private var iconColor = Color.TRANSPARENT
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<ItemSearchHistoryBinding>(
                 inflater, LAYOUT_ID, parent, false)
@@ -86,6 +93,15 @@ internal class ModuleAdapter(
             true
         }
         holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
+
+        if (iconColor == Color.TRANSPARENT) {
+            val preferenceApplier = PreferenceApplier(holder.itemView.context)
+            iconColor = if (DisplayMode(holder.itemView.resources.configuration).isNightMode()) {
+                preferenceApplier.fontColor
+            } else preferenceApplier.color
+        }
+
+        holder.setIconColor(iconColor)
     }
 
     /**
