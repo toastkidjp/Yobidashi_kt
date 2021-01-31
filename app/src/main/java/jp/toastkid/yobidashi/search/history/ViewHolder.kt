@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.search.history
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateMargins
@@ -57,7 +58,7 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.searchHistoryAdd.setImageResource(addIcon)
     }
 
-    fun setIconColor(iconColor: Int) {
+    fun setIconColor(@ColorInt iconColor: Int) {
         binding.searchHistoryBookmark.setColorFilter(iconColor)
         binding.searchHistoryAdd.setColorFilter(iconColor)
     }
