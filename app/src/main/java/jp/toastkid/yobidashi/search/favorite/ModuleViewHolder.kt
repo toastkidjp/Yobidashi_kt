@@ -54,6 +54,10 @@ internal class ModuleViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.searchHistoryAdd.setImageResource(addIcon)
     }
 
+    fun setIconColor(color: Int) {
+        binding.searchHistoryAdd.setColorFilter(color)
+    }
+
     override fun getFrontView(): View = binding.front
 
     override fun isButtonVisible(): Boolean = binding.delete.isVisible
