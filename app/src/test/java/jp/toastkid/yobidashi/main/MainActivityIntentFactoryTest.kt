@@ -54,7 +54,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun launcher() {
+    fun testLauncher() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
 
