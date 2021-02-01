@@ -49,7 +49,7 @@ class IconColorFinderTest {
     }
 
     @Test
-    fun test() {
+    fun testDarkCase() {
         every { anyConstructed<DisplayMode>().isNightMode() }.returns(true)
 
         iconColorFinder.invoke()
@@ -60,7 +60,7 @@ class IconColorFinderTest {
     }
 
     @Test
-    fun testFalseCase() {
+    fun testNormalCase() {
         every { anyConstructed<DisplayMode>().isNightMode() }.returns(false)
 
         iconColorFinder.invoke()
