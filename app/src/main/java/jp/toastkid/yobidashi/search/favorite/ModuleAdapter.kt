@@ -14,7 +14,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.color.IconColorFinder
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.search.SearchAction
 import kotlinx.coroutines.CoroutineScope
@@ -76,7 +75,7 @@ internal class ModuleAdapter(
         holder.setOnClickDelete { remove(favorite) }
 
         holder.setAddIcon(R.drawable.ic_add_circle_search)
-        holder.setIconColor(IconColorFinder(holder.itemView.resources.configuration, PreferenceApplier(holder.itemView.context)).invoke())
+        holder.setIconColor(IconColorFinder.from(holder.itemView).invoke())
 
         holder.setImageRes(jp.toastkid.search.SearchCategory.findByCategory(favorite.category as String).iconId)
         holder.itemView.setOnLongClickListener { v ->
