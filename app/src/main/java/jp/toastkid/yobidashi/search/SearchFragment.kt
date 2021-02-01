@@ -462,7 +462,9 @@ class SearchFragment : Fragment() {
     fun invokeSearch() {
         if (useVoice) {
             try {
-                startActivityForResult(VoiceSearch.makeIntent(requireContext()), VoiceSearch.REQUEST_CODE)
+                context?.let {
+                    startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
+                }
             } catch (e: ActivityNotFoundException) {
                 Timber.e(e)
                 VoiceSearch.suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
