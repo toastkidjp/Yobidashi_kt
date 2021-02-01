@@ -295,6 +295,11 @@ enum class SearchCategory(
             "https://bgr.com/?s=%s",
             { _, h, q -> String.format(h, Uri.encode(q)) }
     ),
+    HACKER_NEWS(
+            R.string.search_category_hacker_news,
+            R.drawable.ic_hacker_news,
+            "https://hn.algolia.com/?q="
+    ),
     TECHNOLOGY(
             R.string.search_category_technology,
             R.drawable.ic_techcrunch,

@@ -69,4 +69,5 @@
     <string name="morningstar">Morningstar</string>
     <string name="yahoo_japan_finance">Yahoo! Finance(JP)</string>
     <string name="search_category_webster">Webster</string>
+    <string name="search_category_hacker_news">Hacker News</string>
 </resources>
