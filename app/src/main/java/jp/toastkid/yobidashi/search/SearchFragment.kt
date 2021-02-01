@@ -343,6 +343,8 @@ class SearchFragment : Fragment() {
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
 
+        urlModule?.onResume()
+
         showKeyboard()
     }
 

@@ -8,12 +8,13 @@
 package jp.toastkid.yobidashi.search.url
 
 import android.view.View
+import jp.toastkid.lib.color.IconColorFinder
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -102,6 +103,13 @@ class UrlModule(
      */
     fun isVisible() = binding.root.visibility == View.VISIBLE
 
+    fun onResume() {
+        val color = IconColorFinder.from(binding.root).invoke()
+        binding.clip.setColorFilter(color)
+        binding.share.setColorFilter(color)
+        binding.edit.setColorFilter(color)
+    }
+
     private fun getCurrentText() = binding.text.text.toString()
 
     private fun setTitle(title: String?) {
@@ -124,4 +132,5 @@ class UrlModule(
 
     private fun runOnMainThread(action: () -> Unit) =
             CoroutineScope(Dispatchers.Main).launch { action() }
+
 }
