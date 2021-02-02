@@ -461,20 +461,24 @@ class SearchFragment : Fragment() {
 
     fun invokeSearch() {
         if (useVoice) {
-            try {
-                context?.let {
-                    startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
-                }
-            } catch (e: ActivityNotFoundException) {
-                Timber.e(e)
-                VoiceSearch.suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
-            }
+            invokeVoiceSearch()
             return
         }
         search(
                 extractCurrentSearchCategory(),
                 headerBinding?.searchInput?.text.toString()
         )
+    }
+
+    private fun invokeVoiceSearch() {
+        try {
+            context?.let {
+                startActivityForResult(VoiceSearch.makeIntent(it), VoiceSearch.REQUEST_CODE)
+            }
+        } catch (e: ActivityNotFoundException) {
+            Timber.e(e)
+            VoiceSearch.suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
+        }
     }
 
     fun invokeBackgroundSearch(): Boolean {
