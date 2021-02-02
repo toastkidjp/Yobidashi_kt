@@ -3,7 +3,7 @@ package jp.toastkid.yobidashi.browser.bookmark
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.databinding.ItemBookmarkBinding
@@ -50,9 +50,7 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
             return
         }
 
-        Glide.with(binding.icon)
-                .load(File(faviconPath))
-                .into(binding.icon)
+        binding.icon.load(File(faviconPath))
     }
 
     /**

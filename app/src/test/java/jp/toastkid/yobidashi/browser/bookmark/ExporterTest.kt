@@ -2,7 +2,8 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import com.squareup.moshi.Moshi
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
-import okio.Okio
+import okio.buffer
+import okio.source
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,16 +46,22 @@ class ExporterTest {
      * Read [Bookmark] objects from source.
      */
     private fun readSource(): List<String>? =
-            Okio.buffer(Okio.source(classLoader?.getResourceAsStream(sourcePath))).let {
-                val sourceText: String? = it.readUtf8()
-                it.close()
-                return sourceText?.split("\n")
+            classLoader?.getResourceAsStream(sourcePath)?.source()?.use { source ->
+                source.buffer().use { bufferedSource ->
+                    val sourceText: String? = bufferedSource.readUtf8()
+                    bufferedSource.close()
+                    return sourceText?.split("\n")
+                }
             }
 
     /**
      * Read expected html string.
      */
-    private fun readExpected()
-            = Okio.buffer(Okio.source(classLoader?.getResourceAsStream(expectedPath)))
-                .readUtf8().replace("\r\n", "")
+    private fun readExpected() =
+            classLoader?.getResourceAsStream(expectedPath)?.source()?.use { source ->
+                source.buffer().use {
+                    it.readUtf8().replace("\r\n", "")
+                }
+            }
+
 }

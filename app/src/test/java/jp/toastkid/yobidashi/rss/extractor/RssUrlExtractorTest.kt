@@ -1,7 +1,10 @@
 package jp.toastkid.yobidashi.rss.extractor
 
-import okio.Okio
-import org.junit.Assert.*
+import okio.buffer
+import okio.source
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.io.InputStream
@@ -20,7 +23,11 @@ class RssUrlExtractorTest {
 
     @Test
     fun test() {
-        val html = Okio.buffer(Okio.source(readStream("rss/extractor/sample.html"))).readUtf8()
+        val html = readStream("rss/extractor/sample.html").source().use { source ->
+            source.buffer().use {
+                it.readUtf8()
+            }
+        }
 
         val rssTargets = extractor.invoke(html)
 

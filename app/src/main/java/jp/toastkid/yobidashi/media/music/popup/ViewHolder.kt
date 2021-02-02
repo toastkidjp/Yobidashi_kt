@@ -13,7 +13,7 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import jp.toastkid.yobidashi.databinding.ItemMediaListBinding
 
 /**
@@ -42,10 +42,9 @@ class ViewHolder(
     }
 
     fun loadIcon(uri: Uri?, iconWidth: Int) {
-        Glide.with(binding.root.context)
-                .load(uri)
-                .placeholder(placeholder)
-                .override(iconWidth)
-                .into(binding.icon)
+        binding.icon.load(uri) {
+            placeholder(placeholder)
+            size(iconWidth)
+        }
     }
 }

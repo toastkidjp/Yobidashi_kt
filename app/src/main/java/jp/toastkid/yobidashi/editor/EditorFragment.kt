@@ -52,7 +52,9 @@ import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
-import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -400,9 +402,10 @@ class EditorFragment :
 
         val content = content()
         contentHolderService.setContent(content)
-        Okio.buffer(Okio.sink(file)).use {
-            it.writeUtf8(content)
-            it.flush()
+        file.sink().use { sink ->
+            sink.buffer().use { bufferedSink ->
+                bufferedSink.writeUtf8(content)
+            }
         }
 
         val context = context ?: return
@@ -455,7 +458,11 @@ class EditorFragment :
             return
         }
 
-        val text = Okio.buffer(Okio.source(file)).use { it.readUtf8() }
+        val text = file.source().use { source ->
+            source.buffer().use { bufferedSource ->
+                bufferedSource.readUtf8()
+            }
+        }
         setContentText(text)
         snackText(R.string.done_load)
         path = file.absolutePath

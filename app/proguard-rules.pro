@@ -22,17 +22,18 @@
     public static ** valueOf(java.lang.String);
 }
 
-## For OkHttp
+# For OkHttp
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
+## Ignore JSR 305 annotations for embedding nullability information.
 -dontwarn javax.annotation.**
 -keep class javax.annotation.** { *; }
 
 ### A resource is loaded with a relative path so the package of this class must be preserved.
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
-## For Moshi
+# For Moshi
 -dontwarn okio.**
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
@@ -58,9 +59,6 @@
 # Ignore annotation used for build tooling.
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
-# Ignore JSR 305 annotations for embedding nullability information.
--dontwarn javax.annotation.**
-
 # Guarded by a NoClassDefFoundError try/catch and only used when on the classpath.
 -dontwarn kotlin.Unit
 
@@ -69,10 +67,24 @@
 -keep class jp.toastkid.yobidashi.wikipedia.** { *; }
 -keepclassmembers class jp.toastkid.yobidashi.wikipedia.** { *; }
 
-# For Glide
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
+# For Coroutines
+## ServiceLoader support
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+
+## Most of volatile fields are updated with AFU and should not be mangled
+-keepclassmembernames class kotlinx.** {
+    volatile <fields>;
 }
+
+## Same story for the standard library's SafeContinuation that also uses AtomicReferenceFieldUpdater
+-keepclassmembernames class kotlin.coroutines.SafeContinuation {
+    volatile <fields>;
+}
+
+## These classes are only required by kotlinx.coroutines.debug.AgentPremain, which is only loaded when
+## kotlinx-coroutines-core is used as a Java agent, so these are not needed in contexts where ProGuard is used.
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn sun.misc.SignalHandler
+-dontwarn java.lang.instrument.Instrumentation
+-dontwarn sun.misc.Signal

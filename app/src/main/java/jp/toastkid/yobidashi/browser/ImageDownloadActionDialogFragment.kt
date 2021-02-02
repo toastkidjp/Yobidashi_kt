@@ -14,12 +14,12 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import com.bumptech.glide.Glide
+import coil.load
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * Method object of downloading image file.
@@ -70,7 +70,7 @@ class ImageDownloadActionDialogFragment : DialogFragment() {
             return
         }
 
-        Glide.with(imageView).load(url).override(400).into(imageView)
+        imageView.load(url) { size(400) }
     }
 
     companion object {

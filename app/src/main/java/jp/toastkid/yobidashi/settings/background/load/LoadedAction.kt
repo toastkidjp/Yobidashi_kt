@@ -4,13 +4,15 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentActivity
-import com.bumptech.glide.Glide
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
+import coil.imageLoader
+import coil.request.ImageRequest
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +57,11 @@ internal class LoadedAction (
         CoroutineScope(Dispatchers.Main).launch {
             val bitmap = try {
                 withContext(Dispatchers.IO) {
-                    val image = Glide.with(context).asBitmap().load(uri).submit().get()
+                    val image = context.imageLoader
+                            .execute(ImageRequest.Builder(context).data(uri).build())
+                            .drawable
+                            ?.toBitmap()
+
                     val fixedImage = rotatedImageFixing(context.contentResolver, image, uri)
                     fixedImage?.let {
                         ImageStoreService(

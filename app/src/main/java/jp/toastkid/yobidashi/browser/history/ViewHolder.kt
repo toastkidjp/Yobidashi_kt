@@ -7,10 +7,10 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateMargins
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
+import jp.toastkid.lib.view.SwipeViewHolder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
-import jp.toastkid.lib.view.SwipeViewHolder
 import java.io.File
 
 /**
@@ -33,9 +33,8 @@ internal class ViewHolder(private val binding: ItemViewHistoryBinding)
             setDefaultIcon()
             return
         }
-        Glide.with(binding.icon)
-                .load(File(faviconPath))
-                .into(binding.icon)
+
+        binding.icon.load(File(faviconPath))
     }
 
     private fun setDefaultIcon() {

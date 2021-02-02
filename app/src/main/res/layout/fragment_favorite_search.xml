@@ -29,7 +29,6 @@
 
                 <FrameLayout
                     android:id="@+id/favorite_search_addition"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@dimen/settings_item_left_margin"

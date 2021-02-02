@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import okio.Okio
+import okio.buffer
+import okio.source
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
@@ -18,7 +19,11 @@ class SuggestionParserTest {
     @Test
     fun test_parse() {
         val file = File(javaClass.classLoader?.getResource(PATH_TO_RESOURCE)?.toURI())
-        val xml = Okio.buffer(Okio.source(file)).use { it.readUtf8() }
+        val xml = file.source().use { source ->
+            source.buffer().use {
+                it.readUtf8()
+            }
+        }
         val suggestions = SuggestionParser()(xml)
         assertEquals(10, suggestions.size)
     }

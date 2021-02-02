@@ -11,7 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
+import coil.load
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment.Companion.withBitmap
 
@@ -47,15 +47,11 @@ internal class ImageDialogFragment: DialogFragment() {
         when {
             arguments.containsKey(KEY_IMAGE) -> {
                 val bitmap = arguments.getParcelable<Bitmap>(KEY_IMAGE)
-                Glide.with(imageView)
-                        .load(bitmap)
-                        .into(imageView)
+                imageView.load(bitmap)
             }
             arguments.containsKey(KEY_IMAGE_URL) -> {
                 val uriString = arguments.getString(KEY_IMAGE_URL)
-                Glide.with(imageView)
-                        .load(uriString)
-                        .into(imageView)
+                imageView.load(uriString)
             }
         }
     }

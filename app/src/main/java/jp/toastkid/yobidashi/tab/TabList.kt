@@ -12,7 +12,9 @@ import jp.toastkid.yobidashi.tab.model.EditorTab
 import jp.toastkid.yobidashi.tab.model.PdfTab
 import jp.toastkid.yobidashi.tab.model.Tab
 import jp.toastkid.yobidashi.tab.model.WebTab
-import okio.Okio
+import okio.buffer
+import okio.sink
+import okio.source
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -72,10 +74,11 @@ class TabList private constructor() {
     internal fun save() {
         val json = jsonAdapter.toJson(this)
         tabsFile?.let {
-            Okio.buffer(Okio.sink(it)).run {
-                writeUtf8(json)
-                flush()
-                close()
+            it.sink().use {  sink ->
+                sink.buffer().use { buffered ->
+                    buffered.writeUtf8(json)
+                    buffered.flush()
+                }
             }
         }
         savingLock.withLock {
@@ -94,10 +97,10 @@ class TabList private constructor() {
                     else -> ByteArray(0)
                 }
                 source?.let {
-                    Okio.buffer(Okio.sink(File(itemsDir, "${tab.id()}.json"))).use {
-                        it.write(source)
-                        it.flush()
-                        it.close()
+                    File(itemsDir, "${tab.id()}.json").sink().use {  sink ->
+                        sink.buffer().use {  bufferedSink ->
+                            bufferedSink.write(source)
+                        }
                     }
                 }
             }
@@ -198,10 +201,10 @@ class TabList private constructor() {
                 val file = tabsFile
                 val fromJson: TabList =
                         if (file == null) TabList() 
-                        else Okio.buffer(Okio.source(file)).let {
-                            val from: TabList? = jsonAdapter.fromJson(it)
-                            it.close()
-                            return@let from
+                        else file.source().use {  source ->
+                            source.buffer().use { bufferedSource ->
+                                jsonAdapter.fromJson(bufferedSource)
+                            }
                         } ?: TabList()
 
                 loadTabsFromDir()
@@ -220,10 +223,10 @@ class TabList private constructor() {
         private fun loadTabsFromDir(): List<Tab?>? {
             return itemsDir?.list()
                     ?.map {
-                        val json: String = Okio.buffer(Okio.source(File(itemsDir, it))).let {
-                            val readUtf8 = it.readUtf8()
-                            it.close()
-                            return@let readUtf8
+                        val json: String = File(itemsDir, it).source().use { source ->
+                            source.buffer().use { bufferedSource ->
+                                bufferedSource.readUtf8()
+                            }
                         }
                         when {
                             json.contains("editorTab") -> editorTabJsonAdapter.fromJson(json)

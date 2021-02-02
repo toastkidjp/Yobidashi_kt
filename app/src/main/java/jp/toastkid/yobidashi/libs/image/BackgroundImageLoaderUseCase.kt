@@ -8,8 +8,7 @@
 package jp.toastkid.yobidashi.libs.image
 
 import android.widget.ImageView
-import androidx.core.net.toUri
-import com.bumptech.glide.Glide
+import coil.load
 import java.io.File
 
 /**
@@ -26,9 +25,11 @@ class BackgroundImageLoaderUseCase {
 
         lastPath = backgroundImagePath
 
-        Glide.with(target)
-                .load(File(backgroundImagePath).toURI().toString().toUri())
-                .override(target.measuredWidth, target.measuredHeight)
-                .into(target)
+        target.load(File(backgroundImagePath)) {
+            if (target.measuredWidth == 0 || target.measuredHeight == 0) {
+                return@load
+            }
+            size(target.measuredWidth, target.measuredHeight)
+        }
     }
 }

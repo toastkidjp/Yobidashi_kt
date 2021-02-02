@@ -7,11 +7,14 @@
  */
 package jp.toastkid.yobidashi.media.image.preview
 
+import android.os.Build
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.load
 import java.io.File
-import kotlin.math.max
 
 /**
  * @author toastkidjp
@@ -19,10 +22,13 @@ import kotlin.math.max
 class ViewHolder(private val view: ImageView) : RecyclerView.ViewHolder(view) {
 
     fun setImage(path: String) {
-        Glide.with(view)
-                .load(File(path))
-                .override(max(view.width, view.height))
-                .into(view)
+        view.load(File(path), imageLoader)
     }
+
+    private val imageLoader = ImageLoader.Builder(view.context)
+            .componentRegistry {
+                add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder() else GifDecoder())
+            }
+            .build()
 
 }

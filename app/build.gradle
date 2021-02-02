@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
-apply plugin: 'io.fabric'
 apply plugin: "jacoco"
 
 apply from: 'signing/config.gradle', to: android
@@ -96,16 +95,15 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation 'com.larswerkman:HoloColorPicker:1.5'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.squareup.moshi:moshi:1.8.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'
     implementation 'org.jsoup:jsoup:1.10.3'
-
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation "io.coil-kt:coil:1.0.0"
+    implementation "io.coil-kt:coil-gif:1.0.0"
 
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "org.robolectric:robolectric:$libVersions.robolectric"
