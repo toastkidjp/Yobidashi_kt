@@ -56,14 +56,14 @@ class ArticleSearchUseCaseTest {
     fun testSearchNull() {
         articleSearchUseCase.search(null)
 
-        verify(exactly = 0) { loaderUseCase.invoke(any()) }
+        verify(exactly = 1) { loaderUseCase.invoke(any()) }
     }
 
     @Test
     fun testSearchEmpty() {
         articleSearchUseCase.search("")
 
-        verify(exactly = 0) { loaderUseCase.invoke(any()) }
+        verify(exactly = 1) { loaderUseCase.invoke(any()) }
     }
 
     @Test
