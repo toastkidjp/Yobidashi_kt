@@ -8,12 +8,16 @@
 
 package jp.toastkid.lib.color
 
+import android.content.Context
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
+import android.view.View
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -68,6 +72,26 @@ class IconColorFinderTest {
         verify (exactly = 1) { anyConstructed<DisplayMode>().isNightMode() }
         verify (exactly = 0) { preferenceApplier.fontColor }
         verify (exactly = 1) { preferenceApplier.color }
+    }
+
+    @Test
+    fun testFrom() {
+        val context = mockk<Context>()
+        every { context.getSharedPreferences(any(), any()) }.returns(mockk())
+
+        val view = mockk<View>()
+        every { view.getContext() }.returns(context)
+
+        val resources = mockk<Resources>()
+        every { resources.getConfiguration() }.returns(mockk())
+        every { view.getResources() }.returns(resources)
+
+        IconColorFinder.from(view)
+
+        verify(atLeast = 1) { context.getSharedPreferences(any(), any()) }
+        verify(atLeast = 1) { view.getContext() }
+        verify(atLeast = 1) { resources.getConfiguration() }
+        verify(atLeast = 1) { view.getResources() }
     }
 
 }
