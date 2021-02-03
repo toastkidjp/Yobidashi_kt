@@ -12,6 +12,7 @@ import io.mockk.verify
 import okhttp3.Cookie
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -63,6 +64,21 @@ class WebViewCookieHandlerTest {
         verify(exactly = 1) { CookieManager.getInstance() }
         verify(exactly = 1) { cookieManager.getCookie(any()) }
         verify(exactly = 1) { Cookie.parse(any(), any()) }
+    }
+
+    @Test
+    fun testLoadForRequestElseCase() {
+        every { cookieManager.getCookie(any()) }.returns(null)
+        mockkObject(Cookie)
+        every { Cookie.parse(any(), any()) }.returns(mockk())
+
+        assertTrue(
+                WebViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl()).isEmpty()
+        )
+
+        verify(exactly = 1) { CookieManager.getInstance() }
+        verify(exactly = 1) { cookieManager.getCookie(any()) }
+        verify(exactly = 0) { Cookie.parse(any(), any()) }
     }
 
     @After
