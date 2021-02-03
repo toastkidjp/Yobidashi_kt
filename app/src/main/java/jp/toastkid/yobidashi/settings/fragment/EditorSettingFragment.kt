@@ -248,7 +248,7 @@ class EditorSettingFragment : Fragment() {
     companion object : TitleIdSupplier {
 
         @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_setting_editor
+        private const val LAYOUT_ID = R.layout.fragment_setting_editor
 
         @StringRes
         override fun titleId() = R.string.subhead_editor
