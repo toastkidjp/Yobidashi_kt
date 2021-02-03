@@ -16,7 +16,7 @@ import android.widget.ListView
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
@@ -51,9 +51,7 @@ class UserAgentDialogFragment : BottomSheetDialogFragment() {
         val binding: DialogUserAgentBinding =
                 DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        val color =
-                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
-                else preferenceApplier.color
+        val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(color, binding.title)
 
         binding.list.choiceMode = ListView.CHOICE_MODE_SINGLE
