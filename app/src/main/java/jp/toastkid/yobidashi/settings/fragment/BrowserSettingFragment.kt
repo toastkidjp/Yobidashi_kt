@@ -19,7 +19,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.webkit.WebViewFeature
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
@@ -73,9 +73,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
         super.onResume()
         setCurrentValues()
 
-        val color =
-                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
-                else preferenceApplier.color
+        val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(
                 color,
                 binding.browserExpand.textScreenMode,
