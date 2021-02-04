@@ -86,6 +86,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("p")
             host.endsWith("www.baidu.com") ->
                 uri.getQueryParameter("wd")
+            host.endsWith("myindex.jp") ->
+                uri.getQueryParameter("w")
             host == "www.wolframalpha.com" ->
                 uri.getQueryParameter("i")
             host == "search.goo.ne.jp" ->
