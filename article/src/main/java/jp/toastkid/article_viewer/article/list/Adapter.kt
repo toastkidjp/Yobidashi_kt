@@ -15,8 +15,7 @@ import androidx.annotation.LayoutRes
 import androidx.paging.PagingDataAdapter
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.list.paging.SimpleComparator
-import jp.toastkid.lib.night.DisplayMode
-import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.color.IconColorFinder
 
 /**
  * [SearchResult] list's adapter.
@@ -40,9 +39,7 @@ class Adapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if (menuColor == -1) {
-            val displayMode = DisplayMode(parent.resources.configuration)
-            val colorPair = PreferenceApplier(parent.context).colorPair()
-            menuColor = if (displayMode.isNightMode()) colorPair.fontColor() else colorPair.bgColor()
+            menuColor = IconColorFinder.from(parent).invoke()
         }
 
         return ViewHolder(
