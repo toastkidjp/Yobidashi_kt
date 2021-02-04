@@ -45,7 +45,7 @@ class ContentLoaderUseCaseTest {
         )
         coEvery { markwon.setMarkdown(any(), any()) }.answers { Unit }
         coEvery { linkGeneratorService.invoke(any()) }.answers { Unit }
-        Dispatchers.setMain(Dispatchers.Default)
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @Test
@@ -64,10 +64,9 @@ class ContentLoaderUseCaseTest {
         coEvery { repository.findContentByTitle(any()) }.returns(null)
 
         contentLoaderUseCase.invoke("test")
-
-        coVerify (exactly = 1) { repository.findContentByTitle(any()) }
-        coVerify (exactly = 0) { markwon.setMarkdown(any(), any()) }
-        coVerify (exactly = 0) { linkGeneratorService.invoke(any()) }
+        coVerify(exactly = 1) { repository.findContentByTitle(any()) }
+        coVerify(exactly = 0) { markwon.setMarkdown(any(), any()) }
+        coVerify(exactly = 0) { linkGeneratorService.invoke(any()) }
     }
 
     @After
