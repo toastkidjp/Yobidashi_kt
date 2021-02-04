@@ -361,6 +361,11 @@ enum class SearchCategory(
             R.drawable.ic_morningstar,
             "https://www.morningstar.com/search?query="
     ),
+    MY_INDEX(
+            R.string.my_index,
+            R.drawable.ic_myindex,
+            "https://myindex.jp/search.php?w="
+    ),
     YAHOO_JAPAN_FINANCE(
             R.string.yahoo_japan_finance,
             R.drawable.ic_yahoo_japan_finance,
