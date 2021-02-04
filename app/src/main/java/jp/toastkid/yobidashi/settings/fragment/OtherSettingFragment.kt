@@ -15,7 +15,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
@@ -70,9 +70,7 @@ class OtherSettingFragment : Fragment() {
             it.jumpDrawablesToCurrentState()
         }
 
-        val color =
-                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
-                else preferenceApplier.color
+        val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(
                 color,
                 binding.settingsDevice,
