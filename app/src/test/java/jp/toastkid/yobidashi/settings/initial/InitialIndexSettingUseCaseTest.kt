@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.yobidashi.search.SearchFragment
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,6 +41,14 @@ class InitialIndexSettingUseCaseTest {
         initialIndexSettingUseCase.put(argument, Fragment::class.java)
 
         verify(exactly = 1) { argument.putInt(any(), 0) }
+    }
+
+    @Test
+    fun testSearchFragment() {
+        @Suppress("UNCHECKED_CAST")
+        initialIndexSettingUseCase.put(argument, SearchFragment::class.java as Class<Fragment>)
+
+        verify(exactly = 1) { argument.putInt(any(), 2) }
     }
 
     @After
