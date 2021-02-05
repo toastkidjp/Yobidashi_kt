@@ -70,6 +70,15 @@ class InitialIndexSettingUseCaseTest {
         verify(exactly = 1) { argument.getInt("initialIndex") }
     }
 
+    @Test
+    fun testExtractElseCase() {
+        every { argument.getInt(any()) }.returns(0)
+
+        assertEquals(0, initialIndexSettingUseCase.extract(argument))
+
+        verify(exactly = 1) { argument.getInt("initialIndex") }
+    }
+
     @After
     fun tearDown() {
         unmockkAll()
