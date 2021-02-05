@@ -18,6 +18,7 @@ import io.mockk.verify
 import jp.toastkid.yobidashi.editor.EditorFragment
 import jp.toastkid.yobidashi.search.SearchFragment
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -64,7 +65,7 @@ class InitialIndexSettingUseCaseTest {
     fun testExtract() {
         every { argument.getInt("initialIndex") }.returns(2)
 
-        initialIndexSettingUseCase.extract(argument)
+        assertEquals(2, initialIndexSettingUseCase.extract(argument))
 
         verify(exactly = 1) { argument.getInt("initialIndex") }
     }
