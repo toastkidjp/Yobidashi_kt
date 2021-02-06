@@ -13,9 +13,7 @@ import jp.toastkid.lib.storage.FilesDir
 /**
  * @author toastkidjp
  */
-class TabThumbnails(contextSupplier: () -> Context) {
-
-    private val folder = FilesDir(contextSupplier(), SCREENSHOT_DIR_PATH)
+class TabThumbnails(private val folder: FilesDir) {
 
     fun assignNewFile(name: String) = folder.assignNewFile(name)
 
@@ -44,6 +42,9 @@ class TabThumbnails(contextSupplier: () -> Context) {
          * Directory path to screenshot.
          */
         private const val SCREENSHOT_DIR_PATH: String = "tabs/screenshots"
+
+        fun with(context: Context) =
+                TabThumbnails(FilesDir(context, SCREENSHOT_DIR_PATH))
 
     }
 }
