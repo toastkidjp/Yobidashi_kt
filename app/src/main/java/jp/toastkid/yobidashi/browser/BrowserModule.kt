@@ -370,7 +370,8 @@ class BrowserModule(
             updateForwardButtonState(it.canGoForward())
             browserHeaderViewModel?.nextTitle(it.title)
             browserHeaderViewModel?.nextUrl(it.url)
-            it.startAnimation(slideUpFromBottom)
+
+            webViewContainer?.startAnimation(slideUpFromBottom)
 
             val activity = webViewContainer?.context
             if (activity is FragmentActivity

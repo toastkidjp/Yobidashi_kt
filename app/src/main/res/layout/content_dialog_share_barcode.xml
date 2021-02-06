@@ -40,7 +40,7 @@
             android:layout_marginRight="24dp"
             android:gravity="center"
             android:text="@string/share"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/share_dialog_button_text"
             android:background="@color/colorPrimary"
             style="?android:attr/buttonBarStyle"
             />

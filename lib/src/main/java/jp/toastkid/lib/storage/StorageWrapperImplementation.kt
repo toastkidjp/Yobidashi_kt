@@ -50,7 +50,7 @@ sealed class StorageWrapperImplementation(context: Context, dirName: String) : S
         return listFiles()[index].delete()
     }
 
-    override fun findByName(name: String): File? = listFiles().firstOrNull { it.name.equals(name) }
+    override fun findByName(name: String): File? = listFiles().firstOrNull { it.name == name }
 
     override fun delete(name: String) {
         assignNewFile(name).delete()
@@ -59,7 +59,7 @@ sealed class StorageWrapperImplementation(context: Context, dirName: String) : S
     /**
      * Delete all files.
      */
-    override fun clean() = dir.listFiles().forEach { it.delete() }
+    override fun clean() = dir.listFiles()?.forEach { it.delete() } ?: Unit
 
     /**
      * Assign new file.
@@ -87,7 +87,7 @@ sealed class StorageWrapperImplementation(context: Context, dirName: String) : S
      * Internal method.
      * @return
      */
-    override fun listFiles(): Array<File> = dir.listFiles()
+    override fun listFiles(): Array<File> = dir.listFiles() ?: emptyArray()
 
     /**
      * Get file count.

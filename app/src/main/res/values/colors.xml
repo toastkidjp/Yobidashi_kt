@@ -17,6 +17,7 @@
     <color name="filter_white_aa">#AAFFFFFF</color>
 
     <color name="link_blue">#FF4444FA</color>
+    <color name="share_dialog_button_text">#FFE0E0E0</color>
 
     <color name="default_color_filter">#22777700</color>
 
