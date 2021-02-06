@@ -44,6 +44,9 @@ class AutoArchive(private val filesDir: StorageWrapper) {
         }
 
         val file = filesDir.findByName("$id$EXTENSION") ?: return
+        if (file.exists().not()) {
+            return
+        }
         webView?.let {
             it.loadUrl(Uri.fromFile(file).toString())
             callback()
