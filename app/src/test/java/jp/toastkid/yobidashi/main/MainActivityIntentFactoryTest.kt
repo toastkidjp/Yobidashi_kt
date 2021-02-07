@@ -30,7 +30,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun browser() {
+    fun testBrowser() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().setData(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
