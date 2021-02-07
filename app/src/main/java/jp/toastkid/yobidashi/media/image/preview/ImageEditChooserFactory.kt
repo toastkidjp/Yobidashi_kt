@@ -30,4 +30,5 @@ class ImageEditChooserFactory {
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         return Intent.createChooser(intent, "File edit")
     }
+
 }
