@@ -36,7 +36,7 @@ class LinkBehaviorServiceTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Default)
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @Test
