@@ -88,12 +88,21 @@ class TabThumbnailsTest {
     }
 
     @Test
-    fun testDeleteUnused() {
+    fun testDeleteUnusedUnmatched() {
         tabThumbnails.deleteUnused(listOf("unmatched"))
 
         verify(exactly = 1) { filesDir.listFiles() }
         verify(exactly = 1) { file.getName() }
         verify(exactly = 1) { file.delete() }
+    }
+
+    @Test
+    fun testDeleteUnusedExcepted() {
+        tabThumbnails.deleteUnused(listOf("test"))
+
+        verify(exactly = 1) { filesDir.listFiles() }
+        verify(exactly = 1) { file.getName() }
+        verify(exactly = 0) { file.delete() }
     }
 
 }
