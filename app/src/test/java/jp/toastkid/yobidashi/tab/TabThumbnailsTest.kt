@@ -37,7 +37,9 @@ class TabThumbnailsTest {
         MockKAnnotations.init(this)
 
         every { filesDir.assignNewFile(any<String>()) }.returns(file)
+        every { filesDir.listFiles() }.returns(arrayOf(file))
 
+        every { file.getName() }.returns("test")
         every { file.exists() }.returns(false)
         every { file.delete() }.returns(false)
     }
@@ -82,6 +84,15 @@ class TabThumbnailsTest {
 
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
         verify(exactly = 1) { file.exists() }
+        verify(exactly = 1) { file.delete() }
+    }
+
+    @Test
+    fun testDeleteUnused() {
+        tabThumbnails.deleteUnused(listOf("unmatched"))
+
+        verify(exactly = 1) { filesDir.listFiles() }
+        verify(exactly = 1) { file.getName() }
         verify(exactly = 1) { file.delete() }
     }
 
