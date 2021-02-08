@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.search.trend
 
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
+import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -16,13 +17,22 @@ import org.jsoup.parser.Parser
 class TrendParser {
 
     operator fun invoke(content: String): List<Trend> =
-            Jsoup.parse(content, "", Parser.xmlParser())
-                    .select("channel > item")
-                    .map {
+            parseContent(content)
+                    ?.select("channel > item")
+                    ?.map {
                         Trend(
                                 it.getElementsByTag("title").text(),
                                 it.getElementsByTag("link").text(),
                                 it.getElementsByTag("ht:picture").text()
                         )
                     }
+                    ?: emptyList()
+
+    private fun parseContent(content: String) = try {
+        Jsoup.parse(content, "", Parser.xmlParser())
+    } catch (e: Throwable) {
+        Timber.e(e)
+        null
+    }
+
 }
