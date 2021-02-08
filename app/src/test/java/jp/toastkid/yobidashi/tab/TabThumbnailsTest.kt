@@ -74,4 +74,15 @@ class TabThumbnailsTest {
         verify(exactly = 0) { file.delete() }
     }
 
+    @Test
+    fun testDeleteExists() {
+        every { file.exists() }.returns(true)
+
+        tabThumbnails.delete("test")
+
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 1) { file.exists() }
+        verify(exactly = 1) { file.delete() }
+    }
+
 }
