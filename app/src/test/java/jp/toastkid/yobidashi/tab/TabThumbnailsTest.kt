@@ -36,6 +36,7 @@ class TabThumbnailsTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
+        every { filesDir.clean() }.answers { Unit }
         every { filesDir.assignNewFile(any<String>()) }.returns(file)
         every { filesDir.listFiles() }.returns(arrayOf(file))
 
@@ -103,6 +104,13 @@ class TabThumbnailsTest {
         verify(exactly = 1) { filesDir.listFiles() }
         verify(exactly = 1) { file.getName() }
         verify(exactly = 0) { file.delete() }
+    }
+
+    @Test
+    fun testClean() {
+        tabThumbnails.clean()
+
+        verify(exactly = 1) { filesDir.clean() }
     }
 
 }
