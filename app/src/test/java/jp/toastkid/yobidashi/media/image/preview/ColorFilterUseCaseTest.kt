@@ -41,7 +41,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun applyAlpha() {
+    fun testApplyAlpha() {
         colorFilterUseCase.applyAlpha(0.5f)
 
         verify(exactly = 1) { viewModel.newColorFilter(any<ColorFilter>()) }
