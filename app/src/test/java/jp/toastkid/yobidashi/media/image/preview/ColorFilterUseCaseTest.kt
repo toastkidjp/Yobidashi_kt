@@ -49,7 +49,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun applyContrast() {
+    fun testApplyContrast() {
         colorFilterUseCase.applyContrast(0.5f)
 
         verify(exactly = 1) { viewModel.newColorFilter(any<ColorFilter>()) }
