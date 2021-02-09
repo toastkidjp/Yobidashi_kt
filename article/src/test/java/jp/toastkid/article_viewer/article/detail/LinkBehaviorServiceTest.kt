@@ -5,6 +5,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -24,6 +25,9 @@ import org.junit.Test
  */
 class LinkBehaviorServiceTest {
 
+    @InjectMockKs
+    private lateinit var linkBehaviorService: LinkBehaviorService
+
     @MockK
     private lateinit var contentViewModel: ContentViewModel
 
@@ -37,14 +41,14 @@ class LinkBehaviorServiceTest {
     fun setUp() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(Dispatchers.Unconfined)
+
+        every { browserViewModel.open(any()) }.answers { Unit }
+        coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
+        coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
     }
 
     @Test
     fun testNullUrl() {
-        every { browserViewModel.open(any()) }.answers { Unit }
-        every { contentViewModel.newArticle(any()) }.answers { Unit }
-        val linkBehaviorService = LinkBehaviorService(contentViewModel, browserViewModel, exists)
-
         linkBehaviorService.invoke(null)
 
         verify(exactly = 0) { browserViewModel.open(any()) }
@@ -53,10 +57,6 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testEmptyUrl() {
-        every { browserViewModel.open(any()) }.answers { Unit }
-        every { contentViewModel.newArticle(any()) }.answers { Unit }
-        val linkBehaviorService = LinkBehaviorService(contentViewModel, browserViewModel, exists)
-
         linkBehaviorService.invoke("")
 
         verify(exactly = 0) { browserViewModel.open(any()) }
@@ -65,11 +65,8 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testWebUrl() {
-        every { browserViewModel.open(any()) }.answers { Unit }
-        every { contentViewModel.newArticle(any()) }.answers { Unit }
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
-        val linkBehaviorService = LinkBehaviorService(contentViewModel, browserViewModel, exists)
 
         linkBehaviorService.invoke("https://www.yahoo.co.jp")
 
@@ -79,11 +76,7 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testArticleUrlDoesNotExists() {
-        every { browserViewModel.open(any()) }.answers { Unit }
-        coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
-        coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
         coEvery { exists(any()) }.answers { false }
-        val linkBehaviorService = LinkBehaviorService(contentViewModel, browserViewModel, exists)
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
@@ -94,11 +87,7 @@ class LinkBehaviorServiceTest {
 
     @Test
     fun testArticleUrl() {
-        every { browserViewModel.open(any()) }.answers { Unit }
-        coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
-        coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
         coEvery { exists(any()) }.answers { true }
-        val linkBehaviorService = LinkBehaviorService(contentViewModel, browserViewModel, exists)
 
         linkBehaviorService.invoke("internal-article://yahoo")
 
