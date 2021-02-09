@@ -113,4 +113,11 @@ class TabThumbnailsTest {
         verify(exactly = 1) { filesDir.clean() }
     }
 
+    @Test
+    fun testAssignNewFile() {
+        tabThumbnails.assignNewFile("test")
+
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+    }
+
 }
