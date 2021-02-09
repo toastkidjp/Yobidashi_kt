@@ -19,7 +19,10 @@ import java.util.Locale
  *
  * @author toastkidjp
  */
-class BookmarkInitializer {
+class BookmarkInitializer(
+        private val favicons: FilesDir,
+        private val databaseFinder: DatabaseFinder = DatabaseFinder()
+) {
 
     /**
      * Default bookmarks.
@@ -64,8 +67,7 @@ class BookmarkInitializer {
      * @param context
      */
     operator fun invoke(context: Context, onComplete: () -> Unit = {}): Job {
-        val favicons = FilesDir(context, "favicons")
-        val bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
+        val bookmarkRepository = databaseFinder.invoke(context).bookmarkRepository()
 
         return CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
