@@ -1,32 +1,29 @@
 package jp.toastkid.yobidashi.tab
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.view.View
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.BrowserFragment
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
+import jp.toastkid.yobidashi.browser.FaviconApplier
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebViewFactory
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
+import jp.toastkid.yobidashi.tab.background.BackgroundWebViewFactoryUseCase
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
@@ -71,18 +68,28 @@ class TabAdapter(
 
     private var tabListViewModel: TabListViewModel? = null
 
-    private val webViewFactory = WebViewFactory()
+    private var webViewFactory: BackgroundWebViewFactoryUseCase? = null
 
     init {
         val viewContext = contextSupplier()
         tabThumbnails = TabThumbnails(contextSupplier)
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
+
         if (viewContext is MainActivity) {
             val viewModelProvider = ViewModelProvider(viewContext)
             browserHeaderViewModel = viewModelProvider.get(BrowserHeaderViewModel::class.java)
             appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
+
+            webViewFactory = BackgroundWebViewFactoryUseCase(
+                    webViewClientFactory = WebViewClientFactory(
+                            viewModelProvider.get(ContentViewModel::class.java),
+                            AdRemover.make(viewContext.assets),
+                            FaviconApplier(viewContext),
+                            preferenceApplier
+                    )
+            )
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -126,36 +133,16 @@ class TabAdapter(
      * @param url Tab's URL
      */
     fun openBackgroundTab(title: String, url: String) {
+        val context = contextSupplier()
         val tabTitle =
                 if (title.isNotBlank()) title
-                else contextSupplier().getString(R.string.new_tab)
+                else context.getString(R.string.new_tab)
 
         val newTab = WebTab.makeBackground(tabTitle, url)
         tabList.add(newTab)
         tabList.save()
-        val webView = webViewFactory.make(contextSupplier())
-        webView.webViewClient = object : WebViewClient() {
 
-            private val adRemover: AdRemover = AdRemover.make(webView.context.assets)
-
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
-                    if (preferenceApplier.adRemove) {
-                        adRemover(request.url.toString())
-                    } else {
-                        super.shouldInterceptRequest(view, request)
-                    }
-
-            @Suppress("OverridingDeprecatedMember")
-            @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-            override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
-                    if (preferenceApplier.adRemove) {
-                        adRemover(url)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        super.shouldInterceptRequest(view, url)
-                    }
-        }
+        val webView = webViewFactory?.invoke(context) ?: return
         webView.loadUrl(url)
         GlobalWebViewPool.put(newTab.id(), webView)
         setCount()
@@ -239,6 +226,10 @@ class TabAdapter(
      * @return
      */
     internal fun getTabByIndex(index: Int): Tab? = tabList.get(index)
+
+    internal fun addTo(tab: Tab, index: Int) {
+        tabList.addTo(tab, index)
+    }
 
     /**
      * Close specified index' tab.

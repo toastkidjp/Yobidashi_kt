@@ -9,11 +9,12 @@ import androidx.annotation.LayoutRes
 import androidx.core.graphics.ColorUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.tab.TabThumbnails
+import jp.toastkid.yobidashi.tab.model.Tab
 
 /**
  * WebTab list adapter.
@@ -67,7 +68,7 @@ internal class Adapter(
 
         holder.setImagePath(tabThumbnails.assignNewFile(tab.thumbnailPath()).absolutePath)
         holder.setTitle(tab.title())
-        holder.setCloseAction(View.OnClickListener { closeAt(callback.tabIndexOfFromTabList(tab)) })
+        holder.setCloseAction(View.OnClickListener { close(tab) })
         holder.setColor(colorPair)
         holder.setBackgroundColor(
                 if (index == position) {
@@ -82,9 +83,10 @@ internal class Adapter(
      * Close tab at index.
      * @param position
      */
-    private fun closeAt(position: Int) {
-        callback.closeTabFromTabList(position)
-        notifyItemRemoved(position)
+    private fun close(tab: Tab) {
+        val index = callback.tabIndexOfFromTabList(tab)
+        callback.closeTabFromTabList(index)
+        notifyItemRemoved(index)
     }
 
     override fun getItemCount(): Int = callback.getTabAdapterSizeFromTabList()

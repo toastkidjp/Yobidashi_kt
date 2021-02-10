@@ -111,11 +111,14 @@ class TabList private constructor() {
         get() = tabs.isEmpty()
 
     internal fun add(newTab: Tab) {
-        val newIndex = index + 1
-        if (inRange(newIndex)) {
-            tabs.add(newIndex, newTab)
+        addTo(newTab, index + 1)
+    }
+
+    internal fun addTo(tab: Tab, index: Int) {
+        if (inRange(index)) {
+            tabs.add(index, tab)
         } else {
-            tabs.add(newTab)
+            tabs.add(tab)
         }
     }
 

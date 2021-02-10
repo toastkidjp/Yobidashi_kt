@@ -15,6 +15,7 @@
     <color name="filter_white">#88FFFFFF</color>
     <color name="filter_white_bb">#CCFFFFFF</color>
     <color name="filter_white_aa">#AAFFFFFF</color>
+    <color name="setting_background">#E0FFFFFF</color>
 
     <color name="link_blue">#FF4444FA</color>
     <color name="share_dialog_button_text">#FFE0E0E0</color>

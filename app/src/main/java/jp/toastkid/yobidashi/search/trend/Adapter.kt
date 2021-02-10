@@ -30,7 +30,7 @@ class Adapter(private val viewModel: SearchFragmentViewModel) : RecyclerView.Ada
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items.get(position))
         holder.itemView.setOnClickListener {
-            viewModel.search(items.get(position).title)
+            viewModel.search(items.get(position).link)
         }
         holder.itemView.setOnLongClickListener {
             viewModel.searchOnBackground(items.get(position).title)

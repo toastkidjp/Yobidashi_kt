@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.search.trend
 import okio.buffer
 import okio.source
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -19,6 +20,7 @@ class TrendParserTest {
 
         val items = TrendParser().invoke(xmlSource)
         assertEquals(20, items.size)
+        assertTrue(items.first().link.isNotBlank())
     }
 
 }

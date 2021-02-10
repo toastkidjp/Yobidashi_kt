@@ -1,34 +1,19 @@
 package jp.toastkid.yobidashi.browser
 
-import android.annotation.TargetApi
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
-import android.net.http.SslError
-import android.os.Build
 import android.os.Bundle
-import android.os.Message
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.webkit.SslErrorHandler
 import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.FrameLayout
-import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.AppBarViewModel
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -38,22 +23,19 @@ import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
-import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.page_information.PageInformationExtractor
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
-import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
-import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
-import jp.toastkid.yobidashi.browser.webview.WebViewFactory
+import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
-import jp.toastkid.yobidashi.libs.BitmapCompressor
+import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
@@ -105,7 +87,7 @@ class BrowserModule(
 
     private var contentViewModel: ContentViewModel? = null
 
-    private val webViewFactory: WebViewFactory
+    private val webViewFactory: WebViewFactoryUseCase
 
     private val darkThemeApplier = DarkModeApplier()
 
@@ -116,8 +98,6 @@ class BrowserModule(
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
 
-        webViewFactory = WebViewFactory()
-
         customViewSwitcher = CustomViewSwitcher({ context }, { currentView() })
 
         if (context is MainActivity) {
@@ -126,188 +106,50 @@ class BrowserModule(
             loadingViewModel = viewModelProvider.get(LoadingViewModel::class.java)
             contentViewModel = viewModelProvider.get(ContentViewModel::class.java)
         }
-    }
 
-    private fun makeWebViewClient(): WebViewClient = object : WebViewClient() {
+        webViewFactory = WebViewFactoryUseCase(
+                webViewClientFactory = WebViewClientFactory(
+                        contentViewModel,
+                        adRemover,
+                        faviconApplier,
+                        preferenceApplier,
+                        { webView, url ->
+                            browserHeaderViewModel?.updateProgress(0)
+                            browserHeaderViewModel?.nextUrl(url)
 
-        override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
-            super.onPageStarted(view, url, favicon)
-            browserHeaderViewModel?.updateProgress(0)
-            browserHeaderViewModel?.nextUrl(url)
-
-            rssAddingSuggestion(view, url)
-            updateBackButtonState(view.canGoBack())
-        }
-
-        override fun onPageFinished(view: WebView, url: String?) {
-            super.onPageFinished(view, url)
-
-            val title = view.title ?: ""
-            val urlStr = url ?: ""
-
-            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
-                loadingViewModel?.finished(lastId, History.make(title, urlStr))
-            }
-
-            browserHeaderViewModel?.updateProgress(100)
-            browserHeaderViewModel?.stopProgress(true)
-
-            try {
-                if (view == currentView()) {
-                    browserHeaderViewModel?.nextTitle(title)
-                    browserHeaderViewModel?.nextUrl(urlStr)
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
-
-            if (preferenceApplier.saveViewHistory
-                    && title.isNotEmpty()
-                    && urlStr.isNotEmpty()
-            ) {
-                ViewHistoryInsertion
-                        .make(
-                                view.context,
-                                title,
-                                urlStr,
-                                faviconApplier.makePath(urlStr)
-                        )
-                        .invoke()
-            }
-        }
-
-        override fun onReceivedError(
-                view: WebView, request: WebResourceRequest, error: WebResourceError) {
-            super.onReceivedError(view, request, error)
-            browserHeaderViewModel?.updateProgress(100)
-            browserHeaderViewModel?.stopProgress(true)
-        }
-
-        override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-            super.onReceivedSslError(view, handler, error)
-
-            handler?.cancel()
-
-            if (context !is FragmentActivity || context.isFinishing) {
-                return
-            }
-
-            TlsErrorDialogFragment
-                    .make(TlsErrorMessageGenerator().invoke(context, error))
-                    .show(
-                            context.supportFragmentManager,
-                            TlsErrorDialogFragment::class.java.simpleName
-                    )
-        }
-
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
-                if (preferenceApplier.adRemove) {
-                    adRemover(request.url.toString())
-                } else {
-                    super.shouldInterceptRequest(view, request)
-                }
-
-        @Suppress("OverridingDeprecatedMember")
-        @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-        override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? =
-                if (preferenceApplier.adRemove) {
-                    adRemover(url)
-                } else {
-                    @Suppress("DEPRECATION")
-                    super.shouldInterceptRequest(view, url)
-                }
-
-        @Suppress("DEPRECATION")
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-        override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean =
-                shouldOverrideUrlLoading(view, request?.url?.toString())
-
-        @Suppress("OverridingDeprecatedMember", "DEPRECATION")
-        override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean =
-                url?.let {
-                    val context: Context? = view?.context
-                    val uri: Uri = Uri.parse(url)
-                    when (uri.scheme) {
-                        "market", "intent" -> {
-                            try {
-                                context?.startActivity(Intent.parseUri(url, Intent.URI_INTENT_SCHEME))
-                                true
-                            } catch (e: ActivityNotFoundException) {
-                                Timber.w(e)
-
-                                context?.let {
-                                    contentViewModel?.snackShort(context.getString(R.string.message_cannot_launch_app))
-                                }
-                                true
+                            rssAddingSuggestion(webView, url)
+                            updateBackButtonState(webView.canGoBack())
+                        },
+                        { webView, url ->
+                            val title = webView.title ?: ""
+                            val urlStr = url ?: ""
+                            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
+                                loadingViewModel?.finished(lastId, History.make(title, urlStr))
                             }
+
+                            browserHeaderViewModel?.updateProgress(100)
+                            browserHeaderViewModel?.stopProgress(true)
+
+                            try {
+                                if (webView == currentView()) {
+                                    browserHeaderViewModel?.nextTitle(title)
+                                    browserHeaderViewModel?.nextUrl(urlStr)
+                                }
+                            } catch (e: Exception) {
+                                Timber.e(e)
+                            }
+                        },
+                        { webView, request, error ->
+                            browserHeaderViewModel?.updateProgress(100)
+                            browserHeaderViewModel?.stopProgress(true)
                         }
-                        "tel" -> {
-                            context?.startActivity(IntentFactory.dial(uri))
-                            view?.reload()
-                            true
-                        }
-                        "mailto" -> {
-                            context?.startActivity(IntentFactory.mailTo(uri))
-                            view?.reload()
-                            true
-                        }
-                        else -> {
-                            super.shouldOverrideUrlLoading(view, url)
-                        }
-                    }
-                } ?: super.shouldOverrideUrlLoading(view, url)
-    }
-
-    private fun makeWebChromeClient(): WebChromeClient = object : WebChromeClient() {
-
-        private val bitmapCompressor = BitmapCompressor()
-
-        override fun onProgressChanged(view: WebView, newProgress: Int) {
-            super.onProgressChanged(view, newProgress)
-
-            browserHeaderViewModel?.updateProgress(newProgress)
-            browserHeaderViewModel?.stopProgress(newProgress < 65)
-        }
-
-        override fun onReceivedIcon(view: WebView?, favicon: Bitmap?) {
-            super.onReceivedIcon(view, favicon)
-            val urlStr = view?.url
-            if (urlStr != null && favicon != null) {
-                bitmapCompressor(favicon, faviconApplier.assignFile(urlStr))
-            }
-        }
-
-        override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-            super.onShowCustomView(view, callback)
-            customViewSwitcher?.onShowCustomView(view, callback)
-        }
-
-        override fun onHideCustomView() {
-            super.onHideCustomView()
-            customViewSwitcher?.onHideCustomView()
-        }
-
-        override fun onCreateWindow(
-                view: WebView?,
-                isDialog: Boolean,
-                isUserGesture: Boolean,
-                resultMsg: Message?
-        ): Boolean {
-            val href = view?.handler?.obtainMessage()
-            view?.requestFocusNodeHref(href)
-            val url = href?.data?.getString("url")?.toUri()
-                    ?: return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg)
-            view.stopLoading()
-
-            (context as? FragmentActivity)?.also { fragmentActivity ->
-                ViewModelProvider(fragmentActivity)
-                        .get(BrowserViewModel::class.java)
-                        .open(url)
-            }
-
-            return true
-        }
+                ),
+                webChromeClientFactory = WebChromeClientFactory(
+                        browserHeaderViewModel,
+                        faviconApplier,
+                        customViewSwitcher
+                )
+        )
     }
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
@@ -543,10 +385,7 @@ class BrowserModule(
     }
 
     private fun makeWebView(): WebView {
-        val webView = webViewFactory.make(context)
-        webView.webViewClient = makeWebViewClient()
-        webView.webChromeClient = makeWebChromeClient()
-        return webView
+        return webViewFactory(context)
     }
 
     fun onSaveInstanceState(outState: Bundle) {
