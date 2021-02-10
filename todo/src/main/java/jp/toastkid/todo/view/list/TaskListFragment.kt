@@ -42,10 +42,15 @@ class TaskListFragment : Fragment() {
 
     private lateinit var appBarBinding: AppBarTaskListBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        appBarBinding = DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
+        appBarBinding =
+                DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
         return binding.root
     }
 
