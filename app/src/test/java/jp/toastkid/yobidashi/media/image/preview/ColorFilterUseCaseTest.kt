@@ -57,7 +57,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun reverseFilter() {
+    fun testReverseFilter() {
         colorFilterUseCase.reverseFilter()
 
         verify(exactly = 0) { viewModel.newColorFilter(any<ColorFilter>()) }
