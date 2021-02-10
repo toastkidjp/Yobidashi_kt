@@ -49,7 +49,7 @@ class SearchHistoryInsertionTest {
     }
 
     @Test
-    fun insert() {
+    fun testInsert() {
         searchHistoryInsertion = SearchHistoryInsertion.make(
                 mockk(),
                 "test-category",
