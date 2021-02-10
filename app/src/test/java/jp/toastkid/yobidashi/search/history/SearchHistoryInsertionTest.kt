@@ -63,4 +63,19 @@ class SearchHistoryInsertionTest {
         coVerify(exactly = 1) { repository.insert(any()) }
     }
 
+    @Test
+    fun testInsertWithEmptyCategory() {
+        searchHistoryInsertion = SearchHistoryInsertion.make(
+                mockk(),
+                "",
+                "test-query"
+        )
+
+        searchHistoryInsertion.insert()
+
+        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
+        verify(exactly = 1) { appDatabase.searchHistoryRepository() }
+        coVerify(exactly = 0) { repository.insert(any()) }
+    }
+
 }
