@@ -65,7 +65,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun sepia() {
+    fun testSepia() {
         colorFilterUseCase.sepia()
 
         verify(exactly = 0) { viewModel.newColorFilter(any<ColorFilter>()) }
