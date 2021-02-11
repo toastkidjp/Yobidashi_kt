@@ -24,7 +24,7 @@
                 android:layout_width="@dimen/music_list_icon_width"
                 android:layout_height="0dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_music"
                 app:layout_constraintTop_toTopOf="parent"
