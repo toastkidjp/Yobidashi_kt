@@ -27,6 +27,7 @@
                 android:layout_marginStart="8dp"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_music"
+                android:contentDescription="@string/image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
