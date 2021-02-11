@@ -66,7 +66,7 @@ class TaskAdditionDialogFragmentUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         taskAdditionDialogFragmentUseCase.invoke(mockk())
     }
 
