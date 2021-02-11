@@ -87,6 +87,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_lyrics"
+                android:contentDescription="@string/title_lyrics_search"
                 app:layout_constraintStart_toEndOf="@id/title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
