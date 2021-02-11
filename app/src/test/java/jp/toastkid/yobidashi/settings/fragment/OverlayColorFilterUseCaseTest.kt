@@ -144,7 +144,7 @@ class OverlayColorFilterUseCaseTest {
     }
 
     @Test
-    fun setDefault() {
+    fun testSetDefault() {
         overlayColorFilterUseCase.setDefault()
 
         verify(atLeast = 1) { colorResolver.invoke(any()) }
