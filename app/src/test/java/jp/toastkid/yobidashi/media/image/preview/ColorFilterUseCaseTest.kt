@@ -73,7 +73,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun grayScale() {
+    fun testGrayScale() {
         colorFilterUseCase.grayScale()
 
         verify(exactly = 0) { viewModel.newColorFilter(any<ColorFilter>()) }
