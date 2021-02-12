@@ -17,7 +17,6 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.search.SearchFragment
-import jp.toastkid.yobidashi.search.favorite.AddingFavoriteSearchService
 import jp.toastkid.yobidashi.settings.SettingFragment
 
 /**
@@ -60,8 +59,8 @@ class LauncherIntentUseCase(
                 return
             }
             Intent.ACTION_WEB_SEARCH -> {
-                val category = if (intent.hasExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)) {
-                    intent.getStringExtra(AddingFavoriteSearchService.EXTRA_KEY_CATEGORY)
+                val category = if (intent.hasExtra(EXTRA_KEY_CATEGORY)) {
+                    intent.getStringExtra(EXTRA_KEY_CATEGORY)
                 } else {
                     searchCategoryFinder()
                 } ?: return
@@ -87,5 +86,11 @@ class LauncherIntentUseCase(
                 elseCaseUseCase()
             }
         }
+    }
+
+    companion object {
+        val EXTRA_KEY_CATEGORY = "Category"
+
+        val EXTRA_KEY_QUERY = SearchManager.QUERY
     }
 }
