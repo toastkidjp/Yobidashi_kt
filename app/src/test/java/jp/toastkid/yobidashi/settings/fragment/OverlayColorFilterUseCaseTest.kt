@@ -133,7 +133,7 @@ class OverlayColorFilterUseCaseTest {
     }
 
     @Test
-    fun setAlpha() {
+    fun testSetAlpha() {
         overlayColorFilterUseCase.setAlpha(120)
 
         verify(atLeast = 1) { colorResolver.invoke(any()) }
