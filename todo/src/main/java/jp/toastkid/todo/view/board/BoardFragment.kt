@@ -101,7 +101,7 @@ class BoardFragment : Fragment() {
                 tasks,
                 binding.board,
                 BoardItemViewFactory(layoutInflater) { parent, showTask ->
-                    popup?.show(parent, showTask)
+                    popup.show(parent, showTask)
                 }
         )
 
