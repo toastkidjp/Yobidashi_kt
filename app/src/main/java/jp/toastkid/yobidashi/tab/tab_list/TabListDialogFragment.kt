@@ -102,7 +102,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
 
         BackgroundImageLoaderUseCase().invoke(
                 binding.background,
-                PreferenceApplier(requireContext()).backgroundImagePath
+                PreferenceApplier(activityContext).backgroundImagePath
         )
 
         return binding.root
