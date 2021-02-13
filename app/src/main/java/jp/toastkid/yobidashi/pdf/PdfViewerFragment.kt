@@ -29,7 +29,6 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
-import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
@@ -172,7 +171,7 @@ class PdfViewerFragment : Fragment(), OnBackCloseableTabUiFragment, CommonFragme
     override fun onResume() {
         super.onResume()
         appBarViewModel?.replace(appBarBinding.root)
-        applyColor(PreferenceApplier(requireContext()).colorPair())
+        applyColor(PreferenceApplier(appBarBinding.root.context).colorPair())
     }
 
     /**
