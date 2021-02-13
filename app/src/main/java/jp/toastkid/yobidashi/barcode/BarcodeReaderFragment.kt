@@ -85,7 +85,8 @@ class BarcodeReaderFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        resultPopup = BarcodeReaderResultPopup(requireContext())
+        val context = binding?.root?.context ?: return binding?.root
+        resultPopup = BarcodeReaderResultPopup(context)
 
         return binding?.root
     }
