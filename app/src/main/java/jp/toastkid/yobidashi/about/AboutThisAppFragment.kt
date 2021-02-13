@@ -42,9 +42,11 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding?.fragment = this
-        preferenceApplier = PreferenceApplier(requireContext())
-
         binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
+
+        val context = context ?: return binding?.root
+        preferenceApplier = PreferenceApplier(context)
+
         return binding?.root
     }
 
