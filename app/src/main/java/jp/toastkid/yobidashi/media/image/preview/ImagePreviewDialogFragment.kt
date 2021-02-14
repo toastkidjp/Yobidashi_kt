@@ -181,7 +181,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     fun setTo() {
         if (attachMenuPopup == null) {
             attachMenuPopup = AttachMenuPopup(
-                    requireContext(),
+                    binding.root.context,
                     MenuActionUseCase(
                             AttachToThisAppBackgroundUseCase(contentViewModel),
                             AttachToAnyAppUseCase { startActivity(it) },
