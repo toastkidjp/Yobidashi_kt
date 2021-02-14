@@ -41,8 +41,6 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
-import jp.toastkid.yobidashi.tab.History
-import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -113,36 +111,11 @@ class BrowserModule(
                         adRemover,
                         faviconApplier,
                         preferenceApplier,
-                        { webView, url ->
-                            browserHeaderViewModel?.updateProgress(0)
-                            browserHeaderViewModel?.nextUrl(url)
-
-                            rssAddingSuggestion(webView, url)
-                            updateBackButtonState(webView.canGoBack())
-                        },
-                        { webView, url ->
-                            val title = webView.title ?: ""
-                            val urlStr = url ?: ""
-                            if (!AutoArchive.shouldNotUpdateTab(urlStr)) {
-                                loadingViewModel?.finished(lastId, History.make(title, urlStr))
-                            }
-
-                            browserHeaderViewModel?.updateProgress(100)
-                            browserHeaderViewModel?.stopProgress(true)
-
-                            try {
-                                if (webView == currentView()) {
-                                    browserHeaderViewModel?.nextTitle(title)
-                                    browserHeaderViewModel?.nextUrl(urlStr)
-                                }
-                            } catch (e: Exception) {
-                                Timber.e(e)
-                            }
-                        },
-                        { webView, request, error ->
-                            browserHeaderViewModel?.updateProgress(100)
-                            browserHeaderViewModel?.stopProgress(true)
-                        }
+                        browserHeaderViewModel,
+                        rssAddingSuggestion,
+                        loadingViewModel,
+                        { currentView() },
+                        { lastId }
                 ),
                 webChromeClientFactory = WebChromeClientFactory(
                         browserHeaderViewModel,
@@ -407,7 +380,7 @@ class BrowserModule(
         GlobalWebViewPool.applyNewAlpha(alphaConverter.readBackground(context))
     }
 
-    fun makeShareMessage() = "${currentTitle()}$lineSeparator${currentUrl()}"
+    fun makeShareMessage() = "${currentTitle()}${System.lineSeparator()}${currentUrl()}"
 
     fun invokeContentExtraction(callback: ValueCallback<String>) {
         readerModeUseCase(currentView(), callback)
@@ -421,7 +394,4 @@ class BrowserModule(
         AllImageDownloaderService(DownloadAction(context)).invoke(currentView())
     }
 
-    companion object {
-        private val lineSeparator = System.lineSeparator()
-    }
 }

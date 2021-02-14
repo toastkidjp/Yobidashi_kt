@@ -63,8 +63,6 @@ enum class Menu(
 
     MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),
 
-    VOICE_SEARCH(R.string.title_voice_search, R.drawable.ic_mic),
-
     ABOUT_THIS_APP(R.string.title_about_this_app, R.drawable.ic_yobidashi),
 
     TODO_TASKS_BOARD(R.string.title_todo_tasks_board, R.drawable.ic_board),

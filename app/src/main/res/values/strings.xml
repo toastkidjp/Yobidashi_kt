@@ -458,5 +458,8 @@
     <string name="title_todo_tasks">TODO tasks</string>
     <string name="title_todo_tasks_board">Task board</string>
     <string name="title_search_with_map_app">Search with map app</string>
+    <string name="title_sort_by_date">Sort by date</string>
+    <string name="title_sort_by_name">Sort by name</string>
+    <string name="title_sort_by_count">Sort by count</string>
 
 </resources>

@@ -44,6 +44,7 @@ class SearchQueryExtractor {
                     or host.endsWith("www.info.com")
                     or host.endsWith("results.looksmart.com")
                     or host.equals("www.privacywall.org")
+                    or host.equals("alohafind.com")
                     or host.equals("www.mojeek.com")
                     or host.equals("www.ecosia.org")
                     or host.equals("www.findx.com")
@@ -85,6 +86,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("i")
             host == "search.goo.ne.jp" ->
                 uri.getQueryParameter("MT")
+            host == "bgr.com" ->
+                uri.getQueryParameter("s")?.replace("#$".toRegex(), "")
             host.endsWith("facebook.com")
                     or host.equals("www.instagram.com")
                     or host.equals("www.espn.com") ->

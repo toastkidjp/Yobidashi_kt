@@ -4,14 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import android.view.View
+import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import jp.toastkid.lib.preference.ColorPair
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.yobidashi.search.SearchAction
-import jp.toastkid.search.SearchCategory
-import kotlinx.coroutines.Job
 
 /**
  * Voice search use case.
@@ -39,24 +35,6 @@ object VoiceSearch {
                 )
                 it.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
             }
-
-    /**
-     * Process activity result.
-     *
-     * @param context
-     * @param data
-     *
-     * @return [Job]
-     */
-    fun processResult(context: Context, data: Intent): Job {
-        val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        if (result.isNullOrEmpty()) {
-            return Job()
-        }
-        return SearchAction(context, PreferenceApplier(context).getDefaultSearchEngine()
-                ?: SearchCategory.getDefaultCategoryName(), result[0])
-                .invoke()
-    }
 
     /**
      * Show Google App install suggestion by [android.support.design.widget.Snackbar].

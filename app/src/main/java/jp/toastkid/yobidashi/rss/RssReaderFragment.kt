@@ -24,8 +24,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssReaderBinding
@@ -45,7 +47,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class RssReaderFragment : Fragment(), CommonFragmentAction {
+class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
     private lateinit var binding: FragmentRssReaderBinding
 
@@ -90,23 +92,35 @@ class RssReaderFragment : Fragment(), CommonFragmentAction {
                     .map { RssReaderApi().invoke(it) }
                     .collect {
                         withContext(Dispatchers.Main) {
-                            adapter.addAll(it?.items)
+                            val items = it?.items
+                            adapter.addAll(items)
+                            adapter.notifyDataSetChanged()
                         }
                     }
         }
     }
 
     private fun observeViewModelEvent(fragmentActivity: FragmentActivity) {
-        viewModel?.itemClick?.observe(viewLifecycleOwner, Observer<String> {
-            if (it == null) {
-                return@Observer
-            }
+        viewModel?.itemClick?.observe(viewLifecycleOwner, Observer {
+            val event = it?.getContentIfNotHandled() ?: return@Observer
 
-            activity?.supportFragmentManager?.popBackStack()
-            ViewModelProvider(fragmentActivity)
+            val browserViewModel = ViewModelProvider(fragmentActivity)
                     .get(BrowserViewModel::class.java)
-                    .open(it.toUri())
+            if (event.second) {
+                browserViewModel.openBackground(event.first.toUri())
+            } else {
+                browserViewModel.open(event.first.toUri())
+                activity?.supportFragmentManager?.popBackStack()
+            }
         })
+    }
+
+    override fun toTop() {
+        RecyclerViewScroller.toTop(binding.rssList, binding.rssList.adapter?.itemCount ?: 0)
+    }
+
+    override fun toBottom() {
+        RecyclerViewScroller.toBottom(binding.rssList, binding.rssList.adapter?.itemCount ?: 0)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

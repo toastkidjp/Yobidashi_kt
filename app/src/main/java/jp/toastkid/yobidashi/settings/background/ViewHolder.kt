@@ -40,7 +40,7 @@ internal class ViewHolder(
 
         binding.image.load(f)
 
-        binding.text.text = f.name
+        binding.text.text = f.nameWithoutExtension
         binding.remove.setOnClickListener { removeSetImage(f) }
         binding.root.setOnClickListener {
             preferenceApplier.backgroundImagePath = f.path

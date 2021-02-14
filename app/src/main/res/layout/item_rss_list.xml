@@ -25,7 +25,7 @@
                 android:adjustViewBounds="true"
                 app:srcCompat="@drawable/ic_rss_feed"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/divider"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 />
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_marginTop="4dp"
                 android:maxLines="1"
                 android:gravity="center_vertical"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/link_blue"
                 android:textSize="12sp"
                 tools:text="@string/sample_url"
                 app:layout_constraintTop_toBottomOf="@id/title"
@@ -70,6 +70,19 @@
                 app:layout_constraintEnd_toEndOf="@id/title"
                 />
             <TextView
+                android:id="@+id/source"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                tools:text="@string/wikipedia"
+                app:layout_constraintTop_toBottomOf="@id/content"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintEnd_toEndOf="@id/title"
+                />
+            <TextView
                 android:id="@+id/time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -79,21 +92,11 @@
                 android:textColor="@color/darkgray_scale"
                 android:textSize="12sp"
                 tools:text="@string/sample_date_time"
-                app:layout_constraintTop_toBottomOf="@id/content"
+                app:layout_constraintTop_toBottomOf="@id/source"
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintEnd_toEndOf="@id/title"
                 />
 
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_gravity="bottom"
-                android:background="@color/search_divider"
-                app:layout_constraintTop_toBottomOf="@id/icon"
-                app:layout_constraintStart_toEndOf="@id/icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

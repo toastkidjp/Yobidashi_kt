@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.menu
 
-import android.content.ActivityNotFoundException
 import android.os.Build
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -38,11 +37,9 @@ import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
 import jp.toastkid.yobidashi.planning_poker.CardListFragment
 import jp.toastkid.yobidashi.rss.RssReaderFragment
-import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import jp.toastkid.yobidashi.wikipedia.today.DateArticleUrlFactory
-import timber.log.Timber
 import java.util.Calendar
 
 /**
@@ -150,22 +147,6 @@ class MenuUseCase(
             }
             Menu.GESTURE_MEMO -> {
                 nextFragment(GestureMemoFragment::class.java)
-            }
-            Menu.VOICE_SEARCH-> {
-                activitySupplier().also {
-                    try {
-                        it.startActivityForResult(
-                                VoiceSearch.makeIntent(it),
-                                VoiceSearch.REQUEST_CODE
-                        )
-                    } catch (e: ActivityNotFoundException) {
-                        Timber.e(e)
-                        VoiceSearch.suggestInstallGoogleApp(
-                                it.findViewById(R.id.content),
-                                preferenceApplier.colorPair()
-                        )
-                    }
-                }
             }
             Menu.ABOUT_THIS_APP -> {
                 nextFragment(AboutThisAppFragment::class.java)

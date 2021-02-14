@@ -112,6 +112,11 @@ enum class SearchCategory(
             R.drawable.ic_privacywall,
             "https://www.privacywall.org/search/secure/?q="
     ),
+    ALOHA_FIND(
+            R.string.search_category_aloha_find,
+            R.drawable.ic_alohafind,
+            "https://alohafind.com/search/?q="
+    ),
     YANDEX(
             R.string.search_category_yandex,
             R.drawable.ic_yandex,
@@ -268,6 +273,12 @@ enum class SearchCategory(
             R.drawable.ic_stackoverflow,
             "https://stackoverflow.com/search?q="
     ),
+    BGR(
+            R.string.search_category_bgr,
+            R.drawable.ic_bgr,
+            "https://bgr.com/?s=%s",
+            { _, h, q -> String.format(h, Uri.encode(q)) }
+    ),
     TECHNOLOGY(
             R.string.search_category_technology,
             R.drawable.ic_techcrunch,
@@ -367,8 +378,6 @@ enum class SearchCategory(
 
     companion object {
 
-        private val locale = Locale.getDefault()
-
         private val hostAndCategories =
                 values()
                         .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
@@ -386,6 +395,7 @@ enum class SearchCategory(
          * @return [SearchCategory]
          */
         fun findByCategory(category: String?): SearchCategory {
+            val locale = Locale.getDefault()
             val target = category?.toUpperCase(locale) ?: ""
             return values().find { it.name == target } ?: getDefault()
         }
@@ -397,8 +407,11 @@ enum class SearchCategory(
          *
          * @return index
          */
-        fun findIndex(category: String): Int =
-                values().find { it.name == category.toUpperCase(locale) } ?.ordinal ?: getDefault().ordinal
+        fun findIndex(category: String): Int {
+            val locale = Locale.getDefault()
+            return values().find { it.name == category.toUpperCase(locale) } ?.ordinal
+                    ?: getDefault().ordinal
+        }
 
         /**
          * Get default object.

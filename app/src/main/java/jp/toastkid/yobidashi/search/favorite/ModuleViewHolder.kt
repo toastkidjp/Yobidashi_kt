@@ -13,9 +13,9 @@ import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.view.SwipeViewHolder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemSearchHistoryBinding
-import jp.toastkid.lib.view.SwipeViewHolder
 
 /**
  * @author toastkidjp
@@ -48,10 +48,6 @@ internal class ModuleViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.delete.setOnClickListener {
             onClick()
         }
-    }
-
-    fun switchDividerVisibility(visible: Boolean) {
-        binding.divider.isVisible = visible
     }
 
     fun setAddIcon(@DrawableRes addIcon: Int) {

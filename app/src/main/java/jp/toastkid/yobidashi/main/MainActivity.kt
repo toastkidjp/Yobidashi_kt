@@ -60,7 +60,6 @@ import jp.toastkid.yobidashi.menu.MenuViewModel
 import jp.toastkid.yobidashi.search.SearchAction
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.search.clip.SearchWithClip
-import jp.toastkid.yobidashi.search.voice.VoiceSearch
 import jp.toastkid.yobidashi.settings.SettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OverlayColorFilterViewModel
 import jp.toastkid.yobidashi.tab.TabAdapter
@@ -716,9 +715,6 @@ class MainActivity : AppCompatActivity(),
                 tabs.openNewPdfTab(uri)
                 replaceToCurrentTab(true)
                 tabListUseCase?.dismiss()
-            }
-            VoiceSearch.REQUEST_CODE -> {
-                VoiceSearch.processResult(this, data)
             }
         }
     }

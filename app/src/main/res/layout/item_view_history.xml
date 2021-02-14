@@ -104,6 +104,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/ripple_transparent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:contentDescription="@string/action_bookmark"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

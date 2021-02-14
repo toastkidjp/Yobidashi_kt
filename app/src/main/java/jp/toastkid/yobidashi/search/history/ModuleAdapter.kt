@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.search.history
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
+import java.util.ArrayList
 import kotlin.math.min
 
 /**
@@ -51,7 +52,7 @@ internal class ModuleAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<ItemSearchHistoryBinding>(
-                inflater, R.layout.item_search_history, parent, false)
+                inflater, LAYOUT_ID, parent, false)
         binding.searchHistoryAdd.isVisible = useAddition
         return ViewHolder(binding)
     }
@@ -85,7 +86,6 @@ internal class ModuleAdapter(
             true
         }
         holder.setFavorite(searchHistory.category as String, searchHistory.query as String)
-        holder.switchDividerVisibility(position != (itemCount - 1))
     }
 
     /**
@@ -191,4 +191,12 @@ internal class ModuleAdapter(
     override fun getItemCount(): Int {
         return if (maxItemCount == -1) selected.size else min(maxItemCount, selected.size)
     }
+
+    companion object {
+
+        @LayoutRes
+        private const val LAYOUT_ID = R.layout.item_search_history
+
+    }
+
 }

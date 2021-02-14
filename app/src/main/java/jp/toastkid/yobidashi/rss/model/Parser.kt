@@ -51,10 +51,10 @@ class Parser {
             line.contains("<description") -> {
                 extractDescription(line)
             }
-            line.contains("</content") -> {
+            line.contains("</summary") -> {
                 isInContent = false
             }
-            line.contains("<content") -> {
+            line.contains("<summary") -> {
                 isInContent = true
             }
             isInContent -> {
@@ -65,6 +65,9 @@ class Parser {
             }
             line.contains("<published") -> {
                 extractPublished(line)
+            }
+            line.contains("<issued") -> {
+                extractIssued(line)
             }
             line.contains("<dc:creator>") -> {
                 extractCreator(line)
@@ -86,11 +89,24 @@ class Parser {
      * @param line
      */
     private fun extractPubDate(line: String) {
-        rss.date = extract(line, PUBLISH_DATE_PATTERN)
+        val extract = extract(line, PUBLISH_DATE_PATTERN)
+        if (extract?.isNotBlank() == true) {
+            currentItem?.date = extract
+        }
     }
 
     private fun extractPublished(line: String) {
-        rss.date = extract(line, PUBLISHED_PATTERN)
+        val extract = extract(line, PUBLISHED_PATTERN)
+        if (extract?.isNotBlank() == true) {
+            currentItem?.date = extract
+        }
+    }
+
+    private fun extractIssued(line: String) {
+        val extract = extract(line, ISSUED_PATTERN)
+        if (extract?.isNotBlank() == true) {
+            currentItem?.date = extract
+        }
     }
 
     /**
@@ -98,7 +114,10 @@ class Parser {
      * @param line
      */
     private fun extractDate(line: String) {
-        rss.date = extract(line, DATE_PATTERN)
+        val extract = extract(line, DATE_PATTERN)
+        if (extract?.isNotBlank() == true) {
+            currentItem?.date = extract
+        }
     }
 
     /**
@@ -182,6 +201,7 @@ class Parser {
      */
     private fun initializeItem() {
         currentItem = Item()
+        currentItem?.source = rss.title ?: ""
     }
 
     companion object {
@@ -211,6 +231,9 @@ class Parser {
 
         /** pattern of published (for atom).  */
         private val PUBLISHED_PATTERN = Pattern.compile("<published>(.+?)</published>", Pattern.DOTALL)
+
+        /** pattern of published (for atom).  */
+        private val ISSUED_PATTERN = Pattern.compile("<issued>(.+?)</issued>", Pattern.DOTALL)
 
     }
 }
