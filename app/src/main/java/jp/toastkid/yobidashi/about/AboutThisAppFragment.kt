@@ -55,7 +55,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
      * @param view
      */
     fun licenses(view: View) {
-        val intent = Intent(requireContext(), OssLicensesMenuActivity::class.java)
+        val intent = Intent(view.context, OssLicensesMenuActivity::class.java)
         OssLicensesMenuActivity.setActivityTitle(view.context.getString(R.string.title_licenses))
         startActivity(intent)
     }
