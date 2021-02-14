@@ -90,7 +90,7 @@ class LauncherIntentUseCase(
 
     companion object {
 
-        val EXTRA_KEY_CATEGORY = "Category"
+        const val EXTRA_KEY_CATEGORY = "Category"
 
     }
 }
