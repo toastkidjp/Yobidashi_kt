@@ -94,7 +94,7 @@ class BarcodeReaderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        preferenceApplier = PreferenceApplier(requireContext())
+        preferenceApplier = PreferenceApplier(view.context)
 
         binding?.fragment = this
 
