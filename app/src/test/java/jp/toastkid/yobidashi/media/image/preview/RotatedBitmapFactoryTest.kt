@@ -69,7 +69,7 @@ class RotatedBitmapFactoryTest {
     }
 
     @Test
-    fun reverse() {
+    fun testReverse() {
         rotatedBitmapFactory.reverse(bitmap)
 
         verify(atLeast = 1) { bitmap.getWidth() }
