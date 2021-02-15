@@ -11,12 +11,10 @@ package jp.toastkid.yobidashi.browser.history
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
-import io.mockk.verify
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import org.junit.After
@@ -38,8 +36,8 @@ class ViewHistoryInsertionTest {
         MockKAnnotations.init(this)
 
         mockkConstructor(DatabaseFinder::class)
-        every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
-        every { appDatabase.viewHistoryRepository() }.returns(repository)
+        coEvery { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
+        coEvery { appDatabase.viewHistoryRepository() }.returns(repository)
         coEvery { repository.add(any()) }.answers { Unit }
     }
 
@@ -53,8 +51,8 @@ class ViewHistoryInsertionTest {
         viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "test", "test")
 
         viewHistoryInsertion.invoke()
-        verify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
-        verify(exactly = 1) { appDatabase.viewHistoryRepository() }
+        coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
+        coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
         coVerify(exactly = 1) { repository.add(any()) }
     }
 
