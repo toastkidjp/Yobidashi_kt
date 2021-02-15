@@ -14,9 +14,9 @@ import android.graphics.Bitmap
  */
 class ImageRotationUseCase(
         private val viewModel: ImagePreviewFragmentViewModel,
-        private val currentBitmap: () -> Bitmap?
+        private val currentBitmap: () -> Bitmap?,
+        private val rotatedBitmapFactory: RotatedBitmapFactory = RotatedBitmapFactory()
 ) {
-    private val rotatedBitmapFactory = RotatedBitmapFactory()
 
     fun rotateLeft() {
         currentBitmap()?.let {
