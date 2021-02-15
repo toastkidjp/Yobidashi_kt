@@ -13,9 +13,9 @@ import android.graphics.Matrix
 /**
  * @author toastkidjp
  */
-class RotatedBitmapFactory {
-
-    private val rotateMatrixFactory = RotateMatrixFactory()
+class RotatedBitmapFactory(
+        private val rotateMatrixFactory: RotateMatrixFactory = RotateMatrixFactory()
+) {
 
     fun rotateLeft(bitmap: Bitmap): Bitmap {
         return applyMatrix(
