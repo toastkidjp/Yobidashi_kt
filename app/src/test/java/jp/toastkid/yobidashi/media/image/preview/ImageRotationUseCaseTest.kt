@@ -73,7 +73,7 @@ class ImageRotationUseCaseTest {
     }
 
     @Test
-    fun reverse() {
+    fun testReverse() {
         imageRotationUseCase.reverse()
 
         verify(exactly = 1) { currentBitmap.invoke() }
