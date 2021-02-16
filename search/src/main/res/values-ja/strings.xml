@@ -64,5 +64,6 @@
     <string name="search_category_rambler">Rambler</string>
     <string name="imdb">IMDb</string>
     <string name="espn">ESPN</string>
+    <string name="givero">Givero</string>
 
 </resources>
