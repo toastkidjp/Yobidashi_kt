@@ -14,7 +14,7 @@ import java.io.File
 /**
  * @author toastkidjp
  */
-class BackgroundImageLoaderUseCase {
+class BackgroundImageLoaderUseCase(private val fileResolver: (String) -> File = { File(it) }) {
 
     private var lastPath: String? = null
 
@@ -25,7 +25,7 @@ class BackgroundImageLoaderUseCase {
 
         lastPath = backgroundImagePath
 
-        target.load(File(backgroundImagePath)) {
+        target.load(fileResolver(backgroundImagePath)) {
             if (target.measuredWidth == 0 || target.measuredHeight == 0) {
                 return@load
             }
