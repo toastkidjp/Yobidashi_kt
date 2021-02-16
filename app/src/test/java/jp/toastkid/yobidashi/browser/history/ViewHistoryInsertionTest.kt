@@ -56,4 +56,14 @@ class ViewHistoryInsertionTest {
         coVerify(exactly = 1) { repository.add(any()) }
     }
 
+    @Test
+    fun testTitleEmptyCase() {
+        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "", "test", "test")
+
+        viewHistoryInsertion.invoke()
+        coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
+        coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
+        coVerify(exactly = 0) { repository.add(any()) }
+    }
+
 }
