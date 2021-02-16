@@ -75,7 +75,7 @@ class BackgroundImageLoaderUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         backgroundImageLoaderUseCase.invoke(targetView, "test.png")
 
         verify(exactly = 1) { anyConstructed<ImageRequest.Builder>().data(any()) }
