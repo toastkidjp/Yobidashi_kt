@@ -10,10 +10,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.article.ArticleRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,14 +37,11 @@ class ArticleInsertionTest {
         every { database.articleRepository() }.answers { repository }
 
         articleInsertion = ArticleInsertion(context)
-
-        Dispatchers.setMain(Dispatchers.Default)
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
     @Test
