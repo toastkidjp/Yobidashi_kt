@@ -16,10 +16,10 @@ import jp.toastkid.yobidashi.R
 /**
  * @author toastkidjp
  */
-class ImageViewFactory {
+class ImageViewFactory(private val generator: (Context) -> PhotoView = { PhotoView(it) }) {
 
     operator fun invoke(context: Context): ImageView {
-        val view = PhotoView(context)
+        val view = generator(context)
         view.layoutParams = LAYOUT_PARAMS
         val horizontalMargin =
                 context.resources.getDimensionPixelSize(R.dimen.image_viewer_item_horizontal_margin)
