@@ -10,7 +10,6 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.article.ArticleRepository
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -45,7 +44,7 @@ class ArticleInsertionTest {
     }
 
     @Test
-    fun testTitleIsNull() = runBlocking {
+    fun testTitleIsNull() {
         coEvery { repository.insert(any()) }.answers { Unit }
 
         articleInsertion.invoke(null, "test")
@@ -54,7 +53,7 @@ class ArticleInsertionTest {
     }
 
     @Test
-    fun testContentIsBlank() = runBlocking {
+    fun testContentIsBlank() {
         coEvery { repository.insert(any()) }.answers { Unit }
 
         articleInsertion.invoke("test", "  ")
@@ -63,7 +62,7 @@ class ArticleInsertionTest {
     }
 
     @Test
-    fun test() = runBlocking {
+    fun test() {
         coEvery { repository.insert(any()) }.answers { Unit }
 
         articleInsertion.invoke("test", "test")
