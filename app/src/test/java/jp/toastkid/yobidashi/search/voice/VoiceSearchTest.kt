@@ -15,8 +15,11 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import io.mockk.unmockkObject
 import io.mockk.verify
+import jp.toastkid.yobidashi.libs.Toaster
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -51,6 +54,17 @@ class VoiceSearchTest {
 
         verify(atLeast = 1) { anyConstructed<Intent>().putExtra(any(), any<String>()) }
         verify(atLeast = 1) { context.getPackageName() }
+    }
+
+    @Test
+    fun testSuggestInstallGoogleApp() {
+        mockkObject(Toaster)
+        every { Toaster.withAction(any(), any<Int>(), any(), any(), any()) }.answers { mockk() }
+
+        voiceSearch.suggestInstallGoogleApp(mockk(), mockk())
+
+        verify(atLeast = 1) { Toaster.withAction(any(), any<Int>(), any(), any(), any()) }
+        unmockkObject(Toaster)
     }
 
 }
