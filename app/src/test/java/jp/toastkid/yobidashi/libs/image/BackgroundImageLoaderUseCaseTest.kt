@@ -88,4 +88,18 @@ class BackgroundImageLoaderUseCaseTest {
         verify(atLeast = 1) { targetView.getMeasuredHeight() }
     }
 
+    @Test
+    fun testPathIsEmpty() {
+        backgroundImageLoaderUseCase.invoke(targetView, "")
+
+        verify(exactly = 0) { anyConstructed<ImageRequest.Builder>().data(any()) }
+        verify(exactly = 0) { imageRequestBuilder.target(any<ImageView>()) }
+        verify(exactly = 0) { imageRequestBuilder.size(any(), any()) }
+        verify(exactly = 0) { imageRequestBuilder.build() }
+        verify(exactly = 0) { imageLoader.enqueue(any()) }
+        verify(exactly = 0) { targetView.getContext() }
+        verify(exactly = 0) { targetView.getMeasuredWidth() }
+        verify(exactly = 0) { targetView.getMeasuredHeight() }
+    }
+
 }
