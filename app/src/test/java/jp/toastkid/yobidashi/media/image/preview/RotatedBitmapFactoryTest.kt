@@ -49,7 +49,7 @@ class RotatedBitmapFactoryTest {
     }
 
     @Test
-    fun rotateLeft() {
+    fun testRotateLeft() {
         rotatedBitmapFactory.rotateLeft(bitmap)
 
         verify(atLeast = 1) { bitmap.getWidth() }
