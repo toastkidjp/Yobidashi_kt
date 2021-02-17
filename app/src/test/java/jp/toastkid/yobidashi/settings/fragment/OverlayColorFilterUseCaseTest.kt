@@ -122,7 +122,7 @@ class OverlayColorFilterUseCaseTest {
     }
 
     @Test
-    fun setDark() {
+    fun testSetDark() {
         overlayColorFilterUseCase.setDark()
 
         verify(atLeast = 1) { colorResolver.invoke(any()) }
