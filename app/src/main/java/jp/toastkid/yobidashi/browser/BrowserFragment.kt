@@ -313,7 +313,7 @@ class BrowserFragment : Fragment(),
                 activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
                         ?: ReaderFragment()
 
-        val lineSeparator = System.getProperty("line.separator") ?: ""
+        val lineSeparator = System.lineSeparator()
         val replacedContent = cleaned.replace("\\n", lineSeparator)
 
         activity?.let {
