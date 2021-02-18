@@ -37,6 +37,7 @@ class ViewHistoryInsertionTest {
 
         mockkConstructor(DatabaseFinder::class)
         coEvery { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
+
         coEvery { appDatabase.viewHistoryRepository() }.returns(repository)
         coEvery { repository.add(any()) }.answers { Unit }
     }
@@ -51,6 +52,7 @@ class ViewHistoryInsertionTest {
         viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "test", "test")
 
         viewHistoryInsertion.invoke()
+
         coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
         coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
         coVerify(exactly = 1) { repository.add(any()) }
@@ -61,6 +63,7 @@ class ViewHistoryInsertionTest {
         viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "", "test", "test")
 
         viewHistoryInsertion.invoke()
+
         coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
         coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
         coVerify(exactly = 0) { repository.add(any()) }
@@ -71,6 +74,7 @@ class ViewHistoryInsertionTest {
         viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "", "test")
 
         viewHistoryInsertion.invoke()
+
         coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
         coVerify(exactly = 1) { appDatabase.viewHistoryRepository() }
         coVerify(exactly = 0) { repository.add(any()) }
