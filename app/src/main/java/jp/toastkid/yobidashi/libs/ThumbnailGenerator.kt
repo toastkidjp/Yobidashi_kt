@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.view.View
 import androidx.annotation.UiThread
+import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -32,7 +33,14 @@ class ThumbnailGenerator {
         val c = Canvas(bitmap)
 
         view.invalidate()
-        view.draw(c)
+
+        // For avoiding IllegalArgumentException: Software rendering doesn't support hardware bitmaps
+        try {
+            view.draw(c)
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e)
+            return null
+        }
 
         return bitmap
     }

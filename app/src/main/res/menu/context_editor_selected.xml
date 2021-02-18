@@ -8,8 +8,20 @@
         app:showAsAction="always"
         />
     <item
-        android:id="@+id/context_edit_add_minus"
-        android:title="@string/title_context_editor_add_minus"
+        android:id="@+id/context_edit_unordered_list"
+        android:title="@string/title_context_editor_unordered_list"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/context_edit_task_list"
+        android:title="@string/title_context_editor_task_list"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/context_edit_convert_to_table"
+        android:title="@string/title_context_editor_convert_to_table"
         android:orderInCategory="100"
         app:showAsAction="always"
         />

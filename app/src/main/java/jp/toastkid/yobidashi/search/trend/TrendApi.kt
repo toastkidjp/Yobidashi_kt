@@ -9,6 +9,8 @@ package jp.toastkid.yobidashi.search.trend
 
 import androidx.annotation.WorkerThread
 import retrofit2.Retrofit
+import java.io.IOException
+import kotlin.jvm.Throws
 
 /**
  * @author toastkidjp
@@ -17,6 +19,7 @@ class TrendApi {
 
     private val converter = TrendResponseConverterFactory.create()
 
+    @Throws(IOException::class)
     @WorkerThread
     operator fun invoke(): List<Trend>? {
         val retrofit = Retrofit.Builder()

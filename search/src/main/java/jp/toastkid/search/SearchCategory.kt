@@ -1,6 +1,7 @@
 package jp.toastkid.search
 
 import android.net.Uri
+import android.webkit.URLUtil
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
@@ -31,6 +32,11 @@ enum class SearchCategory(
             R.string.search_category_yahoo,
             R.drawable.ic_yahoo,
             "https://search.yahoo.com/search?p="
+    ),
+    YAHOO_JAPAN_REALTIME_SEARCH(
+            R.string.search_category_yahoo_japan_realtime_search,
+            R.drawable.ic_yahoo_japan_realtime_search,
+            "https://search.yahoo.co.jp/realtime/search?p="
     ),
     YAHOO_JAPAN(
             R.string.search_category_yahoo_japan,
@@ -340,6 +346,16 @@ enum class SearchCategory(
             R.drawable.ic_financial_times,
             "https://www.ft.com/search?q="
     ),
+    MORNINGSTAR(
+            R.string.morningstar,
+            R.drawable.ic_morningstar,
+            "https://www.morningstar.com/search?query="
+    ),
+    YAHOO_JAPAN_FINANCE(
+            R.string.yahoo_japan_finance,
+            R.drawable.ic_yahoo_japan_finance,
+            "https://info.finance.yahoo.co.jp/search/?query="
+    ),
     BUZZFEED(
             R.string.buzzfeed,
             R.drawable.ic_buzzfeed,
@@ -386,12 +402,31 @@ enum class SearchCategory(
         private val hostAndCategories =
                 values()
                         .filter { it != SITE_SEARCH && it != MAP && it != IMAGE }
-                        .map { it.host.toUri().host to it }
+                        .map {
+                            val key = if (it == YAHOO_JAPAN_REALTIME_SEARCH) "search.yahoo.co.jp/realtime" else it.host.toUri().host
+                            key to it
+                        }
                         .toMap()
 
-        fun findByHostOrNull(host: String?): SearchCategory? =
-                if (host.isNullOrBlank()) null
-                else hostAndCategories[host]
+        fun findByUrlOrNull(url: String?): SearchCategory? {
+            val key = makeKey(url)
+            return if (key.isNullOrEmpty()) null else hostAndCategories[key]
+        }
+
+        private fun makeKey(url: String?): String? {
+            if (url.isNullOrBlank() || URLUtil.isValidUrl(url).not()) {
+                return null
+            }
+
+            val uri = url.toUri()
+            if (url.contains("/realtime/").not()) {
+                return uri.host
+            }
+
+            val pathSegments = uri.pathSegments
+            val firstPath = if (pathSegments.size >= 2) pathSegments[0] ?: "" else ""
+            return "${uri.host}/$firstPath"
+        }
 
         /**
          * Find [SearchCategory] by search category.

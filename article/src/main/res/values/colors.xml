@@ -9,4 +9,5 @@
 
 <resources>
     <color name="result_background">#AAFFFFFF</color>
+    <color name="menu_tint">#3700B3</color>
 </resources>

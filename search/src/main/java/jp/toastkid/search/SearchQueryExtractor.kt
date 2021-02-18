@@ -68,6 +68,8 @@ class SearchQueryExtractor {
                     or host.equals("web.archive.org")-> uri.lastPathSegment
             host.endsWith("archive.org")
                     or host.endsWith("search.naver.com")
+                    or host.endsWith("www.morningstar.com")
+                    or host.endsWith("info.finance.yahoo.co.jp")
                     or host.endsWith(".rambler.ru") ->
                 uri.getQueryParameter("query")
             host.endsWith(".wikipedia.org")

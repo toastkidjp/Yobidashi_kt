@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_more"
             app:layout_constraintEnd_toEndOf="parent"
-            android:tint="@color/design_default_color_primary_variant"
+            app:tint="@color/menu_tint"
             android:contentDescription="@string/menu"
             />
 

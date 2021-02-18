@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemSavedImageBinding
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ItemSavedImageBinding
 
 /**
  * RecyclerView's adapter.
@@ -36,7 +36,5 @@ internal class Adapter(
         holder.applyContent(filesDir.get(position))
     }
 
-    override fun getItemCount(): Int {
-        return filesDir.count
-    }
+    override fun getItemCount() = filesDir.count
 }

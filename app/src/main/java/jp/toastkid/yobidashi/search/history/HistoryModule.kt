@@ -58,7 +58,7 @@ class HistoryModule(
                 context,
                 repository,
                 searchCallback,
-                { visible -> if (visible) show() else hide() },
+                { if (it) show() else hide() },
                 { history -> onClickAdd(history) },
                 true,
                 5

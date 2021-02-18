@@ -17,13 +17,13 @@ import android.widget.EditText
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
@@ -116,11 +116,19 @@ class EditorContextMenuInitializer {
                 val text = extractSelectedText()
                 when (menuItem?.itemId) {
                     R.id.context_edit_add_order -> {
-                        listHeadAdder(editText, "1.")
+                        OrderedListHeadAdder().invoke(editText)
                         return true
                     }
-                    R.id.context_edit_add_minus -> {
+                    R.id.context_edit_unordered_list -> {
                         listHeadAdder(editText, "-")
+                        return true
+                    }
+                    R.id.context_edit_task_list -> {
+                        listHeadAdder(editText, "- [ ]")
+                        return true
+                    }
+                    R.id.context_edit_convert_to_table -> {
+                        TableConverter().invoke(editText)
                         return true
                     }
                     R.id.context_edit_add_quote -> {

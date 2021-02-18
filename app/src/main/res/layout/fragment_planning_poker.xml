@@ -2,9 +2,12 @@
 <layout>
     <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cards_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_planning_poker"
         />
 </layout>

@@ -392,7 +392,7 @@
     <string name="title_current_page">現在のページ</string>
     <string name="message_clip_to">%s をクリップボードにコピーしました。</string>
     <string name="title_url_module">URL モジュールを使う</string>
-    <string name="title_audio_player">Audio player</string>
+    <string name="title_audio_player">音楽プレイヤー</string>
     <string name="description_play_switch">Switch playing state</string>
     <string name="message_audio_file_is_not_found">音楽ファイルが見つかりませんでした。</string>
     <string name="menu_what_happened_today">今日は何の日？</string>
@@ -423,7 +423,8 @@
     <string name="title_dark_mode">ダークモードを使う</string>
     <string name="undo">戻す</string>
     <string name="title_context_editor_add_order">順序リスト</string>
-    <string name="title_context_editor_add_minus">リスト</string>
+    <string name="title_context_editor_unordered_list">リスト</string>
+    <string name="title_context_editor_convert_to_table">テーブルに変換</string>
     <string name="title_context_editor_add_quote">引用符</string>
     <string name="title_context_editor_double_quote">ダブルクォート</string>
     <string name="title_reset_camera_button_position">カメラボタンの位置を戻す</string>
@@ -433,7 +434,6 @@
     <string name="touch_listener_single_touch">Single Touch</string>
     <string name="touch_listener_multi_touch">Multi Touch</string>
     <string name="touch_listener_gesture_detector">Gesture Detector</string>
-    <string name="touch_listener_scale_gesture_detector">Scale Gesture Detector</string>
     <string name="touch_listener_default">Default</string>
     <string name="title_gesture_memo">ジェスチャーメモ</string>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
@@ -454,5 +454,6 @@
     <string name="title_sort_by_date">日付でソート</string>
     <string name="title_sort_by_name">名前でソート</string>
     <string name="title_sort_by_count">数でソート</string>
+    <string name="title_context_editor_task_list">Task list</string>
 
 </resources>

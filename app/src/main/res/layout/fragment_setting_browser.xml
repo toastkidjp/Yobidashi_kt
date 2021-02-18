@@ -31,6 +31,7 @@
                 android:onClick="@{view -> fragment.switchRetainTabs()}"
                 >
                 <TextView
+                    android:id="@+id/text_retain_tab"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
             <include layout="@layout/view_setting_divider" />
 
             <TextView
+                android:id="@+id/text_home"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -187,6 +189,7 @@
                 android:onClick="@{view -> fragment.switchViewHistory()}"
                 >
                 <TextView
+                    android:id="@+id/text_save_history"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -215,6 +218,7 @@
                 android:onClick="@{view -> fragment.userAgent()}"
                 >
                 <TextView
+                    android:id="@+id/text_user_agent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/OneLineTextMenu"
@@ -323,6 +327,7 @@
                 android:onClick="@{view -> fragment.switchDarkMode()}"
                 >
                 <TextView
+                    android:id="@+id/text_dark_mode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/settings_item_left_margin"
@@ -351,6 +356,7 @@
                 android:onClick="@{view -> fragment.switchAdRemove()}"
                 >
                 <TextView
+                    android:id="@+id/text_ad_remove"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
