@@ -63,6 +63,14 @@ class AutoArchiveTest {
     }
 
     @Test
+    fun testDeleteWithNullTabId() {
+        autoArchive.delete(null)
+
+        verify(exactly = 0) { filesDir.delete(any()) }
+    }
+
+    // TODO Rename.
+    @Test
     fun test() {
         assertFalse(AutoArchive.shouldNotUpdateTab("https://www.yahoo.co.jp/"))
 
