@@ -62,7 +62,7 @@ class ImageRotationUseCaseTest {
     }
 
     @Test
-    fun rotateRight() {
+    fun testRotateRight() {
         imageRotationUseCase.rotateRight()
 
         verify(exactly = 1) { currentBitmap.invoke() }
