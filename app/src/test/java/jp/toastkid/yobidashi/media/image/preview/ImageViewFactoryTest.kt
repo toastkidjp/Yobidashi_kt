@@ -52,7 +52,7 @@ class ImageViewFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         imageViewFactory.invoke(context)
 
         verify(exactly = 1) { context.getResources() }
