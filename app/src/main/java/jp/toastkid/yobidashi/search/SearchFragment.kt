@@ -510,7 +510,7 @@ class SearchFragment : Fragment() {
      */
     @Suppress("NOTHING_TO_INLINE")
     private inline fun search(category: String, query: String, onBackground: Boolean = false) {
-        val context = requireContext()
+        val context = context ?: return
         if (NetworkChecker.isNotAvailable(context)) {
             contentViewModel?.snackShort("Network is not available...")
             return
