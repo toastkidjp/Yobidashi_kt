@@ -28,7 +28,7 @@
     <item
         android:id="@+id/action_date_filter"
         android:orderInCategory="100"
-        android:title="Date filter"
+        android:title="@string/action_date_filter"
         app:showAsAction="never" />
 
     <item
