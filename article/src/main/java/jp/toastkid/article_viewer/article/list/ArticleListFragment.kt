@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.article_viewer.article.data.AppDatabase
+import jp.toastkid.article_viewer.article.list.date.DateFilterDialogFragment
 import jp.toastkid.article_viewer.article.list.menu.ArticleListMenuPopupActionUseCase
 import jp.toastkid.article_viewer.article.list.menu.MenuPopup
 import jp.toastkid.article_viewer.article.list.sort.SortSettingDialogFragment
@@ -249,6 +250,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 searchUseCase?.all()
             }
         })
+        viewModel?.filter?.observe(viewLifecycleOwner, Observer {
+            val keyword = it ?: return@Observer
+            searchUseCase?.filter(keyword, true)
+        })
 
         searchUseCase = ArticleSearchUseCase(
                 ListLoaderUseCase(adapter),
@@ -291,6 +296,12 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 val dialogFragment = SortSettingDialogFragment()
                 dialogFragment.setTargetFragment(this, REQUEST_CODE)
                 dialogFragment.show(parentFragmentManager, "")
+                true
+            }
+            R.id.action_date_filter -> {
+                val dateFilterDialogFragment = DateFilterDialogFragment()
+                dateFilterDialogFragment.setTargetFragment(this, 0)
+                dateFilterDialogFragment.show(parentFragmentManager, "")
                 true
             }
             R.id.action_switch_title_filter -> {

@@ -26,6 +26,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_date_filter"
+        android:orderInCategory="100"
+        android:title="Date filter"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_switch_title_filter"
         android:checkable="true"
         android:checked="true"
