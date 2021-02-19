@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:minHeight="36dp"
                 android:gravity="center"
-                android:background="@drawable/ripple_soft"
+                android:background="@drawable/ripple_transparent"
                 android:text="@string/copyright"
                 android:onClick="@{view -> fragment.aboutAuthorApp()}"
                 />
