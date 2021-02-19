@@ -6,7 +6,7 @@
   ~ which accompany this distribution.
   ~ The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
   -->
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="dialog"
@@ -35,6 +35,7 @@
                 android:datePickerMode="spinner"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/filter"
+                tools:targetApi="lollipop"
                 />
 
             <Button
