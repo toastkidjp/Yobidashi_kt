@@ -36,8 +36,8 @@ class ArticleSearchUseCase(
         listLoaderUseCase { repository.search("${tokenizer(keyword, 2)}") }
     }
 
-    fun filter(keyword: String?) {
-        if (!preferencesWrapper.useTitleFilter()) {
+    fun filter(keyword: String?, force: Boolean = false) {
+        if (!force && !preferencesWrapper.useTitleFilter()) {
             return
         }
 
@@ -46,7 +46,9 @@ class ArticleSearchUseCase(
             return
         }
 
-        listLoaderUseCase { repository.filter(keyword) }
+        listLoaderUseCase {
+            repository.filter("%${keyword}%")
+        }
     }
 
     fun dispose() {
