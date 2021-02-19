@@ -329,7 +329,9 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         viewModel?.showProgress()
 
-        ZipLoaderService.start(requireContext(), target)
+        context?.let {
+            ZipLoaderService.start(it, target)
+        }
     }
 
     override fun toTop() {
