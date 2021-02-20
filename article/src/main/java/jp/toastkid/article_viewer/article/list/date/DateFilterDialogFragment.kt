@@ -27,7 +27,7 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogDateFilterBinding
 
-    private lateinit var dateSelectedActionService: DateSelectedActionService
+    private var dateSelectedActionService: DateSelectedActionService? = null
 
     private var date: Triple<Int, Int, Int>? = null
 
@@ -48,10 +48,12 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
             date = Triple(year, monthOfYear, dayOfMonth)
         }
 
-        dateSelectedActionService = DateSelectedActionService(
-                AppDatabase.find(requireActivity()).articleRepository(),
-                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-        )
+        activity?.let {
+            dateSelectedActionService = DateSelectedActionService(
+                    AppDatabase.find(it).articleRepository(),
+                    ViewModelProvider(it).get(ContentViewModel::class.java)
+            )
+        }
 
         return binding.root
     }
@@ -70,7 +72,11 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     fun openDate() {
         activity?.let {
-            dateSelectedActionService.invoke(binding.datePicker.year, binding.datePicker.month, binding.datePicker.dayOfMonth)
+            dateSelectedActionService?.invoke(
+                    binding.datePicker.year,
+                    binding.datePicker.month,
+                    binding.datePicker.dayOfMonth
+            )
         }
         dismiss()
     }
