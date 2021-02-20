@@ -95,9 +95,10 @@ class ImagePreviewDialogFragment  : DialogFragment() {
         initializeContrastSlider()
         initializeAlphaSlider()
 
-        binding.moduleEdit.imageRotationUseCase = ImageRotationUseCase(viewModel) {
-            findCurrentImageView()?.drawable?.toBitmap()
-        }
+        binding.moduleEdit.imageRotationUseCase = ImageRotationUseCase(
+                viewModel,
+                { findCurrentImageView()?.drawable?.toBitmap() }
+        )
 
         viewModel.bitmap.observe(this, Observer {
             findCurrentImageView()?.setImageBitmap(it)
@@ -200,7 +201,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                 pathFinder,
                 { contentViewModel.snackShort(R.string.message_cannot_launch_app) },
                 { binding.root.context.startActivity(it) }
-        ).invoke(requireContext())
+        ).invoke(binding.root.context)
     }
 
     fun switchVisibility() {
