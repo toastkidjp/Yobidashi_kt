@@ -60,9 +60,7 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     fun filterByMonth() {
        targetFragment?.let {
-           val formattedMonth =
-                   if (binding.datePicker.month < 9) "0${binding.datePicker.month + 1}"
-                   else binding.datePicker.month + 1
+           val formattedMonth = MonthFormatterUseCase().invoke(binding.datePicker.month)
            ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
                    .filter("${binding.datePicker.year}-$formattedMonth")
        }
