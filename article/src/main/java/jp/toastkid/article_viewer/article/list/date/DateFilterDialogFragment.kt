@@ -71,13 +71,11 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
     }
 
     fun openDate() {
-        activity?.let {
-            dateSelectedActionService?.invoke(
-                    binding.datePicker.year,
-                    binding.datePicker.month,
-                    binding.datePicker.dayOfMonth
-            )
-        }
+        dateSelectedActionService?.invoke(
+                binding.datePicker.year,
+                binding.datePicker.month,
+                binding.datePicker.dayOfMonth
+        )
         dismiss()
     }
 
