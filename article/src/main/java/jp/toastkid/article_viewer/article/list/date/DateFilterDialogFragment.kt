@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
-import jp.toastkid.article_viewer.calendar.DateSelectedActionService
+import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.databinding.DialogDateFilterBinding
 import jp.toastkid.lib.ContentViewModel
 import java.util.Calendar
@@ -27,7 +27,7 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogDateFilterBinding
 
-    private var dateSelectedActionService: DateSelectedActionService? = null
+    private var dateSelectedActionUseCase: DateSelectedActionUseCase? = null
 
     private var date: Triple<Int, Int, Int>? = null
 
@@ -49,7 +49,7 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
         }
 
         activity?.let {
-            dateSelectedActionService = DateSelectedActionService(
+            dateSelectedActionUseCase = DateSelectedActionUseCase(
                     AppDatabase.find(it).articleRepository(),
                     ViewModelProvider(it).get(ContentViewModel::class.java)
             )
@@ -69,7 +69,7 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
     }
 
     fun openDate() {
-        dateSelectedActionService?.invoke(
+        dateSelectedActionUseCase?.invoke(
                 binding.datePicker.year,
                 binding.datePicker.month,
                 binding.datePicker.dayOfMonth

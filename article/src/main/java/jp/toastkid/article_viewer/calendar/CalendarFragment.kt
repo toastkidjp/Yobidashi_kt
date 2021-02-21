@@ -27,7 +27,7 @@ class CalendarFragment : Fragment(), OnBackCloseableTabUiFragment {
 
     private lateinit var binding: FragmentCalendarBinding
 
-    private lateinit var dateSelectedActionService: DateSelectedActionService
+    private lateinit var dateSelectedActionUseCase: DateSelectedActionUseCase
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -44,18 +44,18 @@ class CalendarFragment : Fragment(), OnBackCloseableTabUiFragment {
 
         val activityContext = context ?: return
 
-        dateSelectedActionService = DateSelectedActionService(
+        dateSelectedActionUseCase = DateSelectedActionUseCase(
                 AppDatabase.find(activityContext).articleRepository(),
                 ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
         )
 
         binding.calendar.setOnDateChangeListener { _, year, month, date ->
-            dateSelectedActionService.invoke(year, month, date)
+            dateSelectedActionUseCase.invoke(year, month, date)
         }
     }
 
     override fun onDetach() {
-        dateSelectedActionService.dispose()
+        dateSelectedActionUseCase.dispose()
         super.onDetach()
     }
 
