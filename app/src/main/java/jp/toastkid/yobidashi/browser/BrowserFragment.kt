@@ -111,7 +111,7 @@ class BrowserFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = requireActivity()
+        val activity = activity ?: return
 
         initializeHeaderViewModels(activity)
 
