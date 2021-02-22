@@ -43,7 +43,7 @@ class FilterByMonthUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         filterByMonthUseCase.invoke(2021, 1)
 
         verify(exactly = 1) { articleListFragmentViewModel.filter(any()) }
