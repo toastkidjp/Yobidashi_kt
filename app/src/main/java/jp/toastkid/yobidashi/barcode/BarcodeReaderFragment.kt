@@ -103,8 +103,6 @@ class BarcodeReaderFragment : Fragment() {
             return
         }
 
-        val requireActivity = requireActivity()
-
         viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
         viewModel?.also {
             val viewLifecycleOwner = viewLifecycleOwner
@@ -118,13 +116,14 @@ class BarcodeReaderFragment : Fragment() {
             })
             it.open.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
+                val activity = activity ?: return@Observer
                 SearchAction(
-                        requireActivity,
+                        activity,
                         preferenceApplier.getDefaultSearchEngine()
                                 ?: SearchCategory.getDefaultCategoryName(),
                         text
                 ).invoke()
-                activity?.supportFragmentManager?.popBackStack()
+                activity.supportFragmentManager.popBackStack()
             })
         }
 
