@@ -15,12 +15,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.ImageSearchUrlGenerator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 /**
@@ -62,11 +61,8 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
     private fun downloadImage(url: String) {
         val activityContext = activity ?: return
         if (Urls.isInvalidUrl(url)) {
-            Toaster.snackShort(
-                    activityContext.findViewById(android.R.id.content),
-                    activityContext.getString(R.string.message_cannot_downloading_image),
-                    PreferenceApplier(activityContext).colorPair()
-            )
+            ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+                    .snackShort(R.string.message_cannot_downloading_image)
             return
         }
 
