@@ -27,6 +27,8 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogDateFilterBinding
 
+    private var filterByMonthUseCase: FilterByMonthUseCase? = null
+
     private var dateSelectedActionUseCase: DateSelectedActionUseCase? = null
 
     private var date: Triple<Int, Int, Int>? = null
@@ -48,6 +50,12 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
             date = Triple(year, monthOfYear, dayOfMonth)
         }
 
+        targetFragment?.let {
+            filterByMonthUseCase = FilterByMonthUseCase(
+                    ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
+            )
+        }
+
         activity?.let {
             dateSelectedActionUseCase = DateSelectedActionUseCase(
                     AppDatabase.find(it).articleRepository(),
@@ -59,11 +67,7 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
     }
 
     fun filterByMonth() {
-       targetFragment?.let {
-           val formattedMonth = MonthFormatterUseCase().invoke(binding.datePicker.month)
-           ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-                   .filter("${binding.datePicker.year}-$formattedMonth")
-       }
+        filterByMonthUseCase?.invoke(binding.datePicker.year, binding.datePicker.month)
 
         dismiss()
     }
