@@ -28,7 +28,7 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+        val activityContext = activity ?: return super.onCreateDialog(savedInstanceState)
 
         val title = arguments?.getString(KEY_TITLE) ?: ""
 
@@ -38,7 +38,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
         val anchor = arguments?.getString(KEY_ANCHOR)
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+        val viewModel = ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
 
         val uri = anchor.toUri()
 
