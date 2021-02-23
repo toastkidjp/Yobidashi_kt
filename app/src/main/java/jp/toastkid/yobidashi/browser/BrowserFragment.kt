@@ -219,10 +219,10 @@ class BrowserFragment : Fragment(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.translate -> {
-                val uri = "https://translate.googleusercontent.com/translate_c" +
-                        "?depth=1&nv=1&pto=aue&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=" +
-                        Uri.encode(browserModule.currentUrl())
                 activity?.let {
+                    val uri = "https://translate.googleusercontent.com/translate_c" +
+                            "?depth=1&nv=1&pto=aue&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=" +
+                            Uri.encode(browserModule.currentUrl())
                     ViewModelProvider(it).get(BrowserViewModel::class.java).open(uri.toUri())
                 }
             }
