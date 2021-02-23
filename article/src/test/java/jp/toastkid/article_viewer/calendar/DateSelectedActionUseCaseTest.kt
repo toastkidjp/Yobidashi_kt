@@ -31,6 +31,7 @@ class DateSelectedActionUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @ExperimentalCoroutinesApi
@@ -41,8 +42,6 @@ class DateSelectedActionUseCaseTest {
 
         mockkObject(TitleFilterGenerator)
         every { TitleFilterGenerator.invoke(any(), any(), any()) }.answers { "test" }
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
 
         val dateSelectedActionService = DateSelectedActionUseCase(repository, viewModel)
         dateSelectedActionService.invoke(2020, 0, 22)
