@@ -222,8 +222,9 @@ class BrowserFragment : Fragment(),
                 val uri = "https://translate.googleusercontent.com/translate_c" +
                         "?depth=1&nv=1&pto=aue&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=" +
                         Uri.encode(browserModule.currentUrl())
-                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
-                        .open(uri.toUri())
+                activity?.let {
+                    ViewModelProvider(it).get(BrowserViewModel::class.java).open(uri.toUri())
+                }
             }
             R.id.download_all_images -> {
                 browserModule.downloadAllImages()
