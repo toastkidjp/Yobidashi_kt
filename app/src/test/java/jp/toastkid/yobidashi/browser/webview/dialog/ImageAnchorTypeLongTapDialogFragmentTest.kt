@@ -31,7 +31,7 @@ class ImageAnchorTypeLongTapDialogFragmentTest {
     }
 
     @Test
-    fun test() {
+    fun testMake() {
         ImageAnchorTypeLongTapDialogFragment
                 .make("testTitle", "testExtra", "testAnchor")
 
