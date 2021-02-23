@@ -9,7 +9,7 @@ import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ModuleSearcherBinding
 import jp.toastkid.yobidashi.libs.Inputs
@@ -166,12 +166,11 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
      * Set background color to views.
      */
     private fun setBackgroundColor(binding: ModuleSearcherBinding) {
-        PreferenceApplier(binding.root.context).colorPair().bgColor().also {
-            binding.close.setColorFilter(it)
-            binding.sipClear.setColorFilter(it)
-            binding.sipUpward.setColorFilter(it)
-            binding.sipDownward.setColorFilter(it)
-        }
+        val color = IconColorFinder.from(binding.root).invoke()
+        binding.close.setColorFilter(color)
+        binding.sipClear.setColorFilter(color)
+        binding.sipUpward.setColorFilter(color)
+        binding.sipDownward.setColorFilter(color)
     }
 
     /**
