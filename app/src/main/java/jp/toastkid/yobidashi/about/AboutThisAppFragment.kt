@@ -66,7 +66,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     fun privacyPolicy() {
         val browserViewModel =
-                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+                activity?.let { ViewModelProvider(it).get(BrowserViewModel::class.java) } ?: return
 
         popBackStack()
         browserViewModel.open(getString(R.string.link_privacy_policy).toUri())
