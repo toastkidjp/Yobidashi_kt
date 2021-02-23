@@ -140,7 +140,9 @@ class BookmarkFragment: Fragment(),
      */
     private fun finishWithResult(uri: Uri) {
         popBackStack()
-        ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).open(uri)
+        activity?.let {
+            ViewModelProvider(it).get(BrowserViewModel::class.java).open(uri)
+        }
     }
 
     private fun popBackStack() {

@@ -54,7 +54,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
         binding.historiesView.layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = activity?.let { ViewModelProvider(it).get(ContentViewModel::class.java) }
 
         adapter = ActivityAdapter(
                 context,
