@@ -129,7 +129,7 @@ class BarcodeReaderFragment : Fragment() {
 
         resultPopup.setViewModel(viewModel)
 
-        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = activity?.let { ViewModelProvider(it).get(ContentViewModel::class.java) }
 
         initializeFab()
         startDecode()
