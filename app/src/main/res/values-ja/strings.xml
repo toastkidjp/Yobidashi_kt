@@ -287,6 +287,7 @@
     <string name="save">保存</string>
     <string name="save_as">別名で保存</string>
     <string name="load_as">別名で読込</string>
+    <string name="export_to_article_viewer">記事リストにエクスポート</string>
     <string name="restore">復元</string>
     <string name="title_dialog_input_file_name">ファイル名入力</string>
     <string name="message_requires_permission_storage">
@@ -441,19 +442,21 @@
     <string name="button_clip_cookie">Cookie をコピー</string>
     <string name="add_to_home_screen">ショートカットを設置</string>
     <string name="horizontal_rule">水平線</string>
+    <string name="duplicate_current_line">行をコピー</string>
     <string name="title_add_default_background">デフォルトの背景を追加</string>
     <string name="title_article_viewer">記事</string>
-    <string name="preview_search">Preview search</string>
+    <string name="preview_search">ちょっと見る検索</string>
     <string name="translate">翻訳</string>
     <string name="download_all_images">すべての画像を保存</string>
     <string name="this_app">このアプリの背景に設定</string>
     <string name="other_app">別のアプリで設定</string>
-    <string name="title_todo_tasks">TODO tasks</string>
-    <string name="title_todo_tasks_board">Task board</string>
+    <string name="title_todo_tasks">タスクリスト</string>
+    <string name="title_todo_tasks_board">タスクボード</string>
     <string name="title_search_with_map_app">地図アプリで検索</string>
     <string name="title_sort_by_date">日付でソート</string>
     <string name="title_sort_by_name">名前でソート</string>
     <string name="title_sort_by_count">数でソート</string>
-    <string name="title_context_editor_task_list">Task list</string>
+    <string name="title_context_editor_task_list">タスクリスト</string>
+    <string name="subhead_search_category_setting">検索種別の設定</string>
 
 </resources>

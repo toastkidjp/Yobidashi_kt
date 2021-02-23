@@ -1,9 +1,11 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
+import androidx.annotation.WorkerThread
 import androidx.core.net.toUri
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,21 +67,25 @@ class BookmarkInitializer {
         val favicons = FilesDir(context, "favicons")
         val bookmarkRepository = DatabaseFinder().invoke(context).bookmarkRepository()
 
-        // TODO Extract to function.
         return CoroutineScope(Dispatchers.Main).launch {
             withContext(Dispatchers.IO) {
-                defaultBookmarks.forEach {
-                    val parent = it.key
-
-                    bookmarkRepository.add(makeFolder(parent))
-
-                    it.value.entries.forEach { entry ->
-                        bookmarkRepository.add(makeItem(entry, favicons, parent))
-                    }
-                }
+                addBookmarks(bookmarkRepository, favicons)
             }
 
             onComplete()
+        }
+    }
+
+    @WorkerThread
+    private fun addBookmarks(bookmarkRepository: BookmarkRepository, favicons: FilesDir) {
+        defaultBookmarks.forEach {
+            val parent = it.key
+
+            bookmarkRepository.add(makeFolder(parent))
+
+            it.value.entries.forEach { entry ->
+                bookmarkRepository.add(makeItem(entry, favicons, parent))
+            }
         }
     }
 

@@ -15,8 +15,9 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
-import jp.toastkid.yobidashi.R
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
+import jp.toastkid.yobidashi.R
 
 /**
  * @author toastkidjp
@@ -24,7 +25,9 @@ import jp.toastkid.search.SearchCategory
 class SearchCategoryAdapter(context: Context): BaseAdapter() {
     private val inflater = LayoutInflater.from(context)
 
-    private val searchCategories = SearchCategory.values()
+    private val initialDisables = PreferenceApplier(context).readDisableSearchCategory()
+
+    private val searchCategories = SearchCategory.values().filterNot { initialDisables?.contains(it.name) ?: false }
 
     override fun getCount(): Int = searchCategories.size
 

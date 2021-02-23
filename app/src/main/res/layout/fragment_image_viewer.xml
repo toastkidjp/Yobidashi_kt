@@ -4,16 +4,12 @@
         <variable name="fragment"
             type="jp.toastkid.yobidashi.media.image.list.ImageViewerFragment" />
     </data>
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/images"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/images"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-    </FrameLayout>
+        android:scrollbars="vertical"
+        />
 </layout>

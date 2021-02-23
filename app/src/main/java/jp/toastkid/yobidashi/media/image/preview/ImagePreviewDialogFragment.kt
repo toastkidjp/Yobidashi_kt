@@ -213,7 +213,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     companion object {
 
         @LayoutRes
-        private val LAYOUT_ID = R.layout.dialog_image_preview
+        private const val LAYOUT_ID = R.layout.dialog_image_preview
 
         private const val KEY_IMAGE = "image"
 

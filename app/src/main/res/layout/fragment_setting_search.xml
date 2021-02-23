@@ -6,6 +6,7 @@
     </data>
     <androidx.core.widget.NestedScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/search_module"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,12 +18,13 @@
             android:background="@color/setting_background"
             >
             <FrameLayout
-                android:id="@+id/default_search_engine"
+                android:id="@+id/font_size_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{view -> fragment.openSearchCategory()}"
                 >
                 <TextView
+                    android:id="@+id/text_default_search_engine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="4dp"
@@ -51,6 +53,7 @@
                 android:onClick="@{view -> fragment.switchSearchQueryExtract()}"
                 >
                 <TextView
+                    android:id="@+id/text_enable_search_query_extract"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,6 +83,7 @@
                 android:onClick="@{fragment::switchSearchWithClip}"
                 >
                 <TextView
+                    android:id="@+id/text_enable_search_with_clip"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,6 +113,7 @@
                 android:onClick="@{view -> fragment.switchUseSuggestion()}"
                 >
                 <TextView
+                    android:id="@+id/text_use_suggestion"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -138,6 +143,7 @@
                 android:onClick="@{view -> fragment.switchUseSearchHistory()}"
                 >
                 <TextView
+                    android:id="@+id/text_use_history"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,7 +173,7 @@
                 android:onClick="@{view -> fragment.switchUseFavoriteSearch()}"
                 >
                 <TextView
-                    android:orientation="horizontal"
+                    android:id="@+id/text_use_favorite"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -196,7 +202,7 @@
                 android:onClick="@{view -> fragment.switchUseViewHistory()}"
                 >
                 <TextView
-                    android:orientation="horizontal"
+                    android:id="@+id/text_use_view_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -225,7 +231,7 @@
                 android:onClick="@{view -> fragment.switchUseUrlModule()}"
                 >
                 <TextView
-                    android:orientation="horizontal"
+                    android:id="@+id/text_use_url_module"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -254,7 +260,7 @@
                 android:onClick="@{view -> fragment.switchUseTrendModule() }"
                 >
                 <TextView
-                    android:orientation="horizontal"
+                    android:id="@+id/text_use_trend"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -283,6 +289,7 @@
                 android:onClick="@{view -> fragment.switchUseAppSearch() }"
                 >
                 <TextView
+                    android:id="@+id/text_use_app_search"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -302,6 +309,25 @@
                     />
             </FrameLayout>
 
+            <TextView
+                android:id="@+id/text_search_category"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_search"
+                android:text="@string/subhead_search_category_setting"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/setting_search_categories"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

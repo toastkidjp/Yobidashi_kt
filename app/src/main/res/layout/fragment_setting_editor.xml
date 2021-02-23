@@ -140,6 +140,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider1"
             >
             <TextView
+                android:id="@+id/text_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"
@@ -180,6 +181,7 @@
             app:layout_constraintTop_toBottomOf="@id/divider2"
             >
             <TextView
+                android:id="@+id/text_highlight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"
@@ -208,16 +210,17 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintTop_toBottomOf="@id/highlight"
-            app:layout_constraintBottom_toTopOf="@id/default_search_engine"
+            app:layout_constraintBottom_toTopOf="@id/font_size_area"
             />
 
         <FrameLayout
-            android:id="@+id/default_search_engine"
+            android:id="@+id/font_size_area"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:layout_constraintTop_toBottomOf="@id/divider3"
             >
             <TextView
+                android:id="@+id/text_font_size"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/OneLineTextMenu"

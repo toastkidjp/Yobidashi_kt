@@ -15,8 +15,8 @@ import android.widget.TextView
 class CompoundDrawableColorApplier {
 
     operator fun invoke(color: Int, vararg textViews: TextView) {
-        textViews.forEach {
-            it.compoundDrawables.forEach {
+        textViews.forEach { textView ->
+            textView.compoundDrawables.forEach {
                 it?.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
             }
         }

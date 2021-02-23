@@ -24,6 +24,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
  * @param layoutInflater [LayoutInflater]
  * @param onClick Callback of click event
  * @param onLongClick Callback of long-click event
+ * @param onMenuClick Callback of menu-click event
  *
  * @author toastkidjp
  */

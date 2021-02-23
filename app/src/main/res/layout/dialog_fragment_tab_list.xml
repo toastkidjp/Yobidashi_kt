@@ -36,7 +36,7 @@
             />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_pdf_tab"
+            android:id="@+id/add_article_tab"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
@@ -44,6 +44,21 @@
             android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_view"
+            app:rippleColor="@color/aw_ripple"
+            app:srcCompat="@drawable/ic_article"
+            android:onClick="@{view -> dialog.openArticleList()}"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_pdf_tab"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/add_article_tab"
             app:layout_constraintTop_toBottomOf="@id/recycler_view"
             app:rippleColor="@color/aw_ripple"
             app:srcCompat="@drawable/ic_pdf"

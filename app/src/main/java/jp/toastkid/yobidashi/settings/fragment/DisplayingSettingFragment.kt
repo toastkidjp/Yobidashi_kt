@@ -118,7 +118,11 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         val color =
                 if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
                 else preferenceApplier.color
-        CompoundDrawableColorApplier().invoke(color, binding.applyDarkMode)
+        CompoundDrawableColorApplier().invoke(
+                color,
+                binding.applyDarkMode,
+                binding.clearBackgroundSettings
+        )
     }
 
     fun applyDarkMode() {

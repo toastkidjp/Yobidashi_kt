@@ -15,10 +15,12 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingOtherBinding
 import jp.toastkid.yobidashi.libs.intent.SettingsIntentFactory
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.main.StartUp
 import jp.toastkid.yobidashi.settings.ClearSettingConfirmDialogFragment
 
@@ -67,6 +69,21 @@ class OtherSettingFragment : Fragment() {
             it.isChecked = preferenceApplier.wifiOnly
             it.jumpDrawablesToCurrentState()
         }
+
+        val color =
+                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
+                else preferenceApplier.color
+        CompoundDrawableColorApplier().invoke(
+                color,
+                binding.settingsDevice,
+                binding.startUpItems.textStartUpTab,
+                binding.settingsAllApps,
+                binding.settingsDateAndTime,
+                binding.settingsDisplay,
+                binding.settingsWifi,
+                binding.settingsWireless,
+                binding.clearSettings
+        )
     }
 
     /**
