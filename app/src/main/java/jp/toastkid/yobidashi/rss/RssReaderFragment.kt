@@ -70,7 +70,7 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
         super.onViewCreated(view, savedInstanceState)
         val context = view.context
 
-        val fragmentActivity = requireActivity()
+        val fragmentActivity = activity ?: return
         viewModel = ViewModelProvider(this).get(RssReaderFragmentViewModel::class.java)
         observeViewModelEvent(fragmentActivity)
 
