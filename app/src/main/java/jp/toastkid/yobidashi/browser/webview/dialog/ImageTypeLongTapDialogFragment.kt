@@ -28,19 +28,19 @@ import jp.toastkid.yobidashi.libs.Toaster
 class ImageTypeLongTapDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+        val activityContext = activity ?: return super.onCreateDialog(savedInstanceState)
 
         val url = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+        val viewModel = ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle("Image: $url")
                 .setItems(R.array.image_menu, { _, which ->
                     when (which) {
                         0 -> viewModel.open(ImageSearchUrlGenerator()(url))
-                        1 -> ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).preview(url.toUri())
+                        1 -> ViewModelProvider(activityContext).get(BrowserViewModel::class.java).preview(url.toUri())
                         2 -> downloadImage(url)
                     }
                 })
