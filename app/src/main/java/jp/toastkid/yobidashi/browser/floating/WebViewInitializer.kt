@@ -17,8 +17,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.browser.block.AdRemover
 
 /**
  * @author toastkidjp
@@ -29,7 +29,6 @@ class WebViewInitializer {
      * Initialize WebView.
      *
      * @param webView [WebView]
-     * @param url URL string
      */
     operator fun invoke(webView: WebView) {
         val context = webView.context as? FragmentActivity ?: return
