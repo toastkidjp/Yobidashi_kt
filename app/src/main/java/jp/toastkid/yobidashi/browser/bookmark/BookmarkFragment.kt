@@ -190,8 +190,9 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.import_bookmark -> {
+                val activity = activity ?: return true
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    RuntimePermissions(requireActivity())
+                    RuntimePermissions(activity)
                             .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             ?.receiveAsFlow()
                             ?.collect {
