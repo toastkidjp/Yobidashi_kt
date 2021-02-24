@@ -88,8 +88,9 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
             return
         }
 
+        val activity = activity ?: return
         val browserViewModel =
-                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+                ViewModelProvider(activity).get(BrowserViewModel::class.java)
 
         popBackStack()
         browserViewModel.open(uri)
