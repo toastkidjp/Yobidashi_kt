@@ -225,9 +225,10 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     private fun camera() {
+        val activity = activity ?: return
         CoroutineScope(Dispatchers.Main).launch {
             val result =
-                    RuntimePermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    RuntimePermissions(activity).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     ?.receive()
             if (result?.granted == true) {
                 invokeRequest()
