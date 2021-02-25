@@ -5,6 +5,7 @@ import jp.toastkid.yobidashi.libs.MultiByteCharacterInspector
 import jp.toastkid.yobidashi.libs.network.HttpClientFactory
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
@@ -17,19 +18,17 @@ import kotlin.jvm.Throws
  *
  * @author toastkidjp
  */
-class SuggestionApi {
-
-    /**
-     * HTTP client.
-     */
-    private val httpClient = HttpClientFactory.withTimeout(3L)
-
-    /**
-     * Response parser.
-     */
-    private val suggestionParser = SuggestionParser()
-
-    private val multiByteCharacterInspector = MultiByteCharacterInspector()
+class SuggestionApi(
+        /**
+         * HTTP client.
+         */
+        private val httpClient: OkHttpClient = HttpClientFactory.withTimeout(3L),
+        /**
+         * Response parser.
+         */
+        private val suggestionParser: SuggestionParser = SuggestionParser(),
+        private val multiByteCharacterInspector: MultiByteCharacterInspector = MultiByteCharacterInspector()
+) {
 
     /**
      * Fetch Web API result asynchronously.
