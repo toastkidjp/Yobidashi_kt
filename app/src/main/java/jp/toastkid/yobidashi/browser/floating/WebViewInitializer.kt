@@ -16,14 +16,16 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.block.AdRemover
 
 /**
  * @author toastkidjp
  */
-class WebViewInitializer {
+class WebViewInitializer(
+        private val preferenceApplier: PreferenceApplier,
+        private val viewModel: FloatingPreviewViewModel
+) {
 
     /**
      * Initialize WebView.
@@ -33,11 +35,7 @@ class WebViewInitializer {
     operator fun invoke(webView: WebView) {
         val context = webView.context as? FragmentActivity ?: return
 
-        val preferenceApplier = PreferenceApplier(context)
-
         val adRemover = AdRemover.make(context.assets)
-
-        val viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
         webView.webViewClient = object : WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)

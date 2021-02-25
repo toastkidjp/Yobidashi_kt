@@ -110,7 +110,12 @@ class FloatingPreview(context: Context) {
 
         popupWindow.animationStyle = R.style.PopupWindowVisibilityAnimation
 
-        WebViewInitializer()(webView)
+        (context as? FragmentActivity)?.let {
+            WebViewInitializer(
+                    PreferenceApplier(context),
+                    ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
+            )(webView)
+        }
 
         setSlidingListener()
 
