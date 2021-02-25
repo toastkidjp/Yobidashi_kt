@@ -70,6 +70,13 @@ class AutoArchiveTest {
     }
 
     @Test
+    fun testDelete() {
+        autoArchive.delete("test")
+
+        verify(exactly = 1) { filesDir.delete(any()) }
+    }
+
+    @Test
     fun testShouldNotUpdateTab() {
         assertFalse(AutoArchive.shouldNotUpdateTab("https://www.yahoo.co.jp/"))
 
