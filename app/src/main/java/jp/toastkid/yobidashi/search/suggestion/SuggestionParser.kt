@@ -1,6 +1,6 @@
 package jp.toastkid.yobidashi.search.suggestion
 
-import java.util.*
+import java.util.ArrayList
 import java.util.regex.Pattern
 
 /**
@@ -8,7 +8,7 @@ import java.util.regex.Pattern
  *
  * @author toastkidjp
  */
-internal class SuggestionParser {
+class SuggestionParser {
 
     /**
      * Parse response xml.
