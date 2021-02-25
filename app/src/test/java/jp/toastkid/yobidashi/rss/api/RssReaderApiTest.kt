@@ -73,7 +73,7 @@ class RssReaderApiTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         rssReaderApi.invoke("https://www.yahoo-test.com")
 
         verify(exactly = 1) { Uri.parse(any()) }
