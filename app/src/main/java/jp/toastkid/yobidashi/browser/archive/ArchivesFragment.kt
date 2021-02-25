@@ -33,12 +33,11 @@ class ArchivesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val browserViewModel =
-                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+        val browserViewModel = activity?.let { ViewModelProvider(it).get(BrowserViewModel::class.java) }
 
         val adapter = Adapter(view.context) { filePath ->
             popBackStack()
-            browserViewModel.open(Uri.fromFile(File(filePath)))
+            browserViewModel?.open(Uri.fromFile(File(filePath)))
         }
 
         if (adapter.itemCount == 0) {
