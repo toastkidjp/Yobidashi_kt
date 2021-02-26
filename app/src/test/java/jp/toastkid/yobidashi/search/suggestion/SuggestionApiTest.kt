@@ -64,7 +64,7 @@ class SuggestionApiTest {
     }
 
     @Test
-    fun fetchAsync() {
+    fun testFetchAsync() {
         suggestionApi.fetchAsync("query", {})
 
         verify(exactly = 1) { anyConstructed<Request.Builder>().url(any<String>()) }
