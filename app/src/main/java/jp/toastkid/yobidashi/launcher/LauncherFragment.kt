@@ -53,22 +53,21 @@ class LauncherFragment : Fragment(), ContentScrollable {
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        binding.appItemsView.layoutManager =
-                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-
-        adapter = Adapter(
-                context,
-                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
-        )
-        binding.appItemsView.adapter = adapter
-        binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
-            override fun onFling(velocityX: Int, velocityY: Int): Boolean {
-                binding.appItemsView.requestFocus()
-                return false
-            }
-        }
-
         activity?.also { activity ->
+            adapter = Adapter(
+                    context,
+                    ViewModelProvider(activity).get(ContentViewModel::class.java)
+            )
+            binding.appItemsView.adapter = adapter
+            binding.appItemsView.layoutManager =
+                    LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            binding.appItemsView.onFlingListener = object : RecyclerView.OnFlingListener() {
+                override fun onFling(velocityX: Int, velocityY: Int): Boolean {
+                    binding.appItemsView.requestFocus()
+                    return false
+                }
+            }
+
             val viewModel =
                     ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
             viewModel.find.observe(activity, Observer {
