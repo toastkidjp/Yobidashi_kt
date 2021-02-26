@@ -163,9 +163,9 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activityContext = context ?: return
+        val activityContext = activity ?: return
 
-        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
         val menuPopup = MenuPopup(
                 activityContext,
