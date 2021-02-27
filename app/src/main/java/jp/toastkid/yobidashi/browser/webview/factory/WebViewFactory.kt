@@ -187,6 +187,9 @@ internal class WebViewFactory {
                 1
         )
         val fragmentManager = supportFragmentManager ?: return
+        if (fragmentManager.isDestroyed) {
+            return
+        }
         dialogFragment.show(
                 fragmentManager,
                 dialogFragment::class.java.simpleName
