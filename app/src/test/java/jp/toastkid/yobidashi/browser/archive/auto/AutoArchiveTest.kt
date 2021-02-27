@@ -39,6 +39,7 @@ class AutoArchiveTest {
         MockKAnnotations.init(this)
 
         every { file.getAbsolutePath() }.returns("test/test.mht")
+        every { file.delete() }.returns(true)
         every { filesDir.assignNewFile(any<String>()) }.returns(file)
         every { filesDir.delete(any()) }.answers { Unit }
         every { filesDir.listFiles() }.returns(arrayOf(file))
@@ -74,6 +75,15 @@ class AutoArchiveTest {
         autoArchive.delete("test")
 
         verify(exactly = 1) { filesDir.delete(any()) }
+    }
+
+    @Test
+    fun testDeleteUnused() {
+        every { file.getName() }.returns("test")
+
+        autoArchive.deleteUnused(emptyList())
+
+        verify(atLeast = 1) { file.delete() }
     }
 
     @Test
