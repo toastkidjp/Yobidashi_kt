@@ -54,9 +54,11 @@ class LauncherFragment : Fragment(), ContentScrollable {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
         activity?.also { activity ->
+            val viewModelProvider = ViewModelProvider(activity)
+
             adapter = Adapter(
                     context,
-                    ViewModelProvider(activity).get(ContentViewModel::class.java)
+                    viewModelProvider.get(ContentViewModel::class.java)
             )
             binding.appItemsView.adapter = adapter
             binding.appItemsView.layoutManager =
@@ -68,8 +70,7 @@ class LauncherFragment : Fragment(), ContentScrollable {
                 }
             }
 
-            val viewModel =
-                    ViewModelProvider(activity).get(PageSearcherViewModel::class.java)
+            val viewModel = viewModelProvider.get(PageSearcherViewModel::class.java)
             viewModel.find.observe(activity, Observer {
                 val text = it?.getContentIfNotHandled() ?: return@Observer
                 if (prev == text) {
