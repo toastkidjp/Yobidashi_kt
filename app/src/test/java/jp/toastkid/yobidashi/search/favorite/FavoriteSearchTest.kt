@@ -14,7 +14,7 @@ import org.junit.Test
 class FavoriteSearchTest {
 
     @Test
-    fun test() {
+    fun testWith() {
         val favoriteSearch = FavoriteSearch.with("category", "query")
 
         assertEquals(0, favoriteSearch.id)
