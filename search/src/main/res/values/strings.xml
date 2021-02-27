@@ -71,4 +71,5 @@
     <string name="search_category_webster">Webster</string>
     <string name="search_category_hacker_news">Hacker News</string>
     <string name="my_index">myINDEX</string>
+    <string name="search_category_weblio">Weblio</string>
 </resources>

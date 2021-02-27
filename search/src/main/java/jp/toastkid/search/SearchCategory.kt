@@ -179,6 +179,11 @@ enum class SearchCategory(
             R.drawable.ic_webster,
             "https://www.merriam-webster.com/dictionary/"
     ),
+    WEBLIO(
+            R.string.search_category_weblio,
+            R.drawable.ic_weblio,
+            "https://ejje.weblio.jp/content/"
+    ),
     INTERNET_ARCHIVE(
             R.string.search_category_internet_archive,
             R.drawable.ic_internet_archive,
