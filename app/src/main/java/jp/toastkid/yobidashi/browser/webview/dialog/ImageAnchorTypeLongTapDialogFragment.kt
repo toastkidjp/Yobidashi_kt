@@ -49,7 +49,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
                         0 -> viewModel.open(uri)
                         1 -> viewModel.openBackground(title, uri)
                         2 -> viewModel.open(ImageSearchUrlGenerator()(imageUrl))
-                        3 -> ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).preview(uri)
+                        3 -> ViewModelProvider(activityContext).get(BrowserViewModel::class.java).preview(uri)
                         4 -> downloadImage(imageUrl)
                         5 -> Clipboard.clip(activityContext, anchor)
                     }
