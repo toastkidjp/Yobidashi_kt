@@ -174,6 +174,11 @@ enum class SearchCategory(
             "https://%s.m.wikipedia.org/w/index.php?search=",
             { l, h, q -> String.format(h, l) + Uri.encode(q) }
     ),
+    WEBSTER(
+            R.string.search_category_webster,
+            R.drawable.ic_webster,
+            "https://www.merriam-webster.com/dictionary/"
+    ),
     INTERNET_ARCHIVE(
             R.string.search_category_internet_archive,
             R.drawable.ic_internet_archive,

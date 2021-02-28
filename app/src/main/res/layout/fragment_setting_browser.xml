@@ -133,12 +133,15 @@
                 android:onClick="@{view -> fragment.switchLoadingImage()}"
                 >
                 <TextView
+                    android:id="@+id/text_use_image"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/settings_item_left_margin"
                     android:gravity="center_vertical"
                     android:text="@string/title_load_image"
+                    android:drawableStart="@drawable/ic_image"
+                    android:drawablePadding="4dp"
                     />
                 <CheckBox
                     android:id="@+id/use_image_check"
@@ -188,7 +191,6 @@
                 >
                 <TextView
                     android:id="@+id/text_save_history"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"

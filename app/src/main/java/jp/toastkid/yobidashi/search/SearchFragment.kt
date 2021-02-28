@@ -152,12 +152,15 @@ class SearchFragment : Fragment() {
         headerBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_search, container, false)
         headerBinding?.fragment = this
         headerBinding?.searchCategories?.let {
-            it.adapter = SearchCategoryAdapter(context)
-            val index = jp.toastkid.search.SearchCategory.findIndex(
-                    jp.toastkid.search.SearchCategory.findByUrlOrNull(currentUrl)?.name
-                            ?: PreferenceApplier(context).getDefaultSearchEngine() ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
-            )
-            it.setSelection(index)
+            val searchCategoryAdapter = SearchCategoryAdapter(context)
+            it.adapter = searchCategoryAdapter
+            val categoryName = (jp.toastkid.search.SearchCategory.findByUrlOrNull(currentUrl)?.name
+                    ?: PreferenceApplier(context).getDefaultSearchEngine())
+                    ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
+            val index = searchCategoryAdapter.findIndex(categoryName)
+            if (index != -1) {
+                it.setSelection(index)
+            }
         }
 
         preferenceApplier = PreferenceApplier(context)

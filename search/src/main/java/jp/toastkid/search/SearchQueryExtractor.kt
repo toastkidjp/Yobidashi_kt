@@ -92,6 +92,7 @@ class SearchQueryExtractor {
             host == "bgr.com" ->
                 uri.getQueryParameter("s")?.replace("#$".toRegex(), "")
             host.endsWith("facebook.com")
+                    or host.equals("www.merriam-webster.com")
                     or host.equals("www.instagram.com")
                     or host.equals("www.espn.com") ->
                 Uri.decode(uri.lastPathSegment)

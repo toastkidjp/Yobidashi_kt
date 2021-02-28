@@ -7,7 +7,9 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -91,6 +93,11 @@ class EditorChooserInvokingUseCaseTest {
         verify(exactly = 0) { showErrorMessage.invoke() }
         verify(exactly = 1) { anyConstructed<ImageEditChooserFactory>().invoke(any(), any()) }
         verify(exactly = 1) { activityStarter.invoke(any()) }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
 }

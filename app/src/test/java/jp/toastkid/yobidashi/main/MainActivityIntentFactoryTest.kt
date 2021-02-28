@@ -4,6 +4,7 @@ import android.content.Intent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi.main.launch.APP_LAUNCHER
 import jp.toastkid.yobidashi.main.launch.BARCODE_READER
@@ -11,6 +12,7 @@ import jp.toastkid.yobidashi.main.launch.BOOKMARK
 import jp.toastkid.yobidashi.main.launch.MainActivityIntentFactory
 import jp.toastkid.yobidashi.main.launch.SEARCH
 import jp.toastkid.yobidashi.main.launch.SETTING
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -85,7 +87,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun setting() {
+    fun testSetting() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
 
@@ -94,4 +96,10 @@ class MainActivityIntentFactoryTest {
         verify(exactly = 1) { anyConstructed<Intent>().setAction(SETTING) }
         verify(exactly = 1) { anyConstructed<Intent>().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
     }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
+
 }

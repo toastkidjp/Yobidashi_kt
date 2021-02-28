@@ -50,8 +50,6 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
 
     /**
      * Show module with opening software keyboard.
-     *
-     * @param activity [Activity] TODO remove it.
      */
     fun show() {
         if (!viewStubProxy.isInflated) {

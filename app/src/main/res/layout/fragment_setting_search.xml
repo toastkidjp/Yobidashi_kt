@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="fragment"
             type="jp.toastkid.yobidashi.settings.fragment.SearchSettingFragment" />
@@ -309,17 +309,35 @@
                     />
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/text_search_category"
-                android:orientation="horizontal"
+            <include layout="@layout/view_setting_divider"/>
+
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                android:drawableStart="@drawable/ic_search"
-                android:text="@string/subhead_search_category_setting"
-                />
+                >
+                <TextView
+                    android:id="@+id/text_search_category"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_search"
+                    android:text="@string/subhead_search_category_setting"
+                    />
+                <CheckBox
+                    android:id="@+id/check_search_category"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layoutDirection="rtl"
+                    android:text="Check all"
+                    android:checked="true"
+                    />
+            </FrameLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/setting_search_categories"
@@ -327,6 +345,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_search_category_selection"
+                tools:itemCount="5"
                 />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

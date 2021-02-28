@@ -6,9 +6,6 @@ import android.view.Display
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
-import io.mockk.mockk
-import io.mockk.mockkClass
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.spyk
@@ -18,9 +15,7 @@ import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.libs.BitmapScaling
 import org.junit.Before
 import org.junit.Test
-import java.io.Closeable
 import java.io.File
-import java.io.FileDescriptor
 import java.io.FileOutputStream
 
 /**
@@ -53,7 +48,7 @@ class ImageStoreServiceTest {
     @Test
     fun test() {
         val file = spyk(File.createTempFile("test", "webp"))
-        every { filesDir.assignNewFile(any<Uri>()) }.answers { file }
+        every { filesDir.assignNewFile(any<String>()) }.answers { file }
         every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
         every { display.getRectSize(any()) }.answers { Unit }
 
@@ -65,13 +60,16 @@ class ImageStoreServiceTest {
         mockkObject(BitmapScaling)
         every { BitmapScaling.invoke(any(), any(), any()) }.answers { scaledBitmap }
 
+        every { uri.getLastPathSegment() }.returns("last")
+
         ImageStoreService(filesDir, preferenceApplier).invoke(bitmap, uri, display)
 
         verify(exactly = 2) { file.getPath() }
-        verify(exactly = 1) { filesDir.assignNewFile(any<Uri>()) }
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
         verify(exactly = 1) { display.getRectSize(any()) }
         verify(exactly = 1) { anyConstructed<FileOutputStream>().close() }
         verify(exactly = 1) { BitmapScaling.invoke(any(), any(), any()) }
+        verify(exactly = 1) { uri.getLastPathSegment() }
 
         file.delete()
     }

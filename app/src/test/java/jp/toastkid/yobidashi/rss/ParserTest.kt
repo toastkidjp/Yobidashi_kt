@@ -34,7 +34,6 @@ class ParserTest {
         val rss = parser.parse(rssText.split("\n"))
 
         assertNull(rss.creator)
-        assertEquals("Sat, 21 Jan 2017 19:32:11 +0900", rss.date)
         assertEquals("This instance has only 1 item.", rss.description)
         assertEquals("http://www.yahoo.co.jp/", rss.link)
         assertEquals("RSS title", rss.title)

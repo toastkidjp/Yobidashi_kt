@@ -53,6 +53,10 @@ class SearchCategoryAdapter(context: Context): BaseAdapter() {
         return convertView
     }
 
+    fun findIndex(categoryName: String): Int {
+        return searchCategories.indexOfFirst { it.name == categoryName }
+    }
+
     companion object {
 
         @LayoutRes

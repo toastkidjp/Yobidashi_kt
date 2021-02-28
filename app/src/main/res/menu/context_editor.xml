@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
+<menu
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
     <item
         android:id="@+id/context_edit_insert_as_plain"
         android:title="@string/insert_as_plain"
@@ -9,6 +12,7 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_insert_plain"
         />
+
     <item
         android:id="@+id/context_edit_paste_as_quotation"
         android:title="@string/paste_as_quotation"
@@ -25,6 +29,7 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
+
     <item
         android:id="@+id/context_edit_horizontal_rule"
         android:title="@string/horizontal_rule"
@@ -32,4 +37,5 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction"
         />
+
 </menu>
