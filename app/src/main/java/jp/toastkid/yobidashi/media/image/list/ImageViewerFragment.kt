@@ -138,7 +138,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     fun reset() {
-        MediaControllerCompat.getMediaController(requireActivity()).transportControls.stop()
+        activity?.let {
+            MediaControllerCompat.getMediaController(it).transportControls.stop()
+        }
     }
 
     override fun pressBack(): Boolean {
