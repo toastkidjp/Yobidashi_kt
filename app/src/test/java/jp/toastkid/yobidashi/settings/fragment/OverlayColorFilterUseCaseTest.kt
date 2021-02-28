@@ -89,7 +89,7 @@ class OverlayColorFilterUseCaseTest {
     }
 
     @Test
-    fun setOrange() {
+    fun testSetOrange() {
         overlayColorFilterUseCase.setOrange()
 
         verify(atLeast = 1) { colorResolver.invoke(any()) }
