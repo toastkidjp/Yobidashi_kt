@@ -18,12 +18,12 @@ import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
+import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.libs.BitmapCompressor
 import jp.toastkid.yobidashi.libs.ThumbnailGenerator
 import jp.toastkid.yobidashi.main.MainActivity
-import jp.toastkid.yobidashi.tab.background.BackgroundWebViewFactoryUseCase
 import jp.toastkid.yobidashi.tab.model.ArticleListTab
 import jp.toastkid.yobidashi.tab.model.ArticleTab
 import jp.toastkid.yobidashi.tab.model.CalendarTab
@@ -68,7 +68,7 @@ class TabAdapter(
 
     private var tabListViewModel: TabListViewModel? = null
 
-    private var webViewFactory: BackgroundWebViewFactoryUseCase? = null
+    private var webViewFactory: WebViewFactoryUseCase? = null
 
     init {
         val viewContext = contextSupplier()
@@ -82,7 +82,7 @@ class TabAdapter(
             appBarViewModel = viewModelProvider.get(AppBarViewModel::class.java)
             tabListViewModel = viewModelProvider.get(TabListViewModel::class.java)
 
-            webViewFactory = BackgroundWebViewFactoryUseCase(
+            webViewFactory = WebViewFactoryUseCase(
                     webViewClientFactory = WebViewClientFactory(
                             viewModelProvider.get(ContentViewModel::class.java),
                             AdRemover.make(viewContext.assets),
