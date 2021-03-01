@@ -160,8 +160,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     private fun attemptLoad() {
+        val activity = activity ?: return
         CoroutineScope(Dispatchers.Main).launch(disposables) {
-            RuntimePermissions(requireActivity())
+            RuntimePermissions(activity)
                     .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                     ?.receiveAsFlow()
                     ?.collect {
