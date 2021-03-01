@@ -49,10 +49,10 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
     }
 
     private fun downloadImage(url: String) {
-        val activityContext = context ?: return
+        val activityContext = activity ?: return
         if (Urls.isInvalidUrl(url)) {
             Toaster.snackShort(
-                    requireActivity().findViewById(android.R.id.content),
+                    activityContext.findViewById(android.R.id.content),
                     activityContext.getString(R.string.message_cannot_downloading_image),
                     PreferenceApplier(activityContext).colorPair()
             )
