@@ -56,7 +56,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogStyle)
 
-        val activityContext = context
+        val activityContext = activity
                 ?: return super.onCreateDialog(savedInstanceState)
 
         binding = DataBindingUtil.inflate(
@@ -83,7 +83,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
             }
         }
 
-        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
         val viewModel =
                 ViewModelProvider(this).get(ImagePreviewFragmentViewModel::class.java)
