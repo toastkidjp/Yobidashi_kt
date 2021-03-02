@@ -12,7 +12,9 @@ import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
  *
  * @author toastkidjp
  */
-class PendingIntentFactory {
+class PendingIntentFactory(
+        private val mainActivityIntentFactory: MainActivityIntentFactory = MainActivityIntentFactory()
+) {
 
     /**
      * Make launch search intent.
@@ -112,7 +114,4 @@ class PendingIntentFactory {
                     PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-    companion object {
-        private val mainActivityIntentFactory = MainActivityIntentFactory()
-    }
 }
