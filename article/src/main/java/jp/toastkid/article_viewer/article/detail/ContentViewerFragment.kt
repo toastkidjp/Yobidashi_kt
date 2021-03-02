@@ -69,10 +69,12 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         textViewHighlighter = TextViewHighlighter(binding.content)
         repository = AppDatabase.find(binding.root.context).articleRepository()
 
-        ContextMenuInitializer(
-                binding.content,
-                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
-        ).invoke()
+        activity?.let {
+            ContextMenuInitializer(
+                    binding.content,
+                    ViewModelProvider(it).get(BrowserViewModel::class.java)
+            ).invoke()
+        }
 
         val linkBehaviorService = makeLinkBehaviorService()
 
