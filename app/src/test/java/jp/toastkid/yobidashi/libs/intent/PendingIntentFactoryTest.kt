@@ -20,6 +20,7 @@ import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -50,9 +51,6 @@ class PendingIntentFactoryTest {
 
         mockkStatic(PendingIntent::class)
         every { PendingIntent.getActivity(any(), any(), any(), any()) }.returns(mockk())
-
-        mockkObject(RandomWikipedia)
-        every { RandomWikipedia.makeIntent(any()) }.returns(mockk())
     }
 
     @After
@@ -115,10 +113,15 @@ class PendingIntentFactoryTest {
 
     @Test
     fun randomWikipedia() {
+        mockkObject(RandomWikipedia)
+        every { RandomWikipedia.makeIntent(any()) }.returns(mockk())
+
         pendingIntentFactory.randomWikipedia(mockk())
 
         verify(exactly = 1) { RandomWikipedia.makeIntent(any()) }
         verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
+
+        unmockkObject(RandomWikipedia)
     }
 
     @Test
