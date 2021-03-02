@@ -176,7 +176,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                                 R.string.message_audio_file_is_not_found,
                                 PreferenceApplier(binding.root.context).colorPair()
                         )
-                        activity?.supportFragmentManager?.popBackStack()
+                        activity.supportFragmentManager.popBackStack()
                     }
         }
     }
