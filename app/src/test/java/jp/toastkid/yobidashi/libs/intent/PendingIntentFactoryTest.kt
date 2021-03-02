@@ -51,9 +51,6 @@ class PendingIntentFactoryTest {
         mockkStatic(PendingIntent::class)
         every { PendingIntent.getActivity(any(), any(), any(), any()) }.returns(mockk())
 
-        mockkConstructor(PreferenceApplier::class)
-        every { anyConstructed<PreferenceApplier>().homeUrl }.returns("https://www.yahoo.co.jp")
-
         mockkObject(RandomWikipedia)
         every { RandomWikipedia.makeIntent(any()) }.returns(mockk())
     }
@@ -91,6 +88,9 @@ class PendingIntentFactoryTest {
     fun browser() {
         val context = mockk<Context>()
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
+
+        mockkConstructor(PreferenceApplier::class)
+        every { anyConstructed<PreferenceApplier>().homeUrl }.returns("https://www.yahoo.co.jp")
 
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
