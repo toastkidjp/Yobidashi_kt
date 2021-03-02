@@ -191,18 +191,20 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         binding.results.adapter = adapter
         binding.results.layoutManager = LinearLayoutManager(activityContext, RecyclerView.VERTICAL, false)
 
-        val activityViewModel = ViewModelProvider(requireActivity()).get(ArticleListFragmentViewModel::class.java)
-        activityViewModel.search.observe(requireActivity(), Observer {
-            searchUseCase?.search(it)
-            if (appBarBinding.input.text.isNullOrEmpty()) {
-                appBarBinding.input.setText(it)
-            }
-        })
+        activity?.let {
+            val activityViewModel = ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
+            activityViewModel.search.observe(it, Observer {
+                searchUseCase?.search(it)
+                if (appBarBinding.input.text.isNullOrEmpty()) {
+                    appBarBinding.input.setText(it)
+                }
+            })
 
-        appBarBinding.input.setOnEditorActionListener { textView, _, _ ->
-            val keyword = textView.text.toString()
-            activityViewModel.search(keyword)
-            true
+            appBarBinding.input.setOnEditorActionListener { textView, _, _ ->
+                val keyword = textView.text.toString()
+                activityViewModel.search(keyword)
+                true
+            }
         }
 
         appBarBinding.input.addTextChangedListener(object : TextWatcher {
