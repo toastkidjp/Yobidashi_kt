@@ -68,6 +68,7 @@ class PendingIntentFactoryTest {
         pendingIntentFactory.makeSearchLauncher(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.search(any()) }
+        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
     }
 
     @Test
@@ -75,6 +76,7 @@ class PendingIntentFactoryTest {
         pendingIntentFactory.launcher(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.launcher(any()) }
+        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
     }
 
     @Test
@@ -82,6 +84,7 @@ class PendingIntentFactoryTest {
         pendingIntentFactory.barcode(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.barcodeReader(any()) }
+        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
     }
 
     @Test
@@ -97,6 +100,7 @@ class PendingIntentFactoryTest {
         verify(exactly = 1) { mainActivityIntentFactory.browser(any(), any()) }
         verify(exactly = 1) { context.getSharedPreferences(any(), any()) }
         verify(exactly = 1) { Uri.parse(any()) }
+        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
 
         unmockkStatic(Uri::class)
     }
@@ -106,6 +110,7 @@ class PendingIntentFactoryTest {
         pendingIntentFactory.bookmark(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.bookmark(any()) }
+        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
     }
 
     @Test
@@ -113,6 +118,7 @@ class PendingIntentFactoryTest {
         pendingIntentFactory.randomWikipedia(mockk())
 
         verify(exactly = 1) { RandomWikipedia.makeIntent(any()) }
+        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
     }
 
     @Test
@@ -120,6 +126,7 @@ class PendingIntentFactoryTest {
         pendingIntentFactory.setting(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.setting(any()) }
+        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
     }
 
 }
