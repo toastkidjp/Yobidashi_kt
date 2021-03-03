@@ -79,7 +79,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         val linkBehaviorService = makeLinkBehaviorService()
 
         val linkMovementMethod = ContentLinkMovementMethod {
-            linkBehaviorService.invoke(it)
+            linkBehaviorService?.invoke(it)
         }
         binding.content.movementMethod = linkMovementMethod
 
@@ -87,8 +87,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         return binding.root
     }
 
-    private fun makeLinkBehaviorService(): LinkBehaviorService {
-        val viewModelProvider = ViewModelProvider(requireActivity())
+    private fun makeLinkBehaviorService(): LinkBehaviorService? {
+        val activity = activity ?: return null
+        val viewModelProvider = ViewModelProvider(activity)
         return LinkBehaviorService(
                 viewModelProvider.get(ContentViewModel::class.java),
                 viewModelProvider.get(BrowserViewModel::class.java)
