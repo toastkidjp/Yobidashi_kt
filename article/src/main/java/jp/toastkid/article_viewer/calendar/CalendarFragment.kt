@@ -42,11 +42,11 @@ class CalendarFragment : Fragment(), OnBackCloseableTabUiFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activityContext = context ?: return
+        val activityContext = activity ?: return
 
         dateSelectedActionUseCase = DateSelectedActionUseCase(
                 AppDatabase.find(activityContext).articleRepository(),
-                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+                ViewModelProvider(activityContext).get(ContentViewModel::class.java)
         )
 
         binding.calendar.setOnDateChangeListener { _, year, month, date ->
