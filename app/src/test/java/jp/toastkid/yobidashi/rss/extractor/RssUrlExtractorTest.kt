@@ -22,7 +22,7 @@ class RssUrlExtractorTest {
     }
 
     @Test
-    fun test() {
+    fun testInvoke() {
         val html = readStream("rss/extractor/sample.html").source().use { source ->
             source.buffer().use {
                 it.readUtf8()
