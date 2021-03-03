@@ -59,7 +59,7 @@ class PendingIntentFactoryTest {
     }
 
     @Test
-    fun makeSearchLauncher() {
+    fun testMakeSearchLauncher() {
         pendingIntentFactory.makeSearchLauncher(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.search(any()) }
