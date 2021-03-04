@@ -67,7 +67,7 @@ class PendingIntentFactoryTest {
     }
 
     @Test
-    fun launcher() {
+    fun testLauncher() {
         pendingIntentFactory.launcher(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.launcher(any()) }
