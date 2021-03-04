@@ -136,8 +136,10 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         appBarBinding.tabCount.setTextColor(preferenceApplier.fontColor)
         appBarBinding.subhead.setColorFilter(preferenceApplier.fontColor)
 
-        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
-                .replace(appBarBinding.root)
+        activity?.let {
+            ViewModelProvider(it).get(AppBarViewModel::class.java)
+                    .replace(appBarBinding.root)
+        }
     }
 
     @UiThread
