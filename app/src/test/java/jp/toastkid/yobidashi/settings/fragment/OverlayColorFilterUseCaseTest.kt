@@ -67,7 +67,7 @@ class OverlayColorFilterUseCaseTest {
     }
 
     @Test
-    fun setRed() {
+    fun testSetRed() {
         overlayColorFilterUseCase.setRed()
 
         verify(atLeast = 1) { colorResolver.invoke(any()) }
