@@ -206,7 +206,7 @@ class EditorSettingFragment : Fragment() {
     }
 
     fun showCursorColorSetting() {
-        val activity = requireActivity()
+        val activity = activity ?: return
         val currentColor = preferenceApplier.editorCursorColor(
                 ContextCompat.getColor(activity, R.color.editor_cursor)
         )
