@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -50,7 +51,7 @@ internal class ActivityAdapter(
     private val folderHistory: Stack<String> = Stack()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_bookmark, parent, false))
+            ViewHolder(DataBindingUtil.inflate(inflater, ITEM_LAYOUT_ID, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark: Bookmark = items[position]
@@ -173,6 +174,13 @@ internal class ActivityAdapter(
      */
     fun dispose() {
         disposables.cancel()
+    }
+
+    companion object {
+
+        @LayoutRes
+        private const val ITEM_LAYOUT_ID = R.layout.item_bookmark
+
     }
 
 }
