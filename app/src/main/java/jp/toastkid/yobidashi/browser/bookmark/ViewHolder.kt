@@ -70,4 +70,8 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
         binding.delete.setOnClickListener { onClickAdd(bookmark) }
     }
 
+    fun setIconColorFilter(color: Int) {
+        binding.icon.setColorFilter(color)
+    }
+
 }
