@@ -14,6 +14,7 @@
     <string name="ok">OK</string>
     <string name="share">Share</string>
     <string name="select">Select</string>
+    <string name="check_all">Check all</string>
 
     <string name="title_search_action">Search</string>
     <string name="action_settings">Settings</string>
@@ -438,10 +439,6 @@
     <string name="title_search_suggestion">Search suggestion</string>
     <string name="search_category">Search category</string>
 
-    <string name="touch_listener_single_touch">Single Touch</string>
-    <string name="touch_listener_multi_touch">Multi Touch</string>
-    <string name="touch_listener_gesture_detector">Gesture Detector</string>
-    <string name="touch_listener_default">Default</string>
     <string name="title_gesture_memo">Gesture memo</string>
     <string name="message_store_gesture_memo">Save current canvas to %s</string>
     <string name="button_clip_url">Clip URL</string>

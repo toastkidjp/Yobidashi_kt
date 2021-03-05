@@ -14,12 +14,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
  *
  * @author toastkidjp
  */
-object VoiceSearch {
-
-    /**
-     * Request Code.
-     */
-    const val REQUEST_CODE: Int = 19001
+class VoiceSearch {
 
     /**
      * Make intent.
@@ -66,4 +61,13 @@ object VoiceSearch {
      */
     private fun makeGoogleAppInstallIntent() =
             IntentFactory.googlePlay("com.google.android.googlequicksearchbox")
+
+    companion object {
+
+        /**
+         * Request Code.
+         */
+        const val REQUEST_CODE: Int = 19001
+
+    }
 }

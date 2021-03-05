@@ -40,7 +40,7 @@ internal class Adapter(
      */
     private val colorPair: ColorPair = PreferenceApplier(context).colorPair()
 
-    private val tabThumbnails = TabThumbnails { context }
+    private val tabThumbnails = TabThumbnails.with(context)
 
     /**
      * Current index.

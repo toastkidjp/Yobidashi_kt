@@ -295,6 +295,11 @@ enum class SearchCategory(
             "https://bgr.com/?s=%s",
             { _, h, q -> String.format(h, Uri.encode(q)) }
     ),
+    HACKER_NEWS(
+            R.string.search_category_hacker_news,
+            R.drawable.ic_hacker_news,
+            "https://hn.algolia.com/?q="
+    ),
     TECHNOLOGY(
             R.string.search_category_technology,
             R.drawable.ic_techcrunch,
@@ -355,6 +360,11 @@ enum class SearchCategory(
             R.string.morningstar,
             R.drawable.ic_morningstar,
             "https://www.morningstar.com/search?query="
+    ),
+    MY_INDEX(
+            R.string.my_index,
+            R.drawable.ic_myindex,
+            "https://myindex.jp/search.php?w="
     ),
     YAHOO_JAPAN_FINANCE(
             R.string.yahoo_japan_finance,

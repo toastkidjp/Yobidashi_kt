@@ -42,6 +42,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_gravity="start|center_vertical"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/image"
                 />
             <TextView
                 android:id="@+id/search_history_text"

@@ -22,7 +22,7 @@
             android:onClick="@{view -> fragment.switchColorFilter()}"
             >
             <TextView
-                android:orientation="horizontal"
+                android:id="@+id/text_use_color_filter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"

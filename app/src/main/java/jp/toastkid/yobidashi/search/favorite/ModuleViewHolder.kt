@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateMargins
@@ -52,6 +53,10 @@ internal class ModuleViewHolder(private val binding: ItemSearchHistoryBinding)
 
     fun setAddIcon(@DrawableRes addIcon: Int) {
         binding.searchHistoryAdd.setImageResource(addIcon)
+    }
+
+    fun setIconColor(@ColorInt color: Int) {
+        binding.searchHistoryAdd.setColorFilter(color)
     }
 
     override fun getFrontView(): View = binding.front

@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import jp.toastkid.lib.ContentViewModel
-import jp.toastkid.lib.night.DisplayMode
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
@@ -115,9 +115,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         super.onResume()
         preferenceApplier.colorPair().applyReverseTo(binding.fab)
 
-        val color =
-                if (DisplayMode(resources.configuration).isNightMode()) preferenceApplier.fontColor
-                else preferenceApplier.color
+        val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(
                 color,
                 binding.applyDarkMode,

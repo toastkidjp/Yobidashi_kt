@@ -12,6 +12,11 @@ import android.widget.EditText
 
 class CurrentLineDuplicatorUseCase {
 
+    /**
+     * Duplicate current line.
+     *
+     * @param editText [EditText]
+     */
     operator fun invoke(editText: EditText) {
         val lineNumber = editText.layout.getLineForOffset(editText.selectionStart)
         val start = editText.layout.getLineStart(lineNumber)

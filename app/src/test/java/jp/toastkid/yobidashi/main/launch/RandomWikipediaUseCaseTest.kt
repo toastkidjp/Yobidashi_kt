@@ -10,6 +10,7 @@ import io.mockk.unmockkAll
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -58,6 +59,7 @@ class RandomWikipediaUseCaseTest {
     @After
     fun tearDown() {
         unmockkAll()
+        Dispatchers.resetMain()
     }
 
 }

@@ -102,8 +102,10 @@ class MenuBinder(
 
         menuSwitch?.viewTreeObserver?.addOnGlobalLayoutListener {
             val menuFabPosition = preferenceApplier.menuFabPosition()
+
             val displayMetrics =
                     menuSwitch.context?.resources?.displayMetrics ?: return@addOnGlobalLayoutListener
+
             if (menuSwitch.x > displayMetrics.widthPixels) {
                 menuSwitch.x =
                         min(menuFabPosition?.first ?: 0f, displayMetrics.widthPixels.toFloat())
@@ -111,6 +113,13 @@ class MenuBinder(
             if (menuSwitch.y > displayMetrics.heightPixels) {
                 menuSwitch.y =
                         min(menuFabPosition?.second ?: 0f, displayMetrics.heightPixels.toFloat())
+            }
+
+            if (menuSwitch.x < 0) {
+                menuSwitch.x = displayMetrics.widthPixels.toFloat() - 40f
+            }
+            if (menuSwitch.y < 0) {
+                menuSwitch.y = 40f
             }
         }
     }

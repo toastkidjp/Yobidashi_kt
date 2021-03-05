@@ -106,7 +106,6 @@
                 android:onClick="@{view -> fragment.switchJsEnabled()}"
                 >
                 <TextView
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/settings_item_left_margin"
@@ -134,7 +133,6 @@
                 >
                 <TextView
                     android:id="@+id/text_use_image"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/settings_item_left_margin"

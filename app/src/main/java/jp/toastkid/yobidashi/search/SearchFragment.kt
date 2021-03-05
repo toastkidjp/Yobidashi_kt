@@ -343,6 +343,8 @@ class SearchFragment : Fragment() {
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
 
+        urlModule?.onResume()
+
         showKeyboard()
     }
 
@@ -459,18 +461,24 @@ class SearchFragment : Fragment() {
 
     fun invokeSearch() {
         if (useVoice) {
-            try {
-                startActivityForResult(VoiceSearch.makeIntent(requireContext()), VoiceSearch.REQUEST_CODE)
-            } catch (e: ActivityNotFoundException) {
-                Timber.e(e)
-                VoiceSearch.suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
-            }
+            invokeVoiceSearch()
             return
         }
         search(
                 extractCurrentSearchCategory(),
                 headerBinding?.searchInput?.text.toString()
         )
+    }
+
+    private fun invokeVoiceSearch() {
+        try {
+            context?.let {
+                startActivityForResult(VoiceSearch().makeIntent(it), VoiceSearch.REQUEST_CODE)
+            }
+        } catch (e: ActivityNotFoundException) {
+            Timber.e(e)
+            VoiceSearch().suggestInstallGoogleApp(binding?.root as View, preferenceApplier.colorPair())
+        }
     }
 
     fun invokeBackgroundSearch(): Boolean {

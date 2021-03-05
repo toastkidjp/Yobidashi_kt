@@ -334,7 +334,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center_vertical|end"
                     android:layoutDirection="rtl"
-                    android:text="Check all"
+                    android:text="@string/check_all"
                     android:checked="true"
                     />
             </FrameLayout>

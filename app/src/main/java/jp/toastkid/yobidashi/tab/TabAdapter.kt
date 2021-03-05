@@ -72,7 +72,7 @@ class TabAdapter(
 
     init {
         val viewContext = contextSupplier()
-        tabThumbnails = TabThumbnails(contextSupplier)
+        tabThumbnails = TabThumbnails.with(contextSupplier())
         preferenceApplier = PreferenceApplier(viewContext)
         colorPair = preferenceApplier.colorPair()
 

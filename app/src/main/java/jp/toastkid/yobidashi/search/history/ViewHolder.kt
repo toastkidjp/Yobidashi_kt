@@ -9,6 +9,7 @@ package jp.toastkid.yobidashi.search.history
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.core.view.updateMargins
@@ -57,6 +58,11 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.searchHistoryAdd.setImageResource(addIcon)
     }
 
+    fun setIconColor(@ColorInt iconColor: Int) {
+        binding.searchHistoryBookmark.setColorFilter(iconColor)
+        binding.searchHistoryAdd.setColorFilter(iconColor)
+    }
+
     override fun getFrontView(): View = binding.front
 
     override fun isButtonVisible(): Boolean = binding.delete.isVisible
@@ -77,4 +83,5 @@ internal class ViewHolder(private val binding: ItemSearchHistoryBinding)
         binding.front.layoutParams = marginLayoutParams
         marginLayoutParams?.updateMargins()
     }
+
 }

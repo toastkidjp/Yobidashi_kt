@@ -43,7 +43,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun barcodeReader() {
+    fun testBarcodeReader() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
 
@@ -54,7 +54,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun launcher() {
+    fun testLauncher() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
 
@@ -65,7 +65,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun bookmark() {
+    fun testBookmark() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
 
@@ -76,7 +76,7 @@ class MainActivityIntentFactoryTest {
     }
 
     @Test
-    fun search() {
+    fun testSearch() {
         every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
         every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
 

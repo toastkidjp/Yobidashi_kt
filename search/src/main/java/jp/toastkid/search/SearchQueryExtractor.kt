@@ -49,6 +49,7 @@ class SearchQueryExtractor {
                     or host.equals("www.ecosia.org")
                     or host.equals("www.findx.com")
                     or host.equals("www.bbc.co.uk")
+                    or host.equals("hn.algolia.com")
                     or host.endsWith("search.gmx.com")
                     or host.equals("www.givero.com") ->
                 uri.getQueryParameter("q")
@@ -85,6 +86,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("p")
             host.endsWith("www.baidu.com") ->
                 uri.getQueryParameter("wd")
+            host.endsWith("myindex.jp") ->
+                uri.getQueryParameter("w")
             host == "www.wolframalpha.com" ->
                 uri.getQueryParameter("i")
             host == "search.goo.ne.jp" ->
