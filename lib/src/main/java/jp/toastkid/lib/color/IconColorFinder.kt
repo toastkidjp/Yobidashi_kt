@@ -8,6 +8,7 @@
 
 package jp.toastkid.lib.color
 
+import android.content.Context
 import android.content.res.Configuration
 import android.view.View
 import jp.toastkid.lib.night.DisplayMode
@@ -25,11 +26,14 @@ class IconColorFinder(
 
     companion object {
 
+        fun from(context: Context) =
+                from(context.resources.configuration, PreferenceApplier(context))
+
         fun from(view: View) =
-                IconColorFinder(
-                        view.resources.configuration,
-                        PreferenceApplier(view.context)
-                )
+                from(view.resources.configuration, PreferenceApplier(view.context))
+
+        private fun from(configuration: Configuration, preferenceApplier: PreferenceApplier) =
+                IconColorFinder(configuration, preferenceApplier)
     }
 
 }
