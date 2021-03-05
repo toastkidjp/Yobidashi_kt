@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
@@ -50,6 +52,8 @@ internal class ActivityAdapter(
      */
     private val folderHistory: Stack<String> = Stack()
 
+    private val iconColor = IconColorFinder.from(context).invoke()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(DataBindingUtil.inflate(inflater, ITEM_LAYOUT_ID, parent, false))
 
@@ -71,8 +75,10 @@ internal class ActivityAdapter(
 
         if (bookmark.folder) {
             holder.setImageId(R.drawable.ic_folder_black)
+            holder.setIconColorFilter(iconColor)
         } else {
             holder.setImage(bookmark.favicon)
+            holder.setIconColorFilter(Color.TRANSPARENT)
         }
 
         val browserViewModel = (holder.itemView.context as? FragmentActivity)?.let {
