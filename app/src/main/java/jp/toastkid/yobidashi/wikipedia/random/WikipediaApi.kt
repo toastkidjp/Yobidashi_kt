@@ -17,23 +17,22 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  *
  * @author toastkidjp
  */
-class WikipediaApi {
-
-    /**
-     * Wikipedia URL decider.
-     */
-    private val urlDecider = UrlDecider()
-
-    /**
-     * Converter factory.
-     */
-    private val converterFactory = MoshiConverterFactory.create()
+class WikipediaApi(
+        /**
+         * Wikipedia URL decider.
+         */
+        private val urlDecider: UrlDecider = UrlDecider(),
+        /**
+         * Converter factory.
+         */
+        private val converterFactory: MoshiConverterFactory = MoshiConverterFactory.create()
+) {
 
     /**
      * You should call this method on worker-thread.
      */
     @WorkerThread
-    fun invoke(): Array<Article>? {
+    operator fun invoke(): Array<Article>? {
         val retrofit = Retrofit.Builder()
                 .baseUrl(urlDecider())
                 .addConverterFactory(converterFactory)
@@ -43,4 +42,5 @@ class WikipediaApi {
         val call = service.call()
         return call.execute().body()?.query?.random
     }
+
 }
