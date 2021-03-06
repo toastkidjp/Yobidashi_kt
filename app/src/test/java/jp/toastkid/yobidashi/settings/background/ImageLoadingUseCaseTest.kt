@@ -91,4 +91,22 @@ class ImageLoadingUseCaseTest {
         verify(exactly = 1) { imageLoader.enqueue(any()) }
     }
 
+    @Test
+    fun testNotContainsKey() {
+        every { arguments.containsKey(any()) }.returns(false)
+        every { arguments.getParcelable<Bitmap>(any()) }.returns(mockk())
+
+        imageLoadingUseCase.invoke(contentView, arguments)
+
+        verify(atLeast = 1) { arguments.containsKey(any()) }
+        verify(exactly = 0) { arguments.getParcelable<Bitmap>(any()) }
+        verify(exactly = 1) { contentView.findViewById<ImageView>(any()) }
+        verify(exactly = 0) { imageView.getContext() }
+
+        verify(exactly = 0) { anyConstructed<ImageRequest.Builder>().data(any()) }
+        verify(exactly = 0) { imageRequestBuilder.target(any<ImageView>()) }
+        verify(exactly = 0) { imageRequestBuilder.build() }
+        verify(exactly = 0) { imageLoader.enqueue(any()) }
+    }
+
 }
