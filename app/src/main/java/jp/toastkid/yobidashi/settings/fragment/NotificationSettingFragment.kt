@@ -17,10 +17,10 @@ import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentSettingNotificationBinding
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.notification.morning.DailyNotificationWorker
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 
@@ -50,11 +50,11 @@ class NotificationSettingFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding.fragment = this
-        val activityContext = context
+        val activityContext = activity
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
 
-        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
 
         return binding.root
     }
