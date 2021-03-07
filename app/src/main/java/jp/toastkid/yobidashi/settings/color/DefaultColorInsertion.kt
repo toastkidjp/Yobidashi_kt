@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  *
  * @author toastkidjp
  */
-class DefaultColorInsertion {
+class DefaultColorInsertion(private val databaseFinder: DatabaseFinder = DatabaseFinder()) {
 
     private val map = mapOf(
             R.color.colorPrimaryDark to R.color.textPrimary,
@@ -50,7 +50,7 @@ class DefaultColorInsertion {
     @SuppressLint("CheckResult")
     fun insert(context: Context): Job =
             CoroutineScope(Dispatchers.IO).launch {
-                val repository = DatabaseFinder().invoke(context).savedColorRepository()
+                val repository = databaseFinder.invoke(context).savedColorRepository()
                 make(context).forEach { repository.add(it) }
             }
 
