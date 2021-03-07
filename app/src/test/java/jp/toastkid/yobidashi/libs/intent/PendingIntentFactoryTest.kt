@@ -75,7 +75,7 @@ class PendingIntentFactoryTest {
     }
 
     @Test
-    fun barcode() {
+    fun testBarcode() {
         pendingIntentFactory.barcode(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.barcodeReader(any()) }
