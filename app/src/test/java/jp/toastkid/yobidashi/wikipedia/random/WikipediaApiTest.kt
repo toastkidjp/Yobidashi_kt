@@ -78,7 +78,7 @@ class WikipediaApiTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         wikipediaApi.invoke()
 
         verify(exactly = 1) { urlDecider.invoke() }
