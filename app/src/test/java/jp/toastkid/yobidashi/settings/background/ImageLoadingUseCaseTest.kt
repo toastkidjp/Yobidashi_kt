@@ -109,4 +109,23 @@ class ImageLoadingUseCaseTest {
         verify(exactly = 0) { imageLoader.enqueue(any()) }
     }
 
+    @Test
+    fun testUrlCase() {
+        every { arguments.containsKey("image") }.returns(false)
+        every { arguments.containsKey("imageUrl") }.returns(true)
+        every { arguments.getString(any()) }.returns("test")
+
+        imageLoadingUseCase.invoke(contentView, arguments)
+
+        verify(atLeast = 1) { arguments.containsKey(any()) }
+        verify(exactly = 1) { arguments.getString(any()) }
+        verify(exactly = 1) { contentView.findViewById<ImageView>(any()) }
+        verify(atLeast = 1) { imageView.getContext() }
+
+        verify(exactly = 1) { anyConstructed<ImageRequest.Builder>().data(any()) }
+        verify(exactly = 1) { imageRequestBuilder.target(any<ImageView>()) }
+        verify(exactly = 1) { imageRequestBuilder.build() }
+        verify(exactly = 1) { imageLoader.enqueue(any()) }
+    }
+
 }
