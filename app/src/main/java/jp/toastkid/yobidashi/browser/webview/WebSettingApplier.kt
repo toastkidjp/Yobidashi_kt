@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.os.Build
 import android.webkit.WebSettings
-import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 
 /**
  * @author toastkidjp
@@ -42,5 +42,7 @@ class WebSettingApplier(private val preferenceApplier: PreferenceApplier) {
         if (webSettings.userAgentString != ua) {
             webSettings.userAgentString = ua
         }
+
+        webSettings.allowFileAccess = true
     }
 }
