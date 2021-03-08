@@ -62,7 +62,7 @@ class DefaultColorInsertionTest {
     }
 
     @Test
-    fun insert() = runBlockingTest {
+    fun testInsert() = runBlockingTest {
         defaultColorInsertion.insert(mockk())
 
         delay(1000L)
