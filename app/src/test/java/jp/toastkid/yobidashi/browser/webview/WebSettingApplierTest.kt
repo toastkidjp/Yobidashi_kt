@@ -36,6 +36,22 @@ class WebSettingApplierTest {
         webSettingApplier = WebSettingApplier(preferenceApplier)
 
         every { preferenceApplier.useJavaScript() }.returns(true)
+        every { preferenceApplier.doesSaveForm() }.returns(true)
+        every { preferenceApplier.doesLoadImage() }.returns(true)
+        every { preferenceApplier.userAgent() }.returns("test")
+
+        every { webSettings.setJavaScriptEnabled(any()) }.answers { Unit }
+        every { webSettings.setSaveFormData(any()) }.answers { Unit }
+        every { webSettings.setLoadsImagesAutomatically(any()) }.answers { Unit }
+        every { webSettings.setBuiltInZoomControls(any()) }.answers { Unit }
+        every { webSettings.setDisplayZoomControls(any()) }.answers { Unit }
+        every { webSettings.setJavaScriptCanOpenWindowsAutomatically(any()) }.answers { Unit }
+        every { webSettings.setSafeBrowsingEnabled(any()) }.answers { Unit }
+        every { webSettings.setSupportMultipleWindows(true) }.answers { Unit }
+        every { webSettings.setDomStorageEnabled(any()) }.answers { Unit }
+        every { webSettings.getUserAgentString() }.returns("test")
+        every { webSettings.setUserAgentString(any()) }.answers { Unit }
+        every { webSettings.setAllowFileAccess(any()) }.answers { Unit }
     }
 
     @Test
@@ -43,6 +59,28 @@ class WebSettingApplierTest {
         webSettingApplier.invoke(null)
 
         verify (exactly = 0) { preferenceApplier.useJavaScript() }
+    }
+
+    @Test
+    fun testInvoke() {
+        webSettingApplier.invoke(webSettings)
+
+        verify (exactly = 1) { preferenceApplier.useJavaScript() }
+        verify (exactly = 1) { preferenceApplier.doesSaveForm() }
+        verify (exactly = 1) { preferenceApplier.doesLoadImage() }
+        verify (exactly = 1) { preferenceApplier.userAgent() }
+
+        verify (exactly = 1) { webSettings.setJavaScriptEnabled(any()) }
+        verify (exactly = 1) { webSettings.setSaveFormData(any()) }
+        verify (exactly = 1) { webSettings.setLoadsImagesAutomatically(any()) }
+        verify (exactly = 1) { webSettings.setBuiltInZoomControls(any()) }
+        verify (exactly = 1) { webSettings.setDisplayZoomControls(any()) }
+        verify (exactly = 1) { webSettings.setJavaScriptCanOpenWindowsAutomatically(any()) }
+        verify (exactly = 1) { webSettings.setSupportMultipleWindows(true) }
+        verify (exactly = 1) { webSettings.setDomStorageEnabled(any()) }
+        verify (exactly = 1) { webSettings.getUserAgentString() }
+        verify (exactly = 1) { webSettings.setUserAgentString(any()) }
+        verify (exactly = 1) { webSettings.setAllowFileAccess(any()) }
     }
 
     @After
