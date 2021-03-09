@@ -83,7 +83,7 @@ class PendingIntentFactoryTest {
     }
 
     @Test
-    fun browser() {
+    fun testBrowser() {
         val context = mockk<Context>()
         every { context.getSharedPreferences(any(), any()) }.returns(mockk())
 
