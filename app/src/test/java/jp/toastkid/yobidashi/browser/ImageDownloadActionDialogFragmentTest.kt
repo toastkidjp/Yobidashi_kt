@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.browser
 
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -49,6 +50,19 @@ class ImageDownloadActionDialogFragmentTest {
         verify(exactly = 0) { anyConstructed<Bundle>().putCharSequence(any(), any()) }
         verify(exactly = 0) { anyConstructed<ImageDownloadActionDialogFragment>().setArguments(any()) }
         verify(exactly = 0) { anyConstructed<ImageDownloadActionDialogFragment>().show(any<FragmentManager>(), any()) }
+    }
+
+    @Test
+    fun testCorrectParameterCase() {
+        val context = mockk<FragmentActivity>()
+        every { context.getSupportFragmentManager() }.returns(mockk())
+
+        ImageDownloadActionDialogFragment.show(context, "test")
+
+        verify(exactly = 1) { anyConstructed<Bundle>().putCharSequence(any(), any()) }
+        verify(exactly = 1) { anyConstructed<ImageDownloadActionDialogFragment>().setArguments(any()) }
+        verify(exactly = 1) { anyConstructed<ImageDownloadActionDialogFragment>().show(any<FragmentManager>(), any()) }
+        verify(exactly = 1) { context.getSupportFragmentManager() }
     }
 
 }
