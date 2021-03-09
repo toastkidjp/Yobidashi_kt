@@ -18,4 +18,9 @@ class ScreenModeTest {
         assertSame(ScreenMode.EXPANDABLE, ScreenMode.find(""))
     }
 
+    @Test
+    fun testFindWithCorrectArgument() {
+        assertSame(ScreenMode.FULL_SCREEN, ScreenMode.find("FULL_SCREEN"))
+    }
+
 }
