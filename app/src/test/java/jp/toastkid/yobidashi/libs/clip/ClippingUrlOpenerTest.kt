@@ -8,7 +8,11 @@
 
 package jp.toastkid.yobidashi.libs.clip
 
+import android.view.View
+import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -19,10 +23,16 @@ import org.junit.Test
 
 class ClippingUrlOpenerTest {
 
+    @MockK
+    private lateinit var view: View
+
     @Before
     fun setUp() {
+        MockKAnnotations.init(this)
+        every { view.getContext() }.returns(mockk())
+
         mockkObject(NetworkChecker)
-        every { NetworkChecker.isNotAvailable(any()) }.returns(true)
+        every { NetworkChecker.isNotAvailable(any()) }.returns(false)
     }
 
     @After
@@ -34,7 +44,18 @@ class ClippingUrlOpenerTest {
     fun invoke() {
         ClippingUrlOpener.invoke(null, { })
 
+        verify(exactly = 0) { view.getContext() }
         verify(exactly = 0) { NetworkChecker.isNotAvailable(any()) }
+    }
+
+    @Test
+    fun testNetworkIsNotAvailable() {
+        every { NetworkChecker.isNotAvailable(any()) }.returns(true)
+
+        ClippingUrlOpener.invoke(view, { })
+
+        verify(exactly = 1) { view.getContext() }
+        verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
     }
 
 }
