@@ -22,6 +22,7 @@ import java.io.FileOutputStream
  * @author toastkidjp
  */
 class ImageStoreServiceTest {
+
     @MockK
     private lateinit var filesDir: FilesDir
 
