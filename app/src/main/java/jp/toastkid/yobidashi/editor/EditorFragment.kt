@@ -346,7 +346,8 @@ class EditorFragment :
     }
 
     fun exportToArticleViewer() {
-        ArticleInsertion(requireContext()).invoke(
+        val context = context ?: return
+        ArticleInsertion(context).invoke(
                 if (path.isEmpty()) Calendar.getInstance().time.toString() else path.split("/").last(),
                 content()
         )

@@ -24,6 +24,7 @@ import jp.toastkid.todo.databinding.AppBarBoardBinding
 import jp.toastkid.todo.databinding.FragmentTaskBoardBinding
 import jp.toastkid.todo.model.TodoTask
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
+import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import jp.toastkid.todo.view.list.TaskListFragmentViewModel
@@ -71,7 +72,10 @@ class BoardFragment : Fragment() {
                 })
 
         taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(this) {
+                TaskAdditionDialogFragmentUseCase(
+                        this,
+                        ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
+                ) {
                     val firstOrNull = tasks.firstOrNull { task -> task.lastModified == it.lastModified }
                     if (firstOrNull == null) {
                         it.id = tasks.size + 1
@@ -97,7 +101,7 @@ class BoardFragment : Fragment() {
                 tasks,
                 binding.board,
                 BoardItemViewFactory(layoutInflater) { parent, showTask ->
-                    popup?.show(parent, showTask)
+                    popup.show(parent, showTask)
                 }
         )
 

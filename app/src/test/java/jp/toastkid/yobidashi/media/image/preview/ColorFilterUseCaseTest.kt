@@ -41,7 +41,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun applyAlpha() {
+    fun testApplyAlpha() {
         colorFilterUseCase.applyAlpha(0.5f)
 
         verify(exactly = 1) { viewModel.newColorFilter(any<ColorFilter>()) }
@@ -49,7 +49,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun applyContrast() {
+    fun testApplyContrast() {
         colorFilterUseCase.applyContrast(0.5f)
 
         verify(exactly = 1) { viewModel.newColorFilter(any<ColorFilter>()) }
@@ -57,7 +57,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun reverseFilter() {
+    fun testReverseFilter() {
         colorFilterUseCase.reverseFilter()
 
         verify(exactly = 0) { viewModel.newColorFilter(any<ColorFilter>()) }
@@ -65,7 +65,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun sepia() {
+    fun testSepia() {
         colorFilterUseCase.sepia()
 
         verify(exactly = 0) { viewModel.newColorFilter(any<ColorFilter>()) }
@@ -73,7 +73,7 @@ class ColorFilterUseCaseTest {
     }
 
     @Test
-    fun grayScale() {
+    fun testGrayScale() {
         colorFilterUseCase.grayScale()
 
         verify(exactly = 0) { viewModel.newColorFilter(any<ColorFilter>()) }

@@ -4,6 +4,7 @@ import android.widget.TextView
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.noties.markwon.Markwon
@@ -20,6 +21,7 @@ import org.junit.Test
  */
 class ContentLoaderUseCaseTest {
 
+    @InjectMockKs
     private lateinit var contentLoaderUseCase: ContentLoaderUseCase
 
     @MockK
@@ -40,9 +42,7 @@ class ContentLoaderUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        contentLoaderUseCase = ContentLoaderUseCase(
-                repository, markwon, contentView, subheads, linkGeneratorService
-        )
+
         coEvery { markwon.setMarkdown(any(), any()) }.answers { Unit }
         coEvery { linkGeneratorService.invoke(any()) }.answers { Unit }
         Dispatchers.setMain(Dispatchers.Unconfined)

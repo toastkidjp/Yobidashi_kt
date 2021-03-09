@@ -26,6 +26,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.RecyclerViewScroller
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.databinding.FragmentBookmarkBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
@@ -242,7 +243,8 @@ class BookmarkFragment: Fragment(),
     }
 
     override fun onClickAddDefaultBookmark() {
-        BookmarkInitializer()(binding.root.context) { adapter.showRoot() }
+        val context = binding.root.context
+        BookmarkInitializer(FaviconFolderProviderService().invoke(context))(context) { adapter.showRoot() }
         contentViewModel?.snackShort(R.string.done_addition)
     }
 

@@ -28,15 +28,15 @@ class SubheadDialogFragment : BottomSheetDialogFragment() {
             savedInstanceState: Bundle?
     ): View? {
         val target = targetFragment ?: return null
-        val requireContext = requireContext()
-        val recyclerView = RecyclerView(requireContext)
+        val context = context ?: return null
+        val recyclerView = RecyclerView(context)
         val viewModel =
                 ViewModelProvider(target).get(SubheadDialogFragmentViewModel::class.java)
         recyclerView.adapter =
                 Adapter(layoutInflater, viewModel)
                         .also { it.addAll(arguments?.getStringArrayList(KEY_EXTRA_ITEM)) }
         recyclerView.layoutManager =
-                LinearLayoutManager(requireContext, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         return recyclerView
     }
 

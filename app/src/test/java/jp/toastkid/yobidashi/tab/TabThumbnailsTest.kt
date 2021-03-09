@@ -36,8 +36,11 @@ class TabThumbnailsTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
+        every { filesDir.clean() }.answers { Unit }
         every { filesDir.assignNewFile(any<String>()) }.returns(file)
+        every { filesDir.listFiles() }.returns(arrayOf(file))
 
+        every { file.getName() }.returns("test")
         every { file.exists() }.returns(false)
         every { file.delete() }.returns(false)
     }
@@ -63,6 +66,58 @@ class TabThumbnailsTest {
         verify(exactly = 0) { filesDir.assignNewFile(any<String>()) }
         verify(exactly = 0) { file.exists() }
         verify(exactly = 0) { file.delete() }
+    }
+
+    @Test
+    fun testDeleteDoesNotExists() {
+        tabThumbnails.delete("test")
+
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 1) { file.exists() }
+        verify(exactly = 0) { file.delete() }
+    }
+
+    @Test
+    fun testDeleteExists() {
+        every { file.exists() }.returns(true)
+
+        tabThumbnails.delete("test")
+
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 1) { file.exists() }
+        verify(exactly = 1) { file.delete() }
+    }
+
+    @Test
+    fun testDeleteUnusedUnmatched() {
+        tabThumbnails.deleteUnused(listOf("unmatched"))
+
+        verify(exactly = 1) { filesDir.listFiles() }
+        verify(exactly = 1) { file.getName() }
+        verify(exactly = 1) { file.delete() }
+    }
+
+    @Test
+    fun testDeleteUnusedExcepted() {
+        tabThumbnails.deleteUnused(listOf("test"))
+
+        verify(exactly = 1) { filesDir.listFiles() }
+        verify(exactly = 1) { file.getName() }
+        verify(exactly = 0) { file.delete() }
+    }
+
+    @Test
+    fun testClean() {
+        tabThumbnails.clean()
+
+        verify(exactly = 1) { filesDir.clean() }
+    }
+
+    @Test
+    fun testAssignNewFile() {
+        tabThumbnails.assignNewFile("test")
+
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
     }
 
 }

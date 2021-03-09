@@ -24,6 +24,7 @@ import jp.toastkid.todo.data.TodoTaskDatabase
 import jp.toastkid.todo.databinding.AppBarTaskListBinding
 import jp.toastkid.todo.databinding.FragmentTaskListBinding
 import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentUseCase
+import jp.toastkid.todo.view.addition.TaskAdditionDialogFragmentViewModel
 import jp.toastkid.todo.view.item.menu.ItemMenuPopup
 import jp.toastkid.todo.view.item.menu.ItemMenuPopupActionUseCase
 import jp.toastkid.todo.view.list.initial.InitialTaskPreparation
@@ -42,10 +43,15 @@ class TaskListFragment : Fragment() {
 
     private lateinit var appBarBinding: AppBarTaskListBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        appBarBinding = DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
+        appBarBinding =
+                DataBindingUtil.inflate(inflater, APP_BAR_LAYOUT_ID, container, false)
         return binding.root
     }
 
@@ -70,7 +76,10 @@ class TaskListFragment : Fragment() {
         val refresh = { adapter.refresh() }
 
         val taskAdditionDialogFragmentUseCase =
-                TaskAdditionDialogFragmentUseCase(this) {
+                TaskAdditionDialogFragmentUseCase(
+                        this,
+                        ViewModelProvider(this).get(TaskAdditionDialogFragmentViewModel::class.java)
+                ) {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             repository.insert(it)
