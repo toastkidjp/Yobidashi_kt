@@ -38,7 +38,7 @@ class WebSettingApplierTest {
         every { preferenceApplier.useJavaScript() }.returns(true)
         every { preferenceApplier.doesSaveForm() }.returns(true)
         every { preferenceApplier.doesLoadImage() }.returns(true)
-        every { preferenceApplier.userAgent() }.returns("test")
+        every { preferenceApplier.userAgent() }.returns("ANDROID")
 
         every { webSettings.setJavaScriptEnabled(any()) }.answers { Unit }
         every { webSettings.setSaveFormData(any()) }.answers { Unit }
