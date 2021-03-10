@@ -86,6 +86,7 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
+                android:contentDescription="@string/title_menu_reload"
                 android:onClick="@{view -> fragment.reload()}"
                 />
             <ProgressBar
