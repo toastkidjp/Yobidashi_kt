@@ -137,14 +137,14 @@ class ColorSettingFragment : Fragment(),
      * Initialize saved color's section.
      */
     private fun initSavedColors() {
-        val activityContext = context ?: return
+        val activityContext = activity ?: return
 
         repository = DatabaseFinder().invoke(activityContext).savedColorRepository()
 
         adapter = SavedColorAdapter(
                 LayoutInflater.from(activityContext),
                 repository,
-                ViewModelProvider(requireActivity()).get(ContentViewModel::class.java),
+                ViewModelProvider(activityContext).get(ContentViewModel::class.java),
                 this::commitNewColor
         )
 
