@@ -23,4 +23,9 @@ class ScreenModeTest {
         assertSame(ScreenMode.FULL_SCREEN, ScreenMode.find("FULL_SCREEN"))
     }
 
+    @Test
+    fun testFindWithNoneTypa() {
+        assertSame(ScreenMode.EXPANDABLE, ScreenMode.find("HALF_SCREEN"))
+    }
+
 }
