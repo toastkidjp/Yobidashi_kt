@@ -29,4 +29,5 @@
     <string name="button_filter_by_month">Filter by month</string>
     <string name="button_open_date">Open date</string>
     <string name="action_date_filter">Date filter</string>
+    <string name="title_sort_setting">Sort setting</string>
 </resources>
