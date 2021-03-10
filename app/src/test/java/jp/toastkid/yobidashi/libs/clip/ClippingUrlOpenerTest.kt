@@ -16,6 +16,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import org.junit.After
 import org.junit.Before
@@ -33,6 +34,12 @@ class ClippingUrlOpenerTest {
 
         mockkObject(NetworkChecker)
         every { NetworkChecker.isNotAvailable(any()) }.returns(false)
+
+        mockkObject(Clipboard)
+        every { Clipboard.getPrimary(any()) }.returns("clipped")
+
+        mockkObject(Urls)
+        every { Urls.isInvalidUrl(any()) }.returns(false)
     }
 
     @After
@@ -56,6 +63,19 @@ class ClippingUrlOpenerTest {
 
         verify(exactly = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
+        // TODO Add Clipboard.getPrimary(any())
+    }
+
+    @Test
+    fun testClipboardIsNull() {
+        every { Clipboard.getPrimary(any()) }.returns(null)
+
+        ClippingUrlOpener.invoke(view, { })
+
+        verify(atLeast = 1) { view.getContext() }
+        verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
+        verify(exactly = 1) { Clipboard.getPrimary(any()) }
+        verify(exactly = 0) { Urls.isInvalidUrl(any()) }
     }
 
 }
