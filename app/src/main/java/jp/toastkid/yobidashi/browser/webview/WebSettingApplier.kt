@@ -11,6 +11,7 @@ import android.os.Build
 import android.webkit.WebSettings
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
+import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -39,8 +40,13 @@ class WebSettingApplier(private val preferenceApplier: PreferenceApplier) {
 
         val ua =  UserAgent.findByName(preferenceApplier.userAgent()).text()
 
-        if (webSettings.userAgentString != ua) {
-            webSettings.userAgentString = ua
+        if (ua.isNotBlank() && webSettings.userAgentString != ua) {
+            try {
+                webSettings.userAgentString = ua
+            } catch (e: IllegalArgumentException) {
+                Timber.w(e)
+                preferenceApplier.setUserAgent(UserAgent.DEFAULT.name)
+            }
         }
 
         webSettings.allowFileAccess = true
