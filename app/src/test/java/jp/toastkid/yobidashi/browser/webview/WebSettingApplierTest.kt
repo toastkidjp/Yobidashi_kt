@@ -83,6 +83,31 @@ class WebSettingApplierTest {
         verify (exactly = 1) { webSettings.setAllowFileAccess(any()) }
     }
 
+
+    @Test
+    fun testIncorrectUserAgentCase() {
+        every { preferenceApplier.userAgent() }.returns("test")
+
+        webSettingApplier.invoke(webSettings)
+
+        verify (exactly = 1) { preferenceApplier.useJavaScript() }
+        verify (exactly = 1) { preferenceApplier.doesSaveForm() }
+        verify (exactly = 1) { preferenceApplier.doesLoadImage() }
+        verify (exactly = 1) { preferenceApplier.userAgent() }
+
+        verify (exactly = 1) { webSettings.setJavaScriptEnabled(any()) }
+        verify (exactly = 1) { webSettings.setSaveFormData(any()) }
+        verify (exactly = 1) { webSettings.setLoadsImagesAutomatically(any()) }
+        verify (exactly = 1) { webSettings.setBuiltInZoomControls(any()) }
+        verify (exactly = 1) { webSettings.setDisplayZoomControls(any()) }
+        verify (exactly = 1) { webSettings.setJavaScriptCanOpenWindowsAutomatically(any()) }
+        verify (exactly = 1) { webSettings.setSupportMultipleWindows(true) }
+        verify (exactly = 1) { webSettings.setDomStorageEnabled(any()) }
+        verify (exactly = 0) { webSettings.getUserAgentString() }
+        verify (exactly = 0) { webSettings.setUserAgentString(any()) }
+        verify (exactly = 1) { webSettings.setAllowFileAccess(any()) }
+    }
+
     @After
     fun tearDown() {
         unmockkAll()
