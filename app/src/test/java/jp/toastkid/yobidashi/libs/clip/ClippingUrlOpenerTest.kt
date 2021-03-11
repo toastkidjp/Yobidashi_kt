@@ -17,6 +17,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.Urls
+import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import org.junit.After
 import org.junit.Before
@@ -40,6 +41,9 @@ class ClippingUrlOpenerTest {
 
         mockkObject(Urls)
         every { Urls.isInvalidUrl(any()) }.returns(false)
+
+        mockkObject(Toaster)
+        every { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }.returns(mockk())
     }
 
     @After
@@ -76,6 +80,20 @@ class ClippingUrlOpenerTest {
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 0) { Urls.isInvalidUrl(any()) }
+    }
+
+    @Test
+    fun testClipboardIsInvalidUrl() {
+        every { Clipboard.getPrimary(any()) }.returns("test")
+        every { Urls.isInvalidUrl(any()) }.returns(true)
+
+        ClippingUrlOpener.invoke(view, { })
+
+        verify(atLeast = 1) { view.getContext() }
+        verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
+        verify(exactly = 1) { Clipboard.getPrimary(any()) }
+        verify(exactly = 1) { Urls.isInvalidUrl(any()) }
+        verify(exactly = 0) { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }
     }
 
 }
