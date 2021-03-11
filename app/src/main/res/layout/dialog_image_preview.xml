@@ -29,6 +29,7 @@
             app:srcCompat="@drawable/ic_close"
             android:onClick="@{view -> dialog.dismiss()}"
             android:background="@drawable/ripple_transparent"
+            android:contentDescription="@string/action_close"
             />
 
         <LinearLayout
