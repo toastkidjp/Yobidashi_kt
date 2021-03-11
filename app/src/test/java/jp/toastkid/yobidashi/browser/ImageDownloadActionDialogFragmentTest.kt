@@ -42,7 +42,7 @@ class ImageDownloadActionDialogFragmentTest {
     }
 
     @Test
-    fun test() {
+    fun testIncorrectTypeArgumentCase() {
         val context = mockk<Context>()
 
         ImageDownloadActionDialogFragment.show(context, "test")
