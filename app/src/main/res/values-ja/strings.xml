@@ -455,7 +455,7 @@
     <string name="title_sort_by_count">数でソート</string>
     <string name="title_context_editor_task_list">タスクリスト</string>
     <string name="subhead_search_category_setting">検索種別の設定</string>
-    <string name="title_lyrics_search">Lyrics search</string>
+    <string name="title_lyrics_search">歌詞検索</string>
     <string name="content_description_switch_visibility">表示切替</string>
 
 </resources>
