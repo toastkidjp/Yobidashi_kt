@@ -111,7 +111,7 @@ class ClippingUrlOpenerTest {
         mockkConstructor(PreferenceApplier::class)
         every { anyConstructed<PreferenceApplier>().colorPair() }.returns(mockk())
 
-        ClippingUrlOpener.invoke(view, { })
+        ClippingUrlOpener.invoke(view) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
