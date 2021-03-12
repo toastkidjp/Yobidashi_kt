@@ -118,6 +118,7 @@ class ClippingUrlOpenerTest {
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 1) { Urls.isInvalidUrl(any()) }
         verify(exactly = 1) { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }
+        verify(exactly = 1) { anyConstructed<PreferenceApplier>().colorPair() }
     }
 
 }
