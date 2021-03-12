@@ -59,7 +59,7 @@ class ClippingUrlOpenerTest {
     }
 
     @Test
-    fun invoke() {
+    fun testParentViewIsNull() {
         ClippingUrlOpener.invoke(null, { })
 
         verify(exactly = 0) { view.getContext() }
