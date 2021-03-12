@@ -74,7 +74,7 @@ class ClippingUrlOpenerTest {
 
         verify(exactly = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
-        // TODO Add Clipboard.getPrimary(any())
+        verify(exactly = 0) { Clipboard.getPrimary(any()) }
     }
 
     @Test
