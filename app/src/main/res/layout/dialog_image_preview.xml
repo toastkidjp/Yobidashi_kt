@@ -50,6 +50,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:onClick="@{view -> dialog.switchVisibility()}"
+                android:contentDescription="Switch visibility"
                 />
             <include
                 android:id="@+id/module_edit"
