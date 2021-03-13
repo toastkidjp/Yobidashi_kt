@@ -42,4 +42,13 @@ class DateFormatHolderTest {
         verify(exactly = 1) { context.getString(any()) }
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun testIllegalArgumentCase() {
+        every { context.getString(any()) }.returns("test")
+
+        DateFormatHolder.invoke(context)
+
+        verify(exactly = 1) { context.getString(any()) }
+    }
+
 }
