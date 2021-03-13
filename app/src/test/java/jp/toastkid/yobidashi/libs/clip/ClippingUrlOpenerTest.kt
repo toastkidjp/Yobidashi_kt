@@ -94,7 +94,7 @@ class ClippingUrlOpenerTest {
         every { Clipboard.getPrimary(any()) }.returns("test")
         every { Urls.isInvalidUrl(any()) }.returns(true)
 
-        ClippingUrlOpener.invoke(view, { })
+        ClippingUrlOpener.invoke(view) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
