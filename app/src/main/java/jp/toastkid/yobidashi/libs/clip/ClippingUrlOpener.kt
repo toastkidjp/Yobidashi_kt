@@ -49,7 +49,12 @@ object ClippingUrlOpener {
     private fun shouldNotFeedback(clipboardContent: String) =
             Urls.isInvalidUrl(clipboardContent) || clipboardContent.equals(previous)
 
-    private fun feedbackToUser(view: View, clipboardContent: String, onClick: (Uri) -> Unit, activityContext: Context) {
+    private fun feedbackToUser(
+            view: View,
+            clipboardContent: String,
+            onClick: (Uri) -> Unit,
+            activityContext: Context
+    ) {
         Toaster.withAction(
                 view,
                 "Would you open \"$clipboardContent\"?",
