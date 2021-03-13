@@ -59,4 +59,5 @@ object ClippingUrlOpener {
                 Snackbar.LENGTH_LONG
         )
     }
+
 }
