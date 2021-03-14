@@ -52,7 +52,7 @@ class ClipboardTest {
     }
 
     @Test
-    fun clip() {
+    fun testClip() {
         Clipboard.clip(context, "test")
 
         verify(exactly = 1) { context.getApplicationContext() }
