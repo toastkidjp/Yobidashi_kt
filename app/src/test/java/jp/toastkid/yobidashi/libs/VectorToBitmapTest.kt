@@ -62,7 +62,7 @@ class VectorToBitmapTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         vectorToBitmap.invoke(1)
 
         verify(exactly = 1) { drawable.setBounds(any(), any(), any(), any()) }
