@@ -97,7 +97,7 @@ class BoardFragment : Fragment() {
         )
 
         taskAddingUseCase = TaskAddingUseCase(
-                PreferenceApplier(requireContext()).color,
+                PreferenceApplier(view.context).color,
                 tasks,
                 binding.board,
                 BoardItemViewFactory(layoutInflater) { parent, showTask ->

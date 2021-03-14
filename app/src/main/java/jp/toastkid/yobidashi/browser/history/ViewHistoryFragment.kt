@@ -46,7 +46,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        val context = requireContext()
+        val context = context ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(context)
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)

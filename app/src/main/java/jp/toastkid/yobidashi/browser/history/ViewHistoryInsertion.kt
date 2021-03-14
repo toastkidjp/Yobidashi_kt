@@ -17,25 +17,25 @@ class ViewHistoryInsertion private constructor(
         private val faviconPath: String
 ) {
 
+    private val repository = DatabaseFinder().invoke(context).viewHistoryRepository()
+
     operator fun invoke(): Job =
             if (title.isEmpty() || url.isEmpty()) Job()
             else insert(makeItem(title, url, faviconPath))
 
     private fun insert(searchHistory: ViewHistory): Job {
         return CoroutineScope(Dispatchers.IO).launch {
-            DatabaseFinder().invoke(context)
-                    .viewHistoryRepository()
-                    .add(searchHistory)
+            repository.add(searchHistory)
         }
     }
 
     private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory {
-        val sh = ViewHistory()
-        sh.title = title
-        sh.url = url
-        sh.favicon = faviconPath
-        sh.lastViewed = System.currentTimeMillis()
-        return sh
+        val viewHistory = ViewHistory()
+        viewHistory.title = title
+        viewHistory.url = url
+        viewHistory.favicon = faviconPath
+        viewHistory.lastViewed = System.currentTimeMillis()
+        return viewHistory
     }
 
     companion object {

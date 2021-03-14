@@ -26,4 +26,7 @@
     <string name="title">Title</string>
     <string name="menu">Menu</string>
     <string name="delete">Delete</string>
+    <string name="button_filter_by_month">Filter by month</string>
+    <string name="button_open_date">Open date</string>
+    <string name="action_date_filter">Date filter</string>
 </resources>

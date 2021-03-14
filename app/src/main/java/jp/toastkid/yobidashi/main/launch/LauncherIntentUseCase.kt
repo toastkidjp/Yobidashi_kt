@@ -89,8 +89,8 @@ class LauncherIntentUseCase(
     }
 
     companion object {
-        val EXTRA_KEY_CATEGORY = "Category"
 
-        val EXTRA_KEY_QUERY = SearchManager.QUERY
+        const val EXTRA_KEY_CATEGORY = "Category"
+
     }
 }

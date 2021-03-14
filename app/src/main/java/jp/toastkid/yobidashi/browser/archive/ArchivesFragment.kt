@@ -9,9 +9,8 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentArchivesBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import java.io.File
@@ -28,7 +27,6 @@ class ArchivesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
-        binding?.archivesView?.layoutManager = LinearLayoutManager(requireContext())
         return binding?.root
     }
 

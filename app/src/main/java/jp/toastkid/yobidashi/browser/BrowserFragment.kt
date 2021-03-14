@@ -230,11 +230,12 @@ class BrowserFragment : Fragment(),
             }
             R.id.add_to_home -> {
                 val uri = browserModule.currentUrl()?.toUri() ?: return true
-                ShortcutUseCase(requireContext())
+                val context = binding?.root?.context ?: return true
+                ShortcutUseCase(context)
                         .invoke(
                                 uri,
                                 browserModule.currentTitle(),
-                                FaviconApplier(requireContext()).load(uri)
+                                FaviconApplier(context).load(uri)
                         )
             }
             R.id.add_bookmark -> {
@@ -312,7 +313,7 @@ class BrowserFragment : Fragment(),
                 activity?.supportFragmentManager?.findFragmentByTag(ReaderFragment::class.java.canonicalName)
                         ?: ReaderFragment()
 
-        val lineSeparator = System.getProperty("line.separator") ?: ""
+        val lineSeparator = System.lineSeparator()
         val replacedContent = cleaned.replace("\\n", lineSeparator)
 
         activity?.let {

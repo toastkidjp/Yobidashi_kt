@@ -85,7 +85,8 @@ class BarcodeReaderFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
 
-        resultPopup = BarcodeReaderResultPopup(requireContext())
+        val context = binding?.root?.context ?: return binding?.root
+        resultPopup = BarcodeReaderResultPopup(context)
 
         return binding?.root
     }
@@ -93,7 +94,7 @@ class BarcodeReaderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        preferenceApplier = PreferenceApplier(requireContext())
+        preferenceApplier = PreferenceApplier(view.context)
 
         binding?.fragment = this
 

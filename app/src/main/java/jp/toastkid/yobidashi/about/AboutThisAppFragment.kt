@@ -42,9 +42,11 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         binding?.fragment = this
-        preferenceApplier = PreferenceApplier(requireContext())
-
         binding?.settingsAppVersion?.text = BuildConfig.VERSION_NAME
+
+        val context = context ?: return binding?.root
+        preferenceApplier = PreferenceApplier(context)
+
         return binding?.root
     }
 
@@ -53,7 +55,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
      * @param view
      */
     fun licenses(view: View) {
-        val intent = Intent(requireContext(), OssLicensesMenuActivity::class.java)
+        val intent = Intent(view.context, OssLicensesMenuActivity::class.java)
         OssLicensesMenuActivity.setActivityTitle(view.context.getString(R.string.title_licenses))
         startActivity(intent)
     }

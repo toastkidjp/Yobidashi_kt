@@ -17,9 +17,10 @@ import jp.toastkid.lib.storage.StorageWrapper
 /**
  * @author toastkidjp
  */
-class AutoArchive(private val filesDir: StorageWrapper) {
-
-    private val extensionRemover = ExtensionRemover()
+class AutoArchive(
+        private val filesDir: StorageWrapper,
+        private val extensionRemover: ExtensionRemover = ExtensionRemover()
+) {
 
     fun save(webView: WebView?, id: String?) {
         webView?.saveWebArchive(filesDir.assignNewFile("$id$EXTENSION").absolutePath)

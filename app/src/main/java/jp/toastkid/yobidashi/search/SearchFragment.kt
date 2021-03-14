@@ -260,6 +260,13 @@ class SearchFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.double_quote -> {
+            val queryOrEmpty = headerBinding?.searchInput?.text?.toString()
+            if (queryOrEmpty?.isNotBlank() == true) {
+                setTextAndMoveCursorToEnd("\"$queryOrEmpty\"")
+            }
+            true
+        }
         R.id.suggestion_check -> {
             preferenceApplier.switchEnableSuggestion()
             item.isChecked = preferenceApplier.isEnableSuggestion
@@ -503,7 +510,7 @@ class SearchFragment : Fragment() {
      */
     @Suppress("NOTHING_TO_INLINE")
     private inline fun search(category: String, query: String, onBackground: Boolean = false) {
-        val context = requireContext()
+        val context = context ?: return
         if (NetworkChecker.isNotAvailable(context)) {
             contentViewModel?.snackShort("Network is not available...")
             return

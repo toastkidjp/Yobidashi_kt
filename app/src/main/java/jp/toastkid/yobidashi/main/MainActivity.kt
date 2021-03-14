@@ -523,7 +523,8 @@ class MainActivity : AppCompatActivity(),
             RecentAppColoringUseCase(
                     ::getString,
                     { resources },
-                    ::setTaskDescription
+                    ::setTaskDescription,
+                    Build.VERSION.SDK_INT
             ).invoke(preferenceApplier.color)
         }
 
