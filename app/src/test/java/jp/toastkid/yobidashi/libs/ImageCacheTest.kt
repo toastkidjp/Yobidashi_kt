@@ -56,7 +56,7 @@ class ImageCacheTest {
     }
 
     @Test
-    fun saveBitmap() {
+    fun testSaveBitmap() {
         imageCache.saveBitmap(parent, mockk())
 
         verify(exactly = 1) { fileProvider.invoke(parent, any()) }
