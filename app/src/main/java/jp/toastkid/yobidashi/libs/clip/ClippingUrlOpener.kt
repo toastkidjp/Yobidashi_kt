@@ -46,7 +46,7 @@ object ClippingUrlOpener {
     }
 
     private fun shouldNotFeedback(clipboardContent: String) =
-            Urls.isInvalidUrl(clipboardContent) || clipboardContent.equals(previous)
+            Urls.isInvalidUrl(clipboardContent) || clipboardContent == previous
 
     private fun feedbackToUser(
             view: View,
