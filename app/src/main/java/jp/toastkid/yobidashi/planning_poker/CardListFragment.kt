@@ -29,6 +29,8 @@ class CardListFragment : Fragment() {
 
     private lateinit var binding: FragmentPlanningPokerBinding
 
+    private var viewModel: CardListFragmentViewModel? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_planning_poker, container, false)
@@ -66,8 +68,6 @@ class CardListFragment : Fragment() {
         }
         return binding.root
     }
-
-    private var viewModel: CardListFragmentViewModel? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
