@@ -64,7 +64,7 @@ class ClipboardTest {
     }
 
     @Test
-    fun getPrimary() {
+    fun testGetPrimary() {
         assertEquals("test", Clipboard.getPrimary(context))
 
         verify(exactly = 1) { context.getApplicationContext() }
