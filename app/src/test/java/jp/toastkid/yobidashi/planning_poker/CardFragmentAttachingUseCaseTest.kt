@@ -58,4 +58,15 @@ class CardFragmentAttachingUseCaseTest {
         verify(exactly = 1) { transaction.commit() }
     }
 
+    @Test
+    fun testTextIsBlank() {
+        cardFragmentAttachingUseCase.invoke(" ")
+
+        verify(exactly = 0) { fragmentManager.beginTransaction() }
+        verify(exactly = 0) { transaction.setCustomAnimations(any(), any(), any(), any()) }
+        verify(exactly = 0) { transaction.add(any<Int>(), any()) }
+        verify(exactly = 0) { transaction.addToBackStack(any()) }
+        verify(exactly = 0) { transaction.commit() }
+    }
+
 }
