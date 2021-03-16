@@ -48,7 +48,7 @@ class CardFragmentAttachingUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         cardFragmentAttachingUseCase.invoke("1")
 
         verify(exactly = 1) { fragmentManager.beginTransaction() }
