@@ -53,7 +53,7 @@ class SearchWithClipTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         searchWithClip.invoke()
 
         verify(exactly = 1) { cm.addPrimaryClipChangedListener(any()) }
