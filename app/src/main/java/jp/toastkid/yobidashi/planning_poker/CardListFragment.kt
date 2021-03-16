@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -38,11 +37,9 @@ class CardListFragment : Fragment() {
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
 
-        val layoutManager = LinearLayoutManager(activityContext, LinearLayoutManager.HORIZONTAL, false)
         binding.cardsView.let {
-            it.layoutManager = layoutManager
             it.adapter = Adapter()
-            layoutManager.scrollToPosition(Adapter.medium())
+            it.layoutManager?.scrollToPosition(Adapter.medium())
             ItemTouchHelper(
                     object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
                         override fun onMove(
