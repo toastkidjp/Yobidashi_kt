@@ -54,7 +54,7 @@ class HtmlApiTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         htmlApi.invoke("https://www.yahoo.co.jp")
 
         verify(exactly = 1) { HttpClientFactory.withTimeout(any()) }
