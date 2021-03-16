@@ -71,25 +71,16 @@ class CardListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val cardFragmentUseCase = CardFragmentAttachingUseCase(parentFragmentManager)
+
         activity?.also { fragmentActivity ->
             viewModel = ViewModelProvider(fragmentActivity)
                     .get(CardListFragmentViewModel::class.java)
             viewModel
                     ?.nextCard
-                    ?.observe(fragmentActivity, Observer { openCard(it) })
+                    ?.observe(fragmentActivity, Observer { cardFragmentUseCase(it) })
         }
-    }
-
-    private fun openCard(text: String?) {
-        if (text.isNullOrBlank()) {
-            return
-        }
-
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
-        transaction.add(R.id.content, CardFragment.makeWithNumber(text))
-        transaction.addToBackStack(CardFragment::class.java.canonicalName)
-        transaction.commit()
     }
 
     override fun onDetach() {
