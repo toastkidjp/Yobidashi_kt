@@ -64,7 +64,7 @@ class TrendApiTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         trendApi.invoke()
 
         verify(exactly = 1) { anyConstructed<Retrofit.Builder>().baseUrl(any<String>()) }
