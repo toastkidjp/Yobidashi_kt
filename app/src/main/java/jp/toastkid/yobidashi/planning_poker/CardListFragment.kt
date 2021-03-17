@@ -34,9 +34,6 @@ class CardListFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_planning_poker, container, false)
 
-        val activityContext = context
-                ?: return super.onCreateView(inflater, container, savedInstanceState)
-
         binding.cardsView.let {
             it.adapter = Adapter()
             it.layoutManager?.scrollToPosition(Adapter.medium())
