@@ -62,4 +62,13 @@ class HtmlApiTest {
         verify(exactly = 1) { call.execute() }
     }
 
+    @Test
+    fun testUrlIsBlank() {
+        htmlApi.invoke(" ")
+
+        verify(exactly = 1) { HttpClientFactory.withTimeout(any()) }
+        verify(exactly = 0) { httpClient.newCall(any()) }
+        verify(exactly = 0) { call.execute() }
+    }
+
 }
