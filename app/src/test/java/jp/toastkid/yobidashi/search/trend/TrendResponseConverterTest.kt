@@ -45,7 +45,7 @@ class TrendResponseConverterTest {
     }
 
     @Test
-    fun convert() {
+    fun testConvert() {
         trendResponseConverter.convert(responseBody)
 
         verify(exactly = 1) { parser.invoke(any()) }
