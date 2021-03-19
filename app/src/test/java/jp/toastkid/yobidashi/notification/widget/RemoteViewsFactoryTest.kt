@@ -56,7 +56,7 @@ class RemoteViewsFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         remoteViewsFactory.invoke(context)
     }
 
