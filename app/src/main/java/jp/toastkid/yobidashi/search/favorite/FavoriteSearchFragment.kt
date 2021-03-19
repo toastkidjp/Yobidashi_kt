@@ -160,7 +160,7 @@ class FavoriteSearchFragment : Fragment(), CommonFragmentAction {
             }
 
     private fun clear() {
-        val context = requireContext()
+        val context = context ?: return
         val repository = DatabaseFinder().invoke(context).favoriteSearchRepository()
 
         CoroutineScope(Dispatchers.Main).launch(disposables) {
