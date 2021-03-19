@@ -16,6 +16,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
 import org.junit.After
 import org.junit.Before
@@ -58,6 +59,13 @@ class RemoteViewsFactoryTest {
     @Test
     fun testInvoke() {
         remoteViewsFactory.invoke(context)
+
+        verify(exactly = 1) { context.getPackageName() }
+        verify(exactly = 1) { context.getSharedPreferences(any(), any()) }
+        verify(atLeast = 1) { anyConstructed<RemoteViews>().setInt(any(), any(), any()) }
+        verify(atLeast = 1) { anyConstructed<RemoteViews>().setTextColor(any(), any()) }
+        verify(atLeast = 1) { anyConstructed<TapActionInitializer>().invoke(any(), any()) }
+        verify(atLeast = 1) { anyConstructed<IconInitializer>().invoke(any(), any(), any(), any()) }
     }
 
 }
