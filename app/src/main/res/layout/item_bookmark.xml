@@ -64,6 +64,7 @@
             app:srcCompat="@drawable/ic_remove_search"
             android:adjustViewBounds="true"
             android:background="@drawable/ripple_transparent"
+            android:contentDescription="@string/delete"
             />
     </androidx.cardview.widget.CardView>
 </layout>
