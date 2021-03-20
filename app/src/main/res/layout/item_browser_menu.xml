@@ -17,6 +17,7 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             app:srcCompat="@mipmap/ic_launcher"
+            android:contentDescription="@string/image"
             />
         <TextView
             android:id="@+id/text"
