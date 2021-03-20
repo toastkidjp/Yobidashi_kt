@@ -62,6 +62,18 @@ class NotificationWidgetTest {
 
     @Test
     fun show() {
+        NotificationWidget.show(mockk())
+
+        verify(exactly = 1) { NotificationManagerCompat.from(any()) }
+        verify(exactly = 0) { notificationManagerCompat.cancel(any()) }
+        verify(exactly = 1) { notificationManagerCompat.notify(any(), any()) }
+        verify(exactly = 1) { anyConstructed<RemoteViewsFactory>().invoke(any()) }
+        verify(exactly = 1) { anyConstructed<NotificationCompat.Builder>().setSmallIcon(any()) }
+        verify(exactly = 1) { builder.setCustomContentView(any()) }
+        verify(exactly = 1) { builder.setOngoing(any()) }
+        verify(exactly = 1) { builder.setAutoCancel(any()) }
+        verify(exactly = 1) { builder.setVisibility(any()) }
+        verify(exactly = 1) { builder.build() }
     }
 
     @Test
