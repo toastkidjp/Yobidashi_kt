@@ -36,15 +36,12 @@ object NotificationWidget {
      * @param context
      */
     fun show(context: Context) {
-        val notificationManager =
-                context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-                        ?: return
+        val notificationManager = NotificationManagerCompat.from(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.title_show_notification_widget)
             notificationManager.createNotificationChannel(makeNotificationChannel(name))
         }
-        notificationManager
-                .notify(ID, makeNotification(context))
+        notificationManager.notify(ID, makeNotification(context))
     }
 
     @TargetApi(Build.VERSION_CODES.O)
