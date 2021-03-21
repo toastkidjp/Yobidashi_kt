@@ -72,7 +72,7 @@ class EditorContextMenuInitializer {
                         R.id.context_edit_horizontal_rule -> {
                             editText.text.insert(
                                     editText.selectionStart,
-                                    "----${System.getProperty("line.separator")}"
+                                    "----${System.lineSeparator()}"
                             )
                             actionMode?.finish()
                         }

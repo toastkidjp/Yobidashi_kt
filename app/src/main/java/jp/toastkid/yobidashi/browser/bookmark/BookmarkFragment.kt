@@ -140,7 +140,9 @@ class BookmarkFragment: Fragment(),
      */
     private fun finishWithResult(uri: Uri) {
         popBackStack()
-        ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java).open(uri)
+        activity?.let {
+            ViewModelProvider(it).get(BrowserViewModel::class.java).open(uri)
+        }
     }
 
     private fun popBackStack() {
@@ -188,8 +190,9 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.import_bookmark -> {
+                val activity = activity ?: return true
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    RuntimePermissions(requireActivity())
+                    RuntimePermissions(activity)
                             .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             ?.receiveAsFlow()
                             ?.collect {
@@ -208,8 +211,9 @@ class BookmarkFragment: Fragment(),
                 true
             }
             R.id.export_bookmark -> {
+                val activity = activity ?: return true
                 CoroutineScope(Dispatchers.Main).launch(disposables) {
-                    RuntimePermissions(requireActivity())
+                    RuntimePermissions(activity)
                             .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             ?.receiveAsFlow()
                             ?.collect { permissionResult ->

@@ -20,7 +20,7 @@ import org.junit.Test
 /**
  * @author toastkidjp
  */
-class DateSelectedActionServiceTest {
+class DateSelectedActionUseCaseTest {
 
     @MockK
     private lateinit var repository: ArticleRepository
@@ -31,6 +31,7 @@ class DateSelectedActionServiceTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @ExperimentalCoroutinesApi
@@ -42,9 +43,7 @@ class DateSelectedActionServiceTest {
         mockkObject(TitleFilterGenerator)
         every { TitleFilterGenerator.invoke(any(), any(), any()) }.answers { "test" }
 
-        Dispatchers.setMain(Dispatchers.Unconfined)
-
-        val dateSelectedActionService = DateSelectedActionService(repository, viewModel)
+        val dateSelectedActionService = DateSelectedActionUseCase(repository, viewModel)
         dateSelectedActionService.invoke(2020, 0, 22)
 
         coVerify(exactly = 1) { repository.findFirst(any()) }

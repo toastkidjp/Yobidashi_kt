@@ -43,6 +43,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$libVersions.ktx"
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
     implementation "com.google.android.material:material:$libVersions.material"
     testImplementation "junit:junit:$libVersions.junit"
     testImplementation "org.robolectric:robolectric:$libVersions.robolectric"

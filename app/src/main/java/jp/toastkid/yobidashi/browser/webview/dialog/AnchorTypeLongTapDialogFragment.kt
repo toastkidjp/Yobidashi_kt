@@ -14,8 +14,8 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 /**
@@ -24,14 +24,14 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 class AnchorTypeLongTapDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+        val activityContext = activity ?: return super.onCreateDialog(savedInstanceState)
 
         val url = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
         val title = arguments?.getString(KEY_TITLE) ?: ""
 
-        val viewModel = ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+        val viewModel = ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
 
         val uri = url.toUri()
 

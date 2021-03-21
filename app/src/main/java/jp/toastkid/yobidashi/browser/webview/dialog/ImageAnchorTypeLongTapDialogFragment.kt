@@ -15,12 +15,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.ImageSearchUrlGenerator
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.ImageDownloadActionDialogFragment
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 /**
@@ -29,7 +28,7 @@ import jp.toastkid.yobidashi.libs.clip.Clipboard
 class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+        val activityContext = activity ?: return super.onCreateDialog(savedInstanceState)
 
         val title = arguments?.getString(KEY_TITLE) ?: ""
 
@@ -39,7 +38,7 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
         val anchor = arguments?.getString(KEY_ANCHOR)
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val viewModel = ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
+        val viewModel = ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
 
         val uri = anchor.toUri()
 
@@ -60,13 +59,10 @@ class ImageAnchorTypeLongTapDialogFragment : DialogFragment() {
     }
 
     private fun downloadImage(url: String) {
-        val activityContext = context ?: return
+        val activityContext = activity ?: return
         if (Urls.isInvalidUrl(url)) {
-            Toaster.snackShort(
-                    requireActivity().findViewById(android.R.id.content),
-                    activityContext.getString(R.string.message_cannot_downloading_image),
-                    PreferenceApplier(activityContext).colorPair()
-            )
+            ViewModelProvider(activityContext).get(ContentViewModel::class.java)
+                    .snackShort(R.string.message_cannot_downloading_image)
             return
         }
 

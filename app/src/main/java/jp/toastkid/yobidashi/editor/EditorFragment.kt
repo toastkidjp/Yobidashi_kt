@@ -115,7 +115,7 @@ class EditorFragment :
      */
     private lateinit var finder: EditTextFinder
 
-    private lateinit var runtimePermissions: RuntimePermissions
+    private var runtimePermissions: RuntimePermissions? = null
 
     private var appBarViewModel: AppBarViewModel? = null
 
@@ -145,7 +145,7 @@ class EditorFragment :
 
         val context = context ?: return
 
-        runtimePermissions = RuntimePermissions(requireActivity())
+        runtimePermissions = activity?.let { RuntimePermissions(it) }
 
         preferenceApplier = PreferenceApplier(context)
         finder = EditTextFinder(binding.editorInput)
@@ -395,9 +395,9 @@ class EditorFragment :
             file.createNewFile()
         }
 
-        if (runtimePermissions.isRevoked(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (runtimePermissions?.isRevoked(Manifest.permission.WRITE_EXTERNAL_STORAGE) == true) {
             snackText(R.string.message_requires_permission_storage)
-            runtimePermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            runtimePermissions?.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             return
         }
 

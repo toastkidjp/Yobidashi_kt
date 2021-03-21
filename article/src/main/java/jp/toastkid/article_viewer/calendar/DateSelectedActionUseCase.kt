@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class DateSelectedActionService(
+class DateSelectedActionUseCase(
         private val repository: ArticleRepository,
         private val viewModel: ContentViewModel
 ) {

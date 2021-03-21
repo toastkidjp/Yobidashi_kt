@@ -103,8 +103,6 @@ class BarcodeReaderFragment : Fragment() {
             return
         }
 
-        val requireActivity = requireActivity()
-
         viewModel = ViewModelProvider(this).get(BarcodeReaderResultPopupViewModel::class.java)
         viewModel?.also {
             val viewLifecycleOwner = viewLifecycleOwner
@@ -118,19 +116,20 @@ class BarcodeReaderFragment : Fragment() {
             })
             it.open.observe(viewLifecycleOwner, Observer { event ->
                 val text = event?.getContentIfNotHandled() ?: return@Observer
+                val activity = activity ?: return@Observer
                 SearchAction(
-                        requireActivity,
+                        activity,
                         preferenceApplier.getDefaultSearchEngine()
                                 ?: SearchCategory.getDefaultCategoryName(),
                         text
                 ).invoke()
-                activity?.supportFragmentManager?.popBackStack()
+                activity.supportFragmentManager.popBackStack()
             })
         }
 
         resultPopup.setViewModel(viewModel)
 
-        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = activity?.let { ViewModelProvider(it).get(ContentViewModel::class.java) }
 
         initializeFab()
         startDecode()
@@ -226,9 +225,10 @@ class BarcodeReaderFragment : Fragment() {
     }
 
     private fun camera() {
+        val activity = activity ?: return
         CoroutineScope(Dispatchers.Main).launch {
             val result =
-                    RuntimePermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    RuntimePermissions(activity).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     ?.receive()
             if (result?.granted == true) {
                 invokeRequest()
@@ -244,8 +244,9 @@ class BarcodeReaderFragment : Fragment() {
 
         barcodeView.barcodeView?.cameraInstance?.requestPreview(object : PreviewCallback {
             override fun onPreview(sourceData: SourceData?) {
+                val context = context ?: return
                 val output = ExternalFileAssignment()(
-                        requireContext(),
+                        context,
                         "shoot_${System.currentTimeMillis()}.png"
                 )
 

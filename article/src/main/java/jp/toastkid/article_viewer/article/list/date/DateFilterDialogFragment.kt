@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.data.AppDatabase
 import jp.toastkid.article_viewer.article.list.ArticleListFragmentViewModel
-import jp.toastkid.article_viewer.calendar.DateSelectedActionService
+import jp.toastkid.article_viewer.calendar.DateSelectedActionUseCase
 import jp.toastkid.article_viewer.databinding.DialogDateFilterBinding
 import jp.toastkid.lib.ContentViewModel
 import java.util.Calendar
@@ -27,7 +27,9 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogDateFilterBinding
 
-    private var dateSelectedActionService: DateSelectedActionService? = null
+    private var filterByMonthUseCase: FilterByMonthUseCase? = null
+
+    private var dateSelectedActionUseCase: DateSelectedActionUseCase? = null
 
     private var date: Triple<Int, Int, Int>? = null
 
@@ -48,8 +50,14 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
             date = Triple(year, monthOfYear, dayOfMonth)
         }
 
+        targetFragment?.let {
+            filterByMonthUseCase = FilterByMonthUseCase(
+                    ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
+            )
+        }
+
         activity?.let {
-            dateSelectedActionService = DateSelectedActionService(
+            dateSelectedActionUseCase = DateSelectedActionUseCase(
                     AppDatabase.find(it).articleRepository(),
                     ViewModelProvider(it).get(ContentViewModel::class.java)
             )
@@ -59,25 +67,17 @@ class DateFilterDialogFragment  : BottomSheetDialogFragment() {
     }
 
     fun filterByMonth() {
-       targetFragment?.let {
-           val formattedMonth =
-                   if (binding.datePicker.month < 9) "0${binding.datePicker.month + 1}"
-                   else binding.datePicker.month + 1
-           ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-                   .filter("${binding.datePicker.year}-$formattedMonth")
-       }
+        filterByMonthUseCase?.invoke(binding.datePicker.year, binding.datePicker.month)
 
         dismiss()
     }
 
     fun openDate() {
-        activity?.let {
-            dateSelectedActionService?.invoke(
-                    binding.datePicker.year,
-                    binding.datePicker.month,
-                    binding.datePicker.dayOfMonth
-            )
-        }
+        dateSelectedActionUseCase?.invoke(
+                binding.datePicker.year,
+                binding.datePicker.month,
+                binding.datePicker.dayOfMonth
+        )
         dismiss()
     }
 
