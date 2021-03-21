@@ -84,6 +84,6 @@ object NotificationWidget {
     fun refresh(context: Context) {
         val manager = NotificationManagerCompat.from(context)
         manager.cancel(ID)
-        manager.notify(ID, makeNotification(context))
+        show(context)
     }
 }
