@@ -23,6 +23,7 @@
                 android:layout_height="80dp"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/title_apps_launcher"
                 tools:src="@drawable/ic_android_app"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
