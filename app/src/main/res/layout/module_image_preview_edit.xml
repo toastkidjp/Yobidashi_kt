@@ -61,6 +61,7 @@
                 app:tint="@color/lime_bg"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> colorFilterUseCase.reverseFilter()}"
+                android:contentDescription="@string/content_description_reverse_color"
                 />
 
             <ImageView
@@ -73,6 +74,7 @@
                 app:tint="@color/deep_orange_500_dd"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> colorFilterUseCase.sepia()}"
+                android:contentDescription="@string/content_description_sepia_color_filter"
                 />
             <ImageView
                 android:id="@+id/gray_scale"
@@ -84,6 +86,7 @@
                 app:tint="@color/pre4_ripple"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> colorFilterUseCase.grayScale()}"
+                android:contentDescription="@string/content_description_gray_scale"
                 />
 
             <ImageView
@@ -95,6 +98,7 @@
                 app:srcCompat="@drawable/ic_rotate_left"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> imageRotationUseCase.rotateLeft()}"
+                android:contentDescription="@string/content_description_rotate_left"
                 />
             <ImageView
                 android:id="@+id/reverse"
@@ -106,6 +110,7 @@
                 app:srcCompat="@drawable/ic_flip"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> imageRotationUseCase.reverse()}"
+                android:contentDescription="@string/content_description_reverse_image"
                 />
             <ImageView
                 android:id="@+id/rotate_right"
@@ -117,6 +122,7 @@
                 app:srcCompat="@drawable/ic_rotate_right"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> imageRotationUseCase.rotateRight()}"
+                android:contentDescription="@string/content_description_rotate_right"
                 />
             <ImageView
                 android:id="@+id/set_to"
@@ -128,6 +134,7 @@
                 app:srcCompat="@drawable/ic_set_to"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> dialog.setTo()}"
+                android:contentDescription="@string/content_description_set_to"
                 />
             <ImageView
                 android:id="@+id/edit"
@@ -139,6 +146,7 @@
                 app:srcCompat="@drawable/ic_brush"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> dialog.edit()}"
+                android:contentDescription="@string/content_description_edit_image"
                 />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

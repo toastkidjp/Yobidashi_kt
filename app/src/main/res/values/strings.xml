@@ -464,5 +464,13 @@
     <string name="subhead_search_category_setting">Search category setting</string>
     <string name="title_lyrics_search">Lyrics search</string>
     <string name="content_description_switch_visibility">Switch visibility</string>
+    <string name="content_description_reverse_color">Reverse color</string>
+    <string name="content_description_sepia_color_filter">Sepia color filter</string>
+    <string name="content_description_gray_scale">Gray scale</string>
+    <string name="content_description_rotate_left">Rotate left</string>
+    <string name="content_description_reverse_image">Reverse image</string>
+    <string name="content_description_rotate_right">Rotate right</string>
+    <string name="content_description_set_to">Set to</string>
+    <string name="content_description_edit_image">Edit image</string>
 
 </resources>
