@@ -17,6 +17,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.lib.storage.FilesDir
 import org.junit.After
 import org.junit.Before
@@ -62,11 +63,21 @@ class FaviconApplierTest {
     @Test
     fun assignFile() {
         faviconApplier.assignFile("test")
+
+        verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 0) { BitmapFactory.decodeFile(any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
     }
 
     @Test
     fun makePath() {
         faviconApplier.makePath("test")
+
+        verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 0) { BitmapFactory.decodeFile(any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
     }
 
     @Test
@@ -75,6 +86,12 @@ class FaviconApplierTest {
         every { uri.toString() }.returns("test")
 
         faviconApplier.load(uri)
+
+        verify(exactly = 1) { uri.toString() }
+        verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 1) { BitmapFactory.decodeFile(any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
     }
 
 }
