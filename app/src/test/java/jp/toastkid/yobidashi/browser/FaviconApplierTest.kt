@@ -20,6 +20,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.storage.FilesDir
 import org.junit.After
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import java.io.File
@@ -91,6 +92,17 @@ class FaviconApplierTest {
         verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
         verify(exactly = 1) { BitmapFactory.decodeFile(any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
+    }
+
+    @Test
+    fun uriNullCase() {
+        val result = faviconApplier.load(null)
+
+        assertNull(result)
+        verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
+        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 0) { BitmapFactory.decodeFile(any()) }
         verify(exactly = 1) { Uri.parse(any()) }
     }
 
