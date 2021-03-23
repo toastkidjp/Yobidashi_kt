@@ -62,7 +62,7 @@ class FaviconApplierTest {
     }
 
     @Test
-    fun assignFile() {
+    fun testAssignFile() {
         faviconApplier.assignFile("test")
 
         verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
@@ -101,9 +101,9 @@ class FaviconApplierTest {
 
         assertNull(result)
         verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
-        verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
+        verify(exactly = 0) { filesDir.assignNewFile(any<String>()) }
         verify(exactly = 0) { BitmapFactory.decodeFile(any()) }
-        verify(exactly = 1) { Uri.parse(any()) }
+        verify(exactly = 0) { Uri.parse(any()) }
     }
 
 }
