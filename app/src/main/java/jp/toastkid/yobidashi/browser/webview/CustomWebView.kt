@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
@@ -337,8 +336,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     }
 
     companion object {
-
-        private val urlFactory = UrlFactory()
 
         private val selectedTextExtractor = SelectedTextExtractor()
 
