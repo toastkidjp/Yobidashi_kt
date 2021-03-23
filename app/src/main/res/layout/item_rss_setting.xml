@@ -47,6 +47,7 @@
                 android:layout_marginLeft="36dp"
                 android:layout_gravity="left|center_vertical"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/image"
                 />
             <TextView
                 android:id="@+id/text"
