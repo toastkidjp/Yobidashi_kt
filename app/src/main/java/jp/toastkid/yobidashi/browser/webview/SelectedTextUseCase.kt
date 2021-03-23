@@ -8,7 +8,10 @@
 
 package jp.toastkid.yobidashi.browser.webview
 
+import android.content.Context
 import android.net.Uri
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.search.SearchCategory
@@ -44,6 +47,21 @@ class SelectedTextUseCase(
                 searchEngine ?: SearchCategory.getDefaultCategoryName(),
                 word
         )
+    }
+
+    companion object {
+
+        fun make(context: Context?): SelectedTextUseCase? {
+            return (context as? FragmentActivity)?.let { activity ->
+                val viewModelProvider = ViewModelProvider(activity)
+                return SelectedTextUseCase(
+                        contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
+                        browserViewModel = viewModelProvider.get(BrowserViewModel::class.java),
+                        stringResolver = { activity.getString(it) }
+                )
+            }
+        }
+
     }
 
 }

@@ -13,10 +13,6 @@ import androidx.core.net.toUri
 import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
@@ -200,26 +196,15 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private fun search() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            makeUseCase(context)
+            SelectedTextUseCase.make(context)
                     ?.search(word, PreferenceApplier(context).getDefaultSearchEngine())
         }
     }
 
     private fun searchWithPreview() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            makeUseCase(context)
+            SelectedTextUseCase.make(context)
                     ?.searchWithPreview(word, PreferenceApplier(context).getDefaultSearchEngine())
-        }
-    }
-
-    private fun makeUseCase(context: Context?): SelectedTextUseCase? {
-        return (context as? FragmentActivity)?.let { activity ->
-            val viewModelProvider = ViewModelProvider(activity)
-            return SelectedTextUseCase(
-                    contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
-                    browserViewModel = viewModelProvider.get(BrowserViewModel::class.java),
-                    stringResolver = { resources.getString(it) }
-            )
         }
     }
 
