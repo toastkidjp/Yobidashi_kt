@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
@@ -217,17 +218,22 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private fun searchWithPreview() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            context?.let {
+            (context as? FragmentActivity)?.let { activity ->
+                val viewModelProvider = ViewModelProvider(activity)
+
+                if (word.isEmpty() || word == "\"\"") {
+                    viewModelProvider.get(ContentViewModel::class.java)
+                            .snackShort("Query extraction failed. Please would you retry or copy to clipboard?")
+                    return@withAction
+                }
+
                 val url = urlFactory(
-                        PreferenceApplier(it).getDefaultSearchEngine()
+                        PreferenceApplier(activity).getDefaultSearchEngine()
                                 ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
                         word
                 )
 
-                (it as? FragmentActivity)?.let { activity ->
-                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
-                            .preview(url)
-                }
+                viewModelProvider.get(BrowserViewModel::class.java).preview(url)
             }
         }
     }
