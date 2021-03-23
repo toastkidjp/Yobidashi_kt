@@ -223,7 +223,7 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
                 if (word.isEmpty() || word == "\"\"") {
                     viewModelProvider.get(ContentViewModel::class.java)
-                            .snackShort("Query extraction failed. Please would you retry or copy to clipboard?")
+                            .snackShort(resources.getString(R.string.message_failed_query_extraction_from_web_view))
                     return@withAction
                 }
 

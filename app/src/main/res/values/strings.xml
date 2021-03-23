@@ -472,5 +472,6 @@
     <string name="content_description_rotate_right">Rotate right</string>
     <string name="content_description_set_to">Set to</string>
     <string name="content_description_edit_image">Edit image</string>
+    <string name="message_failed_query_extraction_from_web_view">Query extraction failed. Please would you retry or copy to clipboard?</string>
 
 </resources>
