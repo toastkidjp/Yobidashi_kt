@@ -201,43 +201,28 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private fun search() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            context?.let {
-                val url = urlFactory(
-                        PreferenceApplier(it).getDefaultSearchEngine()
-                                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
-                        word
-                ).toString()
-
-                (it as? FragmentActivity)?.let { activity ->
-                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
-                            .open(url.toUri())
-                }
-            }
+            makeUseCase(context)
+                    ?.search(word, PreferenceApplier(context).getDefaultSearchEngine())
         }
     }
 
     private fun searchWithPreview() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            (context as? FragmentActivity)?.let { activity ->
-                val viewModelProvider = ViewModelProvider(activity)
-
-                if (word.isEmpty() || word == "\"\"") {
-                    viewModelProvider.get(ContentViewModel::class.java)
-                            .snackShort(resources.getString(R.string.message_failed_query_extraction_from_web_view))
-                    return@withAction
-                }
-
-                val url = urlFactory(
-                        PreferenceApplier(activity).getDefaultSearchEngine()
-                                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
-                        word
-                )
-
-                viewModelProvider.get(BrowserViewModel::class.java).preview(url)
-            }
+            makeUseCase(context)
+                    ?.searchWithPreview(word, PreferenceApplier(context).getDefaultSearchEngine())
         }
     }
 
+    private fun makeUseCase(context: Context?): SelectedTextUseCase? {
+        return (context as? FragmentActivity)?.let { activity ->
+            val viewModelProvider = ViewModelProvider(activity)
+            return SelectedTextUseCase(
+                    contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
+                    browserViewModel = viewModelProvider.get(BrowserViewModel::class.java),
+                    stringResolver = { resources.getString(it) }
+            )
+        }
+    }
 
     override fun setNestedScrollingEnabled(enabled: Boolean) {
         childHelper.isNestedScrollingEnabled = enabled
