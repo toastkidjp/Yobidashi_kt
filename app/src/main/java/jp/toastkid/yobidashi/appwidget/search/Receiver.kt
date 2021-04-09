@@ -16,6 +16,7 @@ class Receiver : BroadcastReceiver() {
         if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             Provider.updateWidget(
                     context.applicationContext,
+                    AppWidgetManager.getInstance(context),
                     RemoteViewsFactory.make(context)
             )
         }
