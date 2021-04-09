@@ -72,7 +72,7 @@ class FaviconApplierTest {
     }
 
     @Test
-    fun makePath() {
+    fun testMakePath() {
         faviconApplier.makePath("test")
 
         verify(exactly = 1) { filesDirFactory.invoke(any(), any()) }
