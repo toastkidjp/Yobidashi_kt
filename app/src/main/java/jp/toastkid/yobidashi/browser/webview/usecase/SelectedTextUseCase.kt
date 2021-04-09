@@ -6,7 +6,7 @@
  * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package jp.toastkid.yobidashi.browser.webview
+package jp.toastkid.yobidashi.browser.webview.usecase
 
 import android.content.Context
 import android.net.Uri
