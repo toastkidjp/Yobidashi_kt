@@ -15,6 +15,7 @@ import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.webview.usecase.SelectedTextUseCase
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
 
