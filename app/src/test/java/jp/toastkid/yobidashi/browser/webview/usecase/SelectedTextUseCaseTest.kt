@@ -36,14 +36,10 @@ class SelectedTextUseCaseTest {
     @MockK
     private lateinit var browserViewModel: BrowserViewModel
 
-    @MockK
-    private lateinit var stringResolver: (Int) -> String
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         every { contentViewModel.snackShort(any<String>()) }.answers { Unit }
-        every { stringResolver.invoke(any()) }.returns("test")
         every { browserViewModel.open(any()) }.answers { Unit }
         every { browserViewModel.preview(any()) }.answers { Unit }
         every { urlFactory.invoke(any(), any()) }.returns(mockk())
@@ -59,7 +55,6 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.search("test", "test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
-        verify(exactly = 0) { stringResolver.invoke(any()) }
         verify(exactly = 1) { browserViewModel.open(any()) }
         verify(exactly = 0) { browserViewModel.preview(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any()) }
@@ -70,7 +65,6 @@ class SelectedTextUseCaseTest {
         selectedTextUseCase.searchWithPreview("test", "test")
 
         verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
-        verify(exactly = 0) { stringResolver.invoke(any()) }
         verify(exactly = 0) { browserViewModel.open(any()) }
         verify(exactly = 1) { browserViewModel.preview(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any()) }

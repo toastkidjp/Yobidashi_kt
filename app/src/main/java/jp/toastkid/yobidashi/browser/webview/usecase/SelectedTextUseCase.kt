@@ -21,8 +21,7 @@ import jp.toastkid.yobidashi.R
 class SelectedTextUseCase(
         private val urlFactory: UrlFactory = UrlFactory(),
         private val contentViewModel: ContentViewModel,
-        private val browserViewModel: BrowserViewModel,
-        private val stringResolver: (Int) -> String
+        private val browserViewModel: BrowserViewModel
 ) {
 
     fun search(word: String, searchEngine: String?) {
@@ -37,9 +36,7 @@ class SelectedTextUseCase(
 
     private fun makeUrl(word: String, searchEngine: String?): Uri? {
         if (word.isEmpty() || word == "\"\"") {
-            contentViewModel.snackShort(
-                    stringResolver(R.string.message_failed_query_extraction_from_web_view)
-            )
+            contentViewModel.snackShort(R.string.message_failed_query_extraction_from_web_view)
             return null
         }
 
@@ -56,8 +53,7 @@ class SelectedTextUseCase(
                 val viewModelProvider = ViewModelProvider(activity)
                 return SelectedTextUseCase(
                         contentViewModel = viewModelProvider.get(ContentViewModel::class.java),
-                        browserViewModel = viewModelProvider.get(BrowserViewModel::class.java),
-                        stringResolver = { activity.getString(it) }
+                        browserViewModel = viewModelProvider.get(BrowserViewModel::class.java)
                 )
             }
         }
