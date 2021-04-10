@@ -80,4 +80,14 @@ class SelectedTextUseCaseTest {
         verify(exactly = 0) { urlFactory.invoke(any(), any()) }
     }
 
+    @Test
+    fun searchWithOnlyDoubleQuotes() {
+        selectedTextUseCase.search("\"\"", "test")
+
+        verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { urlFactory.invoke(any(), any()) }
+    }
+
 }
