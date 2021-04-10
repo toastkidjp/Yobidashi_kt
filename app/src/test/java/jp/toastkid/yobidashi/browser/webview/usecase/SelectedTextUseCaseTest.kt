@@ -39,7 +39,7 @@ class SelectedTextUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { contentViewModel.snackShort(any<String>()) }.answers { Unit }
+        every { contentViewModel.snackShort(any<Int>()) }.answers { Unit }
         every { browserViewModel.open(any()) }.answers { Unit }
         every { browserViewModel.preview(any()) }.answers { Unit }
         every { urlFactory.invoke(any(), any()) }.returns(mockk())
@@ -54,7 +54,7 @@ class SelectedTextUseCaseTest {
     fun search() {
         selectedTextUseCase.search("test", "test")
 
-        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 1) { browserViewModel.open(any()) }
         verify(exactly = 0) { browserViewModel.preview(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any()) }
@@ -64,10 +64,20 @@ class SelectedTextUseCaseTest {
     fun searchWithPreview() {
         selectedTextUseCase.searchWithPreview("test", "test")
 
-        verify(exactly = 0) { contentViewModel.snackShort(any<String>()) }
+        verify(exactly = 0) { contentViewModel.snackShort(any<Int>()) }
         verify(exactly = 0) { browserViewModel.open(any()) }
         verify(exactly = 1) { browserViewModel.preview(any()) }
         verify(exactly = 1) { urlFactory.invoke(any(), any()) }
+    }
+
+    @Test
+    fun searchWithEmptyWord() {
+        selectedTextUseCase.search("", "test")
+
+        verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 0) { browserViewModel.open(any()) }
+        verify(exactly = 0) { browserViewModel.preview(any()) }
+        verify(exactly = 0) { urlFactory.invoke(any(), any()) }
     }
 
 }
