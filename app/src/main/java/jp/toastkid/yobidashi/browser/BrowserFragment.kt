@@ -514,6 +514,11 @@ class BrowserFragment : Fragment(),
         super.onDetach()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        browserModule.onDestroy()
+    }
+
     companion object {
 
         /**
