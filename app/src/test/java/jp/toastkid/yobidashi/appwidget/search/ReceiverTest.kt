@@ -39,7 +39,7 @@ class ReceiverTest {
         every { context.getApplicationContext() }.returns(mockk())
 
         mockkObject(Provider.Companion)
-        every { Provider.updateWidget(any(), any()) }.answers { Unit }
+        every { Provider.updateWidget(any(), any(), any()) }.answers { Unit }
 
         mockkObject(RemoteViewsFactory)
         every { RemoteViewsFactory.make(any()) }.returns(mockk())
@@ -53,12 +53,12 @@ class ReceiverTest {
     }
 
     @Test
-    fun onReceive() {
+    fun testOnReceive() {
         receiver.onReceive(context, intent)
 
         verify(exactly = 1) { intent.getAction() }
         verify(exactly = 1) { context.getApplicationContext() }
-        verify(exactly = 1) { Provider.updateWidget(any(), any()) }
+        verify(exactly = 1) { Provider.updateWidget(any(), any(), any()) }
         verify(exactly = 1) { RemoteViewsFactory.make(any()) }
     }
 
