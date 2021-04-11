@@ -49,4 +49,13 @@ class ToasterTest {
         verify(exactly = 1)  { toast.show() }
     }
 
+    @Test
+    fun toastShortWithString() {
+        Toaster.tShort(mockk(), "test")
+
+        verify(exactly = 0) { Toast.makeText(any(), any<Int>(), any()) }
+        verify(exactly = 1) { Toast.makeText(any(), any<String>(), any()) }
+        verify(exactly = 1)  { toast.show() }
+    }
+
 }
