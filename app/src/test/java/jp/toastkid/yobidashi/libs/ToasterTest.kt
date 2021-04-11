@@ -107,4 +107,19 @@ class ToasterTest {
         verify(exactly = 1) { colorPair.bgColor() }
     }
 
+    @Test
+    fun snackShortWithText() {
+        Toaster.snackShort(view, "test", colorPair)
+
+        verify(exactly = 0) { view.getContext() }
+        verify(exactly = 0) { context.getString(any()) }
+        verify(exactly = 1) { snackbar.getView() }
+        verify(exactly = 1) { snackbar.show() }
+        verify(exactly = 1) { Snackbar.make(any(), any<String>(), any()) }
+        verify(exactly = 1) { snackbarView.setBackgroundColor(any()) }
+        verify(exactly = 1) { snackbarView.findViewById<View>(any()) }
+        verify(exactly = 1) { colorPair.fontColor() }
+        verify(exactly = 1) { colorPair.bgColor() }
+    }
+
 }
