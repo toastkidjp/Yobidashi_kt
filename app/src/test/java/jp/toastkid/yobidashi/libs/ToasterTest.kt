@@ -66,6 +66,7 @@ class ToasterTest {
         every { colorPair.fontColor() }.returns(Color.WHITE)
         every { colorPair.bgColor() }.returns(Color.BLACK)
         every { snackbar.getView() }.returns(snackbarView)
+        every { snackbar.setAction(any<String>(), any()) }.returns(snackbar)
         every { snackbar.show() }.answers { Unit }
     }
 
@@ -149,6 +150,22 @@ class ToasterTest {
         verify(exactly = 1) { snackbarView.setBackgroundColor(any()) }
         verify(exactly = 1) { snackbarView.findViewById<View>(any()) }
         verify(exactly = 1) { colorPair.fontColor() }
+        verify(exactly = 1) { colorPair.bgColor() }
+    }
+
+    @Test
+    fun snackLongWithAction() {
+        Toaster.snackLong(view, "test", -1, View.OnClickListener { }, colorPair)
+
+        verify(exactly = 1) { view.getContext() }
+        verify(exactly = 1) { context.getString(any()) }
+        verify(exactly = 1) { snackbar.getView() }
+        verify(exactly = 1) { snackbar.setAction(any<String>(), any()) }
+        verify(exactly = 1) { snackbar.show() }
+        verify(exactly = 1) { Snackbar.make(any(), any<String>(), Snackbar.LENGTH_LONG) }
+        verify(exactly = 1) { snackbarView.setBackgroundColor(any()) }
+        verify(atLeast = 1) { snackbarView.findViewById<View>(any()) }
+        verify(atLeast = 1) { colorPair.fontColor() }
         verify(exactly = 1) { colorPair.bgColor() }
     }
 
