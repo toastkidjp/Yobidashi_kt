@@ -95,7 +95,7 @@ object Toaster {
      * @param pair
      * @param duration
      */
-    fun snack(
+    private fun snack(
             view: View,
             message: String,
             pair: ColorPair,
