@@ -79,7 +79,7 @@ class ToasterTest {
     fun testToast() {
         Toaster.tShort(mockk(), -1)
 
-        verify(exactly = 1) { Toast.makeText(any(), any<Int>(), any()) }
+        verify(exactly = 1) { Toast.makeText(any(), any<Int>(), Toast.LENGTH_SHORT) }
         verify(exactly = 0) { Toast.makeText(any(), any<String>(), any()) }
         verify(exactly = 1) { toast.show() }
     }
