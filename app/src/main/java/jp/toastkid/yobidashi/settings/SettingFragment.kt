@@ -84,7 +84,9 @@ class SettingFragment : Fragment() {
     }
 
     override fun onDetach() {
-        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).refresh()
+        activity?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java).refresh()
+        }
         super.onDetach()
     }
 

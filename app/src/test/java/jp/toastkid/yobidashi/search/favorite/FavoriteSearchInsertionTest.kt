@@ -63,7 +63,7 @@ class FavoriteSearchInsertionTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         favoriteSearchInsertion = FavoriteSearchInsertion(context, "category", "query")
         favoriteSearchInsertion.invoke()
 

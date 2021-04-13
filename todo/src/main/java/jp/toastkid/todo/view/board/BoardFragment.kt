@@ -105,16 +105,17 @@ class BoardFragment : Fragment() {
                 }
         )
 
-        val viewModelProvider = ViewModelProvider(requireActivity())
+        activity?.let {
+            val viewModelProvider = ViewModelProvider(it)
 
-        viewModelProvider.get(AppBarViewModel::class.java)
-                .replace(appBarBinding.root)
+            viewModelProvider.get(AppBarViewModel::class.java).replace(appBarBinding.root)
 
-        taskClearUseCase = TaskClearUseCase(
-                tasks,
-                viewModelProvider.get(ContentViewModel::class.java),
-                taskAddingUseCase
-        ) { binding.board.removeAllViews() }
+            taskClearUseCase = TaskClearUseCase(
+                    tasks,
+                    viewModelProvider.get(ContentViewModel::class.java),
+                    taskAddingUseCase
+            ) { binding.board.removeAllViews() }
+        }
 
         taskAddingUseCase?.invoke(makeSampleTask())
     }

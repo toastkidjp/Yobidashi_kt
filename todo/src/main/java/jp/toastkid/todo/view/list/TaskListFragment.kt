@@ -122,8 +122,9 @@ class TaskListFragment : Fragment() {
             taskAdditionDialogFragmentUseCase.invoke()
         }
 
-        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
-                .replace(appBarBinding.root)
+        activity?.let {
+            ViewModelProvider(it).get(AppBarViewModel::class.java).replace(appBarBinding.root)
+        }
     }
 
     companion object {

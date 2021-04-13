@@ -78,11 +78,11 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
                 container,
                 false
         )
-        val activityContext = context
+        val activityContext = activity
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
         preferenceApplier = PreferenceApplier(activityContext)
         binding.fragment = this
-        contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
         setHasOptionsMenu(true)
         return binding.root
     }

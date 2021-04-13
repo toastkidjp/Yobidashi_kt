@@ -25,10 +25,10 @@ import jp.toastkid.yobidashi.databinding.DialogColorChooserBinding
 class ColorChooserDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
+        val activityContext = activity ?: return super.onCreateDialog(savedInstanceState)
 
         val chooserDialogFragmentViewModel =
-                ViewModelProvider(requireActivity())
+                ViewModelProvider(activityContext)
                         .get(ColorChooserDialogFragmentViewModel::class.java)
 
         val binding = DataBindingUtil.inflate<DialogColorChooserBinding>(

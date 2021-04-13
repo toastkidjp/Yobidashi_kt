@@ -8,9 +8,9 @@
 package jp.toastkid.yobidashi.rss.suggestion
 
 import android.view.View
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +20,10 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class RssAddingSuggestion(private val preferenceApplier: PreferenceApplier) {
-
-    private val rssUrlValidator = RssUrlValidator()
+class RssAddingSuggestion(
+        private val preferenceApplier: PreferenceApplier,
+        private val rssUrlValidator: RssUrlValidator = RssUrlValidator()
+) {
 
     operator fun invoke(view: View, url: String) {
         CoroutineScope(Dispatchers.Main).launch {

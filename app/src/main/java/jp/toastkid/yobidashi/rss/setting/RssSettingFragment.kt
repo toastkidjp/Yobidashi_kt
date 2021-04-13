@@ -15,11 +15,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentRssSettingBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 
 /**
@@ -43,7 +43,7 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
         super.onViewCreated(view, savedInstanceState)
         val context = view.context
 
-        val fragmentActivity = requireActivity()
+        val fragmentActivity = activity ?: return
 
         val preferenceApplier = PreferenceApplier(fragmentActivity)
 
@@ -56,8 +56,9 @@ class RssSettingFragment : Fragment(), CommonFragmentAction {
         val rssReaderTargets = preferenceApplier.readRssReaderTargets()
 
         if (rssReaderTargets.isEmpty()) {
+            // TODO Use ContentViewModel.
             Toaster.tShort(fragmentActivity, R.string.message_rss_reader_launch_failed)
-            activity?.supportFragmentManager?.popBackStack()
+            fragmentActivity.supportFragmentManager?.popBackStack()
             return
         }
 

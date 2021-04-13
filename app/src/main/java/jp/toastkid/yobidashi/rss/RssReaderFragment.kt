@@ -130,7 +130,8 @@ class RssReaderFragment : Fragment(), CommonFragmentAction, ContentScrollable {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_rss_setting) {
-            ViewModelProvider(requireActivity())
+            val activity = activity ?: return true
+            ViewModelProvider(activity)
                     .get(ContentViewModel::class.java)
                     .nextFragment(RssSettingFragment::class.java)
             return true

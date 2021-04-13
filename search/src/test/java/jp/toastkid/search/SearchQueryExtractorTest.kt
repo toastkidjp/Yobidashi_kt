@@ -65,6 +65,7 @@ class SearchQueryExtractorTest {
             "test" to "https://info.finance.yahoo.co.jp/search/?query=test",
             "test" to "https://www.merriam-webster.com/dictionary/test",
             "test" to "https://hn.algolia.com/?q=test",
+            "test" to "https://ejje.weblio.jp/content/test",
             "s&p 500" to "https://myindex.jp/search.php?w=s%26p+500&p=3"
     )
 

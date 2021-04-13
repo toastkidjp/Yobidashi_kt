@@ -69,15 +69,17 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         textViewHighlighter = TextViewHighlighter(binding.content)
         repository = AppDatabase.find(binding.root.context).articleRepository()
 
-        ContextMenuInitializer(
-                binding.content,
-                ViewModelProvider(requireActivity()).get(BrowserViewModel::class.java)
-        ).invoke()
+        activity?.let {
+            ContextMenuInitializer(
+                    binding.content,
+                    ViewModelProvider(it).get(BrowserViewModel::class.java)
+            ).invoke()
+        }
 
         val linkBehaviorService = makeLinkBehaviorService()
 
         val linkMovementMethod = ContentLinkMovementMethod {
-            linkBehaviorService.invoke(it)
+            linkBehaviorService?.invoke(it)
         }
         binding.content.movementMethod = linkMovementMethod
 
@@ -85,8 +87,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         return binding.root
     }
 
-    private fun makeLinkBehaviorService(): LinkBehaviorService {
-        val viewModelProvider = ViewModelProvider(requireActivity())
+    private fun makeLinkBehaviorService(): LinkBehaviorService? {
+        val activity = activity ?: return null
+        val viewModelProvider = ViewModelProvider(activity)
         return LinkBehaviorService(
                 viewModelProvider.get(ContentViewModel::class.java),
                 viewModelProvider.get(BrowserViewModel::class.java)
@@ -133,8 +136,10 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         appBarBinding.tabCount.setTextColor(preferenceApplier.fontColor)
         appBarBinding.subhead.setColorFilter(preferenceApplier.fontColor)
 
-        ViewModelProvider(requireActivity()).get(AppBarViewModel::class.java)
-                .replace(appBarBinding.root)
+        activity?.let {
+            ViewModelProvider(it).get(AppBarViewModel::class.java)
+                    .replace(appBarBinding.root)
+        }
     }
 
     @UiThread

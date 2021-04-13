@@ -138,7 +138,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     fun reset() {
-        MediaControllerCompat.getMediaController(requireActivity()).transportControls.stop()
+        activity?.let {
+            MediaControllerCompat.getMediaController(it).transportControls.stop()
+        }
     }
 
     override fun pressBack(): Boolean {
@@ -158,8 +160,9 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
     }
 
     private fun attemptLoad() {
+        val activity = activity ?: return
         CoroutineScope(Dispatchers.Main).launch(disposables) {
-            RuntimePermissions(requireActivity())
+            RuntimePermissions(activity)
                     .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                     ?.receiveAsFlow()
                     ?.collect {
@@ -173,7 +176,7 @@ class ImageViewerFragment : Fragment(), CommonFragmentAction, ContentScrollable 
                                 R.string.message_audio_file_is_not_found,
                                 PreferenceApplier(binding.root.context).colorPair()
                         )
-                        activity?.supportFragmentManager?.popBackStack()
+                        activity.supportFragmentManager.popBackStack()
                     }
         }
     }

@@ -9,6 +9,7 @@ package jp.toastkid.todo.view.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import jp.toastkid.todo.R
@@ -21,13 +22,20 @@ import jp.toastkid.todo.model.TodoTask
 class Adapter(private val viewModel: TaskListFragmentViewModel) : PagingDataAdapter<TodoTask, ViewHolder>(SimpleComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_task, parent, false))
+        return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), LAYOUT_ID, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val result = getItem(position) ?: return
         holder.bind(result)
         holder.setOnMenuClick { viewModel.showMenu(it, result) }
+    }
+
+    companion object {
+
+        @LayoutRes
+        private val LAYOUT_ID = R.layout.item_task
+
     }
 
 }

@@ -170,7 +170,8 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun openArticleList() {
-        ViewModelProvider(requireActivity()).get(ContentViewModel::class.java).openArticleList()
+        val activity = activity ?: return
+        ViewModelProvider(activity).get(ContentViewModel::class.java).openArticleList()
         callback?.onCloseOnly()
     }
 
