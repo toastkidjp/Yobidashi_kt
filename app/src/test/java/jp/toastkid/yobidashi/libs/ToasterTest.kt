@@ -109,7 +109,7 @@ class ToasterTest {
     }
 
     @Test
-    fun snackShortWithText() {
+    fun testSnackShortWithText() {
         Toaster.snackShort(view, "test", colorPair)
 
         verify(exactly = 0) { view.getContext() }
