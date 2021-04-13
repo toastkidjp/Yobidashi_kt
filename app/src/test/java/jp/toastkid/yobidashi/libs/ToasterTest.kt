@@ -101,7 +101,7 @@ class ToasterTest {
         verify(exactly = 1) { context.getString(any()) }
         verify(exactly = 1) { snackbar.getView() }
         verify(exactly = 1) { snackbar.show() }
-        verify(exactly = 1) { Snackbar.make(any(), any<String>(), any()) }
+        verify(exactly = 1) { Snackbar.make(any(), any<String>(), Snackbar.LENGTH_SHORT) }
         verify(exactly = 1) { snackbarView.setBackgroundColor(any()) }
         verify(exactly = 1) { snackbarView.findViewById<View>(any()) }
         verify(exactly = 1) { colorPair.fontColor() }
