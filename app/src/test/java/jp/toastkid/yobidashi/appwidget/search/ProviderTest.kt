@@ -57,7 +57,7 @@ class ProviderTest {
         provider.onUpdate(context, appWidgetManager, intArrayOf())
 
         verify(exactly = 1) { RemoteViewsFactory.make(any()) }
-        verify(exactly = 1) { AppWidgetManager.getInstance(any()) }
+        verify(exactly = 0) { AppWidgetManager.getInstance(any()) }
         verify(exactly = 1) { appWidgetManager.updateAppWidget(any<ComponentName>(), any()) }
     }
 
