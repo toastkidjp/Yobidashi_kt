@@ -62,7 +62,7 @@ class UpdaterTest {
     }
 
     @Test
-    fun update() {
+    fun testUpdate() {
         Updater().update(contextWrapper)
 
         verify(exactly = 1) { contextWrapper.applicationContext }
