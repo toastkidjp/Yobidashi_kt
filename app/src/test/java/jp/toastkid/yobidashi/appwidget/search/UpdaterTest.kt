@@ -73,4 +73,18 @@ class UpdaterTest {
         verify(exactly = 1) { NotificationWidget.refresh(any()) }
     }
 
+    @Test
+    fun falseCase() {
+        every { sharedPreferences.getBoolean(any(), any()) }.returns(false)
+
+        Updater().update(contextWrapper)
+
+        verify(exactly = 1) { contextWrapper.applicationContext }
+        verify(exactly = 1) { contextWrapper.getSharedPreferences(any(), any()) }
+        verify(exactly = 1) { AppWidgetManager.getInstance(any()) }
+        verify(exactly = 1) { RemoteViewsFactory.make(any()) }
+        verify(exactly = 1) { Provider.updateWidget(any(), any(), any()) }
+        verify(exactly = 0) { NotificationWidget.refresh(any()) }
+    }
+
 }
