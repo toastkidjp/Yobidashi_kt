@@ -212,7 +212,7 @@ class ColorSettingFragment : Fragment(),
 
         binding?.backgroundPalette?.color = bgColor
         binding?.fontPalette?.color = fontColor
-        activity?.let { Updater.update(it) }
+        activity?.let { Updater().update(it) }
 
         snackShort(R.string.settings_color_done_commit)
     }
@@ -225,7 +225,7 @@ class ColorSettingFragment : Fragment(),
         preferenceApplier.fontColor = initialFontColor
 
         refresh()
-        activity?.let { Updater.update(it) }
+        activity?.let { Updater().update(it) }
         snackShort(R.string.settings_color_done_reset)
     }
 

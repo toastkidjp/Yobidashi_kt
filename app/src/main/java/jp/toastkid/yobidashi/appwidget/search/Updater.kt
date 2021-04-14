@@ -10,7 +10,7 @@ import jp.toastkid.yobidashi.notification.widget.NotificationWidget
  *
  * @author toastkidjp
  */
-internal object Updater {
+internal class Updater {
 
     /**
      * Do update app-widget.
