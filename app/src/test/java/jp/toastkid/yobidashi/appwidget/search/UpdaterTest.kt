@@ -27,6 +27,8 @@ import org.junit.Test
 
 class UpdaterTest {
 
+    private lateinit var updater: Updater
+
     @MockK
     private lateinit var contextWrapper: ContextWrapper
 
@@ -38,6 +40,8 @@ class UpdaterTest {
 
     @Before
     fun setUp() {
+        updater = Updater()
+
         MockKAnnotations.init(this)
         every { contextWrapper.applicationContext }.returns(context)
         every { contextWrapper.getSharedPreferences(any(), any()) }.returns(sharedPreferences)
@@ -63,7 +67,7 @@ class UpdaterTest {
 
     @Test
     fun testUpdate() {
-        Updater().update(contextWrapper)
+        updater.update(contextWrapper)
 
         verify(exactly = 1) { contextWrapper.applicationContext }
         verify(exactly = 1) { contextWrapper.getSharedPreferences(any(), any()) }
@@ -77,7 +81,7 @@ class UpdaterTest {
     fun falseCase() {
         every { sharedPreferences.getBoolean(any(), any()) }.returns(false)
 
-        Updater().update(contextWrapper)
+        updater.update(contextWrapper)
 
         verify(exactly = 1) { contextWrapper.applicationContext }
         verify(exactly = 1) { contextWrapper.getSharedPreferences(any(), any()) }
