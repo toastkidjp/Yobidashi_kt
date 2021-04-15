@@ -54,7 +54,7 @@ class RemoteViewsFactoryTest {
     }
 
     @Test
-    fun make() {
+    fun testMake() {
         RemoteViewsFactory.make(context)
 
         verify(exactly = 1) { context.getPackageName() }
