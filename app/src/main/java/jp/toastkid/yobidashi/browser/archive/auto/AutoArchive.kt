@@ -35,7 +35,7 @@ class AutoArchive(
 
     fun deleteUnused(archiveIds: Collection<String>) {
         filesDir.listFiles()
-                .filter { !archiveIds.contains(extensionRemover(it.name)) }
+                .filter { !archiveIds.contains(it.nameWithoutExtension) }
                 .forEach { it.delete() }
     }
 
