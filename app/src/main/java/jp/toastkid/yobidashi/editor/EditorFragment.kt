@@ -84,8 +84,6 @@ class EditorFragment :
 
     private val externalFileAssignment = ExternalFileAssignment()
 
-    private val extensionRemover = ExtensionRemover()
-
     /**
      * Default date format holder.
      */
