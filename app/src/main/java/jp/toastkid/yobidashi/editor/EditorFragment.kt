@@ -287,7 +287,7 @@ class EditorFragment :
             save()
             return
         }
-        val fileName = extensionRemover(File(path).name) + "_backup.txt"
+        val fileName = File(path).nameWithoutExtension + "_backup.txt"
         saveToFile(externalFileAssignment(binding.root.context, fileName).absolutePath)
     }
 
@@ -535,7 +535,7 @@ class EditorFragment :
         while (newFile.exists()) {
             newFile = externalFileAssignment(
                     context,
-                    "${extensionRemover(newFile.name)}_.txt"
+                    "${newFile.nameWithoutExtension}_.txt"
             )
         }
         path = newFile.absolutePath
