@@ -37,7 +37,6 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.lib.file.ExtensionRemover
 import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
