@@ -66,4 +66,5 @@ class RemoteViewsFactoryTest {
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().launcher(any()) }
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().barcode(any()) }
     }
+
 }
