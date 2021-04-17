@@ -29,7 +29,6 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.gesture.GestureMemoFragment
-import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.main.MainActivity
@@ -105,9 +104,6 @@ class MenuUseCase(
             }
             Menu.PLANNING_POKER-> {
                 nextFragment(CardListFragment::class.java)
-            }
-            Menu.APP_LAUNCHER-> {
-                nextFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
                 nextFragment(RssReaderFragment::class.java)

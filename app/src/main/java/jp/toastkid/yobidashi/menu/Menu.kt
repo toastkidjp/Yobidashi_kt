@@ -49,8 +49,6 @@ enum class Menu(
 
     PLANNING_POKER(R.string.title_planning_poker, R.drawable.ic_card),
 
-    APP_LAUNCHER(R.string.title_apps_launcher, R.drawable.ic_launcher),
-
     GESTURE_MEMO(R.string.title_gesture_memo, R.drawable.ic_gesture_memo),
 
     RSS_READER(R.string.title_rss_reader, R.drawable.ic_rss_feed),
