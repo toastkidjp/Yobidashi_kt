@@ -39,15 +39,14 @@ import jp.toastkid.lib.view.EditTextColorSetter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchAppsBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
+import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.search.apps.AppModule
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchFragment
 import jp.toastkid.yobidashi.search.favorite.FavoriteSearchModule
@@ -107,11 +106,6 @@ class SearchFragment : Fragment() {
     private var urlSuggestionModule: UrlSuggestionModule? = null
 
     private var hourlyTrendModule: HourlyTrendModule? = null
-
-    /**
-     * App module.
-     */
-    private var appModule: AppModule? = null
 
     /**
      * Does use voice search?
@@ -182,8 +176,6 @@ class SearchFragment : Fragment() {
                 this::setTextAndMoveCursorToEnd
         )
 
-        appModule = AppModule(binding?.appModule as ModuleSearchAppsBinding, contentViewModel)
-
         setListenerForKeyboardHiding()
 
         initSearchInput()
@@ -225,7 +217,7 @@ class SearchFragment : Fragment() {
         )
 
         hourlyTrendModule = HourlyTrendModule(
-                binding?.hourlyTrendModule,
+                binding?.hourlyTrendModule as? ModuleSearchHourlyTrendBinding,
                 viewModel
         )
         hourlyTrendModule?.request()
@@ -345,7 +337,6 @@ class SearchFragment : Fragment() {
         urlModule?.enable = preferenceApplier.isEnableUrlModule()
         urlSuggestionModule?.enable = preferenceApplier.isEnableViewHistory
         hourlyTrendModule?.setEnable(preferenceApplier.isEnableTrendModule())
-        appModule?.enable = preferenceApplier.isEnableAppSearch()
 
         val headerView = headerBinding?.root ?: return
         appBarViewModel?.replace(headerView)
@@ -425,12 +416,6 @@ class SearchFragment : Fragment() {
 
         favoriteModule?.query(key)
         urlSuggestionModule?.query(key)
-
-        if (preferenceApplier.isEnableAppSearch()) {
-            appModule?.request(key)
-        } else {
-            appModule?.hide()
-        }
 
         if (preferenceApplier.isDisableSuggestion) {
             suggestionModule?.clear()
@@ -575,7 +560,6 @@ class SearchFragment : Fragment() {
         historyModule?.dispose()
         suggestionModule?.dispose()
         hourlyTrendModule?.dispose()
-        appModule?.dispose()
         super.onDetach()
     }
 

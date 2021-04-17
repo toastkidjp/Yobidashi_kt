@@ -34,9 +34,6 @@
             <include android:id="@+id/hourly_trend_module"
                 layout="@layout/module_search_hourly_trend" />
 
-            <include android:id="@+id/app_module"
-                layout="@layout/module_search_apps" />
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
