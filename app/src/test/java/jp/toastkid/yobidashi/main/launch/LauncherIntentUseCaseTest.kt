@@ -269,20 +269,6 @@ class LauncherIntentUseCaseTest {
     }
 
     @Test
-    fun testAppLauncher() {
-        every { intent.getBooleanExtra(any(), false) }.answers { false }
-        every { intent.getAction() }.answers { APP_LAUNCHER }
-
-        launcherIntentUseCase.invoke(intent)
-
-        verify(exactly = 0) { randomWikipediaUseCase.invoke() }
-        verify(exactly = 1) { intent.getBooleanExtra(any(), false) }
-        verify(exactly = 1) { intent.getAction() }
-        verify(exactly = 1) { replaceFragment.invoke(LauncherFragment::class.java) }
-        verify(exactly = 0) { elseCaseUseCase.invoke() }
-    }
-
-    @Test
     fun testBarcodeReader() {
         every { intent.getBooleanExtra(any(), false) }.answers { false }
         every { intent.getAction() }.answers { BARCODE_READER }

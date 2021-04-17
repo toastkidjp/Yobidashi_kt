@@ -6,7 +6,6 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.yobidashi.main.launch.APP_LAUNCHER
 import jp.toastkid.yobidashi.main.launch.BARCODE_READER
 import jp.toastkid.yobidashi.main.launch.BOOKMARK
 import jp.toastkid.yobidashi.main.launch.MainActivityIntentFactory
@@ -50,17 +49,6 @@ class MainActivityIntentFactoryTest {
         mainActivityIntentFactory.barcodeReader(mockk())
 
         verify(exactly = 1) { anyConstructed<Intent>().setAction(BARCODE_READER) }
-        verify(exactly = 1) { anyConstructed<Intent>().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
-    }
-
-    @Test
-    fun testLauncher() {
-        every { anyConstructed<Intent>().setAction(any()) }.answers { mockk() }
-        every { anyConstructed<Intent>().addFlags(any()) }.answers { mockk() }
-
-        mainActivityIntentFactory.launcher(mockk())
-
-        verify(exactly = 1) { anyConstructed<Intent>().setAction(APP_LAUNCHER) }
         verify(exactly = 1) { anyConstructed<Intent>().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) }
     }
 
