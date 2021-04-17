@@ -81,7 +81,7 @@ class ClippingUrlOpenerTest {
     fun testClipboardIsNull() {
         every { Clipboard.getPrimary(any()) }.returns(null)
 
-        ClippingUrlOpener.invoke(view, { })
+        ClippingUrlOpener.invoke(view) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
