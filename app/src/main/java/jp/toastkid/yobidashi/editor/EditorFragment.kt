@@ -19,7 +19,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.Dimension
@@ -511,15 +510,6 @@ class EditorFragment :
      * @return content [String]
      */
     private fun content(): String = binding.editorInput.text.toString()
-
-    /**
-     * Animate root view with specified [Animation].
-     *
-     * @param animation
-     */
-    fun animate(animation: Animation) {
-        binding.root.startAnimation(animation)
-    }
 
     /**
      * Assign new file object.
