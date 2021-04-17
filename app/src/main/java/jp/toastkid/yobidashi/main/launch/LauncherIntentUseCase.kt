@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
-import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.settings.SettingFragment
 
@@ -69,9 +68,6 @@ class LauncherIntentUseCase(
             }
             BOOKMARK -> {
                 replaceFragment(BookmarkFragment::class.java)
-            }
-            APP_LAUNCHER -> {
-                replaceFragment(LauncherFragment::class.java)
             }
             BARCODE_READER -> {
                 replaceFragment(BarcodeReaderFragment::class.java)
