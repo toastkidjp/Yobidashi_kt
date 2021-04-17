@@ -1,10 +1,4 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply plugin: "jacoco"
-
-jacoco {
-    toolVersion = "0.8.5"
-}
-
 buildscript {
     final byte verMajor  = 1
     final byte verMiddle = 4
@@ -54,6 +48,16 @@ buildscript {
             mockk: '1.9.3',
             coroutines_test: '1.4.0'
     ]
+}
+
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.16.0"
+}
+
+apply plugin: "jacoco"
+
+jacoco {
+    toolVersion = "0.8.5"
 }
 
 allprojects {
