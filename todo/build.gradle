@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion compileSdk
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
         minSdkVersion 19
