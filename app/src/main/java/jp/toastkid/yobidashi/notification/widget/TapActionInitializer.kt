@@ -34,8 +34,6 @@ class TapActionInitializer {
         remoteViews.setOnClickPendingIntent(
                 R.id.browser, pendingIntentFactory.browser(context))
         remoteViews.setOnClickPendingIntent(
-                R.id.launcher, pendingIntentFactory.launcher(context))
-        remoteViews.setOnClickPendingIntent(
                 R.id.barcode_reader, pendingIntentFactory.barcode(context))
         remoteViews.setOnClickPendingIntent(
                 R.id.setting, pendingIntentFactory.setting(context))

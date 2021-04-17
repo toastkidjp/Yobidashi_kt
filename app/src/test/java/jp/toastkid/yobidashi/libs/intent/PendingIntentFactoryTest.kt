@@ -45,7 +45,6 @@ class PendingIntentFactoryTest {
         every { mainActivityIntentFactory.barcodeReader(any()) }.returns(mockk())
         every { mainActivityIntentFactory.bookmark(any()) }.returns(mockk())
         every { mainActivityIntentFactory.browser(any(), any()) }.returns(mockk())
-        every { mainActivityIntentFactory.launcher(any()) }.returns(mockk())
         every { mainActivityIntentFactory.search(any()) }.returns(mockk())
         every { mainActivityIntentFactory.setting(any()) }.returns(mockk())
 
@@ -63,14 +62,6 @@ class PendingIntentFactoryTest {
         pendingIntentFactory.makeSearchLauncher(mockk())
 
         verify(exactly = 1) { mainActivityIntentFactory.search(any()) }
-        verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
-    }
-
-    @Test
-    fun testLauncher() {
-        pendingIntentFactory.launcher(mockk())
-
-        verify(exactly = 1) { mainActivityIntentFactory.launcher(any()) }
         verify(exactly = 1) { PendingIntent.getActivity(any(), any(), any(), any()) }
     }
 
