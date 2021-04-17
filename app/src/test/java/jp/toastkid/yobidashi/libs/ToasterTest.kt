@@ -124,7 +124,7 @@ class ToasterTest {
     }
 
     @Test
-    fun snackIndefinite() {
+    fun testSnackIndefinite() {
         Toaster.snackIndefinite(view, "test", colorPair)
 
         verify(exactly = 0) { view.getContext() }
