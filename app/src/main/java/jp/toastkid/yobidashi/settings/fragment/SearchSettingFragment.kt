@@ -91,8 +91,6 @@ class SearchSettingFragment : Fragment() {
         binding.useUrlModuleCheck.jumpDrawablesToCurrentState()
         binding.useTrendCheck.isChecked = preferenceApplier.isEnableTrendModule()
         binding.useTrendCheck.jumpDrawablesToCurrentState()
-        binding.useAppSearchCheck.isChecked = preferenceApplier.isEnableAppSearch()
-        binding.useAppSearchCheck.jumpDrawablesToCurrentState()
 
         val color = IconColorFinder.from(binding.root).invoke()
         CompoundDrawableColorApplier().invoke(
@@ -106,7 +104,6 @@ class SearchSettingFragment : Fragment() {
                 binding.textUseSuggestion,
                 binding.textUseTrend,
                 binding.textUseUrlModule,
-                binding.textUseAppSearch,
                 binding.textSearchCategory
         )
     }
@@ -194,15 +191,6 @@ class SearchSettingFragment : Fragment() {
         val newState = !preferenceApplier.isEnableTrendModule()
         preferenceApplier.switchEnableTrendModule()
         binding.useTrendCheck.isChecked = newState
-    }
-
-    /**
-     * Switch state of using App search suggestion.
-     */
-    fun switchUseAppSearch() {
-        val newState = !preferenceApplier.isEnableAppSearch()
-        preferenceApplier.switchEnableAppSearch()
-        binding.useAppSearchCheck.isChecked = newState
     }
 
     companion object : TitleIdSupplier {

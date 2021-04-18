@@ -21,13 +21,13 @@ class PreferenceApplier(private val context: Context) {
     @SuppressWarnings("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
-        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION,
+        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION, ENABLE_APP_SEARCH
     }
 
     private enum class Key {
         BG_COLOR, FONT_COLOR,
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
-        ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH, DISABLE_SEARCH_CATEGORIES,
+        ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, DISABLE_SEARCH_CATEGORIES,
         BG_IMAGE, LAST_AD_DATE,
         USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
@@ -104,14 +104,6 @@ class PreferenceApplier(private val context: Context) {
     fun switchEnableTrendModule() {
         preferences.edit().putBoolean(Key.ENABLE_TREND_MODULE.name, !isEnableTrendModule())
                 .apply()
-    }
-
-    fun isEnableAppSearch(): Boolean {
-        return preferences.getBoolean(Key.ENABLE_APP_SEARCH.name, true)
-    }
-
-    fun switchEnableAppSearch() {
-        preferences.edit().putBoolean(Key.ENABLE_APP_SEARCH.name, !isEnableAppSearch()).apply()
     }
 
     fun addDisableSearchCategory(name: String) {

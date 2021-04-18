@@ -282,36 +282,6 @@
             <include layout="@layout/view_setting_divider"/>
 
             <FrameLayout
-                android:id="@+id/use_app_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_transparent"
-                android:onClick="@{view -> fragment.switchUseAppSearch() }"
-                >
-                <TextView
-                    android:id="@+id/text_use_app_search"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:drawablePadding="4dp"
-                    android:gravity="center_vertical"
-                    android:drawableStart="@drawable/ic_android_app"
-                    android:text="@string/use_app_search"
-                    />
-                <CheckBox
-                    android:id="@+id/use_app_search_check"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:clickable="false"
-                    style="@style/Border"
-                    />
-            </FrameLayout>
-
-            <include layout="@layout/view_setting_divider"/>
-
-            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 >
