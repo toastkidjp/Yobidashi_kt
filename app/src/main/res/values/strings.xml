@@ -463,5 +463,6 @@
     <string name="title_context_editor_task_list">Task list</string>
     <string name="subhead_search_category_setting">Search category setting</string>
     <string name="title_lyrics_search">Lyrics search</string>
+    <string name="content_description_switch_visibility">Switch visibility</string>
 
 </resources>

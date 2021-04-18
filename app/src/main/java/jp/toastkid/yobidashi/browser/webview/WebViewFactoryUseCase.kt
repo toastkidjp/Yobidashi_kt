@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 internal class WebViewFactoryUseCase(
         private val webViewFactory: WebViewFactory = WebViewFactory(),
         private val webViewClientFactory: WebViewClientFactory,
-        private val webChromeClientFactory: WebChromeClientFactory
+        private val webChromeClientFactory: WebChromeClientFactory = WebChromeClientFactory()
 ) {
 
     operator fun invoke(context: Context): WebView {

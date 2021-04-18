@@ -23,12 +23,13 @@
             android:id="@+id/close"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_gravity="top|right"
+            android:layout_gravity="top|end"
             android:scaleType="centerInside"
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/ic_close"
             android:onClick="@{view -> dialog.dismiss()}"
             android:background="@drawable/ripple_transparent"
+            android:contentDescription="@string/action_close"
             />
 
         <LinearLayout
@@ -49,6 +50,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:onClick="@{view -> dialog.switchVisibility()}"
+                android:contentDescription="@string/content_description_switch_visibility"
                 />
             <include
                 android:id="@+id/module_edit"

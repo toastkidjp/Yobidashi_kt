@@ -101,10 +101,10 @@ class BookmarkFragment : Fragment(), ContentScrollable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activityContext = context ?: return
+        val activityContext = activity ?: return
 
         val bookmarkRepository = AppDatabase.find(activityContext).bookmarkRepository()
-        val contentViewModel = ViewModelProvider(requireActivity()).get(ContentViewModel::class.java)
+        val contentViewModel = ViewModelProvider(activityContext).get(ContentViewModel::class.java)
         closeOnEmpty(bookmarkRepository, contentViewModel)
 
         val menuPopup = MenuPopup(

@@ -6,12 +6,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import coil.load
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.settings.background.ImageDialogFragment.Companion.withBitmap
 
@@ -33,27 +30,13 @@ internal class ImageDialogFragment: DialogFragment() {
 
         val arguments = arguments ?: return super.onCreateDialog(savedInstanceState)
 
-        loadImage(contentView, arguments)
+        ImageLoadingUseCase().invoke(contentView, arguments)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.image)
                 .setView(contentView)
                 .setPositiveButton(R.string.close) { d, _ -> d.dismiss() }
                 .create()
-    }
-
-    private fun loadImage(contentView: View, arguments: Bundle) {
-        val imageView = contentView.findViewById<ImageView>(R.id.image)
-        when {
-            arguments.containsKey(KEY_IMAGE) -> {
-                val bitmap = arguments.getParcelable<Bitmap>(KEY_IMAGE)
-                imageView.load(bitmap)
-            }
-            arguments.containsKey(KEY_IMAGE_URL) -> {
-                val uriString = arguments.getString(KEY_IMAGE_URL)
-                imageView.load(uriString)
-            }
-        }
     }
 
     companion object {

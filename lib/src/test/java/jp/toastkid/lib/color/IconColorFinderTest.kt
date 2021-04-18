@@ -94,4 +94,20 @@ class IconColorFinderTest {
         verify(atLeast = 1) { view.getResources() }
     }
 
+    @Test
+    fun testFromWithContext() {
+        val context = mockk<Context>()
+        every { context.getSharedPreferences(any(), any()) }.returns(mockk())
+
+        val resources = mockk<Resources>()
+        every { resources.getConfiguration() }.returns(mockk())
+        every { context.getResources() }.returns(resources)
+
+        IconColorFinder.from(context)
+
+        verify(atLeast = 1) { context.getSharedPreferences(any(), any()) }
+        verify(atLeast = 1) { resources.getConfiguration() }
+        verify(atLeast = 1) { context.getResources() }
+    }
+
 }

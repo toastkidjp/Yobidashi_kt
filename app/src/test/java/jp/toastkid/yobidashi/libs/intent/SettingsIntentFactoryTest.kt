@@ -21,7 +21,7 @@ class SettingsIntentFactoryTest {
     }
 
     @Test
-    fun makeLaunch() {
+    fun testMakeLaunch() {
         settingsIntentFactory.makeLaunch()
     }
 

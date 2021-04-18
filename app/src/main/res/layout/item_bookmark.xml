@@ -23,6 +23,7 @@
             android:layout_marginLeft="8dp"
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/ic_history_black"
+            android:contentDescription="@string/title_icon"
             />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

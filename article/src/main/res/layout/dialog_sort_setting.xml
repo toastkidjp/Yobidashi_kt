@@ -16,7 +16,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textSize="18sp"
-            android:text="Sort setting"
+            android:text="@string/title_sort_setting"
             android:drawableLeft="@drawable/ic_sort"
             android:drawableTint="#FF000B00"
             android:drawablePadding="4dp"

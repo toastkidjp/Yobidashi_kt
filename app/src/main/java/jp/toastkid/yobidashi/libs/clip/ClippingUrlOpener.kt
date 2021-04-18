@@ -1,6 +1,5 @@
 package jp.toastkid.yobidashi.libs.clip
 
-import android.content.Context
 import android.net.Uri
 import android.view.View
 import androidx.core.net.toUri
@@ -43,20 +42,25 @@ object ClippingUrlOpener {
 
         previous = clipboardContent
 
-        feedbackToUser(view, clipboardContent, onClick, activityContext)
+        feedbackToUser(view, clipboardContent, onClick)
     }
 
     private fun shouldNotFeedback(clipboardContent: String) =
             Urls.isInvalidUrl(clipboardContent) || clipboardContent.equals(previous)
 
-    private fun feedbackToUser(view: View, clipboardContent: String, onClick: (Uri) -> Unit, activityContext: Context) {
+    private fun feedbackToUser(
+            view: View,
+            clipboardContent: String,
+            onClick: (Uri) -> Unit
+    ) {
         Toaster.withAction(
                 view,
                 "Would you open \"$clipboardContent\"?",
                 R.string.open,
                 View.OnClickListener { onClick(clipboardContent.toUri()) },
-                PreferenceApplier(activityContext).colorPair(),
+                PreferenceApplier(view.context).colorPair(),
                 Snackbar.LENGTH_LONG
         )
     }
+
 }

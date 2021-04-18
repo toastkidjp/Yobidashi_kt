@@ -225,7 +225,7 @@ class EditorSettingFragment : Fragment() {
     }
 
     fun showHighlightColorSetting() {
-        val activity = requireActivity()
+        val activity = activity ?: return
         val currentColor = preferenceApplier.editorHighlightColor(
                 ContextCompat.getColor(activity, R.color.light_blue_200_dd)
         )
