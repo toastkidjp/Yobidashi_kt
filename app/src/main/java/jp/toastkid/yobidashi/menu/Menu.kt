@@ -59,8 +59,6 @@ enum class Menu(
 
     OVERLAY_COLOR_FILTER(R.string.title_color_filter, R.drawable.ic_color_filter),
 
-    MEMORY_CLEANER(R.string.title_memory_cleaner, R.drawable.ic_cleaned),
-
     ABOUT_THIS_APP(R.string.title_about_this_app, R.drawable.ic_yobidashi),
 
     TODO_TASKS_BOARD(R.string.title_todo_tasks_board, R.drawable.ic_board),
