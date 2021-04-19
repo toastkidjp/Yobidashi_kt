@@ -123,7 +123,6 @@
                 android:layout_height="wrap_content"
                 style="@style/OneLineTextMenu"
                 android:text="@string/title_settings_all_apps"
-                app:drawableStartCompat="@drawable/ic_android_app"
                 android:drawablePadding="4dp"
                 android:onClick="@{view -> fragment.allApps()}"
                 />
