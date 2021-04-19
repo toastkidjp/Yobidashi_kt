@@ -7,7 +7,6 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import jp.toastkid.lib.Urls
 import java.io.File
-import java.util.Calendar
 import java.util.Locale
 import kotlin.math.max
 
@@ -21,14 +20,15 @@ class PreferenceApplier(private val context: Context) {
     @SuppressWarnings("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
-        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION, ENABLE_APP_SEARCH
+        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION, ENABLE_APP_SEARCH,
+        LAST_AD_DATE
     }
 
     private enum class Key {
         BG_COLOR, FONT_COLOR,
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
         ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, DISABLE_SEARCH_CATEGORIES,
-        BG_IMAGE, LAST_AD_DATE,
+        BG_IMAGE,
         USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
@@ -139,17 +139,6 @@ class PreferenceApplier(private val context: Context) {
             firstLaunch.mkdirs()
             return true
         }
-
-    fun updateLastAd() {
-        preferences.edit()
-                .putInt(Key.LAST_AD_DATE.name, Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_YEAR))
-                .apply()
-    }
-
-    fun allowShowingAd(): Boolean {
-        val today = Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_YEAR)
-        return today != preferences.getInt(Key.LAST_AD_DATE.name, -1)
-    }
 
     fun setUseNotificationWidget(newState: Boolean) {
         preferences.edit().putBoolean(Key.USE_NOTIFICATION_WIDGET.name, newState).apply()
