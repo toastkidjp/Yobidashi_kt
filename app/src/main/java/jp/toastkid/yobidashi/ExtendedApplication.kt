@@ -20,6 +20,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
+@Suppress("unused")
 class ExtendedApplication : Application() {
 
     override fun onCreate() {
