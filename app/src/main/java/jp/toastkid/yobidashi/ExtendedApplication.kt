@@ -32,7 +32,6 @@ class ExtendedApplication : Application() {
         }
 
         val preferenceApplier = PreferenceApplier(this)
-        preferenceApplier.color = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
         CoroutineScope(Dispatchers.Default).launch {
             processForFirstLaunch(preferenceApplier)
@@ -52,6 +51,8 @@ class ExtendedApplication : Application() {
         if (!preferenceApplier.isFirstLaunch) {
             return
         }
+
+        preferenceApplier.color = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
         DefaultColorInsertion().insert(this)
         BookmarkInitializer(FaviconFolderProviderService().invoke(this))(this)
