@@ -53,7 +53,6 @@ class ExtendedApplication : Application() {
         }
 
         DefaultColorInsertion().insert(this)
-        preferenceApplier.updateLastAd()
         BookmarkInitializer(FaviconFolderProviderService().invoke(this))(this)
         DefaultBackgroundImagePreparation()(this) {
             preferenceApplier.backgroundImagePath = it.absolutePath
