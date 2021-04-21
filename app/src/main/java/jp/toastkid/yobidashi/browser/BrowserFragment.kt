@@ -511,12 +511,8 @@ class BrowserFragment : Fragment(),
 
     override fun onDetach() {
         appBarViewModel?.show()
-        super.onDetach()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
         browserModule.onDestroy()
+        super.onDetach()
     }
 
     companion object {
