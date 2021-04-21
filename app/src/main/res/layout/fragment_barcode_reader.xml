@@ -27,6 +27,7 @@
             app:rippleColor="@color/aw_ripple"
             android:clickable="true"
             android:focusable="true"
+            android:contentDescription="@string/title_camera"
             />
 
     </FrameLayout>
