@@ -78,6 +78,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_behavior="jp.toastkid.lib.view.HidingFloatingActionButtonBehavior"
+                android:contentDescription="@string/menu"
                 />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
