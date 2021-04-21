@@ -69,6 +69,7 @@
                 app:rippleColor="@color/aw_ripple"
                 app:srcCompat="@drawable/ic_add_white"
                 android:onClick="@{view -> fragment.launchAdding()}"
+                android:contentDescription="@string/add_background_image"
                 />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
