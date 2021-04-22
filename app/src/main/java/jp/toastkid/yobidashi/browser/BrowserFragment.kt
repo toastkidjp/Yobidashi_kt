@@ -2,7 +2,6 @@ package jp.toastkid.yobidashi.browser
 
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuInflater
@@ -37,6 +36,7 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.browser.reader.ReaderFragment
 import jp.toastkid.yobidashi.browser.reader.ReaderFragmentViewModel
 import jp.toastkid.yobidashi.browser.shortcut.ShortcutUseCase
+import jp.toastkid.yobidashi.browser.translate.TranslatedPageOpenerUseCase
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
@@ -219,12 +219,10 @@ class BrowserFragment : Fragment(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.translate -> {
-                activity?.let {
-                    val uri = "https://translate.googleusercontent.com/translate_c" +
-                            "?depth=1&nv=1&pto=aue&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=" +
-                            Uri.encode(browserModule.currentUrl())
-                    ViewModelProvider(it).get(BrowserViewModel::class.java).open(uri.toUri())
-                }
+                val activity = activity ?: return true
+                val browserViewModel =
+                        ViewModelProvider(activity).get(BrowserViewModel::class.java)
+                TranslatedPageOpenerUseCase(browserViewModel).invoke(browserModule.currentUrl())
             }
             R.id.download_all_images -> {
                 browserModule.downloadAllImages()
