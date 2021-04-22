@@ -101,8 +101,9 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         adapter = Adapter(preferenceApplier, filesDir)
         binding.imagesView.adapter = adapter
         if (adapter?.itemCount == 0) {
+            val activity = activity ?: return
             Toaster.withAction(
-                    requireActivity().findViewById(android.R.id.content),
+                    activity.findViewById(android.R.id.content),
                     R.string.message_snackbar_suggestion_select_background_image,
                     R.string.select,
                     View.OnClickListener { launchAdding() },

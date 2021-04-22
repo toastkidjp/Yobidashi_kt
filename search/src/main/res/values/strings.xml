@@ -72,4 +72,5 @@
     <string name="search_category_hacker_news">Hacker News</string>
     <string name="my_index">myINDEX</string>
     <string name="search_category_weblio">Weblio</string>
+    <string name="search_category_google_scholar">Google Scholar</string>
 </resources>

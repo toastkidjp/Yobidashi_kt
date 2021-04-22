@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -29,18 +28,15 @@ class CardListFragment : Fragment() {
 
     private lateinit var binding: FragmentPlanningPokerBinding
 
+    private var viewModel: CardListFragmentViewModel? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_planning_poker, container, false)
 
-        val activityContext = context
-                ?: return super.onCreateView(inflater, container, savedInstanceState)
-
-        val layoutManager = LinearLayoutManager(activityContext, LinearLayoutManager.HORIZONTAL, false)
         binding.cardsView.let {
-            it.layoutManager = layoutManager
             it.adapter = Adapter()
-            layoutManager.scrollToPosition(Adapter.medium())
+            it.layoutManager?.scrollToPosition(Adapter.medium())
             ItemTouchHelper(
                     object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP, ItemTouchHelper.UP) {
                         override fun onMove(
@@ -67,29 +63,18 @@ class CardListFragment : Fragment() {
         return binding.root
     }
 
-    private var viewModel: CardListFragmentViewModel? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val cardFragmentUseCase = CardFragmentAttachingUseCase(parentFragmentManager)
+
         activity?.also { fragmentActivity ->
             viewModel = ViewModelProvider(fragmentActivity)
                     .get(CardListFragmentViewModel::class.java)
             viewModel
                     ?.nextCard
-                    ?.observe(fragmentActivity, Observer { openCard(it) })
+                    ?.observe(fragmentActivity, Observer { cardFragmentUseCase(it) })
         }
-    }
-
-    private fun openCard(text: String?) {
-        if (text.isNullOrBlank()) {
-            return
-        }
-
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.slide_up, 0, 0, R.anim.slide_down)
-        transaction.add(R.id.content, CardFragment.makeWithNumber(text))
-        transaction.addToBackStack(CardFragment::class.java.canonicalName)
-        transaction.commit()
     }
 
     override fun onDetach() {

@@ -9,9 +9,10 @@ import java.io.File
  *
  * @author toastkidjp
  */
-class ImageCache {
-
-    private val bitmapCompressor = BitmapCompressor()
+class ImageCache(
+        private val fileProvider: (File?, String) -> File = { parent, name -> File(parent, name) },
+        private val bitmapCompressor: BitmapCompressor = BitmapCompressor()
+) {
 
     /**
      * Save bitmap file to cache file.
@@ -22,11 +23,11 @@ class ImageCache {
      * @return temporary file object
      */
     fun saveBitmap(parent: File?, bitmap: Bitmap): File {
-        val cacheDir = File(parent, CHILD_DIRECTORY)
+        val cacheDir = fileProvider(parent, CHILD_DIRECTORY)
         if (!cacheDir.exists()) {
             cacheDir.mkdirs()
         }
-        val file = File(cacheDir, System.currentTimeMillis().toString() + FILE_EXTENSION)
+        val file = fileProvider(cacheDir, System.currentTimeMillis().toString() + FILE_EXTENSION)
         bitmapCompressor(bitmap, file)
         return file
     }

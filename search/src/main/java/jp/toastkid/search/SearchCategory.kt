@@ -153,6 +153,11 @@ enum class SearchCategory(
             R.drawable.ic_daum,
             "https://search.daum.net/search?w=tot&q="
     ),
+    SCHOLAR(
+            R.string.search_category_google_scholar,
+            R.drawable.ic_google_scholar,
+            "https://scholar.google.com/scholar?q="
+    ),
     IMAGE(
             R.string.search_category_image,
             R.drawable.ic_image_search,
