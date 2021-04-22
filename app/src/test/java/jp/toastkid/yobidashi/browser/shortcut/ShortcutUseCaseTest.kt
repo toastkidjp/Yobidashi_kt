@@ -80,7 +80,7 @@ class ShortcutUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         shortcutUseCase.invoke(mockk(), "test", mockk())
     }
 
