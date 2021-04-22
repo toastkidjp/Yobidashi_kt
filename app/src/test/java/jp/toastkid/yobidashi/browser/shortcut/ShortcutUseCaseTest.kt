@@ -21,6 +21,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.yobidashi.libs.VectorToBitmap
 import org.junit.After
 import org.junit.Before
@@ -82,6 +83,14 @@ class ShortcutUseCaseTest {
     @Test
     fun testInvoke() {
         shortcutUseCase.invoke(mockk(), "test", mockk())
+
+        verify(atLeast = 1) { intentFactory.invoke(any()) }
+        verify(exactly = 1) { intent.setClass(any(), any()) }
+        verify(exactly = 1) { intent.setData(any()) }
+        verify(exactly = 1) { intent.putExtra(any(), any<String>()) }
+        verify(exactly = 1) { intent.putExtra(any(), any<Intent>()) }
+        verify(atLeast = 1) { context.getApplicationContext() }
+        verify(exactly = 1) { context.sendBroadcast(any()) }
     }
 
 }
