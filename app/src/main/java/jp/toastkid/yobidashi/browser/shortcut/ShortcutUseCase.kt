@@ -12,7 +12,6 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
@@ -21,16 +20,18 @@ import androidx.core.content.ContextCompat.getSystemService
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.VectorToBitmap
 import jp.toastkid.yobidashi.main.MainActivity
-import timber.log.Timber
 
 
 /**
  * @author toastkidjp
  */
-class ShortcutUseCase(private val context: Context) {
+class ShortcutUseCase(
+        private val context: Context,
+        private val intentFactory: (String) -> Intent = { Intent(it) }
+) {
 
     operator fun invoke(uri: Uri, title: String, bitmap: Bitmap?) {
-        val shortcutIntent = Intent(Intent.ACTION_VIEW)
+        val shortcutIntent = intentFactory(Intent.ACTION_VIEW)
         shortcutIntent.setClass(context.applicationContext, MainActivity::class.java)
         shortcutIntent.data = uri
 
@@ -65,7 +66,7 @@ class ShortcutUseCase(private val context: Context) {
             shortcutIntent: Intent,
             title: String
     ) {
-        val intent = Intent("com.android.launcher.action.INSTALL_SHORTCUT")
+        val intent = intentFactory("com.android.launcher.action.INSTALL_SHORTCUT")
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title)
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent)
 
