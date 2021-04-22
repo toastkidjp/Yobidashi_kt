@@ -307,17 +307,6 @@ class BrowserModule(
         GlobalWebViewPool.onPause()
     }
 
-    /**
-     * Disable [WebView].
-     */
-    private fun disableWebView() {
-        currentView()?.let {
-            it.isEnabled = false
-            //it.visibility = View.GONE
-        }
-        stopLoading()
-    }
-
     fun onDestroy() {
         webViewContainer?.removeAllViews()
     }
