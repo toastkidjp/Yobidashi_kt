@@ -49,7 +49,7 @@ class TranslatedPageOpenerUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         translatedPageOpenerUseCase.invoke("https://www.yahoo.co.jp")
 
         verify(exactly = 1) { browserViewModel.open(any()) }
