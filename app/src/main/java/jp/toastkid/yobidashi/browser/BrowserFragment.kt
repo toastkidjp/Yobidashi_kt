@@ -268,7 +268,7 @@ class BrowserFragment : Fragment(),
                         return true
                     }
                     preferenceApplier.homeUrl = it
-                    contentViewModel?.snackShort(context.getString(R.string.message_replace_home_url))
+                    contentViewModel?.snackShort(context.getString(R.string.message_replace_home_url, it))
                 }
             }
         }
