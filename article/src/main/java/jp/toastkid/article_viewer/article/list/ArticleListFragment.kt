@@ -275,8 +275,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     override fun onResume() {
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
-        appBarBinding.input.setHintTextColor(ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196))
-        appBarBinding.searchClear.setColorFilter(ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196))
+
+        val buttonColor = ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196)
+        appBarBinding.input.setHintTextColor(buttonColor)
+        appBarBinding.searchClear.setColorFilter(buttonColor)
 
         activity?.let {
             ViewModelProvider(it).get(AppBarViewModel::class.java)
