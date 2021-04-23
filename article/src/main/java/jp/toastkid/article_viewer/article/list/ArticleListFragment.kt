@@ -207,6 +207,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
         }
 
+        appBarBinding.searchClear.setOnClickListener {
+            appBarBinding.input.setText("")
+        }
+
         appBarBinding.input.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) = Unit
 
@@ -216,6 +220,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 CoroutineScope(Dispatchers.Default).launch {
                     inputChannel.send(charSequence.toString())
                 }
+
+                appBarBinding.searchClear.isVisible = charSequence?.length != 0
             }
 
         })

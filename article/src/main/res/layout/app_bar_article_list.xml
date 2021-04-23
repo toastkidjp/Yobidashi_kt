@@ -18,6 +18,23 @@
             app:layout_constraintBottom_toTopOf="@+id/search_result"
             tools:ignore="Autofill,LabelFor"
             />
+        <ImageView
+            android:id="@+id/search_clear"
+            android:layout_width="32dp"
+            android:layout_height="0dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            app:srcCompat="@drawable/ic_close"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ripple_transparent"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:contentDescription="@string/content_description_clear_input"
+            app:layout_constraintEnd_toEndOf="@id/input"
+            app:layout_constraintTop_toTopOf="@id/input"
+            app:layout_constraintBottom_toBottomOf="@id/input"
+            />
         <TextView
             android:id="@+id/search_result"
             android:layout_width="match_parent"
