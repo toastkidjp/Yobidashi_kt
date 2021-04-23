@@ -193,10 +193,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         activity?.let {
             val activityViewModel = ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-            activityViewModel.search.observe(it, Observer {
-                searchUseCase?.search(it)
+            activityViewModel.search.observe(it, Observer { searchInput ->
+                searchUseCase?.search(searchInput)
                 if (appBarBinding.input.text.isNullOrEmpty()) {
-                    appBarBinding.input.setText(it)
+                    appBarBinding.input.setText(searchInput)
                 }
             })
 
