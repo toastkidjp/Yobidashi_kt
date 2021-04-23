@@ -276,6 +276,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
         appBarBinding.input.setHintTextColor(ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196))
+        appBarBinding.searchClear.setColorFilter(ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196))
 
         activity?.let {
             ViewModelProvider(it).get(AppBarViewModel::class.java)
