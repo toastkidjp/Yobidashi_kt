@@ -21,7 +21,6 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.VectorToBitmap
 import jp.toastkid.yobidashi.main.MainActivity
 
-
 /**
  * @author toastkidjp
  */
