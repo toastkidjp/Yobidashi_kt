@@ -379,7 +379,7 @@ class BrowserFragment : Fragment(),
         val makeIntent = if (query.isNullOrEmpty() || Urls.isValidUrl(query)) {
             SearchFragment.makeWith(currentTitle, currentUrl)
         } else {
-            SearchFragment.makeWithQuery(query ?: "", currentTitle, currentUrl)
+            SearchFragment.makeWithQuery(query, currentTitle, currentUrl)
         }
 
         activity?.also  { activity ->
