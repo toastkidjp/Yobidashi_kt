@@ -17,9 +17,11 @@ import kotlinx.coroutines.flow.SharedFlow
  */
 class LoadingViewModel : ViewModel() {
 
-    private val _onPageFinished = MutableSharedFlow<Pair<String, History>>()
+    private val _onPageFinished =
+            MutableSharedFlow<Pair<String, History>>()
 
     val onPageFinished: SharedFlow<Pair<String, History>> = _onPageFinished
 
-    suspend fun finished(tabId: String, history: History) = _onPageFinished.emit(tabId to history)
+    suspend fun finished(tabId: String, history: History) =
+            _onPageFinished.emit(tabId to history)
 }
