@@ -208,17 +208,16 @@ class MainActivity : AppCompatActivity(),
 
         invokeSearchWithClip(colorPair)
 
-        activityViewModelProvider.get(LoadingViewModel::class.java)
-                .onPageFinished
-                .observe(
-                        this,
-                        Observer {
-                            tabs.updateWebTab(it)
-                            if (tabs.currentTabId() == it.first) {
-                                refreshThumbnail()
-                            }
+        CoroutineScope(Dispatchers.Main).launch {
+            activityViewModelProvider.get(LoadingViewModel::class.java)
+                    .onPageFinished
+                    .collect {
+                        tabs.updateWebTab(it)
+                        if (tabs.currentTabId() == it.first) {
+                            refreshThumbnail()
                         }
-                )
+                    }
+        }
 
         activityViewModelProvider.get(OverlayColorFilterViewModel::class.java)
                 .newColor

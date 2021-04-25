@@ -7,19 +7,19 @@
  */
 package jp.toastkid.yobidashi.browser
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.toastkid.yobidashi.tab.History
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 /**
  * @author toastkidjp
  */
 class LoadingViewModel : ViewModel() {
 
-    private val _onPageFinished = MutableLiveData<Pair<String, History>>()
+    private val _onPageFinished = MutableSharedFlow<Pair<String, History>>()
 
-    val onPageFinished: LiveData<Pair<String, History>> = _onPageFinished
+    val onPageFinished: SharedFlow<Pair<String, History>> = _onPageFinished
 
-    fun finished(tabId: String, history: History) = _onPageFinished.postValue(tabId to history)
+    suspend fun finished(tabId: String, history: History) = _onPageFinished.emit(tabId to history)
 }
