@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.browser
 
 import androidx.lifecycle.ViewModel
+import jp.toastkid.yobidashi.browser.model.LoadInformation
 import jp.toastkid.yobidashi.tab.History
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,10 +19,10 @@ import kotlinx.coroutines.flow.SharedFlow
 class LoadingViewModel : ViewModel() {
 
     private val _onPageFinished =
-            MutableSharedFlow<Pair<String, History>>()
+            MutableSharedFlow<LoadInformation>()
 
-    val onPageFinished: SharedFlow<Pair<String, History>> = _onPageFinished
+    val onPageFinished: SharedFlow<LoadInformation> = _onPageFinished
 
     suspend fun finished(tabId: String, history: History) =
-            _onPageFinished.emit(tabId to history)
+            _onPageFinished.emit(LoadInformation(tabId, history))
 }

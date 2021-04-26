@@ -212,8 +212,12 @@ class MainActivity : AppCompatActivity(),
             activityViewModelProvider.get(LoadingViewModel::class.java)
                     .onPageFinished
                     .collect {
-                        tabs.updateWebTab(it)
-                        if (tabs.currentTabId() == it.first) {
+                        if (it.expired()) {
+                            return@collect
+                        }
+
+                        tabs.updateWebTab(it.tabId to it.history)
+                        if (tabs.currentTabId() == it.tabId) {
                             refreshThumbnail()
                         }
                     }
