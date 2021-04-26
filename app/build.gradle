@@ -71,7 +71,6 @@ dependencies {
     implementation project(":todo")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
-    implementation "androidx.fragment:fragment:$libVersions.fragment"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
     implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
     implementation "androidx.exifinterface:exifinterface:1.1.0"
