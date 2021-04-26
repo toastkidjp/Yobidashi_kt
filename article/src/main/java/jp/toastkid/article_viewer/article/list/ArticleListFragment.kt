@@ -254,7 +254,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
         })
         viewModel?.sort?.observe(viewLifecycleOwner, Observer {
-            it?.getContentIfNotHandled()?.let { _ ->
+            it?.getContentIfNotHandled()?.let {
                 searchUseCase?.all()
             }
         })
