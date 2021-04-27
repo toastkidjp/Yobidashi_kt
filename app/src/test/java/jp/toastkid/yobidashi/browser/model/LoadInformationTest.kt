@@ -18,8 +18,8 @@ import org.junit.Test
 class LoadInformationTest {
 
     @Test
-    fun expired() {
-        val loadInformation = LoadInformation("test-id", History.EMPTY)
+    fun testExpired() {
+        val loadInformation = LoadInformation("test-id", History.EMPTY, -1)
         assertFalse(loadInformation.expired())
     }
 
