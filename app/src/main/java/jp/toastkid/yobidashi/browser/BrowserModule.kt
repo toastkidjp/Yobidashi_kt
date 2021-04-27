@@ -76,9 +76,6 @@ class BrowserModule(
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(context, R.anim.slide_up)
 
-    private val slideDown
-            = AnimationUtils.loadAnimation(context, R.anim.slide_down)
-
     private val idGenerator = IdGenerator()
 
     private var lastId = ""
