@@ -28,7 +28,7 @@
             android:textColor="@color/white"
             app:theme="@style/EditTextStyle"
             android:inputType="text"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionSearch|flagNoExtractUi"
             android:background="@color/transparent"
             >
             <requestFocus/>
