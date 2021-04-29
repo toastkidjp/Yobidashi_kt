@@ -144,4 +144,14 @@ class WebViewReplacementUseCaseTest {
         verify(exactly = 1) { anyConstructed<WebSettingApplier>().invoke(any()) }
     }
 
+    @Test
+    fun testChildCountIsNotZero() {
+        every { webViewContainer.getChildCount() }.returns(1)
+
+        webViewReplacementUseCase.invoke("test-id")
+
+        verify(exactly = 1) { webViewContainer.getChildCount() }
+        verify(exactly = 1) { webViewContainer.getChildAt(any()) }
+    }
+
 }
