@@ -291,11 +291,7 @@ class TabAdapter(
     fun swap(from: Int, to: Int) = tabList.swap(from, to)
 
     fun updateWebTab(idAndHistory: Pair<String, History>?) {
-        val id = idAndHistory?.first
-        if (currentTabId() != id) {
-            return
-        }
-
+        idAndHistory ?: return
         tabList.updateWithIdAndHistory(idAndHistory)
     }
 

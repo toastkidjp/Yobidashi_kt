@@ -45,7 +45,7 @@ class ItemMenuPopupActionUseCaseTest {
     }
 
     @Test
-    fun modify() {
+    fun testModify() {
         itemMenuPopupActionUseCase.modify(mockk())
 
         verify(exactly = 1) { modifyAction.invoke(any()) }

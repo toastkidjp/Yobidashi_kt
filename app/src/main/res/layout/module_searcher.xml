@@ -40,6 +40,7 @@
             app:srcCompat="@drawable/ic_close"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> viewModel.hide()}"
+            android:contentDescription="@string/close"
             />
         <ImageView
             android:id="@+id/sip_clear"
@@ -52,6 +53,7 @@
             app:srcCompat="@drawable/ic_clear_form"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> viewModel.clearInput()}"
+            android:contentDescription="@string/clear"
             />
 
         <ImageView
@@ -65,6 +67,7 @@
             app:srcCompat="@drawable/ic_up"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> viewModel.findUp()}"
+            android:contentDescription="@string/content_description_find_upward"
             />
 
         <ImageView
@@ -79,6 +82,7 @@
             app:srcCompat="@drawable/ic_down"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> viewModel.findDown()}"
+            android:contentDescription="@string/content_description_find_downward"
             />
 
     </androidx.cardview.widget.CardView>

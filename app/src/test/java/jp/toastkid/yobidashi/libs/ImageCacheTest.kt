@@ -66,4 +66,17 @@ class ImageCacheTest {
         verify(exactly = 0) { cache.mkdirs() }
     }
 
+    @Test
+    fun testSaveBitmapNoneFolderCase() {
+        every { cache.exists() }.returns(false)
+
+        imageCache.saveBitmap(parent, mockk())
+
+        verify(exactly = 1) { fileProvider.invoke(parent, any()) }
+        verify(exactly = 1) { fileProvider.invoke(cache, any()) }
+        verify(exactly = 1) { bitmapCompressor.invoke(any(), any()) }
+        verify(exactly = 1) { cache.exists() }
+        verify(exactly = 1) { cache.mkdirs() }
+    }
+
 }

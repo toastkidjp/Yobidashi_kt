@@ -13,11 +13,7 @@ import androidx.core.net.toUri
 import androidx.core.view.NestedScrollingChild3
 import androidx.core.view.NestedScrollingChildHelper
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
@@ -200,38 +196,17 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
 
     private fun search() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            context?.let {
-                val url = urlFactory(
-                        PreferenceApplier(it).getDefaultSearchEngine()
-                                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
-                        word
-                ).toString()
-
-                (it as? FragmentActivity)?.let { activity ->
-                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
-                            .open(url.toUri())
-                }
-            }
+            SelectedTextUseCase.make(context)
+                    ?.search(word, PreferenceApplier(context).getDefaultSearchEngine())
         }
     }
 
     private fun searchWithPreview() {
         selectedTextExtractor.withAction(this@CustomWebView) { word ->
-            context?.let {
-                val url = urlFactory(
-                        PreferenceApplier(it).getDefaultSearchEngine()
-                                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(),
-                        word
-                )
-
-                (it as? FragmentActivity)?.let { activity ->
-                    ViewModelProvider(activity).get(BrowserViewModel::class.java)
-                            .preview(url)
-                }
-            }
+            SelectedTextUseCase.make(context)
+                    ?.searchWithPreview(word, PreferenceApplier(context).getDefaultSearchEngine())
         }
     }
-
 
     override fun setNestedScrollingEnabled(enabled: Boolean) {
         childHelper.isNestedScrollingEnabled = enabled
@@ -346,8 +321,6 @@ internal class CustomWebView(context: Context) : WebView(context), NestedScrolli
     }
 
     companion object {
-
-        private val urlFactory = UrlFactory()
 
         private val selectedTextExtractor = SelectedTextExtractor()
 

@@ -13,12 +13,15 @@ import java.io.File
  *
  * @author toastkidjp
  */
-class FaviconApplier(context: Context) {
+class FaviconApplier(
+        context: Context,
+        filesDirFactory: (Context, String) -> FilesDir = { c, n -> FilesDir(c, n) }
+) {
 
     /**
      * Favicon file directory.
      */
-    private val favicons: FilesDir = FilesDir(context, "favicons")
+    private val favicons: FilesDir = filesDirFactory(context, "favicons")
 
     /**
      * Assign file.

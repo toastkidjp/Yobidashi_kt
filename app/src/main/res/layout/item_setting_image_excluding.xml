@@ -36,6 +36,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start|center_vertical"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/image"
                 />
             <TextView
                 android:id="@+id/text"
@@ -56,6 +57,7 @@
                 app:srcCompat="@drawable/ic_remove_circle"
                 android:adjustViewBounds="true"
                 android:background="@drawable/ripple_transparent"
+                android:contentDescription="@string/delete"
                 />
             <View
                 android:layout_width="match_parent"

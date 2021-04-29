@@ -71,4 +71,15 @@ class HtmlApiTest {
         verify(exactly = 0) { call.execute() }
     }
 
+    @Test
+    fun testUrlIsInvalid() {
+        every { Urls.isInvalidUrl(any()) }.returns(true)
+
+        htmlApi.invoke("ttps://www.yahoo.co.jp")
+
+        verify(exactly = 1) { HttpClientFactory.withTimeout(any()) }
+        verify(exactly = 0) { httpClient.newCall(any()) }
+        verify(exactly = 0) { call.execute() }
+    }
+
 }
