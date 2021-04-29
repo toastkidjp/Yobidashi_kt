@@ -164,7 +164,7 @@ class WebViewReplacementUseCaseTest {
 
         webViewReplacementUseCase.invoke("test-id")
 
-        verify(exactly = 1) { GlobalWebViewPool.containsKey(any()) }
+        verify(exactly = 1) { GlobalWebViewPool.containsKey("test-id") }
         verify(exactly = 0) { GlobalWebViewPool.put(any(), any()) }
     }
 
