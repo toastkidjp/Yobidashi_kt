@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.tab.History
 data class LoadInformation(
         val tabId: String,
         val history: History,
-        val lastUpdated: Long = System.currentTimeMillis()
+        private val lastUpdated: Long = System.currentTimeMillis()
 ) {
 
     fun expired() = System.currentTimeMillis() - lastUpdated > 3000L
