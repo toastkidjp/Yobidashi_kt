@@ -23,4 +23,10 @@ class LoadInformationTest {
         assertFalse(loadInformation.expired())
     }
 
+    @Test
+    fun testDoesNotExpired() {
+        val loadInformation = LoadInformation("test-id", History.EMPTY, System.currentTimeMillis())
+        assertFalse(loadInformation.expired())
+    }
+
 }
