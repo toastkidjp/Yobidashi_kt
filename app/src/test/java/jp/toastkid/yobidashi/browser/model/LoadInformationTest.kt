@@ -31,7 +31,7 @@ class LoadInformationTest {
     }
 
     @Test
-    fun defaultCase() {
+    fun testDefaultCase() {
         val loadInformation = LoadInformation("test-id", History.EMPTY)
         assertFalse(loadInformation.expired())
     }
