@@ -21,6 +21,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.BrowserHeaderViewModel
 import jp.toastkid.yobidashi.browser.ScreenMode
@@ -117,6 +118,30 @@ class WebViewReplacementUseCaseTest {
     @Test
     fun testInvoke() {
         webViewReplacementUseCase.invoke("test-id")
+
+        verify(exactly = 1) { webViewContainer.getChildCount() }
+        verify(exactly = 0) { webViewContainer.getChildAt(any()) }
+        verify(exactly = 1) { webViewContainer.getContext() }
+        verify(atLeast = 1) { webView.onResume() }
+        verify(atLeast = 1) { webView.getParent() }
+        verify(atLeast = 1) { webView.getSettings() }
+        verify(atLeast = 1) { webView.canGoBack() }
+        verify(atLeast = 1) { webView.canGoForward() }
+        verify(atLeast = 1) { webView.getTitle() }
+        verify(atLeast = 1) { webView.getUrl() }
+        verify(exactly = 1) { darkThemeApplier.invoke(any(), any()) }
+        verify(exactly = 1) { preferenceApplier.useDarkMode() }
+        verify(exactly = 1) { preferenceApplier.browserScreenMode() }
+        verify(exactly = 1) { browserHeaderViewModel.setBackButtonEnability(any()) }
+        verify(exactly = 1) { browserHeaderViewModel.setForwardButtonEnability(any()) }
+        verify(exactly = 1) { browserHeaderViewModel.nextTitle(any()) }
+        verify(exactly = 1) { browserHeaderViewModel.nextUrl(any()) }
+        verify(exactly = 1) { makeWebView.invoke() }
+        verify(exactly = 1) { webViewStateUseCase.restore(any(), any()) }
+        verify(exactly = 1) { GlobalWebViewPool.put(any(), any()) }
+        verify(exactly = 1) { GlobalWebViewPool.get(any()) }
+        verify(exactly = 1) { GlobalWebViewPool.getLatest() }
+        verify(exactly = 1) { anyConstructed<WebSettingApplier>().invoke(any()) }
     }
 
 }
