@@ -155,7 +155,7 @@ class WebViewReplacementUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testContainsTabId() {
         mockkObject(GlobalWebViewPool)
         every { GlobalWebViewPool.containsKey(any()) }.returns(true)
 
