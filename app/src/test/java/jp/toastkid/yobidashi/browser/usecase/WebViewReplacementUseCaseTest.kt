@@ -115,7 +115,7 @@ class WebViewReplacementUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         webViewReplacementUseCase.invoke("test-id")
     }
 
