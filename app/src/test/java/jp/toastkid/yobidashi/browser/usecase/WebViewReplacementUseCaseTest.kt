@@ -69,7 +69,7 @@ class WebViewReplacementUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { webViewContainer.getChildCount() }.returns(0) // TODO Other case
+        every { webViewContainer.getChildCount() }.returns(0)
         every { webViewContainer.getChildAt(any()) }.returns(webView)
         every { webViewContainer.addView(any()) }.returns(Unit)
         every { webViewContainer.removeAllViews() }.returns(Unit)
@@ -101,7 +101,7 @@ class WebViewReplacementUseCaseTest {
         mockkConstructor(LruCache::class)
 
         mockkObject(GlobalWebViewPool)
-        every { GlobalWebViewPool.containsKey(any()) }.returns(false) // TODO true case
+        every { GlobalWebViewPool.containsKey(any()) }.returns(false)
         every { GlobalWebViewPool.put(any(), any()) }.returns(Unit)
         every { GlobalWebViewPool.get(any()) }.returns(webView)
         every { GlobalWebViewPool.getLatest() }.returns(webView)
@@ -152,6 +152,17 @@ class WebViewReplacementUseCaseTest {
 
         verify(exactly = 1) { webViewContainer.getChildCount() }
         verify(exactly = 1) { webViewContainer.getChildAt(any()) }
+    }
+
+    @Test
+    fun test() {
+        mockkObject(GlobalWebViewPool)
+        every { GlobalWebViewPool.containsKey(any()) }.returns(true)
+
+        webViewReplacementUseCase.invoke("test-id")
+
+        verify(exactly = 1) { GlobalWebViewPool.containsKey(any()) }
+        verify(exactly = 0) { GlobalWebViewPool.put(any(), any()) }
     }
 
 }
