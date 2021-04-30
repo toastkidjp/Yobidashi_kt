@@ -137,8 +137,6 @@ class BrowserModule(
             return
         }
 
-        val context: Context = context
-
         val currentView = currentView() ?: return
 
         if (currentView.url.isNullOrEmpty()
