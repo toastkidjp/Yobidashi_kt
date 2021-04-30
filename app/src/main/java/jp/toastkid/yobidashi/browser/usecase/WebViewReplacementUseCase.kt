@@ -37,6 +37,11 @@ class WebViewReplacementUseCase(
         private val darkThemeApplier: DarkModeApplier = DarkModeApplier()
 ) {
 
+    /**
+     *
+     * @param tabId Tab's ID
+     * @return If return true, it should load immediately
+     */
     operator fun invoke(tabId: String): Boolean {
         val currentWebView = getWebView(tabId)
         if (webViewContainer?.childCount != 0) {
