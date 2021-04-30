@@ -153,8 +153,8 @@ class WebViewReplacementUseCaseTest {
 
         verify(exactly = 1) { webViewContainer.getChildCount() }
         verify(exactly = 1) { webViewContainer.getChildAt(any()) }
-        verify(exactly = 1) { GlobalWebViewPool.containsKey(any()) }
-        verify(exactly = 1) { GlobalWebViewPool.put(any(), any()) }
+        verify(exactly = 1) { GlobalWebViewPool.containsKey("test-id") }
+        verify(exactly = 1) { GlobalWebViewPool.put("test-id", any()) }
     }
 
     @Test
