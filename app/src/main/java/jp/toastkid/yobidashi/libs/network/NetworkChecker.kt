@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
  *
  * @author toastkidjp
  */
+@Deprecated("ActiveNetworkInfo is deprecated.")
 object NetworkChecker {
 
     /**
