@@ -28,7 +28,7 @@ import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
 import jp.toastkid.yobidashi.gesture.GestureMemoFragment
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.media.image.list.ImageViewerFragment
 import jp.toastkid.yobidashi.media.music.popup.MediaPlayerPopup
@@ -160,7 +160,7 @@ class MenuUseCase(
             Menu.RANDOM_WIKIPEDIA -> {
                 val activity = activitySupplier()
                 if (preferenceApplier.wifiOnly &&
-                        WifiConnectionChecker.isNotConnecting(activity)) {
+                        NetworkChecker.isUnavailableWiFi(activity)) {
                     contentViewModel.snackShort(R.string.message_wifi_not_connecting)
                     return
                 }
