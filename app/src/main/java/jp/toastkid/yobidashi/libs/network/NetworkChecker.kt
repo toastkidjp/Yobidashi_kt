@@ -27,8 +27,8 @@ object NetworkChecker {
         return isAvailable(context) == NetworkType.NONE
     }
 
-    fun canUseWiFi(context: Context): Boolean {
-        return isAvailable(context) == NetworkType.WIFI
+    fun isUnavailableWiFi(context: Context): Boolean {
+        return isAvailable(context) != NetworkType.WIFI
     }
 
     /**
