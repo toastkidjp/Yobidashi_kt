@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
  * TODO Rewrite new API
  * @author toastkidjp
  */
+@Deprecated("You should use NetworkChecker.")
 object WifiConnectionChecker {
 
     /**
