@@ -19,7 +19,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
-import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 
 /**
  * Method object of downloading image file.
@@ -65,7 +65,7 @@ class ImageDownloadActionDialogFragment : DialogFragment() {
      */
     private fun downloadPreview(url: String, imageView: ImageView) {
         val context: Context = imageView.context
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+        if (PreferenceApplier(context).wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
