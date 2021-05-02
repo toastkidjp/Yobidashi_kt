@@ -10,7 +10,6 @@ import android.os.Build
  *
  * @author toastkidjp
  */
-@Deprecated("ActiveNetworkInfo is deprecated.")
 object NetworkChecker {
 
     enum class NetworkType {
