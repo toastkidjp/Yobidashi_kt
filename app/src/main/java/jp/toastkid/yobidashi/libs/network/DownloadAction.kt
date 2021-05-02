@@ -30,7 +30,7 @@ class DownloadAction(private val context: Context) {
     }
 
     operator fun invoke(urls: Collection<String>) {
-        if (PreferenceApplier(context).wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+        if (PreferenceApplier(context).wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
