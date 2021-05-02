@@ -12,7 +12,7 @@ import android.os.Build
  */
 object NetworkChecker {
 
-    enum class NetworkType {
+    private enum class NetworkType {
         WIFI, OTHER, NONE
     }
 
