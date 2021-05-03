@@ -31,10 +31,10 @@ object NetworkChecker {
     }
 
     /**
-     * Check usable network.
+     * Check network is available.
      *
-     * @param context
-     * @return
+     * @param context Use for obtaining [ConnectivityManager]
+     * @return If network is available, return true
      */
     private fun isAvailable(context: Context): NetworkType {
         val connectivityManager =
