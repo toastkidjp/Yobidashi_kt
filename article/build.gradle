@@ -61,7 +61,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$libVersions.timber"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
 
-    final def markwonVersion = '4.5.1'
+    final def markwonVersion = '4.6.2'
 
     implementation "io.noties.markwon:core:$markwonVersion"
     implementation "io.noties.markwon:ext-tables:$markwonVersion"
