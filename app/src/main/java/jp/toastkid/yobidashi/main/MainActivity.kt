@@ -510,7 +510,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        ClippingUrlOpener(binding.content) { browserViewModel?.open(it) }
+        ClippingUrlOpener()(binding.content) { browserViewModel?.open(it) }
     }
 
     /**

@@ -15,7 +15,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
  *
  * @author toastkidjp
  */
-object ClippingUrlOpener {
+class ClippingUrlOpener {
 
     /**
      * For suppress consecutive showing.
