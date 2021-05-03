@@ -17,14 +17,14 @@ import jp.toastkid.yobidashi.libs.BitmapScaling
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.UUID
-import kotlin.jvm.Throws
 
 /**
  * @author toastkidjp
  */
 class ImageStoreService(
         private val filesDir: StorageWrapper,
-        private val preferenceApplier: PreferenceApplier
+        private val preferenceApplier: PreferenceApplier,
+        private val bitmapScaling: BitmapScaling = BitmapScaling()
 ) {
 
     /**
@@ -42,7 +42,7 @@ class ImageStoreService(
 
         val size = getDisplayScale(display)
         val fileOutputStream = FileOutputStream(output)
-        BitmapScaling(image, size.width().toDouble(), size.height().toDouble())
+        bitmapScaling(image, size.width().toDouble(), size.height().toDouble())
                 .compress(Bitmap.CompressFormat.WEBP, 100, fileOutputStream)
         fileOutputStream.close()
     }

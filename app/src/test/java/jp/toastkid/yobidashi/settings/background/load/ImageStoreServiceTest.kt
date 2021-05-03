@@ -7,7 +7,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
-import io.mockk.mockkObject
 import io.mockk.spyk
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -41,6 +40,9 @@ class ImageStoreServiceTest {
     @MockK
     private lateinit var scaledBitmap: Bitmap
 
+    @MockK
+    private lateinit var bitmapScaling: BitmapScaling
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -58,8 +60,7 @@ class ImageStoreServiceTest {
 
         every { scaledBitmap.compress(any(), any(), any()) }.answers { true }
 
-        mockkObject(BitmapScaling)
-        every { BitmapScaling.invoke(any(), any(), any()) }.answers { scaledBitmap }
+        every { bitmapScaling.invoke(any(), any(), any()) }.answers { scaledBitmap }
 
         every { uri.getLastPathSegment() }.returns("last")
 
@@ -69,7 +70,7 @@ class ImageStoreServiceTest {
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
         verify(exactly = 1) { display.getRectSize(any()) }
         verify(exactly = 1) { anyConstructed<FileOutputStream>().close() }
-        verify(exactly = 1) { BitmapScaling.invoke(any(), any(), any()) }
+        verify(exactly = 1) { bitmapScaling.invoke(any(), any(), any()) }
         verify(exactly = 1) { uri.getLastPathSegment() }
 
         file.delete()
