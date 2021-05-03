@@ -17,10 +17,10 @@ object NetworkChecker {
     }
 
     /**
-     * Return true if we can't use network.
+     * If it can't use network, return true.
      *
-     * @param context
-     * @return
+     * @param context Use for obtaining ConnectivityManager
+     * @return If it can't use network, return true
      */
     fun isNotAvailable(context: Context): Boolean {
         return isAvailable(context) == NetworkType.NONE
