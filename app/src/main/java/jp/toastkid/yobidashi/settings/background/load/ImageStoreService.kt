@@ -17,6 +17,7 @@ import jp.toastkid.yobidashi.libs.BitmapScaling
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.util.UUID
+import kotlin.jvm.Throws
 
 /**
  * @author toastkidjp
