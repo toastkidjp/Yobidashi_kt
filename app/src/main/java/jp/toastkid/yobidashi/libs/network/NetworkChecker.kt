@@ -26,6 +26,12 @@ object NetworkChecker {
         return isAvailable(context) == NetworkType.NONE
     }
 
+    /**
+     * If current network is not Wi-Fi or it is unavailable, return true.
+     *
+     * @param context Use for obtaining ConnectivityManager
+     * @return If current network is not Wi-Fi or it is unavailable, return true.
+     */
     fun isUnavailableWiFi(context: Context): Boolean {
         return isAvailable(context) != NetworkType.WIFI
     }
