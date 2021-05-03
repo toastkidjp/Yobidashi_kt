@@ -363,7 +363,7 @@ enum class SearchCategory(
     ),
     ECONOMIST(
             R.string.search_category_economist,
-            R.drawable.ic_financial_times,
+            R.drawable.ic_the_economist_logo,
             "https://www.economist.com/search?q="
     ),
     FT(
