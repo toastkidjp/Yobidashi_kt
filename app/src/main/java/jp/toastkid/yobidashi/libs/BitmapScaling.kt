@@ -7,7 +7,7 @@ import android.graphics.Bitmap
  *
  * @author toastkidjp
  */
-object BitmapScaling {
+class BitmapScaling {
 
     /**
      * Invoke scaling.
