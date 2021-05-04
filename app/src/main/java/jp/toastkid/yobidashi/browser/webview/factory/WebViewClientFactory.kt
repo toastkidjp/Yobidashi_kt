@@ -76,9 +76,11 @@ class WebViewClientFactory(
             val title = view.title ?: ""
             val urlStr = url ?: ""
 
-            val tabId = tabIds.get(view.hashCode())
+            val key = view.hashCode()
+            val tabId = tabIds.get(key)
             if (tabId?.isNotBlank() == true) {
                 loadingViewModel?.finished(tabId, History.make(title, urlStr))
+                tabIds.remove(key)
             }
 
             browserHeaderViewModel?.updateProgress(100)

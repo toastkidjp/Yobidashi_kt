@@ -17,9 +17,9 @@ import android.provider.Settings
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,11 +69,10 @@ class ProcessCleanerInvoker {
             message: String,
             preferenceApplier: PreferenceApplier
     ) {
-        Toaster.snack(
+        Toaster.snackLong(
                 snackbarParent,
                 if (message.isBlank()) "Failed." else message,
-                preferenceApplier.colorPair(),
-                Snackbar.LENGTH_LONG
+                preferenceApplier.colorPair()
         )
     }
 

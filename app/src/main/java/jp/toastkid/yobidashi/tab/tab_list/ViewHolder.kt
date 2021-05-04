@@ -6,6 +6,7 @@ import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.CachePolicy
+import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemTabListBinding
@@ -18,6 +19,8 @@ import java.io.File
  */
 internal class ViewHolder(private val binding: ItemTabListBinding)
     : RecyclerView.ViewHolder(binding.root) {
+
+    private val closeButtonColor = IconColorFinder.from(binding.close).invoke()
 
     /**
      * Set tab's title.
@@ -60,7 +63,7 @@ internal class ViewHolder(private val binding: ItemTabListBinding)
      * @param pair [ColorPair]
      */
     fun setColor(pair: ColorPair) {
-        binding.close.setColorFilter(pair.bgColor())
+        binding.close.setColorFilter(closeButtonColor)
         binding.title.setTextColor(pair.fontColor())
         binding.title.setBackgroundColor(pair.bgColor())
     }

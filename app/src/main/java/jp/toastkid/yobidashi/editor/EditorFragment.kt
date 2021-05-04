@@ -19,7 +19,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.Dimension
@@ -37,7 +36,6 @@ import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.FileExtractorFromUri
 import jp.toastkid.lib.TabListViewModel
-import jp.toastkid.lib.file.ExtensionRemover
 import jp.toastkid.lib.permission.RuntimePermissions
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.ExternalFileAssignment
@@ -83,8 +81,6 @@ class EditorFragment :
     private lateinit var preferenceApplier: PreferenceApplier
 
     private val externalFileAssignment = ExternalFileAssignment()
-
-    private val extensionRemover = ExtensionRemover()
 
     /**
      * Default date format holder.
@@ -287,7 +283,7 @@ class EditorFragment :
             save()
             return
         }
-        val fileName = extensionRemover(File(path).name) + "_backup.txt"
+        val fileName = File(path).nameWithoutExtension + "_backup.txt"
         saveToFile(externalFileAssignment(binding.root.context, fileName).absolutePath)
     }
 
@@ -516,15 +512,6 @@ class EditorFragment :
     private fun content(): String = binding.editorInput.text.toString()
 
     /**
-     * Animate root view with specified [Animation].
-     *
-     * @param animation
-     */
-    fun animate(animation: Animation) {
-        binding.root.startAnimation(animation)
-    }
-
-    /**
      * Assign new file object.
      *
      * @param fileName
@@ -535,7 +522,7 @@ class EditorFragment :
         while (newFile.exists()) {
             newFile = externalFileAssignment(
                     context,
-                    "${extensionRemover(newFile.name)}_.txt"
+                    "${newFile.nameWithoutExtension}_.txt"
             )
         }
         path = newFile.absolutePath

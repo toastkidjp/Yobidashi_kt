@@ -150,7 +150,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableStart="@drawable/ic_history_black"
+                    android:drawableStart="@drawable/ic_search_history_black"
                     android:text="@string/title_use_search_history"
                     />
                 <CheckBox
@@ -208,7 +208,7 @@
                     android:layout_margin="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:drawableStart="@drawable/ic_web_black"
+                    android:drawableStart="@drawable/ic_history_black"
                     android:text="@string/use_view_history"
                     />
                 <CheckBox

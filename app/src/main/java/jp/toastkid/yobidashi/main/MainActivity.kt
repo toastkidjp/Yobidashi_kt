@@ -43,6 +43,7 @@ import jp.toastkid.yobidashi.browser.LoadingViewModel
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.floating.FloatingPreview
 import jp.toastkid.yobidashi.browser.page_search.PageSearcherModule
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.databinding.ActivityMainBinding
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.Toaster
@@ -733,6 +734,7 @@ class MainActivity : AppCompatActivity(),
         searchWithClip.dispose()
         pageSearchPresenter.dispose()
         floatingPreview?.dispose()
+        GlobalWebViewPool.dispose()
         super.onDestroy()
     }
 

@@ -53,7 +53,7 @@ class ItemMenuPopupActionUseCaseTest {
     }
 
     @Test
-    fun delete() {
+    fun testDelete() {
         itemMenuPopupActionUseCase.delete(mockk())
 
         verify(exactly = 0) { modifyAction.invoke(any()) }

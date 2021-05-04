@@ -18,7 +18,7 @@ internal class Provider : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetIds: IntArray
     ) {
-        updateWidget(context, RemoteViewsFactory.make(context))
+        updateWidget(context, appWidgetManager, RemoteViewsFactory.make(context))
     }
 
     companion object {
@@ -29,10 +29,13 @@ internal class Provider : AppWidgetProvider() {
          * @param context
          * @param remoteViews
          */
-        fun updateWidget(context: Context, remoteViews: RemoteViews) {
+        fun updateWidget(
+                context: Context,
+                appWidgetManager: AppWidgetManager,
+                remoteViews: RemoteViews
+        ) {
             val componentName = ComponentName(context, Provider::class.java)
-            val manager = AppWidgetManager.getInstance(context)
-            manager.updateAppWidget(componentName, remoteViews)
+            appWidgetManager.updateAppWidget(componentName, remoteViews)
         }
     }
 }

@@ -23,6 +23,7 @@
             android:textSize="10sp"
             android:textColor="@color/black"
             android:background="@color/filter_white_bb"
+            tools:ignore="SmallSp"
             />
     </androidx.cardview.widget.CardView>
 </layout>

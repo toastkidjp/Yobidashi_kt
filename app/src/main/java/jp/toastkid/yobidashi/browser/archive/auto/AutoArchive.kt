@@ -10,17 +10,13 @@ package jp.toastkid.yobidashi.browser.archive.auto
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebView
-import jp.toastkid.lib.file.ExtensionRemover
 import jp.toastkid.lib.storage.CacheDir
 import jp.toastkid.lib.storage.StorageWrapper
 
 /**
  * @author toastkidjp
  */
-class AutoArchive(
-        private val filesDir: StorageWrapper,
-        private val extensionRemover: ExtensionRemover = ExtensionRemover()
-) {
+class AutoArchive(private val filesDir: StorageWrapper) {
 
     fun save(webView: WebView?, id: String?) {
         webView?.saveWebArchive(filesDir.assignNewFile("$id$EXTENSION").absolutePath)
@@ -35,7 +31,7 @@ class AutoArchive(
 
     fun deleteUnused(archiveIds: Collection<String>) {
         filesDir.listFiles()
-                .filter { !archiveIds.contains(extensionRemover(it.name)) }
+                .filter { !archiveIds.contains(it.nameWithoutExtension) }
                 .forEach { it.delete() }
     }
 

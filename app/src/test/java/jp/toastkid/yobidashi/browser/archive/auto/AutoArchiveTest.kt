@@ -8,7 +8,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import jp.toastkid.lib.file.ExtensionRemover
 import jp.toastkid.lib.storage.StorageWrapper
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -29,9 +28,6 @@ class AutoArchiveTest {
     private lateinit var filesDir: StorageWrapper
 
     @MockK
-    private lateinit var extensionRemover: ExtensionRemover
-
-    @MockK
     private lateinit var file: File
 
     @Before
@@ -43,7 +39,6 @@ class AutoArchiveTest {
         every { filesDir.assignNewFile(any<String>()) }.returns(file)
         every { filesDir.delete(any()) }.answers { Unit }
         every { filesDir.listFiles() }.returns(arrayOf(file))
-        every { extensionRemover.invoke(any()) }.returns("test")
     }
 
     @After

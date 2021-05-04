@@ -75,6 +75,19 @@ object Toaster {
     ): Snackbar = snack(view, message, pair, Snackbar.LENGTH_INDEFINITE)
 
     /**
+     * Show simple snackbar on long duration.
+     *
+     * @param view
+     * @param message
+     * @param pair
+     */
+    fun snackLong(
+            view: View,
+            message: String,
+            pair: ColorPair
+    ): Snackbar = snack(view, message, pair, Snackbar.LENGTH_LONG)
+
+    /**
      * Show simple snackbar on specified duration.
      *
      * @param view
@@ -82,7 +95,7 @@ object Toaster {
      * @param pair
      * @param duration
      */
-    fun snack(
+    private fun snack(
             view: View,
             message: String,
             pair: ColorPair,
