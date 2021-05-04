@@ -28,7 +28,7 @@ class DateSelectedActionUseCase(
     operator fun invoke(year: Int, month: Int, date: Int) {
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             val article = withContext(Dispatchers.IO) {
-                repository.findFirst(TitleFilterGenerator(year, month + 1, date))
+                repository.findFirst(TitleFilterGenerator()(year, month + 1, date))
             } ?: return@launch
             viewModel.newArticle(article.title)
         }
