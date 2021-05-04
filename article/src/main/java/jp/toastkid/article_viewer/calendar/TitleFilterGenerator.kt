@@ -5,7 +5,7 @@ package jp.toastkid.article_viewer.calendar
  *
  * @author toastkidjp
  */
-object TitleFilterGenerator {
+class TitleFilterGenerator {
 
     /**
      * Make filtering query with year, month, and date.
