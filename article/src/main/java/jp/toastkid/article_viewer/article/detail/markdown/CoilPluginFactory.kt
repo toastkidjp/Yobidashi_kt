@@ -11,7 +11,6 @@ import android.content.Context
 import coil.ImageLoader
 import coil.request.Disposable
 import coil.request.ImageRequest
-import coil.transform.CircleCropTransformation
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.coil.CoilImagesPlugin
 
@@ -29,7 +28,6 @@ class CoilPluginFactory {
                                     .defaults(imageLoader.defaults)
                                     .data(drawable.destination)
                                     .crossfade(true)
-                                    .transformations(CircleCropTransformation())
                                     .build()
 
                     override fun cancel(disposable: Disposable) =
