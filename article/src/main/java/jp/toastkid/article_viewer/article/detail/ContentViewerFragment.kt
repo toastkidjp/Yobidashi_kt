@@ -92,8 +92,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         val viewModelProvider = ViewModelProvider(activity)
         return LinkBehaviorService(
                 viewModelProvider.get(ContentViewModel::class.java),
-                viewModelProvider.get(BrowserViewModel::class.java)
-        ) { repository.exists(it) > 0 }
+                viewModelProvider.get(BrowserViewModel::class.java),
+                { repository.exists(it) > 0 }
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
