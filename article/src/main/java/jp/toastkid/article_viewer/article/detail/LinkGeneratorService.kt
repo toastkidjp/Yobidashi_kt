@@ -21,7 +21,7 @@ class LinkGeneratorService {
                 textView,
                 internalLinkPattern,
                 Linkify.TransformFilter { matcher, _ ->
-                    InternalLinkScheme.makeLink(matcher.group(1))
+                    InternalLinkScheme().makeLink(matcher.group(1))
                 }
         )
 
