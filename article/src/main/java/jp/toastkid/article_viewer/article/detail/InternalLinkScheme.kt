@@ -10,9 +10,7 @@ package jp.toastkid.article_viewer.article.detail
 /**
  * @author toastkidjp
  */
-object InternalLinkScheme {
-
-    private const val INTERNAL_LINK_SCHEME = "internal-article://"
+class InternalLinkScheme {
 
     fun makeLink(title: String?) = "$INTERNAL_LINK_SCHEME$title"
 
@@ -25,6 +23,12 @@ object InternalLinkScheme {
             return url
         }
         return url.substring(INTERNAL_LINK_SCHEME.length)
+    }
+
+    companion object {
+
+        private const val INTERNAL_LINK_SCHEME = "internal-article://"
+
     }
 
 }
