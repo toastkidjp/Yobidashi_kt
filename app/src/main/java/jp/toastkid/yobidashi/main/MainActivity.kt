@@ -20,6 +20,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.lib.AppBarViewModel
@@ -189,20 +190,32 @@ class MainActivity : AppCompatActivity(),
         })
         browserViewModel?.openBackground?.observe(this, Observer {
             val uri = it?.getContentIfNotHandled() ?: return@Observer
-            tabs.openBackgroundTab(uri.toString(), uri.toString())
-            Toaster.snackShort(
+            val callback = tabs.openBackgroundTab(uri.toString(), uri.toString())
+            Toaster.withAction(
                     binding.content,
                     getString(R.string.message_tab_open_background, uri.toString()),
-                    preferenceApplier.colorPair()
+                    getString(R.string.open),
+                    View.OnClickListener {
+                        callback()
+                        replaceToCurrentTab(true)
+                    },
+                    preferenceApplier.colorPair(),
+                    Snackbar.LENGTH_SHORT
             )
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
-            tabs.openBackgroundTab(pair.first, pair.second.toString())
-            Toaster.snackShort(
+            val callback = tabs.openBackgroundTab(pair.first, pair.second.toString())
+            Toaster.withAction(
                     binding.content,
                     getString(R.string.message_tab_open_background, pair.first),
-                    preferenceApplier.colorPair()
+                    getString(R.string.open),
+                    View.OnClickListener {
+                        callback()
+                        replaceToCurrentTab(true)
+                    },
+                    preferenceApplier.colorPair(),
+                    Snackbar.LENGTH_SHORT
             )
         })
 
