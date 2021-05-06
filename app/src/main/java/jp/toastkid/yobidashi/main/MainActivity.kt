@@ -188,21 +188,20 @@ class MainActivity : AppCompatActivity(),
             val uri = it?.getContentIfNotHandled() ?: return@Observer
             openNewWebTab(uri)
         })
+
+        val backgroundTabOpenerUseCase = BackgroundTabOpenerUseCase(
+                binding.content,
+                { title, url -> tabs.openBackgroundTab(title, url) },
+                { replaceToCurrentTab(true) }
+        )
+
         browserViewModel?.openBackground?.observe(this, Observer {
             val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
-            BackgroundTabOpenerUseCase(
-                    binding.content,
-                    { title, url -> tabs.openBackgroundTab(title, url) },
-                    { replaceToCurrentTab(true) }
-            ).invoke(urlString, urlString, preferenceApplier.colorPair())
+            backgroundTabOpenerUseCase.invoke(urlString, urlString, preferenceApplier.colorPair())
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
-            BackgroundTabOpenerUseCase(
-                    binding.content,
-                    { title, url -> tabs.openBackgroundTab(title, url) },
-                    { replaceToCurrentTab(true) }
-            ).invoke(pair.first, pair.second.toString(), preferenceApplier.colorPair())
+            backgroundTabOpenerUseCase.invoke(pair.first, pair.second.toString(), preferenceApplier.colorPair())
         })
 
         invokeSearchWithClip(colorPair)
