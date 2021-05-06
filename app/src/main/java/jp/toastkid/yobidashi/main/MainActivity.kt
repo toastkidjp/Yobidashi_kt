@@ -20,7 +20,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import jp.toastkid.lib.AppBarViewModel
@@ -55,6 +54,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
+import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -189,34 +189,20 @@ class MainActivity : AppCompatActivity(),
             openNewWebTab(uri)
         })
         browserViewModel?.openBackground?.observe(this, Observer {
-            val uri = it?.getContentIfNotHandled() ?: return@Observer
-            val callback = tabs.openBackgroundTab(uri.toString(), uri.toString())
-            Toaster.withAction(
+            val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
+            BackgroundTabOpenerUseCase(
                     binding.content,
-                    getString(R.string.message_tab_open_background, uri.toString()),
-                    getString(R.string.open),
-                    View.OnClickListener {
-                        callback()
-                        replaceToCurrentTab(true)
-                    },
-                    preferenceApplier.colorPair(),
-                    Snackbar.LENGTH_SHORT
-            )
+                    { title, url -> tabs.openBackgroundTab(title, url) },
+                    { replaceToCurrentTab(true) }
+            ).invoke(urlString, urlString, preferenceApplier.colorPair())
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
-            val callback = tabs.openBackgroundTab(pair.first, pair.second.toString())
-            Toaster.withAction(
+            BackgroundTabOpenerUseCase(
                     binding.content,
-                    getString(R.string.message_tab_open_background, pair.first),
-                    getString(R.string.open),
-                    View.OnClickListener {
-                        callback()
-                        replaceToCurrentTab(true)
-                    },
-                    preferenceApplier.colorPair(),
-                    Snackbar.LENGTH_SHORT
-            )
+                    { title, url -> tabs.openBackgroundTab(title, url) },
+                    { replaceToCurrentTab(true) }
+            ).invoke(pair.first, pair.second.toString(), preferenceApplier.colorPair())
         })
 
         invokeSearchWithClip(colorPair)
