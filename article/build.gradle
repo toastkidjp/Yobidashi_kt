@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "jacoco"
 
 android {
-    compileSdkVersion compileSdk
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
         minSdkVersion 19

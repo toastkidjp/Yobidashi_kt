@@ -8,13 +8,13 @@ apply plugin: "jacoco"
 apply from: 'signing/config.gradle', to: android
 
 android {
-    compileSdkVersion compileSdk
+    compileSdkVersion rootProject.ext.compileSdk
     buildToolsVersion buildTools
 
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
         minSdkVersion 19
-        targetSdkVersion targetSdk
+        targetSdkVersion rootProject.ext.targetSdk
 
         versionCode versionCodeValue
         versionName versionNameValue
@@ -60,9 +60,8 @@ android {
 }
 
 play {
+    serviceAccountCredentials.set(file("signing/Google Play Android Developer-cbf2176b721a.json"))
     track = 'alpha'
-    serviceAccountEmail = 'tk-bot@api-6327630184664180575-715630.iam.gserviceaccount.com'
-    serviceAccountCredentials = file('signing/api-6327630184664180575-715630-73af1e35d196.p12')
 }
 
 dependencies {
