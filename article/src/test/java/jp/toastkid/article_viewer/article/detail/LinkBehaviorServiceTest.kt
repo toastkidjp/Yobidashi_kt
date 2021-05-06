@@ -37,12 +37,17 @@ class LinkBehaviorServiceTest {
     @MockK
     private lateinit var exists: (String) -> Boolean
 
+    @MockK
+    private lateinit var internalLinkScheme: InternalLinkScheme
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(Dispatchers.Unconfined)
 
         every { browserViewModel.open(any()) }.answers { Unit }
+        every { internalLinkScheme.isInternalLink(any()) }.returns(true)
+        every { internalLinkScheme.extract(any()) }.returns("yahoo")
         coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
         coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
     }
@@ -67,6 +72,7 @@ class LinkBehaviorServiceTest {
     fun testWebUrl() {
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
+        every { internalLinkScheme.isInternalLink(any()) }.returns(false)
 
         linkBehaviorService.invoke("https://www.yahoo.co.jp")
 
