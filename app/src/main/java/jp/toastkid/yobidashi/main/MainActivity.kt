@@ -197,11 +197,11 @@ class MainActivity : AppCompatActivity(),
 
         browserViewModel?.openBackground?.observe(this, Observer {
             val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
-            backgroundTabOpenerUseCase.invoke(urlString, urlString, preferenceApplier.colorPair())
+            backgroundTabOpenerUseCase(urlString, urlString, preferenceApplier.colorPair())
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
-            backgroundTabOpenerUseCase.invoke(pair.first, pair.second.toString(), preferenceApplier.colorPair())
+            backgroundTabOpenerUseCase(pair.first, pair.second.toString(), preferenceApplier.colorPair())
         })
 
         invokeSearchWithClip(colorPair)
