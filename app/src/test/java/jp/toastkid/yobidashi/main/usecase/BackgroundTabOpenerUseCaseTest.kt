@@ -65,7 +65,11 @@ class BackgroundTabOpenerUseCaseTest {
 
     @Test
     fun testInvoke() {
-        backgroundTabOpenerUseCase.invoke("test", "https://www.yahoo.co.jp", ColorPair(Color.BLACK, Color.WHITE))
+        backgroundTabOpenerUseCase.invoke(
+                "test",
+                "https://www.yahoo.co.jp",
+                ColorPair(Color.BLACK, Color.WHITE)
+        )
 
         verify(exactly = 1) { parent.getContext() }
         verify(exactly = 1) { context.getString(any(), any()) }
