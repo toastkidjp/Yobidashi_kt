@@ -29,7 +29,7 @@ class BackgroundTabOpenerUseCase(
                 parent,
                 context.getString(R.string.message_tab_open_background, title),
                 context.getString(R.string.open),
-                View.OnClickListener {
+                {
                     callback()
                     replaceToCurrentTab()
                 },
