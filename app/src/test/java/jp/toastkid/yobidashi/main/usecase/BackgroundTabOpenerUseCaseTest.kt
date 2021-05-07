@@ -76,4 +76,5 @@ class BackgroundTabOpenerUseCaseTest {
         verify(exactly = 1) { openBackgroundTab.invoke(any(), any()) }
         verify(exactly = 1) { Toaster.withAction(any(), any(), any<String>(), any(), any(), any()) }
     }
+
 }
