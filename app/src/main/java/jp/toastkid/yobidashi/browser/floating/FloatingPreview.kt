@@ -158,6 +158,8 @@ class FloatingPreview(context: Context) {
     fun show(parent: View, url: String) {
         binding.icon.setImageBitmap(null)
 
+        onResume()
+
         darkModeApplier(webView, PreferenceApplier(webView.context).useDarkMode())
         webView.isEnabled = true
         webView.onResume()
