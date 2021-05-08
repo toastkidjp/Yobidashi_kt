@@ -125,8 +125,10 @@ class FloatingPreview(context: Context) {
     fun onResume() {
         val context = binding.root.context
         val preferenceApplier = PreferenceApplier(context)
-        binding.previewContainer.foreground =
-                ColorDrawable(preferenceApplier.filterColor(ContextCompat.getColor(context, R.color.default_color_filter)))
+        val filterColorDrawable = ColorDrawable(
+            preferenceApplier.filterColor(ContextCompat.getColor(context, R.color.default_color_filter))
+        )
+        binding.previewContainer.foreground = filterColorDrawable
         binding.progress.progressDrawable.colorFilter =
                 PorterDuffColorFilter(
                         PreferenceApplier(context).fontColor,
