@@ -35,11 +35,11 @@ class DateSelectedActionUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { repository.findFirst(any()) }.answers { Article(1).also { it.title = "test" } }
-        every { viewModel.newArticle(any()) }.answers { Unit }
+        every { repository.findFirst(any()) }.returns(Article(1).also { it.title = "test" })
+        every { viewModel.newArticle(any()) }.returns(Unit)
 
         mockkConstructor(TitleFilterGenerator::class)
-        every { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }.answers { "test" }
+        every { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }.returns("test")
 
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
