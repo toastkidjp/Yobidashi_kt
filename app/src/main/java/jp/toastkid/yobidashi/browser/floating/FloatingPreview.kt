@@ -126,7 +126,11 @@ class FloatingPreview(context: Context) {
         val context = binding.root.context
         val preferenceApplier = PreferenceApplier(context)
         val filterColorDrawable = ColorDrawable(
-            preferenceApplier.filterColor(ContextCompat.getColor(context, R.color.default_color_filter))
+            if (preferenceApplier.useColorFilter())
+                preferenceApplier.filterColor(
+                    ContextCompat.getColor(context, R.color.default_color_filter)
+                )
+            else Color.TRANSPARENT
         )
         binding.previewContainer.foreground = filterColorDrawable
         binding.progress.progressDrawable.colorFilter =
