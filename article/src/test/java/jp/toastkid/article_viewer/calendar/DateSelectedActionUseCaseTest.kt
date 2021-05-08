@@ -35,18 +35,18 @@ class DateSelectedActionUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
-
-    @ExperimentalCoroutinesApi
-    @Test
-    fun test() {
         every { repository.findFirst(any()) }.answers { Article(1).also { it.title = "test" } }
         every { viewModel.newArticle(any()) }.answers { Unit }
 
         mockkConstructor(TitleFilterGenerator::class)
         every { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }.answers { "test" }
 
+        Dispatchers.setMain(Dispatchers.Unconfined)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun test() {
         dateSelectedActionService.invoke(2020, 0, 22)
 
         coVerify(exactly = 1) { repository.findFirst(any()) }
