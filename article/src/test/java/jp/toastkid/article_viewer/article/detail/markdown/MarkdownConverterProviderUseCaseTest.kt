@@ -76,6 +76,7 @@ class MarkdownConverterProviderUseCaseTest {
         verify(atLeast = 1) { TaskListPlugin.create(any<Context>()) }
         verify(atLeast = 1) { SyntaxHighlightPlugin.create(any(), any()) }
         verify(atLeast = 1) { Prism4jThemeDefault.create() }
+        verify(atLeast = 1) { anyConstructed<CoilPluginFactory>().invoke(any()) }
         verify(atLeast = 1) { Markwon.builder(any()) }
         verify(atLeast = 1) { builder.usePlugins(any()) }
         verify(atLeast = 1) { builder.build() }
