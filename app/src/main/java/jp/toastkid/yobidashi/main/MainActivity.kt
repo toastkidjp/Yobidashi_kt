@@ -541,6 +541,7 @@ class MainActivity : AppCompatActivity(),
         binding.foreground.foreground =
                 if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(Color.TRANSPARENT))
                 else null
+        floatingPreview?.onResume()
     }
 
     /**
