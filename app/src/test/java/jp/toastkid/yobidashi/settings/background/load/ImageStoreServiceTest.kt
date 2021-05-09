@@ -47,11 +47,13 @@ class ImageStoreServiceTest {
     @MockK
     private lateinit var bitmapScaling: BitmapScaling
 
+    private lateinit var file: File
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        val file = spyk(File.createTempFile("test", "webp"))
+        file = spyk(File.createTempFile("test", "webp"))
         every { filesDir.assignNewFile(any<String>()) }.answers { file }
         every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
         every { display.getRectSize(any()) }.answers { Unit }
