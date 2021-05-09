@@ -59,8 +59,6 @@ class ImageStoreServiceTest {
         every { anyConstructed<FileOutputStream>().close() }.answers { Unit }
 
         every { scaledBitmap.compress(any(), any(), any()) }.answers { true }
-        every { scaledBitmap.getWidth() }.returns(100)
-        every { scaledBitmap.getHeight() }.returns(100)
 
         every { bitmapScaling.invoke(any(), any(), any()) }.answers { scaledBitmap }
 
