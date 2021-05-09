@@ -66,7 +66,7 @@ class ImageStoreServiceTest {
 
         every { uri.getLastPathSegment() }.returns("last")
 
-        ImageStoreService(filesDir, preferenceApplier).invoke(bitmap, uri, display)
+        ImageStoreService(filesDir, preferenceApplier, bitmapScaling).invoke(bitmap, uri, display)
 
         verify(exactly = 2) { file.getPath() }
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
