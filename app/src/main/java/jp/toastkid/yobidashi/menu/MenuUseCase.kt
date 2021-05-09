@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
@@ -57,13 +56,13 @@ class MenuUseCase(
 
     fun observe() {
         val activity = activitySupplier()
-        menuViewModel?.click?.observe(activity, Observer { event ->
+        menuViewModel?.click?.observe(activity, { event ->
             event.getContentIfNotHandled()?.let {
                 onMenuClick(it)
             }
         })
 
-        menuViewModel?.longClick?.observe(activity, Observer {
+        menuViewModel?.longClick?.observe(activity, {
             onMenuLongClick(it)
         })
     }
