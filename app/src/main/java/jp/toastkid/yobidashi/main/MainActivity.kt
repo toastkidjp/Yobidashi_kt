@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(),
 
         activityViewModelProvider.get(OverlayColorFilterViewModel::class.java)
                 .newColor
-                .observe(this, Observer {
+                .observe(this, {
                     updateColorFilter()
                 })
 
