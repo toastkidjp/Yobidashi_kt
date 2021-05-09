@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.Display
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.spyk
@@ -21,6 +22,9 @@ import java.io.FileOutputStream
  * @author toastkidjp
  */
 class ImageStoreServiceTest {
+
+    @InjectMockKs
+    private lateinit var imageStoreService: ImageStoreService
 
     @MockK
     private lateinit var filesDir: FilesDir
@@ -64,7 +68,7 @@ class ImageStoreServiceTest {
 
     @Test
     fun test() {
-        ImageStoreService(filesDir, preferenceApplier, bitmapScaling).invoke(bitmap, uri, display)
+        imageStoreService.invoke(bitmap, uri, display)
 
         verify(exactly = 2) { file.getPath() }
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }
