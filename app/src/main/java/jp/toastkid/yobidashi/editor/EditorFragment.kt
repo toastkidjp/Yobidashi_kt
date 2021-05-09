@@ -170,12 +170,12 @@ class EditorFragment :
 
             tabListViewModel
                     ?.tabCount
-                    ?.observe(activity, Observer { menuBinding.tabCount.setText(it.toString()) })
+                    ?.observe(activity, { menuBinding.tabCount.setText(it.toString()) })
 
             (viewModelProvider.get(PageSearcherViewModel::class.java)).let { viewModel ->
                 var currentWord = ""
-                viewModel.find.observe(activity, Observer {
-                    val text = it?.getContentIfNotHandled() ?: return@Observer
+                viewModel.find.observe(activity, {
+                    val text = it?.getContentIfNotHandled() ?: return@observe
                     currentWord = text
                     finder.findDown(currentWord)
                 })
