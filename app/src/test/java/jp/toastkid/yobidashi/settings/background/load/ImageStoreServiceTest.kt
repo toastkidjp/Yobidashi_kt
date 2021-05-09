@@ -46,10 +46,7 @@ class ImageStoreServiceTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-    }
 
-    @Test
-    fun test() {
         val file = spyk(File.createTempFile("test", "webp"))
         every { filesDir.assignNewFile(any<String>()) }.answers { file }
         every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
@@ -63,7 +60,10 @@ class ImageStoreServiceTest {
         every { bitmapScaling.invoke(any(), any(), any()) }.answers { scaledBitmap }
 
         every { uri.getLastPathSegment() }.returns("last")
+    }
 
+    @Test
+    fun test() {
         ImageStoreService(filesDir, preferenceApplier, bitmapScaling).invoke(bitmap, uri, display)
 
         verify(exactly = 2) { file.getPath() }
