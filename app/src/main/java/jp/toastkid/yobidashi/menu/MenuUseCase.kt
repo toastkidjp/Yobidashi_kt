@@ -200,7 +200,7 @@ class MenuUseCase(
                 view,
                 menu.titleId,
                 R.string.run,
-                View.OnClickListener { onMenuClick(menu) },
+            { onMenuClick(menu) },
                 preferenceApplier.colorPair()
         )
         return true
