@@ -538,12 +538,12 @@ class EditorFragment :
     fun showName(view: View): Boolean {
         if (view is TextView) {
             Toaster.withAction(
-                    view,
-                    view.text.toString(),
-                    R.string.run,
+                view,
+                view.text.toString(),
+                R.string.run,
                 { view.performClick() },
-                    preferenceApplier.colorPair(),
-                    Snackbar.LENGTH_LONG
+                preferenceApplier.colorPair(),
+                Snackbar.LENGTH_LONG
             )
         }
         return true
