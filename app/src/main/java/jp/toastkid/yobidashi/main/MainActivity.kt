@@ -306,7 +306,7 @@ class MainActivity : AppCompatActivity(),
             binding.toolbarContent.addView(view, 0)
         })
 
-        headerViewModel.visibility.observe(this, Observer { isVisible ->
+        headerViewModel.visibility.observe(this, { isVisible ->
             if (isVisible) appBarVisibilityUseCase.show() else appBarVisibilityUseCase.hide()
         })
     }
