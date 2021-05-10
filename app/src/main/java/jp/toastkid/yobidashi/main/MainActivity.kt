@@ -352,10 +352,10 @@ class MainActivity : AppCompatActivity(),
             val messageId = it?.getContentIfNotHandled() ?: return@Observer
             Toaster.snackShort(binding.content, messageId, preferenceApplier.colorPair())
         })
-        contentViewModel?.toTop?.observe(this, Observer {
+        contentViewModel?.toTop?.observe(this, {
             (findFragment() as? ContentScrollable)?.toTop()
         })
-        contentViewModel?.toBottom?.observe(this, Observer {
+        contentViewModel?.toBottom?.observe(this, {
             (findFragment() as? ContentScrollable)?.toBottom()
         })
         contentViewModel?.share?.observe(this, Observer {
@@ -365,7 +365,7 @@ class MainActivity : AppCompatActivity(),
             it.getContentIfNotHandled()
             (findFragment() as? CommonFragmentAction)?.share()
         })
-        contentViewModel?.webSearch?.observe(this, Observer {
+        contentViewModel?.webSearch?.observe(this, {
             when (val fragment = findFragment()) {
                 is BrowserFragment ->
                     fragment.search()
@@ -373,20 +373,20 @@ class MainActivity : AppCompatActivity(),
                     contentViewModel?.nextFragment(SearchFragment::class.java)
             }
         })
-        contentViewModel?.openPdf?.observe(this, Observer {
+        contentViewModel?.openPdf?.observe(this, {
             openPdfTabFromStorage()
         })
-        contentViewModel?.openEditorTab?.observe(this, Observer {
+        contentViewModel?.openEditorTab?.observe(this, {
             openEditorTab()
         })
-        contentViewModel?.switchPageSearcher?.observe(this, Observer {
+        contentViewModel?.switchPageSearcher?.observe(this, {
             pageSearchPresenter.switch()
         })
         contentViewModel?.switchTabList?.observe(this, Observer {
             it?.getContentIfNotHandled() ?: return@Observer
             switchTabList()
         })
-        contentViewModel?.refresh?.observe(this, Observer {
+        contentViewModel?.refresh?.observe(this, {
             refresh()
         })
         contentViewModel?.newArticle?.observe(this, Observer {
@@ -400,11 +400,11 @@ class MainActivity : AppCompatActivity(),
                 replaceToCurrentTab()
             }
         })
-        contentViewModel?.openArticleList?.observe(this, Observer {
+        contentViewModel?.openArticleList?.observe(this, {
             tabs.openArticleList()
             replaceToCurrentTab()
         })
-        contentViewModel?.openCalendar?.observe(this, Observer {
+        contentViewModel?.openCalendar?.observe(this, {
             tabs.openCalendar()
             replaceToCurrentTab()
         })
