@@ -17,7 +17,7 @@ import kotlin.math.max
  */
 class PreferenceApplier(private val context: Context) {
 
-    @SuppressWarnings("unused")
+    @Suppress("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
         USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION, ENABLE_APP_SEARCH,
