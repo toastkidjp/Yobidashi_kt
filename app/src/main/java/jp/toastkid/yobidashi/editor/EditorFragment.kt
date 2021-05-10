@@ -541,7 +541,7 @@ class EditorFragment :
                     view,
                     view.text.toString(),
                     R.string.run,
-                    View.OnClickListener { view.performClick() },
+                { view.performClick() },
                     preferenceApplier.colorPair(),
                     Snackbar.LENGTH_LONG
             )
