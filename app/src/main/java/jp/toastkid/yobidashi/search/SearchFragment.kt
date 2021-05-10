@@ -41,7 +41,6 @@ import jp.toastkid.yobidashi.databinding.AppBarSearchBinding
 import jp.toastkid.yobidashi.databinding.FragmentSearchBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
-import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchSuggestionBinding
 import jp.toastkid.yobidashi.databinding.ModuleSearchUrlBinding
 import jp.toastkid.yobidashi.databinding.ModuleUrlSuggestionBinding
@@ -217,7 +216,7 @@ class SearchFragment : Fragment() {
         )
 
         hourlyTrendModule = HourlyTrendModule(
-                binding?.hourlyTrendModule as? ModuleSearchHourlyTrendBinding,
+                binding?.hourlyTrendModule,
                 viewModel
         )
         hourlyTrendModule?.request()
