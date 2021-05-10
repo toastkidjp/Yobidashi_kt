@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -341,11 +340,11 @@ class MainActivity : AppCompatActivity(),
             }
 
             Toaster.withAction(
-                    binding.content,
-                    snackbarEvent.message,
-                    snackbarEvent.actionLabel ?: "",
+                binding.content,
+                snackbarEvent.message,
+                snackbarEvent.actionLabel ?: "",
                 { snackbarEvent.action() },
-                    preferenceApplier.colorPair()
+                preferenceApplier.colorPair()
             )
         })
         contentViewModel?.snackbarRes?.observe(this, Observer {
@@ -705,11 +704,11 @@ class MainActivity : AppCompatActivity(),
                     return
                 }
                 Toaster.snackLong(
-                        binding.content,
-                        "Scanned: ${result.contents}",
-                        R.string.clip,
+                    binding.content,
+                    "Scanned: ${result.contents}",
+                    R.string.clip,
                     { Clipboard.clip(this, result.contents) },
-                        preferenceApplier.colorPair()
+                    preferenceApplier.colorPair()
                 )
             }
             REQUEST_CODE_OPEN_PDF -> {
