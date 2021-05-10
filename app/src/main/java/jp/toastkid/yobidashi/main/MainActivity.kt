@@ -344,7 +344,7 @@ class MainActivity : AppCompatActivity(),
                     binding.content,
                     snackbarEvent.message,
                     snackbarEvent.actionLabel ?: "",
-                    View.OnClickListener { snackbarEvent.action() },
+                { snackbarEvent.action() },
                     preferenceApplier.colorPair()
             )
         })
@@ -708,7 +708,7 @@ class MainActivity : AppCompatActivity(),
                         binding.content,
                         "Scanned: ${result.contents}",
                         R.string.clip,
-                        View.OnClickListener { Clipboard.clip(this, result.contents) },
+                    { Clipboard.clip(this, result.contents) },
                         preferenceApplier.colorPair()
                 )
             }
