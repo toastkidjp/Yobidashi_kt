@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.MenuRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
@@ -41,7 +42,7 @@ class GestureMemoFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_gesture_memo, menu)
+        inflater.inflate(MENU_ID, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -63,6 +64,9 @@ class GestureMemoFragment : Fragment() {
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.fragment_gesture_memo
+
+        @MenuRes
+        private val MENU_ID = R.menu.fragment_gesture_memo
 
     }
 }
