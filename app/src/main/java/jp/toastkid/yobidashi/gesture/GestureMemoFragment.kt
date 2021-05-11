@@ -33,7 +33,7 @@ class GestureMemoFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         setHasOptionsMenu(true)
         return binding.root
