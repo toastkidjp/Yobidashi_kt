@@ -54,12 +54,12 @@ class ClippingUrlOpener {
             onClick: (Uri) -> Unit
     ) {
         Toaster.withAction(
-                view,
-                "Would you open \"$clipboardContent\"?",
-                R.string.open,
+            view,
+            "Would you open \"$clipboardContent\"?",
+            R.string.open,
             { onClick(clipboardContent.toUri()) },
-                PreferenceApplier(view.context).colorPair(),
-                Snackbar.LENGTH_LONG
+            PreferenceApplier(view.context).colorPair(),
+            Snackbar.LENGTH_LONG
         )
     }
 
