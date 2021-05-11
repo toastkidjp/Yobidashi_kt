@@ -66,7 +66,7 @@ class GestureMemoFragment : Fragment() {
         private const val LAYOUT_ID = R.layout.fragment_gesture_memo
 
         @MenuRes
-        private val MENU_ID = R.menu.fragment_gesture_memo
+        private const val MENU_ID = R.menu.fragment_gesture_memo
 
     }
 }
