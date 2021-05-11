@@ -55,7 +55,7 @@ class ClippingUrlOpener {
     ) {
         Toaster.withAction(
             view,
-            "Would you open \"$clipboardContent\"?",
+            view.context.getString(R.string.message_clipping_url_open, clipboardContent),
             R.string.open,
             { onClick(clipboardContent.toUri()) },
             PreferenceApplier(view.context).colorPair(),
