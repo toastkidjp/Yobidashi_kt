@@ -62,7 +62,7 @@ class GestureMemoFragment : Fragment() {
     companion object {
 
         @LayoutRes
-        private val LAYOUT_ID = R.layout.fragment_gesture_memo
+        private const val LAYOUT_ID = R.layout.fragment_gesture_memo
 
     }
 }
