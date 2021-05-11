@@ -78,15 +78,15 @@ class FloatingPreview(context: Context) {
         (context as? FragmentActivity)?.also {
             viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
-            viewModel?.title?.observe(context, Observer {
+            viewModel?.title?.observe(context, {
                 binding.title.text = it
             })
 
-            viewModel?.icon?.observe(context, Observer {
+            viewModel?.icon?.observe(context, {
                 binding.icon.setImageBitmap(it)
             })
 
-            viewModel?.url?.observe(context, Observer {
+            viewModel?.url?.observe(context, {
                 binding.url.text = it
             })
 
