@@ -57,7 +57,7 @@ class ClippingUrlOpener {
                 view,
                 "Would you open \"$clipboardContent\"?",
                 R.string.open,
-                View.OnClickListener { onClick(clipboardContent.toUri()) },
+            { onClick(clipboardContent.toUri()) },
                 PreferenceApplier(view.context).colorPair(),
                 Snackbar.LENGTH_LONG
         )
