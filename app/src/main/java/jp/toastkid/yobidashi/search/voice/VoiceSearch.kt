@@ -42,7 +42,7 @@ class VoiceSearch {
                 parent,
                 R.string.message_install_suggestion_google_app,
                 R.string.install,
-                View.OnClickListener { launchGooglePlay(parent) },
+            { launchGooglePlay(parent) },
                 colorPair
         )
     }
