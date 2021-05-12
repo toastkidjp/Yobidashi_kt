@@ -34,7 +34,7 @@ class VoiceSearch {
     /**
      * Show Google App install suggestion by [com.google.android.material.snackbar.Snackbar].
      *
-     * @param parent Snackbar's parent
+     * @param parent Snackbar parent
      * @param colorPair [ColorPair]
      */
     fun suggestInstallGoogleApp(parent: View, colorPair: ColorPair) {
