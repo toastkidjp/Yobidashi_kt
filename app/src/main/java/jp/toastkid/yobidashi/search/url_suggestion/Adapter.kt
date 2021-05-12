@@ -19,8 +19,7 @@ import kotlinx.coroutines.withContext
  *
  * @param layoutInflater [LayoutInflater]
  * @param removeAt Callback of removing
- * @param browseCallback
- * @param browseBackgroundCallback
+ * @param viewModel [SearchFragmentViewModel]
  * @author toastkidjp
  */
 class Adapter(
