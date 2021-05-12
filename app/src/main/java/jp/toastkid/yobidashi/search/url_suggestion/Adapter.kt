@@ -41,7 +41,7 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = suggestions[position]
+        val item = get(position) ?: return
         item.bind(holder)
         holder.setOnClick(View.OnClickListener { viewModel.search(item.urlString()) })
         holder.setOnLongClick(View.OnLongClickListener {
@@ -81,7 +81,12 @@ class Adapter(
      *
      * @return item
      */
-    fun get(index: Int): UrlItem = suggestions[index]
+    fun get(index: Int): UrlItem? {
+        if (index < 0 || suggestions.size <= index) {
+            return null
+        }
+        return suggestions[index]
+    }
 
     /**
      * Remove at index.
@@ -94,7 +99,11 @@ class Adapter(
         return remove(get(index), index)
     }
 
-    fun remove(item: UrlItem, passedIndex: Int = -1): Job {
+    fun remove(item: UrlItem?, passedIndex: Int = -1): Job {
+        if (item == null) {
+            return Job()
+        }
+
         return CoroutineScope(Dispatchers.Main).launch {
             val index = if (passedIndex == -1) suggestions.indexOf(item) else passedIndex
             withContext(Dispatchers.IO) {
