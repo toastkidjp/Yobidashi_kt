@@ -106,7 +106,7 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
                     activity.findViewById(android.R.id.content),
                     R.string.message_snackbar_suggestion_select_background_image,
                     R.string.select,
-                    View.OnClickListener { launchAdding() },
+                { launchAdding() },
                     preferenceApplier.colorPair()
             )
         }
