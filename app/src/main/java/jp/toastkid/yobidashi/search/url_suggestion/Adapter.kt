@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -42,12 +41,12 @@ class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = get(position) ?: return
         item.bind(holder)
-        holder.setOnClick(View.OnClickListener { viewModel.search(item.urlString()) })
-        holder.setOnLongClick(View.OnLongClickListener {
+        holder.setOnClick({ viewModel.search(item.urlString()) })
+        holder.setOnLongClick({
             viewModel.searchOnBackground(item.urlString())
             true
         })
-        holder.setDelete(View.OnClickListener { removeAt(item) })
+        holder.setDelete({ removeAt(item) })
     }
 
     override fun getItemCount(): Int = suggestions.size
