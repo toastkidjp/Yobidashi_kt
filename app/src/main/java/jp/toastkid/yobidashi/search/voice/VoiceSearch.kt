@@ -32,7 +32,7 @@ class VoiceSearch {
             }
 
     /**
-     * Show Google App install suggestion by [android.support.design.widget.Snackbar].
+     * Show Google App install suggestion by [com.google.android.material.snackbar.Snackbar].
      *
      * @param parent Snackbar's parent
      * @param colorPair [ColorPair]
