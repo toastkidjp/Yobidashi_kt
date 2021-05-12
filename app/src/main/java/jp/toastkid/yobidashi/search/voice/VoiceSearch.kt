@@ -39,11 +39,11 @@ class VoiceSearch {
      */
     fun suggestInstallGoogleApp(parent: View, colorPair: ColorPair) {
         Toaster.withAction(
-                parent,
-                R.string.message_install_suggestion_google_app,
-                R.string.install,
+            parent,
+            R.string.message_install_suggestion_google_app,
+            R.string.install,
             { launchGooglePlay(parent) },
-                colorPair
+            colorPair
         )
     }
 
