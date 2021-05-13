@@ -56,11 +56,11 @@ class SearchWithClip(
 
             val context = parent.context
             Toaster.snackLong(
-                    parent,
-                    context.getString(R.string.message_clip_search, text),
-                    R.string.title_search_action,
+                parent,
+                context.getString(R.string.message_clip_search, text),
+                R.string.title_search_action,
                 { searchOrBrowse(context, text) },
-                    colorPair
+                colorPair
             )
         }
     }
