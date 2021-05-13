@@ -10,9 +10,9 @@ package jp.toastkid.yobidashi.settings
 import android.graphics.Color
 import android.view.View
 import androidx.core.content.ContextCompat
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * @author toastkidjp
@@ -34,9 +34,9 @@ class DarkModeApplier {
                 parent,
                 "Apply dark mode.",
                 R.string.undo,
-                View.OnClickListener {
-                    currentTheme.apply(preferenceApplier)
-                },
+            {
+                currentTheme.apply(preferenceApplier)
+            },
                 preferenceApplier.colorPair()
         )
     }
