@@ -31,13 +31,13 @@ class DarkModeApplier {
         )
         darkTheme.apply(preferenceApplier)
         Toaster.snackLong(
-                parent,
-                "Apply dark mode.",
-                R.string.undo,
+            parent,
+            "Apply dark mode.",
+            R.string.undo,
             {
                 currentTheme.apply(preferenceApplier)
             },
-                preferenceApplier.colorPair()
+            preferenceApplier.colorPair()
         )
     }
 
