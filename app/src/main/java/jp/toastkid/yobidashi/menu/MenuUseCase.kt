@@ -197,11 +197,11 @@ class MenuUseCase(
     private fun onMenuLongClick(menu: Menu): Boolean {
         val view = extractContentView() ?: return true
         Toaster.snackLong(
-                view,
-                menu.titleId,
-                R.string.run,
+            view,
+            menu.titleId,
+            R.string.run,
             { onMenuClick(menu) },
-                preferenceApplier.colorPair()
+            preferenceApplier.colorPair()
         )
         return true
     }
