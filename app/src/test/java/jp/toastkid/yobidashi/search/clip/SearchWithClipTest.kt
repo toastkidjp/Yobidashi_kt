@@ -60,7 +60,7 @@ class SearchWithClipTest {
     }
 
     @Test
-    fun dispose() {
+    fun testDispose() {
         searchWithClip.dispose()
 
         verify(exactly = 1) { cm.removePrimaryClipChangedListener(any()) }
