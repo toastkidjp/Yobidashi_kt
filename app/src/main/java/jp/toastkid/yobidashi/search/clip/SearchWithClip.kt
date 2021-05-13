@@ -59,7 +59,7 @@ class SearchWithClip(
                     parent,
                     context.getString(R.string.message_clip_search, text),
                     R.string.title_search_action,
-                    View.OnClickListener { searchOrBrowse(context, text) },
+                { searchOrBrowse(context, text) },
                     colorPair
             )
         }
