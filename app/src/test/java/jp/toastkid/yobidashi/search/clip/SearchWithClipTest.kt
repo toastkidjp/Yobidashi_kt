@@ -28,7 +28,7 @@ class SearchWithClipTest {
     private lateinit var searchWithClip: SearchWithClip
 
     @MockK
-    private lateinit var cm: ClipboardManager
+    private lateinit var clipboardManager: ClipboardManager
 
     @MockK
     private lateinit var parent: View
@@ -43,8 +43,8 @@ class SearchWithClipTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { cm.addPrimaryClipChangedListener(any()) }.answers { Unit }
-        every { cm.removePrimaryClipChangedListener(any()) }.answers { Unit }
+        every { clipboardManager.addPrimaryClipChangedListener(any()) }.answers { Unit }
+        every { clipboardManager.removePrimaryClipChangedListener(any()) }.answers { Unit }
     }
 
     @After
@@ -56,14 +56,14 @@ class SearchWithClipTest {
     fun testInvoke() {
         searchWithClip.invoke()
 
-        verify(exactly = 1) { cm.addPrimaryClipChangedListener(any()) }
+        verify(exactly = 1) { clipboardManager.addPrimaryClipChangedListener(any()) }
     }
 
     @Test
     fun testDispose() {
         searchWithClip.dispose()
 
-        verify(exactly = 1) { cm.removePrimaryClipChangedListener(any()) }
+        verify(exactly = 1) { clipboardManager.removePrimaryClipChangedListener(any()) }
     }
 
 }
