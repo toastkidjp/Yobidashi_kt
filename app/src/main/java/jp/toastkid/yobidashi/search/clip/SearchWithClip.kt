@@ -17,7 +17,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
  * Search action with clipboard text.
  * Initialize with ClipboardManager, parent view, and color pair.
  *
- * @param cm For monitoring clipboard.
+ * @param clipboardManager For monitoring clipboard.
  * @param parent Use for showing snackbar.
  * @param colorPair Use for showing snackbar.
  * @param browserViewModel [BrowserViewModel].
@@ -25,10 +25,10 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
  * @author toastkidjp
  */
 class SearchWithClip(
-        private val cm: ClipboardManager,
-        private val parent: View,
-        private val colorPair: ColorPair,
-        private val browserViewModel: BrowserViewModel?
+    private val clipboardManager: ClipboardManager,
+    private val parent: View,
+    private val colorPair: ColorPair,
+    private val browserViewModel: BrowserViewModel?
 ) {
 
     /**
@@ -46,7 +46,7 @@ class SearchWithClip(
             }
             lastClipped = System.currentTimeMillis()
 
-            val firstItem = cm.primaryClip?.getItemAt(0)
+            val firstItem = clipboardManager.primaryClip?.getItemAt(0)
                     ?: return@OnPrimaryClipChangedListener
 
             val text = firstItem.text
@@ -72,7 +72,7 @@ class SearchWithClip(
      */
     private fun isInvalidCondition(): Boolean {
         return (!PreferenceApplier(parent.context).enableSearchWithClip
-                || !cm.hasPrimaryClip()
+                || !clipboardManager.hasPrimaryClip()
                 || (System.currentTimeMillis() - lastClipped) < DISALLOW_INTERVAL_MS)
     }
 
@@ -80,7 +80,7 @@ class SearchWithClip(
      * Invoke action.
      */
     operator fun invoke() {
-        cm.addPrimaryClipChangedListener(listener)
+        clipboardManager.addPrimaryClipChangedListener(listener)
     }
 
     /**
@@ -103,7 +103,7 @@ class SearchWithClip(
      * Unregister listener.
      */
     fun dispose() {
-        cm.removePrimaryClipChangedListener(listener)
+        clipboardManager.removePrimaryClipChangedListener(listener)
     }
 
     companion object {
