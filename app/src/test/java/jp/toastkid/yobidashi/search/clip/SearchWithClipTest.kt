@@ -43,8 +43,8 @@ class SearchWithClipTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { clipboardManager.addPrimaryClipChangedListener(any()) }.answers { Unit }
-        every { clipboardManager.removePrimaryClipChangedListener(any()) }.answers { Unit }
+        every { clipboardManager.addPrimaryClipChangedListener(any()) }.returns(Unit)
+        every { clipboardManager.removePrimaryClipChangedListener(any()) }.returns(Unit)
     }
 
     @After
