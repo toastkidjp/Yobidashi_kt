@@ -278,7 +278,8 @@ class MainActivity : AppCompatActivity(),
                 applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
                 binding.content,
                 colorPair,
-                browserViewModel
+                browserViewModel,
+            preferenceApplier
         )
         searchWithClip.invoke()
     }
