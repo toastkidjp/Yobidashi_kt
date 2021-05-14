@@ -69,7 +69,7 @@ class DarkModeApplierTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         darkModeApplier.invoke(preferenceApplier, parent)
 
         verify(exactly = 1) { parent.getContext() }
