@@ -28,7 +28,8 @@ class SearchWithClip(
     private val clipboardManager: ClipboardManager,
     private val parent: View,
     private val colorPair: ColorPair,
-    private val browserViewModel: BrowserViewModel?
+    private val browserViewModel: BrowserViewModel?,
+    private val preferenceApplier: PreferenceApplier
 ) {
 
     /**
@@ -44,15 +45,19 @@ class SearchWithClip(
             if (isInvalidCondition() || NetworkChecker.isNotAvailable(parent.context)) {
                 return@OnPrimaryClipChangedListener
             }
-            lastClipped = System.currentTimeMillis()
 
             val firstItem = clipboardManager.primaryClip?.getItemAt(0)
                     ?: return@OnPrimaryClipChangedListener
 
             val text = firstItem.text
-            if (text.isNullOrEmpty() || (Urls.isInvalidUrl(text.toString()) && LENGTH_LIMIT <= text.length)) {
+            if (text.isNullOrEmpty()
+                || (Urls.isInvalidUrl(text.toString()) && LENGTH_LIMIT <= text.length)
+                || preferenceApplier.lastClippedWord() == text
+            ) {
                 return@OnPrimaryClipChangedListener
             }
+
+            preferenceApplier.setLastClippedWord(text.toString())
 
             val context = parent.context
             Toaster.snackLong(
