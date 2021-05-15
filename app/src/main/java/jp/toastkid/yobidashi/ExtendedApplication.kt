@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.browser.FaviconFolderProviderService
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkInitializer
-import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.notification.widget.NotificationWidget
 import jp.toastkid.yobidashi.settings.background.DefaultBackgroundImagePreparation
 import jp.toastkid.yobidashi.settings.color.DefaultColorInsertion
@@ -20,6 +19,7 @@ import timber.log.Timber
  *
  * @author toastkidjp
  */
+@Suppress("unused")
 class ExtendedApplication : Application() {
 
     override fun onCreate() {
@@ -31,7 +31,6 @@ class ExtendedApplication : Application() {
         }
 
         val preferenceApplier = PreferenceApplier(this)
-        preferenceApplier.color = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
         CoroutineScope(Dispatchers.Default).launch {
             processForFirstLaunch(preferenceApplier)
@@ -52,17 +51,13 @@ class ExtendedApplication : Application() {
             return
         }
 
+        preferenceApplier.color = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+
         DefaultColorInsertion().insert(this)
-        preferenceApplier.updateLastAd()
         BookmarkInitializer(FaviconFolderProviderService().invoke(this))(this)
         DefaultBackgroundImagePreparation()(this) {
             preferenceApplier.backgroundImagePath = it.absolutePath
         }
-    }
-
-    override fun onTerminate() {
-        GlobalWebViewPool.dispose()
-        super.onTerminate()
     }
 
 }

@@ -56,6 +56,7 @@
             android:background="@color/spinner_background"
             />
 
+        <!--suppress AndroidUnknownAttribute -->
         <ImageView
             android:id="@+id/search_action"
             android:layout_width="32dp"

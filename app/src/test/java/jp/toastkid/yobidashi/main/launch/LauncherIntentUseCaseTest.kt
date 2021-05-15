@@ -16,7 +16,6 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
-import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.settings.SettingFragment
 import org.junit.After
@@ -265,20 +264,6 @@ class LauncherIntentUseCaseTest {
         verify(exactly = 1) { intent.getBooleanExtra(any(), false) }
         verify(exactly = 1) { intent.getAction() }
         verify(exactly = 1) { replaceFragment.invoke(BookmarkFragment::class.java) }
-        verify(exactly = 0) { elseCaseUseCase.invoke() }
-    }
-
-    @Test
-    fun testAppLauncher() {
-        every { intent.getBooleanExtra(any(), false) }.answers { false }
-        every { intent.getAction() }.answers { APP_LAUNCHER }
-
-        launcherIntentUseCase.invoke(intent)
-
-        verify(exactly = 0) { randomWikipediaUseCase.invoke() }
-        verify(exactly = 1) { intent.getBooleanExtra(any(), false) }
-        verify(exactly = 1) { intent.getAction() }
-        verify(exactly = 1) { replaceFragment.invoke(LauncherFragment::class.java) }
         verify(exactly = 0) { elseCaseUseCase.invoke() }
     }
 

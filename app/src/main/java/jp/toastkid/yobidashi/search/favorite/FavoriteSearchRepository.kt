@@ -9,9 +9,9 @@ package jp.toastkid.yobidashi.search.favorite
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Query
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 /**
  * @author toastkidjp
@@ -22,7 +22,7 @@ interface FavoriteSearchRepository {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: FavoriteSearch)
 
-    @Query("SELECT * FROM FavoriteSearch WHERE query LIKE :keyword ORDER BY id DESC LIMIT 5")
+    @Query("SELECT * FROM FavoriteSearch WHERE `query` LIKE :keyword ORDER BY id DESC LIMIT 5")
     fun select(keyword: String): List<FavoriteSearch>
 
     @Query("SELECT * FROM FavoriteSearch")

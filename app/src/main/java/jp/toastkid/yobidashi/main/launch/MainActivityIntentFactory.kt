@@ -34,8 +34,6 @@ class MainActivityIntentFactory {
 
     fun barcodeReader(context: Context) = withAction(context, BARCODE_READER)
 
-    fun launcher(context: Context) = withAction(context, APP_LAUNCHER)
-
     fun bookmark(context: Context) = withAction(context, BOOKMARK)
 
     fun search(context: Context) = withAction(context, SEARCH)

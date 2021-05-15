@@ -193,10 +193,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
 
         activity?.let {
             val activityViewModel = ViewModelProvider(it).get(ArticleListFragmentViewModel::class.java)
-            activityViewModel.search.observe(it, Observer {
-                searchUseCase?.search(it)
+            activityViewModel.search.observe(it, Observer { searchInput ->
+                searchUseCase?.search(searchInput)
                 if (appBarBinding.input.text.isNullOrEmpty()) {
-                    appBarBinding.input.setText(it)
+                    appBarBinding.input.setText(searchInput)
                 }
             })
 
@@ -205,6 +205,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 activityViewModel.search(keyword)
                 true
             }
+        }
+
+        appBarBinding.searchClear.setOnClickListener {
+            appBarBinding.input.setText("")
         }
 
         appBarBinding.input.addTextChangedListener(object : TextWatcher {
@@ -216,6 +220,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 CoroutineScope(Dispatchers.Default).launch {
                     inputChannel.send(charSequence.toString())
                 }
+
+                appBarBinding.searchClear.isVisible = charSequence?.length != 0
             }
 
         })
@@ -248,7 +254,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             }
         })
         viewModel?.sort?.observe(viewLifecycleOwner, Observer {
-            it?.getContentIfNotHandled()?.let { sort ->
+            it?.getContentIfNotHandled()?.let { _ ->
                 searchUseCase?.all()
             }
         })
@@ -269,7 +275,10 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
     override fun onResume() {
         super.onResume()
         preferencesWrapper.colorPair().setTo(appBarBinding.input)
-        appBarBinding.input.setHintTextColor(ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196))
+
+        val buttonColor = ColorUtils.setAlphaComponent(preferencesWrapper.fontColor, 196)
+        appBarBinding.input.setHintTextColor(buttonColor)
+        appBarBinding.searchClear.setColorFilter(buttonColor)
 
         activity?.let {
             ViewModelProvider(it).get(AppBarViewModel::class.java)

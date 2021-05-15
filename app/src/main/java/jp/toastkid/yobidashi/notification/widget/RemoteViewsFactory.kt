@@ -4,9 +4,9 @@ import android.content.Context
 import android.widget.RemoteViews
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.VectorToBitmap
-import jp.toastkid.lib.preference.PreferenceApplier
 
 /**
  * App Widget's RemoteViews factory.
@@ -54,7 +54,6 @@ class RemoteViewsFactory {
             it(remoteViews, fontColor, R.drawable.ic_barcode, R.id.icon_barcode_reader)
             it(remoteViews, fontColor, R.drawable.ic_search_white, R.id.icon_search)
             it(remoteViews, fontColor, R.drawable.ic_web, R.id.icon_browser)
-            it(remoteViews, fontColor, R.drawable.ic_launcher, R.id.icon_launcher)
             it(remoteViews, fontColor, R.drawable.ic_settings, R.id.icon_setting)
         }
     }
@@ -92,7 +91,6 @@ class RemoteViewsFactory {
                 R.id.text_barcode_reader,
                 R.id.text_search,
                 R.id.text_browser,
-                R.id.text_launcher,
                 R.id.text_setting
         )
 
@@ -101,8 +99,7 @@ class RemoteViewsFactory {
                 R.id.divider2,
                 R.id.divider3,
                 R.id.divider4,
-                R.id.divider5,
-                R.id.divider6
+                R.id.divider5
         )
 
     }

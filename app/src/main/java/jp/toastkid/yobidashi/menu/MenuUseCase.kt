@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.menu
 
-import android.os.Build
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -27,9 +26,7 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.archive.ArchivesFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.browser.history.ViewHistoryFragment
-import jp.toastkid.yobidashi.cleaner.ProcessCleanerInvoker
 import jp.toastkid.yobidashi.gesture.GestureMemoFragment
-import jp.toastkid.yobidashi.launcher.LauncherFragment
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.main.MainActivity
@@ -95,19 +92,8 @@ class MenuUseCase(
                 }
                 return
             }
-            Menu.MEMORY_CLEANER -> {
-                val activity = activitySupplier()
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    contentViewModel.snackShort(activity.getString(R.string.message_cannot_use_under_l))
-                    return
-                }
-                ProcessCleanerInvoker()(activity.findViewById(R.id.content))
-            }
             Menu.PLANNING_POKER-> {
                 nextFragment(CardListFragment::class.java)
-            }
-            Menu.APP_LAUNCHER-> {
-                nextFragment(LauncherFragment::class.java)
             }
             Menu.RSS_READER -> {
                 nextFragment(RssReaderFragment::class.java)

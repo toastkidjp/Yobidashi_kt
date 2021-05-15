@@ -42,7 +42,6 @@ class TapActionInitializerTest {
         every { anyConstructed<PendingIntentFactory>().barcode(any()) }.returns(mockk())
         every { anyConstructed<PendingIntentFactory>().browser(any()) }.returns(mockk())
         every { anyConstructed<PendingIntentFactory>().bookmark(any()) }.returns(mockk())
-        every { anyConstructed<PendingIntentFactory>().launcher(any()) }.returns(mockk())
     }
 
     @After
@@ -60,7 +59,6 @@ class TapActionInitializerTest {
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().barcode(any()) }
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().browser(any()) }
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().bookmark(any()) }
-        verify(exactly = 1) { anyConstructed<PendingIntentFactory>().launcher(any()) }
     }
 
 }

@@ -44,7 +44,6 @@ class RemoteViewsFactoryTest {
 
         mockkConstructor(PendingIntentFactory::class)
         every { anyConstructed<PendingIntentFactory>().makeSearchLauncher(any()) }.returns(mockk())
-        every { anyConstructed<PendingIntentFactory>().launcher(any()) }.returns(mockk())
         every { anyConstructed<PendingIntentFactory>().barcode(any()) }.returns(mockk())
     }
 
@@ -63,7 +62,6 @@ class RemoteViewsFactoryTest {
         verify(atLeast = 1) { anyConstructed<RemoteViews>().setTextColor(any(), any()) }
         verify(atLeast = 1) { anyConstructed<RemoteViews>().setOnClickPendingIntent(any(), any()) }
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().makeSearchLauncher(any()) }
-        verify(exactly = 1) { anyConstructed<PendingIntentFactory>().launcher(any()) }
         verify(exactly = 1) { anyConstructed<PendingIntentFactory>().barcode(any()) }
     }
 

@@ -31,20 +31,6 @@ class PendingIntentFactory(
             )
 
     /**
-     * Return Launcher Intent of Launcher Activity.
-     *
-     * @param context
-     * @return
-     */
-    fun launcher(context: Context): PendingIntent =
-            PendingIntent.getActivity(
-                    context,
-                    6,
-                    mainActivityIntentFactory.launcher(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-    /**
      * Make barcode reader intent.
      *
      * @param context

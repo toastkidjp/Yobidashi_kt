@@ -47,6 +47,7 @@
             app:rippleColor="@color/aw_ripple"
             app:srcCompat="@drawable/ic_article"
             android:onClick="@{view -> dialog.openArticleList()}"
+            android:contentDescription="@string/title_article_viewer"
             />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

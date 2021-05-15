@@ -44,7 +44,7 @@
                     android:id="@+id/retain_tabs_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />
@@ -116,7 +116,7 @@
                     android:id="@+id/browser_js_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />
@@ -145,7 +145,7 @@
                     android:id="@+id/use_image_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />
@@ -171,7 +171,7 @@
                     android:id="@+id/save_form_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />
@@ -200,7 +200,7 @@
                     android:id="@+id/save_view_history_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />
@@ -229,7 +229,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/OneLineTextMenu"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     />
             </FrameLayout>
 
@@ -366,7 +366,7 @@
                     android:id="@+id/ad_remove_check"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:clickable="false"
                     style="@style/Border"
                     />

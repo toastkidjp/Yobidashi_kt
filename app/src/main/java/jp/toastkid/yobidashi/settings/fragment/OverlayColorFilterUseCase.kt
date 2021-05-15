@@ -9,7 +9,6 @@ package jp.toastkid.yobidashi.settings.fragment
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.preference.PreferenceApplier

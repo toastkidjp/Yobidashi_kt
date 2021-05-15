@@ -70,7 +70,7 @@ class ClippingUrlOpenerTest {
     fun testNetworkIsNotAvailable() {
         every { NetworkChecker.isNotAvailable(any()) }.returns(true)
 
-        ClippingUrlOpener.invoke(view, { })
+        ClippingUrlOpener.invoke(view) { }
 
         verify(exactly = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }

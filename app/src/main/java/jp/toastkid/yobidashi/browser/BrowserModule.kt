@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.ValueCallback
@@ -308,19 +307,7 @@ class BrowserModule(
         GlobalWebViewPool.onPause()
     }
 
-    /**
-     * Disable [WebView].
-     */
-    private fun disableWebView() {
-        currentView()?.let {
-            it.isEnabled = false
-            it.visibility = View.GONE
-        }
-        stopLoading()
-    }
-
     fun onDestroy() {
-        disableWebView()
         webViewContainer?.removeAllViews()
     }
 

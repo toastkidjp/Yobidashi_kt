@@ -139,7 +139,7 @@ class ToasterTest {
     }
 
     @Test
-    fun snackLong() {
+    fun testSnackLong() {
         Toaster.snackLong(view, "test", colorPair)
 
         verify(exactly = 0) { view.getContext() }

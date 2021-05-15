@@ -17,8 +17,6 @@ import jp.toastkid.yobidashi.settings.fragment.EditorSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.NotificationSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.OtherSettingFragment
 import jp.toastkid.yobidashi.settings.fragment.SearchSettingFragment
-import jp.toastkid.yobidashi.settings.fragment.TitleIdSupplier
-import timber.log.Timber
 
 /**
  * Setting fragments pager adapter.

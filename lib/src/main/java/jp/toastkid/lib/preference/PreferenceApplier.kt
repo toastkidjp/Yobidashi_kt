@@ -7,7 +7,6 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import jp.toastkid.lib.Urls
 import java.io.File
-import java.util.Calendar
 import java.util.Locale
 import kotlin.math.max
 
@@ -21,18 +20,19 @@ class PreferenceApplier(private val context: Context) {
     @SuppressWarnings("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
-        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION,
+        USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION, ENABLE_APP_SEARCH,
+        LAST_AD_DATE, FULL_SCREEN
     }
 
     private enum class Key {
         BG_COLOR, FONT_COLOR,
         ENABLE_SUGGESTION, ENABLE_SEARCH_HISTORY, ENABLE_VIEW_HISTORY, ENABLE_URL_MODULE,
-        ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, ENABLE_APP_SEARCH, DISABLE_SEARCH_CATEGORIES,
-        BG_IMAGE, LAST_AD_DATE,
+        ENABLE_TREND_MODULE, ENABLE_FAVORITE_SEARCH, DISABLE_SEARCH_CATEGORIES,
+        BG_IMAGE,
         USE_NOTIFICATION_WIDGET, USE_DAILY_NOTIFICATION, RETAIN_TABS, USE_JS,
         LOAD_IMAGE, SAVE_FORM, USER_AGENT, HOME_URL, USE_COLOR_FILTER, FILTER_COLOR,
         DEFAULT_SEARCH_ENGINE, ENABLE_SEARCH_QUERY_EXTRACT, ENABLE_SEARCH_WITH_CLIP, START_UP, SAVE_VIEW_HISTORY,
-        FULL_SCREEN, SCREEN_MODE, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
+        SCREEN_MODE, WIFI_ONLY_MODE, AD_REMOVE, WEB_VIEW_POOL_SIZE,
         EDITOR_BACKGROUND_COLOR, EDITOR_FONT_COLOR, EDITOR_CURSOR_COLOR, EDITOR_HIGHLIGHT_COLOR,
         EDITOR_FONT_SIZE, CAMERA_FAB_BUTTON_POSITION_X, CAMERA_FAB_BUTTON_POSITION_Y,
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
@@ -106,14 +106,6 @@ class PreferenceApplier(private val context: Context) {
                 .apply()
     }
 
-    fun isEnableAppSearch(): Boolean {
-        return preferences.getBoolean(Key.ENABLE_APP_SEARCH.name, true)
-    }
-
-    fun switchEnableAppSearch() {
-        preferences.edit().putBoolean(Key.ENABLE_APP_SEARCH.name, !isEnableAppSearch()).apply()
-    }
-
     fun addDisableSearchCategory(name: String) {
         val set = readDisableSearchCategory()
         set?.add(name)
@@ -147,17 +139,6 @@ class PreferenceApplier(private val context: Context) {
             firstLaunch.mkdirs()
             return true
         }
-
-    fun updateLastAd() {
-        preferences.edit()
-                .putInt(Key.LAST_AD_DATE.name, Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_YEAR))
-                .apply()
-    }
-
-    fun allowShowingAd(): Boolean {
-        val today = Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_YEAR)
-        return today != preferences.getInt(Key.LAST_AD_DATE.name, -1)
-    }
 
     fun setUseNotificationWidget(newState: Boolean) {
         preferences.edit().putBoolean(Key.USE_NOTIFICATION_WIDGET.name, newState).apply()
@@ -264,12 +245,6 @@ class PreferenceApplier(private val context: Context) {
     var saveViewHistory: Boolean
         get () = preferences.getBoolean(Key.SAVE_VIEW_HISTORY.name, true)
         set (newState) = preferences.edit().putBoolean(Key.SAVE_VIEW_HISTORY.name, newState).apply()
-
-    var fullScreen: Boolean
-        get () = preferences.getBoolean(Key.FULL_SCREEN.name, false)
-        set (newState) {
-            preferences.edit().putBoolean(Key.FULL_SCREEN.name, newState).apply()
-        }
 
     fun setBrowserScreenMode(newState: String) {
         preferences.edit().putString(Key.SCREEN_MODE.name, newState).apply()
