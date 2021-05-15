@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.menu
 
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -86,10 +85,8 @@ class MenuUseCase(
             Menu.OVERLAY_COLOR_FILTER-> {
                 preferenceApplier.setUseColorFilter(preferenceApplier.useColorFilter().not())
                 (activitySupplier() as? MainActivity)?.let {
-                    val substitute =
-                        ContextCompat.getColor(activitySupplier(), R.color.default_color_filter)
                     ViewModelProvider(it).get(OverlayColorFilterViewModel::class.java)
-                            .newColor(preferenceApplier.filterColor(substitute))
+                            .update()
                 }
                 return
             }
