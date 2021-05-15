@@ -44,7 +44,7 @@ class OverlayColorFilterUseCaseTest {
         every { ColorUtils.setAlphaComponent(any(), any()) }.returns(Color.BLACK)
         every { preferenceApplier.filterColor(any()) }.returns(Color.TRANSPARENT)
         every { preferenceApplier.setFilterColor(any()) }.answers { Unit }
-        every { overlayColorFilterViewModel.newColor(any()) }.answers { Unit }
+        every { overlayColorFilterViewModel.update() }.answers { Unit }
 
         overlayColorFilterUseCase =
                 OverlayColorFilterUseCase(preferenceApplier, colorResolver, overlayColorFilterViewModel)
@@ -63,7 +63,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -74,7 +74,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -85,7 +85,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -96,7 +96,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -107,7 +107,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -118,7 +118,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -129,7 +129,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -140,7 +140,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
     @Test
@@ -151,7 +151,7 @@ class OverlayColorFilterUseCaseTest {
         verify(exactly = 1) { ColorUtils.setAlphaComponent(any(), any()) }
         verify(exactly = 0) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { preferenceApplier.setFilterColor(any()) }
-        verify(exactly = 1) { overlayColorFilterViewModel.newColor(any()) }
+        verify(exactly = 1) { overlayColorFilterViewModel.update() }
     }
 
 }
