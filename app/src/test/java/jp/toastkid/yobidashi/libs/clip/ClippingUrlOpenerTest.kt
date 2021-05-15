@@ -56,6 +56,11 @@ class ClippingUrlOpenerTest {
 
         mockkObject(Toaster)
         every { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }.returns(mockk())
+
+        mockkConstructor(PreferenceApplier::class)
+        every { anyConstructed<PreferenceApplier>().colorPair() }.returns(mockk())
+        every { anyConstructed<PreferenceApplier>().lastClippedWord() }.returns("last-clipped")
+        every { anyConstructed<PreferenceApplier>().setLastClippedWord(any()) }.returns(Unit)
     }
 
     @After
@@ -113,9 +118,6 @@ class ClippingUrlOpenerTest {
         every { Clipboard.getPrimary(any()) }.returns("https://www.yahoo.co.jp")
         every { Urls.isInvalidUrl(any()) }.returns(false)
 
-        mockkConstructor(PreferenceApplier::class)
-        every { anyConstructed<PreferenceApplier>().colorPair() }.returns(mockk())
-
         clippingUrlOpener.invoke(view) { }
 
         verify(atLeast = 1) { view.getContext() }
@@ -123,6 +125,8 @@ class ClippingUrlOpenerTest {
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 1) { Urls.isInvalidUrl(any()) }
         verify(exactly = 1) { context.getString(any(), any()) }
+        verify(exactly = 1) { anyConstructed<PreferenceApplier>().lastClippedWord() }
+        verify(exactly = 1) { anyConstructed<PreferenceApplier>().setLastClippedWord(any()) }
         verify(exactly = 1) { Toaster.withAction(any(), any<String>(), any<Int>(), any(), any(), any()) }
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().colorPair() }
     }
