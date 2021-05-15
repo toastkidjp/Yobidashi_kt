@@ -18,6 +18,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -39,12 +40,17 @@ class SearchWithClipTest {
     @MockK
     private lateinit var browserViewModel: BrowserViewModel
 
+    @MockK
+    private lateinit var preferenceApplier: PreferenceApplier
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { clipboardManager.addPrimaryClipChangedListener(any()) }.returns(Unit)
         every { clipboardManager.removePrimaryClipChangedListener(any()) }.returns(Unit)
+        every { preferenceApplier.lastClippedWord() }.returns("last")
+        every { preferenceApplier.setLastClippedWord(any()) }.returns(Unit)
     }
 
     @After
