@@ -81,7 +81,7 @@ class OverlayColorFilterUseCase(
     }
 
     companion object {
-        private val DEFAULT_COLOR = Color.TRANSPARENT
+        private const val DEFAULT_COLOR = Color.TRANSPARENT
 
         private const val DEFAULT_ALPHA = 34
 
