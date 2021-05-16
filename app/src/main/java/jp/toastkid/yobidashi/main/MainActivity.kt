@@ -275,10 +275,10 @@ class MainActivity : AppCompatActivity(),
 
     private fun invokeSearchWithClip(colorPair: ColorPair) {
         searchWithClip = SearchWithClip(
-                applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
-                binding.content,
-                colorPair,
-                browserViewModel,
+            applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
+            binding.content,
+            colorPair,
+            browserViewModel,
             preferenceApplier
         )
         searchWithClip.invoke()
