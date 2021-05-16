@@ -39,7 +39,7 @@ class ForegroundColorFilterUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { preferenceApplier.useColorFilter() }.returns(true)
-        every { preferenceApplier.filterColor(Color.TRANSPARENT) }.returns(Color.YELLOW)
+        every { preferenceApplier.filterColor(any()) }.returns(Color.YELLOW)
         every { frameLayout.setForeground(any()) }.returns(Unit)
     }
 
@@ -53,7 +53,7 @@ class ForegroundColorFilterUseCaseTest {
         foregroundColorFilterUseCase.invoke(frameLayout)
 
         verify(exactly = 1) { preferenceApplier.useColorFilter() }
-        verify(exactly = 1) { preferenceApplier.filterColor(Color.TRANSPARENT) }
+        verify(exactly = 1) { preferenceApplier.filterColor(any()) }
         verify(exactly = 1) { frameLayout.setForeground(any()) }
     }
 
