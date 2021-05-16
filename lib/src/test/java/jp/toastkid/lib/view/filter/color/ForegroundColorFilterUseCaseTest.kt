@@ -49,7 +49,7 @@ class ForegroundColorFilterUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         foregroundColorFilterUseCase.invoke(frameLayout)
 
         verify(exactly = 1) { preferenceApplier.useColorFilter() }
