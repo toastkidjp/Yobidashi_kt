@@ -65,14 +65,14 @@ class OverlayColorFilterUseCase(
     }
 
     fun setAlpha(alpha: Int) {
-        setNewColor(alpha, preferenceApplier.filterColor(Color.TRANSPARENT))
+        setNewColor(alpha, preferenceApplier.filterColor(DEFAULT_COLOR))
     }
 
     fun setDefault() {
         setNewColor(DEFAULT_ALPHA, yellowBase)
     }
 
-    private fun currentAlpha(): Int = Color.alpha(preferenceApplier.filterColor(Color.TRANSPARENT))
+    private fun currentAlpha(): Int = Color.alpha(preferenceApplier.filterColor(DEFAULT_COLOR))
 
     private fun setNewColor(alpha: Int, @ColorInt newBaseColor: Int) {
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)
@@ -81,6 +81,8 @@ class OverlayColorFilterUseCase(
     }
 
     companion object {
+        private val DEFAULT_COLOR = Color.TRANSPARENT
+
         private const val DEFAULT_ALPHA = 34
 
         fun getDefaultAlpha() = DEFAULT_ALPHA
