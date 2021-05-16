@@ -5,8 +5,6 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -33,6 +31,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.TabUiFragment
 import jp.toastkid.lib.view.ToolbarColorApplier
 import jp.toastkid.lib.view.WindowOptionColorApplier
+import jp.toastkid.lib.view.filter.color.ForegroundColorFilterUseCase
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.CommonFragmentAction
 import jp.toastkid.yobidashi.R
@@ -538,9 +537,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun updateColorFilter() {
-        binding.foreground.foreground =
-                if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(Color.TRANSPARENT))
-                else null
+        ForegroundColorFilterUseCase(preferenceApplier).invoke(binding.foreground)
         floatingPreview?.onResume()
     }
 
