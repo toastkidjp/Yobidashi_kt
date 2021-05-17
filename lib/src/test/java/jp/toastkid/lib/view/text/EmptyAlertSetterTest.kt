@@ -47,7 +47,7 @@ class EmptyAlertSetterTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         emptyAlertSetter.invoke(inputLayout)
 
         verify(exactly = 1) { inputLayout.getEditText() }
