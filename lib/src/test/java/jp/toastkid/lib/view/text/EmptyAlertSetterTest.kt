@@ -17,6 +17,8 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
@@ -60,11 +62,13 @@ class EmptyAlertSetterTest {
     fun testNullCase() {
         every { inputLayout.getEditText() }.returns(null)
 
-        emptyAlertSetter.invoke(inputLayout)
+        val returnedEditText = emptyAlertSetter.invoke(inputLayout)
 
         verify(exactly = 1) { inputLayout.getEditText() }
         verify(exactly = 1) { inputLayout.getContext() }
         verify(exactly = 0) { editText.addTextChangedListener(any()) }
+        assertNotNull(returnedEditText)
+        assertNotEquals(editText, returnedEditText)
     }
 
 }
