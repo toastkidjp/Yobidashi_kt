@@ -54,15 +54,6 @@ class UrlSuggestionModule(
         SwipeActionAttachment().invoke(binding.urlSuggestions)
     }
 
-    /**
-     * Remove item.
-     *
-     * @param index
-     */
-    private fun removeAt(index: Int) {
-        adapter.removeAt(index)
-    }
-
     private fun remove(item: UrlItem) {
         adapter.remove(item)
     }
