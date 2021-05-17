@@ -22,13 +22,13 @@ import jp.toastkid.lib.Urls
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
+import jp.toastkid.lib.view.text.EmptyAlertSetter
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.FragmentSettingBrowserBinding
-import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 
 /**
@@ -64,7 +64,7 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
         super.onViewCreated(view, savedInstanceState)
         binding.let {
             it.fragment = this
-            TextInputs.setEmptyAlert(it.homeInputLayout)
+            EmptyAlertSetter().invoke(it.homeInputLayout)
         }
         initBrowserExpandable()
     }
