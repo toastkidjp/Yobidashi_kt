@@ -13,6 +13,7 @@ import com.google.android.material.textfield.TextInputLayout
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -36,6 +37,7 @@ class EmptyAlertSetterTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { inputLayout.getEditText() }.returns(editText)
+        every { inputLayout.getContext() }.returns(mockk())
         every { editText.addTextChangedListener(any()) }.returns(Unit)
 
         emptyAlertSetter = EmptyAlertSetter()
@@ -52,6 +54,17 @@ class EmptyAlertSetterTest {
 
         verify(exactly = 1) { inputLayout.getEditText() }
         verify(exactly = 1) { editText.addTextChangedListener(any()) }
+    }
+
+    @Test
+    fun testNullCase() {
+        every { inputLayout.getEditText() }.returns(null)
+
+        emptyAlertSetter.invoke(inputLayout)
+
+        verify(exactly = 1) { inputLayout.getEditText() }
+        verify(exactly = 1) { inputLayout.getContext() }
+        verify(exactly = 0) { editText.addTextChangedListener(any()) }
     }
 
 }
