@@ -81,12 +81,13 @@ class OverlayColorFilterUseCase(
     }
 
     companion object {
+
         private const val DEFAULT_COLOR = Color.TRANSPARENT
 
         private const val DEFAULT_ALPHA = 34
 
         fun getDefaultAlpha() = DEFAULT_ALPHA
-    }
 
+    }
 
 }
