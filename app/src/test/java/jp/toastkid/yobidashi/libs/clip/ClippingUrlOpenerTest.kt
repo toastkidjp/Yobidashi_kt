@@ -60,7 +60,7 @@ class ClippingUrlOpenerTest {
 
     @Test
     fun testParentViewIsNull() {
-        ClippingUrlOpener.invoke(null, { })
+        ClippingUrlOpener.invoke(null) { }
 
         verify(exactly = 0) { view.getContext() }
         verify(exactly = 0) { NetworkChecker.isNotAvailable(any()) }

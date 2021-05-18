@@ -76,6 +76,16 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
 
     fun add() {
         val task = this.task ?: TodoTask(0)
+        updateTask(task)
+
+        viewModel?.refresh(task)
+
+        if (this.task != null) {
+            dismiss()
+        }
+    }
+
+    private fun updateTask(task: TodoTask) {
         task.description = binding.additionQueryInput.text.toString()
         if (this@TaskAdditionDialogFragment.task == null) {
             task.created = System.currentTimeMillis()
@@ -86,12 +96,6 @@ class TaskAdditionDialogFragment : BottomSheetDialogFragment() {
         val checkedRadioButtonId = binding.colors.checkedRadioButtonId
         if (checkedRadioButtonId != -1) {
             task.color = extractBackgroundColor(binding.root.findViewById(checkedRadioButtonId))
-        }
-
-        viewModel?.refresh(task)
-
-        if (this.task != null) {
-            dismiss()
         }
     }
 

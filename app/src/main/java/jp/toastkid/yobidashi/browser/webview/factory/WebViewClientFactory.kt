@@ -37,6 +37,9 @@ import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class WebViewClientFactory(
@@ -79,7 +82,9 @@ class WebViewClientFactory(
             val key = view.hashCode()
             val tabId = tabIds.get(key)
             if (tabId?.isNotBlank() == true) {
-                loadingViewModel?.finished(tabId, History.make(title, urlStr))
+                CoroutineScope(Dispatchers.Main).launch {
+                    loadingViewModel?.finished(tabId, History.make(title, urlStr))
+                }
                 tabIds.remove(key)
             }
 

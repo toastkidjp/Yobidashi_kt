@@ -53,7 +53,7 @@ class TaskClearUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         taskClearUseCase.invoke()
 
         verify(exactly = 1) { tasks.toArray() }

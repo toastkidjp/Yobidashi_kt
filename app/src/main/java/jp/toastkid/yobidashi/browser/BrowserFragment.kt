@@ -44,6 +44,10 @@ import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Internal browser fragment.
@@ -176,12 +180,13 @@ class BrowserFragment : Fragment(),
             viewModel.enableBack.observe(activity, Observer(::updateBackButtonState))
         }
 
-        viewModelProvider.get(LoadingViewModel::class.java)
-                .onPageFinished
-                .observe(
-                        activity,
-                        Observer { browserModule.saveArchiveForAutoArchive() }
-                )
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModelProvider.get(LoadingViewModel::class.java)
+                    .onPageFinished
+                    .collect {
+                        browserModule.saveArchiveForAutoArchive()
+                    }
+        }
 
         viewModelProvider.get(BrowserFragmentViewModel::class.java)
                 .loadWithNewTab
@@ -379,7 +384,7 @@ class BrowserFragment : Fragment(),
         val makeIntent = if (query.isNullOrEmpty() || Urls.isValidUrl(query)) {
             SearchFragment.makeWith(currentTitle, currentUrl)
         } else {
-            SearchFragment.makeWithQuery(query ?: "", currentTitle, currentUrl)
+            SearchFragment.makeWithQuery(query, currentTitle, currentUrl)
         }
 
         activity?.also  { activity ->
