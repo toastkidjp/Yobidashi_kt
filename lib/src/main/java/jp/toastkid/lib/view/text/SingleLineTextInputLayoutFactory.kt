@@ -21,6 +21,11 @@ class SingleLineTextInputLayoutFactory(
     private val factory: (Context) -> TextInputLayout = { TextInputLayout(it) }
 ) {
 
+    /**
+     * Make [TextInputLayout] instance.
+     *
+     * @param context [Context] Use for make instance.
+     */
     operator fun invoke(context: Context): TextInputLayout =
         factory(context)
             .also { layout ->
