@@ -17,7 +17,6 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -54,7 +53,8 @@ class ColorFilterSettingFragment : Fragment() {
                     ViewModelProvider(activity).get(OverlayColorFilterViewModel::class.java)
             overlayColorFilterViewModel
                     ?.newColor
-                    ?.observe(activity, Observer { binding.sample.setBackgroundColor(preferenceApplier.filterColor(Color.TRANSPARENT)) })
+                    ?.observe(activity,
+                        { binding.sample.setBackgroundColor(preferenceApplier.filterColor(Color.TRANSPARENT)) })
             binding.useCase = OverlayColorFilterUseCase(
                     preferenceApplier,
                     { ContextCompat.getColor(activity, it) },
