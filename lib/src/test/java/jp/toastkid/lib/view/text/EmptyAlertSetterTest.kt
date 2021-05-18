@@ -19,6 +19,7 @@ import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
 
@@ -52,10 +53,11 @@ class EmptyAlertSetterTest {
 
     @Test
     fun testInvoke() {
-        emptyAlertSetter.invoke(inputLayout)
+        val returnedEditText = emptyAlertSetter.invoke(inputLayout)
 
         verify(exactly = 1) { inputLayout.getEditText() }
         verify(exactly = 1) { editText.addTextChangedListener(any()) }
+        assertSame(editText, returnedEditText)
     }
 
     @Test
