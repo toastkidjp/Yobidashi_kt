@@ -35,7 +35,11 @@ class ColorFilterSettingFragment : Fragment() {
 
     private var overlayColorFilterViewModel: OverlayColorFilterViewModel? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
@@ -74,7 +78,9 @@ class ColorFilterSettingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val filterColor = preferenceApplier.filterColor(ContextCompat.getColor(binding.root.context, R.color.default_color_filter))
+        val filterColor = preferenceApplier.filterColor(
+            ContextCompat.getColor(binding.root.context, R.color.default_color_filter)
+        )
         binding.sample.setBackgroundColor(filterColor)
         binding.alpha.value = Color.alpha(filterColor).toFloat()
         binding.useColorFilterCheck.let {
