@@ -10,9 +10,7 @@ import okhttp3.HttpUrl
  *
  * @author toastkidjp
  */
-object WebViewCookieHandler : CookieJar {
-
-    private const val DELIMITER = ";"
+class WebViewCookieHandler : CookieJar {
 
     override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
         val urlString = url.toString()
@@ -33,4 +31,11 @@ object WebViewCookieHandler : CookieJar {
             emptyList()
         }
     }
+
+    companion object {
+
+        private const val DELIMITER = ";"
+
+    }
+
 }
