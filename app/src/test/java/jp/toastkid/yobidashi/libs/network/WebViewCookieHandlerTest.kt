@@ -36,7 +36,7 @@ class WebViewCookieHandlerTest {
 
     @Test
     fun testSaveFromResponseNoneCookie() {
-        WebViewCookieHandler.saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
+        WebViewCookieHandler().saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
 
         verify(exactly = 1) { CookieManager.getInstance() }
         verify(exactly = 0) { cookieManager.setCookie(any(), any()) }
@@ -44,7 +44,7 @@ class WebViewCookieHandlerTest {
 
     @Test
     fun testSaveFromResponse() {
-        WebViewCookieHandler.saveFromResponse(
+        WebViewCookieHandler().saveFromResponse(
                 "https://www.yahoo.co.jp".toHttpUrl(),
                 mutableListOf(Cookie.Builder().domain("www.yahoo.co.jp").name("test").value("test").build())
         )
@@ -59,7 +59,7 @@ class WebViewCookieHandlerTest {
         mockkObject(Cookie)
         every { Cookie.parse(any(), any()) }.returns(mockk())
 
-        WebViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl())
+        WebViewCookieHandler().loadForRequest("https://www.yahoo.co.jp".toHttpUrl())
 
         verify(exactly = 1) { CookieManager.getInstance() }
         verify(exactly = 1) { cookieManager.getCookie(any()) }
@@ -73,7 +73,7 @@ class WebViewCookieHandlerTest {
         every { Cookie.parse(any(), any()) }.returns(mockk())
 
         assertTrue(
-                WebViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl()).isEmpty()
+                WebViewCookieHandler().loadForRequest("https://www.yahoo.co.jp".toHttpUrl()).isEmpty()
         )
 
         verify(exactly = 1) { CookieManager.getInstance() }
