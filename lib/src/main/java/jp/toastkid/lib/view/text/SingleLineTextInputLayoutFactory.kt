@@ -15,6 +15,8 @@ import android.widget.EditText
 import com.google.android.material.textfield.TextInputLayout
 
 /**
+ *
+ * @param factory For injecting test dependencies.
  * @author toastkidjp
  */
 class SingleLineTextInputLayoutFactory(
