@@ -41,12 +41,12 @@ class Adapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = get(position) ?: return
         item.bind(holder)
-        holder.setOnClick({ viewModel.search(item.urlString()) })
-        holder.setOnLongClick({
+        holder.setOnClick { viewModel.search(item.urlString()) }
+        holder.setOnLongClick {
             viewModel.searchOnBackground(item.urlString())
             true
-        })
-        holder.setDelete({ removeAt(item) })
+        }
+        holder.setDelete { removeAt(item) }
     }
 
     override fun getItemCount(): Int = suggestions.size
