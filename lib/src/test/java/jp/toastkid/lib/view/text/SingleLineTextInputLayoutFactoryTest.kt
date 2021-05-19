@@ -51,7 +51,7 @@ class SingleLineTextInputLayoutFactoryTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         singleLineTextInputLayoutFactory.invoke(mockk())
 
         verify(exactly = 1) { textInputLayout.addView(any(), any(), any<ViewGroup.LayoutParams>()) }
