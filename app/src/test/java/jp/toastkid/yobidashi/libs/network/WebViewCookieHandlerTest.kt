@@ -40,7 +40,8 @@ class WebViewCookieHandlerTest {
 
     @Test
     fun testSaveFromResponseNoneCookie() {
-        webViewCookieHandler.saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
+        webViewCookieHandler
+            .saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
 
         verify(exactly = 1) { CookieManager.getInstance() }
         verify(exactly = 0) { cookieManager.setCookie(any(), any()) }
@@ -50,7 +51,13 @@ class WebViewCookieHandlerTest {
     fun testSaveFromResponse() {
         webViewCookieHandler.saveFromResponse(
                 "https://www.yahoo.co.jp".toHttpUrl(),
-                mutableListOf(Cookie.Builder().domain("www.yahoo.co.jp").name("test").value("test").build())
+                mutableListOf(
+                    Cookie.Builder()
+                        .domain("www.yahoo.co.jp")
+                        .name("test")
+                        .value("test")
+                        .build()
+                )
         )
 
         verify(exactly = 1) { CookieManager.getInstance() }
