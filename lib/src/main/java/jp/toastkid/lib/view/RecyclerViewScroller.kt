@@ -9,7 +9,7 @@ object RecyclerViewScroller {
 
     private const val THRESHOLD = 30
 
-    private val TOP_POSITION = 0
+    private const val TOP_POSITION = 0
 
     fun toTop(recyclerView: RecyclerView, itemCount: Int) {
         if (itemCount > THRESHOLD) {
