@@ -40,6 +40,7 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
+import timber.log.Timber
 
 /**
  * @author toastkidjp
@@ -279,8 +280,12 @@ class BrowserModule(
     }
 
     fun resetUserAgent(userAgentText: String) {
-        currentView()?.settings?.userAgentString = userAgentText
-        reload()
+        try {
+            currentView()?.settings?.userAgentString = userAgentText
+            reload()
+        } catch (e: RuntimeException) {
+            Timber.e(e)
+        }
     }
 
     /**
