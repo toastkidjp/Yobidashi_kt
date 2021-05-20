@@ -50,7 +50,7 @@ class VoiceSearch {
     /**
      * Launch Google Play App.
      *
-     * @param parent Snackbar's parent
+     * @param parent Snackbar parent
      */
     private fun launchGooglePlay(parent: View) {
         parent.context.startActivity(makeGoogleAppInstallIntent())
