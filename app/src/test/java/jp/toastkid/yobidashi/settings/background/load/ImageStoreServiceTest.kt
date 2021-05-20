@@ -9,10 +9,12 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.spyk
+import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
 import jp.toastkid.yobidashi.libs.BitmapScaling
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.io.File
@@ -68,6 +70,12 @@ class ImageStoreServiceTest {
         every { uri.getLastPathSegment() }.returns("last")
     }
 
+    @After
+    fun tearDown() {
+        unmockkAll()
+        file.delete()
+    }
+
     @Test
     fun test() {
         imageStoreService.invoke(bitmap, uri, display)
@@ -78,8 +86,6 @@ class ImageStoreServiceTest {
         verify(exactly = 1) { anyConstructed<FileOutputStream>().close() }
         verify(exactly = 1) { bitmapScaling.invoke(any(), any(), any()) }
         verify(exactly = 1) { uri.getLastPathSegment() }
-
-        file.delete()
     }
 
 }
