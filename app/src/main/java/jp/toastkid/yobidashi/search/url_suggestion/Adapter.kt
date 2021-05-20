@@ -89,7 +89,6 @@ class Adapter(
     /**
      * Remove at index.
      *
-     * @param viewHistoryRepository
      * @param index
      * @return disposable
      */
