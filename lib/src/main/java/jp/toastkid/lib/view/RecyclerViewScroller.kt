@@ -9,12 +9,14 @@ object RecyclerViewScroller {
 
     private const val THRESHOLD = 30
 
+    private val TOP_POSITION = 0
+
     fun toTop(recyclerView: RecyclerView, itemCount: Int) {
         if (itemCount > THRESHOLD) {
-            recyclerView.scrollToPosition(0)
+            recyclerView.scrollToPosition(TOP_POSITION)
             return
         }
-        recyclerView.smoothScrollToPosition(0)
+        recyclerView.smoothScrollToPosition(TOP_POSITION)
     }
 
     fun toBottom(recyclerView: RecyclerView, itemCount: Int) {
