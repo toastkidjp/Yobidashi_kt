@@ -50,7 +50,7 @@ class ItemDeletionUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testBookmarkCase() {
         itemDeletionUseCase.invoke(Bookmark())
 
         verify(exactly = 1) { bookmarkRepository.delete(any()) }
