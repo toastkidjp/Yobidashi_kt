@@ -58,7 +58,7 @@ class ItemDeletionUseCaseTest {
     }
 
     @Test
-    fun invokeViewHistory() {
+    fun testViewHistoryCase() {
         itemDeletionUseCase.invoke(ViewHistory())
 
         verify(exactly = 0) { bookmarkRepository.delete(any()) }
