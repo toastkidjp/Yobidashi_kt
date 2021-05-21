@@ -24,17 +24,6 @@ class UrlSuggestionModule(
         viewModel: SearchFragmentViewModel
 ) {
 
-    /**
-     * Adapter.
-     */
-    private val adapter = Adapter(
-        LayoutInflater.from(binding.root.context),
-        this::remove,
-        viewModel,
-        bookmarkRepository,
-        viewHistoryRepository
-    )
-
     var enable = true
 
     /**
@@ -48,6 +37,17 @@ class UrlSuggestionModule(
      */
     private val viewHistoryRepository: ViewHistoryRepository =
             DatabaseFinder().invoke(binding.root.context).viewHistoryRepository()
+
+    /**
+     * Adapter.
+     */
+    private val adapter = Adapter(
+        LayoutInflater.from(binding.root.context),
+        this::remove,
+        viewModel,
+        bookmarkRepository,
+        viewHistoryRepository
+    )
 
     init {
         binding.urlSuggestions.adapter = adapter
