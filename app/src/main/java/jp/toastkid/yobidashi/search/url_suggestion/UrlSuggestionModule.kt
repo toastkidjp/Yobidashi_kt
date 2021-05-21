@@ -30,7 +30,9 @@ class UrlSuggestionModule(
     private val adapter = Adapter(
             LayoutInflater.from(binding.root.context),
             this::remove,
-            viewModel
+            viewModel,
+        bookmarkRepository,
+        viewHistoryRepository
             )
 
     var enable = true

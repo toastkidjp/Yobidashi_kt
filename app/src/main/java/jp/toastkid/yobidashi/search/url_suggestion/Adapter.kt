@@ -6,6 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
+import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
+import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
+import jp.toastkid.yobidashi.browser.history.ViewHistory
+import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +28,9 @@ import kotlinx.coroutines.withContext
 class Adapter(
         private val layoutInflater: LayoutInflater,
         private val removeAt: (UrlItem) -> Unit,
-        private val viewModel: SearchFragmentViewModel
+        private val viewModel: SearchFragmentViewModel,
+        private val bookmarkRepository: BookmarkRepository,
+        private val viewHistoryRepository: ViewHistoryRepository
 ): RecyclerView.Adapter<ViewHolder>() {
 
     /**
@@ -104,7 +110,11 @@ class Adapter(
         return CoroutineScope(Dispatchers.Main).launch {
             val index = if (passedIndex == -1) suggestions.indexOf(item) else passedIndex
             withContext(Dispatchers.IO) {
-                //TODO consider it. viewHistoryRepository.delete(item)
+                when (item) {
+                    is Bookmark -> bookmarkRepository.delete(item)
+                    is ViewHistory -> viewHistoryRepository.delete(item)
+                    else -> Unit
+                }
                 suggestions.remove(item)
             }
 
