@@ -47,8 +47,7 @@ class UrlSuggestionModule(
         LayoutInflater.from(binding.root.context),
         this::remove,
         viewModel,
-        bookmarkRepository,
-        viewHistoryRepository
+        ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
     )
 
     init {
