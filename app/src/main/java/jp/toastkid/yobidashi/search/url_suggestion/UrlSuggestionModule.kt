@@ -26,17 +26,19 @@ class UrlSuggestionModule(
 
     var enable = true
 
+    private val database = DatabaseFinder().invoke(binding.root.context)
+
     /**
      * Bookmark's database repository.
      */
     private val bookmarkRepository: BookmarkRepository =
-            DatabaseFinder().invoke(binding.root.context).bookmarkRepository()
+            database.bookmarkRepository()
 
     /**
      * Database repository.
      */
     private val viewHistoryRepository: ViewHistoryRepository =
-            DatabaseFinder().invoke(binding.root.context).viewHistoryRepository()
+            database.viewHistoryRepository()
 
     /**
      * Adapter.
