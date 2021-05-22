@@ -39,7 +39,7 @@ class RandomWikipedia(
 
     companion object {
 
-        private val KEY_EXTRA_RANDOM_WIKIPEDIA = "random_wikipedia"
+        private const val KEY_EXTRA_RANDOM_WIKIPEDIA = "random_wikipedia"
 
         fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
                 .also {
