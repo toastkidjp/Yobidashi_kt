@@ -47,5 +47,9 @@ class RandomWikipedia(
                     it.putExtra(KEY_EXTRA_RANDOM_WIKIPEDIA, true)
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
+
+        fun shouldUse(intent: Intent?) =
+            intent?.getBooleanExtra("random_wikipedia", false) == true
+
     }
 }
