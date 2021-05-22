@@ -39,10 +39,12 @@ class RandomWikipedia(
 
     companion object {
 
+        private val KEY_EXTRA_RANDOM_WIKIPEDIA = "random_wikipedia"
+
         fun makeIntent(context: Context) = Intent(context, MainActivity::class.java)
                 .also {
                     it.action = Intent.ACTION_VIEW
-                    it.putExtra("random_wikipedia", true)
+                    it.putExtra(KEY_EXTRA_RANDOM_WIKIPEDIA, true)
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
     }
