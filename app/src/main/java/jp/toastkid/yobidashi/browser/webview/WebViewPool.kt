@@ -2,9 +2,9 @@ package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
 import android.os.Build
-import android.util.LruCache
 import android.webkit.WebView
 import androidx.annotation.ColorInt
+import androidx.collection.LruCache
 
 /**
  * [WebView] pool.

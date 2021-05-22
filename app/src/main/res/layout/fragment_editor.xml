@@ -18,6 +18,7 @@
             android:minLines="10"
             android:hint="@string/hint_editor_input"
             tools:ignore="Autofill"
+            android:imeOptions="flagNoExtractUi"
             />
     </androidx.core.widget.NestedScrollView>
 </layout>

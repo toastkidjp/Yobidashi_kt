@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:maxLines="1"
             android:inputType="number"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionSearch|flagNoExtractUi"
             android:gravity="center"
             android:text="@string/sample_number"
             android:textSize="14sp"

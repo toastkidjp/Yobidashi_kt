@@ -10,6 +10,7 @@ package jp.toastkid.yobidashi.browser.model
 
 import jp.toastkid.yobidashi.tab.History
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -18,7 +19,19 @@ import org.junit.Test
 class LoadInformationTest {
 
     @Test
-    fun expired() {
+    fun testExpired() {
+        val loadInformation = LoadInformation("test-id", History.EMPTY, -1)
+        assertTrue(loadInformation.expired())
+    }
+
+    @Test
+    fun testDoesNotExpired() {
+        val loadInformation = LoadInformation("test-id", History.EMPTY, System.currentTimeMillis())
+        assertFalse(loadInformation.expired())
+    }
+
+    @Test
+    fun testDefaultCase() {
         val loadInformation = LoadInformation("test-id", History.EMPTY)
         assertFalse(loadInformation.expired())
     }

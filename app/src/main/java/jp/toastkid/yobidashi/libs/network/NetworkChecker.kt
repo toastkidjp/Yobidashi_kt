@@ -5,15 +5,16 @@ import android.net.ConnectivityManager
 
 /**
  * Network checker.
-
+ *
  * @author toastkidjp
  */
+@Deprecated("ActiveNetworkInfo is deprecated.")
 object NetworkChecker {
 
     /**
      * Return true if we can't use network.
-     * @param context
      *
+     * @param context
      * @return
      */
     fun isNotAvailable(context: Context): Boolean {
@@ -22,11 +23,11 @@ object NetworkChecker {
 
     /**
      * Check usable network.
-     * @param context
      *
+     * @param context
      * @return
      */
-    fun isAvailable(context: Context): Boolean {
+    private fun isAvailable(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
         val info = cm?.activeNetworkInfo ?: return false
         return info.isConnected

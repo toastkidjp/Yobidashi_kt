@@ -3,16 +3,11 @@ package jp.toastkid.yobidashi.browser
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.webkit.ValueCallback
-import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
-import androidx.core.view.get
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -24,12 +19,11 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
 import jp.toastkid.yobidashi.browser.page_information.PageInformationExtractor
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
+import jp.toastkid.yobidashi.browser.usecase.WebViewReplacementUseCase
 import jp.toastkid.yobidashi.browser.webview.AlphaConverter
 import jp.toastkid.yobidashi.browser.webview.CustomViewSwitcher
 import jp.toastkid.yobidashi.browser.webview.CustomWebView
-import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
-import jp.toastkid.yobidashi.browser.webview.WebSettingApplier
 import jp.toastkid.yobidashi.browser.webview.WebViewFactoryUseCase
 import jp.toastkid.yobidashi.browser.webview.WebViewStateUseCase
 import jp.toastkid.yobidashi.browser.webview.factory.WebChromeClientFactory
@@ -76,8 +70,7 @@ class BrowserModule(
     private val slideUpFromBottom
             = AnimationUtils.loadAnimation(context, R.anim.slide_up)
 
-    private val slideDown
-            = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+    private val webViewReplacementUseCase: WebViewReplacementUseCase
 
     private val idGenerator = IdGenerator()
 
@@ -87,11 +80,7 @@ class BrowserModule(
 
     private val webViewFactory: WebViewFactoryUseCase
 
-    private val darkThemeApplier = DarkModeApplier()
-
     private val alphaConverter = AlphaConverter()
-
-    private val webViewStateUseCase = WebViewStateUseCase.make(context)
 
     init {
         GlobalWebViewPool.resize(preferenceApplier.poolSize)
@@ -123,11 +112,22 @@ class BrowserModule(
                         customViewSwitcher
                 )
         )
+
+        webViewReplacementUseCase = WebViewReplacementUseCase(
+                webViewContainer,
+                WebViewStateUseCase.make(context),
+                { webViewFactory(context) },
+                browserHeaderViewModel,
+                preferenceApplier,
+                slideUpFromBottom
+        )
     }
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
         lastId = tabId
-        if (replaceWebView(tabId)) {
+
+        browserHeaderViewModel?.resetContent()
+        if (webViewReplacementUseCase(tabId)) {
             loadUrl(uri.toString())
         }
     }
@@ -136,8 +136,6 @@ class BrowserModule(
         if (url.isEmpty()) {
             return
         }
-
-        val context: Context = context
 
         val currentView = currentView() ?: return
 
@@ -157,45 +155,6 @@ class BrowserModule(
         }
 
         currentView.loadUrl(url)
-    }
-
-    private fun replaceWebView(tabId: String): Boolean {
-        browserHeaderViewModel?.resetContent()
-
-        val currentWebView = getWebView(tabId)
-        if (webViewContainer?.childCount != 0) {
-            val previousView = webViewContainer?.get(0)
-            if (currentWebView == previousView) {
-                return false
-            }
-        }
-
-        setWebView(currentWebView)
-        return currentWebView?.url.isNullOrBlank()
-    }
-
-    private fun setWebView(webView: WebView?) {
-        webViewContainer?.removeAllViews()
-        webView?.let {
-            it.onResume()
-            (it.parent as? ViewGroup)?.removeAllViews()
-            darkThemeApplier(it, preferenceApplier.useDarkMode())
-            webViewContainer?.addView(it)
-            updateBackButtonState(it.canGoBack())
-            updateForwardButtonState(it.canGoForward())
-            browserHeaderViewModel?.nextTitle(it.title)
-            browserHeaderViewModel?.nextUrl(it.url)
-
-            webViewContainer?.startAnimation(slideUpFromBottom)
-
-            val activity = webViewContainer?.context
-            if (activity is FragmentActivity
-                    && ScreenMode.find(preferenceApplier.browserScreenMode()) != ScreenMode.FULL_SCREEN) {
-                ViewModelProvider(activity).get(AppBarViewModel::class.java).show()
-            }
-        }
-
-        reloadWebViewSettings()
     }
 
     private fun updateBackButtonState(newState: Boolean) {
@@ -272,13 +231,6 @@ class BrowserModule(
         autoArchive.save(webView, idGenerator.from(webView?.url))
     }
 
-    /**
-     * Reload [WebSettings].
-     */
-    private fun reloadWebViewSettings() {
-        WebSettingApplier(preferenceApplier).invoke(currentView()?.settings)
-    }
-
     fun resetUserAgent(userAgentText: String) {
         try {
             currentView()?.settings?.userAgentString = userAgentText
@@ -338,25 +290,6 @@ class BrowserModule(
      * @return title (NonNull)
      */
     fun currentTitle(): String = currentView()?.title ?: ""
-
-    /**
-     * Get [WebView] with tab ID.
-     *
-     * @param tabId Tab's ID.
-     * @return [WebView]
-     */
-    private fun getWebView(tabId: String?): WebView? {
-        if (!GlobalWebViewPool.containsKey(tabId) && tabId != null) {
-            GlobalWebViewPool.put(tabId, makeWebView())
-        }
-        val webView = GlobalWebViewPool.get(tabId)
-        webViewStateUseCase.restore(webView, tabId)
-        return webView
-    }
-
-    private fun makeWebView(): WebView {
-        return webViewFactory(context)
-    }
 
     fun onSaveInstanceState(outState: Bundle) {
         currentView()?.saveState(outState)
