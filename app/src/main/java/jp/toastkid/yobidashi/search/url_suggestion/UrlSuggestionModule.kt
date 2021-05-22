@@ -2,8 +2,6 @@ package jp.toastkid.yobidashi.search.url_suggestion
 
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
@@ -52,8 +50,6 @@ class UrlSuggestionModule(
 
     init {
         binding.urlSuggestions.adapter = adapter
-        binding.urlSuggestions.layoutManager =
-                LinearLayoutManager(binding.root.context, RecyclerView.VERTICAL, false)
         SwipeActionAttachment().invoke(binding.urlSuggestions)
     }
 
