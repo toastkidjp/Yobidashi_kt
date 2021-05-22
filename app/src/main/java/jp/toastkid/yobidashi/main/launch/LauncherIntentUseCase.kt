@@ -17,6 +17,7 @@ import jp.toastkid.yobidashi.barcode.BarcodeReaderFragment
 import jp.toastkid.yobidashi.browser.bookmark.BookmarkFragment
 import jp.toastkid.yobidashi.search.SearchFragment
 import jp.toastkid.yobidashi.settings.SettingFragment
+import jp.toastkid.yobidashi.wikipedia.random.RandomWikipedia
 
 /**
  * @author toastkidjp
@@ -32,7 +33,7 @@ class LauncherIntentUseCase(
 ) {
     
     operator fun invoke(intent: Intent) {
-        if (intent.getBooleanExtra("random_wikipedia", false)) {
+        if (RandomWikipedia.shouldUse(intent)) {
             randomWikipediaUseCase.invoke()
             return
         }
