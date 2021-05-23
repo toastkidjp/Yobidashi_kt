@@ -19,6 +19,8 @@ import kotlinx.coroutines.withContext
  * @param layoutInflater [LayoutInflater]
  * @param removeAt Callback of removing
  * @param viewModel [SearchFragmentViewModel]
+ * @param itemDeletionUseCase Use for deletion item from database
+ *
  * @author toastkidjp
  */
 class Adapter(
