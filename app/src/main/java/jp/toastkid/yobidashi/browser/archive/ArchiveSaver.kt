@@ -24,10 +24,9 @@ class ArchiveSaver {
             webView: WebView,
             file: File
     ) {
-        webView.saveWebArchive(
-                file.absolutePath,
-                false
-        ) { value -> saveToFile(webView, value) }
+        webView.saveWebArchive(file.absolutePath, false) {
+                value -> saveToFile(webView, value)
+        }
     }
 
     /**
