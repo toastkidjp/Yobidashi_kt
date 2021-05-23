@@ -69,7 +69,7 @@ class QueryUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         queryUseCase.invoke("test")
 
         verify(exactly = 1) { adapter.clear() }
@@ -77,6 +77,18 @@ class QueryUseCaseTest {
         coVerify(exactly = 1) { adapter.isNotEmpty() }
         coVerify(exactly = 1) { adapter.notifyDataSetChanged() }
         coVerify(exactly = 1) { bookmarkRepository.search(any(), any()) }
+        coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
+    }
+
+    @Test
+    fun testBlankCase() {
+        queryUseCase.invoke(" ")
+
+        verify(exactly = 1) { adapter.clear() }
+        coVerify(atLeast = 1) { adapter.add(any()) }
+        coVerify(exactly = 1) { adapter.isNotEmpty() }
+        coVerify(exactly = 1) { adapter.notifyDataSetChanged() }
+        coVerify(exactly = 0) { bookmarkRepository.search(any(), any()) }
         coVerify(exactly = 1) { viewHistoryRepository.search(any(), any()) }
     }
 
