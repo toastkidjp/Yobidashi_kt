@@ -2,9 +2,9 @@ package jp.toastkid.yobidashi.browser.archive
 
 import android.view.View
 import android.webkit.WebView
+import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.lib.preference.PreferenceApplier
 import java.io.File
 
 /**
@@ -16,8 +16,8 @@ class ArchiveSaver {
 
     /**
      * Invoke saver.
-     * @param webView
      *
+     * @param webView
      * @param file
      */
     operator fun invoke(
