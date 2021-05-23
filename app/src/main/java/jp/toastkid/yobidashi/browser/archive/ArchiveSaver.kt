@@ -31,8 +31,8 @@ class ArchiveSaver {
 
     /**
      * Save archive content to file.
-     * @param view Snackbar's parent
      *
+     * @param view Snackbar's parent
      * @param value is nullable, because WebView#saveWebArchive is returnable null when it failed.
      */
     private fun saveToFile(view: View, value: String?) {
