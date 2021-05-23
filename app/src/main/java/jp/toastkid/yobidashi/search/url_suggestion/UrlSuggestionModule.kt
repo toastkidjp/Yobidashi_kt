@@ -12,7 +12,6 @@ import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author toastkidjp
@@ -48,9 +47,14 @@ class UrlSuggestionModule(
         ItemDeletionUseCase(bookmarkRepository, viewHistoryRepository)
     )
 
+    private val queryUseCase: QueryUseCase
+
     init {
         binding.urlSuggestions.adapter = adapter
         SwipeActionAttachment().invoke(binding.urlSuggestions)
+        queryUseCase = QueryUseCase(adapter, bookmarkRepository, viewHistoryRepository) {
+            if (it) show() else hide()
+        }
     }
 
     private fun remove(item: UrlItem) {
@@ -63,27 +67,7 @@ class UrlSuggestionModule(
      * @param q query string
      */
     fun query(q: CharSequence) {
-        adapter.clear()
-
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                if (q.isBlank()) {
-                    return@withContext
-                }
-                bookmarkRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
-            }
-
-            withContext(Dispatchers.IO) {
-                viewHistoryRepository.search("%$q%", ITEM_LIMIT).forEach { adapter.add(it) }
-            }
-
-            if (adapter.isNotEmpty()) {
-                show()
-            } else {
-                hide()
-            }
-            adapter.notifyDataSetChanged()
-        }
+        queryUseCase.invoke(q)
     }
 
     /**
@@ -107,11 +91,4 @@ class UrlSuggestionModule(
     private fun runOnMainThread(action: () -> Unit) =
             CoroutineScope(Dispatchers.Main).launch { action() }
 
-    companion object {
-
-        /**
-         * Item limit.
-         */
-        private const val ITEM_LIMIT = 3
-    }
 }
