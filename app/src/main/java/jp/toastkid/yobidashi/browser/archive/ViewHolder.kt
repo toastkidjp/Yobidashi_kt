@@ -1,17 +1,14 @@
 package jp.toastkid.yobidashi.browser.archive
 
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
-import android.view.View
-
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 
 /**
  * View holder.
  *
- * Initialize with binding object.
  * @param binding Data binding object.
- *
  * @author toastkidjp
  */
 internal class ViewHolder(private val binding: ItemArchiveBinding)
