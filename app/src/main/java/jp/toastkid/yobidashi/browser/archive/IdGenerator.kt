@@ -11,6 +11,8 @@ import androidx.core.net.toUri
 import jp.toastkid.lib.Urls
 
 /**
+ * Use for storing archive file.
+ *
  * @author toastkidjp
  */
 class IdGenerator {
