@@ -54,7 +54,7 @@ class BookmarkInsertionTest {
     }
 
     @Test
-    fun insert() {
+    fun testEmptyTitleCase() {
         bookmarkInsertion = BookmarkInsertion(context, "", "https://www.yahoo.co.jp")
 
         bookmarkInsertion.insert()
