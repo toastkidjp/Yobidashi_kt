@@ -47,7 +47,7 @@ class ArchiveSaverTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         archiveSaver.invoke(webView, file)
 
         verify(exactly = 1) { webView.saveWebArchive(any(), any(), any()) }
