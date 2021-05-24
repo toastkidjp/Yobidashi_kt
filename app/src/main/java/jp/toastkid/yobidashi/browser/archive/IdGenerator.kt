@@ -17,6 +17,12 @@ import jp.toastkid.lib.Urls
  */
 class IdGenerator {
 
+    /**
+     * Generate file ID from passed URL string.
+     *
+     * @param url URL string(nullable)
+     * @return file ID
+     */
     fun from(url: String?): String? {
         if (Urls.isInvalidUrl(url)) {
             return url
