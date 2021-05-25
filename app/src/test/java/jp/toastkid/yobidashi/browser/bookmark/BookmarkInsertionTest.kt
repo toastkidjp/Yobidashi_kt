@@ -18,6 +18,7 @@ import io.mockk.unmockkAll
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -62,6 +63,22 @@ class BookmarkInsertionTest {
         coVerify(exactly = 0) { anyConstructed<DatabaseFinder>().invoke(any()) }
         coVerify(exactly = 0) { appDatabase.bookmarkRepository() }
         coVerify(exactly = 0) { bookmarkRepository.add(any()) }
+    }
+
+    @Test
+    fun test() {
+        bookmarkInsertion = BookmarkInsertion(
+            context,
+            "Yahoo! JAPAN",
+            "https://www.yahoo.co.jp",
+            dispatcher = TestCoroutineDispatcher()
+        )
+
+        bookmarkInsertion.insert()
+
+        coVerify(exactly = 1) { anyConstructed<DatabaseFinder>().invoke(any()) }
+        coVerify(exactly = 1) { appDatabase.bookmarkRepository() }
+        coVerify(exactly = 1) { bookmarkRepository.add(any()) }
     }
 
 }
