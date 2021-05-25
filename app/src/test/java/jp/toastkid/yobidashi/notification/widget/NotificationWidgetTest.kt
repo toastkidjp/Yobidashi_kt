@@ -44,8 +44,8 @@ class NotificationWidgetTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { notificationManagerCompat.cancel(any()) }.answers { Unit }
-        every { notificationManagerCompat.notify(any(), any()) }.answers { Unit }
+        every { notificationManagerCompat.cancel(any()) }.returns(Unit)
+        every { notificationManagerCompat.notify(any(), any()) }.returns(Unit)
         every { context.getPackageName() }.returns("test")
 
         mockkStatic(NotificationManagerCompat::class)
@@ -71,7 +71,7 @@ class NotificationWidgetTest {
     }
 
     @Test
-    fun refresh() {
+    fun test() {
         notificationWidget.refresh(context)
 
         verify(atLeast = 1) { NotificationManagerCompat.from(any()) }
