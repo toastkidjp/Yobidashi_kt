@@ -66,7 +66,7 @@ class BookmarkInsertionTest {
     }
 
     @Test
-    fun test() {
+    fun testCorrectCase() {
         bookmarkInsertion = BookmarkInsertion(
             context,
             "Yahoo! JAPAN",
