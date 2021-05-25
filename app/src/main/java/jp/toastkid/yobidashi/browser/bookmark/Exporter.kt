@@ -25,10 +25,10 @@ class Exporter(private val bookmarks: Iterable<Bookmark?>) {
     }
 
     private fun convertDirectory(builder: StringBuilder, item: Bookmark?) {
-        item?.let {
-            builder.append("<DT><H3>${it.title}</H3>\n")
+        item?.let { itemBookmark ->
+            builder.append("<DT><H3>${itemBookmark.title}</H3>\n")
                     .append("<DL><p>\n")
-            getDirBookmarks(it.title).forEach {
+            getDirBookmarks(itemBookmark.title).forEach {
                 if (it == null) {
                     return@forEach
                 }
