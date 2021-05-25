@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.browser.bookmark
 
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -75,7 +76,7 @@ internal class ViewHolder(private val binding: ItemBookmarkBinding)
      *
      * @param color Color Int
      */
-    fun setIconColorFilter(color: Int) {
+    fun setIconColorFilter(@ColorInt color: Int) {
         binding.icon.setColorFilter(color)
     }
 
