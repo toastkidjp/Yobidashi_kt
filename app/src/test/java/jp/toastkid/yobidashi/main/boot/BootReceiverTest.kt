@@ -30,7 +30,7 @@ class BootReceiverTest {
         every { context.getSharedPreferences(any(), any()) }.answers { mockk() }
 
         mockkObject(NotificationWidget)
-        every { NotificationWidget.show(any()) }.answers { Unit }
+        every { NotificationWidget.show(any()) }.returns(Unit)
 
         mockkConstructor(PreferenceApplier::class)
     }
