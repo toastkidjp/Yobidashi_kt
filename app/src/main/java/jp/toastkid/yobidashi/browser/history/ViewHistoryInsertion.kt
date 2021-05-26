@@ -38,6 +38,14 @@ class ViewHistoryInsertion private constructor(
 
     companion object {
 
+        /**
+         * Make object with content strings.
+         *
+         * @param context For obtaining repository
+         * @param title title string
+         * @param url URL string
+         * @param faviconPath Path to favicon
+         */
         fun make(
                 context: Context,
                 title: String,
