@@ -31,7 +31,6 @@ import jp.toastkid.yobidashi.browser.webview.factory.WebViewClientFactory
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.network.DownloadAction
 import jp.toastkid.yobidashi.libs.network.NetworkChecker
-import jp.toastkid.yobidashi.libs.network.WifiConnectionChecker
 import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import timber.log.Timber
@@ -149,7 +148,7 @@ class BrowserModule(
             return
         }
 
-        if (preferenceApplier.wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+        if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
@@ -169,7 +168,7 @@ class BrowserModule(
      * Simple delegation to [WebView].
      */
     fun reload() {
-        if (preferenceApplier.wifiOnly && WifiConnectionChecker.isNotConnecting(context)) {
+        if (preferenceApplier.wifiOnly && NetworkChecker.isUnavailableWiFi(context)) {
             Toaster.tShort(context, R.string.message_wifi_not_connecting)
             return
         }
