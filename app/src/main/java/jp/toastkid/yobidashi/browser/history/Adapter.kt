@@ -8,8 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * View history activity's adapter.
@@ -29,7 +29,7 @@ import java.util.*
  *
  * @author toastkidjp
  */
-internal class ActivityAdapter(
+internal class Adapter(
         private val context: Context,
         private val viewHistoryRepository: ViewHistoryRepository,
         private val onClick: (ViewHistory) -> Unit,
