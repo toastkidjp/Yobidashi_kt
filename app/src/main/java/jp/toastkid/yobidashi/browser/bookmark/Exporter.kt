@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
  */
 class Exporter(private val bookmarks: Iterable<Bookmark?>) {
 
-    fun invoke(): String {
+    operator fun invoke(): String {
         val builder = StringBuilder()
                 .append("<!DOCTYPE NETSCAPE-Bookmark-file-1>\n")
                 .append("<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">\n")
