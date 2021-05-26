@@ -23,11 +23,10 @@ class ViewHistoryInsertion private constructor(
             if (title.isEmpty() || url.isEmpty()) Job()
             else insert(makeItem(title, url, faviconPath))
 
-    private fun insert(searchHistory: ViewHistory): Job {
-        return CoroutineScope(Dispatchers.IO).launch {
+    private fun insert(searchHistory: ViewHistory): Job =
+        CoroutineScope(Dispatchers.IO).launch {
             repository.add(searchHistory)
         }
-    }
 
     private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory {
         return ViewHistory().also {
