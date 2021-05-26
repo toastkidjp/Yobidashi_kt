@@ -28,14 +28,13 @@ class ViewHistoryInsertion private constructor(
             repository.add(searchHistory)
         }
 
-    private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory {
-        return ViewHistory().also {
+    private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory =
+        ViewHistory().also {
             it.title = title
             it.url = url
             it.favicon = faviconPath
             it.lastViewed = System.currentTimeMillis()
         }
-    }
 
     companion object {
 
