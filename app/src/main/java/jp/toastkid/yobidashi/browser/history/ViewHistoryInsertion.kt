@@ -52,5 +52,7 @@ class ViewHistoryInsertion private constructor(
                 url: String,
                 faviconPath: String
         ) = ViewHistoryInsertion(context, title, url, faviconPath)
+
     }
+
 }
