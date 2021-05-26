@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class ViewHistoryInsertion private constructor(
-        private val context: Context,
+        context: Context,
         private val title: String,
         private val url: String,
         private val faviconPath: String
