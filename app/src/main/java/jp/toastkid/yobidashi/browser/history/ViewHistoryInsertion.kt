@@ -30,12 +30,12 @@ class ViewHistoryInsertion private constructor(
     }
 
     private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory {
-        val viewHistory = ViewHistory()
-        viewHistory.title = title
-        viewHistory.url = url
-        viewHistory.favicon = faviconPath
-        viewHistory.lastViewed = System.currentTimeMillis()
-        return viewHistory
+        return ViewHistory().also {
+            it.title = title
+            it.url = url
+            it.favicon = faviconPath
+            it.lastViewed = System.currentTimeMillis()
+        }
     }
 
     companion object {
