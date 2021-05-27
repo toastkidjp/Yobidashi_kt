@@ -25,9 +25,9 @@ data class LongTapItemHolder(var title: String = "", var anchor: String = "") {
 
     companion object {
 
-        private val KEY_TITLE = "title"
+        private const val KEY_TITLE = "title"
 
-        private val KEY_URL = "url"
+        private const val KEY_URL = "url"
 
     }
 
