@@ -18,12 +18,17 @@ data class LongTapItemHolder(var title: String = "", var anchor: String = "") {
         anchor = ""
     }
 
-    private val KEY_TITLE = "title"
-
-    private val KEY_URL = "url"
-
     fun extract(bundle: Bundle) {
         title = bundle.get(KEY_TITLE)?.toString()?.trim() ?: ""
         anchor = bundle.get(KEY_URL)?.toString() ?: ""
     }
+
+    companion object {
+
+        private val KEY_TITLE = "title"
+
+        private val KEY_URL = "url"
+
+    }
+
 }
