@@ -37,14 +37,15 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(activityContext)
                 .setTitle("Image: $url")
-                .setItems(R.array.image_menu, { _, which ->
+                .setItems(R.array.image_menu) { _, which ->
                     when (which) {
                         0 -> viewModel.open(ImageSearchUrlGenerator()(url))
-                        1 -> ViewModelProvider(activityContext).get(BrowserViewModel::class.java).preview(url.toUri())
+                        1 -> ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
+                            .preview(url.toUri())
                         2 -> downloadImage(url)
                     }
-                })
-                .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
+                }
+            .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .create()
     }
 
