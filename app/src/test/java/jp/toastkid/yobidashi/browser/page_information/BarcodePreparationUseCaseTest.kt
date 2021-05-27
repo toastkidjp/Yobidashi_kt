@@ -61,7 +61,7 @@ class BarcodePreparationUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         barcodePreparationUseCase.invoke(contentView, "https://www.yahoo.co.jp")
 
         coVerify(atLeast = 1) { contentView.findViewById<ImageView>(any()) }
