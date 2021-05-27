@@ -13,6 +13,7 @@ import android.os.Bundle
  * @author toastkidjp
  */
 data class LongTapItemHolder(var title: String = "", var anchor: String = "") {
+
     fun reset() {
         title = ""
         anchor = ""
