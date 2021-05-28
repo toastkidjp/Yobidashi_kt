@@ -14,6 +14,7 @@ import android.widget.EditText
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
@@ -38,6 +39,7 @@ class InputsTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { view.getContext() }.returns(context)
+        every { view.getWindowToken() }.returns(mockk())
         every { context.getSystemService(any()) }.returns(inputMethodManager)
         every { inputMethodManager.isActive() }.returns(true)
         every { inputMethodManager.showSoftInput(any(), any()) }.returns(true)
@@ -60,6 +62,12 @@ class InputsTest {
 
     @Test
     fun hideKeyboard() {
+        Inputs.hideKeyboard(view)
+
+        verify(exactly = 1) { context.getSystemService(any()) }
+        verify(exactly = 1) { view.getWindowToken() }
+        verify(exactly = 1) { inputMethodManager.isActive() }
+        verify(exactly = 1) { inputMethodManager.hideSoftInputFromWindow(any(), any()) }
     }
 
     @Test
