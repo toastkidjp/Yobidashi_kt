@@ -23,7 +23,7 @@ object DateFormatHolder {
                 context.getString(R.string.date_format),
                 Locale.getDefault()
         )
-        holder.put(context, newInstance)
+        holder[context] = newInstance
         return newInstance
     }
 
