@@ -61,7 +61,7 @@ class InputsTest {
     }
 
     @Test
-    fun hideKeyboard() {
+    fun testHideKeyboard() {
         Inputs.hideKeyboard(view)
 
         verify(exactly = 1) { context.getSystemService(any()) }
