@@ -3,6 +3,7 @@ package jp.toastkid.article_viewer.article.detail
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 /**
@@ -10,44 +11,51 @@ import org.junit.Test
  */
 class InternalLinkSchemeTest {
 
+    private lateinit var internalLinkScheme: InternalLinkScheme
+
+    @Before
+    fun setUp() {
+        internalLinkScheme = InternalLinkScheme()
+    }
+
     @Test
     fun makeLink() {
         assertEquals(
                 "internal-article://tomato",
-                InternalLinkScheme.makeLink("tomato")
+                internalLinkScheme.makeLink("tomato")
         )
     }
 
     @Test
     fun isInternalLink() {
-        assertFalse(InternalLinkScheme.isInternalLink(""))
-        assertFalse(InternalLinkScheme.isInternalLink(" "))
-        assertFalse(InternalLinkScheme.isInternalLink("https://www.yahoo.co.jp"))
-        assertFalse(InternalLinkScheme.isInternalLink("tomato"))
-        assertTrue(InternalLinkScheme.isInternalLink(InternalLinkScheme.makeLink("tomato")))
+        assertFalse(internalLinkScheme.isInternalLink(""))
+        assertFalse(internalLinkScheme.isInternalLink(" "))
+        assertFalse(internalLinkScheme.isInternalLink("https://www.yahoo.co.jp"))
+        assertFalse(internalLinkScheme.isInternalLink("tomato"))
+        assertTrue(internalLinkScheme.isInternalLink(internalLinkScheme.makeLink("tomato")))
     }
 
     @Test
     fun extract() {
         assertEquals(
                 "",
-                InternalLinkScheme.extract("")
+                internalLinkScheme.extract("")
         )
         assertEquals(
                 " ",
-                InternalLinkScheme.extract(" ")
+                internalLinkScheme.extract(" ")
         )
         assertEquals(
                 "tomato",
-                InternalLinkScheme.extract("tomato")
+                internalLinkScheme.extract("tomato")
         )
         assertEquals(
                 "https://www.yahoo.co.jp",
-                InternalLinkScheme.extract("https://www.yahoo.co.jp")
+                internalLinkScheme.extract("https://www.yahoo.co.jp")
         )
         assertEquals(
                 "tomato",
-                InternalLinkScheme.extract(InternalLinkScheme.makeLink("tomato"))
+                internalLinkScheme.extract(internalLinkScheme.makeLink("tomato"))
         )
     }
 }

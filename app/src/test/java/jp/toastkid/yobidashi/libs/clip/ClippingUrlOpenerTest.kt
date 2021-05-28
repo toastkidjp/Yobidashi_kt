@@ -60,7 +60,7 @@ class ClippingUrlOpenerTest {
 
     @Test
     fun testParentViewIsNull() {
-        ClippingUrlOpener.invoke(null) { }
+        ClippingUrlOpener().invoke(null) { }
 
         verify(exactly = 0) { view.getContext() }
         verify(exactly = 0) { NetworkChecker.isNotAvailable(any()) }
@@ -70,7 +70,7 @@ class ClippingUrlOpenerTest {
     fun testNetworkIsNotAvailable() {
         every { NetworkChecker.isNotAvailable(any()) }.returns(true)
 
-        ClippingUrlOpener.invoke(view) { }
+        ClippingUrlOpener().invoke(view) { }
 
         verify(exactly = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
@@ -81,7 +81,7 @@ class ClippingUrlOpenerTest {
     fun testClipboardIsNull() {
         every { Clipboard.getPrimary(any()) }.returns(null)
 
-        ClippingUrlOpener.invoke(view) { }
+        ClippingUrlOpener().invoke(view) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
@@ -94,7 +94,7 @@ class ClippingUrlOpenerTest {
         every { Clipboard.getPrimary(any()) }.returns("test")
         every { Urls.isInvalidUrl(any()) }.returns(true)
 
-        ClippingUrlOpener.invoke(view) { }
+        ClippingUrlOpener().invoke(view) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }
@@ -111,7 +111,7 @@ class ClippingUrlOpenerTest {
         mockkConstructor(PreferenceApplier::class)
         every { anyConstructed<PreferenceApplier>().colorPair() }.returns(mockk())
 
-        ClippingUrlOpener.invoke(view) { }
+        ClippingUrlOpener().invoke(view) { }
 
         verify(atLeast = 1) { view.getContext() }
         verify(exactly = 1) { NetworkChecker.isNotAvailable(any()) }

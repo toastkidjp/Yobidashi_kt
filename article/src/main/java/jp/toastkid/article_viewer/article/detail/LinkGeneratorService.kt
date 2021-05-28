@@ -17,19 +17,13 @@ import java.util.regex.Pattern
 class LinkGeneratorService {
 
     operator fun invoke(textView: TextView) {
-        embedLinks(
-                textView,
-                internalLinkPattern,
-                Linkify.TransformFilter { matcher, _ ->
-                    InternalLinkScheme.makeLink(matcher.group(1))
-                }
-        )
+        embedLinks(textView, internalLinkPattern) { matcher, _ ->
+            InternalLinkScheme().makeLink(matcher.group(1))
+        }
 
-        embedLinks(
-                textView,
-                httpPattern,
-                Linkify.TransformFilter { matcher, _ -> matcher.group(0) }
-        )
+        embedLinks(textView, httpPattern) { matcher, _ ->
+            matcher.group(0)
+        }
     }
 
     private fun embedLinks(textView: TextView, pattern: Pattern, transformFilter: Linkify.TransformFilter) {

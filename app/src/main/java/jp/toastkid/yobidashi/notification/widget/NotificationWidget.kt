@@ -36,7 +36,6 @@ object NotificationWidget {
      * @param context
      */
     fun show(context: Context) {
-        println(remoteViewsFactory)
         val notificationManager = NotificationManagerCompat.from(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.title_show_notification_widget)

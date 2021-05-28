@@ -54,6 +54,7 @@ import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.main.launch.ElseCaseUseCase
 import jp.toastkid.yobidashi.main.launch.LauncherIntentUseCase
 import jp.toastkid.yobidashi.main.launch.RandomWikipediaUseCase
+import jp.toastkid.yobidashi.main.usecase.BackgroundTabOpenerUseCase
 import jp.toastkid.yobidashi.menu.MenuBinder
 import jp.toastkid.yobidashi.menu.MenuSwitchColorApplier
 import jp.toastkid.yobidashi.menu.MenuUseCase
@@ -187,23 +188,20 @@ class MainActivity : AppCompatActivity(),
             val uri = it?.getContentIfNotHandled() ?: return@Observer
             openNewWebTab(uri)
         })
+
+        val backgroundTabOpenerUseCase = BackgroundTabOpenerUseCase(
+                binding.content,
+                { title, url -> tabs.openBackgroundTab(title, url) },
+                { replaceToCurrentTab(true) }
+        )
+
         browserViewModel?.openBackground?.observe(this, Observer {
-            val uri = it?.getContentIfNotHandled() ?: return@Observer
-            tabs.openBackgroundTab(uri.toString(), uri.toString())
-            Toaster.snackShort(
-                    binding.content,
-                    getString(R.string.message_tab_open_background, uri.toString()),
-                    preferenceApplier.colorPair()
-            )
+            val urlString = it?.getContentIfNotHandled()?.toString() ?: return@Observer
+            backgroundTabOpenerUseCase(urlString, urlString, preferenceApplier.colorPair())
         })
         browserViewModel?.openBackgroundWithTitle?.observe(this, Observer {
             val pair = it?.getContentIfNotHandled() ?: return@Observer
-            tabs.openBackgroundTab(pair.first, pair.second.toString())
-            Toaster.snackShort(
-                    binding.content,
-                    getString(R.string.message_tab_open_background, pair.first),
-                    preferenceApplier.colorPair()
-            )
+            backgroundTabOpenerUseCase(pair.first, pair.second.toString(), preferenceApplier.colorPair())
         })
 
         invokeSearchWithClip(colorPair)
@@ -510,7 +508,7 @@ class MainActivity : AppCompatActivity(),
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        ClippingUrlOpener(binding.content) { browserViewModel?.open(it) }
+        ClippingUrlOpener()(binding.content) { browserViewModel?.open(it) }
     }
 
     /**

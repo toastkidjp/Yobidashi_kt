@@ -13,6 +13,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -52,6 +53,9 @@ class MarkdownConverterProviderUseCaseTest {
 
         mockkStatic(Prism4jThemeDefault::class)
         every { Prism4jThemeDefault.create() }.returns(mockk())
+
+        mockkConstructor(CoilPluginFactory::class)
+        every { anyConstructed<CoilPluginFactory>().invoke(any()) }.returns(mockk())
 
         mockkStatic(Markwon::class)
         every { Markwon.builder(any()) }.returns(builder)

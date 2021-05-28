@@ -73,5 +73,6 @@
     <string name="my_index">myINDEX</string>
     <string name="search_category_weblio">Weblio</string>
     <string name="search_category_google_scholar">Google Scholar</string>
+    <string name="search_category_economist">Economist</string>
 
 </resources>

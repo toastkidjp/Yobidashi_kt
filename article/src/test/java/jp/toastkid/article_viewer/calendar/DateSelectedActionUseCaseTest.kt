@@ -3,8 +3,9 @@ package jp.toastkid.article_viewer.calendar
 import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockkObject
+import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.article.ArticleRepository
@@ -21,6 +22,9 @@ import org.junit.Test
  * @author toastkidjp
  */
 class DateSelectedActionUseCaseTest {
+
+    @InjectMockKs
+    private lateinit var dateSelectedActionService: DateSelectedActionUseCase
 
     @MockK
     private lateinit var repository: ArticleRepository
@@ -40,15 +44,14 @@ class DateSelectedActionUseCaseTest {
         every { repository.findFirst(any()) }.answers { Article(1).also { it.title = "test" } }
         every { viewModel.newArticle(any()) }.answers { Unit }
 
-        mockkObject(TitleFilterGenerator)
-        every { TitleFilterGenerator.invoke(any(), any(), any()) }.answers { "test" }
+        mockkConstructor(TitleFilterGenerator::class)
+        every { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }.answers { "test" }
 
-        val dateSelectedActionService = DateSelectedActionUseCase(repository, viewModel)
         dateSelectedActionService.invoke(2020, 0, 22)
 
         coVerify(exactly = 1) { repository.findFirst(any()) }
         coVerify(exactly = 1) { viewModel.newArticle(any()) }
-        coVerify(exactly = 1) { TitleFilterGenerator.invoke(any(), any(), any()) }
+        coVerify(exactly = 1) { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }
     }
 
     @After

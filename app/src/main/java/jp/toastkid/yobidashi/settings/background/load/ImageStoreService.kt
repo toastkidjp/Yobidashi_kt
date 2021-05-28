@@ -24,7 +24,8 @@ import kotlin.jvm.Throws
  */
 class ImageStoreService(
         private val filesDir: StorageWrapper,
-        private val preferenceApplier: PreferenceApplier
+        private val preferenceApplier: PreferenceApplier,
+        private val bitmapScaling: BitmapScaling = BitmapScaling()
 ) {
 
     /**
@@ -42,7 +43,7 @@ class ImageStoreService(
 
         val size = getDisplayScale(display)
         val fileOutputStream = FileOutputStream(output)
-        BitmapScaling(image, size.width().toDouble(), size.height().toDouble())
+        bitmapScaling(image, size.width().toDouble(), size.height().toDouble())
                 .compress(Bitmap.CompressFormat.WEBP, 100, fileOutputStream)
         fileOutputStream.close()
     }

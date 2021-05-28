@@ -132,7 +132,7 @@ class TabAdapter(
      * @param title Tab's title
      * @param url Tab's URL
      */
-    fun openBackgroundTab(title: String, url: String) {
+    fun openBackgroundTab(title: String, url: String): () -> Unit {
         val context = contextSupplier()
         val tabTitle =
                 if (title.isNotBlank()) title
@@ -142,10 +142,11 @@ class TabAdapter(
         tabList.add(newTab)
         tabList.save()
 
-        val webView = webViewFactory?.invoke(context) ?: return
+        val webView = webViewFactory?.invoke(context) ?: return { }
         webView.loadUrl(url)
         GlobalWebViewPool.put(newTab.id(), webView)
         setCount()
+        return { setIndexByTab(newTab) }
     }
 
     /**

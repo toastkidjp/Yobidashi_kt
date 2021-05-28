@@ -26,7 +26,8 @@ class MarkdownConverterProviderUseCase {
         val plugins = listOf(
                 TablePlugin.create(context),
                 TaskListPlugin.create(context),
-                SyntaxHighlightPlugin.create(Prism4j(GrammarLocatorDef()), Prism4jThemeDefault.create())
+                SyntaxHighlightPlugin.create(Prism4j(GrammarLocatorDef()), Prism4jThemeDefault.create()),
+                CoilPluginFactory()(context)
         )
         return Markwon.builder(context).usePlugins(plugins).build()
     }

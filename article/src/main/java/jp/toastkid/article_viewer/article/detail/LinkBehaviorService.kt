@@ -21,7 +21,8 @@ import kotlinx.coroutines.withContext
 class LinkBehaviorService(
         private val contentViewModel: ContentViewModel,
         private val browserViewModel: BrowserViewModel,
-        private val exists: (String) -> Boolean
+        private val exists: (String) -> Boolean,
+        private val internalLinkScheme: InternalLinkScheme = InternalLinkScheme()
 ) {
 
     operator fun invoke(url: String?) {
@@ -29,12 +30,12 @@ class LinkBehaviorService(
             return
         }
 
-        if (!InternalLinkScheme.isInternalLink(url)) {
+        if (!internalLinkScheme.isInternalLink(url)) {
             browserViewModel.open(url.toUri())
             return
         }
 
-        val title = InternalLinkScheme.extract(url)
+        val title = internalLinkScheme.extract(url)
         CoroutineScope(Dispatchers.Main).launch {
             val exists = withContext(Dispatchers.IO) { exists(title) }
             if (exists) {

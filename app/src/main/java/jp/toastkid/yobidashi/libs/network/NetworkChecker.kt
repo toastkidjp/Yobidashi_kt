@@ -17,24 +17,30 @@ object NetworkChecker {
     }
 
     /**
-     * Return true if we can't use network.
+     * If it can't use network, return true.
      *
-     * @param context
-     * @return
+     * @param context Use for obtaining ConnectivityManager
+     * @return If it can't use network, return true
      */
     fun isNotAvailable(context: Context): Boolean {
         return isAvailable(context) == NetworkType.NONE
     }
 
+    /**
+     * If current network is not Wi-Fi or it is unavailable, return true.
+     *
+     * @param context Use for obtaining ConnectivityManager
+     * @return If current network is not Wi-Fi or it is unavailable, return true.
+     */
     fun isUnavailableWiFi(context: Context): Boolean {
         return isAvailable(context) != NetworkType.WIFI
     }
 
     /**
-     * Check usable network.
+     * Check network is available.
      *
-     * @param context
-     * @return
+     * @param context Use for obtaining [ConnectivityManager]
+     * @return If network is available, return true
      */
     private fun isAvailable(context: Context): NetworkType {
         val connectivityManager =

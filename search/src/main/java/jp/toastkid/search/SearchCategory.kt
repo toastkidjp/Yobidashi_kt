@@ -361,6 +361,11 @@ enum class SearchCategory(
             R.drawable.ic_speakerdeck,
             "https://cse.google.com/cse?cx=010150859881542981030%3Ahqhxyxpwtc4&q="
     ),
+    ECONOMIST(
+            R.string.search_category_economist,
+            R.drawable.ic_the_economist_logo,
+            "https://www.economist.com/search?q="
+    ),
     FT(
             R.string.financial_times,
             R.drawable.ic_financial_times,
