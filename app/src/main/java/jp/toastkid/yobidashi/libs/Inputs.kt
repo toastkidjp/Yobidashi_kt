@@ -20,11 +20,7 @@ object Inputs {
      * @param editText
      */
     fun showKeyboard(activity: Activity, editText: EditText) {
-        val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        if (inputMethodManager?.isActive == false) {
-            return
-        }
+        val inputMethodManager = obtainInputManager(activity)
         inputMethodManager?.showSoftInput(editText, 0)
     }
 
@@ -34,12 +30,8 @@ object Inputs {
      * @param v
      */
     fun hideKeyboard(v: View?) {
-        val manager = v?.context
-                ?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
-        if (!manager.isActive) {
-            return
-        }
-        manager.hideSoftInputFromWindow(v.windowToken, 0)
+        val manager = obtainInputManager(v?.context)
+        manager?.hideSoftInputFromWindow(v?.windowToken, 0)
     }
 
     private fun obtainInputManager(context: Context?): InputMethodManager? {
