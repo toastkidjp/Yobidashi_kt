@@ -42,6 +42,16 @@ object Inputs {
         manager.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
+    private fun obtainInputManager(context: Context?): InputMethodManager? {
+        val inputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                ?: return null
+        if (!inputMethodManager.isActive) {
+            return null
+        }
+        return inputMethodManager
+    }
+
     /**
      * Show software keyboard for input dialog.
      * You should call this method from `onActivityCreated(savedInstanceState: Bundle?)`.
