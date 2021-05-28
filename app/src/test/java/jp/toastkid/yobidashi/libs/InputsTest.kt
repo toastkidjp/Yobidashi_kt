@@ -50,7 +50,7 @@ class InputsTest {
     }
 
     @Test
-    fun showKeyboard() {
+    fun testShowKeyboard() {
         Inputs.showKeyboard(context, view)
 
         verify(exactly = 1) { context.getSystemService(any()) }
