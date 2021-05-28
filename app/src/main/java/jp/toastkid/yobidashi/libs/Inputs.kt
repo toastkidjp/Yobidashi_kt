@@ -15,8 +15,8 @@ object Inputs {
 
     /**
      * Show software keyboard.
-     * @param activity
      *
+     * @param activity
      * @param editText
      */
     fun showKeyboard(activity: Activity, editText: EditText) {
@@ -30,6 +30,7 @@ object Inputs {
 
     /**
      * Hide software keyboard.
+     *
      * @param v
      */
     fun hideKeyboard(v: View?) {
