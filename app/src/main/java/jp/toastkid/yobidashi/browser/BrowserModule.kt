@@ -16,7 +16,7 @@ import jp.toastkid.yobidashi.browser.archive.Archive
 import jp.toastkid.yobidashi.browser.archive.IdGenerator
 import jp.toastkid.yobidashi.browser.archive.auto.AutoArchive
 import jp.toastkid.yobidashi.browser.block.AdRemover
-import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderService
+import jp.toastkid.yobidashi.browser.download.image.AllImageDownloaderUseCase
 import jp.toastkid.yobidashi.browser.page_information.PageInformationExtractor
 import jp.toastkid.yobidashi.browser.reader.ReaderModeUseCase
 import jp.toastkid.yobidashi.browser.usecase.WebViewReplacementUseCase
@@ -320,7 +320,7 @@ class BrowserModule(
     }
 
     fun downloadAllImages() {
-        AllImageDownloaderService(DownloadAction(context)).invoke(currentView())
+        AllImageDownloaderUseCase(DownloadAction(context)).invoke(currentView())
     }
 
 }

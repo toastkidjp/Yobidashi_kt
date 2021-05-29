@@ -14,7 +14,7 @@ import jp.toastkid.yobidashi.libs.network.DownloadAction
 /**
  * @author toastkidjp
  */
-class AllImageDownloaderService(private val downloadAction: DownloadAction) {
+class AllImageDownloaderUseCase(private val downloadAction: DownloadAction) {
 
     operator fun invoke(webView: WebView?) {
         webView?.evaluateJavascript(SCRIPT) { result ->
