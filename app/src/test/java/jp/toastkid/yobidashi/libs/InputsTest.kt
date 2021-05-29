@@ -76,7 +76,7 @@ class InputsTest {
     }
 
     @Test
-    fun showKeyboardForInputDialog() {
+    fun testShowKeyboardForInputDialog() {
         Inputs.showKeyboardForInputDialog(window)
 
         verify(exactly = 1) { window.setSoftInputMode(any()) }
