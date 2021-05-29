@@ -82,4 +82,15 @@ class InputsTest {
         verify(exactly = 1) { window.setSoftInputMode(any()) }
     }
 
+    @Test
+    fun nullCase() {
+        every { context.getSystemService(any()) }.returns(null)
+
+        Inputs.showKeyboard(context, view)
+
+        verify(exactly = 1) { context.getSystemService(any()) }
+        verify(exactly = 0) { inputMethodManager.isActive() }
+        verify(exactly = 0) { inputMethodManager.showSoftInput(any(), any()) }
+    }
+
 }
