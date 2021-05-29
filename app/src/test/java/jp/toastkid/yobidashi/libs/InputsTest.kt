@@ -83,7 +83,7 @@ class InputsTest {
     }
 
     @Test
-    fun nullCase() {
+    fun testObtainNullCase() {
         every { context.getSystemService(any()) }.returns(null)
 
         Inputs.showKeyboard(context, view)
