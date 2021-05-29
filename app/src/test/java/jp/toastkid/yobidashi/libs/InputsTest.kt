@@ -81,4 +81,5 @@ class InputsTest {
 
         verify(exactly = 1) { window.setSoftInputMode(any()) }
     }
+
 }
