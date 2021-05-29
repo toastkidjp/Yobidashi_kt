@@ -93,4 +93,15 @@ class InputsTest {
         verify(exactly = 0) { inputMethodManager.showSoftInput(any(), any()) }
     }
 
+    @Test
+    fun test() {
+        every { inputMethodManager.isActive() }.returns(false)
+
+        Inputs.showKeyboard(context, view)
+
+        verify(exactly = 1) { context.getSystemService(any()) }
+        verify(exactly = 1) { inputMethodManager.isActive() }
+        verify(exactly = 0) { inputMethodManager.showSoftInput(any(), any()) }
+    }
+
 }
