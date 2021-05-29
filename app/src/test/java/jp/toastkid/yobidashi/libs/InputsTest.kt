@@ -9,6 +9,7 @@
 package jp.toastkid.yobidashi.libs
 
 import android.app.Activity
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import io.mockk.MockKAnnotations
@@ -35,6 +36,9 @@ class InputsTest {
     @MockK
     private lateinit var context: Activity
 
+    @MockK
+    private lateinit var window: Window
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -44,6 +48,7 @@ class InputsTest {
         every { inputMethodManager.isActive() }.returns(true)
         every { inputMethodManager.showSoftInput(any(), any()) }.returns(true)
         every { inputMethodManager.hideSoftInputFromWindow(any(), any()) }.returns(true)
+        every { window.setSoftInputMode(any()) }.returns(Unit)
     }
 
     @After
@@ -72,5 +77,8 @@ class InputsTest {
 
     @Test
     fun showKeyboardForInputDialog() {
+        Inputs.showKeyboardForInputDialog(window)
+
+        verify(exactly = 1) { window.setSoftInputMode(any()) }
     }
 }
