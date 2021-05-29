@@ -353,9 +353,9 @@ class BrowserFragment : Fragment(),
 
     fun showHtmlSource() {
         browserModule.invokeHtmlSourceExtraction(
-                ValueCallback {
-                    showReaderFragment(it.replace("\\u003C", "<"))
-                }
+            {
+                showReaderFragment(it.replace("\\u003C", "<"))
+            }
         )
     }
 
