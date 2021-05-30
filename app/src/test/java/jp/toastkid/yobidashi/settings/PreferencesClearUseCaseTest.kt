@@ -71,4 +71,5 @@ class PreferencesClearUseCaseTest {
         verify(exactly = 1) { anyConstructed<PreferenceApplier>().clear() }
         verify(exactly = 1) { anyConstructed<Updater>().update(any()) }
     }
+
 }
