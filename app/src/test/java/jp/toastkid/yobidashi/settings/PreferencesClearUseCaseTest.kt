@@ -62,7 +62,7 @@ class PreferencesClearUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         preferencesClearUseCase.invoke()
 
         verify(exactly = 1) { fragmentActivity.getSharedPreferences(any(), any()) }
