@@ -11,11 +11,8 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.appwidget.search.Updater
 import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
@@ -35,10 +32,7 @@ class ClearSettingConfirmDialogFragment : DialogFragment() {
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
-                    preferenceApplier.clear()
-                    Updater().update(fragmentActivity)
-                    ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-                            .snackShort(R.string.done_clear)
+                    PreferencesClearUseCase(fragmentActivity).invoke()
                     d.dismiss()
                 }
                 .show()
