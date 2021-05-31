@@ -19,6 +19,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.junit.After
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import java.io.FileNotFoundException
@@ -67,7 +68,7 @@ class AlbumArtFinderTest {
     fun testThrownExceptionCase() {
         every { contentResolver.openInputStream(any()) }.throws(FileNotFoundException())
 
-        albumArtFinder.invoke(mockk())
+        assertNull(albumArtFinder.invoke(mockk()))
 
         verify(exactly = 1) { contentResolver.openInputStream(any()) }
         verify(exactly = 0) { inputStream.close() }
