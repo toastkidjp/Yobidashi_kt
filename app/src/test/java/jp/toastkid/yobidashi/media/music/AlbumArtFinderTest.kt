@@ -53,7 +53,7 @@ class AlbumArtFinderTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         albumArtFinder.invoke(mockk())
 
         verify(exactly = 1) { contentResolver.openInputStream(any()) }
