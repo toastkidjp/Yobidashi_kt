@@ -64,7 +64,7 @@ class AlbumArtFinderTest {
 
 
     @Test
-    fun test() {
+    fun testThrownExceptionCase() {
         every { contentResolver.openInputStream(any()) }.throws(FileNotFoundException())
 
         albumArtFinder.invoke(mockk())
