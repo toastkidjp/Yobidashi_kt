@@ -60,4 +60,5 @@ class AlbumArtFinderTest {
         verify(exactly = 1) { inputStream.close() }
         verify(exactly = 1) { BitmapFactory.decodeStream(any()) }
     }
+
 }
