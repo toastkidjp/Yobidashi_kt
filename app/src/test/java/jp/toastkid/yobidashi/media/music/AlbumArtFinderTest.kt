@@ -21,6 +21,7 @@ import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.io.FileNotFoundException
 import java.io.InputStream
 
 /**
@@ -59,6 +60,18 @@ class AlbumArtFinderTest {
         verify(exactly = 1) { contentResolver.openInputStream(any()) }
         verify(exactly = 1) { inputStream.close() }
         verify(exactly = 1) { BitmapFactory.decodeStream(any()) }
+    }
+
+
+    @Test
+    fun test() {
+        every { contentResolver.openInputStream(any()) }.throws(FileNotFoundException())
+
+        albumArtFinder.invoke(mockk())
+
+        verify(exactly = 1) { contentResolver.openInputStream(any()) }
+        verify(exactly = 0) { inputStream.close() }
+        verify(exactly = 0) { BitmapFactory.decodeStream(any()) }
     }
 
 }
