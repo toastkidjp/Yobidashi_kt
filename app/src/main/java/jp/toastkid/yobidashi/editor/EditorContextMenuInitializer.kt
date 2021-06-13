@@ -65,7 +65,15 @@ class EditorContextMenuInitializer {
                             return true
                         }
                         R.id.context_edit_paste_as_quotation -> {
-                            PasteAsConfirmationDialogFragment.show(context)
+                            val primary = Clipboard.getPrimary(context)
+                            if (primary.isNullOrEmpty()) {
+                                actionMode?.finish()
+                                return true
+                            }
+                            editText.text.insert(
+                                editText.selectionStart,
+                                Quotation()(primary)
+                            )
                             actionMode?.finish()
                             return true
                         }
