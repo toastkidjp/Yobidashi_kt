@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import timber.log.Timber
 import java.io.IOException
 import java.text.DateFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * Initialize with Context.
@@ -80,8 +80,8 @@ internal class Adapter(
      *
      * @param lastModifiedMs milliseconds
      */
-    private fun toLastModifiedText(lastModifiedMs: Long): String
-            = DATE_FORMAT_HOLDER.get()?.format(Date(lastModifiedMs)) ?: ""
+    private fun toLastModifiedText(lastModifiedMs: Long) =
+        android.text.format.DateFormat.format("yyyyMMdd HH:mm:ss", lastModifiedMs)
 
     /**
      * Convert file byte length to KB text.
