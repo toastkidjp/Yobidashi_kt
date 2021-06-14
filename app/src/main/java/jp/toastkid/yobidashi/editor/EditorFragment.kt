@@ -16,6 +16,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,9 +55,7 @@ import okio.buffer
 import okio.sink
 import okio.source
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 /**
  * @author toastkidjp
@@ -81,16 +80,6 @@ class EditorFragment :
     private lateinit var preferenceApplier: PreferenceApplier
 
     private val externalFileAssignment = ExternalFileAssignment()
-
-    /**
-     * Default date format holder.
-     */
-    private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
-        object: ThreadLocal<SimpleDateFormat>() {
-            override fun initialValue() =
-                    SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-        }
-    }
 
     private var speechMaker: SpeechMaker? = null
 
@@ -474,9 +463,7 @@ class EditorFragment :
      * @param ms
      */
     private fun setLastSaved(ms: Long) {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = ms
-        menuBinding.lastSaved.text = lastSavedTitle + dateFormatHolder.get()?.format(calendar.time)
+        menuBinding.lastSaved.text = lastSavedTitle + DateFormat.format("HH:mm:ss", ms)
     }
 
     /**
