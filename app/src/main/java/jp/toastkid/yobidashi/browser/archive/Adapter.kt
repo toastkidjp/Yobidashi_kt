@@ -12,9 +12,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import timber.log.Timber
 import java.io.IOException
-import java.text.DateFormat
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 /**
@@ -95,12 +93,5 @@ internal class Adapter(
 
     companion object {
 
-        /**
-         * Date format holder.
-         */
-        private val DATE_FORMAT_HOLDER = object: ThreadLocal<DateFormat>() {
-            override fun initialValue(): DateFormat
-                    = SimpleDateFormat("yyyyMMdd HH:mm:ss", Locale.getDefault())
-        }
     }
 }
