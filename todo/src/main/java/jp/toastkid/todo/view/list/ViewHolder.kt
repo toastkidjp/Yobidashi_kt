@@ -30,7 +30,4 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
         binding.menu.setOnClickListener { onAction(it) }
     }
 
-    companion object {
-
-    }
 }
