@@ -1,5 +1,6 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import android.text.format.DateFormat
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
@@ -10,9 +11,7 @@ import coil.load
 import jp.toastkid.lib.view.SwipeViewHolder
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.ItemViewHistoryBinding
-import jp.toastkid.yobidashi.libs.DateFormatHolder
 import java.io.File
-import java.util.Calendar
 
 /**
  * ViewHolder.
@@ -102,7 +101,9 @@ class ViewHolder(private val binding: ItemViewHistoryBinding):
 
     fun setTime(timeMs: Long) {
         binding.time.text =
-                DateFormatHolder(binding.root.context)
-                        ?.format(Calendar.getInstance().also { it.timeInMillis = timeMs }.time)
+            DateFormat.format(
+                binding.time.context.getString(R.string.date_format),
+                timeMs
+            )
     }
 }
