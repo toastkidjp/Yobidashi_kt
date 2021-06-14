@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.databinding.ItemTaskBinding
 import jp.toastkid.todo.model.TodoTask
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 /**
  * @author toastkidjp
@@ -34,11 +32,5 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
 
     companion object {
 
-        private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
-            object: ThreadLocal<SimpleDateFormat>() {
-                override fun initialValue() =
-                        SimpleDateFormat("yyyy/MM/dd(E)", Locale.getDefault())
-            }
-        }
     }
 }
