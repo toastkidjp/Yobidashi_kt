@@ -7,6 +7,7 @@
  */
 package jp.toastkid.todo.view.list
 
+import android.text.format.DateFormat
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -24,7 +25,7 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
     fun bind(task: TodoTask) {
         binding.color.setBackgroundColor(task.color)
         binding.mainText.text = task.description
-        binding.subText.text = format(task.dueDate)
+        binding.subText.text = DateFormat.format("yyyy/MM/dd(E)", task.dueDate)
         binding.menu.setColorFilter(PreferenceApplier(binding.menu.context).color)
     }
 
