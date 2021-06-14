@@ -14,7 +14,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.todo.databinding.ItemTaskBinding
 import jp.toastkid.todo.model.TodoTask
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 
 /**
@@ -34,10 +33,6 @@ class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder
     }
 
     companion object {
-
-        fun format(ms: Long): String? {
-            return dateFormatHolder.get()?.format(Calendar.getInstance().also { it.timeInMillis = ms }.time)
-        }
 
         private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
             object: ThreadLocal<SimpleDateFormat>() {
