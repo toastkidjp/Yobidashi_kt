@@ -66,10 +66,10 @@ internal class Adapter(
                 Timber.e(e)
             }
         }
-        holder.setDelete({
+        holder.setDelete {
             file.delete()
             notifyItemRemoved(position)
-        })
+        }
         holder.setIconColor(preferenceApplier.color)
     }
 
