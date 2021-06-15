@@ -1,6 +1,7 @@
 package jp.toastkid.yobidashi.browser.archive
 
 import android.content.Context
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,7 +80,7 @@ internal class Adapter(
      * @param lastModifiedMs milliseconds
      */
     private fun toLastModifiedText(lastModifiedMs: Long) =
-        android.text.format.DateFormat.format("yyyyMMdd HH:mm:ss", lastModifiedMs)
+        DateFormat.format("yyyyMMdd HH:mm:ss", lastModifiedMs)
 
     /**
      * Convert file byte length to KB text.
