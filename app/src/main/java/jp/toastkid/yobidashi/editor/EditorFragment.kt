@@ -48,7 +48,6 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import okio.buffer
@@ -63,7 +62,6 @@ import java.util.Calendar
 class EditorFragment :
         Fragment(),
         TabUiFragment,
-        PasteAsConfirmationDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
         CommonFragmentAction,
@@ -560,15 +558,6 @@ class EditorFragment :
      */
     fun insert(text: CharSequence?) {
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
-    }
-
-    override fun onClickPasteAs() {
-        val activityContext = context ?: return
-        val primary = Clipboard.getPrimary(activityContext)
-        if (primary.isNullOrEmpty()) {
-            return
-        }
-        insert(Quotation()(primary))
     }
 
     override fun onClickClearInput() {
