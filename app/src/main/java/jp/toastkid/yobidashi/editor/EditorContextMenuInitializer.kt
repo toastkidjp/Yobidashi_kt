@@ -19,6 +19,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
@@ -209,10 +210,25 @@ class EditorContextMenuInitializer {
         if (primary.isNullOrEmpty()) {
             return
         }
+
+        val currentText = editText.text.toString()
+        val currentCursor = editText.selectionStart
+
         editText.text.insert(
             editText.selectionStart,
             Quotation()(primary)
         )
+
+        val fragmentActivity = (context as? FragmentActivity) ?: return
+        ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
+            .snackWithAction(
+                context.getString(R.string.paste_as_quotation),
+                context.getString(R.string.undo),
+                {
+                    editText.setText(currentText)
+                    editText.setSelection(currentCursor)
+                }
+            )
     }
 
 }
