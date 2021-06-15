@@ -3,7 +3,6 @@ package jp.toastkid.yobidashi.browser.archive
 import android.content.Context
 import android.text.format.DateFormat
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -67,7 +66,7 @@ internal class Adapter(
                 Timber.e(e)
             }
         }
-        holder.setDelete(View.OnClickListener{
+        holder.setDelete({
             file.delete()
             notifyItemRemoved(position)
         })
