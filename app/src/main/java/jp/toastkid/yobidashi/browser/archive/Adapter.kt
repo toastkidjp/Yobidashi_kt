@@ -91,7 +91,4 @@ internal class Adapter(
 
     override fun getItemCount(): Int = archiveDir.count
 
-    companion object {
-
-    }
 }
