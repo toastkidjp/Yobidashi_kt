@@ -5,16 +5,12 @@ import android.net.http.SslCertificate
 import android.net.http.SslError
 import android.text.format.DateFormat
 import jp.toastkid.yobidashi.R
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 /**
  * @author toastkidjp
  */
 class TlsErrorMessageGenerator {
-
-    private val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
 
     operator fun invoke(context: Context, error: SslError?): String {
         if (error == null) {
