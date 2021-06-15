@@ -3,6 +3,7 @@ package jp.toastkid.yobidashi.browser.tls
 import android.content.Context
 import android.net.http.SslCertificate
 import android.net.http.SslError
+import android.text.format.DateFormat
 import jp.toastkid.yobidashi.R
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,5 +43,5 @@ class TlsErrorMessageGenerator {
     }
 
     private fun dateToString(date: Date?) =
-            if (date == null) "" else dateFormat.format(date)
+            if (date == null) "" else DateFormat.format("yyyy/MM/dd HH:mm:ss", date)
 }
