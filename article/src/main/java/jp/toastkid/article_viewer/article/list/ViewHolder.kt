@@ -46,6 +46,4 @@ class ViewHolder(
         }
     }
 
-    companion object {
-    }
 }
