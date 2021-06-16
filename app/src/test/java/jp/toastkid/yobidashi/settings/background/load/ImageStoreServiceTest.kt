@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.Display
 import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkConstructor
 import io.mockk.spyk
@@ -21,6 +22,9 @@ import java.io.FileOutputStream
  * @author toastkidjp
  */
 class ImageStoreServiceTest {
+
+    @InjectMockKs
+    private lateinit var imageStoreService: ImageStoreService
 
     @MockK
     private lateinit var filesDir: FilesDir
@@ -43,14 +47,13 @@ class ImageStoreServiceTest {
     @MockK
     private lateinit var bitmapScaling: BitmapScaling
 
+    private lateinit var file: File
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-    }
 
-    @Test
-    fun test() {
-        val file = spyk(File.createTempFile("test", "webp"))
+        file = spyk(File.createTempFile("test", "webp"))
         every { filesDir.assignNewFile(any<String>()) }.answers { file }
         every { preferenceApplier.backgroundImagePath = any() }.answers { Unit }
         every { display.getRectSize(any()) }.answers { Unit }
@@ -63,8 +66,11 @@ class ImageStoreServiceTest {
         every { bitmapScaling.invoke(any(), any(), any()) }.answers { scaledBitmap }
 
         every { uri.getLastPathSegment() }.returns("last")
+    }
 
-        ImageStoreService(filesDir, preferenceApplier).invoke(bitmap, uri, display)
+    @Test
+    fun test() {
+        imageStoreService.invoke(bitmap, uri, display)
 
         verify(exactly = 2) { file.getPath() }
         verify(exactly = 1) { filesDir.assignNewFile(any<String>()) }

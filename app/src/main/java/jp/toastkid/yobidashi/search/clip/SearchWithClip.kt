@@ -4,20 +4,20 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.view.View
 import androidx.core.net.toUri
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.lib.Urls
-import jp.toastkid.yobidashi.libs.network.NetworkChecker
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.UrlFactory
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.libs.Toaster
+import jp.toastkid.yobidashi.libs.network.NetworkChecker
 
 /**
  * Search action with clipboard text.
  * Initialize with ClipboardManager, parent view, and color pair.
  *
- * @param cm For monitoring clipboard.
+ * @param clipboardManager For monitoring clipboard.
  * @param parent Use for showing snackbar.
  * @param colorPair Use for showing snackbar.
  * @param browserViewModel [BrowserViewModel].
@@ -25,10 +25,11 @@ import jp.toastkid.search.UrlFactory
  * @author toastkidjp
  */
 class SearchWithClip(
-        private val cm: ClipboardManager,
-        private val parent: View,
-        private val colorPair: ColorPair,
-        private val browserViewModel: BrowserViewModel?
+    private val clipboardManager: ClipboardManager,
+    private val parent: View,
+    private val colorPair: ColorPair,
+    private val browserViewModel: BrowserViewModel?,
+    private val preferenceApplier: PreferenceApplier
 ) {
 
     /**
@@ -44,23 +45,27 @@ class SearchWithClip(
             if (isInvalidCondition() || NetworkChecker.isNotAvailable(parent.context)) {
                 return@OnPrimaryClipChangedListener
             }
-            lastClipped = System.currentTimeMillis()
 
-            val firstItem = cm.primaryClip?.getItemAt(0)
+            val firstItem = clipboardManager.primaryClip?.getItemAt(0)
                     ?: return@OnPrimaryClipChangedListener
 
             val text = firstItem.text
-            if (text.isNullOrEmpty() || (Urls.isInvalidUrl(text.toString()) && LENGTH_LIMIT <= text.length)) {
+            if (text.isNullOrEmpty()
+                || (Urls.isInvalidUrl(text.toString()) && LENGTH_LIMIT <= text.length)
+                || preferenceApplier.lastClippedWord() == text
+            ) {
                 return@OnPrimaryClipChangedListener
             }
 
+            preferenceApplier.setLastClippedWord(text.toString())
+
             val context = parent.context
             Toaster.snackLong(
-                    parent,
-                    context.getString(R.string.message_clip_search, text),
-                    R.string.title_search_action,
-                    View.OnClickListener { searchOrBrowse(context, text) },
-                    colorPair
+                parent,
+                context.getString(R.string.message_clip_search, text),
+                R.string.title_search_action,
+                { searchOrBrowse(context, text) },
+                colorPair
             )
         }
     }
@@ -71,8 +76,8 @@ class SearchWithClip(
      * @return If it is invalid condition, return true.
      */
     private fun isInvalidCondition(): Boolean {
-        return (!PreferenceApplier(parent.context).enableSearchWithClip
-                || !cm.hasPrimaryClip()
+        return (!preferenceApplier.enableSearchWithClip
+                || !clipboardManager.hasPrimaryClip()
                 || (System.currentTimeMillis() - lastClipped) < DISALLOW_INTERVAL_MS)
     }
 
@@ -80,7 +85,7 @@ class SearchWithClip(
      * Invoke action.
      */
     operator fun invoke() {
-        cm.addPrimaryClipChangedListener(listener)
+        clipboardManager.addPrimaryClipChangedListener(listener)
     }
 
     /**
@@ -94,7 +99,7 @@ class SearchWithClip(
 
         val url =
                 if (Urls.isValidUrl(query)) query
-                else UrlFactory()(PreferenceApplier(context).getDefaultSearchEngine()
+                else UrlFactory()(preferenceApplier.getDefaultSearchEngine()
                         ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName(), query).toString()
         browserViewModel?.preview(url.toUri())
     }
@@ -103,7 +108,7 @@ class SearchWithClip(
      * Unregister listener.
      */
     fun dispose() {
-        cm.removePrimaryClipChangedListener(listener)
+        clipboardManager.removePrimaryClipChangedListener(listener)
     }
 
     companion object {

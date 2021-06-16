@@ -465,4 +465,6 @@
     <string name="content_description_edit_image">画像を編集</string>
     <string name="message_failed_query_extraction_from_web_view">キーワードを取得できませんでした。再度実行するか、クリップボードにコピーして検索してください。</string>
 
+    <string name="message_clipping_url_open">この URL を開きますか？ "%s"</string>
+
 </resources>

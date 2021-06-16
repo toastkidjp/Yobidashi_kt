@@ -18,6 +18,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.ColorPair
+import jp.toastkid.lib.preference.PreferenceApplier
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +29,7 @@ class SearchWithClipTest {
     private lateinit var searchWithClip: SearchWithClip
 
     @MockK
-    private lateinit var cm: ClipboardManager
+    private lateinit var clipboardManager: ClipboardManager
 
     @MockK
     private lateinit var parent: View
@@ -39,12 +40,17 @@ class SearchWithClipTest {
     @MockK
     private lateinit var browserViewModel: BrowserViewModel
 
+    @MockK
+    private lateinit var preferenceApplier: PreferenceApplier
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { cm.addPrimaryClipChangedListener(any()) }.answers { Unit }
-        every { cm.removePrimaryClipChangedListener(any()) }.answers { Unit }
+        every { clipboardManager.addPrimaryClipChangedListener(any()) }.returns(Unit)
+        every { clipboardManager.removePrimaryClipChangedListener(any()) }.returns(Unit)
+        every { preferenceApplier.lastClippedWord() }.returns("last")
+        every { preferenceApplier.setLastClippedWord(any()) }.returns(Unit)
     }
 
     @After
@@ -56,14 +62,14 @@ class SearchWithClipTest {
     fun testInvoke() {
         searchWithClip.invoke()
 
-        verify(exactly = 1) { cm.addPrimaryClipChangedListener(any()) }
+        verify(exactly = 1) { clipboardManager.addPrimaryClipChangedListener(any()) }
     }
 
     @Test
-    fun dispose() {
+    fun testDispose() {
         searchWithClip.dispose()
 
-        verify(exactly = 1) { cm.removePrimaryClipChangedListener(any()) }
+        verify(exactly = 1) { clipboardManager.removePrimaryClipChangedListener(any()) }
     }
 
 }

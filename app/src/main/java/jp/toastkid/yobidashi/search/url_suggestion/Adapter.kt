@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.search.url_suggestion
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +18,7 @@ import kotlinx.coroutines.withContext
  *
  * @param layoutInflater [LayoutInflater]
  * @param removeAt Callback of removing
- * @param browseCallback
- * @param browseBackgroundCallback
+ * @param viewModel [SearchFragmentViewModel]
  * @author toastkidjp
  */
 class Adapter(
@@ -41,14 +39,14 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = suggestions[position]
+        val item = get(position) ?: return
         item.bind(holder)
-        holder.setOnClick(View.OnClickListener { viewModel.search(item.urlString()) })
-        holder.setOnLongClick(View.OnLongClickListener {
+        holder.setOnClick({ viewModel.search(item.urlString()) })
+        holder.setOnLongClick({
             viewModel.searchOnBackground(item.urlString())
             true
         })
-        holder.setDelete(View.OnClickListener { removeAt(item) })
+        holder.setDelete({ removeAt(item) })
     }
 
     override fun getItemCount(): Int = suggestions.size
@@ -81,7 +79,12 @@ class Adapter(
      *
      * @return item
      */
-    fun get(index: Int): UrlItem = suggestions[index]
+    fun get(index: Int): UrlItem? {
+        if (index < 0 || suggestions.size <= index) {
+            return null
+        }
+        return suggestions[index]
+    }
 
     /**
      * Remove at index.
@@ -94,7 +97,11 @@ class Adapter(
         return remove(get(index), index)
     }
 
-    fun remove(item: UrlItem, passedIndex: Int = -1): Job {
+    fun remove(item: UrlItem?, passedIndex: Int = -1): Job {
+        if (item == null) {
+            return Job()
+        }
+
         return CoroutineScope(Dispatchers.Main).launch {
             val index = if (passedIndex == -1) suggestions.indexOf(item) else passedIndex
             withContext(Dispatchers.IO) {

@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -223,7 +222,7 @@ class MainActivity : AppCompatActivity(),
 
         activityViewModelProvider.get(OverlayColorFilterViewModel::class.java)
                 .newColor
-                .observe(this, Observer {
+                .observe(this, {
                     updateColorFilter()
                 })
 
@@ -279,7 +278,8 @@ class MainActivity : AppCompatActivity(),
                 applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager,
                 binding.content,
                 colorPair,
-                browserViewModel
+                browserViewModel,
+            preferenceApplier
         )
         searchWithClip.invoke()
     }
@@ -306,7 +306,7 @@ class MainActivity : AppCompatActivity(),
             binding.toolbarContent.addView(view, 0)
         })
 
-        headerViewModel.visibility.observe(this, Observer { isVisible ->
+        headerViewModel.visibility.observe(this, { isVisible ->
             if (isVisible) appBarVisibilityUseCase.show() else appBarVisibilityUseCase.hide()
         })
     }
@@ -341,21 +341,21 @@ class MainActivity : AppCompatActivity(),
             }
 
             Toaster.withAction(
-                    binding.content,
-                    snackbarEvent.message,
-                    snackbarEvent.actionLabel ?: "",
-                    View.OnClickListener { snackbarEvent.action() },
-                    preferenceApplier.colorPair()
+                binding.content,
+                snackbarEvent.message,
+                snackbarEvent.actionLabel ?: "",
+                { snackbarEvent.action() },
+                preferenceApplier.colorPair()
             )
         })
         contentViewModel?.snackbarRes?.observe(this, Observer {
             val messageId = it?.getContentIfNotHandled() ?: return@Observer
             Toaster.snackShort(binding.content, messageId, preferenceApplier.colorPair())
         })
-        contentViewModel?.toTop?.observe(this, Observer {
+        contentViewModel?.toTop?.observe(this, {
             (findFragment() as? ContentScrollable)?.toTop()
         })
-        contentViewModel?.toBottom?.observe(this, Observer {
+        contentViewModel?.toBottom?.observe(this, {
             (findFragment() as? ContentScrollable)?.toBottom()
         })
         contentViewModel?.share?.observe(this, Observer {
@@ -365,7 +365,7 @@ class MainActivity : AppCompatActivity(),
             it.getContentIfNotHandled()
             (findFragment() as? CommonFragmentAction)?.share()
         })
-        contentViewModel?.webSearch?.observe(this, Observer {
+        contentViewModel?.webSearch?.observe(this, {
             when (val fragment = findFragment()) {
                 is BrowserFragment ->
                     fragment.search()
@@ -373,20 +373,20 @@ class MainActivity : AppCompatActivity(),
                     contentViewModel?.nextFragment(SearchFragment::class.java)
             }
         })
-        contentViewModel?.openPdf?.observe(this, Observer {
+        contentViewModel?.openPdf?.observe(this, {
             openPdfTabFromStorage()
         })
-        contentViewModel?.openEditorTab?.observe(this, Observer {
+        contentViewModel?.openEditorTab?.observe(this, {
             openEditorTab()
         })
-        contentViewModel?.switchPageSearcher?.observe(this, Observer {
+        contentViewModel?.switchPageSearcher?.observe(this, {
             pageSearchPresenter.switch()
         })
         contentViewModel?.switchTabList?.observe(this, Observer {
             it?.getContentIfNotHandled() ?: return@Observer
             switchTabList()
         })
-        contentViewModel?.refresh?.observe(this, Observer {
+        contentViewModel?.refresh?.observe(this, {
             refresh()
         })
         contentViewModel?.newArticle?.observe(this, Observer {
@@ -400,11 +400,11 @@ class MainActivity : AppCompatActivity(),
                 replaceToCurrentTab()
             }
         })
-        contentViewModel?.openArticleList?.observe(this, Observer {
+        contentViewModel?.openArticleList?.observe(this, {
             tabs.openArticleList()
             replaceToCurrentTab()
         })
-        contentViewModel?.openCalendar?.observe(this, Observer {
+        contentViewModel?.openCalendar?.observe(this, {
             tabs.openCalendar()
             replaceToCurrentTab()
         })
@@ -541,6 +541,7 @@ class MainActivity : AppCompatActivity(),
         binding.foreground.foreground =
                 if (preferenceApplier.useColorFilter()) ColorDrawable(preferenceApplier.filterColor(Color.TRANSPARENT))
                 else null
+        floatingPreview?.onResume()
     }
 
     /**
@@ -704,11 +705,11 @@ class MainActivity : AppCompatActivity(),
                     return
                 }
                 Toaster.snackLong(
-                        binding.content,
-                        "Scanned: ${result.contents}",
-                        R.string.clip,
-                        View.OnClickListener { Clipboard.clip(this, result.contents) },
-                        preferenceApplier.colorPair()
+                    binding.content,
+                    "Scanned: ${result.contents}",
+                    R.string.clip,
+                    { Clipboard.clip(this, result.contents) },
+                    preferenceApplier.colorPair()
                 )
             }
             REQUEST_CODE_OPEN_PDF -> {

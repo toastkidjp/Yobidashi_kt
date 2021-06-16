@@ -103,11 +103,11 @@ class DisplayingSettingFragment : Fragment(), ClearImagesDialogFragment.Callback
         if (adapter?.itemCount == 0) {
             val activity = activity ?: return
             Toaster.withAction(
-                    activity.findViewById(android.R.id.content),
-                    R.string.message_snackbar_suggestion_select_background_image,
-                    R.string.select,
-                    View.OnClickListener { launchAdding() },
-                    preferenceApplier.colorPair()
+                activity.findViewById(android.R.id.content),
+                R.string.message_snackbar_suggestion_select_background_image,
+                R.string.select,
+                { launchAdding() },
+                preferenceApplier.colorPair()
             )
         }
     }

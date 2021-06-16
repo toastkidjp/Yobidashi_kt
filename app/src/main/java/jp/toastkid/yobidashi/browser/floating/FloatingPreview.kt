@@ -78,15 +78,15 @@ class FloatingPreview(context: Context) {
         (context as? FragmentActivity)?.also {
             viewModel = ViewModelProvider(context).get(FloatingPreviewViewModel::class.java)
 
-            viewModel?.title?.observe(context, Observer {
+            viewModel?.title?.observe(context, {
                 binding.title.text = it
             })
 
-            viewModel?.icon?.observe(context, Observer {
+            viewModel?.icon?.observe(context, {
                 binding.icon.setImageBitmap(it)
             })
 
-            viewModel?.url?.observe(context, Observer {
+            viewModel?.url?.observe(context, {
                 binding.url.text = it
             })
 
@@ -125,8 +125,14 @@ class FloatingPreview(context: Context) {
     fun onResume() {
         val context = binding.root.context
         val preferenceApplier = PreferenceApplier(context)
-        binding.previewContainer.foreground =
-                ColorDrawable(preferenceApplier.filterColor(ContextCompat.getColor(context, R.color.default_color_filter)))
+        val filterColorDrawable = ColorDrawable(
+            if (preferenceApplier.useColorFilter())
+                preferenceApplier.filterColor(
+                    ContextCompat.getColor(context, R.color.default_color_filter)
+                )
+            else Color.TRANSPARENT
+        )
+        binding.previewContainer.foreground = filterColorDrawable
         binding.progress.progressDrawable.colorFilter =
                 PorterDuffColorFilter(
                         PreferenceApplier(context).fontColor,
@@ -151,6 +157,8 @@ class FloatingPreview(context: Context) {
      */
     fun show(parent: View, url: String) {
         binding.icon.setImageBitmap(null)
+
+        onResume()
 
         darkModeApplier(webView, PreferenceApplier(webView.context).useDarkMode())
         webView.isEnabled = true

@@ -18,11 +18,6 @@ import jp.toastkid.yobidashi.libs.network.NetworkChecker
 class ClippingUrlOpener {
 
     /**
-     * For suppress consecutive showing.
-     */
-    private var previous: String? = null
-
-    /**
      * Invoke action.
      *
      * @param view [View](Nullable)
@@ -35,18 +30,20 @@ class ClippingUrlOpener {
 
         val activityContext = view.context
         val clipboardContent = Clipboard.getPrimary(activityContext)?.toString() ?: return
+        val preferenceApplier = PreferenceApplier(activityContext)
+        val lastClipped = preferenceApplier.lastClippedWord()
 
-        if (shouldNotFeedback(clipboardContent)) {
+        if (shouldNotFeedback(clipboardContent, lastClipped)) {
             return
         }
 
-        previous = clipboardContent
+        preferenceApplier.setLastClippedWord(clipboardContent)
 
         feedbackToUser(view, clipboardContent, onClick)
     }
 
-    private fun shouldNotFeedback(clipboardContent: String) =
-            Urls.isInvalidUrl(clipboardContent) || clipboardContent == previous
+    private fun shouldNotFeedback(clipboardContent: String, lastClippedWord: String) =
+            Urls.isInvalidUrl(clipboardContent) || clipboardContent == lastClippedWord
 
     private fun feedbackToUser(
             view: View,
@@ -54,12 +51,12 @@ class ClippingUrlOpener {
             onClick: (Uri) -> Unit
     ) {
         Toaster.withAction(
-                view,
-                "Would you open \"$clipboardContent\"?",
-                R.string.open,
-                View.OnClickListener { onClick(clipboardContent.toUri()) },
-                PreferenceApplier(view.context).colorPair(),
-                Snackbar.LENGTH_LONG
+            view,
+            view.context.getString(R.string.message_clipping_url_open, clipboardContent),
+            R.string.open,
+            { onClick(clipboardContent.toUri()) },
+            PreferenceApplier(view.context).colorPair(),
+            Snackbar.LENGTH_LONG
         )
     }
 

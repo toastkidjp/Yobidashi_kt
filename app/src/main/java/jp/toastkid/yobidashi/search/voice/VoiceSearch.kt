@@ -32,18 +32,18 @@ class VoiceSearch {
             }
 
     /**
-     * Show Google App install suggestion by [android.support.design.widget.Snackbar].
+     * Show Google App install suggestion by [com.google.android.material.snackbar.Snackbar].
      *
-     * @param parent Snackbar's parent
+     * @param parent Snackbar parent
      * @param colorPair [ColorPair]
      */
     fun suggestInstallGoogleApp(parent: View, colorPair: ColorPair) {
         Toaster.withAction(
-                parent,
-                R.string.message_install_suggestion_google_app,
-                R.string.install,
-                View.OnClickListener { launchGooglePlay(parent) },
-                colorPair
+            parent,
+            R.string.message_install_suggestion_google_app,
+            R.string.install,
+            { launchGooglePlay(parent) },
+            colorPair
         )
     }
 

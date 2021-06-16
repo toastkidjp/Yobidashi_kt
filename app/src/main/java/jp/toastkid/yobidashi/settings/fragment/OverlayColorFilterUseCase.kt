@@ -10,8 +10,8 @@ package jp.toastkid.yobidashi.settings.fragment
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.R
 
 /**
  * @author toastkidjp
@@ -77,7 +77,7 @@ class OverlayColorFilterUseCase(
     private fun setNewColor(alpha: Int, @ColorInt newBaseColor: Int) {
         val newColor = ColorUtils.setAlphaComponent(newBaseColor, alpha)
         preferenceApplier.setFilterColor(newColor)
-        overlayColorFilterViewModel?.newColor(newColor)
+        overlayColorFilterViewModel?.update()
     }
 
     companion object {

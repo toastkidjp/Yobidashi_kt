@@ -17,7 +17,7 @@ import kotlin.math.max
  */
 class PreferenceApplier(private val context: Context) {
 
-    @SuppressWarnings("unused")
+    @Suppress("unused")
     @Deprecated("These keys are deprecated.")
     private enum class DefunctKey {
         USE_DAILY_ALARM, USE_INTERNAL_BROWSER, MENU_POS, USE_INVERSION, ENABLE_APP_SEARCH,
@@ -38,7 +38,7 @@ class PreferenceApplier(private val context: Context) {
         MENU_FAB_BUTTON_POSITION_X, MENU_FAB_BUTTON_POSITION_Y,
         WEB_VIEW_BACKGROUND_ALPHA, RSS_READER_TARGETS, IMAGE_VIEWER_EXCLUDED_PATHS,
         IMAGE_VIEWER_SORT_TYPE, BROWSER_DARK_MODE, USE_TITLE_FILTER,
-        ARTICLE_LIST_SORT_TYPE
+        ARTICLE_LIST_SORT_TYPE, LAST_CLIPPED_WORD
     }
 
     private val preferences: SharedPreferences =
@@ -440,4 +440,17 @@ class PreferenceApplier(private val context: Context) {
     fun articleSort(): String {
         return preferences.getString(Key.ARTICLE_LIST_SORT_TYPE.name, "") ?: ""
     }
+
+    fun setLastClippedWord(word: String?) {
+        if (word.isNullOrBlank()) {
+            return
+        }
+
+        preferences.edit().putString(Key.LAST_CLIPPED_WORD.name, word).apply()
+    }
+
+    fun lastClippedWord(): String {
+        return preferences.getString(Key.LAST_CLIPPED_WORD.name, "") ?: ""
+    }
+
 }

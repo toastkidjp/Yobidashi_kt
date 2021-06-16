@@ -472,4 +472,6 @@
     <string name="content_description_edit_image">Edit image</string>
     <string name="message_failed_query_extraction_from_web_view">Query extraction failed. Please would you retry or copy to clipboard?</string>
 
+    <string name="message_clipping_url_open">Would you like to open "%s"?</string>
+
 </resources>
