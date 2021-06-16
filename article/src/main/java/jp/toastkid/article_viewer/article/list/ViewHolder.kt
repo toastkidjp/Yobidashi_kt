@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 /**
@@ -39,7 +38,7 @@ class ViewHolder(
             true
         }
         view.findViewById<TextView>(R.id.sub_text).text =
-            "Last updated: ${DATE_FORMAT.get()?.format(Date().also { it.time = result.lastModified })}" +
+            "Last updated: ${android.text.format.DateFormat.format("yyyy/MM/dd(E) HH:mm:ss", result.lastModified)}" +
                     " / ${result.length}"
 
         view.findViewById<ImageView>(R.id.menu).also {
