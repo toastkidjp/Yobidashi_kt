@@ -16,9 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 /**
  * View history activity's adapter.
@@ -43,14 +40,6 @@ internal class Adapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     private val items = mutableListOf<ViewHistory>()
-
-    /**
-     * Date format holder.
-     */
-    private val dateFormat: ThreadLocal<DateFormat> = object: ThreadLocal<DateFormat>() {
-        override fun initialValue(): DateFormat =
-                SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
-    }
 
     private val parent = Job()
 
