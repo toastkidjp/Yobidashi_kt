@@ -8,6 +8,7 @@
 package jp.toastkid.article_viewer.article.list
 
 import android.annotation.SuppressLint
+import android.text.format.DateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,7 +36,7 @@ class ViewHolder(
             true
         }
         view.findViewById<TextView>(R.id.sub_text).text =
-            "Last updated: ${android.text.format.DateFormat.format("yyyy/MM/dd(E) HH:mm:ss", result.lastModified)}" +
+            "Last updated: ${DateFormat.format("yyyy/MM/dd(E) HH:mm:ss", result.lastModified)}" +
                     " / ${result.length}"
 
         view.findViewById<ImageView>(R.id.menu).also {
