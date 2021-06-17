@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.content.Context
 import android.net.Uri
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -52,7 +53,7 @@ internal class Adapter(
         holder.setText(
                 viewHistory.title,
                 viewHistory.url,
-                android.text.format.DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString() ?: ""
+                DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString() ?: ""
         )
         holder.itemView.setOnClickListener { onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->
