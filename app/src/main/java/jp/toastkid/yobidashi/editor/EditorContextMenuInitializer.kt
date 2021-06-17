@@ -223,12 +223,11 @@ class EditorContextMenuInitializer {
         ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
             .snackWithAction(
                 context.getString(R.string.paste_as_quotation),
-                context.getString(R.string.undo),
-                {
-                    editText.setText(currentText)
-                    editText.setSelection(currentCursor)
-                }
-            )
+                context.getString(R.string.undo)
+            ) {
+                editText.setText(currentText)
+                editText.setSelection(currentCursor)
+            }
     }
 
 }
