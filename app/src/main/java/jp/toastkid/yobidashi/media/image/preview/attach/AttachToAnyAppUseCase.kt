@@ -17,10 +17,13 @@ import jp.toastkid.yobidashi.libs.ImageCache
 /**
  * @author toastkidjp
  */
-class AttachToAnyAppUseCase(private val activityStarter: (Intent) -> Unit) {
+class AttachToAnyAppUseCase(
+    private val activityStarter: (Intent) -> Unit,
+    private val intentFactory: () -> Intent = { Intent(Intent.ACTION_ATTACH_DATA) }
+) {
 
     operator fun invoke(context: Context, bitmap: Bitmap) {
-        val intent = Intent(Intent.ACTION_ATTACH_DATA)
+        val intent = intentFactory()
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         val uri = FileProvider.getUriForFile(
                 context,
