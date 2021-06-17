@@ -55,7 +55,7 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val file = archiveDir.get(position) ?: return
+        val file = archiveDir[position] ?: return
         holder.setText(file.name)
         holder.setSubText(
                 "${toLastModifiedText(file.lastModified())} / ${toKiloBytes(file.length())}[KB]")
