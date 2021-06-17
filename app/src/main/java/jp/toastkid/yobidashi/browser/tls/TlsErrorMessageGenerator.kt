@@ -40,4 +40,5 @@ class TlsErrorMessageGenerator {
 
     private fun dateToString(date: Date?) =
             if (date == null) "" else DateFormat.format("yyyy/MM/dd HH:mm:ss", date)
+
 }
