@@ -54,7 +54,7 @@ class ColorFilterSettingFragment : Fragment() {
                     ViewModelProvider(activity).get(OverlayColorFilterViewModel::class.java)
             overlayColorFilterViewModel
                     ?.newColor
-                    ?.observe(activity, Observer { binding.sample.setBackgroundColor(it) })
+                    ?.observe(activity, Observer { binding.sample.setBackgroundColor(preferenceApplier.filterColor(Color.TRANSPARENT)) })
             binding.useCase = OverlayColorFilterUseCase(
                     preferenceApplier,
                     { ContextCompat.getColor(activity, it) },

@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.settings.fragment
 
 import android.graphics.Color
-import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,10 +20,6 @@ class OverlayColorFilterViewModel : ViewModel() {
     private val _newColor = MutableLiveData<Int>()
 
     val newColor: LiveData<Int> = _newColor
-
-    fun newColor(@ColorInt color: Int) {
-        _newColor.postValue(color)
-    }
 
     fun update() {
         _newColor.postValue(Color.TRANSPARENT)
