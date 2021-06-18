@@ -96,7 +96,7 @@ class PasteAsQuotationUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testPrimaryClipIsEmpty() {
         every { Clipboard.getPrimary(any()) }.returns("")
 
         pasteAsQuotationUseCase.invoke()
