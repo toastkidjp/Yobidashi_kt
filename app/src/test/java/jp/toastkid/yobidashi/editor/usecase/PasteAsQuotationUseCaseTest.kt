@@ -78,4 +78,20 @@ class PasteAsQuotationUseCaseTest {
         verify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
     }
+
+    @Test
+    fun test() {
+        every { Clipboard.getPrimary(any()) }.returns(null)
+
+        pasteAsQuotationUseCase.invoke()
+
+        verify(exactly = 0) { editText.getText() }
+        verify(exactly = 0) { editText.getSelectionStart() }
+        verify(exactly = 0) { editable.insert(any(), any()) }
+        verify(exactly = 0) { editable.toString() }
+        verify(atLeast = 1) { editText.getContext() }
+        verify(exactly = 0) { context.getString(any()) }
+        verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
+        verify(exactly = 1) { Clipboard.getPrimary(any()) }
+    }
 }
