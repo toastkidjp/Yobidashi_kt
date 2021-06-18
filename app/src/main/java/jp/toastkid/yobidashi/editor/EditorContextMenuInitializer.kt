@@ -25,6 +25,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.editor.usecase.PasteAsQuotationUseCase
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
@@ -206,28 +207,12 @@ class EditorContextMenuInitializer {
     }
 
     private fun pasteAsQuotation(context: Context, editText: EditText) {
-        val primary = Clipboard.getPrimary(context)
-        if (primary.isNullOrEmpty()) {
-            return
-        }
-
-        val currentText = editText.text.toString()
-        val currentCursor = editText.selectionStart
-
-        editText.text.insert(
-            editText.selectionStart,
-            Quotation()(primary)
-        )
-
         val fragmentActivity = (context as? FragmentActivity) ?: return
-        ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-            .snackWithAction(
-                context.getString(R.string.paste_as_quotation),
-                context.getString(R.string.undo)
-            ) {
-                editText.setText(currentText)
-                editText.setSelection(currentCursor)
-            }
+
+        PasteAsQuotationUseCase(
+            editText,
+            ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
+        ).invoke()
     }
 
 }
