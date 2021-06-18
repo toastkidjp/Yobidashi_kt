@@ -66,7 +66,7 @@ class PasteAsQuotationUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         pasteAsQuotationUseCase.invoke()
 
         verify(atLeast = 1) { editText.getText() }
