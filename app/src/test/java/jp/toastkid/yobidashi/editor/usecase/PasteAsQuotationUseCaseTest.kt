@@ -94,4 +94,5 @@ class PasteAsQuotationUseCaseTest {
         verify(exactly = 0) { contentViewModel.snackWithAction(any(), any(), any()) }
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
     }
+
 }
