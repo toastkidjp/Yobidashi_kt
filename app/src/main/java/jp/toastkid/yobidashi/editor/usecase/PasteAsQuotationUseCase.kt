@@ -25,7 +25,8 @@ class PasteAsQuotationUseCase(
 ) {
 
     operator fun invoke() {
-        val primary = Clipboard.getPrimary(editText.context)
+        val context = editText.context
+        val primary = Clipboard.getPrimary(context)
         if (primary.isNullOrEmpty()) {
             return
         }
@@ -40,8 +41,8 @@ class PasteAsQuotationUseCase(
 
         contentViewModel
             .snackWithAction(
-                editText.context.getString(R.string.paste_as_quotation),
-                editText.context.getString(R.string.undo)
+                context.getString(R.string.paste_as_quotation),
+                context.getString(R.string.undo)
             ) {
                 editText.setText(currentText)
                 editText.setSelection(currentCursor)
