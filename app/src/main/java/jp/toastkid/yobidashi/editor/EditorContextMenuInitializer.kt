@@ -56,42 +56,7 @@ class EditorContextMenuInitializer {
                 }
 
                 override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    when (menu?.itemId) {
-                        R.id.context_edit_insert_as_plain -> {
-                            val primary = Clipboard.getPrimary(context)
-                            if (primary.isNullOrEmpty()) {
-                                return true
-                            }
-
-                            editText.text.insert(editText.selectionStart, primary)
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_paste_as_quotation -> {
-                            pasteAsQuotation(context, editText)
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_horizontal_rule -> {
-                            editText.text.insert(
-                                    editText.selectionStart,
-                                    "----${System.lineSeparator()}"
-                            )
-                            actionMode?.finish()
-                        }
-                        R.id.context_edit_duplicate_current_line -> {
-                            CurrentLineDuplicatorUseCase().invoke(editText)
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_speech -> {
-                            speechMaker?.invoke(editText.text.toString())
-                            actionMode?.finish()
-                            return true
-                        }
-                        else -> Unit
-                    }
-                    return false
+                    return invokeMenuAction(menu, context, editText, actionMode, speechMaker)
                 }
 
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -204,6 +169,51 @@ class EditorContextMenuInitializer {
             override fun onDestroyActionMode(p0: ActionMode?) = Unit
 
         }
+    }
+
+    private fun invokeMenuAction(
+        menu: MenuItem?,
+        context: Context,
+        editText: EditText,
+        actionMode: ActionMode?,
+        speechMaker: SpeechMaker?
+    ): Boolean {
+        when (menu?.itemId) {
+            R.id.context_edit_insert_as_plain -> {
+                val primary = Clipboard.getPrimary(context)
+                if (primary.isNullOrEmpty()) {
+                    return true
+                }
+
+                editText.text.insert(editText.selectionStart, primary)
+                actionMode?.finish()
+                return true
+            }
+            R.id.context_edit_paste_as_quotation -> {
+                pasteAsQuotation(context, editText)
+                actionMode?.finish()
+                return true
+            }
+            R.id.context_edit_horizontal_rule -> {
+                editText.text.insert(
+                    editText.selectionStart,
+                    "----${System.lineSeparator()}"
+                )
+                actionMode?.finish()
+            }
+            R.id.context_edit_duplicate_current_line -> {
+                CurrentLineDuplicatorUseCase().invoke(editText)
+                actionMode?.finish()
+                return true
+            }
+            R.id.context_edit_speech -> {
+                speechMaker?.invoke(editText.text.toString())
+                actionMode?.finish()
+                return true
+            }
+            else -> Unit
+        }
+        return false
     }
 
     private fun pasteAsQuotation(context: Context, editText: EditText) {
