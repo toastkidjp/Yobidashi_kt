@@ -62,7 +62,11 @@ class EditorContextMenuInitializer {
                 }
 
                 override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    return invokeMenuAction(menu?.itemId ?: -1, editText, actionMode, speechMaker, browserViewModel, listHeadAdder)
+                    val result = invokeMenuAction(menu?.itemId ?: -1, editText, speechMaker, browserViewModel, listHeadAdder)
+                    if (result) {
+                        actionMode?.finish()
+                    }
+                    return result
                 }
 
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -85,7 +89,11 @@ class EditorContextMenuInitializer {
             }
 
             override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
-                return invokeMenuAction(menuItem?.itemId ?: -1, editText, actionMode, speechMaker, browserViewModel, listHeadAdder)
+                val result = invokeMenuAction(menuItem?.itemId ?: -1, editText, speechMaker, browserViewModel, listHeadAdder)
+                if (result) {
+                    actionMode?.finish()
+                }
+                return result
             }
 
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -98,7 +106,6 @@ class EditorContextMenuInitializer {
     private fun invokeMenuAction(
         itemId: Int,
         editText: EditText,
-        actionMode: ActionMode?,
         speechMaker: SpeechMaker?,
         browserViewModel: BrowserViewModel?,
         listHeadAdder: ListHeadAdder
@@ -114,12 +121,10 @@ class EditorContextMenuInitializer {
                 }
 
                 editText.text.insert(editText.selectionStart, primary)
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_paste_as_quotation -> {
                 pasteAsQuotation(context, editText)
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_horizontal_rule -> {
@@ -127,17 +132,14 @@ class EditorContextMenuInitializer {
                     editText.selectionStart,
                     "----${System.lineSeparator()}"
                 )
-                actionMode?.finish()
             }
             R.id.context_edit_duplicate_current_line -> {
                 CurrentLineDuplicatorUseCase().invoke(editText)
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_speech -> {
                 val speechText = if (text.isBlank()) editText.text.toString() else text
                 speechMaker?.invoke(speechText)
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_add_order -> {
@@ -166,28 +168,23 @@ class EditorContextMenuInitializer {
             }
             R.id.context_edit_url_open_new -> {
                 browserViewModel?.open(text.toUri())
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_url_open_background -> {
                 browserViewModel?.openBackground(text.toUri())
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_url_preview -> {
                 browserViewModel?.preview(text.toUri())
                 Inputs.hideKeyboard(editText)
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_preview_search -> {
                 browserViewModel?.preview(makeSearchResultUrl(context, text))
-                actionMode?.finish()
                 return true
             }
             R.id.context_edit_web_search -> {
                 browserViewModel?.open(makeSearchResultUrl(context, text))
-                actionMode?.finish()
                 return true
             }
             else -> Unit
