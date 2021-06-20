@@ -190,11 +190,6 @@ class EditorContextMenuInitializer {
                 actionMode?.finish()
                 return true
             }
-            R.id.context_edit_paste_as_quotation -> {
-                pasteAsQuotation(context, editText)
-                actionMode?.finish()
-                return true
-            }
             else -> Unit
         }
         return false
