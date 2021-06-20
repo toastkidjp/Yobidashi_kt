@@ -62,7 +62,7 @@ class EditorContextMenuInitializer {
                 }
 
                 override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    return invokeMenuAction(menu?.itemId ?: -1, context, editText, actionMode, speechMaker, browserViewModel, listHeadAdder)
+                    return invokeMenuAction(menu?.itemId ?: -1, editText, actionMode, speechMaker, browserViewModel, listHeadAdder)
                 }
 
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -85,7 +85,7 @@ class EditorContextMenuInitializer {
             }
 
             override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
-                return invokeMenuAction(menuItem?.itemId ?: -1, context, editText, actionMode, speechMaker, browserViewModel, listHeadAdder)
+                return invokeMenuAction(menuItem?.itemId ?: -1, editText, actionMode, speechMaker, browserViewModel, listHeadAdder)
             }
 
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -97,7 +97,6 @@ class EditorContextMenuInitializer {
 
     private fun invokeMenuAction(
         itemId: Int,
-        context: Context,
         editText: EditText,
         actionMode: ActionMode?,
         speechMaker: SpeechMaker?,
@@ -105,6 +104,7 @@ class EditorContextMenuInitializer {
         listHeadAdder: ListHeadAdder
     ): Boolean {
         val text = extractSelectedText(editText)
+        val context = editText.context
 
         when (itemId) {
             R.id.context_edit_insert_as_plain -> {
