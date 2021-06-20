@@ -62,16 +62,16 @@ class EditorContextMenuInitializer {
                 }
 
                 override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    val result = invokeMenuAction(
+                    val handled = invokeMenuAction(
                         menu?.itemId ?: -1,
                         editText, speechMaker,
                         browserViewModel,
                         listHeadAdder
                     )
-                    if (result) {
+                    if (handled) {
                         actionMode?.finish()
                     }
-                    return result
+                    return handled
                 }
 
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
