@@ -62,7 +62,12 @@ class EditorContextMenuInitializer {
                 }
 
                 override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    val result = invokeMenuAction(menu?.itemId ?: -1, editText, speechMaker, browserViewModel, listHeadAdder)
+                    val result = invokeMenuAction(
+                        menu?.itemId ?: -1,
+                        editText, speechMaker,
+                        browserViewModel,
+                        listHeadAdder
+                    )
                     if (result) {
                         actionMode?.finish()
                     }
@@ -89,7 +94,13 @@ class EditorContextMenuInitializer {
             }
 
             override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
-                val result = invokeMenuAction(menuItem?.itemId ?: -1, editText, speechMaker, browserViewModel, listHeadAdder)
+                val result = invokeMenuAction(
+                    menuItem?.itemId ?: -1,
+                    editText,
+                    speechMaker,
+                    browserViewModel,
+                    listHeadAdder
+                )
                 if (result) {
                     actionMode?.finish()
                 }
