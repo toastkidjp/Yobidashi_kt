@@ -34,9 +34,7 @@ class DarkModeApplier {
             parent,
             "Apply dark mode.",
             R.string.undo,
-            {
-                currentTheme.apply(preferenceApplier)
-            },
+            { currentTheme.apply(preferenceApplier) },
             preferenceApplier.colorPair()
         )
     }

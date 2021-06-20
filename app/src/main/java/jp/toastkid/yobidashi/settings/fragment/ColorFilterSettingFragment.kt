@@ -17,7 +17,6 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
@@ -36,7 +35,11 @@ class ColorFilterSettingFragment : Fragment() {
 
     private var overlayColorFilterViewModel: OverlayColorFilterViewModel? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         val activityContext = context
                 ?: return super.onCreateView(inflater, container, savedInstanceState)
@@ -54,7 +57,8 @@ class ColorFilterSettingFragment : Fragment() {
                     ViewModelProvider(activity).get(OverlayColorFilterViewModel::class.java)
             overlayColorFilterViewModel
                     ?.newColor
-                    ?.observe(activity, Observer { binding.sample.setBackgroundColor(preferenceApplier.filterColor(Color.TRANSPARENT)) })
+                    ?.observe(activity,
+                        { binding.sample.setBackgroundColor(preferenceApplier.filterColor(Color.TRANSPARENT)) })
             binding.useCase = OverlayColorFilterUseCase(
                     preferenceApplier,
                     { ContextCompat.getColor(activity, it) },
@@ -74,7 +78,9 @@ class ColorFilterSettingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val filterColor = preferenceApplier.filterColor(ContextCompat.getColor(binding.root.context, R.color.default_color_filter))
+        val filterColor = preferenceApplier.filterColor(
+            ContextCompat.getColor(binding.root.context, R.color.default_color_filter)
+        )
         binding.sample.setBackgroundColor(filterColor)
         binding.alpha.value = Color.alpha(filterColor).toFloat()
         binding.useColorFilterCheck.let {

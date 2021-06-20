@@ -10,11 +10,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.lib.view.text.EmptyAlertSetter
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.DialogFavoriteSearchAdditionBinding
 import jp.toastkid.yobidashi.libs.Inputs
-import jp.toastkid.yobidashi.libs.TextInputs
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.search.category.SearchCategoryAdapter
 import java.text.MessageFormat
@@ -70,7 +70,7 @@ class FavoriteSearchAdditionDialogFragment: BottomSheetDialogFragment() {
      * Initialize input field.
      */
     private fun initInput() {
-        TextInputs.setEmptyAlert(binding.favoriteSearchAdditionQuery)
+        EmptyAlertSetter().invoke(binding.favoriteSearchAdditionQuery)
         binding.favoriteSearchAdditionQuery.editText?.setOnEditorActionListener { _, _, _ ->
             ok()
             return@setOnEditorActionListener true

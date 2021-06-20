@@ -21,7 +21,6 @@ import android.view.WindowManager
 import android.webkit.WebView
 import android.widget.PopupWindow
 import androidx.annotation.LayoutRes
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.get
 import androidx.core.view.isEmpty
@@ -35,6 +34,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.SlidingTapListener
+import jp.toastkid.lib.view.filter.color.ForegroundColorFilterUseCase
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.webview.DarkModeApplier
 import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
@@ -125,14 +125,9 @@ class FloatingPreview(context: Context) {
     fun onResume() {
         val context = binding.root.context
         val preferenceApplier = PreferenceApplier(context)
-        val filterColorDrawable = ColorDrawable(
-            if (preferenceApplier.useColorFilter())
-                preferenceApplier.filterColor(
-                    ContextCompat.getColor(context, R.color.default_color_filter)
-                )
-            else Color.TRANSPARENT
-        )
-        binding.previewContainer.foreground = filterColorDrawable
+
+        ForegroundColorFilterUseCase(preferenceApplier).invoke(binding.previewContainer)
+
         binding.progress.progressDrawable.colorFilter =
                 PorterDuffColorFilter(
                         PreferenceApplier(context).fontColor,

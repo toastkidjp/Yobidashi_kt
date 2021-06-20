@@ -21,6 +21,8 @@ import org.junit.Test
  */
 class WebViewCookieHandlerTest {
 
+    private lateinit var webViewCookieHandler: WebViewCookieHandler
+    
     @MockK
     private lateinit var cookieManager: CookieManager
 
@@ -32,11 +34,14 @@ class WebViewCookieHandlerTest {
 
         mockkStatic(CookieManager::class)
         every { CookieManager.getInstance() }.answers { cookieManager }
+
+        webViewCookieHandler = WebViewCookieHandler()
     }
 
     @Test
     fun testSaveFromResponseNoneCookie() {
-        WebViewCookieHandler.saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
+        webViewCookieHandler
+            .saveFromResponse("https://www.yahoo.co.jp".toHttpUrl(), mutableListOf())
 
         verify(exactly = 1) { CookieManager.getInstance() }
         verify(exactly = 0) { cookieManager.setCookie(any(), any()) }
@@ -44,9 +49,15 @@ class WebViewCookieHandlerTest {
 
     @Test
     fun testSaveFromResponse() {
-        WebViewCookieHandler.saveFromResponse(
+        webViewCookieHandler.saveFromResponse(
                 "https://www.yahoo.co.jp".toHttpUrl(),
-                mutableListOf(Cookie.Builder().domain("www.yahoo.co.jp").name("test").value("test").build())
+                mutableListOf(
+                    Cookie.Builder()
+                        .domain("www.yahoo.co.jp")
+                        .name("test")
+                        .value("test")
+                        .build()
+                )
         )
 
         verify(exactly = 1) { CookieManager.getInstance() }
@@ -59,7 +70,7 @@ class WebViewCookieHandlerTest {
         mockkObject(Cookie)
         every { Cookie.parse(any(), any()) }.returns(mockk())
 
-        WebViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl())
+        webViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl())
 
         verify(exactly = 1) { CookieManager.getInstance() }
         verify(exactly = 1) { cookieManager.getCookie(any()) }
@@ -73,7 +84,7 @@ class WebViewCookieHandlerTest {
         every { Cookie.parse(any(), any()) }.returns(mockk())
 
         assertTrue(
-                WebViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl()).isEmpty()
+                webViewCookieHandler.loadForRequest("https://www.yahoo.co.jp".toHttpUrl()).isEmpty()
         )
 
         verify(exactly = 1) { CookieManager.getInstance() }

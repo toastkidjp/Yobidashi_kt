@@ -12,7 +12,7 @@ object HttpClientFactory {
 
     fun withTimeout(seconds: Long): OkHttpClient =
             OkHttpClient.Builder()
-                    .cookieJar(WebViewCookieHandler)
+                    .cookieJar(WebViewCookieHandler())
                     .connectTimeout(seconds, TimeUnit.SECONDS)
                     .readTimeout(seconds, TimeUnit.SECONDS)
                     .writeTimeout(seconds, TimeUnit.SECONDS)
