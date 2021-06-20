@@ -135,7 +135,8 @@ class EditorContextMenuInitializer {
                 return true
             }
             R.id.context_edit_speech -> {
-                speechMaker?.invoke(editText.text.toString())
+                val speechText = if (text.isBlank()) editText.text.toString() else text
+                speechMaker?.invoke(speechText)
                 actionMode?.finish()
                 return true
             }
@@ -186,11 +187,6 @@ class EditorContextMenuInitializer {
             }
             R.id.context_edit_web_search -> {
                 browserViewModel?.open(makeSearchResultUrl(context, text))
-                actionMode?.finish()
-                return true
-            }
-            R.id.context_edit_speech -> {
-                speechMaker?.invoke(text)
                 actionMode?.finish()
                 return true
             }
