@@ -57,7 +57,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         assertFalse(menuActionInvokerUseCase.invoke(-1, ""))
 
         verify(exactly = 1) { editText.context }
