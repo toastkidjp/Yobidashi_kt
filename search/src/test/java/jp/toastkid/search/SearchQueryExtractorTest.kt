@@ -68,7 +68,8 @@ class SearchQueryExtractorTest {
             "test" to "https://ejje.weblio.jp/content/test",
             "tomato" to "https://scholar.google.com/scholar?q=tomato",
             "s&p 500" to "https://myindex.jp/search.php?w=s%26p+500&p=3",
-            "VOO" to "https://www.economist.com/search?q=VOO"
+            "VOO" to "https://www.economist.com/search?q=VOO",
+        "curry" to "http://search.sify.com/search.php?q=curry&cx=partner-pub-0910144482339723:8"
     )
 
     @Before
