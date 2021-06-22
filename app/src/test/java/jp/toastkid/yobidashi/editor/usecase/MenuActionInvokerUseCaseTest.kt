@@ -11,10 +11,13 @@ package jp.toastkid.yobidashi.editor.usecase
 import android.text.Editable
 import android.widget.EditText
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -98,6 +101,17 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 0) { editText.getSelectionStart() }
         verify(exactly = 0) { editable.insert(any(), any()) }
+    }
+
+    @Test
+    fun testPasteAsQuotation() {
+        mockkConstructor(PasteAsQuotationUseCase::class)
+        every { anyConstructed<PasteAsQuotationUseCase>().invoke() }.just(Runs)
+
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_paste_as_quotation, "test")
+
+        assertTrue(handled)
+        verify(exactly = 0) { anyConstructed<PasteAsQuotationUseCase>().invoke() }
     }
 
 }
