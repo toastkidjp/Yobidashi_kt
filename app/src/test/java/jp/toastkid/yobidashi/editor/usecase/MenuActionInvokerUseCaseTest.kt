@@ -17,7 +17,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
-import io.mockk.unmockkObject
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.R
@@ -86,7 +85,6 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 1) { editText.getSelectionStart() }
         verify(exactly = 1) { editable.insert(any(), any()) }
-        unmockkObject(Clipboard)
     }
 
     @Test
