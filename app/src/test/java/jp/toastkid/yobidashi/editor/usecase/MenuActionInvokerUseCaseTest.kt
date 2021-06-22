@@ -76,7 +76,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testInsertAsPlain() {
         mockkObject(Clipboard)
         every { Clipboard.getPrimary(any()) }.returns("clipped")
 
