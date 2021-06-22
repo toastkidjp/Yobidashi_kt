@@ -46,7 +46,7 @@ buildscript {
             timber: '4.6.0',
             junit: '4.12',
             robolectric: '4.2.1',
-            mockk: '1.9.3',
+            mockk: '1.11.0',
             coroutines_test: '1.4.0'
     ]
 }
