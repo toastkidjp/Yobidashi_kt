@@ -90,7 +90,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun testInsertAsPlain2() {
+    fun testInsertAsPlainWithPrimaryClipIsEmpty() {
         mockkObject(Clipboard)
         every { Clipboard.getPrimary(any()) }.returns("")
 
