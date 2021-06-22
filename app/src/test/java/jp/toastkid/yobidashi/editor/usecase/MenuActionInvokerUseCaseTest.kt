@@ -88,4 +88,19 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { editable.insert(any(), any()) }
         unmockkObject(Clipboard)
     }
+
+    @Test
+    fun testInsertAsPlain2() {
+        mockkObject(Clipboard)
+        every { Clipboard.getPrimary(any()) }.returns("")
+
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_insert_as_plain, "")
+
+        assertTrue(handled)
+        verify(exactly = 1) { Clipboard.getPrimary(any()) }
+        verify(exactly = 0) { editText.getSelectionStart() }
+        verify(exactly = 0) { editable.insert(any(), any()) }
+        unmockkObject(Clipboard)
+    }
+
 }
