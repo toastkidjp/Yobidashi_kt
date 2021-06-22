@@ -100,7 +100,6 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         verify(exactly = 0) { editText.getSelectionStart() }
         verify(exactly = 0) { editable.insert(any(), any()) }
-        unmockkObject(Clipboard)
     }
 
 }
