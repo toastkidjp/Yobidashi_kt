@@ -80,9 +80,9 @@ class MenuActionInvokerUseCaseTest {
         mockkObject(Clipboard)
         every { Clipboard.getPrimary(any()) }.returns("clipped")
 
-        val invoke = menuActionInvokerUseCase.invoke(R.id.context_edit_insert_as_plain, "")
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_insert_as_plain, "")
 
-        assertTrue(invoke)
+        assertTrue(handled)
         verify(exactly = 1) { Clipboard.getPrimary(any()) }
         unmockkObject(Clipboard)
     }
