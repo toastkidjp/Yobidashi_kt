@@ -150,7 +150,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testTableConverter() {
         mockkConstructor(TableConverter::class)
         every { anyConstructed<TableConverter>().invoke(any()) }.just(Runs)
 
