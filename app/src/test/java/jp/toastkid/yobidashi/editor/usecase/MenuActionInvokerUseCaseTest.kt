@@ -23,6 +23,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.editor.CurrentLineDuplicatorUseCase
 import jp.toastkid.yobidashi.editor.ListHeadAdder
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
@@ -122,6 +123,17 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { editText.getText() }
         verify(exactly = 1) { editText.getSelectionStart() }
         verify(exactly = 1) { editable.insert(any(), any()) }
+    }
+
+    @Test
+    fun test() {
+        mockkConstructor(CurrentLineDuplicatorUseCase::class)
+        every { anyConstructed<CurrentLineDuplicatorUseCase>().invoke(any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_duplicate_current_line, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<CurrentLineDuplicatorUseCase>().invoke(any()) }
     }
 
 }
