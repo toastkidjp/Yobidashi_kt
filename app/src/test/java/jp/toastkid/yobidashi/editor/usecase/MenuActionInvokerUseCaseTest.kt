@@ -138,7 +138,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testOrderedList() {
         mockkConstructor(OrderedListHeadAdder::class)
         every { anyConstructed<OrderedListHeadAdder>().invoke(any()) }.just(Runs)
 
