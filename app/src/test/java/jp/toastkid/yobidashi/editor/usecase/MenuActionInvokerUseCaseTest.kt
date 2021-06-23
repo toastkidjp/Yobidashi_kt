@@ -126,7 +126,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testCurrentLineDuplication() {
         mockkConstructor(CurrentLineDuplicatorUseCase::class)
         every { anyConstructed<CurrentLineDuplicatorUseCase>().invoke(any()) }.just(Runs)
 
