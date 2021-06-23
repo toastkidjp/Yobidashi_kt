@@ -115,7 +115,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testHorizontalRule() {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_horizontal_rule, "test")
 
         assertTrue(handled)
