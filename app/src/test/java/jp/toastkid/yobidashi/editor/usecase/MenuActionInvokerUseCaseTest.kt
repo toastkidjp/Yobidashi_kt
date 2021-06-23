@@ -114,4 +114,14 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 0) { anyConstructed<PasteAsQuotationUseCase>().invoke() }
     }
 
+    @Test
+    fun test() {
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_horizontal_rule, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { editText.getText() }
+        verify(exactly = 1) { editText.getSelectionStart() }
+        verify(exactly = 1) { editable.insert(any(), any()) }
+    }
+
 }
