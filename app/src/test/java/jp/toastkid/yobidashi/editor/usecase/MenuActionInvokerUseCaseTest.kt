@@ -25,6 +25,7 @@ import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.CurrentLineDuplicatorUseCase
 import jp.toastkid.yobidashi.editor.ListHeadAdder
+import jp.toastkid.yobidashi.editor.OrderedListHeadAdder
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import org.junit.After
@@ -134,6 +135,17 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { anyConstructed<CurrentLineDuplicatorUseCase>().invoke(any()) }
+    }
+
+    @Test
+    fun test() {
+        mockkConstructor(OrderedListHeadAdder::class)
+        every { anyConstructed<OrderedListHeadAdder>().invoke(any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_add_order, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<OrderedListHeadAdder>().invoke(any()) }
     }
 
 }
