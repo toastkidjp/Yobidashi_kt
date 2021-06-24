@@ -13,13 +13,23 @@ import android.os.Bundle
  * @author toastkidjp
  */
 data class LongTapItemHolder(var title: String = "", var anchor: String = "") {
+
     fun reset() {
         title = ""
         anchor = ""
     }
 
     fun extract(bundle: Bundle) {
-        title = bundle.get("title")?.toString()?.trim() ?: ""
-        anchor = bundle.get("url")?.toString() ?: ""
+        title = bundle.get(KEY_TITLE)?.toString()?.trim() ?: ""
+        anchor = bundle.get(KEY_URL)?.toString() ?: ""
     }
+
+    companion object {
+
+        private const val KEY_TITLE = "title"
+
+        private const val KEY_URL = "url"
+
+    }
+
 }

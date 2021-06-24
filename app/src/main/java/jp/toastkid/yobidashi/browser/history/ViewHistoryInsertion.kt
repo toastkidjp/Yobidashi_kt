@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
  * @author toastkidjp
  */
 class ViewHistoryInsertion private constructor(
-        private val context: Context,
+        context: Context,
         private val title: String,
         private val url: String,
         private val faviconPath: String
@@ -23,28 +23,36 @@ class ViewHistoryInsertion private constructor(
             if (title.isEmpty() || url.isEmpty()) Job()
             else insert(makeItem(title, url, faviconPath))
 
-    private fun insert(searchHistory: ViewHistory): Job {
-        return CoroutineScope(Dispatchers.IO).launch {
+    private fun insert(searchHistory: ViewHistory): Job =
+        CoroutineScope(Dispatchers.IO).launch {
             repository.add(searchHistory)
         }
-    }
 
-    private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory {
-        val viewHistory = ViewHistory()
-        viewHistory.title = title
-        viewHistory.url = url
-        viewHistory.favicon = faviconPath
-        viewHistory.lastViewed = System.currentTimeMillis()
-        return viewHistory
-    }
+    private fun makeItem(title: String, url: String, faviconPath: String): ViewHistory =
+        ViewHistory().also {
+            it.title = title
+            it.url = url
+            it.favicon = faviconPath
+            it.lastViewed = System.currentTimeMillis()
+        }
 
     companion object {
 
+        /**
+         * Make object with content strings.
+         *
+         * @param context For obtaining repository
+         * @param title title string
+         * @param url URL string
+         * @param faviconPath Path to favicon
+         */
         fun make(
                 context: Context,
                 title: String,
                 url: String,
                 faviconPath: String
         ) = ViewHistoryInsertion(context, title, url, faviconPath)
+
     }
+
 }

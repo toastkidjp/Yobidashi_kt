@@ -19,7 +19,6 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.lib.preference.ColorPair
@@ -218,7 +217,7 @@ class EditorSettingFragment : Fragment() {
         ViewModelProvider(activity)
                 .get(ColorChooserDialogFragmentViewModel::class.java)
                 .color
-                .observe(activity, Observer {
+                .observe(activity, {
                     preferenceApplier.setEditorCursorColor(it)
                     binding.cursorPreview.setBackgroundColor(it)
                 })
@@ -237,7 +236,7 @@ class EditorSettingFragment : Fragment() {
         ViewModelProvider(activity)
                 .get(ColorChooserDialogFragmentViewModel::class.java)
                 .color
-                .observe(activity, Observer {
+                .observe(activity, {
                     preferenceApplier.setEditorHighlightColor(it)
                     binding.highlightPreview.setBackgroundColor(it)
                 })

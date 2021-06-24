@@ -12,7 +12,7 @@ import org.junit.Test
 /**
  * @author toastkidjp
  */
-class AllImageDownloaderServiceTest {
+class AllImageDownloaderUseCaseTest {
 
     @MockK
     private lateinit var downloadAction: DownloadAction
@@ -29,7 +29,7 @@ class AllImageDownloaderServiceTest {
     fun testWebViewIsNull() {
         every { downloadAction.invoke(any<Collection<String>>()) }.answers { Unit }
 
-        AllImageDownloaderService(downloadAction).invoke(null)
+        AllImageDownloaderUseCase(downloadAction).invoke(null)
 
         verify(exactly = 0) { downloadAction.invoke(any<Collection<String>>()) }
     }
@@ -39,7 +39,7 @@ class AllImageDownloaderServiceTest {
         every { downloadAction.invoke(any<Collection<String>>()) }.answers { Unit }
         every { webView.evaluateJavascript(any(), any()) }.answers { Unit }
 
-        AllImageDownloaderService(downloadAction).invoke(webView)
+        AllImageDownloaderUseCase(downloadAction).invoke(webView)
 
         verify(exactly = 1) { webView.evaluateJavascript(any(), any()) }
         verify(exactly = 0) { downloadAction.invoke(any<Collection<String>>()) }

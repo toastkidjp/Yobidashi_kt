@@ -24,7 +24,11 @@ class ArchivesFragment : Fragment() {
 
     private var binding: FragmentArchivesBinding? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, LAYOUT_ID, container, false)
         return binding?.root
@@ -33,7 +37,8 @@ class ArchivesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val browserViewModel = activity?.let { ViewModelProvider(it).get(BrowserViewModel::class.java) }
+        val browserViewModel =
+            activity?.let { ViewModelProvider(it).get(BrowserViewModel::class.java) }
 
         val adapter = Adapter(view.context) { filePath ->
             popBackStack()

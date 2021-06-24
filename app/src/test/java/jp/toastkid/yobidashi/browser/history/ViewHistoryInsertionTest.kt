@@ -39,7 +39,7 @@ class ViewHistoryInsertionTest {
         coEvery { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
 
         coEvery { appDatabase.viewHistoryRepository() }.returns(repository)
-        coEvery { repository.add(any()) }.answers { Unit }
+        coEvery { repository.add(any()) }.returns(Unit)
     }
 
     @After

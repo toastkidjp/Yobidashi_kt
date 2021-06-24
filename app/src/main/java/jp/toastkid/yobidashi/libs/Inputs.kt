@@ -15,30 +15,33 @@ object Inputs {
 
     /**
      * Show software keyboard.
-     * @param activity
      *
+     * @param activity
      * @param editText
      */
     fun showKeyboard(activity: Activity, editText: EditText) {
-        val inputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        if (inputMethodManager?.isActive == false) {
-            return
-        }
+        val inputMethodManager = obtainInputManager(activity)
         inputMethodManager?.showSoftInput(editText, 0)
     }
 
     /**
      * Hide software keyboard.
+     *
      * @param v
      */
     fun hideKeyboard(v: View?) {
-        val manager = v?.context
-                ?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
-        if (!manager.isActive) {
-            return
+        val manager = obtainInputManager(v?.context)
+        manager?.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
+
+    private fun obtainInputManager(context: Context?): InputMethodManager? {
+        val inputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                ?: return null
+        if (!inputMethodManager.isActive) {
+            return null
         }
-        manager.hideSoftInputFromWindow(v.windowToken, 0)
+        return inputMethodManager
     }
 
     /**

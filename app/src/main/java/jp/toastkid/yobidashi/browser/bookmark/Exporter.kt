@@ -9,7 +9,7 @@ import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
  */
 class Exporter(private val bookmarks: Iterable<Bookmark?>) {
 
-    fun invoke(): String {
+    operator fun invoke(): String {
         val builder = StringBuilder()
                 .append("<!DOCTYPE NETSCAPE-Bookmark-file-1>\n")
                 .append("<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\">\n")
@@ -25,10 +25,10 @@ class Exporter(private val bookmarks: Iterable<Bookmark?>) {
     }
 
     private fun convertDirectory(builder: StringBuilder, item: Bookmark?) {
-        item?.let {
-            builder.append("<DT><H3>${it.title}</H3>\n")
+        item?.let { itemBookmark ->
+            builder.append("<DT><H3>${itemBookmark.title}</H3>\n")
                     .append("<DL><p>\n")
-            getDirBookmarks(it.title).forEach {
+            getDirBookmarks(itemBookmark.title).forEach {
                 if (it == null) {
                     return@forEach
                 }

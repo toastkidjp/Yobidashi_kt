@@ -33,7 +33,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
     private lateinit var binding: FragmentViewHistoryBinding
 
-    private lateinit var adapter: ActivityAdapter
+    private lateinit var adapter: Adapter
 
     private lateinit var preferenceApplier: PreferenceApplier
 
@@ -56,7 +56,7 @@ class ViewHistoryFragment: Fragment(), ClearDialogFragment.Callback, ContentScro
 
         contentViewModel = activity?.let { ViewModelProvider(it).get(ContentViewModel::class.java) }
 
-        adapter = ActivityAdapter(
+        adapter = Adapter(
                 context,
                 DatabaseFinder().invoke(context).viewHistoryRepository(),
                 { history -> finishWithResult(Uri.parse(history.url)) },

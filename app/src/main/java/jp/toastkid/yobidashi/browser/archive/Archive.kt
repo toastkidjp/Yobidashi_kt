@@ -40,6 +40,6 @@ internal object Archive {
     /**
      * Supporting archive file extension.
      */
-    private val fileExtension: String = ".mht"
+    private const val fileExtension: String = ".mht"
 
 }

@@ -352,11 +352,9 @@ class BrowserFragment : Fragment(),
     }
 
     fun showHtmlSource() {
-        browserModule.invokeHtmlSourceExtraction(
-                ValueCallback {
-                    showReaderFragment(it.replace("\\u003C", "<"))
-                }
-        )
+        browserModule.invokeHtmlSourceExtraction {
+            showReaderFragment(it.replace("\\u003C", "<"))
+        }
     }
 
     /**

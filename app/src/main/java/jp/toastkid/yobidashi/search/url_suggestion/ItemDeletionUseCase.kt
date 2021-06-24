@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.search.url_suggestion
 
+import androidx.annotation.WorkerThread
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
@@ -21,6 +22,7 @@ class ItemDeletionUseCase(
     private val viewHistoryRepository: ViewHistoryRepository
 ) {
 
+    @WorkerThread
     operator fun invoke(item: UrlItem) {
         when (item) {
             is Bookmark -> bookmarkRepository.delete(item)

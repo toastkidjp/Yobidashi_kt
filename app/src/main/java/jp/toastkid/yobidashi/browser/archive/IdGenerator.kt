@@ -11,10 +11,18 @@ import androidx.core.net.toUri
 import jp.toastkid.lib.Urls
 
 /**
+ * Use for storing archive file.
+ *
  * @author toastkidjp
  */
 class IdGenerator {
 
+    /**
+     * Generate file ID from passed URL string.
+     *
+     * @param url URL string(nullable)
+     * @return file ID
+     */
     fun from(url: String?): String? {
         if (Urls.isInvalidUrl(url)) {
             return url

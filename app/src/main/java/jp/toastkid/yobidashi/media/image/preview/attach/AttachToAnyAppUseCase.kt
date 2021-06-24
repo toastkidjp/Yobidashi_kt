@@ -40,4 +40,5 @@ class AttachToAnyAppUseCase(private val activityStarter: (Intent) -> Unit) {
 
         private const val CHOOSER_TITLE = "Set as:"
     }
+
 }

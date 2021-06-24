@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.browser.UrlItem
 import jp.toastkid.yobidashi.search.url_suggestion.ViewHolder
-import java.io.File
 
 /**
  * ViewHistory model.

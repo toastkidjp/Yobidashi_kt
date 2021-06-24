@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 /**
  * @author toastkidjp
@@ -17,7 +18,8 @@ class BookmarkInsertion (
         private val url: String = "",
         private val faviconPath: String = "",
         private val parent: String = "",
-        private val folder: Boolean = false
+        private val folder: Boolean = false,
+        private val dispatcher: CoroutineContext = Dispatchers.IO
 ) {
 
     fun insert(): Job {
@@ -28,7 +30,7 @@ class BookmarkInsertion (
     }
 
     private fun insert(bookmark: Bookmark): Job {
-        return CoroutineScope(Dispatchers.IO).launch {
+        return CoroutineScope(dispatcher).launch {
             DatabaseFinder().invoke(context).bookmarkRepository()
                     .add(bookmark)
         }

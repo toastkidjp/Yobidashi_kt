@@ -7,7 +7,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.databinding.ViewStubProxy
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.color.IconColorFinder
 import jp.toastkid.yobidashi.R
@@ -140,13 +139,13 @@ class PageSearcherModule(private val viewStubProxy: ViewStubProxy) {
         }
 
         (context as? FragmentActivity)?.let { activity ->
-            viewModel?.clear?.observe(activity, Observer {
-                it?.getContentIfNotHandled() ?: return@Observer
+            viewModel?.clear?.observe(activity, {
+                it?.getContentIfNotHandled() ?: return@observe
                 clearInput()
             })
 
-            viewModel?.close?.observe(activity, Observer {
-                it?.getContentIfNotHandled() ?: return@Observer
+            viewModel?.close?.observe(activity, {
+                it?.getContentIfNotHandled() ?: return@observe
                 hide()
             })
         }

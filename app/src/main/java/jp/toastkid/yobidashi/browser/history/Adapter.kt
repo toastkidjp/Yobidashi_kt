@@ -4,12 +4,13 @@ import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.yobidashi.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * View history activity's adapter.
@@ -29,7 +30,7 @@ import java.util.*
  *
  * @author toastkidjp
  */
-internal class ActivityAdapter(
+internal class Adapter(
         private val context: Context,
         private val viewHistoryRepository: ViewHistoryRepository,
         private val onClick: (ViewHistory) -> Unit,
@@ -54,7 +55,7 @@ internal class ActivityAdapter(
     private val parent = Job()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(DataBindingUtil.inflate(inflater, R.layout.item_view_history, parent, false))
+            ViewHolder(DataBindingUtil.inflate(inflater, ITEM_LAYOUT_ID, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val viewHistory: ViewHistory = items[position]
@@ -153,4 +154,12 @@ internal class ActivityAdapter(
     fun dispose() {
         parent.cancel()
     }
+
+    companion object {
+
+        @LayoutRes
+        private val ITEM_LAYOUT_ID = R.layout.item_view_history
+
+    }
+
 }
