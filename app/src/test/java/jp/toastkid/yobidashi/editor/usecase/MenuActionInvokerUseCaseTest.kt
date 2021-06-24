@@ -162,7 +162,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testUnorderedList() {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_unordered_list, "test")
 
         assertTrue(handled)
