@@ -178,7 +178,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testAddQuote() {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_add_quote, "test")
 
         assertTrue(handled)
