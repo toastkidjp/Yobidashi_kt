@@ -169,4 +169,12 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { listHeadAdder.invoke(any(), any()) }
     }
 
+    @Test
+    fun test() {
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_task_list, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { listHeadAdder.invoke(any(), any()) }
+    }
+
 }
