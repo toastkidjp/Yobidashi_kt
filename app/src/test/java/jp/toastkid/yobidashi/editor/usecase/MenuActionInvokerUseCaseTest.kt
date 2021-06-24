@@ -177,4 +177,12 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { listHeadAdder.invoke(any(), any()) }
     }
 
+    @Test
+    fun test() {
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_add_quote, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { listHeadAdder.invoke(any(), any()) }
+    }
+
 }
