@@ -170,7 +170,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testTaskList() {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_task_list, "test")
 
         assertTrue(handled)
