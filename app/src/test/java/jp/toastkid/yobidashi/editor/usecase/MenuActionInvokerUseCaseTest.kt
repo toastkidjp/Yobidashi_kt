@@ -66,6 +66,7 @@ class MenuActionInvokerUseCaseTest {
         every { editText.getText() }.returns(editable)
         every { editText.getSelectionStart() }.returns(1)
         every { editable.insert(any(), any()) }.returns(editable)
+        every { listHeadAdder.invoke(any(), any()) }.just(Runs)
     }
 
     @After
@@ -158,6 +159,14 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { anyConstructed<TableConverter>().invoke(any()) }
+    }
+
+    @Test
+    fun test() {
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_unordered_list, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { listHeadAdder.invoke(any(), any()) }
     }
 
 }
