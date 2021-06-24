@@ -67,6 +67,7 @@ class MenuActionInvokerUseCaseTest {
         every { editText.getText() }.returns(editable)
         every { editText.getSelectionStart() }.returns(1)
         every { editable.insert(any(), any()) }.returns(editable)
+        every { speechMaker.invoke(any()) }.just(Runs)
         every { listHeadAdder.invoke(any(), any()) }.just(Runs)
     }
 
@@ -195,6 +196,14 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }
+    }
+
+    @Test
+    fun test() {
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_speech, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { speechMaker.invoke(any()) }
     }
 
 }
