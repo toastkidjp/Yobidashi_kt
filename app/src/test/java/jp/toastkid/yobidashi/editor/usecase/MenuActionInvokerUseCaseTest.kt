@@ -26,6 +26,7 @@ import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.CurrentLineDuplicatorUseCase
 import jp.toastkid.yobidashi.editor.ListHeadAdder
 import jp.toastkid.yobidashi.editor.OrderedListHeadAdder
+import jp.toastkid.yobidashi.editor.StringSurroundingUseCase
 import jp.toastkid.yobidashi.editor.TableConverter
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
@@ -183,6 +184,17 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { listHeadAdder.invoke(any(), any()) }
+    }
+
+    @Test
+    fun test() {
+        mockkConstructor(StringSurroundingUseCase::class)
+        every { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_double_quote, "test")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<StringSurroundingUseCase>().invoke(any(), any()) }
     }
 
 }
