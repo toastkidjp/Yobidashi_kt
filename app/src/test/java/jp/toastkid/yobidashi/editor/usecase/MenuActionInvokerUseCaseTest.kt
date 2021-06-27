@@ -223,7 +223,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testOpenBackground() {
         every { browserViewModel.openBackground(any()) }.just(Runs)
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
