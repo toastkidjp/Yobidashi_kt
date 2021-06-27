@@ -8,6 +8,8 @@
 
 package jp.toastkid.yobidashi.editor.usecase
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.text.Editable
 import android.widget.EditText
@@ -24,6 +26,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.CurrentLineDuplicatorUseCase
 import jp.toastkid.yobidashi.editor.ListHeadAdder
@@ -62,16 +65,24 @@ class MenuActionInvokerUseCaseTest {
     @MockK
     private lateinit var editable: Editable
 
+    @MockK
+    private lateinit var context: Context
+
+    @MockK
+    private lateinit var preferences: SharedPreferences
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { editText.context }.returns(mockk())
+        every { editText.context }.returns(context)
         every { editText.getText() }.returns(editable)
         every { editText.getSelectionStart() }.returns(1)
         every { editable.insert(any(), any()) }.returns(editable)
         every { speechMaker.invoke(any()) }.just(Runs)
         every { listHeadAdder.invoke(any(), any()) }.just(Runs)
+        every { context.getSharedPreferences(any(), any()) }.returns(preferences)
+        every { preferences.getString(any(), any()) }.returns("test")
     }
 
     @After
@@ -252,6 +263,20 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { browserViewModel.preview(any()) }
         verify(exactly = 1) { Uri.parse(any()) }
         verify(exactly = 1) { Inputs.hideKeyboard(any()) }
+    }
+
+    @Test
+    fun test() {
+        every { browserViewModel.open(any()) }.just(Runs)
+        mockkConstructor(UrlFactory::class)
+        every { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }.returns(mockk())
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_web_search, "https://www.yahoo.co.jp")
+
+        assertTrue(handled)
+        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }
     }
 
 }
