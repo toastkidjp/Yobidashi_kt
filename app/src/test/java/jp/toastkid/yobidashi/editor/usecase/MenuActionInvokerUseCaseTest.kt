@@ -30,6 +30,7 @@ import jp.toastkid.yobidashi.editor.ListHeadAdder
 import jp.toastkid.yobidashi.editor.OrderedListHeadAdder
 import jp.toastkid.yobidashi.editor.StringSurroundingUseCase
 import jp.toastkid.yobidashi.editor.TableConverter
+import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import org.junit.After
@@ -234,6 +235,23 @@ class MenuActionInvokerUseCaseTest {
         assertTrue(handled)
         verify(exactly = 1) { browserViewModel.openBackground(any()) }
         verify(exactly = 1) { Uri.parse(any()) }
+    }
+
+    @Test
+    fun test() {
+        every { browserViewModel.preview(any()) }.just(Runs)
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(mockk())
+        mockkObject(Inputs::class)
+        every { Inputs.hideKeyboard(any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_url_preview, "https://www.yahoo.co.jp")
+
+        assertTrue(handled)
+        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
+        verify(exactly = 1) { Inputs.hideKeyboard(any()) }
     }
 
 }
