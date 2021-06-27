@@ -8,6 +8,7 @@
 
 package jp.toastkid.yobidashi.editor.usecase
 
+import android.net.Uri
 import android.text.Editable
 import android.widget.EditText
 import io.mockk.MockKAnnotations
@@ -19,6 +20,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
@@ -204,6 +206,20 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { speechMaker.invoke(any()) }
+    }
+
+    @Test
+    fun test() {
+        every { browserViewModel.open(any()) }.just(Runs)
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(mockk())
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_url_open_new, "https://www.yahoo.co.jp")
+
+        assertTrue(handled)
+        verify(exactly = 1) { browserViewModel.open(any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
     }
 
 }
