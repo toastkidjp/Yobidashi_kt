@@ -222,4 +222,18 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { Uri.parse(any()) }
     }
 
+    @Test
+    fun test() {
+        every { browserViewModel.openBackground(any()) }.just(Runs)
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(mockk())
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_url_open_background, "https://www.yahoo.co.jp")
+
+        assertTrue(handled)
+        verify(exactly = 1) { browserViewModel.openBackground(any()) }
+        verify(exactly = 1) { Uri.parse(any()) }
+    }
+
 }
