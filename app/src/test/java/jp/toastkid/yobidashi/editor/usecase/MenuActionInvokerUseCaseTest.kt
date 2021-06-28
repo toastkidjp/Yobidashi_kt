@@ -253,7 +253,7 @@ class MenuActionInvokerUseCaseTest {
         every { browserViewModel.preview(any()) }.just(Runs)
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.returns(mockk())
-        mockkObject(Inputs::class)
+        mockkObject(Inputs)
         every { Inputs.hideKeyboard(any()) }.just(Runs)
 
         val handled = menuActionInvokerUseCase
