@@ -221,6 +221,15 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
+    fun testSpeech2() {
+        val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_speech, " ")
+
+        assertTrue(handled)
+        verify(exactly = 1) { speechMaker.invoke(any()) }
+        verify(exactly = 1) { editText.getText() }
+    }
+
+    @Test
     fun testOpenNew() {
         every { browserViewModel.open(any()) }.just(Runs)
         mockkStatic(Uri::class)
