@@ -26,6 +26,8 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.CurrentLineDuplicatorUseCase
@@ -301,6 +303,30 @@ class MenuActionInvokerUseCaseTest {
         assertTrue(handled)
         verify(exactly = 1) { browserViewModel.preview(any()) }
         verify(exactly = 1) { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }
+    }
+
+    @Test
+    fun testPreviewSearch2() {
+        every { browserViewModel.preview(any()) }.just(Runs)
+        mockkConstructor(UrlFactory::class)
+        every { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }.returns(mockk())
+        mockkConstructor(PreferenceApplier::class)
+        every { anyConstructed<PreferenceApplier>().getDefaultSearchEngine() }.returns(null)
+        val mockUri = mockk<Uri>()
+        every { mockUri.host }.returns("search.yahoo.co.jp")
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) }.returns(mockUri)
+        mockkObject(SearchCategory)
+        every { SearchCategory.getDefaultCategoryName() }.returns("test")
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_preview_search, "https://www.yahoo.co.jp")
+
+        assertTrue(handled)
+        verify(exactly = 1) { browserViewModel.preview(any()) }
+        verify(exactly = 1) { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }
+        verify(exactly = 1) { anyConstructed<PreferenceApplier>().getDefaultSearchEngine() }
+        verify(exactly = 1) { SearchCategory.getDefaultCategoryName() }
     }
 
 }
