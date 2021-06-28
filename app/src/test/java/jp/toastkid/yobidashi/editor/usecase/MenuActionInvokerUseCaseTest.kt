@@ -221,7 +221,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun testSpeech2() {
+    fun testSpeechWithBlank() {
         val handled = menuActionInvokerUseCase.invoke(R.id.context_edit_speech, " ")
 
         assertTrue(handled)
