@@ -131,7 +131,7 @@ class SearchSettingFragment : Fragment() {
     /**
      * Switch notification widget displaying.
      *
-     * @param v only use snackbar's parent.
+     * @param v only use [com.google.android.material.snackbar.Snackbar]'s parent.
      */
     fun switchSearchWithClip(v: View) {
         val newState = !preferenceApplier.enableSearchWithClip

@@ -7,6 +7,7 @@
  */
 package jp.toastkid.yobidashi.editor
 
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.view.ActionMode
@@ -65,7 +66,7 @@ class EditorContextMenuInitializer {
                             return true
                         }
                         R.id.context_edit_paste_as_quotation -> {
-                            PasteAsConfirmationDialogFragment.show(context)
+                            pasteAsQuotation(context, editText)
                             actionMode?.finish()
                             return true
                         }
@@ -196,6 +197,17 @@ class EditorContextMenuInitializer {
             override fun onDestroyActionMode(p0: ActionMode?) = Unit
 
         }
+    }
+
+    private fun pasteAsQuotation(context: Context, editText: EditText) {
+        val primary = Clipboard.getPrimary(context)
+        if (primary.isNullOrEmpty()) {
+            return
+        }
+        editText.text.insert(
+            editText.selectionStart,
+            Quotation()(primary)
+        )
     }
 
 }
