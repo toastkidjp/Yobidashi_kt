@@ -280,7 +280,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testPreviewSearch() {
         every { browserViewModel.preview(any()) }.just(Runs)
         mockkConstructor(UrlFactory::class)
         every { anyConstructed<UrlFactory>().invoke(any(), any(), any()) }.returns(mockk())
