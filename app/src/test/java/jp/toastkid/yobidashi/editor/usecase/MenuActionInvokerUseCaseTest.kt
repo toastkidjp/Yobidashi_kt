@@ -218,6 +218,7 @@ class MenuActionInvokerUseCaseTest {
 
         assertTrue(handled)
         verify(exactly = 1) { speechMaker.invoke(any()) }
+        verify(exactly = 0) { editText.getText() }
     }
 
     @Test
