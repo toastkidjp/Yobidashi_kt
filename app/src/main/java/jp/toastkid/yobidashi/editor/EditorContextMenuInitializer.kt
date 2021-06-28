@@ -144,6 +144,7 @@ class EditorContextMenuInitializer {
                     editText.selectionStart,
                     "----${System.lineSeparator()}"
                 )
+                return true
             }
             R.id.context_edit_duplicate_current_line -> {
                 CurrentLineDuplicatorUseCase().invoke(editText)
