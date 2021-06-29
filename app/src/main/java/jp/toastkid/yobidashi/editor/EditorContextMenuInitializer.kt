@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.editor
 
-import android.content.Context
 import android.os.Build
 import android.view.ActionMode
 import android.view.Menu
@@ -17,11 +16,9 @@ import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
-import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.usecase.MenuActionInvokerUseCase
-import jp.toastkid.yobidashi.editor.usecase.PasteAsQuotationUseCase
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
 /**
@@ -122,15 +119,6 @@ class EditorContextMenuInitializer {
         return editText.text
             .subSequence(editText.selectionStart, editText.selectionEnd)
             .toString()
-    }
-
-    private fun pasteAsQuotation(context: Context, editText: EditText) {
-        val fragmentActivity = (context as? FragmentActivity) ?: return
-
-        PasteAsQuotationUseCase(
-            editText,
-            ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-        ).invoke()
     }
 
 }
