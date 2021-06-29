@@ -40,8 +40,6 @@ class EditorContextMenuInitializer {
             ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
         }
 
-        val listHeadAdder = ListHeadAdder()
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
