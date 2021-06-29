@@ -59,7 +59,7 @@ class CurrentLineDeletionUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         currentLineDeletionUseCase.invoke(editText)
 
         verify(exactly = 1) { editText.getSelectionStart() }
