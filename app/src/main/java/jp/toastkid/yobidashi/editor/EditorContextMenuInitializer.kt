@@ -8,7 +8,6 @@
 package jp.toastkid.yobidashi.editor
 
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import android.view.ActionMode
 import android.view.Menu
@@ -20,9 +19,6 @@ import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
-import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.search.SearchCategory
-import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.usecase.MenuActionInvokerUseCase
 import jp.toastkid.yobidashi.editor.usecase.PasteAsQuotationUseCase
@@ -121,12 +117,6 @@ class EditorContextMenuInitializer {
 
         return MenuActionInvokerUseCase(editText, speechMaker, browserViewModel).invoke(itemId, text)
     }
-
-    private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(
-        PreferenceApplier(context).getDefaultSearchEngine()
-            ?: SearchCategory.getDefaultCategoryName(),
-        text
-    )
 
     private fun extractSelectedText(editText: EditText): String {
         return editText.text
