@@ -38,4 +38,12 @@
         tools:ignore="AlwaysShowAction"
         />
 
+    <item
+        android:id="@+id/context_edit_delete_line"
+        android:title="@string/delete_current_line"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction"
+        />
+
 </menu>
