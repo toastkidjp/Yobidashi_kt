@@ -83,7 +83,7 @@ class CurrentLineDeletionUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testEarlyReturnCaseByEnd() {
         every { layout.getLineEnd(any()) }.returns(-1)
 
         currentLineDeletionUseCase.invoke(editText)
