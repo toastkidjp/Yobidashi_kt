@@ -121,13 +121,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_delete_line -> {
-                val lineNumber = editText.layout.getLineForOffset(editText.selectionStart)
-                val start = editText.layout.getLineStart(lineNumber)
-                val end = editText.layout.getLineEnd(lineNumber)
-                if (start < 0 || end < 0) {
-                    return true
-                }
-                editText.text.delete(start, end)
+                CurrentLineDeletionUseCase().invoke(editText)
                 return true
             }
             else -> Unit
