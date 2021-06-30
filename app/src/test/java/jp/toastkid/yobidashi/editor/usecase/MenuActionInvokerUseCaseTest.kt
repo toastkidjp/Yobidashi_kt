@@ -329,4 +329,16 @@ class MenuActionInvokerUseCaseTest {
         verify(exactly = 1) { SearchCategory.getDefaultCategoryName() }
     }
 
+    @Test
+    fun test() {
+        mockkConstructor(CurrentLineDeletionUseCase::class)
+        every { anyConstructed<CurrentLineDeletionUseCase>().invoke(any()) }.just(Runs)
+
+        val handled = menuActionInvokerUseCase
+            .invoke(R.id.context_edit_delete_line, "")
+
+        assertTrue(handled)
+        verify(exactly = 1) { anyConstructed<CurrentLineDeletionUseCase>().invoke(any()) }
+    }
+
 }
