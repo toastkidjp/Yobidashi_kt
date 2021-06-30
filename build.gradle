@@ -33,7 +33,7 @@ buildscript {
     }
 
     ext.libVersions = [
-            coroutines: '1.4.0',
+            coroutines: '1.4.3',
             ktx: '1.1.0',
             appcompat: '1.2.0',
             cardview: '1.0.0',
