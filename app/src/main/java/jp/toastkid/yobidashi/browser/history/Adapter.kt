@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.content.Context
 import android.net.Uri
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -16,9 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 /**
  * View history activity's adapter.
@@ -44,14 +42,6 @@ internal class Adapter(
 
     private val items = mutableListOf<ViewHistory>()
 
-    /**
-     * Date format holder.
-     */
-    private val dateFormat: ThreadLocal<DateFormat> = object: ThreadLocal<DateFormat>() {
-        override fun initialValue(): DateFormat =
-                SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
-    }
-
     private val parent = Job()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -63,7 +53,7 @@ internal class Adapter(
         holder.setText(
                 viewHistory.title,
                 viewHistory.url,
-                dateFormat.get()?.format(viewHistory.lastViewed) ?: ""
+                DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString() ?: ""
         )
         holder.itemView.setOnClickListener { onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->

@@ -54,7 +54,8 @@ class SearchSettingFragment : Fragment() {
 
         binding.searchCategories.adapter = SearchCategoryAdapter(activityContext)
         val index = SearchCategory.findIndex(
-                PreferenceApplier(activityContext).getDefaultSearchEngine() ?: SearchCategory.getDefaultCategoryName()
+            PreferenceApplier(activityContext).getDefaultSearchEngine()
+                ?: SearchCategory.getDefaultCategoryName()
         )
         binding.searchCategories.setSelection(index)
         binding.searchCategories.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {

@@ -185,7 +185,7 @@ class ImagePreviewDialogFragment  : DialogFragment() {
                     binding.root.context,
                     MenuActionUseCase(
                             AttachToThisAppBackgroundUseCase(contentViewModel),
-                            AttachToAnyAppUseCase { startActivity(it) },
+                            AttachToAnyAppUseCase(activityStarter = { startActivity(it) }),
                             { pathFinder()?.toUri() },
                             { findCurrentImageView()?.drawable?.toBitmap() },
                             { it.show(parentFragmentManager, "detail") }

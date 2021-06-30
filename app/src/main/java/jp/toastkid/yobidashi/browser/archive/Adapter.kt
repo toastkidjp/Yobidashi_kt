@@ -1,21 +1,19 @@
 package jp.toastkid.yobidashi.browser.archive
 
 import android.content.Context
+import android.text.format.DateFormat
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.storage.FilesDir
+import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.databinding.ItemArchiveBinding
 import timber.log.Timber
 import java.io.IOException
-import java.text.DateFormat
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * Initialize with Context.
@@ -57,7 +55,7 @@ internal class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val file = archiveDir.get(position) ?: return
+        val file = archiveDir[position] ?: return
         holder.setText(file.name)
         holder.setSubText(
                 "${toLastModifiedText(file.lastModified())} / ${toKiloBytes(file.length())}[KB]")
@@ -68,10 +66,10 @@ internal class Adapter(
                 Timber.e(e)
             }
         }
-        holder.setDelete(View.OnClickListener{
+        holder.setDelete {
             file.delete()
             notifyItemRemoved(position)
-        })
+        }
         holder.setIconColor(preferenceApplier.color)
     }
 
@@ -80,8 +78,8 @@ internal class Adapter(
      *
      * @param lastModifiedMs milliseconds
      */
-    private fun toLastModifiedText(lastModifiedMs: Long): String
-            = DATE_FORMAT_HOLDER.get()?.format(Date(lastModifiedMs)) ?: ""
+    private fun toLastModifiedText(lastModifiedMs: Long) =
+        DateFormat.format("yyyyMMdd HH:mm:ss", lastModifiedMs)
 
     /**
      * Convert file byte length to KB text.
@@ -93,14 +91,4 @@ internal class Adapter(
 
     override fun getItemCount(): Int = archiveDir.count
 
-    companion object {
-
-        /**
-         * Date format holder.
-         */
-        private val DATE_FORMAT_HOLDER = object: ThreadLocal<DateFormat>() {
-            override fun initialValue(): DateFormat
-                    = SimpleDateFormat("yyyyMMdd HH:mm:ss", Locale.getDefault())
-        }
-    }
 }

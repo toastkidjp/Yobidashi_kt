@@ -16,6 +16,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,16 +48,13 @@ import jp.toastkid.yobidashi.browser.page_search.PageSearcherViewModel
 import jp.toastkid.yobidashi.databinding.AppBarEditorBinding
 import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.libs.Toaster
-import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 import okio.buffer
 import okio.sink
 import okio.source
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 /**
  * @author toastkidjp
@@ -64,7 +62,6 @@ import java.util.Locale
 class EditorFragment :
         Fragment(),
         TabUiFragment,
-        PasteAsConfirmationDialogFragment.Callback,
         ClearTextDialogFragment.Callback,
         InputNameDialogFragment.Callback,
         CommonFragmentAction,
@@ -81,16 +78,6 @@ class EditorFragment :
     private lateinit var preferenceApplier: PreferenceApplier
 
     private val externalFileAssignment = ExternalFileAssignment()
-
-    /**
-     * Default date format holder.
-     */
-    private val dateFormatHolder: ThreadLocal<SimpleDateFormat> by lazy {
-        object: ThreadLocal<SimpleDateFormat>() {
-            override fun initialValue() =
-                    SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-        }
-    }
 
     private var speechMaker: SpeechMaker? = null
 
@@ -474,9 +461,7 @@ class EditorFragment :
      * @param ms
      */
     private fun setLastSaved(ms: Long) {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = ms
-        menuBinding.lastSaved.text = lastSavedTitle + dateFormatHolder.get()?.format(calendar.time)
+        menuBinding.lastSaved.text = lastSavedTitle + DateFormat.format("HH:mm:ss", ms)
     }
 
     /**
@@ -573,15 +558,6 @@ class EditorFragment :
      */
     fun insert(text: CharSequence?) {
         binding.editorInput.text.insert(binding.editorInput.selectionStart, text)
-    }
-
-    override fun onClickPasteAs() {
-        val activityContext = context ?: return
-        val primary = Clipboard.getPrimary(activityContext)
-        if (primary.isNullOrEmpty()) {
-            return
-        }
-        insert(Quotation()(primary))
     }
 
     override fun onClickClearInput() {

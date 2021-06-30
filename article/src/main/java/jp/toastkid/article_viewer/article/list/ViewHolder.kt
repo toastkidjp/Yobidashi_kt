@@ -8,16 +8,13 @@
 package jp.toastkid.article_viewer.article.list
 
 import android.annotation.SuppressLint
+import android.text.format.DateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.article_viewer.R
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * @author toastkidjp
@@ -39,20 +36,15 @@ class ViewHolder(
             true
         }
         view.findViewById<TextView>(R.id.sub_text).text =
-            "Last updated: ${DATE_FORMAT.get()?.format(Date().also { it.time = result.lastModified })}" +
+            "Last updated: ${DateFormat.format("yyyy/MM/dd(E) HH:mm:ss", result.lastModified)}" +
                     " / ${result.length}"
 
         view.findViewById<ImageView>(R.id.menu).also {
             it.setColorFilter(menuColor)
-            it.setOnClickListener {
-                onMenuClick(it, result)
+            it.setOnClickListener { v ->
+                onMenuClick(v, result)
             }
         }
     }
 
-    companion object {
-        private val DATE_FORMAT = object : ThreadLocal<DateFormat>() {
-            override fun initialValue() = SimpleDateFormat("yyyy/MM/dd(E) HH:mm:ss", Locale.JAPAN)
-        }
-    }
 }

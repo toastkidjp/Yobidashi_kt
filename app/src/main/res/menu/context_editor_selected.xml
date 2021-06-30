@@ -49,4 +49,11 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/context_edit_paste_as_quotation"
+        android:title="@string/paste_as_quotation"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_quote"
+        />
 </menu>
