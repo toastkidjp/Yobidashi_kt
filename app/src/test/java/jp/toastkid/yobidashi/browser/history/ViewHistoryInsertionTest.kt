@@ -9,9 +9,11 @@
 package jp.toastkid.yobidashi.browser.history
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -39,7 +41,7 @@ class ViewHistoryInsertionTest {
         coEvery { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
 
         coEvery { appDatabase.viewHistoryRepository() }.returns(repository)
-        coEvery { repository.add(any()) }.returns(Unit)
+        coEvery { repository.add(any()) }.just(Runs)
     }
 
     @After
