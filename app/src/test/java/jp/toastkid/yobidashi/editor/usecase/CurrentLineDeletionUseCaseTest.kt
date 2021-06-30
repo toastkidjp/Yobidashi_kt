@@ -73,4 +73,13 @@ class CurrentLineDeletionUseCaseTest {
         verify(exactly = 1) { editable.delete(any(), any()) }
     }
 
+    @Test
+    fun test() {
+        every { layout.getLineStart(any()) }.returns(-1)
+
+        currentLineDeletionUseCase.invoke(editText)
+
+        verify(exactly = 0) { editable.delete(any(), any()) }
+    }
+
 }
