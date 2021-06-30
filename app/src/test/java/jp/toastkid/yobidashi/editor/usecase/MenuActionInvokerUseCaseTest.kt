@@ -330,7 +330,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testDeleteLine() {
         mockkConstructor(CurrentLineDeletionUseCase::class)
         every { anyConstructed<CurrentLineDeletionUseCase>().invoke(any()) }.just(Runs)
 
