@@ -1,6 +1,7 @@
 package jp.toastkid.article_viewer.tokenizer
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
 import org.junit.Ignore
 import org.junit.Test
 import kotlin.system.measureTimeMillis
@@ -9,6 +10,12 @@ import kotlin.system.measureTimeMillis
  * @author toastkidjp
  */
 class NgramTokenizerTest {
+
+    @Test
+    fun testBlankCase() {
+        val blank = " "
+        assertSame(blank, NgramTokenizer().invoke(blank, 2))
+    }
 
     @Test
     fun test() {
