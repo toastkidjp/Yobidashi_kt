@@ -11,7 +11,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -211,9 +210,6 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
      * @param recyclerView
      */
     private fun initRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
         ItemTouchHelperAttachment()(recyclerView)
 
         LinearSnapHelper().attachToRecyclerView(recyclerView)
