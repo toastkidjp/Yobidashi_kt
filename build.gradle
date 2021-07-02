@@ -53,6 +53,7 @@ buildscript {
 
 plugins {
     id "io.gitlab.arturbosch.detekt" version "1.16.0"
+    id "com.cookpad.android.plugin.license-tools" version "1.2.8"
 }
 
 apply plugin: "jacoco"
