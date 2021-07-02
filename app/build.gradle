@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: "jacoco"
+apply plugin: "com.cookpad.android.plugin.license-tools"
 
 apply from: 'signing/config.gradle', to: android
 
