@@ -1,0 +1,53 @@
+/*
+ * Copyright (c) 2021 toastkidjp.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompany this distribution.
+ * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html.
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdk
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(":lib")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
+    implementation "androidx.cardview:cardview:$libVersions.cardview"
+    implementation "androidx.constraintlayout:constraintlayout:$libVersions.constraintlayout"
+    implementation "com.google.android.material:material:$libVersions.material"
+    implementation "androidx.core:core-ktx:$libVersions.ktx"
+
+    implementation 'com.squareup.okio:okio:1.17.5'
+    implementation "com.jakewharton.timber:timber:$libVersions.timber"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$libVersions.coroutines"
+
+    testImplementation "junit:junit:$libVersions.junit"
+    testImplementation "io.mockk:mockk:$libVersions.mockk"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$libVersions.coroutines_test"
+}
