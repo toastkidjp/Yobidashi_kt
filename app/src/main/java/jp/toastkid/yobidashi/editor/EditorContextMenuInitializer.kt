@@ -25,6 +25,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.search.SearchCategory
 import jp.toastkid.search.UrlFactory
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.editor.usecase.PasteAsQuotationUseCase
 import jp.toastkid.yobidashi.libs.Inputs
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
@@ -44,6 +45,12 @@ class EditorContextMenuInitializer {
 
         val context = editText.context
 
+        val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
+            ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
+        }
+
+        val listHeadAdder = ListHeadAdder()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
@@ -55,42 +62,11 @@ class EditorContextMenuInitializer {
                 }
 
                 override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    when (menu?.itemId) {
-                        R.id.context_edit_insert_as_plain -> {
-                            val primary = Clipboard.getPrimary(context)
-                            if (primary.isNullOrEmpty()) {
-                                return true
-                            }
-
-                            editText.text.insert(editText.selectionStart, primary)
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_paste_as_quotation -> {
-                            pasteAsQuotation(context, editText)
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_horizontal_rule -> {
-                            editText.text.insert(
-                                    editText.selectionStart,
-                                    "----${System.lineSeparator()}"
-                            )
-                            actionMode?.finish()
-                        }
-                        R.id.context_edit_duplicate_current_line -> {
-                            CurrentLineDuplicatorUseCase().invoke(editText)
-                            actionMode?.finish()
-                            return true
-                        }
-                        R.id.context_edit_speech -> {
-                            speechMaker?.invoke(editText.text.toString())
-                            actionMode?.finish()
-                            return true
-                        }
-                        else -> Unit
+                    val result = invokeMenuAction(menu?.itemId ?: -1, editText, speechMaker, browserViewModel, listHeadAdder)
+                    if (result) {
+                        actionMode?.finish()
                     }
-                    return false
+                    return result
                 }
 
                 override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -100,16 +76,10 @@ class EditorContextMenuInitializer {
             }
         }
 
-        val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
-            ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
-        }
-
         editText.customSelectionActionModeCallback = object : ActionMode.Callback {
 
-            private val listHeadAdder = ListHeadAdder()
-
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
-                val text = extractSelectedText()
+                val text = extractSelectedText(editText)
                 if (Urls.isValidUrl(text)) {
                     MenuInflater(context).inflate(R.menu.context_editor_url, menu)
                 }
@@ -119,83 +89,11 @@ class EditorContextMenuInitializer {
             }
 
             override fun onActionItemClicked(actionMode: ActionMode?, menuItem: MenuItem?): Boolean {
-                val text = extractSelectedText()
-                when (menuItem?.itemId) {
-                    R.id.context_edit_add_order -> {
-                        OrderedListHeadAdder().invoke(editText)
-                        return true
-                    }
-                    R.id.context_edit_unordered_list -> {
-                        listHeadAdder(editText, "-")
-                        return true
-                    }
-                    R.id.context_edit_task_list -> {
-                        listHeadAdder(editText, "- [ ]")
-                        return true
-                    }
-                    R.id.context_edit_convert_to_table -> {
-                        TableConverter().invoke(editText)
-                        return true
-                    }
-                    R.id.context_edit_add_quote -> {
-                        listHeadAdder(editText, ">")
-                        return true
-                    }
-                    R.id.context_edit_double_quote -> {
-                        StringSurroundingUseCase()(editText, '"')
-                        return true
-                    }
-                    R.id.context_edit_url_open_new -> {
-                        browserViewModel?.open(text.toUri())
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_url_open_background -> {
-                        browserViewModel?.openBackground(text.toUri())
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_url_preview -> {
-                        browserViewModel?.preview(text.toUri())
-                        Inputs.hideKeyboard(editText)
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_preview_search -> {
-                        browserViewModel?.preview(makeSearchResultUrl(text))
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_web_search -> {
-                        browserViewModel?.open(makeSearchResultUrl(text))
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_speech -> {
-                        speechMaker?.invoke(text)
-                        actionMode?.finish()
-                        return true
-                    }
-                    R.id.context_edit_paste_as_quotation -> {
-                        pasteAsQuotation(context, editText)
-                        actionMode?.finish()
-                        return true
-                    }
-                    else -> Unit
+                val result = invokeMenuAction(menuItem?.itemId ?: -1, editText, speechMaker, browserViewModel, listHeadAdder)
+                if (result) {
+                    actionMode?.finish()
                 }
-                return false
-            }
-
-            private fun makeSearchResultUrl(text: String): Uri = UrlFactory().invoke(
-                    PreferenceApplier(context).getDefaultSearchEngine()
-                            ?: SearchCategory.getDefaultCategoryName(),
-                    text
-            )
-
-            private fun extractSelectedText(): String {
-                return editText.text
-                        .subSequence(editText.selectionStart, editText.selectionEnd)
-                        .toString()
+                return result
             }
 
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
@@ -205,29 +103,114 @@ class EditorContextMenuInitializer {
         }
     }
 
-    private fun pasteAsQuotation(context: Context, editText: EditText) {
-        val primary = Clipboard.getPrimary(context)
-        if (primary.isNullOrEmpty()) {
-            return
-        }
+    private fun invokeMenuAction(
+        itemId: Int,
+        editText: EditText,
+        speechMaker: SpeechMaker?,
+        browserViewModel: BrowserViewModel?,
+        listHeadAdder: ListHeadAdder
+    ): Boolean {
+        val text = extractSelectedText(editText)
+        val context = editText.context
 
-        val currentText = editText.text.toString()
-        val currentCursor = editText.selectionStart
+        when (itemId) {
+            R.id.context_edit_insert_as_plain -> {
+                val primary = Clipboard.getPrimary(context)
+                if (primary.isNullOrEmpty()) {
+                    return true
+                }
 
-        editText.text.insert(
-            editText.selectionStart,
-            Quotation()(primary)
-        )
-
-        val fragmentActivity = (context as? FragmentActivity) ?: return
-        ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-            .snackWithAction(
-                context.getString(R.string.paste_as_quotation),
-                context.getString(R.string.undo)
-            ) {
-                editText.setText(currentText)
-                editText.setSelection(currentCursor)
+                editText.text.insert(editText.selectionStart, primary)
+                return true
             }
+            R.id.context_edit_paste_as_quotation -> {
+                pasteAsQuotation(context, editText)
+                return true
+            }
+            R.id.context_edit_horizontal_rule -> {
+                editText.text.insert(
+                    editText.selectionStart,
+                    "----${System.lineSeparator()}"
+                )
+            }
+            R.id.context_edit_duplicate_current_line -> {
+                CurrentLineDuplicatorUseCase().invoke(editText)
+                return true
+            }
+            R.id.context_edit_speech -> {
+                val speechText = if (text.isBlank()) editText.text.toString() else text
+                speechMaker?.invoke(speechText)
+                return true
+            }
+            R.id.context_edit_add_order -> {
+                OrderedListHeadAdder().invoke(editText)
+                return true
+            }
+            R.id.context_edit_unordered_list -> {
+                listHeadAdder(editText, "-")
+                return true
+            }
+            R.id.context_edit_task_list -> {
+                listHeadAdder(editText, "- [ ]")
+                return true
+            }
+            R.id.context_edit_convert_to_table -> {
+                TableConverter().invoke(editText)
+                return true
+            }
+            R.id.context_edit_add_quote -> {
+                listHeadAdder(editText, ">")
+                return true
+            }
+            R.id.context_edit_double_quote -> {
+                StringSurroundingUseCase()(editText, '"')
+                return true
+            }
+            R.id.context_edit_url_open_new -> {
+                browserViewModel?.open(text.toUri())
+                return true
+            }
+            R.id.context_edit_url_open_background -> {
+                browserViewModel?.openBackground(text.toUri())
+                return true
+            }
+            R.id.context_edit_url_preview -> {
+                browserViewModel?.preview(text.toUri())
+                Inputs.hideKeyboard(editText)
+                return true
+            }
+            R.id.context_edit_preview_search -> {
+                browserViewModel?.preview(makeSearchResultUrl(context, text))
+                return true
+            }
+            R.id.context_edit_web_search -> {
+                browserViewModel?.open(makeSearchResultUrl(context, text))
+                return true
+            }
+            else -> Unit
+        }
+        return false
+    }
+
+    private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(
+        PreferenceApplier(context).getDefaultSearchEngine()
+            ?: SearchCategory.getDefaultCategoryName(),
+        text
+    )
+
+    private fun extractSelectedText(editText: EditText): String {
+        return editText.text
+            .subSequence(editText.selectionStart, editText.selectionEnd)
+            .toString()
+    }
+
+    private fun pasteAsQuotation(context: Context, editText: EditText) {
+        val fragmentActivity = (context as? FragmentActivity) ?: return
+
+        PasteAsQuotationUseCase(
+            editText,
+            ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
+        ).invoke()
     }
 
 }
