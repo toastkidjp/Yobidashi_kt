@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.about
 
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,9 +66,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
             val readUtf8 =
                 LicensesHtmlLoader(view.context.assets).invoke().source().buffer().readUtf8()
-            it.setText(
-                HtmlCompat.fromHtml(readUtf8, HtmlCompat.FROM_HTML_MODE_COMPACT)
-            )
+            it.text = HtmlCompat.fromHtml(readUtf8, HtmlCompat.FROM_HTML_MODE_COMPACT)
         }
     }
 
