@@ -27,7 +27,6 @@ buildscript {
         classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.2.0'
         classpath 'com.github.triplet.gradle:play-publisher:3.2.0'
     }
 

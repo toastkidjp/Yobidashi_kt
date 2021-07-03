@@ -137,5 +137,3 @@ task jacocoTestReport(
     getClassDirectories().from = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug")
     getExecutionData().from = "${buildDir}/jacoco/testDebugUnitTest.exec"
 }
-
-apply plugin: 'com.google.gms.google-services'
