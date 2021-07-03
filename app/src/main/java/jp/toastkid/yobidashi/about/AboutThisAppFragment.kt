@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -67,7 +68,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
             val readUtf8 =
                 LicensesHtmlLoader(view.context.assets).invoke().source().buffer().readUtf8()
             it.setText(
-                Html.fromHtml(readUtf8, Html.FROM_HTML_MODE_COMPACT)
+                HtmlCompat.fromHtml(readUtf8, HtmlCompat.FROM_HTML_MODE_COMPACT)
             )
         }
     }
