@@ -65,7 +65,9 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
             }
 
             val readUtf8 =
-                LicensesHtmlLoader(view.context.assets).invoke().source().buffer().readUtf8()
+                LicensesHtmlLoader(view.context.assets).invoke().source().use { source ->
+                    source.buffer().readUtf8()
+                }
             it.text = HtmlCompat.fromHtml(readUtf8, HtmlCompat.FROM_HTML_MODE_COMPACT)
         }
     }
