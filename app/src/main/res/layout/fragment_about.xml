@@ -65,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_item_height"
                 android:paddingStart="@dimen/settings_item_left_margin"
+                android:paddingEnd="@dimen/settings_item_left_margin"
                 android:drawableStart="@drawable/ic_license_black"
                 android:gravity="center_vertical"
                 android:text="@string/title_licenses"
