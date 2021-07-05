@@ -101,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/settings_item_left_margin"
-                    android:layout_gravity="center_vertical|right"
+                    android:layout_gravity="center_vertical|end"
                     android:textSize="16sp"
                     />
             </FrameLayout>
