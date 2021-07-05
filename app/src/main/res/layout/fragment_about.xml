@@ -49,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_item_height"
                 android:paddingStart="@dimen/settings_item_left_margin"
+                android:paddingEnd="@dimen/settings_item_left_margin"
                 android:drawableStart="@drawable/ic_privacy"
                 android:gravity="center_vertical"
                 android:text="@string/privacy_policy"
