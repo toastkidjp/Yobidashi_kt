@@ -190,13 +190,13 @@ class BrowserFragment : Fragment(),
 
         viewModelProvider.get(BrowserFragmentViewModel::class.java)
                 .loadWithNewTab
-                .observe(activity, Observer {
+                .observe(activity, {
                     browserModule.loadWithNewTab(it.first, it.second)
                 })
 
         viewModelProvider.get(TabListViewModel::class.java)
                 .tabCount
-                .observe(activity, Observer { appBarBinding?.tabCount?.text = it.toString() })
+                .observe(activity, { appBarBinding?.tabCount?.text = it.toString() })
 
         viewModelProvider.get(PageSearcherViewModel::class.java).also { viewModel ->
             viewModel.find.observe(activity, Observer {
