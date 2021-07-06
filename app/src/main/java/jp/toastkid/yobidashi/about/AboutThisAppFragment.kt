@@ -17,6 +17,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.licence.LicensesHtmlLoader
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
+import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import okio.buffer
@@ -61,7 +62,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     fun licenses(view: View) {
         binding?.licenseContent?.let {
             it.isVisible = !it.isVisible
-            if (it.isGone || it.url?.isNotBlank() == true) {
+            if (it.isGone || it.childCount != 0) {
                 return@let
             }
 
@@ -69,7 +70,9 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 LicensesHtmlLoader(view.context.assets).invoke().source().use { source ->
                     source.buffer().readUtf8()
                 }
-            it.loadDataWithBaseURL(
+            val webView = WebViewFactory().make(it.context)
+            it.addView(webView)
+            webView.loadDataWithBaseURL(
                 null,
                 readUtf8,
                 "text/html",
