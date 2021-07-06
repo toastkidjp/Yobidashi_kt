@@ -80,7 +80,7 @@ class AttachToAnyAppUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         attachToAnyAppUseCase(context, bitmap)
 
         verify(exactly = 1) { activityStarter.invoke(any()) }
