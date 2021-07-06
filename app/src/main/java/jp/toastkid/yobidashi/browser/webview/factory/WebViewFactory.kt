@@ -41,7 +41,7 @@ internal class WebViewFactory {
     /**
      * Use for only extract anchor URL.
      */
-    private val handler = Handler(Looper.getMainLooper(), Handler.Callback {
+    private val handler = Handler(Looper.getMainLooper(), {
         it.data?.let(longTapItemHolder::extract)
         true
     })
