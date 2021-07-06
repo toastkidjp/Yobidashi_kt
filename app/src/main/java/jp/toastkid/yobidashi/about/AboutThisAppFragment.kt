@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
+import androidx.core.view.get
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -63,6 +64,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
         binding?.licenseContent?.let {
             it.isVisible = !it.isVisible
             if (it.isGone || it.childCount != 0) {
+                binding?.licenseContent?.get(0)?.scrollTo(0, 0)
                 return@let
             }
 
