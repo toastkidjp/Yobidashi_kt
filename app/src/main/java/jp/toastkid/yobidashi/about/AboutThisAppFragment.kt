@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
-import androidx.core.text.HtmlCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,6 +21,7 @@ import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import okio.buffer
 import okio.source
+import java.nio.charset.StandardCharsets
 
 /**
  * About this app.
@@ -60,7 +61,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
     fun licenses(view: View) {
         binding?.licenseContent?.let {
             it.isVisible = !it.isVisible
-            if (it.text.isNotBlank()) {
+            if (it.isGone || it.url?.isNotBlank() == true) {
                 return@let
             }
 
@@ -68,7 +69,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 LicensesHtmlLoader(view.context.assets).invoke().source().use { source ->
                     source.buffer().readUtf8()
                 }
-            it.text = HtmlCompat.fromHtml(readUtf8, HtmlCompat.FROM_HTML_MODE_COMPACT)
+            it.loadDataWithBaseURL(null, readUtf8, "text/html", StandardCharsets.UTF_8.name(), null)
         }
     }
 
