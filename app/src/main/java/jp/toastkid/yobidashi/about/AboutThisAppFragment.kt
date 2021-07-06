@@ -69,7 +69,13 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 LicensesHtmlLoader(view.context.assets).invoke().source().use { source ->
                     source.buffer().readUtf8()
                 }
-            it.loadDataWithBaseURL(null, readUtf8, "text/html", StandardCharsets.UTF_8.name(), null)
+            it.loadDataWithBaseURL(
+                null,
+                readUtf8,
+                "text/html",
+                StandardCharsets.UTF_8.name(),
+                null
+            )
         }
     }
 
