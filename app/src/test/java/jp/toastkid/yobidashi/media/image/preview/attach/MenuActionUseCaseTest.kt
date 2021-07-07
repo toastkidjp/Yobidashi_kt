@@ -89,7 +89,7 @@ class MenuActionUseCaseTest {
 
     @Test
     fun detail() {
-        menuActionUseCase.detail(view)
+        menuActionUseCase.detail()
 
         verify (exactly = 0) { view.getContext() }
         verify (exactly = 0) { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }
