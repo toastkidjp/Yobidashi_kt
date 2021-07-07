@@ -76,7 +76,7 @@ class MenuActionUseCaseTest {
     }
 
     @Test
-    fun otherApp() {
+    fun testOtherApp() {
         menuActionUseCase.otherApp(view)
 
         verify (exactly = 1) { view.getContext() }
