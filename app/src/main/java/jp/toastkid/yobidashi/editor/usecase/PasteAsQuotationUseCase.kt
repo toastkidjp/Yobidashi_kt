@@ -14,9 +14,6 @@ import jp.toastkid.yobidashi.editor.Quotation
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 
 /**
- * val fragmentActivity = (context as? FragmentActivity) ?: return
-ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
-
  * @author toastkidjp
  */
 class PasteAsQuotationUseCase(
