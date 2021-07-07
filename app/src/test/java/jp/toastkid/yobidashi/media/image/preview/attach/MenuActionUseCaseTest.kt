@@ -64,7 +64,7 @@ class MenuActionUseCaseTest {
     }
 
     @Test
-    fun thisApp() {
+    fun testThisApp() {
         menuActionUseCase.thisApp(view)
 
         verify (exactly = 1) { view.getContext() }
