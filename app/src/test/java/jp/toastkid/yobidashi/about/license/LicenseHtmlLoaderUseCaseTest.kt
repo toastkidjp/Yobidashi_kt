@@ -90,7 +90,7 @@ class LicenseHtmlLoaderUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testContainerIsGoneCase() {
         every { frameLayout.visibility }.returns(View.GONE)
 
         licenseHtmlLoaderUseCase.invoke(frameLayout)
