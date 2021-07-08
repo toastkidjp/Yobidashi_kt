@@ -73,7 +73,7 @@ class LicenseHtmlLoaderUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         licenseHtmlLoaderUseCase.invoke(frameLayout)
 
         verify(exactly = 1) { frameLayout.addView(any()) }
