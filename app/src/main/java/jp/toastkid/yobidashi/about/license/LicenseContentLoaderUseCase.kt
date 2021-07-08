@@ -17,7 +17,7 @@ import okio.source
  */
 class LicenseContentLoaderUseCase(private val assetManager: AssetManager) {
 
-    operator fun invoke(): String? {
+    operator fun invoke(): String {
         return LicensesHtmlLoader(assetManager).invoke().source().use { source ->
             source.buffer().readUtf8()
         }
