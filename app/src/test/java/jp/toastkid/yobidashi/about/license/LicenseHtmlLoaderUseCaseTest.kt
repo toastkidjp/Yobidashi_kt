@@ -55,6 +55,7 @@ class LicenseHtmlLoaderUseCaseTest {
         MockKAnnotations.init(this)
 
         every { frameLayout.addView(any()) }.just(Runs)
+        every { frameLayout.getChildAt(any()) }.returns(webView)
         every { frameLayout.context }.returns(context)
         every { frameLayout.visibility = any() }.just(Runs)
         every { frameLayout.visibility }.returns(View.VISIBLE)
@@ -62,6 +63,7 @@ class LicenseHtmlLoaderUseCaseTest {
         every { context.assets }.returns(assetManager)
         every { webViewFactory.make(any()) }.returns(webView)
         every { webView.loadDataWithBaseURL(any(), any(), any(), any(), any()) }.just(Runs)
+        every { webView.scrollTo(any(), any()) }.just(Runs)
 
         mockkConstructor(LicenseContentLoaderUseCase::class)
         every { anyConstructed<LicenseContentLoaderUseCase>().invoke() }.returns("<title>test</title>")
@@ -85,6 +87,23 @@ class LicenseHtmlLoaderUseCaseTest {
         verify(exactly = 1) { webViewFactory.make(any()) }
         verify(exactly = 1) { webView.loadDataWithBaseURL(any(), any(), any(), any(), any()) }
         verify(exactly = 1) { anyConstructed<LicenseContentLoaderUseCase>().invoke() }
+    }
+
+    @Test
+    fun test() {
+        every { frameLayout.visibility }.returns(View.GONE)
+
+        licenseHtmlLoaderUseCase.invoke(frameLayout)
+
+        verify(exactly = 0) { frameLayout.addView(any()) }
+        verify(exactly = 0) { frameLayout.context }
+        verify(atLeast = 1) { frameLayout.visibility }
+        verify(atLeast = 1) { frameLayout.visibility = any() }
+        verify(exactly = 0) { frameLayout.childCount }
+        verify(exactly = 0) { context.assets }
+        verify(exactly = 0) { webViewFactory.make(any()) }
+        verify(exactly = 0) { webView.loadDataWithBaseURL(any(), any(), any(), any(), any()) }
+        verify(exactly = 0) { anyConstructed<LicenseContentLoaderUseCase>().invoke() }
     }
 
 }
