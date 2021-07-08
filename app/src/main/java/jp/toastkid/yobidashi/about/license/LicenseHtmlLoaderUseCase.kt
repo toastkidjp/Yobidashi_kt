@@ -28,7 +28,7 @@ internal class LicenseHtmlLoaderUseCase(
             return
         }
 
-        val readUtf8 = LicenseContentLoaderUseCase(it.context.assets).invoke() ?: return
+        val readUtf8 = LicenseContentLoaderUseCase(it.context.assets).invoke()
 
         val webView = webViewFactory.make(it.context)
         it.addView(webView)
