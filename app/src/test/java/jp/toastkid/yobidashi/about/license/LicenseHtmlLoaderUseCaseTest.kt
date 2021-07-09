@@ -99,7 +99,7 @@ class LicenseHtmlLoaderUseCaseTest {
         verify(exactly = 0) { frameLayout.context }
         verify(atLeast = 1) { frameLayout.visibility }
         verify(atLeast = 1) { frameLayout.visibility = any() }
-        verify(exactly = 1) { frameLayout.getChildAt(any()) }
+        verify(exactly = 1) { frameLayout.getChildAt(0) }
         verify(exactly = 0) { frameLayout.childCount }
         verify(exactly = 0) { context.assets }
         verify(exactly = 0) { webViewFactory.make(any()) }
