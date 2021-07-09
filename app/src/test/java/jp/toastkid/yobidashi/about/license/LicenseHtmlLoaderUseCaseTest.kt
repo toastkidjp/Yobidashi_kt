@@ -86,6 +86,7 @@ class LicenseHtmlLoaderUseCaseTest {
         verify(exactly = 1) { context.assets }
         verify(exactly = 1) { webViewFactory.make(any()) }
         verify(exactly = 1) { webView.loadDataWithBaseURL(any(), any(), any(), any(), any()) }
+        verify(exactly = 0) { webView.scrollTo(any(), any()) }
         verify(exactly = 1) { anyConstructed<LicenseContentLoaderUseCase>().invoke() }
     }
 
