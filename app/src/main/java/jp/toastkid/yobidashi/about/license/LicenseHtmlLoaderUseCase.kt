@@ -24,7 +24,7 @@ internal class LicenseHtmlLoaderUseCase(
     operator fun invoke(it: FrameLayout) {
         it.isVisible = !it.isVisible
         if (it.isGone || it.childCount != 0) {
-            it.get(0).scrollTo(0, 0)
+            it[0].scrollTo(0, 0)
             return
         }
 
