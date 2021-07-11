@@ -35,10 +35,14 @@ internal class LicenseHtmlLoaderUseCase(
         webView.loadDataWithBaseURL(
             null,
             readUtf8,
-            "text/html",
+            MIMETYPE,
             StandardCharsets.UTF_8.name(),
             null
         )
+    }
+
+    companion object {
+        private const val MIMETYPE = "text/html"
     }
 
 }
