@@ -36,13 +36,17 @@ internal class LicenseHtmlLoaderUseCase(
             null,
             readUtf8,
             MIMETYPE,
-            StandardCharsets.UTF_8.name(),
+            encoding,
             null
         )
     }
 
     companion object {
+
         private const val MIMETYPE = "text/html"
+
+        private val encoding = StandardCharsets.UTF_8.name()
+
     }
 
 }
