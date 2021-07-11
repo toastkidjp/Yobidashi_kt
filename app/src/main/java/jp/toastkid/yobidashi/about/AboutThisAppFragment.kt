@@ -6,24 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
-import androidx.core.view.get
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.preference.PreferenceApplier
-import jp.toastkid.licence.LicensesHtmlLoader
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.webview.factory.WebViewFactory
+import jp.toastkid.yobidashi.about.license.LicenseHtmlLoaderUseCase
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
-import okio.buffer
-import okio.source
-import java.nio.charset.StandardCharsets
 
 /**
  * About this app.
@@ -62,25 +55,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
      */
     fun licenses(view: View) {
         binding?.licenseContent?.let {
-            it.isVisible = !it.isVisible
-            if (it.isGone || it.childCount != 0) {
-                it[0].scrollTo(0, 0)
-                return@let
-            }
-
-            val content =
-                LicensesHtmlLoader(view.context.assets).invoke().source().use { source ->
-                    source.buffer().readUtf8()
-                }
-            val webView = WebViewFactory().make(it.context)
-            it.addView(webView)
-            webView.loadDataWithBaseURL(
-                null,
-                content,
-                "text/html",
-                StandardCharsets.UTF_8.name(),
-                null
-            )
+            LicenseHtmlLoaderUseCase().invoke(it)
         }
     }
 
