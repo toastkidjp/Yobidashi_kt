@@ -68,7 +68,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
                 return@let
             }
 
-            val readUtf8 =
+            val content =
                 LicensesHtmlLoader(view.context.assets).invoke().source().use { source ->
                     source.buffer().readUtf8()
                 }
@@ -76,7 +76,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
             it.addView(webView)
             webView.loadDataWithBaseURL(
                 null,
-                readUtf8,
+                content,
                 "text/html",
                 StandardCharsets.UTF_8.name(),
                 null
