@@ -51,7 +51,6 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     /**
      * Show licenses dialog.
-     * @param view
      */
     fun licenses() {
         binding?.licenseContent?.let {
