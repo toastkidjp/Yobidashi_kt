@@ -86,6 +86,11 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
         binding?.aboutScroll?.smoothScrollTo(0, binding?.root?.measuredHeight ?: 0)
     }
 
+    override fun onDetach() {
+        binding = null
+        super.onDetach()
+    }
+
     companion object {
 
         /**
