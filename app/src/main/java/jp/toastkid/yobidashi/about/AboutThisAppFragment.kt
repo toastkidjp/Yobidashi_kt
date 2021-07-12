@@ -53,7 +53,7 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
      * Show licenses dialog.
      * @param view
      */
-    fun licenses(view: View) {
+    fun licenses() {
         binding?.licenseContent?.let {
             LicenseHtmlLoaderUseCase().invoke(it)
         }
