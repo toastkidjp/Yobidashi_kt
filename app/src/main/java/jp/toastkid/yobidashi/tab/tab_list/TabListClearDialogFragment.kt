@@ -10,9 +10,9 @@ package jp.toastkid.yobidashi.tab.tab_list
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * @author toastkidjp
@@ -34,7 +34,12 @@ class TabListClearDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(getString(R.string.title_clear_all_tabs))
-                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setMessage(
+                    HtmlCompat.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        HtmlCompat.FROM_HTML_MODE_COMPACT
+                    )
+                )
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
