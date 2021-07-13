@@ -9,11 +9,11 @@ package jp.toastkid.yobidashi.editor
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * Clear text confirmation dialog.
@@ -41,7 +41,12 @@ class ClearTextDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(activityContext.getString(R.string.title_clear_text))
-                .setMessage(HtmlCompat.fromHtml(activityContext.getString(R.string.confirm_clear_all_settings)))
+                .setMessage(
+                    Html.fromHtml(
+                        activityContext.getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    )
+                )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
                     callback?.onClickClearInput()
