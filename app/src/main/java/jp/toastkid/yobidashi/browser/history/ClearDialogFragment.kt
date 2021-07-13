@@ -9,10 +9,10 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * @author toastkidjp
@@ -35,7 +35,12 @@ class ClearDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_view_history)
-                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setMessage(
+                    Html.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    )
+                )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
                     onClick?.onClickClear()
