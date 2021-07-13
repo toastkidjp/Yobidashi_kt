@@ -9,10 +9,10 @@ package jp.toastkid.yobidashi.browser.bookmark
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * Dialog fragment of confirming clear bookmark.
@@ -42,7 +42,12 @@ class BookmarkClearDialogFragment : DialogFragment() {
         val activityContext = context ?: return super.onCreateDialog(savedInstanceState)
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_clear_bookmark)
-                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setMessage(
+                    Html.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    )
+                )
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
                     onClickBookmarkClear?.onClickBookmarkClear()
