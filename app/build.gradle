@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "jp.toastkid.yobidashi"
-        minSdkVersion 19
+        minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
 
         versionCode versionCodeValue

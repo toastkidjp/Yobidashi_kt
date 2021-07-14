@@ -57,6 +57,7 @@
     <string name="search_category_open_street_map">OpenStreetMap</string>
     <string name="search_category_quora">Quora</string>
     <string name="goo">goo Search</string>
+    <string name="sify">Sify</string>
     <string name="naver">NAVER</string>
     <string name="daum">Daum</string>
     <string name="imdb">IMDb</string>

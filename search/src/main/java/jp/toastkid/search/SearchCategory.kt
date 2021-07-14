@@ -143,6 +143,11 @@ enum class SearchCategory(
             R.drawable.ic_goo,
             "https://search.goo.ne.jp/web.jsp?IE=UTF-8&OE=UTF-8&MT="
     ),
+    SIFY(
+        R.string.sify,
+        R.drawable.ic_sify,
+        "http://search.sify.com/search.php?q="
+    ),
     NAVER(
             R.string.naver,
             R.drawable.ic_naver,
