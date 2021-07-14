@@ -3,7 +3,6 @@
 package jp.toastkid.yobidashi.browser
 
 import android.content.Context
-import android.os.Build
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 
@@ -21,12 +20,7 @@ class CookieCleanerCompat {
      * @param callback Pass action on complete work.
      */
     operator fun invoke(context: Context, callback: () -> Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().removeAllCookies { callback() }
-            return
-        }
-        invokeUnderLollipop(context)
-        callback()
+        CookieManager.getInstance().removeAllCookies { callback() }
     }
 
     /**
