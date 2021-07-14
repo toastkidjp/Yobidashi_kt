@@ -19,7 +19,7 @@ class CookieCleanerCompat {
      * @param context Use for under lollipop devices
      * @param callback Pass action on complete work.
      */
-    operator fun invoke(context: Context, callback: () -> Unit) {
+    operator fun invoke(callback: () -> Unit) {
         CookieManager.getInstance().removeAllCookies { callback() }
     }
 

@@ -34,7 +34,7 @@ class CookieCleanerCompatTest {
         mockkStatic(CookieManager::class)
         every { CookieManager.getInstance() }.answers { cookieManager }
 
-        CookieCleanerCompat().invoke(mockk(), mockk())
+        CookieCleanerCompat().invoke(mockk())
 
         verify(exactly = 1) { cookieManager.removeAllCookies(any()) }
     }
