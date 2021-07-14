@@ -2,9 +2,7 @@
 
 package jp.toastkid.yobidashi.browser
 
-import android.content.Context
 import android.webkit.CookieManager
-import android.webkit.CookieSyncManager
 
 /**
  * Cookie cleaner for backward compatible.
@@ -21,22 +19,6 @@ class CookieCleanerCompat {
      */
     operator fun invoke(callback: () -> Unit) {
         CookieManager.getInstance().removeAllCookies { callback() }
-    }
-
-    /**
-     * Invoke under lollipop environment.
-     *
-     * @param context Use for under lollipop devices
-     */
-    private fun invokeUnderLollipop(context: Context) {
-        val cookieSyncManager = CookieSyncManager.createInstance(context)
-        cookieSyncManager.startSync()
-        CookieManager.getInstance().run {
-            removeAllCookie()
-            removeSessionCookie()
-        }
-        cookieSyncManager.stopSync()
-        cookieSyncManager.sync()
     }
 
 }
