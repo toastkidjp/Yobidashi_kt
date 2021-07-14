@@ -9,8 +9,8 @@ package jp.toastkid.yobidashi.tab.tab_list
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Html
 import androidx.appcompat.app.AlertDialog
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
 
@@ -35,9 +35,9 @@ class TabListClearDialogFragment : DialogFragment() {
         return AlertDialog.Builder(activityContext)
                 .setTitle(getString(R.string.title_clear_all_tabs))
                 .setMessage(
-                    HtmlCompat.fromHtml(
+                    Html.fromHtml(
                         getString(R.string.confirm_clear_all_settings),
-                        HtmlCompat.FROM_HTML_MODE_COMPACT
+                        Html.FROM_HTML_MODE_COMPACT
                     )
                 )
                 .setCancelable(true)
