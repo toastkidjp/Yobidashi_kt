@@ -21,9 +21,9 @@ class DarkModeApplier {
             return
         }
 
-        WebSettingsCompat.setForceDark(
-                webView.settings,
-                if (useDarkMode) WebSettingsCompat.FORCE_DARK_ON else WebSettingsCompat.FORCE_DARK_OFF
-        )
+        val forceDarkMode =
+            if (useDarkMode) WebSettingsCompat.FORCE_DARK_ON else WebSettingsCompat.FORCE_DARK_OFF
+        WebSettingsCompat.setForceDark(webView.settings, forceDarkMode)
     }
+
 }
