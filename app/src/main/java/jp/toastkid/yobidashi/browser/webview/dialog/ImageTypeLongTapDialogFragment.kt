@@ -42,8 +42,7 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
                 .setItems(R.array.image_menu) { _, which ->
                     when (which) {
                         0 -> viewModel.open(ImageSearchUrlGenerator()(url))
-                        1 -> viewModelProvider.get(BrowserViewModel::class.java)
-                            .preview(url.toUri())
+                        1 -> viewModel.preview(url.toUri())
                         2 -> downloadImage(url)
                     }
                 }
