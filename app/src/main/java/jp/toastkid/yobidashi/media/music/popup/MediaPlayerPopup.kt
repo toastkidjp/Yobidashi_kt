@@ -14,7 +14,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.session.PlaybackState
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -241,8 +240,8 @@ class MediaPlayerPopup(private val context: Context) {
         val mediaController = attemptMediaController() ?: return
         mediaController.metadata ?: return
         when (mediaController.playbackState.state) {
-            PlaybackState.STATE_PLAYING -> pause()
-            PlaybackState.STATE_PAUSED -> play()
+            PlaybackStateCompat.STATE_PLAYING -> pause()
+            PlaybackStateCompat.STATE_PAUSED -> play()
             else -> Unit
         }
     }
