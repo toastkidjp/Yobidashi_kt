@@ -199,13 +199,13 @@ class MediaPlayerPopup(private val context: Context) {
     }
 
     private fun observeViewModels() {
-        (attemptExtractActivity())?.also {
-            mediaPlayerPopupViewModel?.clickItem?.observe(it, {
+        (attemptExtractActivity())?.also { activity ->
+            mediaPlayerPopupViewModel?.clickItem?.observe(activity, {
                 attemptMediaController()
                         ?.transportControls
                         ?.playFromUri(it.description.mediaUri, bundleOf())
             })
-            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, {
+            mediaPlayerPopupViewModel?.clickLyrics?.observe(activity, {
                 browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
             })
         }
