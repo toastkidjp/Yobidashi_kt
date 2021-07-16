@@ -201,7 +201,7 @@ class MediaPlayerPopup(private val context: Context) {
 
     private fun observeViewModels() {
         (attemptExtractActivity())?.also {
-            mediaPlayerPopupViewModel?.clickItem?.observe(it, Observer {
+            mediaPlayerPopupViewModel?.clickItem?.observe(it, {
                 attemptMediaController()
                         ?.transportControls
                         ?.playFromUri(it.description.mediaUri, bundleOf())
