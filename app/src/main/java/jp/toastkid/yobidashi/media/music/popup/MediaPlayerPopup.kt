@@ -29,7 +29,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -206,7 +205,7 @@ class MediaPlayerPopup(private val context: Context) {
                         ?.transportControls
                         ?.playFromUri(it.description.mediaUri, bundleOf())
             })
-            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, Observer {
+            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, {
                 browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
             })
         }
