@@ -34,7 +34,7 @@ class ExcludingSettingFragment : BottomSheetDialogFragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.fragment_setting_image_excluding,
