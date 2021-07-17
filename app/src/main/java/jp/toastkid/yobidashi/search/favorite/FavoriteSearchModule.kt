@@ -3,8 +3,11 @@ package jp.toastkid.yobidashi.search.favorite
 import android.os.Handler
 import android.os.Looper
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.databinding.ModuleSearchFavoriteBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import jp.toastkid.yobidashi.search.history.SwipeActionAttachment
@@ -76,6 +79,13 @@ class FavoriteSearchModule(
         }
         uiThreadHandler.post {
             SwipeActionAttachment().invoke(binding.searchFavorites)
+        }
+    }
+
+    fun openHistory() {
+        (binding.root.context as? FragmentActivity)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+                .nextFragment(FavoriteSearchFragment::class.java)
         }
     }
 

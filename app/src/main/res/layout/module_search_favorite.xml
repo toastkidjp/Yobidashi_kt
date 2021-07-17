@@ -15,24 +15,38 @@
         tools:visibility="visible"
         android:background="@color/filter_white_bb"
         >
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             >
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_favorite_search"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+            <TextView
+                android:id="@+id/link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/link_open_history"
+                android:textColor="@color/link_blue"
+                android:background="@drawable/ripple_transparent"
+                android:onClick="@{view -> module.openHistory()}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/search_favorites"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/title"
                 />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
