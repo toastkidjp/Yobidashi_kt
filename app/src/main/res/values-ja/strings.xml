@@ -218,6 +218,7 @@
     <string name="title_search_history">検索履歴</string>
     <string name="title_use_search_history">検索履歴を使う</string>
     <string name="title_tab_list">タブ一覧</string>
+    <string name="link_open_history">履歴を開く</string>
     <string name="new_tab">新規タブ</string>
     <string name="message_tutorial_remove_tab">タブを上に引っ張ると削除できます。</string>
 

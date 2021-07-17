@@ -9,8 +9,10 @@ package jp.toastkid.yobidashi.search.history
 
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.databinding.ModuleSearchHistoryBinding
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.CoroutineScope
@@ -78,6 +80,13 @@ class HistoryModule(
     fun query(s: CharSequence) {
         disposable?.cancel()
         disposable = moduleAdapter.query(s)
+    }
+
+    fun openHistory() {
+        (binding.root.context as? FragmentActivity)?.let {
+            ViewModelProvider(it).get(ContentViewModel::class.java)
+                .nextFragment(SearchHistoryFragment::class.java)
+        }
     }
 
     /**
