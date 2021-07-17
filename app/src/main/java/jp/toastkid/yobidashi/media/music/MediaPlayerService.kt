@@ -15,7 +15,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -54,10 +53,8 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
     private val playbackSpeedReceiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val speed = intent.getFloatExtra(KEY_EXTRA_SPEED, 1f)
-                mediaPlayer.playbackParams = PlaybackParams().setSpeed(speed)
-            }
+            val speed = intent.getFloatExtra(KEY_EXTRA_SPEED, 1f)
+            mediaPlayer.playbackParams = PlaybackParams().setSpeed(speed)
         }
     }
 
