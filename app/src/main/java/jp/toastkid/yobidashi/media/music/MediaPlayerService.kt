@@ -187,7 +187,7 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
             clientPackageName: String,
             clientUid: Int,
             rootHints: Bundle?
-    ): BrowserRoot? {
+    ): BrowserRoot {
         return BrowserRoot(ROOT_ID, null)
     }
 
