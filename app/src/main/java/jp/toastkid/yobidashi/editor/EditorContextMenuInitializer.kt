@@ -27,8 +27,8 @@ import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 class EditorContextMenuInitializer {
     
     operator fun invoke(
-            editText: EditText?,
-            speechMaker: SpeechMaker?
+        editText: EditText?,
+        speechMaker: SpeechMaker?
     ) {
         if (editText == null) {
             return

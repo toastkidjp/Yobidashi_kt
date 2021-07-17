@@ -41,6 +41,8 @@ class SearchAction(
 
     /**
      * Invoke action.
+     *
+     * @return job which invoked search-history insertion
      */
     operator fun invoke(): Job {
         val disposable = insertToSearchHistory()

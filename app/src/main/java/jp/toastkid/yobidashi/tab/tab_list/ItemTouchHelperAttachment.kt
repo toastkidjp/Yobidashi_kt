@@ -35,7 +35,10 @@ class ItemTouchHelperAttachment {
                     ): Boolean {
                         val adapter = recyclerView.adapter
                         if (adapter is Adapter) {
-                            adapter.swap(viewHolder.adapterPosition, target.adapterPosition)
+                            adapter.swap(
+                                viewHolder.bindingAdapterPosition,
+                                target.bindingAdapterPosition
+                            )
                         }
                         return true
                     }

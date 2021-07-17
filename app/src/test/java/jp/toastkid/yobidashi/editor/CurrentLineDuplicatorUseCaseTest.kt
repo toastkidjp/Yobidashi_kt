@@ -71,7 +71,7 @@ class CurrentLineDuplicatorUseCaseTest {
     }
 
     @Test
-    fun testEarlyReturnCase() {
+    fun testEarlyReturnCaseByStart() {
         every { layout.getLineStart(any()) }.returns(-1)
         every { layout.getLineEnd(any()) }.returns(133)
 
