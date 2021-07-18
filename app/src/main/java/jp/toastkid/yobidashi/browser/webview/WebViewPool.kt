@@ -1,7 +1,6 @@
 package jp.toastkid.yobidashi.browser.webview
 
 import android.content.Context
-import android.os.Build
 import android.webkit.WebView
 import androidx.annotation.ColorInt
 import androidx.collection.LruCache
@@ -86,9 +85,7 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
             return
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            pool.resize(newSize)
-        }
+        pool.resize(newSize)
     }
 
     fun applyNewAlpha(@ColorInt newAlphaBackground: Int) {
