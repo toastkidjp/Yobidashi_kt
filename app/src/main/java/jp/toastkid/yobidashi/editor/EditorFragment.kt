@@ -50,6 +50,7 @@ import jp.toastkid.yobidashi.databinding.FragmentEditorBinding
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
+import jp.toastkid.yobidashi.main.MainActivity
 import okio.buffer
 import okio.sink
 import okio.source
@@ -260,6 +261,11 @@ class EditorFragment :
 
     fun tabList() {
         contentViewModel?.switchTabList()
+    }
+
+    fun openNewTab(): Boolean {
+        (activity as? MainActivity)?.openNewTabFromTabList()
+        return true
     }
 
     /**
