@@ -42,6 +42,7 @@ import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
 import jp.toastkid.yobidashi.databinding.AppBarBrowserBinding
 import jp.toastkid.yobidashi.databinding.FragmentBrowserBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import jp.toastkid.yobidashi.main.MainActivity
 import jp.toastkid.yobidashi.rss.extractor.RssUrlFinder
 import jp.toastkid.yobidashi.search.SearchFragment
 import kotlinx.coroutines.CoroutineScope
@@ -294,6 +295,11 @@ class BrowserFragment : Fragment(),
 
     fun tabList() {
         contentViewModel?.switchTabList()
+    }
+
+    fun openNewTab(): Boolean {
+        (activity as? MainActivity)?.openNewTabFromTabList()
+        return true
     }
 
     private fun updateForwardButtonState(enable: Boolean) {
