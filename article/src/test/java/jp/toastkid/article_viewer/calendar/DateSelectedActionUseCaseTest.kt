@@ -32,6 +32,7 @@ class DateSelectedActionUseCaseTest {
     @MockK
     private lateinit var viewModel: ContentViewModel
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -54,6 +55,7 @@ class DateSelectedActionUseCaseTest {
         coVerify(exactly = 1) { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun tearDown() {
         unmockkAll()
