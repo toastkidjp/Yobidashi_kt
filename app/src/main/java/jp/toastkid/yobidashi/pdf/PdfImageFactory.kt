@@ -23,4 +23,5 @@ class PdfImageFactory {
         currentPage.close()
         return bitmap
     }
+
 }
