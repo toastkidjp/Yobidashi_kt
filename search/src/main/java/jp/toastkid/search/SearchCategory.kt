@@ -215,6 +215,11 @@ enum class SearchCategory(
             R.drawable.ic_twitter,
             "https://mobile.twitter.com/search?src=typd&q="
     ),
+    REDDIT(
+        R.string.search_category_reddit,
+        R.drawable.ic_reddit,
+        "https://www.reddit.com/search/?q="
+    ),
     FACEBOOK(
             R.string.search_category_facebook,
             R.drawable.ic_facebook,
@@ -325,11 +330,6 @@ enum class SearchCategory(
                 }
                 "https://techcrunch.com/search/" + Uri.encode(q)
             }
-    ),
-    REDDIT(
-            R.string.search_category_reddit,
-            R.drawable.ic_reddit,
-            "https://www.reddit.com/search/?q="
     ),
     GITHUB(
             R.string.search_category_github,
