@@ -7,7 +7,6 @@
  */
 package jp.toastkid.yobidashi.editor
 
-import android.os.Build
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuInflater
@@ -40,33 +39,31 @@ class EditorContextMenuInitializer {
             ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            editText.customInsertionActionModeCallback = object : ActionMode.Callback {
+        editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
-                override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
-                    val menuInflater = MenuInflater(context)
-                    menuInflater.inflate(R.menu.context_editor, menu)
-                    menuInflater.inflate(R.menu.context_speech, menu)
-                    return true
-                }
-
-                override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-                    val handled = invokeMenuAction(
-                        menu?.itemId ?: -1,
-                        editText, speechMaker,
-                        browserViewModel
-                    )
-                    if (handled) {
-                        actionMode?.finish()
-                    }
-                    return handled
-                }
-
-                override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
-
-                override fun onDestroyActionMode(p0: ActionMode?) = Unit
-
+            override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
+                val menuInflater = MenuInflater(context)
+                menuInflater.inflate(R.menu.context_editor, menu)
+                menuInflater.inflate(R.menu.context_speech, menu)
+                return true
             }
+
+            override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
+                val handled = invokeMenuAction(
+                    menu?.itemId ?: -1,
+                    editText, speechMaker,
+                    browserViewModel
+                )
+                if (handled) {
+                    actionMode?.finish()
+                }
+                return handled
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?) = true
+
+            override fun onDestroyActionMode(p0: ActionMode?) = Unit
+
         }
 
         editText.customSelectionActionModeCallback = object : ActionMode.Callback {
