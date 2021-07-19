@@ -1,9 +1,7 @@
 package jp.toastkid.yobidashi.pdf
 
-import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
-import android.os.Build
 
 /**
  * PDF content image factory. This class can use only Android L and upper L.
@@ -23,7 +21,6 @@ class PdfImageFactory {
      * @param currentPage current PDF page
      * @return non-null bitmap
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     operator fun invoke(currentPage: PdfRenderer.Page): Bitmap {
         val bitmap: Bitmap = Bitmap.createBitmap(
                 currentPage.width, currentPage.height, Bitmap.Config.ARGB_8888)
