@@ -518,14 +518,12 @@ class MainActivity : AppCompatActivity(),
         ToolbarColorApplier()(binding.toolbar, colorPair)
         WindowOptionColorApplier()(window, colorPair)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            RecentAppColoringUseCase(
-                    ::getString,
-                    { resources },
-                    ::setTaskDescription,
-                    Build.VERSION.SDK_INT
-            ).invoke(preferenceApplier.color)
-        }
+        RecentAppColoringUseCase(
+                ::getString,
+                { resources },
+                ::setTaskDescription,
+                Build.VERSION.SDK_INT
+        ).invoke(preferenceApplier.color)
 
         menuSwitchColorApplier(colorPair)
 
