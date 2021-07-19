@@ -13,11 +13,6 @@ class PdfImageFactory {
     /**
      * Invoke action.
      *
-     * <pre>
-     * if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-     *     return
-     * }
-     * </pre>
      * @param currentPage current PDF page
      * @return non-null bitmap
      */
