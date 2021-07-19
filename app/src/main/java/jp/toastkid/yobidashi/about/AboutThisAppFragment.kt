@@ -1,23 +1,26 @@
 package jp.toastkid.yobidashi.about
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.net.toUri
+import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.licence.LicensesHtmlLoader
 import jp.toastkid.yobidashi.BuildConfig
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.databinding.FragmentAboutBinding
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
+import okio.buffer
+import okio.source
 
 /**
  * About this app.
@@ -55,9 +58,16 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
      * @param view
      */
     fun licenses(view: View) {
-        val intent = Intent(view.context, OssLicensesMenuActivity::class.java)
-        OssLicensesMenuActivity.setActivityTitle(view.context.getString(R.string.title_licenses))
-        startActivity(intent)
+        binding?.licenseContent?.let {
+            it.isVisible = !it.isVisible
+            if (it.text.isNotBlank()) {
+                return@let
+            }
+
+            val readUtf8 =
+                LicensesHtmlLoader(view.context.assets).invoke().source().buffer().readUtf8()
+            it.text = HtmlCompat.fromHtml(readUtf8, HtmlCompat.FROM_HTML_MODE_COMPACT)
+        }
     }
 
     fun checkUpdate() {

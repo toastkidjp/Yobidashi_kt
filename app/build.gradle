@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.triplet.play'
-apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: "jacoco"
+apply plugin: "com.cookpad.android.plugin.license-tools"
 
 apply from: 'signing/config.gradle', to: android
 
@@ -69,6 +69,7 @@ dependencies {
     implementation project(":article")
     implementation project(":search")
     implementation project(":todo")
+    implementation project(":licenses")
 
     implementation "androidx.appcompat:appcompat:$libVersions.appcompat"
     implementation "androidx.cardview:cardview:$libVersions.cardview"
@@ -83,8 +84,6 @@ dependencies {
     kapt "androidx.room:room-compiler:$libVersions.room"
 
     implementation "com.google.android.material:material:$libVersions.material"
-
-    implementation "com.google.android.gms:play-services-oss-licenses:17.0.0"
 
     implementation 'com.google.android:flexbox:2.0.1'
 
@@ -138,5 +137,3 @@ task jacocoTestReport(
     getClassDirectories().from = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug")
     getExecutionData().from = "${buildDir}/jacoco/testDebugUnitTest.exec"
 }
-
-apply plugin: 'com.google.gms.google-services'
