@@ -54,15 +54,6 @@ object NetworkChecker {
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> NetworkType.OTHER
             else -> NetworkType.NONE
         }
-
-        return connectivityManager.activeNetworkInfo?.let {
-            when (it.type) {
-                ConnectivityManager.TYPE_WIFI -> NetworkType.WIFI
-                ConnectivityManager.TYPE_MOBILE,
-                ConnectivityManager.TYPE_ETHERNET-> NetworkType.OTHER
-                else -> NetworkType.NONE
-            }
-        } ?: NetworkType.NONE
     }
 
 }
