@@ -8,11 +8,6 @@ import androidx.collection.LruCache
 /**
  * [WebView] pool.
  *
- * // TODO clean up comments
- * @param context Use for make [WebViewFactory] instance.
- * @param webViewClientSupplier
- * @param webChromeClientSupplier
- * @param scrollCallback Use for implementing action on scroll
  * @param poolSize (Optional) Count of containing [WebView] instance. If you don't passed it,
  * it use default size.
  *
