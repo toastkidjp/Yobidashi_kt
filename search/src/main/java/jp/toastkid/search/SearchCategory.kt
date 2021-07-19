@@ -341,6 +341,11 @@ enum class SearchCategory(
             R.drawable.ic_mvn,
             "https://mvnrepository.com/search?q="
     ),
+    ANDROID_DEVELOPER(
+        R.string.search_category_android_developer,
+        R.drawable.ic_android_developer,
+        "https://developer.android.com/s/results?q="
+    ),
     MEDIUM(
             R.string.medium,
             R.drawable.ic_medium,

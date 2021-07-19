@@ -19,6 +19,7 @@
     <string name="search_category_technology">TechCrunch</string>
     <string name="search_category_github">GitHub</string>
     <string name="search_category_mvnrepository">MvnRepository</string>
+    <string name="search_category_android_developer">Android Developer</string>
     <string name="search_category_grep_code">GrepCode</string>
     <string name="search_category_yandex">Yandex</string>
     <string name="search_category_rambler">Rambler</string>
