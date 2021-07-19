@@ -69,7 +69,8 @@ class SearchQueryExtractorTest {
             "tomato" to "https://scholar.google.com/scholar?q=tomato",
             "s&p 500" to "https://myindex.jp/search.php?w=s%26p+500&p=3",
             "VOO" to "https://www.economist.com/search?q=VOO",
-        "curry" to "http://search.sify.com/search.php?q=curry&cx=partner-pub-0910144482339723:8"
+        "curry" to "http://search.sify.com/search.php?q=curry&cx=partner-pub-0910144482339723:8",
+        "Intent" to "https://developer.android.com/s/results?q=Intent"
     )
 
     @Before
