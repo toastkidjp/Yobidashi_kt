@@ -32,7 +32,7 @@
                 android:id="@+id/link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/link_open_history"
+                android:text="@string/open"
                 android:textColor="@color/link_blue"
                 android:background="@drawable/ripple_transparent"
                 android:onClick="@{view -> module.openHistory()}"
