@@ -12,8 +12,8 @@ class UrlFactory {
      * Make search [Uri].
      *
      * @param category [SearchCategory]
-     * @param query
-     * @param currentUrl
+     * @param query Search query
+     * @param currentUrl Use for finding out current search category(Nullable)
      */
     operator fun invoke(
             category: String,
