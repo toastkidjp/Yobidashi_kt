@@ -258,7 +258,7 @@ class SearchFragment : Fragment() {
             }
             true
         }
-        R.id.set_default_search_cagegiry -> {
+        R.id.set_default_search_cagegory -> {
             val categoryName = preferenceApplier.getDefaultSearchEngine()
                 ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
             val index = (headerBinding?.searchCategories?.adapter as? SearchCategoryAdapter)
