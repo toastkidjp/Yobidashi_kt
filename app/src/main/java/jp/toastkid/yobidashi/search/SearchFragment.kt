@@ -179,9 +179,7 @@ class SearchFragment : Fragment() {
 
         initSearchInput()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            headerBinding?.searchBar?.transitionName = "share"
-        }
+        headerBinding?.searchBar?.transitionName = "share"
 
         contentViewModel?.snackShort(R.string.message_search_on_background)
 
