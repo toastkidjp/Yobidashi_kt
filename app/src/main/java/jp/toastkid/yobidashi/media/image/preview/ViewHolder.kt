@@ -27,7 +27,7 @@ class ViewHolder(private val view: ImageView) : RecyclerView.ViewHolder(view) {
 
     private val imageLoader = ImageLoader.Builder(view.context)
             .componentRegistry {
-                add(if (Build.VERSION.SDK_INT >= 28) ImageDecoderDecoder() else GifDecoder())
+                add(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) ImageDecoderDecoder() else GifDecoder())
             }
             .build()
 
