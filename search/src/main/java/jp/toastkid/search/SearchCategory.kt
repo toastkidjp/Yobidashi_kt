@@ -489,7 +489,7 @@ enum class SearchCategory(
          */
         fun findIndex(category: String): Int {
             val locale = Locale.getDefault()
-            return values().find { it.name == category.toUpperCase(locale) } ?.ordinal
+            return values().find { it.name == category.uppercase(locale) } ?.ordinal
                     ?: getDefault().ordinal
         }
 
