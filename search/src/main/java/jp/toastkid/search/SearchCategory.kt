@@ -476,7 +476,7 @@ enum class SearchCategory(
          */
         fun findByCategory(category: String?): SearchCategory {
             val locale = Locale.getDefault()
-            val target = category?.toUpperCase(locale) ?: ""
+            val target = category?.uppercase(locale) ?: ""
             return values().find { it.name == target } ?: getDefault()
         }
 
