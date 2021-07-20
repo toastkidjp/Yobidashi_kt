@@ -258,6 +258,16 @@ class SearchFragment : Fragment() {
             }
             true
         }
+        R.id.set_default_search_cagegiry -> {
+            val categoryName = preferenceApplier.getDefaultSearchEngine()
+                ?: jp.toastkid.search.SearchCategory.getDefaultCategoryName()
+            val index = (headerBinding?.searchCategories?.adapter as? SearchCategoryAdapter)
+                ?.findIndex(categoryName) ?: -1
+            if (index != -1) {
+                headerBinding?.searchCategories?.setSelection(index)
+            }
+            true
+        }
         R.id.suggestion_check -> {
             preferenceApplier.switchEnableSuggestion()
             item.isChecked = preferenceApplier.isEnableSuggestion
