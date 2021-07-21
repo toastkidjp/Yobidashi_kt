@@ -80,7 +80,7 @@ class NetworkCheckerTest {
     }
 
     @Test
-    fun test() {
+    fun testCannotGetNetworkCapabilities() {
         every { connectivityManager.getNetworkCapabilities(any()) }.returns(null)
 
         assertTrue(NetworkChecker.isUnavailableWiFi(context))
