@@ -58,4 +58,9 @@ class NetworkCheckerTest {
         assertFalse(NetworkChecker.isNotAvailable(context))
     }
 
+    @Test
+    fun test() {
+        assertFalse(NetworkChecker.isUnavailableWiFi(context))
+    }
+
 }
