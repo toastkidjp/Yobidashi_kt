@@ -262,17 +262,13 @@ class TabList private constructor() {
 
     fun updateWithIdAndHistory(idAndHistory: Pair<String, History>) {
         val targetId = idAndHistory.first
-        for (i in 0 until tabs.size) {
-            val tab = tabs[i]
-            if (tab !is WebTab || tab.id() != targetId) {
-                continue
+        tabs.firstOrNull { it is WebTab && it.id() == targetId }
+            ?.let {
+                val currentIndex = tabs.indexOf(it)
+                (it as? WebTab)?.addHistory(idAndHistory.second)
+                tabs.set(currentIndex, it)
+                save()
             }
-
-            tab.addHistory(idAndHistory.second)
-            tabs.set(i, tab)
-            save()
-            return
-        }
     }
 
     fun thumbnailNames(): Collection<String> = makeCopyTabs().map { it.thumbnailPath() }
