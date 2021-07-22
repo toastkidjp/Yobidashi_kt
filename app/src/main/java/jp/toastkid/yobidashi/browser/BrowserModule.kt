@@ -73,8 +73,6 @@ class BrowserModule(
 
     private val idGenerator = IdGenerator()
 
-    private var lastId = ""
-
     private var contentViewModel: ContentViewModel? = null
 
     private val webViewFactory: WebViewFactoryUseCase
@@ -103,7 +101,7 @@ class BrowserModule(
                         rssAddingSuggestion,
                         loadingViewModel,
                         { currentView() },
-                        { lastId }
+                        { "" }
                 ),
                 webChromeClientFactory = WebChromeClientFactory(
                         browserHeaderViewModel,
@@ -123,8 +121,6 @@ class BrowserModule(
     }
 
     fun loadWithNewTab(uri: Uri, tabId: String) {
-        lastId = tabId
-
         browserHeaderViewModel?.resetContent()
         if (webViewReplacementUseCase(tabId)) {
             loadUrl(uri.toString())
