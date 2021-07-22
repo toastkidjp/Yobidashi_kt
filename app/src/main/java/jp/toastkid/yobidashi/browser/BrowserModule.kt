@@ -93,16 +93,14 @@ class BrowserModule(
 
         webViewFactory = WebViewFactoryUseCase(
                 webViewClientFactory = WebViewClientFactory(
-                        contentViewModel,
-                        adRemover,
-                        faviconApplier,
-                        preferenceApplier,
-                        browserHeaderViewModel,
-                        rssAddingSuggestion,
-                        loadingViewModel,
-                        { currentView() },
-                        { "" }
-                ),
+                    contentViewModel,
+                    adRemover,
+                    faviconApplier,
+                    preferenceApplier,
+                    browserHeaderViewModel,
+                    rssAddingSuggestion,
+                    loadingViewModel
+                ) { currentView() },
                 webChromeClientFactory = WebChromeClientFactory(
                         browserHeaderViewModel,
                         faviconApplier,

@@ -43,15 +43,14 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class WebViewClientFactory(
-        private val contentViewModel: ContentViewModel?,
-        private val adRemover: AdRemover,
-        private val faviconApplier: FaviconApplier,
-        private val preferenceApplier: PreferenceApplier,
-        private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
-        private val rssAddingSuggestion: RssAddingSuggestion? = null,
-        private val loadingViewModel: LoadingViewModel? = null,
-        private val currentView: () -> WebView? = { null },
-        private val lastId: () -> String = { "" }
+    private val contentViewModel: ContentViewModel?,
+    private val adRemover: AdRemover,
+    private val faviconApplier: FaviconApplier,
+    private val preferenceApplier: PreferenceApplier,
+    private val browserHeaderViewModel: BrowserHeaderViewModel? = null,
+    private val rssAddingSuggestion: RssAddingSuggestion? = null,
+    private val loadingViewModel: LoadingViewModel? = null,
+    private val currentView: () -> WebView? = { null }
 ) {
 
     /**
