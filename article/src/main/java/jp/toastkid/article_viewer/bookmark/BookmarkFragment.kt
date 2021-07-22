@@ -89,7 +89,7 @@ class BookmarkFragment : Fragment(), ContentScrollable {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
         context?.let { preferencesWrapper = PreferenceApplier(it) }
