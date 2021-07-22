@@ -112,6 +112,10 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
         pool.evictAll()
     }
 
+    fun getTabId(webView: WebView): String? {
+        return pool.snapshot().entries.firstOrNull { it.value.hashCode() == webView.hashCode() }?.key
+    }
+
     companion object {
 
         /**
