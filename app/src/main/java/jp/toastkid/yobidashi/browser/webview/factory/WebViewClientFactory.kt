@@ -74,7 +74,6 @@ class WebViewClientFactory(
             val title = view.title ?: ""
             val urlStr = url ?: ""
 
-            val key = view.hashCode()
             val tabId = GlobalWebViewPool.getTabId(view)
             if (tabId?.isNotBlank() == true) {
                 CoroutineScope(Dispatchers.Main).launch {
