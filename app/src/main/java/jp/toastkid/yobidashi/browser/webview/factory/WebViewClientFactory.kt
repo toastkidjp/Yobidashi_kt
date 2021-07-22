@@ -34,6 +34,7 @@ import jp.toastkid.yobidashi.browser.block.AdRemover
 import jp.toastkid.yobidashi.browser.history.ViewHistoryInsertion
 import jp.toastkid.yobidashi.browser.tls.TlsErrorDialogFragment
 import jp.toastkid.yobidashi.browser.tls.TlsErrorMessageGenerator
+import jp.toastkid.yobidashi.browser.webview.GlobalWebViewPool
 import jp.toastkid.yobidashi.libs.intent.IntentFactory
 import jp.toastkid.yobidashi.rss.suggestion.RssAddingSuggestion
 import jp.toastkid.yobidashi.tab.History
@@ -80,7 +81,7 @@ class WebViewClientFactory(
             val urlStr = url ?: ""
 
             val key = view.hashCode()
-            val tabId = tabIds.get(key)
+            val tabId = GlobalWebViewPool.getTabId(view)
             if (tabId?.isNotBlank() == true) {
                 CoroutineScope(Dispatchers.Main).launch {
                     loadingViewModel?.finished(tabId, History.make(title, urlStr))
