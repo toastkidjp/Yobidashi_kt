@@ -53,9 +53,6 @@ class WebViewClientFactoryTest {
     @MockK
     private lateinit var currentView: () -> WebView
 
-    @MockK
-    private lateinit var lastId: () -> String
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
