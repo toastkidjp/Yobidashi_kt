@@ -16,7 +16,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.net.http.SslError
 import android.os.Build
-import android.util.SparseArray
 import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -55,8 +54,6 @@ class WebViewClientFactory(
         private val lastId: () -> String = { "" }
 ) {
 
-    private val tabIds = SparseArray<String>()
-
     /**
      * Add onPageFinished and onPageStarted.
      */
@@ -64,8 +61,6 @@ class WebViewClientFactory(
 
         override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-
-            tabIds.put(view.hashCode(), lastId())
 
             browserHeaderViewModel?.updateProgress(0)
             browserHeaderViewModel?.nextUrl(url)
@@ -86,7 +81,6 @@ class WebViewClientFactory(
                 CoroutineScope(Dispatchers.Main).launch {
                     loadingViewModel?.finished(tabId, History.make(title, urlStr))
                 }
-                tabIds.remove(key)
             }
 
             browserHeaderViewModel?.updateProgress(100)
