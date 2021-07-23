@@ -7,13 +7,17 @@
  */
 package jp.toastkid.yobidashi.search.trend
 
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.databinding.ModuleSearchHourlyTrendBinding
 import jp.toastkid.yobidashi.search.SearchFragmentViewModel
@@ -86,6 +90,13 @@ class HourlyTrendModule(
         this.enable = newState
 
         binding?.root?.isVisible = newState
+    }
+
+    fun openMore() {
+        (binding?.root?.context as? FragmentActivity)?.let {
+            ViewModelProvider(it).get(BrowserViewModel::class.java)
+                .open("https://trends.google.co.jp/trends/trendingsearches/realtime".toUri())
+        }
     }
 
     fun dispose() {
