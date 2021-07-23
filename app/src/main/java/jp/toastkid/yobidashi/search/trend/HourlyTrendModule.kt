@@ -48,6 +48,8 @@ class HourlyTrendModule(
         adapter = Adapter(viewModel)
         binding?.trendItems?.adapter = adapter
         binding?.trendItems?.layoutManager = makeLayoutManager()
+
+        binding?.module = this
     }
 
     private fun makeLayoutManager(): RecyclerView.LayoutManager {
