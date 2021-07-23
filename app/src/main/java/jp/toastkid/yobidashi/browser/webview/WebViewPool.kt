@@ -18,7 +18,8 @@ internal class WebViewPool(poolSize: Int = DEFAULT_MAXIMUM_POOL_SIZE) {
     /**
      * Containing [WebView] instance.
      */
-    private val pool: LruCache<String, WebView> = LruCache(if (0 < poolSize) poolSize else DEFAULT_MAXIMUM_POOL_SIZE)
+    private val pool: LruCache<String, WebView> =
+        LruCache(if (0 < poolSize) poolSize else DEFAULT_MAXIMUM_POOL_SIZE)
 
     /**
      * Latest tab's ID.
