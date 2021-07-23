@@ -95,11 +95,17 @@ class HourlyTrendModule(
     fun openMore() {
         (binding?.root?.context as? FragmentActivity)?.let {
             ViewModelProvider(it).get(BrowserViewModel::class.java)
-                .open("https://trends.google.co.jp/trends/trendingsearches/realtime".toUri())
+                .open(fullContentUri)
         }
     }
 
     fun dispose() {
         lastJob.cancel()
+    }
+
+    companion object {
+
+        private val fullContentUri = "https://trends.google.co.jp/trends/trendingsearches/realtime".toUri()
+
     }
 }
