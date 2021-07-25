@@ -88,6 +88,7 @@ internal class ModuleAdapter(
             ).invoke()
             true
         }
+        holder.hideButton()
     }
 
     /**
