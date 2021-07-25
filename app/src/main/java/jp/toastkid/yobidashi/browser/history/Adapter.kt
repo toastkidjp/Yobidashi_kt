@@ -53,7 +53,7 @@ internal class Adapter(
         holder.setText(
                 viewHistory.title,
                 viewHistory.url,
-                DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString() ?: ""
+            DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString()
         )
         holder.itemView.setOnClickListener { onClick(viewHistory) }
         holder.setOnClickAdd(viewHistory) { history ->
