@@ -42,4 +42,9 @@ class TabListViewModel : ViewModel() {
         _openNewTab.postValue(Event(Unit))
     }
 
+    fun openNewTabForLongTap(): Boolean {
+        _openNewTab.postValue(Event(Unit))
+        return true
+    }
+
 }
