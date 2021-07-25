@@ -72,6 +72,7 @@ internal class Adapter(
             browserViewModel?.openBackground(viewHistory.title, Uri.parse(viewHistory.url))
             true
         }
+        holder.hideButton()
     }
 
     override fun getItemCount(): Int = items.size
