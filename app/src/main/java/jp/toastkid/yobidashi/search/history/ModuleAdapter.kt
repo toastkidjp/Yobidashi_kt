@@ -102,6 +102,7 @@ internal class ModuleAdapter(
         }
 
         holder.setIconColor(iconColor)
+        holder.hideButton()
     }
 
     /**
