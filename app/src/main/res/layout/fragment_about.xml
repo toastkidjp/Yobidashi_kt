@@ -74,10 +74,10 @@
                 android:onClick="@{fragment::licenses}"
                 />
 
-            <TextView
+            <FrameLayout
                 android:id="@+id/license_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="800dp"
                 android:visibility="gone"
                 />
 
