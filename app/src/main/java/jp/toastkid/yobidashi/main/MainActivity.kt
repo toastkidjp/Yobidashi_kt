@@ -236,6 +236,9 @@ class MainActivity : AppCompatActivity(),
                             tabs.saveTabList()
                         }
                 )
+        tabListViewModel
+            ?.openNewTab
+            ?.observe(this, { openNewTabFromTabList() })
 
         tabs = TabAdapter({ this }, this::onEmptyTabs)
 
