@@ -46,6 +46,7 @@ import jp.toastkid.article_viewer.zip.ZipLoaderService
 import jp.toastkid.lib.AppBarViewModel
 import jp.toastkid.lib.ContentScrollable
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.TabListViewModel
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.tab.OnBackCloseableTabUiFragment
 import jp.toastkid.lib.view.RecyclerViewScroller
@@ -334,6 +335,13 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
             val uri = data?.data ?: return
             updateIfNeed(uri)
         }
+    }
+
+    fun openNewTab(): Boolean {
+        activity?.let {
+            ViewModelProvider(it).get(TabListViewModel::class.java).openNewTab()
+        }
+        return true
     }
 
     private fun updateIfNeed(target: Uri?) {
