@@ -106,7 +106,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         ViewModelProvider(this)
                 .get(SubheadDialogFragmentViewModel::class.java)
                 .subhead
-                .observe(viewLifecycleOwner, Observer { })
+                .observe(viewLifecycleOwner, { })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
