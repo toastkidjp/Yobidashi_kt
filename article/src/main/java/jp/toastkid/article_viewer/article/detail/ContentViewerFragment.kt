@@ -66,7 +66,12 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_content,
+            container,
+            false
+        )
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_content_viewer, container, false)
         appBarBinding.fragment = this
         appBarBinding.tabListViewModel = activity?.let {
