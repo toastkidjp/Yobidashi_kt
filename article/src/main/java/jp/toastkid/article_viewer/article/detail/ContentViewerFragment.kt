@@ -72,7 +72,12 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
             container,
             false
         )
-        appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_content_viewer, container, false)
+        appBarBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.app_bar_content_viewer,
+            container,
+            false
+        )
         appBarBinding.fragment = this
         appBarBinding.tabListViewModel = activity?.let {
             ViewModelProvider(it).get(TabListViewModel::class.java)
