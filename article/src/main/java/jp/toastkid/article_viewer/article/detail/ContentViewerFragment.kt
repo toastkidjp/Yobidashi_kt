@@ -166,13 +166,6 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         }
     }
 
-    fun openNewTab(): Boolean {
-        activity?.let {
-            ViewModelProvider(it).get(TabListViewModel::class.java).openNewTab()
-        }
-        return true
-    }
-
     private fun search(keyword: String?) {
         textViewHighlighter(keyword)
     }
