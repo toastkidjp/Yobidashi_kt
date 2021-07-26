@@ -61,7 +61,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
 
     private val disposables = Job()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_content, container, false)
         appBarBinding = DataBindingUtil.inflate(inflater, R.layout.app_bar_content_viewer, container, false)
