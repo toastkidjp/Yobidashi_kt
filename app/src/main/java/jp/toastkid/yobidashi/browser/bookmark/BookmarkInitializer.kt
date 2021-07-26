@@ -30,6 +30,7 @@ class BookmarkInitializer(
     private val defaultBookmarks: Map<String, Map<String, String>> = mapOf(
             "Recommended" to mapOf(
                     "Google Translate" to "https://translate.google.com/",
+                "DeepL" to "https://www.deepl.com/translator",
                     "YouTube" to "https://www.youtube.com/",
                     "AccuWeather" to "https://www.accuweather.com/",
                     "Wikipedia" to "https://${Locale.getDefault().language}.wikipedia.org/",
