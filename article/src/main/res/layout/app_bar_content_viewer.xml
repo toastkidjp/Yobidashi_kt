@@ -3,6 +3,10 @@
     <data>
         <variable name="fragment"
             type="jp.toastkid.article_viewer.article.detail.ContentViewerFragment" />
+        <variable
+            name="tabListViewModel"
+            type="jp.toastkid.lib.TabListViewModel"
+            />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,7 +46,7 @@
             android:layout_marginEnd="4dp"
             android:background="@drawable/ripple_transparent"
             android:onClick="@{view -> fragment.tabList()}"
-            android:onLongClick="@{view -> fragment.openNewTab()}"
+            android:onLongClick="@{view -> tabListViewModel.openNewTabForLongTap()}"
             app:layout_constraintEnd_toStartOf="@id/subhead"
             >
             <ImageView
