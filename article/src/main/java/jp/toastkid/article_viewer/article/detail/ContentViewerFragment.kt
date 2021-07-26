@@ -19,7 +19,6 @@ import androidx.annotation.UiThread
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.article_viewer.R
 import jp.toastkid.article_viewer.article.ArticleRepository
@@ -121,7 +120,7 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
         val activity = activity ?: return
         ViewModelProvider(activity).get(TabListViewModel::class.java)
                 .tabCount
-                .observe(activity, Observer { appBarBinding.tabCount.text = it.toString() })
+                .observe(activity, { appBarBinding.tabCount.text = it.toString() })
     }
 
     override fun onResume() {
