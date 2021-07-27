@@ -13,9 +13,11 @@ import android.net.Uri
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -50,11 +52,11 @@ class MenuActionUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }.answers { Unit }
-        every { attachToAnyAppUseCase.invoke(any(), any()) }.answers { Unit }
+        every { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }.just(Runs)
+        every { attachToAnyAppUseCase.invoke(any(), any()) }.just(Runs)
         every { uriSupplier.invoke() }.returns(mockk())
         every { bitmapSupplier.invoke() }.returns(mockk())
-        every { showDialog.invoke(any()) }.answers { Unit }
+        every { showDialog.invoke(any()) }.just(Runs)
         every { view.getContext() }.returns(mockk())
     }
 
@@ -64,7 +66,7 @@ class MenuActionUseCaseTest {
     }
 
     @Test
-    fun thisApp() {
+    fun testThisApp() {
         menuActionUseCase.thisApp(view)
 
         verify (exactly = 1) { view.getContext() }
@@ -76,7 +78,7 @@ class MenuActionUseCaseTest {
     }
 
     @Test
-    fun otherApp() {
+    fun testOtherApp() {
         menuActionUseCase.otherApp(view)
 
         verify (exactly = 1) { view.getContext() }
@@ -88,8 +90,8 @@ class MenuActionUseCaseTest {
     }
 
     @Test
-    fun detail() {
-        menuActionUseCase.detail(view)
+    fun testDetail() {
+        menuActionUseCase.detail()
 
         verify (exactly = 0) { view.getContext() }
         verify (exactly = 0) { attachToThisAppBackgroundUseCase.invoke(any(), any(), any()) }

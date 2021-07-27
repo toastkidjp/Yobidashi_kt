@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="@{useCase::detail}"
+            android:onClick="@{v -> useCase.detail()}"
             android:background="@drawable/ripple_transparent"
             />
 

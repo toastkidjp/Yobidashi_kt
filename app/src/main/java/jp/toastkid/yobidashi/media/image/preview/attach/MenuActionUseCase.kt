@@ -35,7 +35,7 @@ class MenuActionUseCase(
         attachToAnyAppUseCase.invoke(v.context, image)
     }
 
-    fun detail(v: View) {
+    fun detail() {
         val uri = uriSupplier() ?: return
         showDialog(ImageDetailFragment.withImageUri(uri))
     }
