@@ -51,8 +51,8 @@ internal class Adapter(
         val viewHistory: ViewHistory = items[position]
 
         holder.setText(
-                viewHistory.title,
-                viewHistory.url,
+            viewHistory.title,
+            viewHistory.url,
             DateFormat.format(context.getString(R.string.date_format), viewHistory.lastViewed).toString()
         )
         holder.itemView.setOnClickListener { onClick(viewHistory) }
