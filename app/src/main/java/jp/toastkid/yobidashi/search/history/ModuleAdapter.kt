@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search.history
 
 import android.content.Context
 import android.graphics.Color
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -67,7 +68,8 @@ internal class ModuleAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val searchHistory = selected[position]
         holder.hideButton()
-        holder.setText(searchHistory.query)
+        val context = holder.itemView.context
+        holder.setText(searchHistory.query, DateFormat.format(context.getString(R.string.date_format), searchHistory.timestamp))
         holder.itemView.setOnClickListener {
             try {
                 onClick(searchHistory)
