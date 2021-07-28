@@ -244,7 +244,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 binding.progressCircular.isVisible = isVisible
             }
         })
-        viewModel?.progress?.observe(viewLifecycleOwner, Observer {
+        viewModel?.progress?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { message ->
                 appBarBinding.searchResult.text = message
             }
