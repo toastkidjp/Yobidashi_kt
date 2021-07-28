@@ -249,7 +249,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 appBarBinding.searchResult.text = message
             }
         })
-        viewModel?.messageId?.observe(viewLifecycleOwner, Observer {
+        viewModel?.messageId?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { messageId ->
                 appBarBinding.searchResult.setText(messageId)
             }
