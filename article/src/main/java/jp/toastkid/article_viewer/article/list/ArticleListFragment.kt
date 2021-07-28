@@ -27,7 +27,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -259,8 +258,8 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
                 searchUseCase?.all()
             }
         })
-        viewModel?.filter?.observe(viewLifecycleOwner, Observer {
-            val keyword = it ?: return@Observer
+        viewModel?.filter?.observe(viewLifecycleOwner, {
+            val keyword = it ?: return@observe
             searchUseCase?.filter(keyword, true)
         })
 
