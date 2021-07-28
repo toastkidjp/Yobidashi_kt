@@ -239,7 +239,7 @@ class ArticleListFragment : Fragment(), ContentScrollable, OnBackCloseableTabUiF
         }
 
         viewModel = ViewModelProvider(this).get(ArticleListFragmentViewModel::class.java)
-        viewModel?.progressVisibility?.observe(viewLifecycleOwner, Observer {
+        viewModel?.progressVisibility?.observe(viewLifecycleOwner, {
             it?.getContentIfNotHandled()?.let { isVisible ->
                 binding.progressCircular.isVisible = isVisible
             }
