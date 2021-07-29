@@ -136,7 +136,10 @@ class BookmarkFragment : Fragment(), ContentScrollable {
         showAllBookmark(activityContext)
     }
 
-    private fun closeOnEmpty(bookmarkRepository: BookmarkRepository, contentViewModel: ContentViewModel) {
+    private fun closeOnEmpty(
+        bookmarkRepository: BookmarkRepository,
+        contentViewModel: ContentViewModel
+    ) {
         CoroutineScope(Dispatchers.Main).launch(disposables) {
             val count = withContext(Dispatchers.IO) {
                 bookmarkRepository.count()
