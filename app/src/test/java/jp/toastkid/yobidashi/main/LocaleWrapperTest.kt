@@ -1,7 +1,9 @@
 package jp.toastkid.yobidashi.main
 
 import android.content.res.Configuration
+import android.os.LocaleList
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -17,24 +19,29 @@ class LocaleWrapperTest {
     @MockK
     private lateinit var configuration: Configuration
 
+    @MockK
+    private lateinit var localeList: LocaleList
+
     private lateinit var localeWrapper: LocaleWrapper
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         localeWrapper = LocaleWrapper()
+
+        every { configuration.locales }.returns(localeList)
+        every { localeList.isEmpty }.returns(false)
+        every { localeList.get(any()) }.returns(Locale.JAPANESE)
     }
 
     @Test
     fun testIsJapanese() {
-        configuration.locale = Locale.JAPANESE
-
         assertTrue(localeWrapper.isJa(configuration))
     }
 
     @Test
     fun testIsElse() {
-        configuration.locale = Locale.ENGLISH
+        every { localeList.get(any()) }.returns(Locale.ENGLISH)
 
         assertFalse(localeWrapper.isJa(configuration))
     }
