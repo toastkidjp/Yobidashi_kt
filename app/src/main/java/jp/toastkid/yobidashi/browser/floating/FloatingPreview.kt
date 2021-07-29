@@ -160,7 +160,7 @@ class FloatingPreview(context: Context) {
 
         webView.loadUrl(url)
 
-        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, -600)
+        popupWindow.showAtLocation(parent, Gravity.BOTTOM, 0, LOCATION_VERTICAL)
     }
 
     /**
@@ -256,6 +256,8 @@ class FloatingPreview(context: Context) {
 
         @LayoutRes
         private const val LAYOUT_ID = R.layout.popup_floating_preview
+
+        private const val LOCATION_VERTICAL = -600
 
     }
 }
