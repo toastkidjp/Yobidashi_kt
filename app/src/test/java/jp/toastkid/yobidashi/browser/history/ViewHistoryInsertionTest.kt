@@ -19,6 +19,7 @@ import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -51,7 +52,7 @@ class ViewHistoryInsertionTest {
 
     @Test
     fun test() {
-        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "test", "test")
+        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "test", "test", Dispatchers.Unconfined)
 
         viewHistoryInsertion.invoke()
 
@@ -62,7 +63,7 @@ class ViewHistoryInsertionTest {
 
     @Test
     fun testTitleEmptyCase() {
-        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "", "test", "test")
+        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "", "test", "test", Dispatchers.Unconfined)
 
         viewHistoryInsertion.invoke()
 
@@ -73,7 +74,7 @@ class ViewHistoryInsertionTest {
 
     @Test
     fun testUrlEmptyCase() {
-        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "", "test")
+        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "", "test", Dispatchers.Unconfined)
 
         viewHistoryInsertion.invoke()
 
