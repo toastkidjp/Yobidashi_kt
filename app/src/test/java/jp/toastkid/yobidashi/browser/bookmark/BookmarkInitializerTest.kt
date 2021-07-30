@@ -14,7 +14,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -25,8 +24,6 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -34,7 +31,6 @@ import java.io.File
 
 class BookmarkInitializerTest {
 
-    @InjectMockKs
     private lateinit var bookmarkInitializer: BookmarkInitializer
 
     @MockK
@@ -58,7 +54,6 @@ class BookmarkInitializerTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Unconfined)
 
         every { databaseFinder.invoke(any()) }.returns(appDatabase)
         every { appDatabase.bookmarkRepository() }.returns(bookmarkRepository)
@@ -73,12 +68,15 @@ class BookmarkInitializerTest {
         coEvery { uri.getHost() }.returns("test")
         mockkStatic(Uri::class)
         coEvery { Uri.parse(any()) }.returns(uri)
+
+        bookmarkInitializer = BookmarkInitializer(
+            favicons, databaseFinder, Dispatchers.Unconfined, Dispatchers.Unconfined
+        )
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
     @Test
