@@ -52,7 +52,9 @@ class ViewHistoryInsertionTest {
 
     @Test
     fun test() {
-        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "test", "test", Dispatchers.Unconfined)
+        viewHistoryInsertion =
+            ViewHistoryInsertion
+                .make(mockk(), "test", "test", "test", Dispatchers.Unconfined)
 
         viewHistoryInsertion.invoke()
 
@@ -63,7 +65,9 @@ class ViewHistoryInsertionTest {
 
     @Test
     fun testTitleEmptyCase() {
-        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "", "test", "test", Dispatchers.Unconfined)
+        viewHistoryInsertion =
+            ViewHistoryInsertion
+                .make(mockk(), "", "test", "test", Dispatchers.Unconfined)
 
         viewHistoryInsertion.invoke()
 
@@ -74,7 +78,9 @@ class ViewHistoryInsertionTest {
 
     @Test
     fun testUrlEmptyCase() {
-        viewHistoryInsertion = ViewHistoryInsertion.make(mockk(), "test", "", "test", Dispatchers.Unconfined)
+        viewHistoryInsertion =
+            ViewHistoryInsertion
+                .make(mockk(), "test", "", "test", Dispatchers.Unconfined)
 
         viewHistoryInsertion.invoke()
 
