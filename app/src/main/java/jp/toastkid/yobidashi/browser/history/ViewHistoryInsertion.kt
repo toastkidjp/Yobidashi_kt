@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.browser.history
 
 import android.content.Context
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,7 +15,8 @@ class ViewHistoryInsertion private constructor(
         context: Context,
         private val title: String,
         private val url: String,
-        private val faviconPath: String
+        private val faviconPath: String,
+        private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     private val repository = DatabaseFinder().invoke(context).viewHistoryRepository()
@@ -24,7 +26,7 @@ class ViewHistoryInsertion private constructor(
             else insert(makeItem(title, url, faviconPath))
 
     private fun insert(searchHistory: ViewHistory): Job =
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             repository.add(searchHistory)
         }
 
@@ -50,8 +52,9 @@ class ViewHistoryInsertion private constructor(
                 context: Context,
                 title: String,
                 url: String,
-                faviconPath: String
-        ) = ViewHistoryInsertion(context, title, url, faviconPath)
+                faviconPath: String,
+                dispatcher: CoroutineDispatcher = Dispatchers.IO
+        ) = ViewHistoryInsertion(context, title, url, faviconPath, dispatcher)
 
     }
 
