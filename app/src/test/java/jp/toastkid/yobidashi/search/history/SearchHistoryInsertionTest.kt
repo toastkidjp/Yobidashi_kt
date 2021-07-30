@@ -9,10 +9,12 @@
 package jp.toastkid.yobidashi.search.history
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -40,7 +42,7 @@ class SearchHistoryInsertionTest {
         mockkConstructor(DatabaseFinder::class)
         every { anyConstructed<DatabaseFinder>().invoke(any()) }.returns(appDatabase)
         every { appDatabase.searchHistoryRepository() }.returns(repository)
-        coEvery { repository.insert(any()) }.answers { Unit }
+        coEvery { repository.insert(any()) }.just(Runs)
     }
 
     @After
