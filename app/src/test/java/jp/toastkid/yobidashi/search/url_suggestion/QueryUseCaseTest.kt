@@ -11,7 +11,6 @@ package jp.toastkid.yobidashi.search.url_suggestion
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi.browser.bookmark.model.Bookmark
@@ -19,8 +18,6 @@ import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.browser.history.ViewHistory
 import jp.toastkid.yobidashi.browser.history.ViewHistoryRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +27,6 @@ import org.junit.Test
  */
 class QueryUseCaseTest {
 
-    @InjectMockKs
     private lateinit var queryUseCase: QueryUseCase
 
     @MockK
@@ -57,13 +53,15 @@ class QueryUseCaseTest {
         coEvery { viewHistoryRepository.search(any(), any()) }.returns(listOf(ViewHistory()))
         coEvery { switchVisibility.invoke(any()) }.returns(Unit)
 
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        queryUseCase = QueryUseCase(
+            adapter, bookmarkRepository, viewHistoryRepository, switchVisibility,
+            Dispatchers.Unconfined, Dispatchers.Unconfined
+        )
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
     @Test
