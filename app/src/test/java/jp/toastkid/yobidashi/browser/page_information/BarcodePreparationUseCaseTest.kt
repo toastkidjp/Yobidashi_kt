@@ -12,9 +12,11 @@ import android.view.View
 import android.widget.ImageView
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.unmockkAll
@@ -40,8 +42,8 @@ class BarcodePreparationUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
         coEvery { contentView.findViewById<ImageView>(any()) }.returns(imageView)
-        coEvery { imageView.setImageBitmap(any()) }.returns(Unit)
-        coEvery { imageView.setVisibility(any()) }.returns(Unit)
+        coEvery { imageView.setImageBitmap(any()) }.just(Runs)
+        coEvery { imageView.setVisibility(any()) }.just(Runs)
         coEvery { imageView.getContext() }.returns(mockk())
         coEvery { imageView.setOnClickListener(any()) }.returns(mockk())
 
