@@ -17,9 +17,8 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkConstructor
+import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -50,14 +49,12 @@ class BarcodePreparationUseCaseTest {
         coEvery { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }
             .returns(mockk())
 
-        barcodePreparationUseCase = BarcodePreparationUseCase()
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        barcodePreparationUseCase = BarcodePreparationUseCase(Dispatchers.Unconfined, Dispatchers.Unconfined)
     }
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
+        unmockkAll()
     }
 
     @Test
