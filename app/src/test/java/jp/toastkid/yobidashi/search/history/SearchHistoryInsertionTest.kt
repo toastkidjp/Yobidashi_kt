@@ -21,6 +21,7 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -55,7 +56,8 @@ class SearchHistoryInsertionTest {
         searchHistoryInsertion = SearchHistoryInsertion.make(
                 mockk(),
                 "test-category",
-                "test-query"
+                "test-query",
+            Dispatchers.Unconfined
         )
 
         searchHistoryInsertion.insert()
@@ -70,7 +72,8 @@ class SearchHistoryInsertionTest {
         searchHistoryInsertion = SearchHistoryInsertion.make(
                 mockk(),
                 "",
-                "test-query"
+                "test-query",
+            Dispatchers.Unconfined
         )
 
         searchHistoryInsertion.insert()
@@ -85,7 +88,8 @@ class SearchHistoryInsertionTest {
         searchHistoryInsertion = SearchHistoryInsertion.make(
                 mockk(),
                 "test-category",
-                ""
+                "",
+            Dispatchers.Unconfined
         )
 
         searchHistoryInsertion.insert()
