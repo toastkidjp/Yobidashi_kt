@@ -1,10 +1,12 @@
 package jp.toastkid.article_viewer.article.list.menu
 
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -36,8 +38,8 @@ class BookmarkListMenuPopupActionUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        coEvery { deleted() }.answers { Unit }
-        coEvery { bookmarkRepository.delete(any()) }.answers { Unit }
+        coEvery { deleted() }.just(Runs)
+        coEvery { bookmarkRepository.delete(any()) }.just(Runs)
     }
 
     @Test
