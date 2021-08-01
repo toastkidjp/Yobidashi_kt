@@ -12,7 +12,6 @@ import jp.toastkid.article_viewer.article.ArticleRepository
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -37,7 +36,6 @@ class DateSelectedActionUseCaseTest {
     @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
-    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -48,7 +46,6 @@ class DateSelectedActionUseCaseTest {
         every { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }.returns("test")
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun test() {
         dateSelectedActionService.invoke(2020, 0, 22)
@@ -58,7 +55,6 @@ class DateSelectedActionUseCaseTest {
         coVerify(exactly = 1) { anyConstructed<TitleFilterGenerator>().invoke(any(), any(), any()) }
     }
 
-    @ExperimentalCoroutinesApi
     @After
     fun tearDown() {
         unmockkAll()
