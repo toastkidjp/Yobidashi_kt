@@ -6,9 +6,8 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -26,14 +25,16 @@ class BookmarkListMenuPopupActionUseCaseTest {
     @MockK
     private lateinit var deleted: () -> Unit
 
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        useCase = BookmarkListMenuPopupActionUseCase(bookmarkRepository, deleted)
+        useCase = BookmarkListMenuPopupActionUseCase(bookmarkRepository, deleted, mainDispatcher, ioDispatcher)
         coEvery { deleted() }.answers { Unit }
         coEvery { bookmarkRepository.delete(any()) }.answers { Unit }
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @Test
@@ -55,7 +56,6 @@ class BookmarkListMenuPopupActionUseCaseTest {
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
 }
