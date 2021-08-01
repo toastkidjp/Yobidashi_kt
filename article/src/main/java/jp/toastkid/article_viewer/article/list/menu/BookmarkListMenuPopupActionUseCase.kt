@@ -8,6 +8,7 @@
 package jp.toastkid.article_viewer.article.list.menu
 
 import jp.toastkid.article_viewer.bookmark.repository.BookmarkRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,15 +18,17 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class BookmarkListMenuPopupActionUseCase(
-        private val bookmarkRepository: BookmarkRepository,
-        private val deleted: () -> Unit
+    private val bookmarkRepository: BookmarkRepository,
+    private val deleted: () -> Unit,
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MenuPopupActionUseCase {
 
     override fun addToBookmark(id: Int) = Unit
 
     override fun delete(id: Int) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
+        CoroutineScope(mainDispatcher).launch {
+            withContext(ioDispatcher) {
                 bookmarkRepository.delete(id)
             }
             deleted()
