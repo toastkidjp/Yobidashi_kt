@@ -2,9 +2,11 @@ package jp.toastkid.yobidashi.main.launch
 
 import android.net.Uri
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
@@ -37,7 +39,7 @@ class RandomWikipediaUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { randomWikipedia.fetchWithAction(any()) }.answers { Unit }
+        every { randomWikipedia.fetchWithAction(any()) }.just(Runs)
     }
 
     @Test
