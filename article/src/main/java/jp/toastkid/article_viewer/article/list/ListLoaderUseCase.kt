@@ -20,7 +20,10 @@ import kotlinx.coroutines.launch
 /**
  * @author toastkidjp
  */
-class ListLoaderUseCase(private val adapter: Adapter, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+class ListLoaderUseCase(
+    private val adapter: Adapter,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 
     private var lastJob: Job? = null
 
