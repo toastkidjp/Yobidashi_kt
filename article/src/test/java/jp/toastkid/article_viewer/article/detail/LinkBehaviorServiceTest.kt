@@ -2,11 +2,13 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.net.Uri
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -48,11 +50,11 @@ class LinkBehaviorServiceTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { browserViewModel.open(any()) }.answers { Unit }
+        every { browserViewModel.open(any()) }.just(Runs)
         every { internalLinkScheme.isInternalLink(any()) }.returns(true)
         every { internalLinkScheme.extract(any()) }.returns("yahoo")
-        coEvery { contentViewModel.newArticle(any()) }.answers { Unit }
-        coEvery { contentViewModel.snackShort(any<String>()) }.answers { Unit }
+        coEvery { contentViewModel.newArticle(any()) }.just(Runs)
+        coEvery { contentViewModel.snackShort(any<String>()) }.just(Runs)
     }
 
     @Test
