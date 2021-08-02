@@ -51,7 +51,8 @@ class BarcodePreparationUseCaseTest {
         coEvery { anyConstructed<BarcodeEncoder>().encodeBitmap(any(), any(), any(), any()) }
             .returns(mockk())
 
-        barcodePreparationUseCase = BarcodePreparationUseCase(Dispatchers.Unconfined, Dispatchers.Unconfined)
+        barcodePreparationUseCase =
+            BarcodePreparationUseCase(Dispatchers.Unconfined, Dispatchers.Unconfined)
     }
 
     @After
