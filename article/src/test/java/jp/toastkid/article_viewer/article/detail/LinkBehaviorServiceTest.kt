@@ -14,8 +14,6 @@ import io.mockk.verify
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -40,10 +38,15 @@ class LinkBehaviorServiceTest {
     @MockK
     private lateinit var internalLinkScheme: InternalLinkScheme
 
+    @Suppress("unused")
+    private val mainDispatcher = Dispatchers.Unconfined
+
+    @Suppress("unused")
+    private val ioDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Unconfined)
 
         every { browserViewModel.open(any()) }.answers { Unit }
         every { internalLinkScheme.isInternalLink(any()) }.returns(true)
@@ -104,7 +107,6 @@ class LinkBehaviorServiceTest {
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
         unmockkAll()
     }
 
