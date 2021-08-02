@@ -10,6 +10,7 @@ package jp.toastkid.article_viewer.article.detail
 import androidx.core.net.toUri
 import jp.toastkid.lib.BrowserViewModel
 import jp.toastkid.lib.ContentViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,10 +20,12 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class LinkBehaviorService(
-        private val contentViewModel: ContentViewModel,
-        private val browserViewModel: BrowserViewModel,
-        private val exists: (String) -> Boolean,
-        private val internalLinkScheme: InternalLinkScheme = InternalLinkScheme()
+    private val contentViewModel: ContentViewModel,
+    private val browserViewModel: BrowserViewModel,
+    private val exists: (String) -> Boolean,
+    private val internalLinkScheme: InternalLinkScheme = InternalLinkScheme(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke(url: String?) {
@@ -36,8 +39,8 @@ class LinkBehaviorService(
         }
 
         val title = internalLinkScheme.extract(url)
-        CoroutineScope(Dispatchers.Main).launch {
-            val exists = withContext(Dispatchers.IO) { exists(title) }
+        CoroutineScope(mainDispatcher).launch {
+            val exists = withContext(ioDispatcher) { exists(title) }
             if (exists) {
                 contentViewModel.newArticle(title)
             } else {
