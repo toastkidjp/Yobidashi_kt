@@ -17,8 +17,8 @@ import android.support.v4.media.session.PlaybackStateCompat
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.media.session.MediaButtonReceiver
-import jp.toastkid.yobidashi.R
 import jp.toastkid.lib.preference.PreferenceApplier
+import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.media.music.AlbumArtFinder
 
 /**
@@ -45,12 +45,12 @@ class NotificationFactory(
             MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_PLAY)
     )
 
-    operator fun invoke(): Notification {
+    operator fun invoke(): Notification? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
 
-        val currentDescription = mediaSessionSupplier().controller.metadata.description
+        val currentDescription = mediaSessionSupplier().controller?.metadata?.description ?: return null
 
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
