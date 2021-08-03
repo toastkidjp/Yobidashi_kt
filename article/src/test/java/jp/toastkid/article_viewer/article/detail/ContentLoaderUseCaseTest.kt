@@ -41,10 +41,13 @@ class ContentLoaderUseCaseTest {
     @MockK
     private lateinit var linkGeneratorService: LinkGeneratorService
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     @Before
