@@ -2,10 +2,12 @@ package jp.toastkid.article_viewer.article.detail
 
 import android.widget.TextView
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.unmockkAll
 import io.noties.markwon.Markwon
 import jp.toastkid.article_viewer.article.ArticleRepository
@@ -49,8 +51,8 @@ class ContentLoaderUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        coEvery { markwon.setMarkdown(any(), any()) }.answers { Unit }
-        coEvery { linkGeneratorService.invoke(any()) }.answers { Unit }
+        coEvery { markwon.setMarkdown(any(), any()) }.just(Runs)
+        coEvery { linkGeneratorService.invoke(any()) }.just(Runs)
     }
 
     @Test
