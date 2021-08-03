@@ -9,9 +9,9 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import io.noties.markwon.Markwon
 import jp.toastkid.article_viewer.article.ArticleRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -39,17 +39,22 @@ class ContentLoaderUseCaseTest {
     @MockK
     private lateinit var linkGeneratorService: LinkGeneratorService
 
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         coEvery { markwon.setMarkdown(any(), any()) }.answers { Unit }
         coEvery { linkGeneratorService.invoke(any()) }.answers { Unit }
-        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @Test
-    fun test() {
+    fun test() = runBlockingTest {
         coEvery { repository.findContentByTitle(any()) }.returns("test")
 
         contentLoaderUseCase.invoke("test")
@@ -60,7 +65,7 @@ class ContentLoaderUseCaseTest {
     }
 
     @Test
-    fun testContentIsNull() {
+    fun testContentIsNull() = runBlockingTest {
         coEvery { repository.findContentByTitle(any()) }.returns(null)
 
         contentLoaderUseCase.invoke("test")
@@ -72,7 +77,6 @@ class ContentLoaderUseCaseTest {
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
 }
