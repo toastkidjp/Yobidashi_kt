@@ -10,6 +10,7 @@ package jp.toastkid.article_viewer.article.detail
 import android.widget.TextView
 import io.noties.markwon.Markwon
 import jp.toastkid.article_viewer.article.ArticleRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,23 +20,26 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class ContentLoaderUseCase(
-        private val repository: ArticleRepository,
-        private val markwon: Markwon,
-        private val contentView: TextView,
-        private val subheads: MutableList<String>,
-        private val linkGeneratorService: LinkGeneratorService = LinkGeneratorService()
+    private val repository: ArticleRepository,
+    private val markwon: Markwon,
+    private val contentView: TextView,
+    private val subheads: MutableList<String>,
+    private val linkGeneratorService: LinkGeneratorService = LinkGeneratorService(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     operator fun invoke(title: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            val content = withContext(Dispatchers.IO) { repository.findContentByTitle(title) }
+        CoroutineScope(mainDispatcher).launch {
+            val content = withContext(ioDispatcher) { repository.findContentByTitle(title) }
                     ?: return@launch
 
             markwon.setMarkdown(contentView, content)
 
             linkGeneratorService.invoke(contentView)
 
-            withContext(Dispatchers.Default) {
+            withContext(defaultDispatcher) {
                 appendSubheads(content)
             }
         }
