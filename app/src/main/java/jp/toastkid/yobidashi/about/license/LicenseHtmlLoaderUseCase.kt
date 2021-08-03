@@ -21,24 +21,32 @@ internal class LicenseHtmlLoaderUseCase(
     private val webViewFactory: WebViewFactory = WebViewFactory()
 ) {
 
-    operator fun invoke(it: FrameLayout) {
-        it.isVisible = !it.isVisible
-        if (it.isGone || it.childCount != 0) {
-            it[0].scrollTo(0, 0)
+    operator fun invoke(container: FrameLayout) {
+        container.isVisible = !container.isVisible
+        if (container.isGone || container.childCount != 0) {
+            container[0].scrollTo(0, 0)
             return
         }
 
-        val readUtf8 = LicenseContentLoaderUseCase(it.context.assets).invoke()
+        val content = LicenseContentLoaderUseCase(container.context.assets).invoke()
 
-        val webView = webViewFactory.make(it.context)
-        it.addView(webView)
+        val webView = webViewFactory.make(container.context)
+        container.addView(webView)
         webView.loadDataWithBaseURL(
             null,
-            readUtf8,
-            "text/html",
-            StandardCharsets.UTF_8.name(),
+            content,
+            MIMETYPE,
+            encoding,
             null
         )
+    }
+
+    companion object {
+
+        private const val MIMETYPE = "text/html"
+
+        private val encoding = StandardCharsets.UTF_8.name()
+
     }
 
 }
