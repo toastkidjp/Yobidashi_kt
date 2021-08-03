@@ -20,8 +20,6 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import jp.toastkid.yobidashi.wikipedia.random.model.Article
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -38,6 +36,12 @@ class RandomWikipediaTest {
     @MockK
     private lateinit var urlDecider: UrlDecider
 
+    @Suppress("unused")
+    private val mainDispatcher = Dispatchers.Unconfined
+
+    @Suppress("unused")
+    private val ioDispatcher = Dispatchers.Unconfined
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -50,14 +54,11 @@ class RandomWikipediaTest {
 
         mockkStatic(Uri::class)
         every { Uri.parse(any()) }.answers { mockk() }
-
-        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun tearDown() {
         unmockkAll()
-        Dispatchers.resetMain()
     }
 
     @Test
