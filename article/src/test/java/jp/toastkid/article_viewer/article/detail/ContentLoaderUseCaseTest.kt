@@ -13,7 +13,6 @@ import io.noties.markwon.Markwon
 import jp.toastkid.article_viewer.article.ArticleRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -59,7 +58,7 @@ class ContentLoaderUseCaseTest {
     }
 
     @Test
-    fun test() = runBlockingTest {
+    fun test() {
         coEvery { repository.findContentByTitle(any()) }.returns("test")
 
         contentLoaderUseCase.invoke("test")
@@ -70,7 +69,7 @@ class ContentLoaderUseCaseTest {
     }
 
     @Test
-    fun testContentIsNull() = runBlockingTest {
+    fun testContentIsNull() {
         coEvery { repository.findContentByTitle(any()) }.returns(null)
 
         contentLoaderUseCase.invoke("test")
