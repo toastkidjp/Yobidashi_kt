@@ -12,6 +12,7 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
 import jp.toastkid.yobidashi.rss.extractor.RssUrlValidator
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,13 +22,15 @@ import kotlinx.coroutines.withContext
  * @author toastkidjp
  */
 class RssAddingSuggestion(
-        private val preferenceApplier: PreferenceApplier,
-        private val rssUrlValidator: RssUrlValidator = RssUrlValidator()
+    private val preferenceApplier: PreferenceApplier,
+    private val rssUrlValidator: RssUrlValidator = RssUrlValidator(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     operator fun invoke(view: View, url: String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            val shouldShow = withContext(Dispatchers.Default) { shouldShow(url) }
+        CoroutineScope(mainDispatcher).launch {
+            val shouldShow = withContext(backgroundDispatcher) { shouldShow(url) }
             if (!shouldShow) {
                 return@launch
             }
