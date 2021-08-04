@@ -42,13 +42,13 @@ class RssAddingSuggestion(
 
     private fun toast(view: View, url: String) {
         Toaster.snackLong(
-                view,
-                R.string.message_add_rss_target,
-                R.string.title_add,
+            view,
+            R.string.message_add_rss_target,
+            R.string.title_add,
             {
                 preferenceApplier.saveNewRssReaderTargets(url)
             },
-                preferenceApplier.colorPair()
+            preferenceApplier.colorPair()
         )
     }
 
