@@ -11,10 +11,12 @@ package jp.toastkid.yobidashi.browser.bookmark
 import android.content.Context
 import android.net.Uri
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -57,8 +59,8 @@ class BookmarkInitializerTest {
 
         every { databaseFinder.invoke(any()) }.returns(appDatabase)
         every { appDatabase.bookmarkRepository() }.returns(bookmarkRepository)
-        coEvery { bookmarkRepository.add(any()) }.answers { Unit }
-        coEvery { onComplete.invoke() }.answers { Unit }
+        coEvery { bookmarkRepository.add(any()) }.just(Runs)
+        coEvery { onComplete.invoke() }.just(Runs)
 
         val file = mockk<File>()
         coEvery { file.getAbsolutePath() }.returns("/test/test")
