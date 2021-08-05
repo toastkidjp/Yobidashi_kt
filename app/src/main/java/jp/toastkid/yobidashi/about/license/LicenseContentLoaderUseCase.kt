@@ -22,4 +22,5 @@ class LicenseContentLoaderUseCase(private val assetManager: AssetManager) {
             source.buffer().readUtf8()
         }
     }
+
 }

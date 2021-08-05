@@ -51,9 +51,8 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     /**
      * Show licenses dialog.
-     * @param view
      */
-    fun licenses(view: View) {
+    fun licenses() {
         binding?.licenseContent?.let {
             LicenseHtmlLoaderUseCase().invoke(it)
         }
@@ -85,6 +84,11 @@ class AboutThisAppFragment : Fragment(), ContentScrollable {
 
     override fun toBottom() {
         binding?.aboutScroll?.smoothScrollTo(0, binding?.root?.measuredHeight ?: 0)
+    }
+
+    override fun onDetach() {
+        binding = null
+        super.onDetach()
     }
 
     companion object {
