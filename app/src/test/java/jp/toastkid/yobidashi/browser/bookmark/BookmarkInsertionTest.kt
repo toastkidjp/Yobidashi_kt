@@ -18,7 +18,7 @@ import io.mockk.unmockkAll
 import jp.toastkid.yobidashi.browser.bookmark.model.BookmarkRepository
 import jp.toastkid.yobidashi.libs.db.AppDatabase
 import jp.toastkid.yobidashi.libs.db.DatabaseFinder
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -71,7 +71,7 @@ class BookmarkInsertionTest {
             context,
             "Yahoo! JAPAN",
             "https://www.yahoo.co.jp",
-            dispatcher = TestCoroutineDispatcher()
+            dispatcher = Dispatchers.Unconfined
         )
 
         bookmarkInsertion.insert()
