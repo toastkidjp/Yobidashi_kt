@@ -59,7 +59,14 @@ class FavoriteSearchInsertionTest {
 
     @Test
     fun testInvoke() {
-        favoriteSearchInsertion = FavoriteSearchInsertion(context, "category", "query", Dispatchers.Unconfined, Dispatchers.Unconfined)
+        favoriteSearchInsertion = FavoriteSearchInsertion(
+            context,
+            "category",
+            "query",
+            Dispatchers.Unconfined,
+            Dispatchers.Unconfined
+        )
+
         favoriteSearchInsertion.invoke()
 
         verify(exactly = 1) { context.getString(any(), any()) }
