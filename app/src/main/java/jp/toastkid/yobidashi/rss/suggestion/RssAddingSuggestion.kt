@@ -45,9 +45,7 @@ class RssAddingSuggestion(
             view,
             R.string.message_add_rss_target,
             R.string.title_add,
-            {
-                preferenceApplier.saveNewRssReaderTargets(url)
-            },
+            { preferenceApplier.saveNewRssReaderTargets(url) },
             preferenceApplier.colorPair()
         )
     }
