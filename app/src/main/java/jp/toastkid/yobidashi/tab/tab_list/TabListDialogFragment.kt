@@ -108,7 +108,7 @@ class TabListDialogFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        setStyle(STYLE_NORMAL, R.style.TabListBottomSheetDialog);
+        setStyle(STYLE_NORMAL, R.style.TabListBottomSheetDialog)
         return super.onCreateDialog(savedInstanceState)
     }
 
