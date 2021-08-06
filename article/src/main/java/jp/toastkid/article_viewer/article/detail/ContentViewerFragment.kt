@@ -212,7 +212,9 @@ class ContentViewerFragment : Fragment(), ContentScrollable, OnBackCloseableTabU
                 CoroutineScope(Dispatchers.IO).launch {
                     val title = appBarBinding.searchResult.text.toString()
                     val article = repository.findFirst(title) ?: return@launch
-                    AppDatabase.find(appBarBinding.root.context).bookmarkRepository().add(Bookmark(article.id))
+                    AppDatabase.find(appBarBinding.root.context)
+                        .bookmarkRepository()
+                        .add(Bookmark(article.id))
                 }
                 true
             }
