@@ -137,12 +137,18 @@ class EditorSettingFragment : Fragment() {
             editorModule.fontSize.setSelection(
                     EditorFontSize.findIndex(preferenceApplier.editorFontSize())
             )
-            editorModule.fontSize.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    preferenceApplier.setEditorFontSize(EditorFontSize.values()[position].size)
-                }
+            editorModule.fontSize.onItemSelectedListener =
+                object: AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        preferenceApplier.setEditorFontSize(EditorFontSize.values()[position].size)
+                    }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+                    override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             }
 
             val context = binding.root.context
