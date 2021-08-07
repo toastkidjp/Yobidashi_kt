@@ -50,6 +50,7 @@ class Adapter(
             true
         }
         holder.setDelete { removeAt(item) }
+        holder.hideButton()
     }
 
     override fun getItemCount(): Int = suggestions.size
