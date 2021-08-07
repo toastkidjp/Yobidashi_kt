@@ -56,7 +56,7 @@ class RssAddingSuggestionTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         every { rssUrlValidator.invoke(any()) }.returns(true)
         every { preferenceApplier.containsRssTarget(any()) }.returns(false)
 
