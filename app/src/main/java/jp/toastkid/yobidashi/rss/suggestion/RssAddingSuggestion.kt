@@ -39,7 +39,6 @@ class RssAddingSuggestion(
         }
     }
 
-
     private fun toast(view: View, url: String) {
         Toaster.snackLong(
             view,
