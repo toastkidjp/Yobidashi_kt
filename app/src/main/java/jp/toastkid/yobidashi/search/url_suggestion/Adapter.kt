@@ -2,6 +2,7 @@ package jp.toastkid.yobidashi.search.url_suggestion
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.toastkid.yobidashi.R
@@ -42,7 +43,13 @@ class Adapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = get(position) ?: return
+        val item = get(position)
+
+        holder.itemView.isVisible = item != null
+        if (item == null) {
+            return
+        }
+
         item.bind(holder)
         holder.setOnClick { viewModel.search(item.urlString()) }
         holder.setOnLongClick {
