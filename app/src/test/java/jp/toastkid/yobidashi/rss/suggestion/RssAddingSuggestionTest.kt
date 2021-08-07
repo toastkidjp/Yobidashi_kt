@@ -68,4 +68,17 @@ class RssAddingSuggestionTest {
         verify(exactly = 1) { preferenceApplier.colorPair() }
     }
 
+    @Test
+    fun test() {
+        every { rssUrlValidator.invoke(any()) }.returns(false)
+        every { preferenceApplier.containsRssTarget(any()) }.returns(false)
+
+        rssAddingSuggestion.invoke(mockk(), "https://www.yahoo.co.jp")
+
+        verify(exactly = 1) { rssUrlValidator.invoke(any()) }
+        verify(exactly = 0) { preferenceApplier.containsRssTarget(any()) }
+        verify(exactly = 0) { Toaster.snackLong(any(), any<Int>(), any(), any(), any()) }
+        verify(exactly = 0) { preferenceApplier.colorPair() }
+    }
+
 }
