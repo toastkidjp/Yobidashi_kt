@@ -28,6 +28,7 @@ class AttachToThisAppBackgroundUseCase(private val contentViewModel: ContentView
                 FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory()),
                 PreferenceApplier(context)
         )(image, uri, (context as? Activity)?.windowManager?.defaultDisplay)
+        contentViewModel.refresh()
         contentViewModel.snackShort(R.string.done_addition)
     }
 
