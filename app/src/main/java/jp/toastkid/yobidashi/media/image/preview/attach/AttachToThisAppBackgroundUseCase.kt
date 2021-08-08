@@ -21,13 +21,18 @@ import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
 /**
  * @author toastkidjp
  */
-class AttachToThisAppBackgroundUseCase(private val contentViewModel: ContentViewModel) {
+class AttachToThisAppBackgroundUseCase(
+    private val contentViewModel: ContentViewModel,
+    private val imageStoreServiceFactory: (Context) -> ImageStoreService = {
+        ImageStoreService(
+            FilesDir(it, DisplayingSettingFragment.getBackgroundDirectory()),
+            PreferenceApplier(it)
+        )
+    }
+) {
 
     operator fun invoke(context: Context, uri: Uri, image: Bitmap) {
-        ImageStoreService(
-                FilesDir(context, DisplayingSettingFragment.getBackgroundDirectory()),
-                PreferenceApplier(context)
-        )(image, uri, (context as? Activity)?.windowManager?.defaultDisplay)
+        imageStoreServiceFactory(context)(image, uri, (context as? Activity)?.windowManager?.defaultDisplay)
         contentViewModel.refresh()
         contentViewModel.snackShort(R.string.done_addition)
     }
