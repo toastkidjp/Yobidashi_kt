@@ -103,7 +103,7 @@
         4. 簡易タブブラウザー\n
         5. タブエディター\n
         6. Planning Poker\n
-        7. カラーフィルタ\n
+        7. カラーフィルター\n
         8. 音楽プレイヤー\n
         9. 画像ビューアー\n
         10. TODO リスト\n
@@ -206,11 +206,11 @@
     <string name="close_menu">メニューを閉じる</string>
     <string name="message_save_failed">保存に失敗しました。</string>
     <string name="message_disable_archive">OS バージョン 4.3 以下では使用できません。</string>
-    <string name="message_cannot_draw_overlay">カラーフィルタ機能を使用するにはオーバレイの権限が必要です。</string>
-    <string name="message_enable_color_filter">カラーフィルタを有効にしました。</string>
-    <string name="message_stop_color_filter">カラーフィルタをオフにしました。</string>
+    <string name="message_cannot_draw_overlay">カラーフィルター機能を使用するにはオーバレイの権限が必要です。</string>
+    <string name="message_enable_color_filter">カラーフィルターを有効にしました。</string>
+    <string name="message_stop_color_filter">カラーフィルターをオフにしました。</string>
     <string name="content_description_alpha">カラーフィルターの透明度を変更します。</string>
-    <string name="title_color_filter">カラーフィルタ</string>
+    <string name="title_color_filter">カラーフィルター</string>
     <string name="title_clear_form_data">フォームデータを削除</string>
     <string name="title_voice_search">音声検索</string>
     <string name="delete">削除</string>
@@ -275,7 +275,7 @@
     <string name="message_ssl_error_not_yet_valid">証明書はまだ有効ではありません  開始時刻=</string>
     <string name="message_ssl_error_untrusted">証明書を発行した認証局が信頼できません  認証局</string>
     <string name="message_ssl_error_unknown">原因不明のエラーが発生しました</string>
-    <string name="title_filter_color">カラーフィルタの色</string>
+    <string name="title_filter_color">カラーフィルターの色</string>
     <string name="title_default">デフォルト</string>
     <string name="title_screen_mode_full">フルスクリーン</string>
     <string name="title_screen_mode_expandable">スクロールで隠す</string>
