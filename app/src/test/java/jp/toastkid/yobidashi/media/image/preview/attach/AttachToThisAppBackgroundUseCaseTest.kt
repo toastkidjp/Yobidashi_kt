@@ -22,6 +22,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.settings.background.load.ImageStoreService
 import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
@@ -81,6 +82,13 @@ class AttachToThisAppBackgroundUseCaseTest {
     @Test
     fun invoke() {
         attachToThisAppBackgroundUseCase.invoke(context, uri, image)
+
+        verify(exactly = 1) { contentViewModel.refresh() }
+        verify(exactly = 1) { contentViewModel.snackShort(any<Int>()) }
+        verify(exactly = 1) { context.windowManager }
+        verify(exactly = 1) { windowManager.defaultDisplay }
+        verify(exactly = 1) { imageStoreServiceFactory.invoke(any()) }
+        verify(exactly = 1) { imageStoreService.invoke(any(), any(), any()) }
     }
 
 }
