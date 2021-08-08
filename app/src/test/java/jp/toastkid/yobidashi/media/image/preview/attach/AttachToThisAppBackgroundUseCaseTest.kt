@@ -20,12 +20,10 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.yobidashi.settings.background.load.ImageStoreService
-import jp.toastkid.yobidashi.settings.fragment.DisplayingSettingFragment
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -69,9 +67,6 @@ class AttachToThisAppBackgroundUseCaseTest {
         every { windowManager.defaultDisplay }.returns(mockk())
         every { imageStoreServiceFactory.invoke(any()) }.returns(imageStoreService)
         every { imageStoreService.invoke(any(), any(), any()) }.just(Runs)
-
-        mockkObject(DisplayingSettingFragment)
-        every { DisplayingSettingFragment.getBackgroundDirectory() }.returns("test")
     }
 
     @After
@@ -80,7 +75,7 @@ class AttachToThisAppBackgroundUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         attachToThisAppBackgroundUseCase.invoke(context, uri, image)
 
         verify(exactly = 1) { contentViewModel.refresh() }
