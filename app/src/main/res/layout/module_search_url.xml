@@ -88,7 +88,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/ic_edit_black"
-                android:contentDescription="@null"
+                android:contentDescription="@string/edit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/text"
                 app:layout_constraintBottom_toBottomOf="@id/text"
