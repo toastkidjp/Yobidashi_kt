@@ -472,5 +472,6 @@
 
     <string name="message_clipping_url_open">この URL を開きますか？ "%s"</string>
     <string name="hourly_trends">急上昇</string>
+    <string name="sample_text_color_filter">あ</string>
 
 </resources>

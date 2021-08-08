@@ -54,7 +54,7 @@
                 android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:text="A"
+                android:text="@string/sample_text_color_filter"
                 android:textColor="@color/black"
                 />
             <TextView
