@@ -10,6 +10,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import jp.toastkid.article_viewer.article.ArticleRepository
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -35,12 +36,13 @@ class ArticleInsertionTest {
         every { AppDatabase.find(any()) }.answers { database }
         every { database.articleRepository() }.answers { repository }
 
-        articleInsertion = ArticleInsertion(context)
+        articleInsertion = ArticleInsertion(context, Dispatchers.Unconfined)
     }
 
     @After
     fun tearDown() {
         unmockkAll()
+        AppDatabase.clearInstance()
     }
 
     @Test
