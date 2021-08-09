@@ -8,6 +8,7 @@
 package jp.toastkid.yobidashi.libs.db
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.room.Room
 
 /**
@@ -16,16 +17,39 @@ import androidx.room.Room
 class DatabaseFinder {
 
     fun invoke(context: Context): AppDatabase {
+        synchronized(DatabaseFinder) {
+            if (instance != null) {
+                return@synchronized
+            }
+
+            instance = makeAppDatabase(context)
+        }
+
+        return instance?: makeAppDatabase(context)
+    }
+
+    private fun makeAppDatabase(context: Context): AppDatabase {
         return Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                DATABASE_FILE_NAME
+            context.applicationContext,
+            AppDatabase::class.java,
+            DATABASE_FILE_NAME
         )
-                .fallbackToDestructiveMigration()
-                .build()
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     companion object {
         private const val DATABASE_FILE_NAME = "yobidashi2.db"
+
+        private var instance: AppDatabase? = null
+
+        /**
+         * For reset instance each test.
+         */
+        @VisibleForTesting
+        fun clearInstance() {
+            instance = null
+        }
+
     }
 }
