@@ -18,7 +18,10 @@ import kotlinx.coroutines.launch
 /**
  * @author toastkidjp
  */
-class ArticleInsertion(context: Context, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+class ArticleInsertion(
+    context: Context,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 
     private val repository = AppDatabase.find(context).articleRepository()
 
