@@ -2,10 +2,12 @@ package jp.toastkid.article_viewer.article.data
 
 import android.content.Context
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
@@ -47,7 +49,7 @@ class ArticleInsertionTest {
 
     @Test
     fun testTitleIsNull() {
-        coEvery { repository.insert(any()) }.answers { Unit }
+        coEvery { repository.insert(any()) }.just(Runs)
 
         articleInsertion.invoke(null, "test")
 
