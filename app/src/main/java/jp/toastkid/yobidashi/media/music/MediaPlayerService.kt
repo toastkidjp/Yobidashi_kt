@@ -233,4 +233,11 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
                 Intent(ACTION_CHANGE_SPEED)
                         .also { it.putExtra(KEY_EXTRA_SPEED, speed) }
     }
+
+    override fun onDestroy() {
+        unregisterReceiver(audioNoisyReceiver)
+        unregisterReceiver(playbackSpeedReceiver)
+
+        super.onDestroy()
+    }
 }
