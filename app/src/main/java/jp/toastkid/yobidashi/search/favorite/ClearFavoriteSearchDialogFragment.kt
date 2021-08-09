@@ -9,13 +9,13 @@ package jp.toastkid.yobidashi.search.favorite
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * @author toastkidjp
@@ -29,7 +29,12 @@ class ClearFavoriteSearchDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(activityContext)
                 .setTitle(R.string.title_delete_all)
-                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setMessage(
+                    Html.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    )
+                )
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->

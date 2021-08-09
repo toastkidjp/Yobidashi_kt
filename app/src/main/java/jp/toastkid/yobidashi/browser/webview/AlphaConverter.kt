@@ -8,6 +8,8 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import kotlin.math.roundToInt
 
 /**
+ * Read WebView's background alpha color from shared preferences.
+ *
  * @author toastkidjp
  */
 class AlphaConverter {

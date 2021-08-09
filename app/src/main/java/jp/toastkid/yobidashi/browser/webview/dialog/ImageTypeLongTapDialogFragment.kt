@@ -33,15 +33,16 @@ class ImageTypeLongTapDialogFragment : DialogFragment() {
         val url = arguments?.getString(KEY_EXTRA)
                 ?: return super.onCreateDialog(savedInstanceState)
 
-        val viewModel = ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
+        val viewModelProvider = ViewModelProvider(activityContext)
+
+        val viewModel = viewModelProvider.get(BrowserViewModel::class.java)
 
         return AlertDialog.Builder(activityContext)
                 .setTitle("Image: $url")
                 .setItems(R.array.image_menu) { _, which ->
                     when (which) {
                         0 -> viewModel.open(ImageSearchUrlGenerator()(url))
-                        1 -> ViewModelProvider(activityContext).get(BrowserViewModel::class.java)
-                            .preview(url.toUri())
+                        1 -> viewModel.preview(url.toUri())
                         2 -> downloadImage(url)
                     }
                 }

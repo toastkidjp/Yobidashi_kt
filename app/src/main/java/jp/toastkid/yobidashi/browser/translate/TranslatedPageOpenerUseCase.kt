@@ -16,6 +16,11 @@ import jp.toastkid.lib.BrowserViewModel
  */
 class TranslatedPageOpenerUseCase(private val browserViewModel: BrowserViewModel) {
 
+    /**
+     * Open translated page with new WEB tab.
+     *
+     * @param currentUrl URL which you would like to translate (unnecessary encoding)
+     */
     operator fun invoke(currentUrl: String?) {
         val uri = "https://translate.googleusercontent.com/translate_c" +
                 "?depth=1&nv=1&pto=aue&rurl=translate.google.com&sl=auto&sp=nmt4&tl=en&u=" +

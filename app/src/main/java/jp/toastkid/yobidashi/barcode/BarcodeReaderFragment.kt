@@ -12,7 +12,6 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -143,8 +142,7 @@ class BarcodeReaderFragment : Fragment() {
      * @return If is granted camera permission, return true
      */
     private fun isNotGranted() =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                    && activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
+            activity?.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

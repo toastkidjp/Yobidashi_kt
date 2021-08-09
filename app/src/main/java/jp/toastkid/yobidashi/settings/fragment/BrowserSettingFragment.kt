@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebView
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -24,7 +25,6 @@ import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.lib.view.CompoundDrawableColorApplier
 import jp.toastkid.lib.view.text.EmptyAlertSetter
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.browser.CookieCleanerCompat
 import jp.toastkid.yobidashi.browser.ScreenMode
 import jp.toastkid.yobidashi.browser.user_agent.UserAgent
 import jp.toastkid.yobidashi.browser.user_agent.UserAgentDialogFragment
@@ -291,11 +291,11 @@ class BrowserSettingFragment : Fragment(), UserAgentDialogFragment.Callback {
      * @param snackbarParent for data binding
      */
     fun clearCookie(snackbarParent: View) {
-        CookieCleanerCompat().invoke(snackbarParent.context) {
+        CookieManager.getInstance().removeAllCookies {
             Toaster.snackShort(
-                    snackbarParent,
-                    R.string.done_clear,
-                    PreferenceApplier(snackbarParent.context).colorPair()
+                snackbarParent,
+                R.string.done_clear,
+                PreferenceApplier(snackbarParent.context).colorPair()
             )
         }
     }

@@ -15,7 +15,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.session.PlaybackState
-import android.os.Build
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -183,11 +182,6 @@ class MediaPlayerPopup(private val context: Context) {
     }
 
     private fun initializePlaybackSpeedChanger() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            binding.playingSpeed.isVisible = false
-            return
-        }
-
         binding.playingSpeed.isVisible = true
 
         binding.playingSpeed.adapter = PlaybackSpeedAdapter(

@@ -9,10 +9,10 @@ package jp.toastkid.yobidashi.settings
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Html
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import jp.toastkid.yobidashi.R
-import jp.toastkid.yobidashi.libs.HtmlCompat
 
 /**
  * @author toastkidjp
@@ -25,7 +25,12 @@ class ClearSettingConfirmDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(fragmentActivity)
                 .setTitle(R.string.title_clear_settings)
-                .setMessage(HtmlCompat.fromHtml(getString(R.string.confirm_clear_all_settings)))
+                .setMessage(
+                    Html.fromHtml(
+                        getString(R.string.confirm_clear_all_settings),
+                        Html.FROM_HTML_MODE_COMPACT
+                    )
+                )
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel) { d, _ -> d.cancel() }
                 .setPositiveButton(R.string.ok) { d, _ ->
