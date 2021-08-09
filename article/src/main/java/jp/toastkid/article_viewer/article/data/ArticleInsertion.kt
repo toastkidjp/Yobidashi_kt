@@ -10,6 +10,7 @@ package jp.toastkid.article_viewer.article.data
 import android.content.Context
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 /**
  * @author toastkidjp
  */
-class ArticleInsertion(context: Context) {
+class ArticleInsertion(context: Context, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
 
     private val repository = AppDatabase.find(context).articleRepository()
 
@@ -30,7 +31,7 @@ class ArticleInsertion(context: Context) {
 
         val article = makeArticle(title, content) ?: return
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             repository.insert(article)
         }
     }
