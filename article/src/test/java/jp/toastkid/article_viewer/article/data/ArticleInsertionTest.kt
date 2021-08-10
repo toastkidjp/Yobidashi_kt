@@ -67,7 +67,7 @@ class ArticleInsertionTest {
 
     @Test
     fun test() {
-        coEvery { repository.insert(any()) }.answers { Unit }
+        coEvery { repository.insert(any()) }.just(Runs)
 
         articleInsertion.invoke("test", "test")
 
