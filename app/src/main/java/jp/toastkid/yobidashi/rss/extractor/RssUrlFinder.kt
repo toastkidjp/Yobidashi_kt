@@ -38,10 +38,14 @@ class RssUrlFinder(
             currentUrl: String?,
             snackbarParentSupplier: () -> View?
     ) {
+        if (currentUrl.isNullOrBlank()) {
+            return
+        }
+
         val snackbarParent = snackbarParentSupplier() ?: return
         val colorPair = preferenceApplier.colorPair()
 
-        if (currentUrl?.isNotBlank() == true && urlValidator(currentUrl)) {
+        if (urlValidator(currentUrl)) {
             preferenceApplier.saveNewRssReaderTargets(currentUrl)
             Toaster.snackShort(snackbarParent, "Added $currentUrl", colorPair)
             return
