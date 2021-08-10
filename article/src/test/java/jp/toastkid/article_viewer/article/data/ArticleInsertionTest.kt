@@ -37,6 +37,7 @@ class ArticleInsertionTest {
         mockkObject(AppDatabase)
         every { AppDatabase.find(any()) }.answers { database }
         every { database.articleRepository() }.answers { repository }
+        coEvery { repository.insert(any()) }.just(Runs)
 
         articleInsertion = ArticleInsertion(context, Dispatchers.Unconfined)
     }
@@ -49,8 +50,6 @@ class ArticleInsertionTest {
 
     @Test
     fun testTitleIsNull() {
-        coEvery { repository.insert(any()) }.just(Runs)
-
         articleInsertion.invoke(null, "test")
 
         coVerify(exactly = 0) { repository.insert(any()) }
@@ -58,8 +57,6 @@ class ArticleInsertionTest {
 
     @Test
     fun testContentIsBlank() {
-        coEvery { repository.insert(any()) }.just(Runs)
-
         articleInsertion.invoke("test", "  ")
 
         coVerify(exactly = 0) { repository.insert(any()) }
@@ -67,8 +64,6 @@ class ArticleInsertionTest {
 
     @Test
     fun test() {
-        coEvery { repository.insert(any()) }.just(Runs)
-
         articleInsertion.invoke("test", "test")
 
         coVerify(exactly = 1) { repository.insert(any()) }
