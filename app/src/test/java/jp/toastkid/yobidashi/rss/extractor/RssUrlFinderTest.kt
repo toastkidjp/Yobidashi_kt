@@ -11,6 +11,8 @@ package jp.toastkid.yobidashi.rss.extractor
 import android.graphics.Color
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -19,6 +21,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import io.mockk.verify
 import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.libs.Toaster
@@ -64,11 +67,11 @@ class RssUrlFinderTest {
         every { preferenceApplier.colorPair() }.returns(ColorPair(Color.BLACK, Color.WHITE))
         every { preferenceApplier.saveNewRssReaderTargets(any()) }.just(Runs)
         every { urlValidator.invoke(any()) }.returns(false)
-        every { htmlApi.invoke(any()) }.returns(response)
-        every { rssUrlExtractor.invoke(any()) }.returns(listOf("https://rss.yahoo.co.jp/1"))
-        every { response getProperty "isSuccessful" }.returns(true)
-        every { response getProperty "body" }.returns(body)
-        every { body.string() }.returns("test")
+        coEvery { htmlApi.invoke(any()) }.returns(response)
+        coEvery { rssUrlExtractor.invoke(any()) }.returns(listOf("https://rss.yahoo.co.jp/1"))
+        coEvery { response getProperty "isSuccessful" }.returns(true)
+        coEvery { response getProperty "body" }.returns(body)
+        coEvery { body.string() }.returns("test")
 
         mockkObject(Toaster)
         every { Toaster.snackShort(any(), any<Int>(), any()) }.returns(mockk())
@@ -83,6 +86,19 @@ class RssUrlFinderTest {
     @Test
     fun invoke() {
         rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
+
+        verify(exactly = 1) { preferenceApplier.colorPair() }
+        verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
+        verify(atLeast = 1) { urlValidator.invoke(any()) }
+        coVerify(exactly = 1) { htmlApi.invoke(any()) }
+        coVerify(exactly = 1) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 1) { response getProperty "isSuccessful" }
+        coVerify(exactly = 1) { response getProperty "body" }
+        coVerify(exactly = 1) { body.string() }
+
+        mockkObject(Toaster)
+        verify(exactly = 0) { Toaster.snackShort(any(), any<Int>(), any()) }
+        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
     }
 
 }
