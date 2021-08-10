@@ -8,6 +8,7 @@
 package jp.toastkid.article_viewer.article.data
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import jp.toastkid.article_viewer.article.Article
 import jp.toastkid.article_viewer.tokenizer.NgramTokenizer
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
  */
 class ArticleInsertion(
     context: Context,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    @VisibleForTesting private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     private val repository = AppDatabase.find(context).articleRepository()
