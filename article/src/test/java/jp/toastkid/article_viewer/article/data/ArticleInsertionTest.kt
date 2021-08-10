@@ -58,7 +58,7 @@ class ArticleInsertionTest {
 
     @Test
     fun testContentIsBlank() {
-        coEvery { repository.insert(any()) }.answers { Unit }
+        coEvery { repository.insert(any()) }.just(Runs)
 
         articleInsertion.invoke("test", "  ")
 
