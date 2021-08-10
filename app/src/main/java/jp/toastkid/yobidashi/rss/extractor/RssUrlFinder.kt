@@ -12,6 +12,7 @@ import jp.toastkid.lib.preference.ColorPair
 import jp.toastkid.lib.preference.PreferenceApplier
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.Toaster
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,11 +21,15 @@ import kotlinx.coroutines.withContext
 /**
  * @author toastkidjp
  */
-class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
+class RssUrlFinder(
+    private val preferenceApplier: PreferenceApplier,
+    private val urlValidator: RssUrlValidator = RssUrlValidator(),
+    private val rssUrlExtractor: RssUrlExtractor = RssUrlExtractor(),
+    private val htmlApi: HtmlApi = HtmlApi(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 
-    private val urlValidator = RssUrlValidator()
-
-    private val rssUrlExtractor = RssUrlExtractor()
 
     operator fun invoke(
             currentUrl: String?,
@@ -39,9 +44,9 @@ class RssUrlFinder(private val preferenceApplier: PreferenceApplier) {
             return
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val rssItems = withContext(Dispatchers.IO) {
-                val response = HtmlApi().invoke(currentUrl)
+        CoroutineScope(mainDispatcher).launch {
+            val rssItems = withContext(ioDispatcher) {
+                val response = htmlApi.invoke(currentUrl)
                         ?: return@withContext emptyList<String>()
                 if (!response.isSuccessful) {
                     return@withContext emptyList<String>()
