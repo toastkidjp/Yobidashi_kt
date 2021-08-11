@@ -50,8 +50,10 @@ class RssUrlFinderTest {
     @MockK
     private lateinit var htmlApi: HtmlApi
 
+    @Suppress("unused")
     private val mainDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
+    @Suppress("unused")
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
 
     @SpyK(recordPrivateCalls = true)
