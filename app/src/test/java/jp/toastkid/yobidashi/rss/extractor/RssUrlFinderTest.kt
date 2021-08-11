@@ -86,7 +86,7 @@ class RssUrlFinderTest {
     }
 
     @Test
-    fun invoke() {
+    fun testSuccessfulCase() {
         rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
