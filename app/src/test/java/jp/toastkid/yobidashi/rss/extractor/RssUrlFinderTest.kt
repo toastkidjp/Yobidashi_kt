@@ -96,7 +96,23 @@ class RssUrlFinderTest {
         coVerify(exactly = 1) { response getProperty "body" }
         coVerify(exactly = 1) { body.string() }
 
-        mockkObject(Toaster)
+        verify(exactly = 1) { Toaster.snackShort(any(), any<Int>(), any()) }
+        verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
+    }
+
+    @Test
+    fun test() {
+        rssUrlFinder.invoke(" ", { mockk() })
+
+        verify(exactly = 0) { preferenceApplier.colorPair() }
+        verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
+        verify(exactly = 0) { urlValidator.invoke(any()) }
+        coVerify(exactly = 0) { htmlApi.invoke(any()) }
+        coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 0) { response getProperty "isSuccessful" }
+        coVerify(exactly = 0) { response getProperty "body" }
+        coVerify(exactly = 0) { body.string() }
+
         verify(exactly = 0) { Toaster.snackShort(any(), any<Int>(), any()) }
         verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
     }
