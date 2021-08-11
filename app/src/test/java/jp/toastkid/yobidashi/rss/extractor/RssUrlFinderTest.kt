@@ -119,4 +119,23 @@ class RssUrlFinderTest {
         verify(exactly = 0) { Toaster.snackShort(any(), any<String>(), any()) }
     }
 
+    @Test
+    fun test() {
+        every { urlValidator.invoke(any()) }.returns(true)
+
+        rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
+
+        verify(exactly = 1) { preferenceApplier.colorPair() }
+        verify(exactly = 1) { preferenceApplier.saveNewRssReaderTargets(any()) }
+        verify(exactly = 1) { urlValidator.invoke(any()) }
+        coVerify(exactly = 0) { htmlApi.invoke(any()) }
+        coVerify(exactly = 0) { rssUrlExtractor.invoke(any()) }
+        coVerify(exactly = 0) { response getProperty "isSuccessful" }
+        coVerify(exactly = 0) { response getProperty "body" }
+        coVerify(exactly = 0) { body.string() }
+
+        verify(exactly = 0) { Toaster.snackShort(any(), any<Int>(), any()) }
+        verify(exactly = 1) { Toaster.snackShort(any(), any<String>(), any()) }
+    }
+
 }
