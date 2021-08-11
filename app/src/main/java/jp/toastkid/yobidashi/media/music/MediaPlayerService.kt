@@ -204,6 +204,17 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         )
     }
 
+    override fun onDestroy() {
+        unregisterReceivers()
+
+        super.onDestroy()
+    }
+
+    private fun unregisterReceivers() {
+        unregisterReceiver(audioNoisyReceiver)
+        unregisterReceiver(playbackSpeedReceiver)
+    }
+
     companion object {
         private val audioNoisyFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
 
@@ -230,17 +241,6 @@ class MediaPlayerService : MediaBrowserServiceCompat() {
         fun makeSpeedIntent(speed: Float) =
                 Intent(ACTION_CHANGE_SPEED)
                         .also { it.putExtra(KEY_EXTRA_SPEED, speed) }
-    }
-
-    override fun onDestroy() {
-        unregisterReceivers()
-
-        super.onDestroy()
-    }
-
-    private fun unregisterReceivers() {
-        unregisterReceiver(audioNoisyReceiver)
-        unregisterReceiver(playbackSpeedReceiver)
     }
 
 }
