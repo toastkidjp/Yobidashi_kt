@@ -14,7 +14,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.media.session.PlaybackState
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -30,7 +29,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -201,13 +199,13 @@ class MediaPlayerPopup(private val context: Context) {
     }
 
     private fun observeViewModels() {
-        (attemptExtractActivity())?.also {
-            mediaPlayerPopupViewModel?.clickItem?.observe(it, Observer {
+        (attemptExtractActivity())?.also { activity ->
+            mediaPlayerPopupViewModel?.clickItem?.observe(activity, {
                 attemptMediaController()
                         ?.transportControls
                         ?.playFromUri(it.description.mediaUri, bundleOf())
             })
-            mediaPlayerPopupViewModel?.clickLyrics?.observe(it, Observer {
+            mediaPlayerPopupViewModel?.clickLyrics?.observe(activity, {
                 browserViewModel?.preview("https://www.google.com/search?q=$it Lyrics".toUri())
             })
         }
@@ -241,8 +239,8 @@ class MediaPlayerPopup(private val context: Context) {
         val mediaController = attemptMediaController() ?: return
         mediaController.metadata ?: return
         when (mediaController.playbackState.state) {
-            PlaybackState.STATE_PLAYING -> pause()
-            PlaybackState.STATE_PAUSED -> play()
+            PlaybackStateCompat.STATE_PLAYING -> pause()
+            PlaybackStateCompat.STATE_PAUSED -> play()
             else -> Unit
         }
     }
