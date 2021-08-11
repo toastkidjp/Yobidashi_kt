@@ -103,7 +103,7 @@ class RssUrlFinderTest {
     }
 
     @Test
-    fun test() {
+    fun testBlankInputCase() {
         rssUrlFinder.invoke(" ", { mockk() })
 
         verify(exactly = 0) { preferenceApplier.colorPair() }
