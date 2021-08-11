@@ -120,7 +120,7 @@ class RssUrlFinderTest {
     }
 
     @Test
-    fun test() {
+    fun testInputUrlIsValidCase() {
         every { urlValidator.invoke(any()) }.returns(true)
 
         rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
