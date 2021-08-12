@@ -162,7 +162,7 @@ class RssUrlFinderTest {
     fun testIsNotSuccessfulCase() {
         coEvery { response getProperty "isSuccessful" }.returns(false)
 
-        rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
+        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
