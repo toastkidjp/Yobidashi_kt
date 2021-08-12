@@ -123,7 +123,7 @@ class RssUrlFinderTest {
     fun testInputUrlIsValidCase() {
         every { urlValidator.invoke(any()) }.returns(true)
 
-        rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
+        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 1) { preferenceApplier.saveNewRssReaderTargets(any()) }
