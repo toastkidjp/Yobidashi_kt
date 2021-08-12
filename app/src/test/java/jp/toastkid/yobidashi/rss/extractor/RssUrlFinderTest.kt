@@ -159,7 +159,7 @@ class RssUrlFinderTest {
     }
 
     @Test
-    fun test() {
+    fun testIsNotSuccessfulCase() {
         coEvery { response getProperty "isSuccessful" }.returns(false)
 
         rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
