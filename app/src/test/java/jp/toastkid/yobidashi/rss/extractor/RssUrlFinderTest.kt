@@ -140,7 +140,7 @@ class RssUrlFinderTest {
 
 
     @Test
-    fun test() {
+    fun testHtmlApiReturnsNullCase() {
         coEvery { htmlApi.invoke(any()) }.returns(null)
 
         rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
