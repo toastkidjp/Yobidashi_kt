@@ -143,7 +143,7 @@ class RssUrlFinderTest {
     fun testHtmlApiReturnsNullCase() {
         coEvery { htmlApi.invoke(any()) }.returns(null)
 
-        rssUrlFinder.invoke("https://www.yahoo.co.jp", { mockk() })
+        rssUrlFinder.invoke("https://www.yahoo.co.jp") { mockk() }
 
         verify(exactly = 1) { preferenceApplier.colorPair() }
         verify(exactly = 0) { preferenceApplier.saveNewRssReaderTargets(any()) }
