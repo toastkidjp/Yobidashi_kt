@@ -43,6 +43,12 @@ class EditorContextMenuInitializer {
 
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val menuInflater = MenuInflater(context)
+
+                val text = extractSelectedText(editText)
+                if (Urls.isValidUrl(text)) {
+                    menuInflater.inflate(R.menu.context_editor_clipping_url, menu)
+                }
+
                 menuInflater.inflate(R.menu.context_editor, menu)
                 menuInflater.inflate(R.menu.context_speech, menu)
                 return true
