@@ -35,9 +35,11 @@ class EditorContextMenuInitializer {
 
         val context = editText.context
 
-        val browserViewModel = (context as? FragmentActivity)?.let { fragmentActivity ->
-            ViewModelProvider(fragmentActivity).get(BrowserViewModel::class.java)
+        val viewModelProvider = (context as? FragmentActivity)?.let { fragmentActivity ->
+            ViewModelProvider(fragmentActivity)
         }
+
+        val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
 
         editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
