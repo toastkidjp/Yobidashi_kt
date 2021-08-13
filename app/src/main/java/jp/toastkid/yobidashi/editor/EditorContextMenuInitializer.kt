@@ -15,6 +15,7 @@ import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import jp.toastkid.lib.BrowserViewModel
+import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.usecase.MenuActionInvokerUseCase
@@ -40,6 +41,7 @@ class EditorContextMenuInitializer {
         }
 
         val browserViewModel = viewModelProvider?.get(BrowserViewModel::class.java)
+        val contentViewModel = viewModelProvider?.get(ContentViewModel::class.java)
 
         editText.customInsertionActionModeCallback = object : ActionMode.Callback {
 
@@ -60,7 +62,8 @@ class EditorContextMenuInitializer {
                 val handled = invokeMenuAction(
                     menu?.itemId ?: -1,
                     editText, speechMaker,
-                    browserViewModel
+                    browserViewModel,
+                    contentViewModel
                 )
                 if (handled) {
                     actionMode?.finish()
@@ -92,7 +95,8 @@ class EditorContextMenuInitializer {
                     menuItem?.itemId ?: -1,
                     editText,
                     speechMaker,
-                    browserViewModel
+                    browserViewModel,
+                    contentViewModel
                 )
                 if (handled) {
                     actionMode?.finish()
@@ -111,11 +115,12 @@ class EditorContextMenuInitializer {
         itemId: Int,
         editText: EditText,
         speechMaker: SpeechMaker?,
-        browserViewModel: BrowserViewModel?
+        browserViewModel: BrowserViewModel?,
+        contentViewModel: ContentViewModel?
     ): Boolean {
         val text = extractSelectedText(editText)
 
-        return MenuActionInvokerUseCase(editText, speechMaker, browserViewModel).invoke(itemId, text)
+        return MenuActionInvokerUseCase(editText, speechMaker, browserViewModel, contentViewModel).invoke(itemId, text)
     }
 
     private fun extractSelectedText(editText: EditText): String {
