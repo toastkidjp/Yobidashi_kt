@@ -59,6 +59,14 @@ class MenuActionInvokerUseCase(
                 pasteAsQuotation(context, editText)
                 return true
             }
+            R.id.context_edit_paste_url_with_title -> {
+                val fragmentActivity = (context as? FragmentActivity) ?: return true
+                LinkFormInsertionUseCase(
+                    editText,
+                    ViewModelProvider(fragmentActivity).get(ContentViewModel::class.java)
+                ).invoke()
+                return true
+            }
             R.id.context_edit_horizontal_rule -> {
                 editText.text.insert(
                     editText.selectionStart,
