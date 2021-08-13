@@ -139,10 +139,7 @@ class MenuActionInvokerUseCase(
     private fun pasteAsQuotation(editText: EditText, contentViewModel: ContentViewModel?) {
         contentViewModel ?: return
 
-        PasteAsQuotationUseCase(
-            editText,
-            contentViewModel
-        ).invoke()
+        PasteAsQuotationUseCase(editText, contentViewModel).invoke()
     }
 
     private fun makeSearchResultUrl(context: Context, text: String): Uri = UrlFactory().invoke(
