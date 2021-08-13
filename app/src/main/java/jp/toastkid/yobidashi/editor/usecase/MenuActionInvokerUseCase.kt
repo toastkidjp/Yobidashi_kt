@@ -55,7 +55,7 @@ class MenuActionInvokerUseCase(
                 return true
             }
             R.id.context_edit_paste_as_quotation -> {
-                pasteAsQuotation(context, editText, contentViewModel)
+                pasteAsQuotation(editText, contentViewModel)
                 return true
             }
             R.id.context_edit_paste_url_with_title -> {
@@ -136,7 +136,7 @@ class MenuActionInvokerUseCase(
         return false
     }
 
-    private fun pasteAsQuotation(context: Context, editText: EditText, contentViewModel: ContentViewModel?) {
+    private fun pasteAsQuotation(editText: EditText, contentViewModel: ContentViewModel?) {
         contentViewModel ?: return
 
         PasteAsQuotationUseCase(
