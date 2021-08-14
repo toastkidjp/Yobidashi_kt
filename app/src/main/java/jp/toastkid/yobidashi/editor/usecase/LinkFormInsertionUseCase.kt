@@ -13,6 +13,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.libs.clip.Clipboard
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +21,10 @@ import kotlinx.coroutines.withContext
 
 class LinkFormInsertionUseCase(
     private val editText: EditText,
-    private val contentViewModel: ContentViewModel
+    private val contentViewModel: ContentViewModel,
+    private val linkTitleFetcherUseCase: LinkTitleFetcherUseCase = LinkTitleFetcherUseCase(),
+    private val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     operator fun invoke() {
@@ -33,9 +37,9 @@ class LinkFormInsertionUseCase(
         val currentText = editText.text.toString()
         val currentCursor = editText.selectionStart
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val linkWithTitle = withContext(Dispatchers.IO) {
-                LinkTitleFetcherUseCase()(primary)
+        CoroutineScope(mainDispatcher).launch {
+            val linkWithTitle = withContext(ioDispatcher) {
+                linkTitleFetcherUseCase(primary)
             }
             editText.text.insert(editText.selectionStart, linkWithTitle)
         }
