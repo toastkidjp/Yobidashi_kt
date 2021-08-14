@@ -21,6 +21,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import jp.toastkid.lib.ContentViewModel
+import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.libs.clip.Clipboard
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -65,6 +66,9 @@ class LinkFormInsertionUseCaseTest {
         every { contentViewModel.snackWithAction(any(), any(), any()) }.returns(Unit)
         coEvery { linkTitleFetcherUseCase.invoke(any()) }.returns("title")
 
+        mockkObject(Urls)
+        every { Urls.isInvalidUrl(any()) }.returns(false)
+
         mockkObject(Clipboard)
         every { Clipboard.getPrimary(any()) }.returns("https://www.yahoo.co.jp")
     }
@@ -82,6 +86,7 @@ class LinkFormInsertionUseCaseTest {
         coVerify(atLeast = 1) { editText.getSelectionStart() }
         coVerify(exactly = 1) { editable.insert(any(), any()) }
         coVerify(exactly = 1) { editable.toString() }
+        verify(atLeast = 1) { Urls.isInvalidUrl(any()) }
         verify(atLeast = 1) { editText.getContext() }
         verify(atLeast = 1) { context.getString(any()) }
         verify(exactly = 1) { contentViewModel.snackWithAction(any(), any(), any()) }
