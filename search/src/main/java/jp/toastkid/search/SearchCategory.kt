@@ -292,6 +292,11 @@ enum class SearchCategory(
                 }
             }
     ),
+    EBAY(
+        R.string.search_category_ebay,
+        R.drawable.ic_ebay,
+        "https://www.ebay.com/sch/i.html?_nkw="
+    ),
     QUORA(
             R.string.search_category_quora,
             R.drawable.ic_quora,
