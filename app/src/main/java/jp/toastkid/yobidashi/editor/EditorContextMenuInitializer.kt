@@ -19,6 +19,7 @@ import jp.toastkid.lib.ContentViewModel
 import jp.toastkid.lib.Urls
 import jp.toastkid.yobidashi.R
 import jp.toastkid.yobidashi.editor.usecase.MenuActionInvokerUseCase
+import jp.toastkid.yobidashi.libs.clip.Clipboard
 import jp.toastkid.yobidashi.libs.speech.SpeechMaker
 
 /**
@@ -48,7 +49,7 @@ class EditorContextMenuInitializer {
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
                 val menuInflater = MenuInflater(context)
 
-                val text = extractSelectedText(editText)
+                val text = Clipboard.getPrimary(context)?.toString()
                 if (Urls.isValidUrl(text)) {
                     menuInflater.inflate(R.menu.context_editor_clipping_url, menu)
                 }
