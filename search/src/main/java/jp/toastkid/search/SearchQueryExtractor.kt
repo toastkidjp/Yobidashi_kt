@@ -99,6 +99,8 @@ class SearchQueryExtractor {
                 uri.getQueryParameter("MT")
             host == "bgr.com" ->
                 uri.getQueryParameter("s")?.replace("#$".toRegex(), "")
+            host == "www.ebay.com" ->
+                uri.getQueryParameter("_nkw")
             host.endsWith("facebook.com")
                     or host.equals("www.merriam-webster.com")
                     or host.equals("www.instagram.com")
