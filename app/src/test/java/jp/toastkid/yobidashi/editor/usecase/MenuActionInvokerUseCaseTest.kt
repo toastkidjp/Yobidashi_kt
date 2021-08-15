@@ -357,7 +357,7 @@ class MenuActionInvokerUseCaseTest {
     }
 
     @Test
-    fun test() {
+    fun testCount() {
         mockkConstructor(TextCountUseCase::class)
         every { anyConstructed<TextCountUseCase>().invoke(any(), any()) }.just(Runs)
 
