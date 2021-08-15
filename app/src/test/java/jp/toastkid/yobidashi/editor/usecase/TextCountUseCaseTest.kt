@@ -59,7 +59,7 @@ class TextCountUseCaseTest {
     }
 
     @Test
-    fun invoke() {
+    fun testInvoke() {
         textCountUseCase.invoke(editText, contentViewModel)
 
         verify(exactly = 1) { editText.getText() }
