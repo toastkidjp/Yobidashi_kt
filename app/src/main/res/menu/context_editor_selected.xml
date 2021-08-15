@@ -56,4 +56,11 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_quote"
         />
+    <item
+        android:id="@+id/context_edit_count"
+        android:title="@string/title_count"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_quote"
+        />
 </menu>
